@@ -143,11 +143,7 @@ int rtw_hwpwrp_detect = 1;
 int rtw_hwpwrp_detect = 0; //HW power  ping detect 0:disable , 1:enable
 #endif
 
-#ifdef CONFIG_USB_HCI
 int rtw_hw_wps_pbc = 1;
-#else
-int rtw_hw_wps_pbc = 0;
-#endif
 
 #ifdef CONFIG_TX_MCAST2UNI
 int rtw_mc2u_disable = 0;
@@ -1521,9 +1517,7 @@ u8 rtw_free_drv_sw(_adapter *padapter)
 
 #ifdef CONFIG_CONCURRENT_MODE
 
-#ifdef CONFIG_USB_HCI
-	#include <usb_hal.h>
-#endif
+#include <usb_hal.h>
 
 #ifdef CONFIG_MULTI_VIR_IFACES
 int _netdev_vir_if_open(struct net_device *pnetdev)
@@ -1722,17 +1716,9 @@ _adapter *rtw_drv_add_vir_if(_adapter *primary_padapter, char *name,
 
 	//set hal data & hal ops
 #if defined(CONFIG_RTL8192C)
-	#if defined(CONFIG_PCI_HCI)
-		rtl8192ce_set_hal_ops(padapter);
-	#elif defined(CONFIG_USB_HCI)
-		rtl8192cu_set_hal_ops(padapter);
-	#endif
+	rtl8192cu_set_hal_ops(padapter);
 #elif defined(CONFIG_RTL8192D)
-	#if defined(CONFIG_PCI_HCI)
-		rtl8192de_set_hal_ops(padapter);
-	#elif defined(CONFIG_USB_HCI)
-		rtl8192du_set_hal_ops(padapter);
-	#endif
+	rtl8192du_set_hal_ops(padapter);
 #endif
 
 	padapter->HalFunc.inirp_init = NULL;
@@ -2114,17 +2100,9 @@ _adapter *rtw_drv_if2_init(_adapter *primary_padapter, char *name,
 
 	//set hal data & hal ops
 #if defined(CONFIG_RTL8192C)
-	#if defined(CONFIG_PCI_HCI)
-		rtl8192ce_set_hal_ops(padapter);
-	#elif defined(CONFIG_USB_HCI)
-		rtl8192cu_set_hal_ops(padapter);
-	#endif
+	rtl8192cu_set_hal_ops(padapter);
 #elif defined(CONFIG_RTL8192D)
-	#if defined(CONFIG_PCI_HCI)
-		rtl8192de_set_hal_ops(padapter);
-	#elif defined(CONFIG_USB_HCI)
-		rtl8192du_set_hal_ops(padapter);
-	#endif
+	rtl8192du_set_hal_ops(padapter);
 #endif
 
 	padapter->HalFunc.inirp_init = NULL;

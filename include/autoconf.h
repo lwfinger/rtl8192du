@@ -29,13 +29,9 @@
 
 #define CONFIG_RTL8192D	1
 
-#define PLATFORM_LINUX	1
-
 //#define CONFIG_IOCTL_CFG80211 1
 #ifdef CONFIG_IOCTL_CFG80211
-	//#define RTW_USE_CFG80211_STA_EVENT /* Opne this for Android 4.1's wpa_supplicant */
 	#define CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER
-	//#define CONFIG_DEBUG_CFG80211 1
 	#define CONFIG_SET_SCAN_DENY_TIMER
 #endif
 
@@ -233,13 +229,6 @@
 #endif
 
 /*
- * Platform  Related Config
- */
-#ifndef CONFIG_WISTRON_PLATFORM
-//#define CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE	1
-#endif
-
-/*
  * Debug  Related Config
  */
 //#define CONFIG_DEBUG_RTL871X
@@ -250,11 +239,5 @@
 
 #define CONFIG_PROC_DEBUG 1
 
-//#define DBG_HAL_INIT_PROFILING
-
 #define DBG_MEMORY_LEAK	1
 
-//TX use 1 urb
-//#define CONFIG_SINGLE_XMIT_BUF
-//RX use 1 urb
-//#define CONFIG_SINGLE_RECV_BUF

@@ -41,13 +41,10 @@ sint	_rtw_init_cmd_priv (struct	cmd_priv *pcmdpriv)
 _func_enter_;
 
 	_rtw_init_sema(&(pcmdpriv->cmd_queue_sema), 0);
-	//_rtw_init_sema(&(pcmdpriv->cmd_done_sema), 0);
 	_rtw_init_sema(&(pcmdpriv->terminate_cmdthread_sema), 0);
 
 
 	_rtw_init_queue(&(pcmdpriv->cmd_queue));
-
-	//allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf
 
 	pcmdpriv->cmd_seq = 1;
 
@@ -74,9 +71,7 @@ _func_enter_;
 exit:
 
 _func_exit_;
-
 	return res;
-
 }
 
 #ifdef CONFIG_C2H_WK
@@ -110,28 +105,6 @@ _func_enter_;
 		goto exit;
 		}
 	pevtpriv->evt_buf = pevtpriv->evt_allocated_buf  +  4 - ((unsigned int)(pevtpriv->evt_allocated_buf) & 3);
-
-
-#ifdef CONFIG_SDIO_HCI
-	pevtpriv->allocated_c2h_mem = rtw_zmalloc(C2H_MEM_SZ +4);
-
-	if (pevtpriv->allocated_c2h_mem == NULL){
-		res= _FAIL;
-		goto exit;
-	}
-
-	pevtpriv->c2h_mem = pevtpriv->allocated_c2h_mem +  4\
-	- ( (u32)(pevtpriv->allocated_c2h_mem) & 3);
-#ifdef PLATFORM_OS_XP
-	pevtpriv->pc2h_mdl= IoAllocateMdl((u8 *)pevtpriv->c2h_mem, C2H_MEM_SZ , FALSE, FALSE, NULL);
-
-	if(pevtpriv->pc2h_mdl == NULL){
-		res= _FAIL;
-		goto exit;
-	}
-	MmBuildMdlForNonPagedPool(pevtpriv->pc2h_mdl);
-#endif
-#endif //end of CONFIG_SDIO_HCI
 
 	_rtw_init_queue(&(pevtpriv->evt_queue));
 
@@ -192,7 +165,6 @@ _func_enter_;
 	if(pcmdpriv){
 		_rtw_spinlock_free(&(pcmdpriv->cmd_queue.lock));
 		_rtw_free_sema(&(pcmdpriv->cmd_queue_sema));
-		//_rtw_free_sema(&(pcmdpriv->cmd_done_sema));
 		_rtw_free_sema(&(pcmdpriv->terminate_cmdthread_sema));
 
 		if (pcmdpriv->cmd_allocated_buf)
@@ -223,12 +195,10 @@ _func_enter_;
 	if (obj == NULL)
 		goto exit;
 
-	//_enter_critical_bh(&queue->lock, &irqL);
 	_enter_critical(&queue->lock, &irqL);
 
 	rtw_list_insert_tail(&obj->list, &queue->queue);
 
-	//_exit_critical_bh(&queue->lock, &irqL);
 	_exit_critical(&queue->lock, &irqL);
 
 exit:
@@ -245,7 +215,6 @@ struct	cmd_obj	*_rtw_dequeue_cmd(_queue *queue)
 
 _func_enter_;
 
-	//_enter_critical_bh(&(queue->lock), &irqL);
 	_enter_critical(&queue->lock, &irqL);
 	if (rtw_is_list_empty(&(queue->queue)))
 		obj = NULL;
@@ -255,7 +224,6 @@ _func_enter_;
 		rtw_list_delete(&obj->list);
 	}
 
-	//_exit_critical_bh(&(queue->lock), &irqL);
 	_exit_critical(&queue->lock, &irqL);
 
 _func_exit_;
@@ -312,10 +280,7 @@ int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 		{
 			struct drvextra_cmd_parm	*pdrvextra_cmd_parm = (struct drvextra_cmd_parm	*)cmd_obj->parmbuf;
 			if(pdrvextra_cmd_parm->ec_id == POWER_SAVING_CTRL_WK_CID)
-			{
-				//DBG_871X("==>enqueue POWER_SAVING_CTRL_WK_CID\n");
 				bAllow = _TRUE;
-			}
 		}
 	}
 	#endif
@@ -327,18 +292,10 @@ int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 		|| pcmdpriv->cmdthd_running== _FALSE	//com_thread not running
 	)
 	{
-		//DBG_871X("%s:%s: drop cmdcode:%u, hw_init_completed:%u, cmdthd_running:%u\n", caller_func, __FUNCTION__,
-		//	cmd_obj->cmdcode,
-		//	pcmdpriv->padapter->hw_init_completed,
-		//	pcmdpriv->cmdthd_running
-		//);
-
 		return _FAIL;
 	}
 	return _SUCCESS;
 }
-
-
 
 u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 {

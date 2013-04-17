@@ -884,13 +884,6 @@ efuse_ShadowRead4Byte(
  * 11/12/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-#ifdef PLATFORM
-static VOID
-efuse_ShadowWrite1Byte(
-	IN	PADAPTER	pAdapter,
-	IN	u16		Offset,
-	IN	u8		Value);
-#endif //PLATFORM
 static VOID
 efuse_ShadowWrite1Byte(
 	IN	PADAPTER	pAdapter,

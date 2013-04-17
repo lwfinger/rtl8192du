@@ -53,23 +53,7 @@ jackson@realtek.com.tw
 #include <drv_types.h>
 #include <rtw_io.h>
 #include <osdep_intf.h>
-
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-#error "Shall be Linux or Windows, but not both!\n"
-#endif
-
-#ifdef CONFIG_SDIO_HCI
-#include <sdio_ops.h>
-#endif
-
-#ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
-#endif
-
-#ifdef CONFIG_PCI_HCI
-#include <pci_ops.h>
-#endif
-
 
 u8 _rtw_read8(_adapter *adapter, u32 addr)
 {

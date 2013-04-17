@@ -941,7 +941,6 @@ PHY_RF6052_Config8192D(
  * 11/20/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-#ifndef PLATFORM_FREEBSD //amy, temp remove
 
 u32
 PHY_RFShadowRead(
@@ -965,7 +964,6 @@ PHY_RFShadowWrite(
 	RF_Shadow[eRFPath][Offset].Driver_Write = _TRUE;
 
 }	/* PHY_RFShadowWrite */
-#endif  //amy, temp remove
 
 BOOLEAN
 PHY_RFShadowCompare(

@@ -31,7 +31,6 @@
 
 #include <rtl8192d_hal.h>
 
-#ifndef PLATFORM_FREEBSD
 static BOOLEAN
 CheckWriteH2C(
 	IN	PADAPTER		Adapter,
@@ -43,15 +42,12 @@ CheckWriteH2C(
 
 	valHMETFR = rtw_read8(Adapter, REG_HMETFR);
 
-	//DbgPrint("CheckWriteH2C(): Reg[0x%2x] = %x\n",REG_HMETFR, valHMETFR);
-
 	if(((valHMETFR>>BoxNum)&BIT0) == 1)
 		Result = _TRUE;
 
 	return Result;
 
 }
-#endif //PLATFORM_FREEBSD
 
 static BOOLEAN
 CheckFwReadLastH2C(

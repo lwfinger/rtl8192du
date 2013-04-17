@@ -23,24 +23,13 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-#ifdef PLATFORM_FREEBSD
-#include <if_ether.h>
-#endif //PLATFORM_FREEBSD
-
 #ifdef CONFIG_SDIO_HCI
-//#define MAX_XMITBUF_SZ (30720)//	(2048)
 #define MAX_XMITBUF_SZ (12288)
 #define NR_XMITBUFF	(16)
 
 #elif defined (CONFIG_USB_HCI)
 #ifdef CONFIG_USB_TX_AGGREGATION
-	#ifdef CONFIG_PLATFORM_ARM_SUNxI
-		#define MAX_XMITBUF_SZ (12288)  //12k 1536*8
-	#elif defined (CONFIG_PLATFORM_MSTAR_TITANIA12)
-		#define MAX_XMITBUF_SZ	7680	// 7.5k
-	#else
-		#define MAX_XMITBUF_SZ	(20480)	// 20k
-	#endif
+	#define MAX_XMITBUF_SZ	(20480)	// 20k
 #else
 #define MAX_XMITBUF_SZ	(2048)
 #endif //CONFIG_USB_TX_AGGREGATION
@@ -55,15 +44,7 @@
 #define NR_XMITBUFF	(128)
 #endif
 
-#ifdef PLATFORM_OS_CE
-#define XMITBUF_ALIGN_SZ 4
-#else
-#ifdef CONFIG_PCI_HCI
-#define XMITBUF_ALIGN_SZ 4
-#else
 #define XMITBUF_ALIGN_SZ 512
-#endif
-#endif
 
 // xmit extension buff defination
 #define MAX_XMIT_EXTBUF_SZ	(1536)
@@ -310,22 +291,6 @@ struct pkt_attrib
 #endif
 };
 
-#ifdef PLATFORM_FREEBSD
-#define ETH_ALEN	6		/* Octets in one ethernet addr	 */
-#define ETH_HLEN	14		/* Total octets in header.	 */
-#define ETH_P_IP	0x0800		/* Internet Protocol packet	*/
-
-/*struct rtw_ieee80211_hdr {
-	uint16_t frame_control;
-	uint16_t duration_id;
-	u8 addr1[6];
-	u8 addr2[6];
-	u8 addr3[6];
-	uint16_t seq_ctrl;
-	u8 addr4[6];
-} ;*/
-#endif //PLATFORM_FREEBSD
-
 #define WLANHDR_OFFSET	64
 
 #define NULL_FRAMETAG		(0x0)
@@ -345,9 +310,7 @@ struct  submit_ctx{
 	u32 submit_time; /* */
 	u32 timeout_ms; /* <0: not synchronous, 0: wait forever, >0: up to ms waiting */
 	int status; /* status for operation */
-#ifdef PLATFORM_LINUX
 	struct completion done;
-#endif
 };
 
 enum {
@@ -388,52 +351,14 @@ struct xmit_buf
 	u32 alloc_sz;
 
 	struct submit_ctx *sctx;
-
-#ifdef CONFIG_USB_HCI
-
 	u32 sz[8];
-
-#if defined(PLATFORM_OS_XP)||defined(PLATFORM_LINUX) || defined(PLATFORM_FREEBSD)
 	PURB	pxmit_urb[8];
 	dma_addr_t dma_transfer_addr;	/* (in) dma addr for transfer_buffer */
-#endif
-
-#ifdef PLATFORM_OS_XP
-	PIRP		pxmit_irp[8];
-#endif
-
-#ifdef PLATFORM_OS_CE
-	USB_TRANSFER	usb_transfer_write_port;
-#endif
-
 	u8 bpending[8];
-
 	sint last[8];
-
-#endif
-
-#ifdef CONFIG_SDIO_HCI
-	u32  len;
-	u8 *phead;
-	u8 *pdata;
-	u8 *ptail;
-	u8 *pend;
-	u32 ff_hwaddr;
-#ifdef PLATFORM_OS_XP
-	PMDL pxmitbuf_mdl;
-	PIRP  pxmitbuf_irp;
-	PSDBUS_REQUEST_PACKET pxmitbuf_sdrp;
-#endif
-#endif
-
-#ifdef CONFIG_PCI_HCI
-	u32  len;
-#endif
-
 #ifdef DBG_XMIT_BUF
 	u8 no;
 #endif
-
 };
 
 struct xmit_frame
@@ -566,38 +491,14 @@ struct	xmit_priv	{
 
 	struct hw_xmit *hwxmits;
 	u8	hwxmit_entry;
-
-#ifdef CONFIG_USB_HCI
 	_sema	tx_retevt;//all tx return event;
 	u8		txirp_cnt;//
-
-#ifdef PLATFORM_OS_CE
-	USB_TRANSFER	usb_transfer_write_port;
-//	USB_TRANSFER	usb_transfer_write_mem;
-#endif
-#ifdef PLATFORM_LINUX
 	struct tasklet_struct xmit_tasklet;
-#endif
-#ifdef PLATFORM_FREEBSD
-	struct task xmit_tasklet;
-#endif
 	//per AC pending irp
 	int beq_cnt;
 	int bkq_cnt;
 	int viq_cnt;
 	int voq_cnt;
-
-#endif
-
-#ifdef CONFIG_PCI_HCI
-	// Tx
-	struct rtw_tx_ring	tx_ring[PCI_MAX_TX_QUEUE_COUNT];
-	int	txringcount[PCI_MAX_TX_QUEUE_COUNT];
-#ifdef PLATFORM_LINUX
-	struct tasklet_struct xmit_tasklet;
-#endif
-#endif
-
 	_queue free_xmitbuf_queue;
 	_queue pending_xmitbuf_queue;
 	u8 *pallocated_xmitbuf;

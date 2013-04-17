@@ -189,13 +189,6 @@ _func_enter_;
 			goto exit;
 		}
 
-#ifdef CONFIG_SDIO_HCI
-		pxmitbuf->phead = pxmitbuf->pbuf;
-		pxmitbuf->pend = pxmitbuf->pbuf + MAX_XMITBUF_SZ;
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-
 		pxmitbuf->flags = XMIT_VO_QUEUE;
 
 		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmitbuf_queue.queue));
@@ -248,13 +241,6 @@ _func_enter_;
 			goto exit;
 		}
 
-#ifdef CONFIG_SDIO_HCI
-		pxmitbuf->phead = pxmitbuf->pbuf;
-		pxmitbuf->pend = pxmitbuf->pbuf + MAX_XMIT_EXTBUF_SZ;
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-
 		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmit_extbuf_queue.queue));
 		#ifdef DBG_XMIT_BUF
 		pxmitbuf->no=i;
@@ -268,7 +254,6 @@ _func_enter_;
 	rtw_alloc_hwxmits(padapter);
 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
 
-#ifdef CONFIG_USB_HCI
 	pxmitpriv->txirp_cnt=1;
 
 	_rtw_init_sema(&(pxmitpriv->tx_retevt), 0);
@@ -278,8 +263,6 @@ _func_enter_;
 	pxmitpriv->bkq_cnt = 0;
 	pxmitpriv->viq_cnt = 0;
 	pxmitpriv->voq_cnt = 0;
-#endif
-
 
 #ifdef CONFIG_XMIT_ACK
 	pxmitpriv->ack_tx = _FALSE;
@@ -1895,14 +1878,6 @@ _func_enter_;
 
 		pxmitbuf->priv_data = NULL;
 
-#ifdef CONFIG_SDIO_HCI
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-#ifdef CONFIG_PCI_HCI
-		pxmitbuf->len = 0;
-#endif
-
 		if (pxmitbuf->sctx) {
 			DBG_871X("%s pxmitbuf->sctx is not NULL\n", __func__);
 			rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_ALLOC);
@@ -1981,14 +1956,6 @@ _func_enter_;
 		//DBG_871X("alloc, free_xmitbuf_cnt=%d\n", pxmitpriv->free_xmitbuf_cnt);
 
 		pxmitbuf->priv_data = NULL;
-
-#ifdef CONFIG_SDIO_HCI
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-#ifdef CONFIG_PCI_HCI
-		pxmitbuf->len = 0;
-#endif
 
 		if (pxmitbuf->sctx) {
 			DBG_871X("%s pxmitbuf->sctx is not NULL\n", __func__);
@@ -2110,18 +2077,10 @@ _func_enter_;
 
 		pxframe->frame_tag = DATA_FRAMETAG;
 
-#ifdef CONFIG_USB_HCI
 		pxframe->pkt = NULL;
 		pxframe->pkt_offset = 1;//default use pkt_offset to fill tx desc
 
 #ifdef CONFIG_USB_TX_AGGREGATION
-		pxframe->agg_num = 1;
-#endif
-
-#endif //#ifdef CONFIG_USB_HCI
-
-#ifdef CONFIG_SDIO_HCI
-		pxframe->pg_num = 1;
 		pxframe->agg_num = 1;
 #endif
 
@@ -2266,9 +2225,6 @@ struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
 	_adapter *padapter = pxmitpriv->adapter;
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	int i, inx[4];
-#ifdef CONFIG_USB_HCI
-//	int j, tmp, acirp_cnt[4];
-#endif
 
 _func_enter_;
 
@@ -2277,16 +2233,6 @@ _func_enter_;
 	if(pregpriv->wifi_spec==1)
 	{
 		int j, tmp, acirp_cnt[4];
-#if 0
-		if(flags<XMIT_QUEUE_ENTRY)
-		{
-			//priority exchange according to the completed xmitbuf flags.
-			inx[flags] = 0;
-			inx[0] = flags;
-		}
-#endif
-
-#ifdef CONFIG_USB_HCI
 		//entry indx: 0->vo, 1->vi, 2->be, 3->bk.
 		acirp_cnt[0] = pxmitpriv->voq_cnt;
 		acirp_cnt[1] = pxmitpriv->viq_cnt;
@@ -2309,7 +2255,6 @@ _func_enter_;
 				}
 			}
 		}
-#endif
 	}
 
 	_enter_critical_bh(&pxmitpriv->lock, &irqL0);

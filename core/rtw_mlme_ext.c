@@ -8359,24 +8359,7 @@ unsigned int send_beacon(_adapter *padapter)
 	u8	bxmitok = _FALSE;
 	int	issue=0;
 	int poll = 0;
-//#ifdef CONFIG_CONCURRENT_MODE
-	//struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
-	//struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	//_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
-	//struct mlme_priv *pbuddy_mlmepriv = &(pbuddy_adapter->mlmepriv);
-//#endif
 
-#ifdef CONFIG_PCI_HCI
-
-	//DBG_871X("%s\n", __FUNCTION__);
-
-	issue_beacon(padapter);
-
-	return _SUCCESS;
-
-#endif
-
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 	u32 start = rtw_get_current_time();
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_BCN_VALID, NULL);
@@ -8392,28 +8375,17 @@ unsigned int send_beacon(_adapter *padapter)
 	}while(_FALSE == bxmitok && issue<100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
 
 	if(padapter->bSurpriseRemoved || padapter->bDriverStopped)
-	{
 		return _FAIL;
-	}
-	if(_FALSE == bxmitok)
-	{
+	if(_FALSE == bxmitok) {
 		DBG_871X("%s fail! %u ms\n", __FUNCTION__, rtw_get_passing_time_ms(start));
 		return _FAIL;
-	}
-	else
-	{
+	} else {
 		u32 passing_time = rtw_get_passing_time_ms(start);
 
 		if(passing_time > 100 || issue > 3)
 			DBG_871X("%s success, issue:%d, poll:%d, %u ms\n", __FUNCTION__, issue, poll, rtw_get_passing_time_ms(start));
-		//else
-		//	DBG_871X("%s success, issue:%d, poll:%d, %u ms\n", __FUNCTION__, issue, poll, rtw_get_passing_time_ms(start));
-
 		return _SUCCESS;
 	}
-
-#endif
-
 }
 
 /****************************************************************************
@@ -11253,11 +11225,8 @@ u8 tx_beacon_hdl(_adapter *padapter, unsigned char *pbuf)
 		if(!psta_bmc)
 			return H2C_SUCCESS;
 
-		if((pstapriv->tim_bitmap&BIT(0)) && (psta_bmc->sleepq_len>0))
-		{
-#ifndef CONFIG_PCI_HCI
+		if((pstapriv->tim_bitmap&BIT(0)) && (psta_bmc->sleepq_len>0)) {
 			rtw_msleep_os(10);// 10ms, ATIM(HIQ) Windows
-#endif
 			_enter_critical_bh(&psta_bmc->sleep_q.lock, &irqL);
 
 			xmitframe_phead = get_list_head(&psta_bmc->sleep_q);

@@ -243,41 +243,17 @@ rtl8192d_PHY_QueryBBReg(
 	IN	u32		BitMask
 	)
 {
-	#ifdef CONFIG_PCI_HCI
-	u8	DBIdirect = 0;
-	#endif //CONFIG_PCI_HCI
 	u32	ReturnValue = 0, OriginalValue, BitShift;
-
 
 #if (DISABLE_BB_RF == 1)
 	return 0;
 #endif
 
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("--->PHY_QueryBBReg(): RegAddr(%#lx), BitMask(%#lx)\n", RegAddr, BitMask));
-
-#ifdef CONFIG_PCI_HCI
-	if(RegAddr&MAC1_ACCESS_PHY0) //MAC1 use PHY0 wirte radio_A.
-		DBIdirect = BIT3;
-	else if(RegAddr&MAC0_ACCESS_PHY1) //MAC0 use PHY1 wirte radio_B.
-		DBIdirect = BIT3|BIT2;
-
-	if (DBIdirect)
-		OriginalValue = MpReadPCIDwordDBI8192D(Adapter, (u16)RegAddr&0xFFF, DBIdirect);
-	else
-#endif
-	{
-		OriginalValue = rtw_read32(Adapter, RegAddr);
-	}
+	OriginalValue = rtw_read32(Adapter, RegAddr);
 	BitShift = phy_CalculateBitShift(BitMask);
 	ReturnValue = (OriginalValue & BitMask) >> BitShift;
-
-	//RTPRINT(FPHY, PHY_BBR, ("BBR MASK=0x%lx Addr[0x%lx]=0x%lx\n", BitMask, RegAddr, OriginalValue));
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("<---PHY_QueryBBReg(): RegAddr(%#lx), BitMask(%#lx), OriginalValue(%#lx)\n", RegAddr, BitMask, OriginalValue));
-
 	return (ReturnValue);
-
 }
-
 
 /**
 * Function:	PHY_SetBBReg
@@ -305,59 +281,22 @@ rtl8192d_PHY_SetBBReg(
 	IN	u32		Data
 	)
 {
-#ifdef CONFIG_PCI_HCI
-	u8	DBIdirect=0;
-#endif //CONFIG_PCI_HCI
 	u32	OriginalValue, BitShift;
 
 #if (DISABLE_BB_RF == 1)
 	return;
 #endif
 
-#ifdef CONFIG_PCI_HCI
-	if(RegAddr&MAC1_ACCESS_PHY0) //MAC1 use PHY0 wirte radio_A.
-		DBIdirect = BIT3;
-	else if(RegAddr&MAC0_ACCESS_PHY1) //MAC0 use PHY1 wirte radio_B.
-		DBIdirect = BIT3|BIT2;
-#endif
-
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("--->PHY_SetBBReg(): RegAddr(%#lx), BitMask(%#lx), Data(%#lx)\n", RegAddr, BitMask, Data));
-
 	if(BitMask!= bMaskDWord)
 	{//if not "double word" write
-#ifdef CONFIG_PCI_HCI
-		if (DBIdirect)
-		{
-			OriginalValue = MpReadPCIDwordDBI8192D(Adapter, (u16)RegAddr&0xFFF, DBIdirect);
-		}
-		else
-#endif
-		{
-			OriginalValue = rtw_read32(Adapter, RegAddr);
-		}
+		OriginalValue = rtw_read32(Adapter, RegAddr);
 		BitShift = phy_CalculateBitShift(BitMask);
 		Data = ((OriginalValue & (~BitMask)) | ((Data << BitShift) & BitMask));
 	}
 
-#ifdef CONFIG_PCI_HCI
-	if (DBIdirect)
-	{
-		MpWritePCIDwordDBI8192D(Adapter,
-					(u16)RegAddr&0xFFF,
-					Data,
-					DBIdirect);
-	}
-	else
-#endif
-	{
-		rtw_write32(Adapter, RegAddr, Data);
-	}
-
-	//RTPRINT(FPHY, PHY_BBW, ("BBW MASK=0x%lx Addr[0x%lx]=0x%lx\n", BitMask, RegAddr, Data));
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("<---PHY_SetBBReg(): RegAddr(%#lx), BitMask(%#lx), Data(%#lx)\n", RegAddr, BitMask, Data));
+	rtw_write32(Adapter, RegAddr, Data);
 
 }
-
 
 //
 // 2. RF register R/W API
@@ -651,38 +590,13 @@ rtl8192d_PHY_QueryRFReg(
 	if(!pHalData->bPhyValueInitReady)
 		return 0;
 
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("--->PHY_QueryRFReg(): RegAddr(%#lx), eRFPath(%#x), BitMask(%#lx)\n", RegAddr, eRFPath,BitMask));
-
-#ifdef CONFIG_USB_HCI
-	//PlatformAcquireMutex(&pHalData->mxRFOperate);
-#else
-	//PlatformAcquireSpinLock(Adapter, RT_RF_OPERATE_SPINLOCK);
-#endif
-
-#ifdef CONFIG_USB_HCI
 	if(pHalData->bReadRFbyFW)
-	{
 		Original_Value = rtw_read32(Adapter,(0x66<<24|eRFPath<<16)|RegAddr ); //0x66 Just a identifier.by wl
-	}
 	else
-#endif
-	{
 		Original_Value = phy_RFSerialRead(Adapter, eRFPath, RegAddr);
-	}
 
 	BitShift =  phy_CalculateBitShift(BitMask);
 	Readback_Value = (Original_Value & BitMask) >> BitShift;
-
-#ifdef CONFIG_USB_HCI
-	//PlatformReleaseMutex(&pHalData->mxRFOperate);
-#else
-	//PlatformReleaseSpinLock(Adapter, RT_RF_OPERATE_SPINLOCK);
-#endif
-
-
-	//RTPRINT(FPHY, PHY_RFR, ("RFR-%d MASK=0x%lx Addr[0x%lx]=0x%lx\n", eRFPath, BitMask, RegAddr, Original_Value));//BitMask(%#lx),BitMask,
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("<---PHY_QueryRFReg(): RegAddr(%#lx), eRFPath(%#x),  Original_Value(%#lx)\n",
-	//				RegAddr, eRFPath, Original_Value));
 
 	return (Readback_Value);
 }
@@ -729,19 +643,6 @@ rtl8192d_PHY_SetRFReg(
 	if(BitMask == 0)
 		return;
 
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("--->PHY_SetRFReg(): RegAddr(%#lx), BitMask(%#lx), Data(%#lx), eRFPath(%#x)\n",
-	//	RegAddr, BitMask, Data, eRFPath));
-	//RTPRINT(FINIT, INIT_RF, ("PHY_SetRFReg(): RegAddr(%#lx), BitMask(%#lx), Data(%#lx), eRFPath(%#x)\n",
-	//	RegAddr, BitMask, Data, eRFPath));
-
-
-#ifdef CONFIG_USB_HCI
-	//PlatformAcquireMutex(&pHalData->mxRFOperate);
-#else
-	//PlatformAcquireSpinLock(Adapter, RT_RF_OPERATE_SPINLOCK);
-#endif
-
-
 	// RF data is 12 bits only
 	if (BitMask != bRFRegOffsetMask)
 	{
@@ -751,21 +652,7 @@ rtl8192d_PHY_SetRFReg(
 	}
 
 	phy_RFSerialWrite(Adapter, eRFPath, RegAddr, Data);
-
-
-
-#ifdef CONFIG_USB_HCI
-	//PlatformReleaseMutex(&pHalData->mxRFOperate);
-#else
-	//PlatformReleaseSpinLock(Adapter, RT_RF_OPERATE_SPINLOCK);
-#endif
-
-	//PHY_QueryRFReg(Adapter,eRFPath,RegAddr,BitMask);
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("<---PHY_SetRFReg(): RegAddr(%#lx), BitMask(%#lx), Data(%#lx), eRFPath(%#x)\n",
-	//		RegAddr, BitMask, Data, eRFPath));
-
 }
-
 
 //
 // 3. Initial MAC/BB/RF config by reading MAC/BB/RF txt.
@@ -1657,29 +1544,14 @@ PHY_BBConfig8192D(
 	value=rtw_read8(Adapter, REG_RF_CTRL);     //  0x1f bit7 bit6 represent for mac0/mac1 driver ready
 	rtw_write8(Adapter, REG_RF_CTRL, value|RF_EN|RF_RSTB|RF_SDMRSTB);
 
-#ifdef CONFIG_USB_HCI
 	rtw_write8(Adapter, REG_SYS_FUNC_EN, FEN_USBA | FEN_USBD | FEN_BB_GLB_RSTn | FEN_BBRSTB);
-#else
-	rtw_write8(Adapter, REG_SYS_FUNC_EN, FEN_PPLL|FEN_PCIEA|FEN_DIO_PCIE|FEN_BB_GLB_RSTn|FEN_BBRSTB);
-#endif
 	//undo clock gated
 	rtw_write32(Adapter, rFPGA0_XCD_RFParameter, rtw_read32(Adapter, rFPGA0_XCD_RFParameter)&(~BIT31));
-#ifdef CONFIG_USB_HCI
 	//To Fix MAC loopback mode fail. Suggested by SD4 Johnny. 2010.03.23.
 	rtw_write8(Adapter, REG_LDOHCI12_CTRL, 0x0f);
 	rtw_write8(Adapter, 0x15, 0xe9);
-#endif
 
 	rtw_write8(Adapter, REG_AFE_XTAL_CTRL+1, 0x80);
-
-#ifdef CONFIG_PCI_HCI
-	// Force use left antenna by default for 88C.
-	if(Adapter->ledpriv.LedStrategy != SW_LED_MODE10)
-	{
-		RegVal = rtw_read32(Adapter, REG_LEDCFG0);
-		rtw_write32(Adapter, REG_LEDCFG0, RegVal|BIT23);
-	}
-#endif
 
 	//
 	// Config BB and AGC
@@ -2290,10 +2162,8 @@ PHY_SetTxPowerLevel8192D(
 	return;
 #endif
 
-#ifdef CONFIG_USB_HCI
 	if((Adapter->mlmeextpriv.sitesurvey_res.state == SCAN_PROCESS)&&(adapter_to_dvobj(Adapter)->ishighspeed == _FALSE))
 		return;
-#endif
 
 	if(pHalData->bTXPowerDataReadFromEEPORM == _FALSE)
 		return;
@@ -2301,8 +2171,6 @@ PHY_SetTxPowerLevel8192D(
 	channel = GetRightChnlPlace(channel);
 
 	getTxPowerIndex(Adapter, channel, &cckPowerLevel[0], &ofdmPowerLevel[0]);
-	//DBG_8192C("Channel-%d, cckPowerLevel (A / B) = 0x%x / 0x%x,   ofdmPowerLevel (A / B) = 0x%x / 0x%x\n",
-	//	channel, cckPowerLevel[0], cckPowerLevel[1], ofdmPowerLevel[0], ofdmPowerLevel[1]);
 
 	if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
 		ccxPowerIndexCheck(Adapter, channel, &cckPowerLevel[0], &ofdmPowerLevel[0]);
@@ -2311,7 +2179,6 @@ PHY_SetTxPowerLevel8192D(
 		rtl8192d_PHY_RF6052SetCckTxPower(Adapter, &cckPowerLevel[0]);
 	rtl8192d_PHY_RF6052SetOFDMTxPower(Adapter, &ofdmPowerLevel[0], channel);
 }
-
 
 //
 //	Description:
@@ -2707,11 +2574,6 @@ PHY_SwitchWirelessBand(
 	}
 #endif
 
-//#ifdef CONFIG_USB_HCI
-	//RT_ASSERT((KeGetCurrentIrql() == PASSIVE_LEVEL),
-	//	("MPT_ActSetWirelessMode819x(): not in PASSIVE_LEVEL!\n"));
-//#endif
-
 	//stop RX/Tx
 	PHY_StopTRXBeforeChangeBand8192D(Adapter);
 
@@ -2727,22 +2589,9 @@ PHY_SwitchWirelessBand(
 			PHY_SetAGCTab8192D(Adapter);
 #endif
 		}
-		//if( (check_fwstate(&Adapter->mlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == _TRUE) &&
-		//	Adapter->mlmeextpriv.cur_channel <= 14)
-		//{
-		//	ResumeTxBeacon(Adapter);
-		//	DBG_8192C("==>PHY_SwitchWirelessBand():Resume send beacon! \n");
-		//}
 	}
 	else	//5G band
 	{
-		//if( (check_fwstate(&Adapter->mlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == _TRUE) &&
-		//	Adapter->mlmeextpriv.cur_channel <= 14)
-		//{
-		//	StopTxBeacon(Adapter);
-		//	DBG_8192C("==>PHY_SwitchWirelessBand():Stop send beacon! \n");
-		//}
-
 		if(pHalData->interfaceIndex == 1)
 		{
 #ifdef CONFIG_EMBEDDED_FWIMG
@@ -2919,18 +2768,13 @@ PHY_RestoreRFENV(
 
 	//only for 92D C-cut SMSP
 
-#ifdef CONFIG_USB_HCI
 	if(adapter_to_dvobj(Adapter)->ishighspeed == _FALSE)
 		return;
-#endif
 
 	//config path A for 5G
 	if(pHalData->CurrentBandType92D==BAND_ON_5G)
 	{
-		//RT_TRACE(COMP_CMD, DBG_LOUD, ("====>phy_SwitchRfSetting interface %d 5G\n", Adapter->interfaceIndex));
-
 		u4tmp = CurveIndex[GetRightChnlPlace(channel)-1];
-		//RTPRINT(FINIT, INIT_IQK, ("cosa ver 1 set RF-A, 5G, 0x28 = 0x%x !!\n", u4tmp));
 
 		for(i = 0; i < RF_CHNL_NUM_5G; i++)
 		{
@@ -3266,14 +3110,10 @@ static  VOID
 	u32		RFMask=bRFRegOffsetMask;
 	u8		group=0, i;
 
-#ifdef CONFIG_USB_HCI
 	if(adapter_to_dvobj(Adapter)->ishighspeed == _FALSE)
 		return;
-#endif
 
 	//only for 92D C-cut SMSP
-
-	//RT_TRACE(COMP_CMD, DBG_LOUD, ("====>phy_ReloadIMRSetting interface %d path %d\n", pHalData->interfaceIndex, eRFPath));
 
 	if(pHalData->CurrentBandType92D == BAND_ON_5G)
 	{
@@ -3347,18 +3187,11 @@ static  VOID
 
 	//only for 92D C-cut SMSP
 
-#ifdef CONFIG_USB_HCI
 	if(adapter_to_dvobj(Adapter)->ishighspeed == _FALSE)
 		return;
-#endif
-
-	//RT_TRACE(COMP_CMD, DBG_LOUD, ("====>phy_ReloadIQKSetting interface %d channel %d \n", Adapter->interfaceIndex, channel));
 
 	//---------Do IQK for normal chip and test chip 5G band----------------
 	Indexforchannel = rtl8192d_GetRightChnlPlaceforIQK(channel);
-
-	//RT_TRACE(COMP_CMD, DBG_LOUD, ("====>Indexforchannel %d done %d\n", Indexforchannel, pHalData->IQKMatrixRegSetting[Indexforchannel].bIQKDone));
-
 
 #if MP_DRIVER == 1
 	pHalData->bNeedIQK = _TRUE;
@@ -6228,17 +6061,9 @@ phy_APCalibrate(
 			}
 #endif
 
-#ifdef CONFIG_PCI_HCI
-			if(IS_81xxC_VENDOR_UMC_B_CUT(pHalData->VersionID))
-				PHY_SetRFReg(pAdapter, (RF_RADIO_PATH_E)path, RF_IPA_A, bRFRegOffsetMask, 0x894ae);
-			else
-#endif
 				PHY_SetRFReg(pAdapter, (RF_RADIO_PATH_E)path, RF_IPA_A, bRFRegOffsetMask, 0x8992e);
-			//RTPRINT(FINIT, INIT_IQK, ("PHY_APCalibrate() offset 0xc %x\n", PHY_QueryRFReg(pAdapter, (RF_RADIO_PATH_E)path, RF_IPA_A, bRFRegOffsetMask)));
 			PHY_SetRFReg(pAdapter, (RF_RADIO_PATH_E)path, RF_AC, bRFRegOffsetMask, APK_RF_value_0[path][index]);
-			//RTPRINT(FINIT, INIT_IQK, ("PHY_APCalibrate() offset 0x0 %x\n", PHY_QueryRFReg(pAdapter, (RF_RADIO_PATH_E)path, RF_AC, bRFRegOffsetMask)));
 			PHY_SetRFReg(pAdapter, (RF_RADIO_PATH_E)path, RF_TXBIAS_A, bRFRegOffsetMask, tmpReg);
-			//RTPRINT(FINIT, INIT_IQK, ("PHY_APCalibrate() offset 0xd %x\n", PHY_QueryRFReg(pAdapter, (RF_RADIO_PATH_E)path, RF_TXBIAS_A, bRFRegOffsetMask)));
 
 			// PA11+PAD01111, one shot
 			i = 0;
@@ -6247,10 +6072,8 @@ phy_APCalibrate(
 				PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0x80000000);
 				{
 					PHY_SetBBReg(pAdapter, APK_offset[path], bMaskDWord, APK_value[0]);
-					//RTPRINT(FINIT, INIT_IQK, ("PHY_APCalibrate() offset 0x%x value 0x%x\n", APK_offset[path], PHY_QueryBBReg(pAdapter, APK_offset[path], bMaskDWord)));
 					rtw_mdelay_os(3);
 					PHY_SetBBReg(pAdapter, APK_offset[path], bMaskDWord, APK_value[1]);
-					//RTPRINT(FINIT, INIT_IQK, ("PHY_APCalibrate() offset 0x%x value 0x%x\n", APK_offset[path], PHY_QueryBBReg(pAdapter, APK_offset[path], bMaskDWord)));
 
 					rtw_mdelay_os(20);
 				}
@@ -6628,55 +6451,6 @@ rtl8192d_PHY_APCalibrate(
 	}
 }
 
-/*
-VOID PHY_SetRFPathSwitch(
-	IN	PADAPTER	pAdapter,
-	IN	BOOLEAN		bMain
-	)
-{
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-
-#if DISABLE_BB_RF
-	return;
-#endif
-
-	if (IS_92D_SINGLEPHY(pHalData->VersionID))
-	{
-		_PHY_SetRFPathSwitch(pAdapter, bMain, _TRUE);
-	}
-	else{
-		// For 88C 1T1R
-		_PHY_SetRFPathSwitch(pAdapter, bMain, _FALSE);
-	}
-}
-
-
-//return value TRUE => Main; FALSE => Aux
-BOOLEAN PHY_QueryRFPathSwitch(
-	IN	PADAPTER	pAdapter
-	)
-{
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-
-#if DISABLE_BB_RF
-	return _TRUE;
-#endif
-
-#ifdef CONFIG_USB_HCI
-	return _TRUE;
-#endif
-
-	if(IS_92D_SINGLEPHY(pHalData->VersionID))
-	{
-		return _PHY_QueryRFPathSwitch(pAdapter, _TRUE);
-	}
-	else{
-		// For 88C 1T1R
-		return _PHY_QueryRFPathSwitch(pAdapter, _FALSE);
-	}
-}
-*/
-
 VOID
 PHY_UpdateBBRFConfiguration8192D(
 	IN PADAPTER Adapter,
@@ -6688,15 +6462,12 @@ PHY_UpdateBBRFConfiguration8192D(
 	u8	eRFPath = 0;
 	BOOLEAN			bInternalPA;
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
-	//DBG_8192C("PHY_UpdateBBRFConfiguration8192D()=====>\n");
 
 	//Update BB
 	//r_select_5G for path_A/B.0 for 2.4G,1 for 5G
 	if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
 	{// 2.4G band
 		//r_select_5G for path_A/B,0x878
-
-		//DBG_871X("==>PHY_UpdateBBRFConfiguration8192D() interface %d BAND_ON_2_4G settings\n", pHalData->interfaceIndex);
 
 		PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT0, 0x0);
 		PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT15, 0x0);
@@ -6949,17 +6720,7 @@ PHY_UpdateBBRFConfiguration8192D(
 			bMAC0NotUp = rtl8192d_PHY_EnableAnotherPHY(Adapter, _FALSE);
 			if(bMAC0NotUp)
 			{
-#ifdef CONFIG_PCI_HCI
-				//RT_TRACE(COMP_INIT,DBG_LOUD,("MAC1 use DBI to update 0x888"));
-				//0x888
-				MpWritePCIDwordDBI8192D(Adapter,
-									rFPGA0_AdDaClockEn,
-									MpReadPCIDwordDBI8192D(Adapter, rFPGA0_AdDaClockEn, BIT3)|BIT12|BIT13,
-									BIT3);
-#else	//USB interface
-				//RT_TRACE(COMP_INIT,DBG_LOUD,("MAC1 update MAC0's 0x888"));
 				PHY_SetBBReg(Adapter, rFPGA0_AdDaClockEn|MAC1_ACCESS_PHY0, BIT12|BIT13, 0x3);
-#endif
 				rtl8192d_PHY_PowerDownAnotherPHY(Adapter, _FALSE);
 			}
 		}

@@ -23,8 +23,6 @@ CONFIG_AUTOCFG_CP = n
 CONFIG_RTL8192D = y
 
 CONFIG_USB_HCI = y
-CONFIG_PCI_HCI = n
-CONFIG_SDIO_HCI = n
 
 CONFIG_MP_INCLUDED = n
 CONFIG_POWER_SAVING = y
@@ -44,16 +42,10 @@ ifeq ($(CONFIG_RTL8192D), y)
 
 RTL871X = rtl8192d
 
-ifeq ($(CONFIG_USB_HCI), y)
 MODULE_NAME = 8192du
 FW_FILES := hal/Hal8192DUHWImg.o
 ifneq ($(CONFIG_WAKE_ON_WLAN), n)
 FW_FILES += hal/Hal8192DUHWImg_wowlan.o
-endif
-endif
-ifeq ($(CONFIG_PCI_HCI), y)
-MODULE_NAME = 8192de
-FW_FILES := hal/pci/Hal8192DEHWImg.o
 endif
 
 CHIP_FILES := \
@@ -61,10 +53,7 @@ CHIP_FILES := \
 CHIP_FILES += $(FW_FILES)
 endif
 
-
-ifeq ($(CONFIG_USB_HCI), y)
 HCI_NAME = usb
-endif
 
 _OS_INTFS_FILES :=	os_dep/osdep_service.o \
 			os_dep/os_intfs.o \
@@ -91,11 +80,7 @@ _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/rtl$(MODULE_NAME)_xmit.o \
 			hal/rtl$(MODULE_NAME)_recv.o
 
-ifeq ($(CONFIG_SDIO_HCI), y)
-_HAL_INTFS_FILES += hal/$(HCI_NAME)_ops.o
-else
 _HAL_INTFS_FILES += hal/$(HCI_NAME)_ops_linux.o
-endif
 
 ifeq ($(CONFIG_MP_INCLUDED), y)
 _HAL_INTFS_FILES += hal/$(RTL871X)_mp.o
@@ -109,10 +94,8 @@ $(shell cp $(TopDIR)/autoconf_$(RTL871X)_$(HCI_NAME)_linux.h $(TopDIR)/include/a
 endif
 
 
-ifeq ($(CONFIG_USB_HCI), y)
 ifeq ($(CONFIG_USB_AUTOSUSPEND), y)
 EXTRA_CFLAGS += -DCONFIG_USB_AUTOSUSPEND
-endif
 endif
 
 ifeq ($(CONFIG_POWER_SAVING), y)

@@ -134,20 +134,7 @@ struct mp_tx
 	_thread_hdl_  PktTxThread;
 };
 
-//#if (MP_DRIVER == 1)
-#if defined(CONFIG_RTL8192C) || defined(CONFIG_RTL8192D) || defined(CONFIG_RTL8723A) || defined(CONFIG_RTL8188E)
-#ifdef CONFIG_RTL8192C
-#include <Hal8192CPhyCfg.h>
-#endif
-#ifdef CONFIG_RTL8192D
 #include <Hal8192DPhyCfg.h>
-#endif
-#ifdef CONFIG_RTL8723A
-#include <Hal8723APhyCfg.h>
-#endif
-#ifdef CONFIG_RTL8188E
-#include <rtl8188e_hal.h>
-#endif
 #define MP_MAX_LINES		1000
 #define MP_MAX_LINES_BYTES	256
 #define u1Byte u8
@@ -237,22 +224,9 @@ typedef struct _MPT_CONTEXT
 	u8		backup0xc58;
 	u8		backup0xc30;
 }MPT_CONTEXT, *PMPT_CONTEXT;
-#endif
-//#endif
 
 /* E-Fuse */
-#ifdef CONFIG_RTL8192D
 #define EFUSE_MAP_SIZE		255
-#endif
-#ifdef CONFIG_RTL8192C
-#define EFUSE_MAP_SIZE		128
-#endif
-#ifdef CONFIG_RTL8723A
-#define EFUSE_MAP_SIZE		256
-#endif
-#ifdef CONFIG_RTL8188E
-#define EFUSE_MAP_SIZE		256
-#endif
 #define EFUSE_MAX_SIZE		512
 
 /* end of E-Fuse */
@@ -379,21 +353,12 @@ typedef enum _MP_MODE_ {
 	MP_PACKET_RX
 } MP_MODE;
 
-#ifdef CONFIG_RTL8192C
-#define RF_PATH_A	RF_PATH_A
-#define RF_PATH_B	RF_PATH_B
-#define RF_PATH_C	RF_PATH_C
-#define RF_PATH_D	RF_PATH_D
-
-#define MAX_RF_PATH_NUMS	RF_PATH_MAX
-#else
 #define RF_PATH_A	0
 #define RF_PATH_B	1
 #define RF_PATH_C	2
 #define RF_PATH_D	3
 
 #define MAX_RF_PATH_NUMS	2
-#endif
 
 extern u8 mpdatarate[NumRates];
 

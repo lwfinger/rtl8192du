@@ -261,31 +261,17 @@ odm_FalseAlarmCounterStatistics(
 		pbuddy_adapter->recvpriv.FalseAlmCnt_all = FalseAlmCnt->Cnt_all;
 #endif //CONFIG_CONCURRENT_MODE
 
-#if 0 //Just for debug
-	if(pDM_DigTable->CurIGValue < 0x25)
-		FalseAlmCnt->Cnt_all = 12000;
-	else if(pDM_DigTable->CurIGValue < 0x2A)
-		FalseAlmCnt->Cnt_all = 20;
-	else if(pDM_DigTable->CurIGValue < 0x2D)
-		FalseAlmCnt->Cnt_all = 0;
-#endif
-
 	//reset false alarm counter registers
 	PHY_SetBBReg(Adapter, rOFDM1_LSTF, 0x08000000, 1);
 	PHY_SetBBReg(Adapter, rOFDM1_LSTF, 0x08000000, 0);
 	//update ofdm counter
 	PHY_SetBBReg(Adapter, rOFDM0_LSTF, BIT31, 0); //update page C counter
 	PHY_SetBBReg(Adapter, rOFDM1_LSTF, BIT31, 0); //update page D counter
-	if(pHalData->CurrentBandType92D != BAND_ON_5G)
-	{
+	if(pHalData->CurrentBandType92D != BAND_ON_5G) {
 		//reset cck counter
-		//AcquireCCKAndRWPageAControl(Adapter);
-		//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_falsealarmcount 111 \n"));
 		PHY_SetBBReg(Adapter, rCCK0_FalseAlarmReport, 0x0000c000, 0);
 		//enable cck counter
 		PHY_SetBBReg(Adapter, rCCK0_FalseAlarmReport, 0x0000c000, 2);
-		//ReleaseCCKAndRWPageAControl(Adapter);
-		//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_falsealarmcount 111 \n"));
 	}
 
 	//BB Reset
@@ -430,24 +416,6 @@ odm_initial_gain_MinPWDB(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	s32	Rssi_val_min = 0;
-#if 0
-	pDIG_T	pDM_DigTable = &pdmpriv->DM_DigTable;
-
-	if(	(pDM_DigTable->CurMultiSTAConnectState == DIG_MultiSTA_CONNECT) &&
-		(pDM_DigTable->CurSTAConnectState == DIG_STA_CONNECT) )
-	{
-		if(pHalData->EntryMinUndecoratedSmoothedPWDB != 0)
-			Rssi_val_min  =  (pdmpriv->EntryMinUndecoratedSmoothedPWDB > pdmpriv->UndecoratedSmoothedPWDB)?
-					pdmpriv->UndecoratedSmoothedPWDB:pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-		else
-			Rssi_val_min = pdmpriv->UndecoratedSmoothedPWDB;
-	}
-	else if(	pDM_DigTable->CurSTAConnectState == DIG_STA_CONNECT ||
-			pDM_DigTable->CurSTAConnectState == DIG_STA_BEFORE_CONNECT)
-		Rssi_val_min = pdmpriv->UndecoratedSmoothedPWDB;
-	else if(pDM_DigTable->CurMultiSTAConnectState == DIG_MultiSTA_CONNECT)
-		Rssi_val_min = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-#endif
 	if(pdmpriv->EntryMinUndecoratedSmoothedPWDB != 0)
 		Rssi_val_min  =  (pdmpriv->EntryMinUndecoratedSmoothedPWDB > pdmpriv->UndecoratedSmoothedPWDB)?
 					pdmpriv->UndecoratedSmoothedPWDB:pdmpriv->EntryMinUndecoratedSmoothedPWDB;
@@ -1752,23 +1720,6 @@ IN	PADAPTER	pAdapter
 #endif
 			dm_1R_CCA(pAdapter);
 	}
-
-#if 0
-	if(bRestoreRssi)
-	{
-		bRestoreRssi = _FALSE;
-		pdmpriv->MinUndecoratedPWDBForDM = Rssi_val_min_back_for_mac0;
-	}
-#endif
-
-// 20100628 Joseph: Turn off BB power save for 88CE because it makesthroughput unstable.
-#if 0
-	//1 3.Power Saving for 88C
-	if(!IS_92C_SERIAL(pHalData->VersionID))
-	{
-		dm_RF_Saving(pAdapter, FALSE);
-	}
-#endif
 }
 
 static	VOID
@@ -2561,162 +2512,6 @@ dm_InitRateAdaptiveMask(
 static VOID
 dm_RefreshRateAdaptiveMask(	IN	PADAPTER	pAdapter)
 {
-#if 0
-	PADAPTER				pTargetAdapter;
-	HAL_DATA_TYPE			*pHalData = GET_HAL_DATA(pAdapter);
-	PMGNT_INFO				pMgntInfo = &(ADJUST_TO_ADAPTIVE_ADAPTER(pAdapter, TRUE)->MgntInfo);
-	PRATE_ADAPTIVE			pRA = (PRATE_ADAPTIVE)&pMgntInfo->RateAdaptive;
-	u4Byte					LowRSSIThreshForRA = 0, HighRSSIThreshForRA = 0;
-
-	if(pAdapter->bDriverStopped)
-	{
-		RT_TRACE(COMP_RATR, DBG_TRACE, ("<---- dm_RefreshRateAdaptiveMask(): driver is going to unload\n"));
-		return;
-	}
-
-	if(!pMgntInfo->bUseRAMask)
-	{
-		RT_TRACE(COMP_RATR, DBG_LOUD, ("<---- dm_RefreshRateAdaptiveMask(): driver does not control rate adaptive mask\n"));
-		return;
-	}
-
-	// if default port is connected, update RA table for default port (infrastructure mode only)
-	if(pAdapter->MgntInfo.mAssoc && (!ACTING_AS_AP(pAdapter)))
-	{
-
-		// decide rastate according to rssi
-		switch (pRA->PreRATRState)
-		{
-			case DM_RATR_STA_HIGH:
-				HighRSSIThreshForRA = 50;
-				LowRSSIThreshForRA = 20;
-				break;
-
-			case DM_RATR_STA_MIDDLE:
-				HighRSSIThreshForRA = 55;
-				LowRSSIThreshForRA = 20;
-				break;
-
-			case DM_RATR_STA_LOW:
-				HighRSSIThreshForRA = 50;
-				LowRSSIThreshForRA = 25;
-				break;
-
-			default:
-				HighRSSIThreshForRA = 50;
-				LowRSSIThreshForRA = 20;
-				break;
-		}
-
-		if(pHalData->UndecoratedSmoothedPWDB > (s4Byte)HighRSSIThreshForRA)
-			pRA->RATRState = DM_RATR_STA_HIGH;
-		else if(pHalData->UndecoratedSmoothedPWDB > (s4Byte)LowRSSIThreshForRA)
-			pRA->RATRState = DM_RATR_STA_MIDDLE;
-		else
-			pRA->RATRState = DM_RATR_STA_LOW;
-
-		if(pRA->PreRATRState != pRA->RATRState)
-		{
-			RT_PRINT_ADDR(COMP_RATR, DBG_LOUD, ("Target AP addr : "), pMgntInfo->Bssid);
-			RT_TRACE(COMP_RATR, DBG_LOUD, ("RSSI = %ld\n", pHalData->UndecoratedSmoothedPWDB));
-			RT_TRACE(COMP_RATR, DBG_LOUD, ("RSSI_LEVEL = %d\n", pRA->RATRState));
-			RT_TRACE(COMP_RATR, DBG_LOUD, ("PreState = %d, CurState = %d\n", pRA->PreRATRState, pRA->RATRState));
-			pAdapter->HalFunc.UpdateHalRAMaskHandler(
-									pAdapter,
-									FALSE,
-									0,
-									NULL,
-									NULL,
-									pRA->RATRState);
-			pRA->PreRATRState = pRA->RATRState;
-		}
-	}
-
-	//
-	// The following part configure AP/VWifi/IBSS rate adaptive mask.
-	//
-	if(ACTING_AS_AP(pAdapter) || ACTING_AS_IBSS(pAdapter))
-	{
-		pTargetAdapter = pAdapter;
-	}
-	else
-	{
-		pTargetAdapter = ADJUST_TO_ADAPTIVE_ADAPTER(pAdapter, FALSE);
-		if(!ACTING_AS_AP(pTargetAdapter))
-			pTargetAdapter = NULL;
-	}
-
-	// if extension port (softap) is started, updaet RA table for more than one clients associate
-	if(pTargetAdapter != NULL)
-	{
-		int	i;
-		PRT_WLAN_STA	pEntry;
-		PRATE_ADAPTIVE     pEntryRA;
-
-		for(i = 0; i < ASSOCIATE_ENTRY_NUM; i++)
-		{
-			if(	pTargetAdapter->MgntInfo.AsocEntry[i].bUsed && pTargetAdapter->MgntInfo.AsocEntry[i].bAssociated)
-			{
-				pEntry = pTargetAdapter->MgntInfo.AsocEntry+i;
-				pEntryRA = &pEntry->RateAdaptive;
-
-				switch (pEntryRA->PreRATRState)
-				{
-					case DM_RATR_STA_HIGH:
-					{
-						HighRSSIThreshForRA = 50;
-						LowRSSIThreshForRA = 20;
-					}
-					break;
-
-					case DM_RATR_STA_MIDDLE:
-					{
-						HighRSSIThreshForRA = 55;
-						LowRSSIThreshForRA = 20;
-					}
-					break;
-
-					case DM_RATR_STA_LOW:
-					{
-						HighRSSIThreshForRA = 50;
-						LowRSSIThreshForRA = 25;
-					}
-					break;
-
-					default:
-					{
-						HighRSSIThreshForRA = 50;
-						LowRSSIThreshForRA = 20;
-					}
-				}
-
-				if(pEntry->rssi_stat.UndecoratedSmoothedPWDB > (s4Byte)HighRSSIThreshForRA)
-					pEntryRA->RATRState = DM_RATR_STA_HIGH;
-				else if(pEntry->rssi_stat.UndecoratedSmoothedPWDB > (s4Byte)LowRSSIThreshForRA)
-					pEntryRA->RATRState = DM_RATR_STA_MIDDLE;
-				else
-					pEntryRA->RATRState = DM_RATR_STA_LOW;
-
-				if(pEntryRA->PreRATRState != pEntryRA->RATRState)
-				{
-					RT_PRINT_ADDR(COMP_RATR, DBG_LOUD, ("AsocEntry addr : "), pEntry->MacAddr);
-					RT_TRACE(COMP_RATR, DBG_LOUD, ("RSSI = %ld\n", pEntry->rssi_stat.UndecoratedSmoothedPWDB));
-					RT_TRACE(COMP_RATR, DBG_LOUD, ("RSSI_LEVEL = %d\n", pEntryRA->RATRState));
-					RT_TRACE(COMP_RATR, DBG_LOUD, ("PreState = %d, CurState = %d\n", pEntryRA->PreRATRState, pEntryRA->RATRState));
-					pAdapter->HalFunc.UpdateHalRAMaskHandler(
-											pTargetAdapter,
-											FALSE,
-											pEntry->AID+1,
-											pEntry->MacAddr,
-											pEntry,
-											pEntryRA->RATRState);
-					pEntryRA->PreRATRState = pEntryRA->RATRState;
-				}
-
-			}
-		}
-	}
-#endif
 }
 #ifndef PLATFORM_FREEBSD
 static VOID
@@ -2724,26 +2519,6 @@ dm_CheckProtection(
 	IN	PADAPTER	Adapter
 	)
 {
-#if 0
-	PMGNT_INFO		pMgntInfo = &(Adapter->MgntInfo);
-	u1Byte			CurRate, RateThreshold;
-
-	if(pMgntInfo->pHTInfo->bCurBW40MHz)
-		RateThreshold = MGN_MCS1;
-	else
-		RateThreshold = MGN_MCS3;
-
-	if(Adapter->TxStats.CurrentInitTxRate <= RateThreshold)
-	{
-		pMgntInfo->bDmDisableProtect = TRUE;
-		DbgPrint("Forced disable protect: %x\n", Adapter->TxStats.CurrentInitTxRate);
-	}
-	else
-	{
-		pMgntInfo->bDmDisableProtect = FALSE;
-		DbgPrint("Enable protect: %x\n", Adapter->TxStats.CurrentInitTxRate);
-	}
-#endif
 }
 #endif //PLATFORM_FREEBSD
 
@@ -2752,20 +2527,6 @@ dm_CheckStatistics(
 	IN	PADAPTER	Adapter
 	)
 {
-#if 0
-	if(!Adapter->MgntInfo.bMediaConnect)
-		return;
-
-	//2008.12.10 tynli Add for getting Current_Tx_Rate_Reg flexibly.
-	rtw_hal_get_hwreg( Adapter, HW_VAR_INIT_TX_RATE, (pu1Byte)(&Adapter->TxStats.CurrentInitTxRate) );
-
-	// Calculate current Tx Rate(Successful transmited!!)
-
-	// Calculate current Rx Rate(Successful received!!)
-
-	//for tx tx retry count
-	rtw_hal_get_hwreg( Adapter, HW_VAR_RETRY_COUNT, (pu1Byte)(&Adapter->TxStats.NumTxRetryCount) );
-#endif
 }
 
 //

@@ -38,8 +38,8 @@ deps_/home/finger/rtl8192du/core/rtw_mlme_ext.o := \
     $(wildcard include/config/platform/rtk/dmp.h) \
     $(wildcard include/config/80211d.h) \
     $(wildcard include/config/debug/rtl871x.h) \
-    $(wildcard include/config/error/detect.h) \
     $(wildcard include/config/lps.h) \
+    $(wildcard include/config/error/detect.h) \
     $(wildcard include/config/find/best/channel.h) \
     $(wildcard include/config/led/handled/by/cmd/thread.h) \
   /home/finger/rtl8192du/include/drv_conf.h \

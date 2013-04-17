@@ -2638,106 +2638,49 @@ _ResetDigitalProcedure1(
 
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(Adapter);
 
-	//if((pHalData->FirmwareVersion <=  0x20)&&(_FALSE)){
-	if(0){
-		#if 0
-		/*****************************
-		f.	SYS_FUNC_EN 0x03[7:0]=0x54		// reset MAC register, DCORE
-		g.	MCUFWDL 0x80[7:0]=0				// reset MCU ready status
-		******************************/
-		u4Byte	value32 = 0;
-		PlatformIOWrite1Byte(Adapter, REG_SYS_FUNC_EN+1, 0x54);
-		PlatformIOWrite1Byte(Adapter, REG_MCUFWDL, 0);
-		#else
-		/*****************************
-		f.	MCUFWDL 0x80[7:0]=0				// reset MCU ready status
-		g.	SYS_FUNC_EN 0x02[10]= 0			// reset MCU register, (8051 reset)
-		h.	SYS_FUNC_EN 0x02[15-12]= 5		// reset MAC register, DCORE
-		i.     SYS_FUNC_EN 0x02[10]= 1			// enable MCU register, (8051 enable)
-		******************************/
-			u16 valu16 = 0;
+	u8 retry_cnts = 0;
+	// 2010/08/12 MH For USB SS, we can not stop 8051 when we are trying to
+	// enter IPS/HW&SW radio off. For S3/S4/S5/Disable, we can stop 8051 because
+	// we will init FW when power on again.
+	if(rtw_read8(Adapter, REG_MCUFWDL) & BIT1) { //IF fw in RAM code, do reset
+
+		if(Adapter->bFWReady) {
+			rtw_write8(Adapter, REG_FSIMR, 0x00);
+			// 2010/08/25 MH Accordign to RD alfred's suggestion, we need to disable other
+			// HRCV INT to influence 8051 reset.
+			rtw_write8(Adapter, REG_FWIMR, 0x20);
+			// 2011/02/15 MH According to Alex's suggestion, close mask to prevent incorrect FW write operation.
+			rtw_write8(Adapter, REG_FTIMR, 0x00);
+
 			rtw_write8(Adapter, REG_MCUFWDL, 0);
+			rtw_write8(Adapter, REG_HMETFR+3, 0x20);//8051 reset by self
 
-			valu16 = rtw_read16(Adapter, REG_SYS_FUNC_EN);
-			rtw_write16(Adapter, REG_SYS_FUNC_EN, (valu16 & (~FEN_CPUEN)));//reset MCU ,8051
+			while( (retry_cnts++ <100) && (FEN_CPUEN &rtw_read16(Adapter, REG_SYS_FUNC_EN)))
+				rtw_udelay_os(50);//us
 
-			valu16 = rtw_read16(Adapter, REG_SYS_FUNC_EN)&0x0FFF;
-			rtw_write16(Adapter, REG_SYS_FUNC_EN, (valu16 |(FEN_HWPDN|FEN_ELDR)));//reset MAC
-
-			#ifdef DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE
-			{
-				u8 val;
-				if( (val=rtw_read8(Adapter, REG_MCUFWDL)))
-					DBG_871X("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __FUNCTION__, __LINE__, val);
+			if (retry_cnts>= 100) {
+				rtw_write8(Adapter, REG_FWIMR, 0x00);
+				// 2010/08/31 MH According to Filen's info, if 8051 reset fail, reset MAC directly.
+				rtw_write8(Adapter, REG_SYS_FUNC_EN+1, 0x50);	//Reset MAC and Enable 8051
+				rtw_mdelay_os(10);
+			} else {
+				DBG_8192C("=====> 8051 reset success (%d) .\n",retry_cnts);
 			}
-			#endif
-
-
-			valu16 = rtw_read16(Adapter, REG_SYS_FUNC_EN);
-			rtw_write16(Adapter, REG_SYS_FUNC_EN, (valu16 | FEN_CPUEN));//enable MCU ,8051
-
-
-		#endif
-	}
-	else{
-		u8 retry_cnts = 0;
-		// 2010/08/12 MH For USB SS, we can not stop 8051 when we are trying to
-		// enter IPS/HW&SW radio off. For S3/S4/S5/Disable, we can stop 8051 because
-		// we will init FW when power on again.
-		//if(!pDevice->RegUsbSS)
-		{	// If we want to SS mode, we can not reset 8051.
-			if(rtw_read8(Adapter, REG_MCUFWDL) & BIT1)
-			{ //IF fw in RAM code, do reset
-
-				if(Adapter->bFWReady)
-				{
-					rtw_write8(Adapter, REG_FSIMR, 0x00);
-					// 2010/08/25 MH Accordign to RD alfred's suggestion, we need to disable other
-					// HRCV INT to influence 8051 reset.
-					rtw_write8(Adapter, REG_FWIMR, 0x20);
-					// 2011/02/15 MH According to Alex's suggestion, close mask to prevent incorrect FW write operation.
-					rtw_write8(Adapter, REG_FTIMR, 0x00);
-
-					rtw_write8(Adapter, REG_MCUFWDL, 0);
-					rtw_write8(Adapter, REG_HMETFR+3, 0x20);//8051 reset by self
-
-					while( (retry_cnts++ <100) && (FEN_CPUEN &rtw_read16(Adapter, REG_SYS_FUNC_EN)))
-					{
-						rtw_udelay_os(50);//us
-					}
-					//RT_ASSERT((retry_cnts < 100), ("8051 reset failed!\n"));
-
-					if (retry_cnts>= 100)
-					{
-						rtw_write8(Adapter, REG_FWIMR, 0x00);
-						// 2010/08/31 MH According to Filen's info, if 8051 reset fail, reset MAC directly.
-						rtw_write8(Adapter, REG_SYS_FUNC_EN+1, 0x50);	//Reset MAC and Enable 8051
-						rtw_mdelay_os(10);
-					}
-					else
-					{
-						DBG_8192C("=====> 8051 reset success (%d) .\n",retry_cnts);
-					}
-				}
-			}
-			else
-			{
-				DBG_8192C("=====> 8051 in ROM.\n");
-			}
-
-			#ifdef DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE
-			{
-				u8 val;
-				if( (val=rtw_read8(Adapter, REG_MCUFWDL)))
-					DBG_871X("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __FUNCTION__, __LINE__, val);
-			}
-			#endif
-
-			rtw_write8(Adapter, REG_SYS_FUNC_EN+1, 0x54);	//Reset MAC and Enable 8051
-			rtw_write8(Adapter, REG_MCUFWDL, 0);
-
 		}
+	} else {
+		DBG_8192C("=====> 8051 in ROM.\n");
 	}
+
+	#ifdef DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE
+	{
+		u8 val;
+		if( (val=rtw_read8(Adapter, REG_MCUFWDL)))
+			DBG_871X("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __FUNCTION__, __LINE__, val);
+	}
+	#endif
+
+	rtw_write8(Adapter, REG_SYS_FUNC_EN+1, 0x54);	//Reset MAC and Enable 8051
+	rtw_write8(Adapter, REG_MCUFWDL, 0);
 
 	if(bWithoutHWSM){
 	/*****************************
@@ -3021,17 +2964,6 @@ _func_enter_;
 	OpMode = 0;
 	rtw_hal_set_hwreg(padapter, HW_VAR_MEDIA_STATUS, (u8 *)(&OpMode));
 
-#if 0
-	if(pHalData->interfaceIndex == 0){
-		u1bTmp = rtw_read8(padapter, REG_MAC0);
-		rtw_write8(padapter, REG_MAC0, u1bTmp&(~MAC0_ON));
-	}
-	else{
-		u1bTmp = rtw_read8(padapter, REG_MAC1);
-		rtw_write8(padapter, REG_MAC1, u1bTmp&(~MAC1_ON));
-	}
-#endif
-
 	rtw_write16(padapter, REG_GPIO_MUXCFG, rtw_read16(padapter, REG_GPIO_MUXCFG)&(~BIT12));
 
 	if(/*Adapter->bInUsbIfTest ||*/ !pHalData->bSupportRemoteWakeUp){
@@ -3039,8 +2971,7 @@ _func_enter_;
 			CardDisableHWSM(padapter, _FALSE);
 		else
 			CardDisableWithoutHWSM(padapter);
-	}
-	else{
+	} else{
 
 		// Wake on WLAN
 	}
@@ -3405,26 +3336,6 @@ _ReadBoardType(
 	boardType &= BOARD_TYPE_NORMAL_MASK;
 	boardType >>= 5;
 
-#if 0
-	switch(boardType & 0xF)
-	{
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			pHalData->rf_type = RF_2T2R;
-			break;
-		case 5:
-			pHalData->rf_type = RF_1T2R;
-			break;
-		default:
-			pHalData->rf_type = RF_1T1R;
-			break;
-	}
-
-	pHalData->BluetoothCoexist = (boardType >> 4) ? _TRUE : _FALSE;
-#endif
 }
 
 
@@ -5525,50 +5436,28 @@ GetHalDefVar8192DUsb(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8			bResult = _TRUE;
 
-	switch(eVariable)
-	{
-		case HAL_DEF_UNDERCORATEDSMOOTHEDPWDB:
-#if 0 //trunk
-			{
-				struct mlme_priv *pmlmepriv = &Adapter->mlmepriv;
-				struct sta_priv * pstapriv = &Adapter->stapriv;
-				struct sta_info * psta;
-				psta = rtw_get_stainfo(pstapriv, pmlmepriv->cur_network.network.MacAddress);
-				if(psta)
-				{
-					*((int *)pValue) = psta->rssi_stat.UndecoratedSmoothedPWDB;
-				}
-			}
-#else //v4 branch
-			//if(check_fwstate(&Adapter->mlmepriv, WIFI_STATION_STATE) == _TRUE){
-			*((int *)pValue) = pHalData->dmpriv.UndecoratedSmoothedPWDB;
-			//}
-			//else{
-
-			//}
-#endif
-			break;
-		case HAL_DEF_DRVINFO_SZ:
-			*(( u32*)pValue) = DRVINFO_SZ;
-			break;
-		case HAL_DEF_MAX_RECVBUF_SZ:
-			*(( u32*)pValue) = MAX_RECVBUF_SZ;
-			break;
-		case HAL_DEF_RX_PACKET_OFFSET:
-			*(( u32*)pValue) = RXDESC_SIZE + DRVINFO_SZ;
-			break;
-		case HAL_DEF_DBG_DM_FUNC:
-			*(( u8*)pValue) = pHalData->dmpriv.DMFlag;
-			break;
-		default:
-			//RT_TRACE(COMP_INIT, DBG_WARNING, ("GetHalDefVar8192CUsb(): Unkown variable: %d!\n", eVariable));
-			bResult = _FALSE;
-			break;
+	switch(eVariable) {
+	case HAL_DEF_UNDERCORATEDSMOOTHEDPWDB:
+		*((int *)pValue) = pHalData->dmpriv.UndecoratedSmoothedPWDB;
+		break;
+	case HAL_DEF_DRVINFO_SZ:
+		*(( u32*)pValue) = DRVINFO_SZ;
+		break;
+	case HAL_DEF_MAX_RECVBUF_SZ:
+		*(( u32*)pValue) = MAX_RECVBUF_SZ;
+		break;
+	case HAL_DEF_RX_PACKET_OFFSET:
+		*(( u32*)pValue) = RXDESC_SIZE + DRVINFO_SZ;
+		break;
+	case HAL_DEF_DBG_DM_FUNC:
+		*(( u8*)pValue) = pHalData->dmpriv.DMFlag;
+		break;
+	default:
+		bResult = _FALSE;
+		break;
 	}
-
 	return bResult;
 }
-
 
 //
 //	Description:

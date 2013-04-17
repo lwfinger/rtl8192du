@@ -1086,9 +1086,7 @@ Efuse_InitSomeVar(
 	_rtw_memset((PVOID)&fakeBTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
 }
 
-#ifdef PLATFORM_LINUX
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
-//#include <rtw_eeprom.h>
 
  int isAdaptorInfoFileValid(void)
 {
@@ -1126,15 +1124,6 @@ int retriveAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv)
 			ret = _SUCCESS;
 		else
 			ret = _FAIL;
-
-		#if 0
-		if(isAdaptorInfoFileValid()) {
-			return 0;
-		} else {
-			return _FAIL;
-		}
-		#endif
-
 	} else {
 		DBG_871X("%s NULL pointer\n",__FUNCTION__);
 		ret = _FAIL;
@@ -1142,4 +1131,3 @@ int retriveAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv)
 	return ret;
 }
 #endif //CONFIG_ADAPTOR_INFO_CACHING_FILE
-#endif //PLATFORM_LINUX

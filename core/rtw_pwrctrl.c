@@ -740,16 +740,6 @@ void cpwm_int_hdl(
 _func_enter_;
 
 	pwrpriv = &padapter->pwrctrlpriv;
-#if 0
-	if (pwrpriv->cpwm_tog == (preportpwrstate->state & PS_TOGGLE)) {
-		RT_TRACE(_module_rtl871x_pwrctrl_c_, _drv_err_,
-				 ("cpwm_int_hdl: tog(old)=0x%02x cpwm(new)=0x%02x toggle bit didn't change!?\n",
-				  pwrpriv->cpwm_tog, preportpwrstate->state));
-		goto exit;
-	}
-#endif
-//	_enter_pwrlock(&pwrpriv->lock);
-
 	pwrpriv->cpwm = PS_STATE(preportpwrstate->state);
 	pwrpriv->cpwm_tog = preportpwrstate->state & PS_TOGGLE;
 
@@ -760,8 +750,6 @@ _func_enter_;
 		if (pwrpriv->alives & XMIT_ALIVE)
 			_rtw_up_sema(&padapter->xmitpriv.xmit_sema);
 	}
-
-//	_exit_pwrlock(&pwrpriv->lock);
 
 exit:
 	RT_TRACE(_module_rtl871x_pwrctrl_c_, _drv_notice_,

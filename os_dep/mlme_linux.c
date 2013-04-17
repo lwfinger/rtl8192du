@@ -26,57 +26,6 @@
 #include <drv_types.h>
 #include <mlme_osdep.h>
 
-
-#ifdef RTK_DMP_PLATFORM
-void Linkup_workitem_callback(struct work_struct *work)
-{
-	struct mlme_priv *pmlmepriv = container_of(work, struct mlme_priv, Linkup_workitem);
-	_adapter *padapter = container_of(pmlmepriv, _adapter, mlmepriv);
-
-_func_enter_;
-
-	RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("+ Linkup_workitem_callback\n"));
-
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,12))
-	kobject_uevent(&padapter->pnetdev->dev.kobj, KOBJ_LINKUP);
-#else
-	kobject_hotplug(&padapter->pnetdev->class_dev.kobj, KOBJ_LINKUP);
-#endif
-
-_func_exit_;
-}
-
-void Linkdown_workitem_callback(struct work_struct *work)
-{
-	struct mlme_priv *pmlmepriv = container_of(work, struct mlme_priv, Linkdown_workitem);
-	_adapter *padapter = container_of(pmlmepriv, _adapter, mlmepriv);
-
-_func_enter_;
-
-	RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("+ Linkdown_workitem_callback\n"));
-
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,12))
-	kobject_uevent(&padapter->pnetdev->dev.kobj, KOBJ_LINKDOWN);
-#else
-	kobject_hotplug(&padapter->pnetdev->class_dev.kobj, KOBJ_LINKDOWN);
-#endif
-
-_func_exit_;
-}
-#endif
-
-
-/*
-void sitesurvey_ctrl_handler(void *FunctionContext)
-{
-	_adapter *adapter = (_adapter *)FunctionContext;
-
-	_sitesurvey_ctrl_handler(adapter);
-
-	_set_timer(&adapter->mlmepriv.sitesurveyctrl.sitesurvey_ctrl_timer, 3000);
-}
-*/
-
 void rtw_join_timeout_handler (void *FunctionContext)
 {
 	_adapter *adapter = (_adapter *)FunctionContext;
@@ -122,12 +71,6 @@ void rtw_init_mlme_timer(_adapter *padapter)
 	#ifdef CONFIG_SET_SCAN_DENY_TIMER
 	_init_timer(&(pmlmepriv->set_scan_deny_timer), padapter->pnetdev, _rtw_set_scan_deny_timer_hdl, padapter);
 	#endif
-
-#ifdef RTK_DMP_PLATFORM
-	_init_workitem(&(pmlmepriv->Linkup_workitem), Linkup_workitem_callback, padapter);
-	_init_workitem(&(pmlmepriv->Linkdown_workitem), Linkdown_workitem_callback, padapter);
-#endif
-
 }
 
 extern void rtw_indicate_wx_assoc_event(_adapter *padapter);
@@ -148,12 +91,7 @@ _func_enter_;
 	if(adapter->pid[2] !=0)
 		rtw_signal_process(adapter->pid[2], SIGALRM);
 
-#ifdef RTK_DMP_PLATFORM
-	_set_workitem(&adapter->mlmepriv.Linkup_workitem);
-#endif
-
 _func_exit_;
-
 }
 
 extern void indicate_wx_scan_complete_event(_adapter *padapter);
@@ -234,9 +172,6 @@ _func_enter_;
 
 	rtw_indicate_wx_disassoc_event(adapter);
 
-#ifdef RTK_DMP_PLATFORM
-	_set_workitem(&adapter->mlmepriv.Linkdown_workitem);
-#endif
 	 rtw_reset_securitypriv( adapter );
 
 _func_exit_;

@@ -30,16 +30,8 @@ c. provides the software interface between caller and the hardware interface
 
 Compiler Flag Option:
 
-1. CONFIG_SDIO_HCI:
-    a. USE_SYNC_IRP:  Only sync operations are provided.
-    b. USE_ASYNC_IRP:Both sync/async operations are provided.
-
-2. CONFIG_USB_HCI:
+1. default USB configuration
    a. USE_ASYNC_IRP: Both sync/async operations are provided.
-
-3. CONFIG_CFIO_HCI:
-   b. USE_SYNC_IRP: Only sync operations are provided.
-
 
 Only sync read/rtw_write_mem operations are provided.
 

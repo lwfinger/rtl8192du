@@ -25,8 +25,6 @@
 #define RTL871X_MODULE_NAME "92DU"
 #define DRV_NAME "rtl8192du"
 
-#define CONFIG_USB_HCI	1
-
 #define CONFIG_RTL8192D	1
 
 //#define CONFIG_IOCTL_CFG80211 1

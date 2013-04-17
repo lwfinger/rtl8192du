@@ -40,11 +40,6 @@
 #define EUROPE						0x1 //temp, should be provided later
 #define JAPAN						0x2 //temp, should be provided later
 
-#ifdef CONFIG_SDIO_HCI
-#define eeprom_cis0_sz	17
-#define eeprom_cis1_sz	50
-#endif
-
 #define	EEPROM_CID_DEFAULT			0x0
 #define	EEPROM_CID_ALPHA				0x1
 #define	EEPROM_CID_Senao				0x3
@@ -111,26 +106,10 @@ typedef enum _RT_CUSTOMER_ID
 struct eeprom_priv
 {
 	u8		bautoload_fail_flag;
-	//u8		bempty;
-	//u8		sys_config;
 	u8		mac_addr[6];	//PermanentAddress
-	//u8		config0;
 	u16		channel_plan;
-	//u8		country_string[3];
-	//u8		tx_power_b[15];
-	//u8		tx_power_g[15];
-	//u8		tx_power_a[201];
-
 	u8		EepromOrEfuse;
-
 	u8		efuse_eeprom_data[EEPROM_MAX_SIZE];
-
-#ifdef CONFIG_SDIO_HCI
-	u8		sdio_setting;
-	u32		ocr;
-	u8		cis0[eeprom_cis0_sz];
-	u8		cis1[eeprom_cis1_sz];
-#endif
 };
 
 

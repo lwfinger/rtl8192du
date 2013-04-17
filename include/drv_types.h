@@ -214,11 +214,6 @@ struct registry_priv
 
 #define MAX_CONTINUAL_URB_ERR 4
 
-#ifdef CONFIG_SDIO_HCI
-#include <drv_types_sdio.h>
-#define INTF_DATA SDIO_DATA
-#endif
-
 #define GET_PRIMARY_ADAPTER(padapter) (((_adapter *)padapter)->dvobj->if1)
 
 #ifdef CONFIG_CONCURRENT_MODE

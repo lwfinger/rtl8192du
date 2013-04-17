@@ -106,7 +106,6 @@ typedef struct _Phy_CCK_Rx_Status_Report_8192cd
 // Rx smooth factor
 #define	Rx_Smooth_Factor (20)
 
-#ifdef CONFIG_USB_HCI
 typedef struct _INTERRUPT_MSG_FORMAT_EX{
 	unsigned int C2H_MSG0;
 	unsigned int C2H_MSG1;
@@ -120,12 +119,6 @@ typedef struct _INTERRUPT_MSG_FORMAT_EX{
 void rtl8192du_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf);
 int	rtl8192du_init_recv_priv(_adapter * padapter);
 void	rtl8192du_free_recv_priv(_adapter * padapter);
-#endif
-
-#ifdef CONFIG_PCI_HCI
-int	rtl8192de_init_recv_priv(_adapter * padapter);
-void rtl8192de_free_recv_priv(_adapter * padapter);
-#endif
 
 void rtl8192d_translate_rx_signal_stuff(union recv_frame *precvframe, struct phy_stat *pphy_info);
 void rtl8192d_query_rx_desc_status(union recv_frame *precvframe, struct recv_stat *pdesc);

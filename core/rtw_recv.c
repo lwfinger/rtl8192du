@@ -106,15 +106,9 @@ _func_enter_;
 		precvframe++;
 
 	}
-
-#ifdef CONFIG_USB_HCI
-
 	precvpriv->rx_pending_cnt=1;
 
 	_rtw_init_sema(&precvpriv->allrxreturnevt, 0);
-
-#endif
-
 	res = rtw_hal_init_recv_priv(padapter);
 
 	precvpriv->recvbuf_skb_alloc_fail_cnt = 0;
@@ -2218,10 +2212,6 @@ _func_enter_;
 
 		return NULL;
 	}
-
-#ifdef CONFIG_SDIO_HCI
-	recvframe_expand_pkt(adapter, prframe);
-#endif
 
 	curfragnum++;
 

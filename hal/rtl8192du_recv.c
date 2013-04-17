@@ -26,20 +26,9 @@
 #include <ip.h>
 #include <if_ether.h>
 #include <ethernet.h>
-
-#ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
-#endif
-
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
 #include <wifi.h>
 #include <circ_buf.h>
-
 #include <rtl8192d_hal.h>
 
 void rtl8192du_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf)
@@ -70,7 +59,6 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 	_rtw_init_sema(&precvpriv->terminate_recvthread_sema, 0);//will be removed
 #endif //CONFIG_RECV_THREAD_MODE
 
-#ifdef PLATFORM_LINUX
 	tasklet_init(&precvpriv->recv_tasklet,
 	     (void(*)(unsigned long))rtl8192du_recv_tasklet,
 	     (unsigned long)padapter);
@@ -78,23 +66,13 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 #ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
 	_rtw_init_queue(&precvpriv->recv_buf_pending_queue);
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_RX
-#endif	// PLATFORM_LINUX
-
-#ifdef PLATFORM_FREEBSD
-	TASK_INIT(&precvpriv->recv_tasklet, 0, rtl8192du_recv_tasklet, padapter);
-#ifdef CONFIG_RX_INDICATE_QUEUE
-	TASK_INIT(&precvpriv->rx_indicate_tasklet, 0, rtw_rx_indicate_tasklet, padapter);
-#endif	// CONFIG_RX_INDICATE_QUEUE
-#endif	// PLATFORM_FREEBSD
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
 
-#ifdef PLATFORM_LINUX
 	precvpriv->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
 	if(precvpriv->int_in_urb == NULL){
 		DBG_8192C("alloc_urb for interrupt in endpoint fail !!!!\n");
 	}
-#endif //PLATFORM_LINUX
 	precvpriv->int_in_buf = rtw_malloc(sizeof(INTERRUPT_MSG_FORMAT_EX));
 	if(precvpriv->int_in_buf == NULL){
 		DBG_8192C("alloc_mem for interrupt in endpoint fail !!!!\n");
@@ -138,9 +116,6 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 	}
 
 	precvpriv->free_recv_buf_queue_cnt = NR_RECVBUFF;
-
-#if defined(PLATFORM_LINUX) || defined(PLATFORM_FREEBSD)
-
 	skb_queue_head_init(&precvpriv->rx_skb_queue);
 
 #ifdef CONFIG_RX_INDICATE_QUEUE
@@ -159,23 +134,15 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 
 		for(i=0; i<NR_PREALLOC_RECV_SKB; i++)
 		{
-	#ifdef PLATFORM_FREEBSD
-			pskb = dev_alloc_skb(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
-	#else
 	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) // http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html
 			pskb = dev_alloc_skb(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 	#else
 			pskb = netdev_alloc_skb(padapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 	#endif //(LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18))
-	#endif //PLATFORM_FREEBSD
 
 			if(pskb)
 			{
-				#ifdef PLATFORM_FREEBSD
-				pskb->dev = padapter->pifp;
-				#else
 				pskb->dev = padapter->pnetdev;
-				#endif //PLATFORM_FREEBSD
 
 				tmpaddr = (SIZE_PTR)pskb->data;
 				alignment = tmpaddr & (RECVBUFF_ALIGN_SZ-1);
@@ -188,8 +155,6 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 
 		}
 	}
-#endif
-
 #endif
 
 exit:
@@ -216,17 +181,13 @@ void rtl8192du_free_recv_priv (_adapter *padapter)
 		rtw_mfree(precvpriv->pallocated_recv_buf, NR_RECVBUFF *sizeof(struct recv_buf) + 4);
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-#ifdef PLATFORM_LINUX
 	if(precvpriv->int_in_urb)
 	{
 		usb_free_urb(precvpriv->int_in_urb);
 	}
-#endif
 	if(precvpriv->int_in_buf)
 		rtw_mfree(precvpriv->int_in_buf, sizeof(INTERRUPT_MSG_FORMAT_EX));
 #endif
-
-#ifdef PLATFORM_LINUX
 
 	if (skb_queue_len(&precvpriv->rx_skb_queue)) {
 		DBG_8192C(KERN_WARNING "rx_skb_queue not empty\n");
@@ -241,40 +202,5 @@ void rtl8192du_free_recv_priv (_adapter *padapter)
 	}
 
 	skb_queue_purge(&precvpriv->free_recv_skb_queue);
-
 #endif
-
-#endif // PLATFORM_LINUX
-
-#ifdef PLATFORM_FREEBSD
-	struct sk_buff  *pskb;
-	while (NULL != (pskb = skb_dequeue(&precvpriv->rx_skb_queue)))
-	{
-		dev_kfree_skb_any(pskb);
-
-	}
-
-#ifdef CONFIG_PREALLOC_RECV_SKB
-	while (NULL != (pskb = skb_dequeue(&precvpriv->free_recv_skb_queue)))
-	{
-		dev_kfree_skb_any(pskb);
-
-	}
-#endif
-
-#ifdef CONFIG_RX_INDICATE_QUEUE
-	struct mbuf *m;
-	for (;;) {
-		IF_DEQUEUE(&precvpriv->rx_indicate_queue, m);
-		if (m == NULL)
-			break;
-		m_freem(m);
-	}
-	mtx_destroy(&precvpriv->rx_indicate_queue.ifq_mtx);
-#endif	// CONFIG_RX_INDICATE_QUEUE
-
-#endif // PLATFORM_FREEBSD
-
-
-
 }

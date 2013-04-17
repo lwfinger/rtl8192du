@@ -47,7 +47,6 @@
 //	Prototype of protected function.
 //================================================================================
 
-#ifndef PLATFORM_FREEBSD //amy temp remove
 static void
 BlinkTimerCallback(
 	unsigned long data
@@ -57,7 +56,6 @@ static void
 BlinkWorkItemCallback(
 	struct work_struct *work
 	);
-#endif //PLATFORM_FREEBSD,amy temp remove
 
 static void
 ResetLedStatus(PLED_871x	pLed) {
@@ -106,12 +104,10 @@ InitLed871x(
 	pLed->bLedBlinkInProgress = _FALSE;
 	pLed->BlinkTimes = 0;
 	pLed->BlinkingLedState = LED_UNKNOWN;
-#ifndef PLATFORM_FREEBSD   //amy, temp remove
 
 	_init_timer(&(pLed->BlinkTimer), padapter->pnetdev, BlinkTimerCallback, pLed);
 
 	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback, pLed);
-#endif //PLATFORM_FREEBSD    //amy, temp remove
 }
 
 
@@ -1222,7 +1218,6 @@ SwLedBlink5(
 
 }
 
-#ifndef PLATFORM_FREEBSD //amy temp remove
 //
 //	Description:
 //		Callback function of LED BlinkTimer,
@@ -1292,7 +1287,6 @@ void BlinkWorkItemCallback(struct work_struct *work)
 			break;
 	}
 }
-#endif //PLATFORM_FREEBSD,amy temp remove
 
 
 //================================================================================

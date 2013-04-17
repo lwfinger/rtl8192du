@@ -656,12 +656,8 @@ static void odm_DIG(
 	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)
 #endif //CONFIG_CONCURRENT_MODE
 	{
-#ifdef CONFIG_PLATFORM_RTK_DMP
-		pDM_DigTable->rx_gain_range_max = DM_DIG_MAX;
-#else
 		//2 Get minimum RSSI value among associated devices
 		pDM_DigTable->Rssi_val_min = odm_initial_gain_MinPWDB(pAdapter);
-		//DBG_871X("pDM_DigTable->Rssi_val_min = 0x%x\n", pDM_DigTable->Rssi_val_min);
 
 		//2 Modify DIG upper bound
 		if((pDM_DigTable->Rssi_val_min + 20) > DM_DIG_MAX )
@@ -675,24 +671,10 @@ static void odm_DIG(
 			DIG_Dynamic_MIN--;
 		if((pDM_DigTable->Rssi_val_min < 8) && (DIG_Dynamic_MIN > DM_DIG_MIN))
 			DIG_Dynamic_MIN--;
-#endif //CONFIG_PLATFORM_RTK_DMP
-	}
-	else
-	{
+	} else {
 		pDM_DigTable->rx_gain_range_max = DM_DIG_MAX;
 		DIG_Dynamic_MIN = DM_DIG_MIN;
 	}
-#ifdef CONFIG_PLATFORM_RTK_DMP
-	{
-		u8 RSSI_tmp = odm_initial_gain_MinPWDB(pAdapter);
-		if(RSSI_tmp <= DM_DIG_MIN)
-			pDM_DigTable->rx_gain_range_min = DM_DIG_MIN;
-		else if(RSSI_tmp >= DM_DIG_MAX)
-			pDM_DigTable->rx_gain_range_min = DM_DIG_MAX;
-		else
-			pDM_DigTable->rx_gain_range_min = RSSI_tmp;
-	}
-#else //CONFIG_PLATFORM_RTK_DMP
 
 	//1 Modify DIG lower bound, deal with abnorally large false alarm
 	if(FalseAlmCnt->Cnt_all > 10000)
@@ -743,11 +725,6 @@ static void odm_DIG(
 		}
 
 	}
-#endif //CONFIG_PLATFORM_RTK_DMP
-	//DBG_871X("DM_DigTable.ForbiddenIGI = 0x%x, DM_DigTable.LargeFAHit = 0x%x\n",
-		//pDM_DigTable->ForbiddenIGI, pDM_DigTable->LargeFAHit);
-	//DBG_871X("DM_DigTable.rx_gain_range_max = 0x%x, DM_DigTable.rx_gain_range_min = 0x%x\n",
-		//pDM_DigTable->rx_gain_range_max, pDM_DigTable->rx_gain_range_min);
 
 	//1 Adjust initial gain by false alarm
 #ifdef CONFIG_CONCURRENT_MODE
@@ -2363,7 +2340,6 @@ rtl8192d_dm_CheckTXPowerTracking(
  *	01/10/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-#ifndef PLATFORM_FREEBSD
 static VOID
 dm_CheckRfCtrlGPIO(
 	IN	PADAPTER	Adapter
@@ -2371,7 +2347,6 @@ dm_CheckRfCtrlGPIO(
 {
 
 }	/* dm_CheckRfCtrlGPIO */
-#endif //PLATFORM_FREEBSD
 
 /*-----------------------------------------------------------------------------
  * Function:	dm_CheckPbcGPIO()
@@ -2454,23 +2429,13 @@ static void	dm_CheckPbcGPIO(IN PADAPTER padapter)
 		// After trigger PBC, the variable will be set to false
 		DBG_8192C("CheckPbcGPIO - PBC is pressed, try_cnt=%d\n", i-1);
 
-#ifdef RTK_DMP_PLATFORM
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,12))
-		kobject_uevent(&padapter->pnetdev->dev.kobj, KOBJ_NET_PBC);
-#else
-		kobject_hotplug(&padapter->pnetdev->class_dev.kobj, KOBJ_NET_PBC);
-#endif
-#else
 
 		if ( padapter->pid[0] == 0 )
 		{	//	0 is the default value and it means the application monitors the HW PBC doesn't privde its pid to driver.
 			return;
 		}
 
-#ifdef PLATFORM_LINUX
 		rtw_signal_process(padapter->pid[0], SIGUSR1);
-#endif
-#endif
 	}
 }
 
@@ -2513,14 +2478,12 @@ static VOID
 dm_RefreshRateAdaptiveMask(	IN	PADAPTER	pAdapter)
 {
 }
-#ifndef PLATFORM_FREEBSD
 static VOID
 dm_CheckProtection(
 	IN	PADAPTER	Adapter
 	)
 {
 }
-#endif //PLATFORM_FREEBSD
 
 static VOID
 dm_CheckStatistics(

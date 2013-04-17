@@ -681,43 +681,23 @@ _func_enter_;
 		&& (psecuritypriv->busetkipkey==1 || prxattrib->encrypt !=_TKIP_ )
 		)
 	{
-#if 0
-		if((prxstat->icv==1)&&(prxattrib->encrypt!=_AES_))
-		{
-			psecuritypriv->hw_decrypted=_FALSE;
+		psecuritypriv->hw_decrypted=_TRUE;
+		#ifdef DBG_RX_DECRYPTOR
+		DBG_871X("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  Setting psecuritypriv->hw_decrypted = %d\n"
+		, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
+		#endif
 
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("psecuritypriv->hw_decrypted=_FALSE"));
-
-			rtw_free_recvframe(precv_frame, &padapter->recvpriv.free_recv_queue);
-
-			return_packet=NULL;
-
-		}
-		else
-#endif
-		{
-			psecuritypriv->hw_decrypted=_TRUE;
-			#ifdef DBG_RX_DECRYPTOR
-			DBG_871X("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  Setting psecuritypriv->hw_decrypted = %d\n"
-			, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
-			#endif
-
-		}
-	}
-	else {
+	} else {
 		#ifdef DBG_RX_DECRYPTOR
 		DBG_871X("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  psecuritypriv->hw_decrypted:%d\n"
 		, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
 		#endif
 	}
 
-	if(res == _FAIL)
-	{
+	if(res == _FAIL) {
 		rtw_free_recvframe(return_packet,&padapter->recvpriv.free_recv_queue);
 		return_packet = NULL;
-
 	}
-	//recvframe_chkmic(adapter, precv_frame);   //move to recvframme_defrag function
 
 _func_exit_;
 
@@ -1701,24 +1681,7 @@ union recv_frame* recvframe_chk_defrag(PADAPTER padapter, union recv_frame *prec
 sint validate_recv_mgnt_frame(PADAPTER padapter, union recv_frame *precv_frame);
 sint validate_recv_mgnt_frame(PADAPTER padapter, union recv_frame *precv_frame)
 {
-	//struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
-
 	RT_TRACE(_module_rtl871x_recv_c_, _drv_info_, ("+validate_recv_mgnt_frame\n"));
-
-#if 0
-	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
-	{
-#ifdef CONFIG_NATIVEAP_MLME
-		mgt_dispatcher(padapter, precv_frame);
-#else
-		rtw_hostapd_mlme_rx(padapter, precv_frame);
-#endif
-	}
-	else
-	{
-		mgt_dispatcher(padapter, precv_frame);
-	}
-#endif
 
 	precv_frame = recvframe_chk_defrag(padapter, precv_frame);
 	if (precv_frame == NULL) {
@@ -1925,14 +1888,6 @@ _func_enter_;
 		goto exit;
 	}
 
-#if 0
-	if(psta->tdls_sta_state & TDLS_LINKED_STATE )
-	{
-		if(psta->dot118021XPrivacy==_AES_)
-			pattrib->encrypt=psta->dot118021XPrivacy;
-	}
-#endif //CONFIG_TDLS
-
 	if(pattrib->privacy){
 
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("validate_recv_data_frame:pattrib->privacy=%x\n", pattrib->privacy));
@@ -2039,77 +1994,36 @@ _func_enter_;
 	pattrib->mdata = GetMData(ptr);
 	pattrib->privacy = GetPrivacy(ptr);
 	pattrib->order = GetOrder(ptr);
-#if 0 //for debug
-
-if(pHalData->bDumpRxPkt ==1){
-	int i;
-	DBG_871X("############################# \n");
-
-	for(i=0; i<64;i=i+8)
-		DBG_871X("%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:\n", *(ptr+i),
-		*(ptr+i+1), *(ptr+i+2) ,*(ptr+i+3) ,*(ptr+i+4),*(ptr+i+5), *(ptr+i+6), *(ptr+i+7));
-	DBG_871X("############################# \n");
-}
-else if(pHalData->bDumpRxPkt ==2){
-	if(type== WIFI_MGT_TYPE){
-		int i;
-		DBG_871X("############################# \n");
-
-		for(i=0; i<64;i=i+8)
-			DBG_871X("%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:\n", *(ptr+i),
-			*(ptr+i+1), *(ptr+i+2) ,*(ptr+i+3) ,*(ptr+i+4),*(ptr+i+5), *(ptr+i+6), *(ptr+i+7));
-		DBG_871X("############################# \n");
-	}
-}
-else if(pHalData->bDumpRxPkt ==3){
-	if(type== WIFI_DATA_TYPE){
-		int i;
-		DBG_871X("############################# \n");
-
-		for(i=0; i<64;i=i+8)
-			DBG_871X("%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:\n", *(ptr+i),
-			*(ptr+i+1), *(ptr+i+2) ,*(ptr+i+3) ,*(ptr+i+4),*(ptr+i+5), *(ptr+i+6), *(ptr+i+7));
-		DBG_871X("############################# \n");
-	}
-}
-
-#endif
-	switch (type)
-	{
-		case WIFI_MGT_TYPE: //mgnt
-			retval = validate_recv_mgnt_frame(adapter, precv_frame);
-			if (retval == _FAIL)
-			{
-				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_mgnt_frame fail\n"));
-			}
-			retval = _FAIL; // only data frame return _SUCCESS
-			break;
-		case WIFI_CTRL_TYPE: //ctrl
-			retval = validate_recv_ctrl_frame(adapter, precv_frame);
-			if (retval == _FAIL)
-			{
-				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_ctrl_frame fail\n"));
-			}
-			retval = _FAIL; // only data frame return _SUCCESS
-			break;
-		case WIFI_DATA_TYPE: //data
-			rtw_led_control(adapter, LED_CTL_RX);
-			pattrib->qos = (subtype & BIT(7))? 1:0;
-			retval = validate_recv_data_frame(adapter, precv_frame);
-			if (retval == _FAIL)
-			{
-				struct recv_priv *precvpriv = &adapter->recvpriv;
-				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_data_frame fail\n"));
-				precvpriv->rx_drop++;
-			}
-			break;
-		default:
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_data_frame fail! type=0x%x\n", type));
-			#ifdef DBG_RX_DROP_FRAME
-			DBG_871X("DBG_RX_DROP_FRAME validate_recv_data_frame fail! type=0x%x\n", type);
-			#endif
-			retval = _FAIL;
-			break;
+	switch (type) {
+	case WIFI_MGT_TYPE: //mgnt
+		retval = validate_recv_mgnt_frame(adapter, precv_frame);
+		if (retval == _FAIL)
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_mgnt_frame fail\n"));
+		retval = _FAIL; // only data frame return _SUCCESS
+		break;
+	case WIFI_CTRL_TYPE: //ctrl
+		retval = validate_recv_ctrl_frame(adapter, precv_frame);
+		if (retval == _FAIL)
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_ctrl_frame fail\n"));
+		retval = _FAIL; // only data frame return _SUCCESS
+		break;
+	case WIFI_DATA_TYPE: //data
+		rtw_led_control(adapter, LED_CTL_RX);
+		pattrib->qos = (subtype & BIT(7))? 1:0;
+		retval = validate_recv_data_frame(adapter, precv_frame);
+		if (retval == _FAIL) {
+			struct recv_priv *precvpriv = &adapter->recvpriv;
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_data_frame fail\n"));
+			precvpriv->rx_drop++;
+		}
+		break;
+	default:
+		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_data_frame fail! type=0x%x\n", type));
+		#ifdef DBG_RX_DROP_FRAME
+		DBG_871X("DBG_RX_DROP_FRAME validate_recv_data_frame fail! type=0x%x\n", type);
+		#endif
+		retval = _FAIL;
+		break;
 	}
 
 exit:
@@ -2855,19 +2769,6 @@ int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 
 		/* Indicat the packets to upper layer */
 		if (sub_m) {
-
-#if 0
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-			if ( (pattrib->tcpchk_valid == 1) && (pattrib->tcp_chkrpt == 1) ) {
-				sub_skb->ip_summed = CHECKSUM_UNNECESSARY;
-			} else {
-				sub_skb->ip_summed = CHECKSUM_NONE;
-			}
-#else /* !CONFIG_TCP_CSUM_OFFLOAD_RX */
-			sub_skb->ip_summed = CHECKSUM_NONE;
-#endif //CONFIG_TCP_CSUM_OFFLOAD_RX
-#endif //0
-
 			if ( ((u32)(mtod(sub_m, caddr_t) + 14) % 4) != 0)
 				printf("%s()-%d: mtod(sub_m) = %p\n", __FUNCTION__, __LINE__, mtod(sub_m, caddr_t));
 #ifdef CONFIG_RX_INDICATE_QUEUE
@@ -3043,119 +2944,22 @@ exit:
 
 		a_len -= (type_len + ETH_HLEN + padding_len) ;
 
-
-#if 0
-
-	if(a_len > ETH_HLEN)
-	{
-		pnrframe_new = rtw_alloc_recvframe(pfree_recv_queue);
-		if(pnrframe_new)
-		{
-			_pkt *pskb_copy;
-			unsigned int copy_len  = pnrframe->u.hdr.len;
-
-			_rtw_init_listhead(&pnrframe_new->u.hdr.list);
-
-	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) // http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html
-			pskb_copy = dev_alloc_skb(copy_len+64);
-	#else
-			pskb_copy = netdev_alloc_skb(padapter->pnetdev, copy_len + 64);
-	#endif
-			if(pskb_copy==NULL)
-			{
-				DBG_871X("amsdu_to_msdu:can not all(ocate memory for skb copy\n");
-			}
-
-			pnrframe_new->u.hdr.pkt = pskb_copy;
-
-			_rtw_memcpy(pskb_copy->data, pnrframe->u.hdr.rx_data, copy_len);
-
-			pnrframe_new->u.hdr.rx_data = pnrframe->u.hdr.rx_data;
-			pnrframe_new->u.hdr.rx_tail = pnrframe->u.hdr.rx_data + copy_len;
-
-
-			if ((padapter->bDriverStopped ==_FALSE)&&( padapter->bSurpriseRemoved==_FALSE))
-			{
-				rtw_recv_indicatepkt(padapter, pnrframe_new);//indicate this recv_frame
-			}
-			else
-			{
-				rtw_free_recvframe(pnrframe_new, pfree_recv_queue);//free this recv_frame
-			}
-
-		}
-		else
-		{
-			DBG_871X("amsdu_to_msdu:can not allocate memory for pnrframe_new\n");
-		}
-
-	}
-	else
-	{
-		if ((padapter->bDriverStopped ==_FALSE)&&( padapter->bSurpriseRemoved==_FALSE))
-		{
-			rtw_recv_indicatepkt(padapter, pnrframe);//indicate this recv_frame
-		}
-		else
-		{
-			rtw_free_recvframe(pnrframe, pfree_recv_queue);//free this recv_frame
-		}
-
-		pnrframe = NULL;
-
-	}
-
-#else // 0
-
-		//padding_len = (4) - ((type_len + ETH_HLEN)&(4-1));
-
-		//a_len -= (type_len + ETH_HLEN + padding_len) ;
-
 		pnrframe_new = NULL;
 
-
-		if(a_len > ETH_HLEN)
-		{
+		if(a_len > ETH_HLEN) {
 			pnrframe_new = rtw_alloc_recvframe(pfree_recv_queue);
 
-			if(pnrframe_new)
-			{
+			if(pnrframe_new) {
+				_pkt *pskb = pnrframe->u.hdr.pkt;
+				_rtw_init_listhead(&pnrframe_new->u.hdr.list);
 
+				pnrframe_new->u.hdr.len=0;
 
-				//pnrframe_new->u.hdr.precvbuf = precvbuf;//precvbuf is assigned before call rtw_init_recvframe()
-				//rtw_init_recvframe(pnrframe_new, precvpriv);
-				{
-#ifdef PLATFORM_LINUX
-						_pkt *pskb = pnrframe->u.hdr.pkt;
-#endif //PLATFORM_LINUX
-						_rtw_init_listhead(&pnrframe_new->u.hdr.list);
-
-						pnrframe_new->u.hdr.len=0;
-
-#ifdef PLATFORM_LINUX
-						if(pskb)
-						{
-							pnrframe_new->u.hdr.pkt = skb_clone(pskb, GFP_ATOMIC);
-						}
-#endif //PLATFORM_LINUX
-
-				}
-
+				if(pskb)
+					pnrframe_new->u.hdr.pkt = skb_clone(pskb, GFP_ATOMIC);
 				pdata += (type_len + ETH_HLEN + padding_len);
 				pnrframe_new->u.hdr.rx_head = pnrframe_new->u.hdr.rx_data = pnrframe_new->u.hdr.rx_tail = pdata;
 				pnrframe_new->u.hdr.rx_end = pdata + a_len + padding_len;//
-
-#ifdef PLATFORM_WINDOWS
-				pnrframe_new->u.hdr.precvbuf=precvbuf;
-				_enter_critical_bh(&precvbuf->recvbuf_lock, &irql);
-				precvbuf->ref_cnt++;
-				_exit_critical_bh(&precvbuf->recvbuf_lock, &irql);
-#endif //PLATFORM_WINDOWS
-
-			}
-			else
-			{
-				//panic("pnrframe_new=%x\n", pnrframe_new);
 			}
 		}
 
@@ -3175,9 +2979,6 @@ exit:
 		{
 			pnrframe = pnrframe_new;
 		}
-
-
-#endif // end defined (PLATFORM_LINUX) || defined (PLATFORM_FREEBSD)
 
 	}while(pnrframe);
 
@@ -3340,12 +3141,6 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 	phead =		get_list_head(ppending_recvframe_queue);
 	plist = get_next(phead);
 
-#if 0
-	// Check if there is any other indication thread running.
-	if(pTS->RxIndicateState == RXTS_INDICATE_PROCESSING)
-		return;
-#endif
-
 	// Handling some condition for forced indicate case.
 	if(bforced==_TRUE)
 	{
@@ -3379,16 +3174,6 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 				 ("recv_indicatepkts_in_order: indicate=%d seq=%d amsdu=%d\n",
 				  preorder_ctrl->indicate_seq, pattrib->seq_num, pattrib->amsdu));
 
-#if 0
-			// This protect buffer from overflow.
-			if(index >= REORDER_WIN_SIZE)
-			{
-				RT_ASSERT(FALSE, ("IndicateRxReorderList(): Buffer overflow!! \n"));
-				bPktInBuf = TRUE;
-				break;
-			}
-#endif
-
 			plist = get_next(plist);
 			rtw_list_delete(&(prframe->u.hdr.list));
 
@@ -3401,43 +3186,15 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 				#endif
 			}
 
-#if 0
-			index++;
-			if(index==1)
-			{
-				//Cancel previous pending timer.
-				//PlatformCancelTimer(Adapter, &pTS->RxPktPendingTimer);
-				if(bforced!=_TRUE)
-				{
-					//DBG_871X("_cancel_timer(&preorder_ctrl->reordering_ctrl_timer, &bcancelled);\n");
-					_cancel_timer(&preorder_ctrl->reordering_ctrl_timer, &bcancelled);
-				}
-			}
-#endif
-
-			//Set this as a lock to make sure that only one thread is indicating packet.
-			//pTS->RxIndicateState = RXTS_INDICATE_PROCESSING;
-
-			// Indicate packets
-			//RT_ASSERT((index<=REORDER_WIN_SIZE), ("RxReorderIndicatePacket(): Rx Reorder buffer full!! \n"));
-
-
 			//indicate this recv_frame
-			//DbgPrint("recv_indicatepkts_in_order, indicate_seq=%d, seq_num=%d\n", precvpriv->indicate_seq, pattrib->seq_num);
 			if(!pattrib->amsdu)
 			{
-				//DBG_871X("recv_indicatepkts_in_order, amsdu!=1, indicate_seq=%d, seq_num=%d\n", preorder_ctrl->indicate_seq, pattrib->seq_num);
-
 				if ((padapter->bDriverStopped == _FALSE) &&
 				    (padapter->bSurpriseRemoved == _FALSE))
-				{
 
 					rtw_recv_indicatepkt(padapter, prframe);//indicate this recv_frame
 
-				}
-			}
-			else if(pattrib->amsdu==1)
-			{
+			} else if(pattrib->amsdu==1) {
 				if(amsdu_to_msdu(padapter, prframe)!=_SUCCESS)
 				{
 					rtw_free_recvframe(prframe, &precvpriv->free_recv_queue);
@@ -3600,15 +3357,7 @@ int recv_indicatepkt_reorder(_adapter *padapter, union recv_frame *prframe)
 		#ifdef DBG_RX_DROP_FRAME
 		DBG_871X("DBG_RX_DROP_FRAME %s check_indicate_seq fail\n", __FUNCTION__);
 		#endif
-#if 0
-		rtw_recv_indicatepkt(padapter, prframe);
-
-		_exit_critical_bh(&ppending_recvframe_queue->lock, &irql);
-
-		goto _success_exit;
-#else
 		goto _err_exit;
-#endif
 	}
 
 
@@ -3833,22 +3582,6 @@ int recv_func_posthandle(_adapter *padapter, union recv_frame *prframe)
 		ret = _FAIL;
 		goto _recv_data_drop;
 	}
-
-#if 0
-	if ( padapter->adapter_type == PRIMARY_ADAPTER )
-	{
-		DBG_871X("+++\n");
-		{
-			int i;
-			u8	*ptr = get_recvframe_data(prframe);
-			for(i=0; i<140;i=i+8)
-				DBG_871X("%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:", *(ptr+i),
-				*(ptr+i+1), *(ptr+i+2) ,*(ptr+i+3) ,*(ptr+i+4),*(ptr+i+5), *(ptr+i+6), *(ptr+i+7));
-
-		}
-		DBG_871X("---\n");
-	}
-#endif //RTK_DMP_PLATFORM
 
 #ifdef CONFIG_TDLS
 	//check TDLS frame

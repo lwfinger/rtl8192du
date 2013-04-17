@@ -13,7 +13,6 @@ deps_/home/finger/rtl8192du/core/rtw_recv.o := \
     $(wildcard include/config/tdls.h) \
     $(wildcard include/config/wfd.h) \
     $(wildcard include/config/mp/included.h) \
-    $(wildcard include/config/nativeap/mlme.h) \
     $(wildcard include/config/intel/proxim.h) \
     $(wildcard include/config/find/best/channel.h) \
     $(wildcard include/config/sdio/hci.h) \
@@ -59,6 +58,7 @@ deps_/home/finger/rtl8192du/core/rtw_recv.o := \
     $(wildcard include/config/lps.h) \
     $(wildcard include/config/bt/coexist.h) \
     $(wildcard include/config/mp/iwpriv/support.h) \
+    $(wildcard include/config/nativeap/mlme.h) \
     $(wildcard include/config/hostapd/mlme.h) \
     $(wildcard include/config/no/wireless/handlers.h) \
     $(wildcard include/config/p2p.h) \

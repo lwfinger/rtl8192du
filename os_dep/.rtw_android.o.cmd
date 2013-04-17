@@ -5,7 +5,6 @@ source_/home/finger/rtl8192du/os_dep/rtw_android.o := /home/finger/rtl8192du/os_
 deps_/home/finger/rtl8192du/os_dep/rtw_android.o := \
     $(wildcard include/config/compat.h) \
     $(wildcard include/config/ioctl/cfg80211.h) \
-    $(wildcard include/config/platform/mstar/titania12.h) \
     $(wildcard include/config/wfd.h) \
   include/linux/module.h \
     $(wildcard include/config/sysfs.h) \
@@ -1158,6 +1157,7 @@ deps_/home/finger/rtl8192du/os_dep/rtw_android.o := \
   /home/finger/rtl8192du/include/rtw_led.h \
   /home/finger/rtl8192du/include/ieee80211.h \
   /home/finger/rtl8192du/include/rtw_xmit.h \
+    $(wildcard include/config/platform/mstar/titania12.h) \
   /home/finger/rtl8192du/include/xmit_osdep.h \
   /home/finger/rtl8192du/include/rtw_recv.h \
     $(wildcard include/config/recv/thread/mode.h) \

@@ -98,49 +98,6 @@ void rtl8192d_RF_ChangeTxPath(	IN	PADAPTER	Adapter,
 										IN	u16		DataRate)
 {
 // We do not support gain table change inACUT now !!!! Delete later !!!
-#if 0//(RTL92SE_FPGA_VERIFY == 0)
-	static	u1Byte	RF_Path_Type = 2;	// 1 = 1T 2= 2T
-	static	u4Byte	tx_gain_tbl1[6]
-			= {0x17f50, 0x11f40, 0x0cf30, 0x08720, 0x04310, 0x00100};
-	static	u4Byte	tx_gain_tbl2[6]
-			= {0x15ea0, 0x10e90, 0x0c680, 0x08250, 0x04040, 0x00030};
-	u1Byte	i;
-
-	if (RF_Path_Type == 2 && (DataRate&0xF) <= 0x7)
-	{
-		// Set TX SYNC power G2G3 loop filter
-		PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)RF_PATH_A,
-					RF_TXPA_G2, bRFRegOffsetMask, 0x0f000);
-		PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)RF_PATH_A,
-					RF_TXPA_G3, bRFRegOffsetMask, 0xeacf1);
-
-		// Change TX AGC gain table
-		for (i = 0; i < 6; i++)
-			PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)RF_PATH_A,
-						RF_TX_AGC, bRFRegOffsetMask, tx_gain_tbl1[i]);
-
-		// Set PA to high value
-		PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)RF_PATH_A,
-					RF_TXPA_G2, bRFRegOffsetMask, 0x01e39);
-	}
-	else if (RF_Path_Type == 1 && (DataRate&0xF) >= 0x8)
-	{
-		// Set TX SYNC power G2G3 loop filter
-		PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)RF_PATH_A,
-					RF_TXPA_G2, bRFRegOffsetMask, 0x04440);
-		PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)RF_PATH_A,
-					RF_TXPA_G3, bRFRegOffsetMask, 0xea4f1);
-
-		// Change TX AGC gain table
-		for (i = 0; i < 6; i++)
-			PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)RF_PATH_A,
-						RF_TX_AGC, bRFRegOffsetMask, tx_gain_tbl2[i]);
-
-		// Set PA low gain
-		PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)RF_PATH_A,
-					RF_TXPA_G2, bRFRegOffsetMask, 0x01e19);
-	}
-#endif
 
 }	/* RF_ChangeTxPath */
 
@@ -167,17 +124,14 @@ rtl8192d_PHY_RF6052SetBandwidth(
 	u8			eRFPath;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
-	//RT_TRACE(COMP_MLME,DBG_LOUD,("====>PHY_RF6052SetBandwidth()Bandwidth:%d \n",Bandwidth));
 	switch(Bandwidth)
 	{
 		case HT_CHANNEL_WIDTH_20:
 			for(eRFPath=0;eRFPath<pHalData->NumTotalRFPath;eRFPath++)
 			{
 				pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffff3ff) | 0x0400);
-				//PHY_SetRFReg(Adapter, eRFPath, RF_CHNLBW, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
 				PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT10|BIT11, 0x01);
 
-				//RT_TRACE(COMP_RF, DBG_LOUD, ("PHY_RF6052SetBandwidth 20M RF 0x18 = 0x%x interface index %d\n",pHalData->RfRegChnlVal[eRFPath],  Adapter->interfaceIndex));
 			}
 			break;
 
@@ -254,19 +208,6 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 // 20100427 Joseph: Driver dynamic Tx power shall not affect Tx power. It shall be determined by power training mechanism.
 // Currently, we cannot fully disable driver dynamic tx power mechanism because it is referenced by BT coexist mechanism.
 // In the future, two mechanism shall be separated from each other and maintained independantly. Thanks for Lanhsin's reminder.
-#if 0
-		if(pHalData->DynamicTxHighPowerLvl == TxHighPwrLevel_Level1)
-		{
-			TxAGC[RF_PATH_A] = 0x10101010;
-			TxAGC[RF_PATH_B] = 0x10101010;
-		}
-		else if(pHalData->DynamicTxHighPowerLvl == TxHighPwrLevel_Level1)
-		{
-			TxAGC[RF_PATH_A] = 0x00000000;
-			TxAGC[RF_PATH_B] = 0x00000000;
-		}
-		else
-#endif
 		{
 			for(idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
 			{

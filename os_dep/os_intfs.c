@@ -145,9 +145,7 @@ int rtw_hwpwrp_detect = 0; //HW power  ping detect 0:disable , 1:enable
 
 int rtw_hw_wps_pbc = 1;
 
-#ifdef CONFIG_TX_MCAST2UNI
 int rtw_mc2u_disable = 0;
-#endif	// CONFIG_TX_MCAST2UNI
 
 int rtw_mac_phy_mode = 0; //0:by efuse, 1:smsp, 2:dmdp, 3:dmsp.
 
@@ -232,9 +230,7 @@ module_param(rtw_fw_file_path, charp, 0644);
 MODULE_PARM_DESC(rtw_fw_file_path, "The path of fw image");
 #endif //CONFIG_FILE_FWIMG
 
-#ifdef CONFIG_TX_MCAST2UNI
 module_param(rtw_mc2u_disable, int, 0644);
-#endif	// CONFIG_TX_MCAST2UNI
 
 module_param(rtw_mac_phy_mode, int, 0644);
 

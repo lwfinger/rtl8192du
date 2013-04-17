@@ -2024,21 +2024,16 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 	_InitAMPDUAggregation(padapter);
 	_InitBeaconMaxError(padapter, _TRUE);
 
-#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_TX_MCAST2UNI)
+#if defined(CONFIG_CONCURRENT_MODE)
 
 #ifdef CONFIG_CHECK_AC_LIFETIME
 	// Enable lifetime check for the four ACs
 	rtw_write8(padapter, REG_LIFETIME_EN, 0x0F);
 #endif	// CONFIG_CHECK_AC_LIFETIME
 
-#ifdef CONFIG_TX_MCAST2UNI
 	rtw_write16(padapter, REG_PKT_VO_VI_LIFE_TIME, 0x0400);	// unit: 256us. 256ms
 	rtw_write16(padapter, REG_PKT_BE_BK_LIFE_TIME, 0x0400);	// unit: 256us. 256ms
-#else	// CONFIG_TX_MCAST2UNI
-	rtw_write16(padapter, REG_PKT_VO_VI_LIFE_TIME, 0x3000);	// unit: 256us. 3s
-	rtw_write16(padapter, REG_PKT_BE_BK_LIFE_TIME, 0x3000);	// unit: 256us. 3s
-#endif	// CONFIG_TX_MCAST2UNI
-#endif	// CONFIG_CONCURRENT_MODE || CONFIG_TX_MCAST2UNI
+#endif	// CONFIG_CONCURRENT_MODE
 
 	#ifdef CONFIG_LED
 	_InitHWLed(padapter);

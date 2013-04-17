@@ -243,7 +243,6 @@ void rtw_os_xmit_schedule(_adapter *padapter)
 
 
 
-#ifdef CONFIG_TX_MCAST2UNI
 int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 {
 	struct	sta_priv *pstapriv = &padapter->stapriv;
@@ -294,17 +293,13 @@ int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 	dev_kfree_skb_any(skb);
 	return _TRUE;
 }
-#endif	// CONFIG_TX_MCAST2UNI
-
 
 int rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev)
 {
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-#ifdef CONFIG_TX_MCAST2UNI
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	extern int rtw_mc2u_disable;
-#endif	// CONFIG_TX_MCAST2UNI
 	s32 res = 0;
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 	u16 queue;
@@ -332,7 +327,6 @@ _func_enter_;
 	}
 #endif
 
-#ifdef CONFIG_TX_MCAST2UNI
 	if ( !rtw_mc2u_disable
 		&& check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE
 		&& ( IP_MCAST_MAC(pkt->data)
@@ -350,7 +344,6 @@ _func_enter_;
 			//DBG_871X("!m2u );
 		}
 	}
-#endif	// CONFIG_TX_MCAST2UNI
 
 	res = rtw_xmit(padapter, &pkt);
 	if (res < 0) {

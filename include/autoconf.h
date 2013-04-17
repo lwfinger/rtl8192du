@@ -133,8 +133,6 @@
 #define CONFIG_BR_EXT_BRNAME	"br0"
 #endif	// CONFIG_BR_EXT
 
-#define CONFIG_TX_MCAST2UNI	1	// Support IP multicast->unicast
-
 //#define CONFIG_CHECK_AC_LIFETIME	1	// Check packet lifetime of 4 ACs.
 //#define CONFIG_DISABLE_MCS13TO15	1	// Disable MSC13-15 rates for more stable TX throughput with some 5G APs
 

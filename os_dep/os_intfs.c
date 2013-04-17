@@ -1715,11 +1715,7 @@ _adapter *rtw_drv_add_vir_if(_adapter *primary_padapter, char *name,
 	padapter->HardwareType = primary_padapter->HardwareType;
 
 	//set hal data & hal ops
-#if defined(CONFIG_RTL8192C)
-	rtl8192cu_set_hal_ops(padapter);
-#elif defined(CONFIG_RTL8192D)
 	rtl8192du_set_hal_ops(padapter);
-#endif
 
 	padapter->HalFunc.inirp_init = NULL;
 	padapter->HalFunc.inirp_deinit = NULL;
@@ -2099,11 +2095,7 @@ _adapter *rtw_drv_if2_init(_adapter *primary_padapter, char *name,
 	padapter->HardwareType = primary_padapter->HardwareType;
 
 	//set hal data & hal ops
-#if defined(CONFIG_RTL8192C)
-	rtl8192cu_set_hal_ops(padapter);
-#elif defined(CONFIG_RTL8192D)
 	rtl8192du_set_hal_ops(padapter);
-#endif
 
 	padapter->HalFunc.inirp_init = NULL;
 	padapter->HalFunc.inirp_deinit = NULL;

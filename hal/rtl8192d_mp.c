@@ -22,10 +22,7 @@
 
 #include <drv_types.h>
 #include <rtw_mp.h>
-
-#ifdef CONFIG_RTL8192D
 #include <rtl8192d_hal.h>
-#endif
 
 #define IQK_DELAY_TIME		1	//ms
 
@@ -249,33 +246,26 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 			break;
 	}
 
-	if (chgTx && chgRx)
-	{
-		switch(pHalData->rf_chip)
-		{
-			case RF_8225:
-			case RF_8256:
-			case RF_6052:
-				//r_ant_sel_cck_val = r_ant_select_cck_val;
-				PHY_SetBBReg(pAdapter, rFPGA1_TxInfo, 0x7fffffff, r_ant_select_ofdm_val);	//OFDM Tx
-				PHY_SetBBReg(pAdapter, rFPGA0_TxInfo, 0x0000000f, r_ofdm_tx_en_val);		//OFDM Tx
-				PHY_SetBBReg(pAdapter, rOFDM0_TRxPathEnable, 0x0000000f, r_rx_antenna_ofdm);	//OFDM Rx
-				PHY_SetBBReg(pAdapter, rOFDM1_TRxPathEnable, 0x0000000f, r_rx_antenna_ofdm);	//OFDM Rx
-				PHY_SetBBReg(pAdapter, rCCK0_AFESetting, bMaskByte3, r_ant_select_cck_val);//r_ant_sel_cck_val);		//CCK TxRx
-#ifdef CONFIG_RTL8192D
-				if(pHalData->CurrentBandType92D == BAND_ON_2_4G || IS_92D_SINGLEPHY(pHalData->VersionID))
-						rtw_write8(pAdapter, rCCK0_AFESetting+3, r_ant_select_cck_val);
-#endif
-				break;
-
-			default:
-				break;
+	if (chgTx && chgRx) {
+		switch(pHalData->rf_chip) {
+		case RF_8225:
+		case RF_8256:
+		case RF_6052:
+			//r_ant_sel_cck_val = r_ant_select_cck_val;
+			PHY_SetBBReg(pAdapter, rFPGA1_TxInfo, 0x7fffffff, r_ant_select_ofdm_val);	//OFDM Tx
+			PHY_SetBBReg(pAdapter, rFPGA0_TxInfo, 0x0000000f, r_ofdm_tx_en_val);		//OFDM Tx
+			PHY_SetBBReg(pAdapter, rOFDM0_TRxPathEnable, 0x0000000f, r_rx_antenna_ofdm);	//OFDM Rx
+			PHY_SetBBReg(pAdapter, rOFDM1_TRxPathEnable, 0x0000000f, r_rx_antenna_ofdm);	//OFDM Rx
+			PHY_SetBBReg(pAdapter, rCCK0_AFESetting, bMaskByte3, r_ant_select_cck_val);//r_ant_sel_cck_val);		//CCK TxRx
+			if(pHalData->CurrentBandType92D == BAND_ON_2_4G || IS_92D_SINGLEPHY(pHalData->VersionID))
+					rtw_write8(pAdapter, rCCK0_AFESetting+3, r_ant_select_cck_val);
+			break;
+		default:
+			break;
 		}
 	}
-
 	RT_TRACE(_module_mp_, _drv_notice_, ("-SwitchAntenna: finished\n"));
 }
-
 
 s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable)
 {
@@ -1610,16 +1600,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rCCK0_System, bCCKBBMode, 0x2);	//transmit mode
 		write_bbreg(pAdapter, rCCK0_System, bCCKScramble, bEnable); //turn on scramble setting
 
-#ifdef CONFIG_RTL8192C
-		// Patch for CCK 11M waveform
-		if (cckrate == MPT_RATE_1M)
-			write_bbreg(pAdapter, 0xA71, BIT(6), bDisable);
-		else
-			write_bbreg(pAdapter, 0xA71, BIT(6), bEnable);
-#endif
-
-	}
-	else {
+	} else {
 		RT_TRACE(_module_mp_, _drv_info_,
 			 ("SetCCKContinuousTx: test stop\n"));
 

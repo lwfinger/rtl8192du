@@ -8272,14 +8272,8 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	}
 	else if ( strcmp(tmp[0],"mac") == 0 ) {
 		if ( tmp[1]==NULL || tmp[2]==NULL ) return	-EINVAL;
-		#ifdef CONFIG_RTL8192C
-		addr = 0x16;
-		cnts = 6;
-		#endif
-		#ifdef CONFIG_RTL8192D
 		addr = 0x19;
 		cnts = 6;
-		#endif
 		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
 		if ((addr + mapLen) > max_available_size) {
 			DBG_871X("(addr + cnts parameter error \n");
@@ -8304,12 +8298,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	}
 	else if ( strcmp(tmp[0],"vidpid") == 0 ) {
 		if ( tmp[1]==NULL || tmp[2]==NULL ) return	-EINVAL;
-		#ifdef CONFIG_RTL8192C
-		addr=0x0a;
-		#endif
-		#ifdef CONFIG_RTL8192D
 		addr = 0x0c;
-		#endif
 		cnts = 4;
 		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
 		if ((addr + mapLen) > max_available_size) {
@@ -8441,12 +8430,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	else if ( strcmp(tmp[0],"mac") == 0 ) {
 			 if ( tmp[1]==NULL || tmp[2]==NULL ) return	-EINVAL;
 			//mac,00e04c871200
-			#ifdef CONFIG_RTL8192C
-				addr = 0x16;
-			#endif
-			#ifdef CONFIG_RTL8192D
 				addr = 0x19;
-			#endif
 				cnts = strlen( tmp[1] )/2;
 				if ( cnts == 0) return -EFAULT;
 				if ( cnts > 6 ){
@@ -8476,42 +8460,38 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 			return 0;
 		}
 		else if ( strcmp(tmp[0],"vidpid") == 0 ) {
-			 if ( tmp[1]==NULL || tmp[2]==NULL ) return	-EINVAL;
+			if ( tmp[1]==NULL || tmp[2]==NULL )
+				return	-EINVAL;
 				// pidvid,da0b7881
-				#ifdef CONFIG_RTL8192C
-					   addr=0x0a;
-				#endif
-				#ifdef CONFIG_RTL8192D
-					addr = 0x0c;
-				#endif
+			addr = 0x0c;
 
-				cnts=strlen( tmp[1] )/2;
-				if ( cnts == 0) return -EFAULT;
-				DBG_871X("target data = %s \n" ,tmp[1]);
+			cnts=strlen( tmp[1] )/2;
+			if ( cnts == 0)
+				return -EFAULT;
+			DBG_871X("target data = %s \n" ,tmp[1]);
 
-				for( jj = 0, kk = 0; jj < cnts; jj++, kk += 2 )
+			for( jj = 0, kk = 0; jj < cnts; jj++, kk += 2 )
 				{
-					setdata[jj] = key_2char2num(tmp[1][kk], tmp[1][kk+ 1]);
-				}
+				setdata[jj] = key_2char2num(tmp[1][kk], tmp[1][kk+ 1]);
+			}
 
-				EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
+			EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
 
-				if ((addr + cnts) > max_available_size) {
-						DBG_871X("parameter error \n");
-						return -EFAULT;
-					}
+			if ((addr + cnts) > max_available_size) {
+				DBG_871X("parameter error \n");
+				return -EFAULT;
+			}
 
-				if ( rtw_efuse_map_write(padapter, addr, cnts, setdata) == _FAIL ) {
-					DBG_871X("rtw_efuse_map_write error \n");
-					return -EFAULT;
-				} else
-					DBG_871X("rtw_efuse_map_write ok \n");
+			if ( rtw_efuse_map_write(padapter, addr, cnts, setdata) == _FAIL ) {
+				DBG_871X("rtw_efuse_map_write error \n");
+				return -EFAULT;
+			} else
+				DBG_871X("rtw_efuse_map_write ok \n");
 
-				return 0;
-		}
-		else{
-				 DBG_871X("Command not found\n");
-			   return 0;
+			return 0;
+		} else{
+			DBG_871X("Command not found\n");
+			return 0;
 		}
 
 	  return 0;
@@ -9313,12 +9293,7 @@ static int rtw_mp_thermal(struct net_device *dev,
 {
 	u8 val;
 	u16 bwrite=1;
-	#ifdef CONFIG_RTL8192C
-		u16 addr=0x78;
-	#endif
-	#ifdef CONFIG_RTL8192D
-		u16 addr=0xc3;
-	#endif
+	u16 addr=0xc3;
 	u16 cnt=1;
 	u16 max_available_size=0;
 	PADAPTER padapter = rtw_netdev_priv(dev);
@@ -9326,37 +9301,26 @@ static int rtw_mp_thermal(struct net_device *dev,
 	if (copy_from_user(extra, wrqu->pointer, wrqu->length))
 		return -EFAULT;
 
-	//DBG_871X("print extra %s \n",extra);
-
 	 bwrite = strncmp(extra, "write", 6); // strncmp TRUE is 0
 
 	 Hal_GetThermalMeter(padapter, &val);
 
-	 if( bwrite == 0 )
-	 {
-		 //DBG_871X("to write val:%d",val);
-			EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
-			if( 2 > max_available_size )
-			{
-				DBG_871X("no available efuse!\n");
-				return -EFAULT;
-			}
-			if ( rtw_efuse_map_write(padapter, addr, cnt, &val) == _FAIL )
-			{
-				DBG_871X("rtw_efuse_map_write error \n");
-				return -EFAULT;
-			}
-			else
-			{
-				 sprintf(extra, " efuse write ok :%d", val);
-			}
-	  }
-	  else
-	  {
-			 sprintf(extra, "%d", val);
-	  }
+	 if( bwrite == 0 ) {
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
+		if( 2 > max_available_size ) {
+			DBG_871X("no available efuse!\n");
+			return -EFAULT;
+		}
+		if ( rtw_efuse_map_write(padapter, addr, cnt, &val) == _FAIL ) {
+			DBG_871X("rtw_efuse_map_write error \n");
+			return -EFAULT;
+		} else {
+			sprintf(extra, " efuse write ok :%d", val);
+		}
+	} else {
+		sprintf(extra, "%d", val);
+	}
 	wrqu->length = strlen(extra);
-
 	return 0;
 }
 
@@ -9419,19 +9383,14 @@ static int rtw_mp_dump(struct net_device *dev,
 			else
 				path_nums = 2;
 
-			for(path=0;path<path_nums;path++)
-			{
-#ifdef CONFIG_RTL8192D
-			  for (i = 0; i < 0x50; i++)
-#else
-			 for (i = 0; i < 0x34; i++)
-#endif
-				{
-					//value = PHY_QueryRFReg(padapter, (RF90_RADIO_PATH_E)path,i, bMaskDWord);
+			for(path=0;path<path_nums;path++) {
+				for (i = 0; i < 0x50; i++) {
 					value =rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
-					if(j%4==1)	DBG_871X("0x%02x ",i);
+					if (j%4==1)
+						DBG_871X("0x%02x ",i);
 					DBG_871X(" 0x%08x ",value);
-					if((j++)%4==0)	DBG_871X("\n");
+					if ((j++)%4==0)
+						DBG_871X("\n");
 				}
 			}
 	}
@@ -9456,9 +9415,7 @@ static int rtw_mp_phypara(struct net_device *dev,
 
 	if (!IS_HARDWARE_TYPE_8192D(padapter))
 			return 0;
-#ifdef CONFIG_RTL8192D
 	Hal_ProSetCrystalCap( padapter , valxcap );
-#endif
 
 	sprintf( extra, "Set xcap=%d",valxcap );
 	wrqu->length = strlen(extra) + 1;

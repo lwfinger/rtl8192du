@@ -21,16 +21,9 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <rtw_byteorder.h>
-
 #include <hal_intf.h>
 #include <hal_com.h>
-
-#ifdef CONFIG_RTL8192C
-#include <rtl8192c_hal.h>
-#endif
-#ifdef CONFIG_RTL8192D
 #include <rtl8192d_hal.h>
-#endif
 
 #define _HAL_COM_C_
 

@@ -173,15 +173,8 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf);
 	/****** 8192DU-WiFi Display Dongle ********/ \
 	{USB_DEVICE(0x2019, 0xAB2D)},/* Planex - Abocom ,5G dongle for WiFi Display */
 
-#ifndef CONFIG_RTL8192C
 	#undef RTL8192C_USB_IDS
 	#define RTL8192C_USB_IDS
-#endif
-#ifndef CONFIG_RTL8192D
-	#undef RTL8192D_USB_IDS
-	#define RTL8192D_USB_IDS
-#endif
-
 
 static struct usb_device_id rtw_usb_id_tbl[] ={
 	RTL8192C_USB_IDS
@@ -206,31 +199,6 @@ struct rtw_usb_drv {
 	int drv_registered;
 };
 
-#ifdef CONFIG_RTL8192C
-static struct usb_device_id rtl8192c_usb_id_tbl[] ={
-	RTL8192C_USB_IDS
-	{}	/* Terminating entry */
-};
-
-struct rtw_usb_drv rtl8192c_usb_drv = {
-	.usbdrv.name = (char*)"rtl8192cu",
-	.usbdrv.probe = rtw_drv_init,
-	.usbdrv.disconnect = rtw_dev_remove,
-	.usbdrv.id_table = rtl8192c_usb_id_tbl,
-	.usbdrv.suspend =  rtw_suspend,
-	.usbdrv.resume = rtw_resume,
-	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
-	.usbdrv.reset_resume   = rtw_resume,
-	#endif
-	#ifdef CONFIG_AUTOSUSPEND
-	.usbdrv.supports_autosuspend = 1,
-	#endif
-};
-
-static struct rtw_usb_drv *usb_drv = &rtl8192c_usb_drv;
-#endif /* CONFIG_RTL8192C */
-
-#ifdef CONFIG_RTL8192D
 static struct usb_device_id rtl8192d_usb_id_tbl[] ={
 	RTL8192D_USB_IDS
 	{}	/* Terminating entry */
@@ -251,7 +219,6 @@ struct rtw_usb_drv rtl8192d_usb_drv = {
 	#endif
 };
 static struct rtw_usb_drv *usb_drv = &rtl8192d_usb_drv;
-#endif /* CONFIG_RTL8192D */
 
 static inline int RT_usb_endpoint_dir_in(const struct usb_endpoint_descriptor *epd)
 {
@@ -540,17 +507,9 @@ _func_exit_;
 static void decide_chip_type_by_usb_device_id(_adapter *padapter, const struct usb_device_id *pdid)
 {
 	padapter->chip_type = NULL_CHIP_TYPE;
-#ifdef CONFIG_RTL8192C
-	padapter->chip_type = RTL8188C_8192C;
-	padapter->HardwareType = HARDWARE_TYPE_RTL8192CU;
-	DBG_871X("CHIP TYPE: RTL8188C_8192C\n");
-#endif
-
-#ifdef CONFIG_RTL8192D
 	padapter->chip_type = RTL8192D;
 	padapter->HardwareType = HARDWARE_TYPE_RTL8192DU;
 	DBG_871X("CHIP TYPE: RTL8192D\n");
-#endif
 }
 
 static void usb_intf_start(_adapter *padapter)
@@ -1155,14 +1114,8 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 #endif
 
 	//step 2. hook HalFunc, allocate HalData
-	if(padapter->chip_type == RTL8188C_8192C) {
-		#ifdef CONFIG_RTL8192C
-		rtl8192cu_set_hal_ops(padapter);
-		#endif
-	} else if(padapter->chip_type == RTL8192D) {
-		#ifdef CONFIG_RTL8192D
+	if(padapter->chip_type == RTL8192D) {
 		rtl8192du_set_hal_ops(padapter);
-		#endif
 	} else {
 		DBG_871X("Detect NULL_CHIP_TYPE\n");
 		goto free_wdev;

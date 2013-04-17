@@ -151,10 +151,6 @@
 	#define	_MODULE_DEFINE_	_module_efuse_
 #endif
 
-#ifdef PLATFORM_OS_CE
-extern void rtl871x_cedbg(const char *fmt, ...);
-#endif
-
 #define RT_TRACE(_Comp, _Level, Fmt) do{}while(0)
 #define _func_enter_ do{}while(0)
 #define _func_exit_ do{}while(0)
@@ -169,27 +165,7 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 	extern u64 GlobalDebugComponents;
 #endif
 
-#ifdef PLATFORM_WINDOWS
-
-	#ifdef PLATFORM_OS_XP
-
-	#define _dbgdump	DbgPrint
-
-	#elif defined PLATFORM_OS_CE
-
-	#define _dbgdump	rtl871x_cedbg
-
-	#endif
-
-#elif defined PLATFORM_LINUX
-
-	#define _dbgdump	printk
-
-#elif defined PLATFORM_FREEBSD
-
-	#define _dbgdump	printf
-
-#endif
+#define _dbgdump	printk
 
 #endif /* CONFIG_DEBUG_RTL871X */
 
@@ -250,55 +226,16 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 
 #undef	_dbgdump
 
-#ifdef PLATFORM_WINDOWS
-
-	#ifdef PLATFORM_OS_XP
-
-	#define _dbgdump	DbgPrint
-
-	#elif defined PLATFORM_OS_CE
-
-	#define _dbgdump	rtl871x_cedbg
-
-	#endif
-
-#elif defined PLATFORM_LINUX
-
-	#define _dbgdump	printk
-
-#elif defined PLATFORM_FREEBSD
-
-	#define _dbgdump	printf
-
-#endif
+#define _dbgdump	printk
 
 #endif /* CONFIG_DEBUG_RTL819X */
 
 
-#ifdef PLATFORM_WINDOWS
-	#define DBG_871X do {} while(0)
-	#define MSG_8192C do {} while(0)
-	#define DBG_8192C do {} while(0)
-	#define WRN_8192C do {} while(0)
-	#define ERR_8192C do {} while(0)
-#endif
-
-#ifdef PLATFORM_LINUX
 	#define DBG_871X(x, ...) do {} while(0)
 	#define MSG_8192C(x, ...) do {} while(0)
 	#define DBG_8192C(x,...) do {} while(0)
 	#define WRN_8192C(x,...) do {} while(0)
 	#define ERR_8192C(x,...) do {} while(0)
-#endif
-
-#ifdef PLATFORM_FREEBSD
-	#define _dbgdump	printf
-	#define DBG_871X(x, ...) do {} while(0)
-	#define MSG_8192C(x, ...) do {} while(0)
-	#define DBG_8192C(x,...) do {} while(0)
-	#define WRN_8192C(x,...) do {} while(0)
-	#define ERR_8192C(x,...) do {} while(0)
-#endif
 
 extern u32 GlobalDebugLevel;
 #define LOG_LEVEL(level, ...)\

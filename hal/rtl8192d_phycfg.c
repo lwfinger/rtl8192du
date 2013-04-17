@@ -378,7 +378,6 @@ rtl8192d_PHY_SetBBReg(
  *	01/21/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-#ifndef PLATFORM_FREEBSD   //amy, temp remove
 static	u32
 phy_FwRFSerialRead(
 	IN	PADAPTER			Adapter,
@@ -415,9 +414,7 @@ phy_FwRFSerialWrite(
 	IN	u32				Offset,
 	IN	u32				Data	)
 {
-	//RT_ASSERT(FALSE,("deprecate!\n"));
 }
-#endif //PLATFORM_FREEBSD amy, temp remove
 
 /**
 * Function:	phy_RFSerialRead
@@ -3670,7 +3667,6 @@ PHY_SwChnl8192D(	// Call after initialization
 	}
 }
 
-#ifndef PLATFORM_FREEBSD //amy, temp remove
 static	BOOLEAN
 phy_SwChnlStepByStep(
 	IN	PADAPTER	Adapter,
@@ -3698,17 +3694,9 @@ phy_SetSwChnlCmdArray(
 	SwChnlCmd* pCmd;
 
 	if(CmdTable == NULL)
-	{
-		//RT_ASSERT(FALSE, ("phy_SetSwChnlCmdArray(): CmdTable cannot be NULL.\n"));
 		return _FALSE;
-	}
 	if(CmdTableIdx >= CmdTableSz)
-	{
-		//RT_ASSERT(FALSE,
-		//		("phy_SetSwChnlCmdArray(): Access invalid index, please check size of the table, CmdTableIdx:%ld, CmdTableSz:%ld\n",
-		//		CmdTableIdx, CmdTableSz));
 		return _FALSE;
-	}
 
 	pCmd = CmdTable + CmdTableIdx;
 	pCmd->CmdID = CmdID;
@@ -3718,7 +3706,6 @@ phy_SetSwChnlCmdArray(
 
 	return _TRUE;
 }
-#endif  //amy, temp remove
 
 static	void
 phy_FinishSwChnlNow(	// We should not call this function directly

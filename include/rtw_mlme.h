@@ -538,12 +538,6 @@ struct mlme_priv {
 
 #endif
 
-#ifdef RTK_DMP_PLATFORM
-	// DMP kobject_hotplug function  signal need in passive level
-	_workitem	Linkup_workitem;
-	_workitem	Linkdown_workitem;
-#endif
-
 #ifdef CONFIG_INTEL_WIDI
 	int	widi_state;
 	int	listen_state;
@@ -587,37 +581,12 @@ extern void rtw_stadel_event_callback(_adapter *adapter, u8 *pbuf);
 extern void rtw_atimdone_event_callback(_adapter *adapter, u8 *pbuf);
 extern void rtw_cpwm_event_callback(_adapter *adapter, u8 *pbuf);
 
-#ifdef PLATFORM_WINDOWS
-extern thread_return event_thread(void *context);
-
-extern void rtw_join_timeout_handler (
-	IN	PVOID					SystemSpecific1,
-	IN	PVOID					FunctionContext,
-	IN	PVOID					SystemSpecific2,
-	IN	PVOID					SystemSpecific3
-	);
-
-extern void _rtw_scan_timeout_handler (
-	IN	PVOID					SystemSpecific1,
-	IN	PVOID					FunctionContext,
-	IN	PVOID					SystemSpecific2,
-	IN	PVOID					SystemSpecific3
-	);
-
-#endif
-
-#if defined (PLATFORM_LINUX)|| defined (PLATFORM_FREEBSD)
 extern int event_thread(void *context);
 extern void rtw_join_timeout_handler(void* FunctionContext);
 extern void _rtw_scan_timeout_handler(void* FunctionContext);
-#endif
-
 extern void rtw_free_network_queue(_adapter *adapter,u8 isfreeall);
 extern int rtw_init_mlme_priv(_adapter *adapter);// (struct mlme_priv *pmlmepriv);
-
 extern void rtw_free_mlme_priv (struct mlme_priv *pmlmepriv);
-
-
 extern sint rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv);
 extern sint rtw_set_key(_adapter *adapter,struct security_priv *psecuritypriv,sint keyid, u8 set_tx);
 extern sint rtw_set_auth(_adapter *adapter,struct security_priv *psecuritypriv);

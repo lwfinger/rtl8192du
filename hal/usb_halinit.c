@@ -27,19 +27,6 @@
 
 #include <rtl8192d_hal.h>
 #include <rtl8192d_led.h>
-
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
-#ifndef CONFIG_USB_HCI
-
-#error "CONFIG_USB_HCI shall be on!\n"
-
-#endif
-
 #include <usb_ops.h>
 #include <usb_hal.h>
 #include <usb_osintf.h>
@@ -705,7 +692,6 @@ static u8 _LLTWrite(
 
 }
 
-#ifndef PLATFORM_FREEBSD //amy,temp remove
 static u8 _LLTRead(
 	IN  PADAPTER	Adapter,
 	IN	u32		address
@@ -733,7 +719,6 @@ static u8 _LLTRead(
 	return 0xFF;
 
 }
-#endif //amy,temp remove
 
 static u8 InitLLTTable(
 	IN  PADAPTER	Adapter,
@@ -792,7 +777,6 @@ static u8 InitLLTTable(
 
 }
 
-#ifndef PLATFORM_FREEBSD //amy,temp remove
 //---------------------------------------------------------------
 //
 //	MAC init functions
@@ -829,7 +813,6 @@ _SetBSSID(
 		rtw_write32(Adapter, REG_BSSID+i, BSSID[i]);
 	}
 }
-#endif //amy,temp remove
 
 // Shall USB interface init this?
 static VOID
@@ -2438,7 +2421,6 @@ n. LEDCFG 0x4C[15:0] = 0x8080
 	//RT_TRACE(COMP_INIT, DBG_LOUD, ("======> Disable GPIO and LED.\n"));
 
 } //end of _DisableGPIO()
-#ifndef PLATFORM_FREEBSD //amy, temp remove
 static VOID
 _ResetFWDownloadRegister(
 	IN PADAPTER			Adapter
@@ -2449,7 +2431,6 @@ _ResetFWDownloadRegister(
 	value32 = rtw_read32(Adapter, REG_MCUFWDL);
 	value32 &= ~(MCUFWDL_EN | MCUFWDL_RDY);
 	rtw_write32(Adapter, REG_MCUFWDL, value32);
-	//RT_TRACE(COMP_INIT, DBG_LOUD, ("Reset FW download register.\n"));
 }
 
 
@@ -2574,7 +2555,7 @@ _SetUsbSuspend(
 	//RT_TRACE(COMP_INIT, DBG_LOUD, ("Set USB suspend.\n"));
 
 }
-#endif //amy, temp remove
+
 static VOID
 _DisableRFAFEAndResetBB8192D(
 	IN PADAPTER			Adapter
@@ -2757,7 +2738,6 @@ i.	APS_FSMCO 0x04[15:0] = 0x4802		// set USB suspend
 	//RT_TRACE(COMP_INIT, DBG_LOUD, ("======> Disable Analog Reg0x04:0x%04x.\n",value16));
 }
 
-#ifndef PLATFORM_FREEBSD //amy, temp remove
 static BOOLEAN
 CanGotoPowerOff92D(
 	IN	PADAPTER			Adapter
@@ -2821,7 +2801,6 @@ CanGotoPowerOff92D(
 	}
 	return _TRUE;
 }
-#endif //amy, temp remove
 
 static int
 CardDisableHWSM( // HW Auto state machine

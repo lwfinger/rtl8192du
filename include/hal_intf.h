@@ -24,6 +24,8 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
+extern int rtw_ht_enable;
+
 enum RTL871X_HCI_TYPE {
 
 	RTW_SDIO,

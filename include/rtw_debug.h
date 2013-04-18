@@ -278,21 +278,21 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_log_level(struct file *file, const char *buffer,
+	int proc_set_log_level(struct file *file, const char __user *buffer,
 			unsigned long count, void *data);
 
 	int proc_get_write_reg(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_write_reg(struct file *file, const char *buffer,
+	int proc_set_write_reg(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_read_reg(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_read_reg(struct file *file, const char *buffer,
+	int proc_set_read_reg(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 
@@ -396,28 +396,28 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_rx_signal(struct file *file, const char *buffer,
+	int proc_set_rx_signal(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_ht_enable(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_ht_enable(struct file *file, const char *buffer,
+	int proc_set_ht_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_cbw40_enable(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_cbw40_enable(struct file *file, const char *buffer,
+	int proc_set_cbw40_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_ampdu_enable(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_ampdu_enable(struct file *file, const char *buffer,
+	int proc_set_ampdu_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_two_path_rssi(char *page, char **start,
@@ -428,7 +428,7 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_rx_stbc(struct file *file, const char *buffer,
+	int proc_set_rx_stbc(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 
@@ -444,7 +444,7 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_rssi_disp(struct file *file, const char *buffer,
+	int proc_set_rssi_disp(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 

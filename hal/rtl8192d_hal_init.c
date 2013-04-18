@@ -35,13 +35,13 @@ atomic_t GlobalMutexForPowerOnAndPowerOff = ATOMIC_INIT(0);
 atomic_t GlobalMutexForFwDownload = ATOMIC_INIT(0);
 #ifdef CONFIG_DUALMAC_CONCURRENT
 atomic_t GlobalCounterForMutex = ATOMIC_INIT(0);
-BOOLEAN GlobalFirstConfigurationForNormalChip = _TRUE;
+bool GlobalFirstConfigurationForNormalChip = _TRUE;
 #endif
 
 
-static BOOLEAN
+static bool
 _IsFWDownloaded(
-	IN	PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	return ((rtw_read32(Adapter, REG_MCUFWDL) & MCUFWDL_RDY) ? _TRUE : _FALSE);
@@ -49,8 +49,8 @@ _IsFWDownloaded(
 
 static VOID
 _FWDownloadEnable(
-	IN	PADAPTER		Adapter,
-	IN	BOOLEAN			enable
+	PADAPTER		Adapter,
+	bool			enable
 	)
 {
 #if 0
@@ -103,9 +103,9 @@ _FWDownloadEnable(
 
 static int
 _BlockWrite_92d(
-	IN		PADAPTER		Adapter,
-	IN		PVOID			buffer,
-	IN		u32				size
+		PADAPTER		Adapter,
+		PVOID			buffer,
+		u32				size
 	)
 {
 	int ret = _SUCCESS;
@@ -173,10 +173,10 @@ exit:
 
 static int
 _PageWrite(
-	IN		PADAPTER		Adapter,
-	IN		u32			page,
-	IN		PVOID			buffer,
-	IN		u32			size
+		PADAPTER		Adapter,
+		u32			page,
+		PVOID			buffer,
+		u32			size
 	)
 {
 	u8 value8;
@@ -189,9 +189,9 @@ _PageWrite(
 
 static int
 _WriteFW(
-	IN		PADAPTER		Adapter,
-	IN		PVOID			buffer,
-	IN		u32			size
+		PADAPTER		Adapter,
+		PVOID			buffer,
+		u32			size
 	)
 {
 	int ret = _SUCCESS;
@@ -225,10 +225,10 @@ exit:
 	return ret;
 }
 int _FWFreeToGo_92D(
-	IN		PADAPTER		Adapter
+		PADAPTER		Adapter
 	);
 int _FWFreeToGo_92D(
-	IN		PADAPTER		Adapter
+		PADAPTER		Adapter
 	)
 {
 	u32			counter = 0;
@@ -253,7 +253,7 @@ int _FWFreeToGo_92D(
 
 VOID
 rtl8192d_FirmwareSelfReset(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 )
 {
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -356,8 +356,8 @@ u8	FwBuffer8192D[FW_8192D_SIZE];
 //
 //
 int FirmwareDownload92D(
-	IN	PADAPTER			Adapter,
-	IN	BOOLEAN			bUsedWoWLANFw
+	PADAPTER			Adapter,
+	bool			bUsedWoWLANFw
 )
 {
 	int	rtStatus = _SUCCESS;
@@ -378,7 +378,7 @@ int FirmwareDownload92D(
 	u32		FirmwareLen;
 	u8		value;
 	u32		count;
-	BOOLEAN	 bFwDownloaded = _FALSE,bFwDownloadInProcess = _FALSE;
+	bool	 bFwDownloaded = _FALSE,bFwDownloadInProcess = _FALSE;
 
 	if(Adapter->bSurpriseRemoved){
 		return _FAIL;
@@ -609,7 +609,7 @@ Exit:
 #ifdef CONFIG_WOWLAN
 VOID
 InitializeFirmwareVars92D(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 )
 {
 	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(Adapter);
@@ -637,8 +637,8 @@ InitializeFirmwareVars92D(
 //
 VOID
 SetFwRelatedForWoWLAN8192DU(
-	IN	PADAPTER			padapter,
-	IN	u8			bHostIsGoingtoSleep
+	PADAPTER			padapter,
+	u8			bHostIsGoingtoSleep
 )
 {
 	int	status=_FAIL;
@@ -746,9 +746,9 @@ rtl8192d_ReadChipVersion(
 
 VOID
 rtl8192d_EfuseParseChnlPlan(
-	IN	PADAPTER	Adapter,
-	IN	u8*			hwinfo,
-	IN	BOOLEAN		AutoLoadFail
+	PADAPTER	Adapter,
+	u8*			hwinfo,
+	bool		AutoLoadFail
 	)
 {
 	Adapter->mlmepriv.ChannelPlan = hal_com_get_channel_plan(
@@ -770,10 +770,10 @@ rtl8192d_EfuseParseChnlPlan(
 
 static VOID
 hal_ReadPowerValueFromPROM92D(
-	IN	PADAPTER		Adapter,
-	IN	PTxPowerInfo	pwrInfo,
-	IN	u8*			PROMContent,
-	IN	BOOLEAN			AutoLoadFail
+	PADAPTER		Adapter,
+	PTxPowerInfo	pwrInfo,
+	u8*			PROMContent,
+	bool			AutoLoadFail
 	)
 {
 	u32	rfPath, eeAddr, group, offset1,offset2=0;
@@ -906,9 +906,9 @@ hal_ReadPowerValueFromPROM92D(
 
 VOID
 rtl8192d_ReadTxPowerInfo(
-	IN	PADAPTER		Adapter,
-	IN	u8*			PROMContent,
-	IN	BOOLEAN			AutoLoadFail
+	PADAPTER		Adapter,
+	u8*			PROMContent,
+	bool			AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1155,7 +1155,7 @@ u8 GetEEPROMSize8192D(PADAPTER Adapter)
 /************************************************************
 Function: Synchrosize for power off with dual mac
 *************************************************************/
-BOOLEAN
+bool
 PHY_CheckPowerOffFor8192D(
 	PADAPTER   Adapter
 )
@@ -1291,9 +1291,9 @@ enum{
 
 static VOID
 rtl8192d_EfusePowerSwitch(
-	IN	PADAPTER	pAdapter,
-	IN	u8		bWrite,
-	IN	u8		PwrState)
+	PADAPTER	pAdapter,
+	u8		bWrite,
+	u8		PwrState)
 {
 	u8	tempval;
 	u16	tmpV16;
@@ -1345,7 +1345,7 @@ ReadEFuse_RTL8192D(
 	u16			_offset,
 	u16			_size_byte,
 	u8			*pbuf,
-	IN BOOLEAN	bPseudoTest
+	IN bool	bPseudoTest
 	)
 {
 	u8	efuseTbl[EFUSE_MAP_LEN];
@@ -1514,7 +1514,7 @@ ReadEFuse_RTL8192D(
 
 static VOID
 hal_EfuseUpdateNormalChipVersion_92D(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1551,14 +1551,14 @@ hal_EfuseUpdateNormalChipVersion_92D(
 	pHalData->VersionID = ChipVer;
 }
 
-static BOOLEAN
+static bool
 hal_EfuseMacMode_ISVS_92D(
      IN     PADAPTER     Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	PartNo;
-	BOOLEAN bResult = _FALSE;
+	bool bResult = _FALSE;
 	// 92D VS not support dual mac mode
 	if(IS_NORMAL_CHIP92D(pHalData->VersionID))
 	{
@@ -1594,7 +1594,7 @@ rtl8192d_ReadEFuse(
 	u16			_offset,
 	u16			_size_byte,
 	u8			*pbuf,
-	IN BOOLEAN	bPseudoTest
+	IN bool	bPseudoTest
 	)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
@@ -1607,11 +1607,11 @@ rtl8192d_ReadEFuse(
 
 static VOID
 rtl8192d_EFUSE_GetEfuseDefinition(
-	IN		PADAPTER	pAdapter,
-	IN		u8		efuseType,
-	IN		u8		type,
+		PADAPTER	pAdapter,
+		u8		efuseType,
+		u8		type,
 	OUT		PVOID		*pOut,
-	IN		BOOLEAN		bPseudoTest
+		bool		bPseudoTest
 	)
 {
 	switch(type)
@@ -1670,9 +1670,9 @@ rtl8192d_EFUSE_GetEfuseDefinition(
 
 static u16
 rtl8192d_EfuseGetCurrentSize(
-	IN	PADAPTER	pAdapter,
-	IN	u8			efuseType,
-	IN	BOOLEAN		bPseudoTest)
+	PADAPTER	pAdapter,
+	u8			efuseType,
+	bool		bPseudoTest)
 {
 	int	bContinual = _TRUE;
 
@@ -1722,10 +1722,10 @@ rtl8192d_EfuseGetCurrentSize(
 }
 
 static int
-rtl8192d_Efuse_PgPacketRead(	IN	PADAPTER	pAdapter,
-					IN	u8			offset,
-					IN	u8			*data,
-					IN	BOOLEAN		bPseudoTest)
+rtl8192d_Efuse_PgPacketRead(	PADAPTER	pAdapter,
+					u8			offset,
+					u8			*data,
+					bool		bPseudoTest)
 {
 	u8	ReadState = PG_STATE_HEADER;
 
@@ -1833,11 +1833,11 @@ rtl8192d_Efuse_PgPacketRead(	IN	PADAPTER	pAdapter,
 }
 
 static int
-rtl8192d_Efuse_PgPacketWrite(IN	PADAPTER	pAdapter,
-					IN	u8			offset,
-					IN	u8			word_en,
-					IN	u8			*data,
-					IN	BOOLEAN		bPseudoTest)
+rtl8192d_Efuse_PgPacketWrite(PADAPTER	pAdapter,
+					u8			offset,
+					u8			word_en,
+					u8			*data,
+					bool		bPseudoTest)
 {
 	u8	WriteState = PG_STATE_HEADER;
 
@@ -1864,7 +1864,7 @@ rtl8192d_Efuse_PgPacketWrite(IN	PADAPTER	pAdapter,
 
 	static int	repeat_times = 0;
 
-	BOOLEAN		bExtendedHeader = _FALSE;
+	bool		bExtendedHeader = _FALSE;
 	u8	efuseType=EFUSE_WIFI;
 
 	//
@@ -2263,11 +2263,11 @@ rtl8192d_Efuse_PgPacketWrite(IN	PADAPTER	pAdapter,
 }
 
 static u8
-rtl8192d_Efuse_WordEnableDataWrite(	IN	PADAPTER	pAdapter,
-							IN	u16		efuse_addr,
-							IN	u8		word_en,
-							IN	u8		*data,
-							IN	BOOLEAN		bPseudoTest)
+rtl8192d_Efuse_WordEnableDataWrite(	PADAPTER	pAdapter,
+							u16		efuse_addr,
+							u8		word_en,
+							u8		*data,
+							bool		bPseudoTest)
 {
 	u16	tmpaddr = 0;
 	u16	start_addr = efuse_addr;

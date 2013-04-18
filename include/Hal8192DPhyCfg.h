@@ -332,7 +332,7 @@ void	rtl8192d_PHY_GetHWRegOriginalValue(	IN	PADAPTER		Adapter	);
 //
 // RF Power setting
 //
-//extern	BOOLEAN	PHY_SetRFPowerState(IN	PADAPTER			Adapter,
+//extern	bool	PHY_SetRFPowerState(IN	PADAPTER			Adapter,
 //									IN	RT_RF_POWER_STATE	eRFPowerState);
 
 //
@@ -342,7 +342,7 @@ void	PHY_GetTxPowerLevel8192D(	IN	PADAPTER		Adapter,
 											OUT u32*		powerlevel	);
 void	PHY_SetTxPowerLevel8192D(	IN	PADAPTER		Adapter,
 											IN	u8			channel	);
-BOOLEAN	PHY_UpdateTxPowerDbm8192D(	IN	PADAPTER	Adapter,
+bool	PHY_UpdateTxPowerDbm8192D(	IN	PADAPTER	Adapter,
 											IN	int		powerInDbm	);
 
 //
@@ -361,7 +361,7 @@ void	PHY_SetBWMode8192D(	IN	PADAPTER			pAdapter,
 //
 // Set FW CMD IO for 8192S.
 //
-//extern	BOOLEAN HalSetIO8192C(	IN	PADAPTER			Adapter,
+//extern	bool HalSetIO8192C(	IN	PADAPTER			Adapter,
 //									IN	IO_TYPE				IOType);
 
 //
@@ -394,9 +394,9 @@ extern void ChkFwCmdIoDone(	IN	PADAPTER	Adapter);
 // BB/MAC/RF other monitor API
 //
 void	PHY_SetMonitorMode8192D(IN	PADAPTER	pAdapter,
-										IN	BOOLEAN		bEnableMonitorMode	);
+										IN	bool		bEnableMonitorMode	);
 
-BOOLEAN	PHY_CheckIsLegalRfPath8192D(IN	PADAPTER	pAdapter,
+bool	PHY_CheckIsLegalRfPath8192D(IN	PADAPTER	pAdapter,
 											IN	u32		eRFPath	);
 
 //
@@ -434,7 +434,7 @@ PHY_EnableHostClkReq(
 	IN	PADAPTER			Adapter
 	);
 
-BOOLEAN
+bool
 SetAntennaConfig92C(
 	IN	PADAPTER	Adapter,
 	IN	u8		DefaultAnt
@@ -448,12 +448,12 @@ PHY_StopTRXBeforeChangeBand8192D(
 VOID
 PHY_UpdateBBRFConfiguration8192D(
 	IN PADAPTER Adapter,
-	IN BOOLEAN bisBandSwitch
+	IN bool bisBandSwitch
 );
 
 VOID PHY_ReadMacPhyMode92D(
 	IN PADAPTER	Adapter,
-	IN BOOLEAN	AutoloadFail
+	IN bool	AutoloadFail
 );
 
 VOID PHY_ConfigMacPhyMode92D(
@@ -480,12 +480,12 @@ rtl8192d_PHY_ResetIQKResult(
 
 
 VOID
-rtl8192d_PHY_SetRFPathSwitch(IN	PADAPTER	pAdapter, IN	BOOLEAN		bMain);
+rtl8192d_PHY_SetRFPathSwitch(IN	PADAPTER	pAdapter, IN	bool		bMain);
 
 VOID
 HalChangeCCKStatus8192D(
 	IN	PADAPTER	Adapter,
-	IN	BOOLEAN		bCCKDisable
+	IN	bool		bCCKDisable
 );
 
 VOID

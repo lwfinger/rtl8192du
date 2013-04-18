@@ -1,19 +1,19 @@
 /******************************************************************************
  *
- * Copyright(c) 2007 - 2012 Realtek Corporation. All rights reserved.
+ *Copyright(c) 2007 - 2012 Realtek Corporation. All rights reserved.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
+ *This program is free software; you can redistribute it and/or modify it
+ *under the terms of version 2 of the GNU General Public License as
+ *published by the Free Software Foundation.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
+ *This program is distributed in the hope that it will be useful, but WITHOUT
+ *ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ *more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
+ *You should have received a copy of the GNU General Public License along with
+ *this program; if not, write to the Free Software Foundation, Inc.,
+ *51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
  *
  *
  ******************************************************************************/
@@ -201,12 +201,12 @@ struct hal_ops {
 	s32	(*hostap_mgnt_xmit_entry)(PADAPTER Adapter, _pkt *pkt);
 #endif
 	void (*EfusePowerSwitch)(PADAPTER pAdapter, u8 bWrite, u8 PwrState);
-	void (*ReadEFuse)(PADAPTER Adapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, BOOLEAN bPseudoTest);
-	void (*EFUSEGetEfuseDefinition)(PADAPTER pAdapter, u8 efuseType, u8 type, PVOID *pOut, BOOLEAN bPseudoTest);
-	u16	(*EfuseGetCurrentSize)(PADAPTER pAdapter, u8 efuseType, BOOLEAN bPseudoTest);
-	int	(*Efuse_PgPacketRead)(PADAPTER pAdapter, u8 offset, u8 *data, BOOLEAN bPseudoTest);
-	int	(*Efuse_PgPacketWrite)(PADAPTER pAdapter, u8 offset, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
-	u8	(*Efuse_WordEnableDataWrite)(PADAPTER pAdapter, u16 efuse_addr, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
+	void (*ReadEFuse)(PADAPTER Adapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest);
+	void (*EFUSEGetEfuseDefinition)(PADAPTER pAdapter, u8 efuseType, u8 type, PVOID *pOut, bool bPseudoTest);
+	u16	(*EfuseGetCurrentSize)(PADAPTER pAdapter, u8 efuseType, bool bPseudoTest);
+	int	(*Efuse_PgPacketRead)(PADAPTER pAdapter, u8 offset, u8 *data, bool bPseudoTest);
+	int	(*Efuse_PgPacketWrite)(PADAPTER pAdapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
+	u8	(*Efuse_WordEnableDataWrite)(PADAPTER pAdapter, u16 efuse_addr, u8 word_en, u8 *data, bool bPseudoTest);
 
 #ifdef DBG_CONFIG_ERROR_DETECT
 	void (*sreset_init_value)(_adapter *padapter);
@@ -220,8 +220,8 @@ struct hal_ops {
 #ifdef CONFIG_IOL
 	int (*IOL_exec_cmds_sync)(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms);
 #endif
-	void (*hal_notch_filter)(_adapter * adapter, bool enable);
-	void (*hal_reset_security_engine)(_adapter * adapter);
+	void (*hal_notch_filter)(_adapter *adapter, bool enable);
+	void (*hal_reset_security_engine)(_adapter *adapter);
 
 	s32 (*c2h_handler)(_adapter *padapter, struct c2h_evt_hdr *c2h_evt);
 	c2h_id_filter c2h_id_filter_ccx;
@@ -387,8 +387,8 @@ u8 rtw_hal_sreset_get_wifi_status(_adapter *padapter);
 int rtw_hal_iol_cmd(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms);
 #endif
 
-void rtw_hal_notch_filter(_adapter * adapter, bool enable);
-void rtw_hal_reset_security_engine(_adapter * adapter);
+void rtw_hal_notch_filter(_adapter *adapter, bool enable);
+void rtw_hal_reset_security_engine(_adapter *adapter);
 
 s32 rtw_hal_c2h_handler(_adapter *adapter, struct c2h_evt_hdr *c2h_evt);
 c2h_id_filter rtw_hal_c2h_id_filter_ccx(_adapter *adapter);

@@ -300,10 +300,10 @@ struct	dm_priv
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	int	RssiValMinForAnotherMacOfDMSP;
 	u32	CurDigValueForAnotherMacOfDMSP;
-	BOOLEAN		bWriteDigForAnotherMacOfDMSP;
-	BOOLEAN		bChangeCCKPDStateForAnotherMacOfDMSP;
+	bool		bWriteDigForAnotherMacOfDMSP;
+	bool		bChangeCCKPDStateForAnotherMacOfDMSP;
 	u8	CurCCKPDStateForAnotherMacOfDMSP;
-	BOOLEAN		bChangeTxHighPowerLvlForAnotherMacOfDMSP;
+	bool		bChangeTxHighPowerLvlForAnotherMacOfDMSP;
 	u8	CurTxHighLvlForAnotherMacOfDMSP;
 #endif
 
@@ -337,9 +337,9 @@ struct	dm_priv
 	u32	APKoutput[2][2];	//path A/B; output1_1a/output1_2a
 	u8	bAPKdone;
 	u8	bAPKThermalMeterIgnore;
-	BOOLEAN		bDPKdone[2];
-	BOOLEAN		bDPKstore;
-	BOOLEAN		bDPKworking;
+	bool		bDPKdone[2];
+	bool		bDPKstore;
+	bool		bDPKworking;
 	u8	OFDM_min_index_internalPA_DPK[2];
 	u8	TxPowerLevelDPK[2];
 

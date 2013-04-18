@@ -356,7 +356,7 @@ void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart )
     PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
     u8              CurrChannel = pAdapter->mppriv.channel;
     u32              ulAntennaTx = pAdapter->mppriv.antenna_tx;
-    BOOLEAN				is92C = IS_92C_SERIAL(pHalData->VersionID);
+    bool				is92C = IS_92C_SERIAL(pHalData->VersionID);
     RF_RADIO_PATH_E   rfPath;
 
     switch(ulAntennaTx)
@@ -573,7 +573,7 @@ void Hal_SetSingleCarrierTx (PADAPTER pAdapter, u8 bStart)
     }
 }
 
-static  VOID Hal_mpt_StartCckContTx(PADAPTER pAdapter,BOOLEAN bScrambleOn)
+static  VOID Hal_mpt_StartCckContTx(PADAPTER pAdapter,bool bScrambleOn)
 {
 
     HAL_DATA_TYPE   *pHalData   = GET_HAL_DATA(pAdapter);
@@ -721,8 +721,8 @@ void Hal_SetContinuousTx (PADAPTER pAdapter, u8 bStart)
     }
     else
     { // Stop Continuous Tx.
-        BOOLEAN bCckContTx = pMptCtx->bCckContTx;
-        BOOLEAN bOfdmContTx = pMptCtx->bOfdmContTx;
+        bool bCckContTx = pMptCtx->bCckContTx;
+        bool bOfdmContTx = pMptCtx->bOfdmContTx;
 
         if(bCckContTx == _TRUE && bOfdmContTx == _FALSE)
         { // Stop CCK Continuous Tx.
@@ -826,7 +826,7 @@ HalReadPCIDwordDBI8192C(
 VOID
 PHY_PowerDownAnotherPHY(
 	IN	PADAPTER		Adapter,
-	IN	BOOLEAN			bMac0
+	IN	bool			bMac0
 	)
 {
 //	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -854,16 +854,16 @@ PHY_PowerDownAnotherPHY(
 //
 // 2011/02/10 MH Move the function from Halrf6052.c to Halrf6052_92D.c.
 //
-BOOLEAN
+bool
 PHY_EnableAnotherPHY(
 	IN	PADAPTER		Adapter,
-	IN	BOOLEAN			bMac0
+	IN	bool			bMac0
 	)
 {
 	u1Byte					u1bTmp;
 	u1Byte			MAC_REG = (bMac0==_TRUE)?REG_MAC1:REG_MAC0;
 	u1Byte			MAC_ON_BIT = bMac0==_TRUE?MAC1_ON:MAC0_ON;
-	BOOLEAN			bResult = _TRUE; //true: need to enable BB/RF power
+	bool			bResult = _TRUE; //true: need to enable BB/RF power
 	//MAC0 Need PHY1 load radio_b.txt . Driver use DBI to write.
 	 u1bTmp = _rtw_read8(Adapter, MAC_REG);
 
@@ -1008,7 +1008,7 @@ VOID
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	u8		path = pHalData->CurrentBandType92D == BAND_ON_5G?RF_PATH_A:RF_PATH_B;
 	u8		index = 0,	i = 0, eRFPath = RF_PATH_A;
-	BOOLEAN		bNeedPowerDownRadio = _FALSE, bInteralPA = _FALSE;
+	bool		bNeedPowerDownRadio = _FALSE, bInteralPA = _FALSE;
 	u32		u4RegValue = 0, mask = 0x1C000, value = 0, u4tmp, u4tmp2,MaskforPhySet=0;
 	//Query regB30 bit27
 	u32		Regb30 = PHY_QueryBBReg(Adapter, 0xb30, BIT27);
@@ -1247,7 +1247,7 @@ void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
 	u8 ulRateIdx = pmp->rateidx;
 	u8 ulbandwidth = pmp->bandwidth;
 	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
-    BOOLEAN             bInteralPA = _FALSE;
+    bool             bInteralPA = _FALSE;
     u32				value = 0;
     phy_SwitchRfSetting8192D(pAdapter,ChannelToSw);
 #if 0
@@ -1290,7 +1290,7 @@ void Hal_SetBandwidth(PADAPTER pAdapter)
 }
 
 
-void MPT_CCKTxPowerAdjust(PADAPTER Adapter,BOOLEAN	bInCH14)
+void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 {
 	u4Byte				TempVal = 0, TempVal2 = 0, TempVal3 = 0;
 	u4Byte				CurrCCKSwingVal=0, CCKSwingIndex=12;

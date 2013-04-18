@@ -49,7 +49,7 @@ extern atomic_t GlobalMutexForPowerAndEfuse;
 extern atomic_t GlobalMutexForPowerOnAndPowerOff;
 #ifdef CONFIG_DUALMAC_CONCURRENT
 extern atomic_t GlobalCounterForMutex;
-extern BOOLEAN GlobalFirstConfigurationForNormalChip;
+extern bool GlobalFirstConfigurationForNormalChip;
 #endif
 
 
@@ -63,7 +63,7 @@ extern BOOLEAN GlobalFirstConfigurationForNormalChip;
 
 static VOID
 _OneOutEpMapping(
-	IN	HAL_DATA_TYPE	*pHalData
+	HAL_DATA_TYPE	*pHalData
 	)
 {
 	//only endpoint number 0x02
@@ -82,8 +82,8 @@ _OneOutEpMapping(
 
 static VOID
 _TwoOutEpMapping(
-	IN	HAL_DATA_TYPE	*pHalData,
-	IN	BOOLEAN			bWIFICfg
+	HAL_DATA_TYPE	*pHalData,
+	bool			bWIFICfg
 	)
 {
 
@@ -127,8 +127,8 @@ _TwoOutEpMapping(
 
 
 static VOID _ThreeOutEpMapping(
-	IN	HAL_DATA_TYPE	*pHalData,
-	IN	BOOLEAN			bWIFICfg
+	HAL_DATA_TYPE	*pHalData,
+	bool			bWIFICfg
 	)
 {
 	if(bWIFICfg){//for WMM
@@ -168,18 +168,18 @@ static VOID _ThreeOutEpMapping(
 
 }
 
-static BOOLEAN
+static bool
 _MappingOutEP(
-	IN	PADAPTER	pAdapter,
-	IN	u8		NumOutPipe
+	PADAPTER	pAdapter,
+	u8		NumOutPipe
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct registry_priv *pregistrypriv = &pAdapter->registrypriv;
 
-	BOOLEAN	 bWIFICfg = (pregistrypriv->wifi_spec) ?_TRUE:_FALSE;
+	bool	 bWIFICfg = (pregistrypriv->wifi_spec) ?_TRUE:_FALSE;
 
-	BOOLEAN result = _TRUE;
+	bool result = _TRUE;
 
 	switch(NumOutPipe)
 	{
@@ -203,8 +203,8 @@ _MappingOutEP(
 
 static VOID
 _ConfigChipOutEP(
-	IN	PADAPTER	pAdapter,
-	IN	u8		NumOutPipe
+	PADAPTER	pAdapter,
+	u8		NumOutPipe
 	)
 {
 	u8			value8;
@@ -263,14 +263,14 @@ _ConfigChipOutEP(
 
 }
 
-static BOOLEAN HalUsbSetQueuePipeMapping8192DUsb(
-	IN	PADAPTER	pAdapter,
-	IN	u8		NumInPipe,
-	IN	u8		NumOutPipe
+static bool HalUsbSetQueuePipeMapping8192DUsb(
+	PADAPTER	pAdapter,
+	u8		NumInPipe,
+	u8		NumOutPipe
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
-	BOOLEAN			result		= _FALSE;
+	bool			result		= _FALSE;
 
 	_ConfigChipOutEP(pAdapter, NumOutPipe);
 
@@ -663,8 +663,8 @@ void rtw_wowlan_reload_pattern(_adapter *padapter){
 //-------------------------------------------------------------------------
 static u8 _LLTWrite(
 	IN  PADAPTER	Adapter,
-	IN	u32		address,
-	IN	u32		data
+	u32		address,
+	u32		data
 	)
 {
 	u8	status = _SUCCESS;
@@ -694,7 +694,7 @@ static u8 _LLTWrite(
 
 static u8 _LLTRead(
 	IN  PADAPTER	Adapter,
-	IN	u32		address
+	u32		address
 	)
 {
 	int		count = 0;
@@ -722,7 +722,7 @@ static u8 _LLTRead(
 
 static u8 InitLLTTable(
 	IN  PADAPTER	Adapter,
-	IN	u32		boundary
+	u32		boundary
 	)
 {
 	u8		status = _SUCCESS;
@@ -951,13 +951,13 @@ _InitTxBufferBoundary(
 
 static VOID
 _InitNormalChipRegPriority(
-	IN	PADAPTER	Adapter,
-	IN	u16		beQ,
-	IN	u16		bkQ,
-	IN	u16		viQ,
-	IN	u16		voQ,
-	IN	u16		mgtQ,
-	IN	u16		hiQ
+	PADAPTER	Adapter,
+	u16		beQ,
+	u16		bkQ,
+	u16		viQ,
+	u16		voQ,
+	u16		mgtQ,
+	u16		hiQ
 	)
 {
 	u16 value16		= (rtw_read16(Adapter, REG_TRXDMA_CTRL) & 0x7);
@@ -971,7 +971,7 @@ _InitNormalChipRegPriority(
 
 static VOID
 _InitNormalChipOneOutEpPriority(
-	IN	PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -1006,7 +1006,7 @@ _InitNormalChipOneOutEpPriority(
 
 static VOID
 _InitNormalChipTwoOutEpPriority(
-	IN	PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -1059,7 +1059,7 @@ _InitNormalChipTwoOutEpPriority(
 
 static VOID
 _InitNormalChipThreeOutEpPriority(
-	IN	PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
@@ -1152,7 +1152,7 @@ _InitTransferPageSize(
 static VOID
 _InitDriverInfoSize(
 	IN  PADAPTER	Adapter,
-	IN	u8		drvInfoSize
+	u8		drvInfoSize
 	)
 {
 	rtw_write8(Adapter,REG_RX_DRVINFO_SZ, drvInfoSize);
@@ -1323,7 +1323,7 @@ _InitAMPDUAggregation(
 static VOID
 _InitBeaconMaxError(
 	IN  PADAPTER	Adapter,
-	IN	BOOLEAN		InfraMode
+	bool		InfraMode
 	)
 {
 #ifdef RTL8192CU_ADHOC_WORKAROUND_SETTING
@@ -1335,7 +1335,7 @@ _InitBeaconMaxError(
 
 static VOID
 _InitRDGSetting(
-	IN	PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	rtw_write8(Adapter,REG_RD_CTRL,0xFF);
@@ -1477,7 +1477,7 @@ _InitUsbAggregationSetting(
 
 static VOID
 _InitOperationMode(
-	IN	PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1599,7 +1599,7 @@ _InitBeaconParameters(
 
 static VOID
 _InitRFType(
-	IN	PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1635,9 +1635,9 @@ static VOID _InitAdhocWorkaroundParams(IN PADAPTER Adapter)
 
 static VOID
 _BeaconFunctionEnable(
-	IN	PADAPTER		Adapter,
-	IN	BOOLEAN			Enable,
-	IN	BOOLEAN			Linked
+	PADAPTER		Adapter,
+	bool			Enable,
+	bool			Linked
 	)
 {
 	// 20100901 zhiyuan: Change original setting of BCN_CTRL(0x550) from
@@ -1652,7 +1652,7 @@ _BeaconFunctionEnable(
 
 // Set CCK and OFDM Block "ON"
 static VOID _BBTurnOnBlock(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 	)
 {
 	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(Adapter);
@@ -1667,7 +1667,7 @@ static VOID _BBTurnOnBlock(
 }
 
 static VOID _RfPowerSave(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -2381,7 +2381,7 @@ _func_exit_;
 
 static VOID
 _DisableGPIO(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 	)
 {
 /***************************************
@@ -2514,7 +2514,7 @@ _DisableMAC_AFE_PLL(
 
 static VOID
 _AutoPowerDownToHostOff(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 	)
 {
 	u32			value32;
@@ -2607,8 +2607,8 @@ _DisableRFAFEAndResetBB(
 
 static VOID
 _ResetDigitalProcedure1(
-	IN	PADAPTER			Adapter,
-	IN	BOOLEAN				bWithoutHWSM
+	PADAPTER			Adapter,
+	bool				bWithoutHWSM
 	)
 {
 
@@ -2678,7 +2678,7 @@ _ResetDigitalProcedure1(
 
 static VOID
 _ResetDigitalProcedure2(
-	IN	PADAPTER			Adapter
+	PADAPTER			Adapter
 )
 {
 /*****************************
@@ -2697,7 +2697,7 @@ m.	SYS_ISO_CTRL 0x01[7:0] = 0x83			// isolated ELDR to PON
 static VOID
 _DisableAnalog(
 	IN PADAPTER			Adapter,
-	IN BOOLEAN			bWithoutHWSM
+	IN bool			bWithoutHWSM
 	)
 {
 	u32 value16 = 0;
@@ -2733,9 +2733,9 @@ i.	APS_FSMCO 0x04[15:0] = 0x4802		// set USB suspend
 	//RT_TRACE(COMP_INIT, DBG_LOUD, ("======> Disable Analog Reg0x04:0x%04x.\n",value16));
 }
 
-static BOOLEAN
+static bool
 CanGotoPowerOff92D(
-	IN	PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2799,8 +2799,8 @@ CanGotoPowerOff92D(
 
 static int
 CardDisableHWSM( // HW Auto state machine
-	IN	PADAPTER		Adapter,
-	IN	BOOLEAN			resetMCU
+	PADAPTER		Adapter,
+	bool			resetMCU
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2851,7 +2851,7 @@ CardDisableHWSM( // HW Auto state machine
 
 static int
 CardDisableWithoutHWSM( // without HW Auto state machine
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3047,9 +3047,9 @@ unsigned int rtl8192du_inirp_deinit(_adapter * padapter)
 
 static void
 _ReadPROMVersion(
-	IN	PADAPTER	Adapter,
-	IN	u8*	PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	PADAPTER	Adapter,
+	u8*	PROMContent,
+	bool		AutoloadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3064,11 +3064,11 @@ _ReadPROMVersion(
 
 u32
 _GetChannelGroup(
-	IN	u32	channel
+	u32	channel
 	);
 u32
 _GetChannelGroup(
-	IN	u32	channel
+	u32	channel
 	)
 {
 	//RT_ASSERT((channel < 14), ("Channel %d no is supported!\n"));
@@ -3085,9 +3085,9 @@ _GetChannelGroup(
 
 static void
 _ReadIDs(
-	IN	PADAPTER	Adapter,
-	IN	u8*		PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	PADAPTER	Adapter,
+	u8*		PROMContent,
+	bool		AutoloadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3143,9 +3143,9 @@ _ReadIDs(
 
 static VOID
 _ReadMACAddress(
-	IN	PADAPTER	Adapter,
-	IN	u8*		PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	PADAPTER	Adapter,
+	u8*		PROMContent,
+	bool		AutoloadFail
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -3197,8 +3197,8 @@ _ReadMACAddress(
 
 static VOID
 hal_ReadMacPhyModeFromPROM92DU(
-	IN	PADAPTER	Adapter,
-	IN	u8*		PROMContent
+	PADAPTER	Adapter,
+	u8*		PROMContent
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3240,9 +3240,9 @@ hal_ReadMacPhyModeFromPROM92DU(
 
 static VOID
 hal_ReadMacPhyMode_92D(
-	IN	PADAPTER	Adapter,
-	IN	u8			*PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	PADAPTER	Adapter,
+	u8			*PROMContent,
+	bool		AutoloadFail
 )
 {
 #ifdef CONFIG_DUALMAC_CONCURRENT
@@ -3292,9 +3292,9 @@ hal_ReadMacPhyMode_92D(
 
 static VOID
 _ReadBoardType(
-	IN	PADAPTER	Adapter,
-	IN	u8*		PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	PADAPTER	Adapter,
+	u8*		PROMContent,
+	bool		AutoloadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3315,9 +3315,9 @@ _ReadBoardType(
 
 static VOID
 _ReadLEDSetting(
-	IN	PADAPTER	Adapter,
-	IN	u8*		PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	PADAPTER	Adapter,
+	u8*		PROMContent,
+	bool		AutoloadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3343,9 +3343,9 @@ _ReadLEDSetting(
 #ifdef CONFIG_WOWLAN
 static VOID
 _ReadWOWLAN(
-	IN	PADAPTER	Adapter,
-	IN	u8*		PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	PADAPTER	Adapter,
+	u8*		PROMContent,
+	bool		AutoloadFail
 	)
 {
 	if(AutoloadFail)
@@ -3361,9 +3361,9 @@ _ReadWOWLAN(
 #endif //CONFIG_WOWLAN
 
 static void _InitAdapterVariablesByPROM(
-	IN	PADAPTER	Adapter,
-	IN	u8*		PROMContent,
-	IN	unsigned char AutoloadFail
+	PADAPTER	Adapter,
+	u8*		PROMContent,
+	unsigned char AutoloadFail
 	)
 {
 	_ReadPROMVersion(Adapter, PROMContent, AutoloadFail);
@@ -3470,7 +3470,7 @@ _InitOtherVariable(
 
 static VOID
 _ReadRFType(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3527,7 +3527,7 @@ static void rtl8192du_trigger_gpio_0(_adapter *padapter)
 
 static VOID
 StopTxBeacon(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 	)
 {
 	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(Adapter);
@@ -3546,7 +3546,7 @@ StopTxBeacon(
 
 static VOID
 ResumeTxBeacon(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 	)
 {
 	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(Adapter);
@@ -3566,11 +3566,11 @@ ResumeTxBeacon(
 //
 u8
 SelectRTSInitialRate(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 );
 u8
 SelectRTSInitialRate(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 )
 {
 	struct sta_info		*psta;
@@ -4796,7 +4796,7 @@ _func_enter_;
 		case HW_VAR_ACK_PREAMBLE:
 			{
 				u8	regTmp;
-				u8	bShortPreamble = *( (PBOOLEAN)val );
+				u8	bShortPreamble = *((bool *)val);
 				// Joseph marked out for Netgear 3500 TKIP channel 7 issue.(Temporarily)
 				regTmp = (pHalData->nCur40MhzPrimeSC)<<5;
 				//regTmp = 0;
@@ -5396,15 +5396,15 @@ _func_exit_;
 //
 u8
 GetHalDefVar8192DUsb(
-	IN	PADAPTER				Adapter,
-	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	PVOID					pValue
+	PADAPTER				Adapter,
+	HAL_DEF_VARIABLE		eVariable,
+	PVOID					pValue
 	);
 u8
 GetHalDefVar8192DUsb(
-	IN	PADAPTER				Adapter,
-	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	PVOID					pValue
+	PADAPTER				Adapter,
+	HAL_DEF_VARIABLE		eVariable,
+	PVOID					pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -5439,15 +5439,15 @@ GetHalDefVar8192DUsb(
 //
 u8
 SetHalDefVar8192DUsb(
-	IN	PADAPTER				Adapter,
-	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	PVOID					pValue
+	PADAPTER				Adapter,
+	HAL_DEF_VARIABLE		eVariable,
+	PVOID					pValue
 	);
 u8
 SetHalDefVar8192DUsb(
-	IN	PADAPTER				Adapter,
-	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	PVOID					pValue
+	PADAPTER				Adapter,
+	HAL_DEF_VARIABLE		eVariable,
+	PVOID					pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

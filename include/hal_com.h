@@ -127,7 +127,7 @@ hal_com_get_channel_plan(
 	u8 hw_channel_plan,	/* channel plan from HW (efuse/eeprom) */
 	u8 sw_channel_plan,	/* channel plan from SW (registry/module param) */
 	u8 def_channel_plan,	/* channel plan used when the former two is invalid */
-	BOOLEAN		AutoLoadFail
+	bool		AutoLoadFail
 	);
 
 void	halsetbratecfg( PADAPTER Adapter, u8 *mBratesOS, u16 *pBrateCfg);

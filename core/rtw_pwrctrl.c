@@ -621,7 +621,7 @@ void LPS_Leave(PADAPTER padapter)
 
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
 	u32 start_time;
-	BOOLEAN bAwake = _FALSE;
+	bool bAwake = _FALSE;
 
 _func_enter_;
 

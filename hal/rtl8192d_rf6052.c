@@ -94,8 +94,8 @@ static	RF_SHADOW_T	RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
  *						Firmwaer support the utility later.
  *
  *---------------------------------------------------------------------------*/
-void rtl8192d_RF_ChangeTxPath(	IN	PADAPTER	Adapter,
-										IN	u16		DataRate)
+void rtl8192d_RF_ChangeTxPath(	PADAPTER	Adapter,
+										u16		DataRate)
 {
 // We do not support gain table change inACUT now !!!! Delete later !!!
 
@@ -118,8 +118,8 @@ void rtl8192d_RF_ChangeTxPath(	IN	PADAPTER	Adapter,
  *---------------------------------------------------------------------------*/
 VOID
 rtl8192d_PHY_RF6052SetBandwidth(
-	IN	PADAPTER				Adapter,
-	IN	HT_CHANNEL_WIDTH		Bandwidth)	//20M or 40M
+	PADAPTER				Adapter,
+	HT_CHANNEL_WIDTH		Bandwidth)	//20M or 40M
 {
 	u8			eRFPath;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -172,13 +172,13 @@ rtl8192d_PHY_RF6052SetBandwidth(
 
 VOID
 rtl8192d_PHY_RF6052SetCckTxPower(
-	IN	PADAPTER		Adapter,
-	IN	u8*			pPowerlevel)
+	PADAPTER		Adapter,
+	u8*			pPowerlevel)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
 	u32			TxAGC[2]={0, 0}, tmpval=0;
-	BOOLEAN		TurboScanOff = _FALSE;
+	bool		TurboScanOff = _FALSE;
 	u8			idx1, idx2;
 	u8*			ptr;
 
@@ -264,9 +264,9 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 // powerbase1 for HT MCS rates
 //
 static void getPowerBase(
-	IN	PADAPTER	Adapter,
-	IN	u8		*pPowerLevel,
-	IN	u8		Channel,
+	PADAPTER	Adapter,
+	u8		*pPowerLevel,
+	u8		Channel,
 	IN OUT u32	*OfdmBase,
 	IN OUT u32	*MCSBase
 	)
@@ -328,12 +328,12 @@ static u8 getChnlGroupByPG(u8 chnlindex)
 }
 
 static void getTxPowerWriteValByRegulatory(
-	IN		PADAPTER	Adapter,
-	IN		u8*			pPowerLevel,
-	IN		u8			Channel,
-	IN		u8			index,
-	IN		u32*		powerBase0,
-	IN		u32*		powerBase1,
+		PADAPTER	Adapter,
+		u8*			pPowerLevel,
+		u8			Channel,
+		u8			index,
+		u32*		powerBase0,
+		u32*		powerBase1,
 	OUT		u32*		pOutWriteVal
 	)
 {
@@ -466,9 +466,9 @@ static void getTxPowerWriteValByRegulatory(
 }
 
 static void writeOFDMPowerReg(
-	IN		PADAPTER	Adapter,
-	IN		u8			index,
-	IN		u32			*pValue
+		PADAPTER	Adapter,
+		u8			index,
+		u32			*pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -546,9 +546,9 @@ static void writeOFDMPowerReg(
  *---------------------------------------------------------------------------*/
 VOID
 rtl8192d_PHY_RF6052SetOFDMTxPower(
-	IN	PADAPTER	Adapter,
-	IN	u8*		pPowerLevel,
-	IN	u8		Channel)
+	PADAPTER	Adapter,
+	u8*		pPowerLevel,
+	u8		Channel)
 {
 	u32	writeVal[2], powerBase0[2], powerBase1[2];
 	u8	index = 0;
@@ -566,16 +566,16 @@ rtl8192d_PHY_RF6052SetOFDMTxPower(
 	}
 }
 
-BOOLEAN
+bool
 rtl8192d_PHY_EnableAnotherPHY(
-	IN	PADAPTER		Adapter,
-	IN	BOOLEAN			bMac0
+	PADAPTER		Adapter,
+	bool			bMac0
 	)
 {
 	u8			u1bTmp;
 	u8			MAC_REG = bMac0==_TRUE?REG_MAC1:REG_MAC0;
 	u8			MAC_ON_BIT = bMac0==_TRUE?MAC1_ON:MAC0_ON;
-	BOOLEAN		bResult = _TRUE;	//true: need to enable BB/RF power
+	bool		bResult = _TRUE;	//true: need to enable BB/RF power
 	u32			MaskForPHYSet = 0;
 
 	//MAC0 Need PHY1 load radio_b.txt . Driver use DBI to write.
@@ -599,8 +599,8 @@ rtl8192d_PHY_EnableAnotherPHY(
 
 VOID
 rtl8192d_PHY_PowerDownAnotherPHY(
-	IN	PADAPTER		Adapter,
-	IN	BOOLEAN			bMac0
+	PADAPTER		Adapter,
+	bool			bMac0
 	)
 {
 	u8	u1bTmp;
@@ -625,7 +625,7 @@ rtl8192d_PHY_PowerDownAnotherPHY(
 
 static int
 phy_RF6052_Config_ParaFile(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 	)
 {
 	u32	u4RegValue=0;
@@ -639,9 +639,9 @@ phy_RF6052_Config_ParaFile(
 	static s8		sz92DRadioBFile[] = RTL8192D_PHY_RADIO_B;
 	static s8		sz92DRadioAintPAFile[] = RTL8192D_PHY_RADIO_A_intPA;
 	static s8		sz92DRadioBintPAFile[] = RTL8192D_PHY_RADIO_B_intPA;
-	BOOLEAN		bMac1NeedInitRadioAFirst = _FALSE,bMac0NeedInitRadioBFirst = _FALSE;
-	BOOLEAN		bNeedPowerDownRadioA = _FALSE,bNeedPowerDownRadioB = _FALSE;
-	BOOLEAN		bTrueBPath = _FALSE;//vivi added this for read parameter from header, 20100908
+	bool		bMac1NeedInitRadioAFirst = _FALSE,bMac0NeedInitRadioBFirst = _FALSE;
+	bool		bNeedPowerDownRadioA = _FALSE,bNeedPowerDownRadioB = _FALSE;
+	bool		bTrueBPath = _FALSE;//vivi added this for read parameter from header, 20100908
 	u32	MaskforPhySet = 0; //For 92d PHY cross access, 88c must set value 0.
 
 
@@ -841,7 +841,7 @@ phy_RF6052_Config_ParaFile_Fail:
 
 int
 PHY_RF6052_Config8192D(
-	IN	PADAPTER		Adapter)
+	PADAPTER		Adapter)
 {
 	HAL_DATA_TYPE				*pHalData = GET_HAL_DATA(Adapter);
 	int					rtStatus = _SUCCESS;
@@ -904,9 +904,9 @@ PHY_RF6052_Config8192D(
 
 u32
 PHY_RFShadowRead(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset)
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset)
 {
 	return	RF_Shadow[eRFPath][Offset].Value;
 
@@ -915,26 +915,26 @@ PHY_RFShadowRead(
 
 VOID
 PHY_RFShadowWrite(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset,
-	IN	u32				Data)
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset,
+	u32				Data)
 {
 	RF_Shadow[eRFPath][Offset].Value = (Data & bRFRegOffsetMask);
 	RF_Shadow[eRFPath][Offset].Driver_Write = _TRUE;
 
 }	/* PHY_RFShadowWrite */
 
-BOOLEAN
+bool
 PHY_RFShadowCompare(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset);
-BOOLEAN
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset);
+bool
 PHY_RFShadowCompare(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset)
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset)
 {
 	u32	reg;
 	// Check if we need to check the register
@@ -956,14 +956,14 @@ PHY_RFShadowCompare(
 }	/* PHY_RFShadowCompare */
 VOID
 PHY_RFShadowRecorver(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset);
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset);
 VOID
 PHY_RFShadowRecorver(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset)
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset)
 {
 	// Check if the address is error
 	if (RF_Shadow[eRFPath][Offset].ErrorOrNot == _TRUE)
@@ -982,10 +982,10 @@ PHY_RFShadowRecorver(
 }	/* PHY_RFShadowRecorver */
 VOID
 PHY_RFShadowCompareAll(
-	IN	PADAPTER			Adapter);
+	PADAPTER			Adapter);
 VOID
 PHY_RFShadowCompareAll(
-	IN	PADAPTER			Adapter)
+	PADAPTER			Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1001,10 +1001,10 @@ PHY_RFShadowCompareAll(
 }	/* PHY_RFShadowCompareAll */
 VOID
 PHY_RFShadowRecorverAll(
-	IN	PADAPTER			Adapter);
+	PADAPTER			Adapter);
 VOID
 PHY_RFShadowRecorverAll(
-	IN	PADAPTER			Adapter)
+	PADAPTER			Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1020,16 +1020,16 @@ PHY_RFShadowRecorverAll(
 }	/* PHY_RFShadowRecorverAll */
 VOID
 PHY_RFShadowCompareFlagSet(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset,
-	IN	u8				Type);
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset,
+	u8				Type);
 VOID
 PHY_RFShadowCompareFlagSet(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset,
-	IN	u8				Type)
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset,
+	u8				Type)
 {
 	// Set True or False!!!
 	RF_Shadow[eRFPath][Offset].Compare = Type;
@@ -1037,16 +1037,16 @@ PHY_RFShadowCompareFlagSet(
 }	/* PHY_RFShadowCompareFlagSet */
 VOID
 PHY_RFShadowRecorverFlagSet(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset,
-	IN	u8				Type);
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset,
+	u8				Type);
 VOID
 PHY_RFShadowRecorverFlagSet(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset,
-	IN	u8				Type)
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset,
+	u8				Type)
 {
 	// Set True or False!!!
 	RF_Shadow[eRFPath][Offset].Recorver= Type;
@@ -1054,10 +1054,10 @@ PHY_RFShadowRecorverFlagSet(
 }	/* PHY_RFShadowRecorverFlagSet */
 VOID
 PHY_RFShadowCompareFlagSetAll(
-	IN	PADAPTER			Adapter);
+	PADAPTER			Adapter);
 VOID
 PHY_RFShadowCompareFlagSetAll(
-	IN	PADAPTER			Adapter)
+	PADAPTER			Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1077,10 +1077,10 @@ PHY_RFShadowCompareFlagSetAll(
 }	/* PHY_RFShadowCompareFlagSetAll */
 VOID
 PHY_RFShadowRecorverFlagSetAll(
-	IN	PADAPTER			Adapter);
+	PADAPTER			Adapter);
 VOID
 PHY_RFShadowRecorverFlagSetAll(
-	IN	PADAPTER			Adapter)
+	PADAPTER			Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1100,10 +1100,10 @@ PHY_RFShadowRecorverFlagSetAll(
 }	/* PHY_RFShadowCompareFlagSetAll */
 VOID
 PHY_RFShadowRefresh(
-	IN	PADAPTER			Adapter);
+	PADAPTER			Adapter);
 VOID
 PHY_RFShadowRefresh(
-	IN	PADAPTER			Adapter)
+	PADAPTER			Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;

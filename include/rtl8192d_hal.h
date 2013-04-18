@@ -1,19 +1,19 @@
 /******************************************************************************
  *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
+ *Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
+ *This program is free software; you can redistribute it and/or modify it
+ *under the terms of version 2 of the GNU General Public License as
+ *published by the Free Software Foundation.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
+ *This program is distributed in the hope that it will be useful, but WITHOUT
+ *ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ *more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
+ *You should have received a copy of the GNU General Public License along with
+ *this program; if not, write to the Free Software Foundation, Inc.,
+ *51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
  *
  *
  ******************************************************************************/
@@ -349,7 +349,7 @@ typedef struct _BT_COEXIST_STR{
 
 //Added for 92D IQK setting.
 typedef struct _IQK_MATRIX_REGS_SETTING{
-	BOOLEAN		bIQKDone;
+	bool		bIQKDone;
 #if 1
 	int		Value[1][IQK_Matrix_REG_NUM];
 #else
@@ -604,15 +604,15 @@ struct hal_data_8192du
 	MACPHY_MODE_8192D	MacPhyMode92D;
 	BAND_TYPE	CurrentBandType92D;	//0:2.4G, 1:5G
 	BAND_TYPE	BandSet92D;
-	BOOLEAN		bIsVS;
+	bool		bIsVS;
 
-	BOOLEAN		bNOPG;
+	bool		bNOPG;
 
-	BOOLEAN		bSupportRemoteWakeUp;
-	BOOLEAN		bMasterOfDMSP;
-	BOOLEAN		bSlaveOfDMSP;
+	bool		bSupportRemoteWakeUp;
+	bool		bMasterOfDMSP;
+	bool		bSlaveOfDMSP;
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	BOOLEAN		bInModeSwitchProcess;
+	bool		bInModeSwitchProcess;
 #endif
 
 	u16	CustomerID;
@@ -696,27 +696,27 @@ struct hal_data_8192du
 
 	BB_REGISTER_DEFINITION_T	PHYRegDef[4];	//Radio A/B/C/D
 
-	BOOLEAN		bRFPathRxEnable[4];	// We support 4 RF path now.
+	bool		bRFPathRxEnable[4];	// We support 4 RF path now.
 
 	u32	RfRegChnlVal[2];
 
 	u8	bCckHighPower;
 
-	BOOLEAN		bPhyValueInitReady;
+	bool		bPhyValueInitReady;
 
-	BOOLEAN		bTXPowerDataReadFromEEPORM;
+	bool		bTXPowerDataReadFromEEPORM;
 
-	BOOLEAN		bInSetPower;
+	bool		bInSetPower;
 
 	//RDG enable
-	BOOLEAN		bRDGEnable;
+	bool		bRDGEnable;
 
-	BOOLEAN		bLoadIMRandIQKSettingFor2G;// True if IMR or IQK  have done  for 2.4G in scan progress
-	BOOLEAN		bNeedIQK;
+	bool		bLoadIMRandIQKSettingFor2G;// True if IMR or IQK  have done  for 2.4G in scan progress
+	bool		bNeedIQK;
 
-	BOOLEAN		bLCKInProgress;
+	bool		bLCKInProgress;
 
-	BOOLEAN		bEarlyModeEnable;
+	bool		bEarlyModeEnable;
 
 	IQK_MATRIX_REGS_SETTING IQKMatrixRegSetting[IQK_Matrix_Settings_NUM];
 
@@ -733,7 +733,7 @@ struct hal_data_8192du
 	u8	FwRsvdPageStartOffset; //2010.06.23. Added by tynli. Reserve page start offset except beacon in TxQ.
 
 	//Query RF by FW
-	BOOLEAN		bReadRFbyFW;
+	bool		bReadRFbyFW;
 
 	// For 92C USB endpoint setting
 	//
@@ -781,17 +781,17 @@ typedef struct hal_data_8192du HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define GET_HAL_DATA(__pAdapter)	((HAL_DATA_TYPE *)((__pAdapter)->HalData))
 #define GET_RF_TYPE(priv)	(GET_HAL_DATA(priv)->rf_type)
 
-int FirmwareDownload92D(IN	PADAPTER Adapter,IN	BOOLEAN  bUsedWoWLANFw);
+int FirmwareDownload92D(IN	PADAPTER Adapter,IN	bool  bUsedWoWLANFw);
 VOID rtl8192d_FirmwareSelfReset(IN PADAPTER Adapter);
 void rtl8192d_ReadChipVersion(IN PADAPTER Adapter);
-VOID rtl8192d_EfuseParseChnlPlan(PADAPTER Adapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-VOID rtl8192d_ReadTxPowerInfo(PADAPTER Adapter, u8* PROMContent, BOOLEAN AutoLoadFail);
+VOID rtl8192d_EfuseParseChnlPlan(PADAPTER Adapter, u8 *hwinfo, bool AutoLoadFail);
+VOID rtl8192d_ReadTxPowerInfo(PADAPTER Adapter, u8* PROMContent, bool AutoLoadFail);
 VOID rtl8192d_ResetDualMacSwitchVariables(IN PADAPTER Adapter);
 u8 GetEEPROMSize8192D(PADAPTER Adapter);
-BOOLEAN PHY_CheckPowerOffFor8192D(PADAPTER Adapter);
+bool PHY_CheckPowerOffFor8192D(PADAPTER Adapter);
 VOID PHY_SetPowerOnFor8192D(PADAPTER Adapter);
 //void PHY_ConfigMacPhyMode92D(PADAPTER Adapter);
-void rtl8192d_free_hal_data(_adapter * padapter);
+void rtl8192d_free_hal_data(_adapter *padapter);
 void rtl8192d_set_hal_ops(struct hal_ops *pHalFunc);
 
 #endif
@@ -814,13 +814,13 @@ extern void Hal_SetChannel(PADAPTER pAdapter);
 extern void Hal_SetAntennaPathPower(PADAPTER pAdapter);
 extern s32 Hal_SetThermalMeter(PADAPTER pAdapter, u8 target_ther);
 extern s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable);
-extern void Hal_GetPowerTracking(PADAPTER padapter, u8 * enable);
+extern void Hal_GetPowerTracking(PADAPTER padapter, u8 *enable);
 extern void Hal_GetThermalMeter(PADAPTER pAdapter, u8 *value);
 extern void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter);
-extern void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14);
-extern void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven);
-extern void Hal_SetCCKTxPower(PADAPTER pAdapter, u8 * TxPower);
-extern void Hal_SetOFDMTxPower(PADAPTER pAdapter, u8 * TxPower);
+extern void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14);
+extern void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven);
+extern void Hal_SetCCKTxPower(PADAPTER pAdapter, u8 *TxPower);
+extern void Hal_SetOFDMTxPower(PADAPTER pAdapter, u8 *TxPower);
 extern void Hal_TriggerRFThermalMeter(PADAPTER pAdapter);
 extern u8 Hal_ReadRFThermalMeter(PADAPTER pAdapter);
 extern void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart);

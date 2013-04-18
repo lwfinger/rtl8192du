@@ -194,7 +194,7 @@ hal_com_get_channel_plan(
 	u8 hw_channel_plan, /* from HW (efuse/eeprom) */
 	u8 sw_channel_plan, /* from SW (registry/module param) */
 	u8 def_channel_plan, /* used when the former two are invalid */
-	BOOLEAN		autoloadfail
+	bool		autoloadfail
 	)
 {
 	u8 swconfig;

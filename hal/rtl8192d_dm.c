@@ -110,7 +110,7 @@ static void dm_DIGInit(
 }
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-static BOOLEAN
+static bool
 dm_DualMacGetParameterFromBuddyAdapter(
 		PADAPTER	Adapter
 )
@@ -329,8 +329,8 @@ odm_FindMinimumRSSI_Dmsp(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	s32	Rssi_val_min_back_for_mac0;
-	BOOLEAN		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
-	BOOLEAN		bRestoreRssi = _FALSE;
+	bool		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
+	bool		bRestoreRssi = _FALSE;
 	PADAPTER	BuddyAdapter = pAdapter->pbuddy_adapter;
 	struct dm_priv	*Buddydmpriv;
 
@@ -435,7 +435,7 @@ DM_Write_DIG_DMSP(
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	pDIG_T		pDM_DigTable = &pdmpriv->DM_DigTable;
 	PADAPTER	BuddyAdapter = pAdapter->pbuddy_adapter;
-	BOOLEAN		bGetValueFromOtherMac = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
+	bool		bGetValueFromOtherMac = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
 	struct dm_priv	*Buddydmpriv;
 
 	//DBG_871X(("CurIGValue = 0x%x, PreIGValue = 0x%x\n", pDM_DigTable->CurIGValue, pDM_DigTable->PreIGValue);
@@ -544,9 +544,9 @@ static void odm_DIG(
 	static u8	DIG_Dynamic_MIN_0 = 0x25;
 	static u8	DIG_Dynamic_MIN_1 = 0x25;
 	u8	DIG_Dynamic_MIN;
-	static BOOLEAN	bMediaConnect_0 = _FALSE;
-	static BOOLEAN	bMediaConnect_1 = _FALSE;
-	BOOLEAN		FirstConnect;
+	static bool	bMediaConnect_0 = _FALSE;
+	static bool	bMediaConnect_1 = _FALSE;
+	bool		FirstConnect;
 	u8	TxRate = rtw_read8(pAdapter, REG_INIDATA_RATE_SEL);
 #ifdef CONFIG_CONCURRENT_MODE
 	PADAPTER pbuddy_adapter = pAdapter->pbuddy_adapter;
@@ -949,7 +949,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	pDIG_T		pDM_DigTable = &pdmpriv->DM_DigTable;
 	PADAPTER	BuddyAdapter = pAdapter->pbuddy_adapter;
-	BOOLEAN		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
+	bool		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
 	struct dm_priv	*Buddydmpriv;
 
 
@@ -1246,7 +1246,7 @@ static void odm_DynamicTxPower_92D(IN	PADAPTER	Adapter)
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
 	struct dm_priv	*pbuddy_dmpriv = NULL;
-	BOOLEAN		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(Adapter);
+	bool		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(Adapter);
 	u8		HighPowerLvlBackForMac0 = TxHighPwrLevel_Level1;
 #endif
 
@@ -1675,8 +1675,8 @@ IN	PADAPTER	pAdapter
 	//struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	//s32			Rssi_val_min_back_for_mac0;
-	//BOOLEAN		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
-	//BOOLEAN		bRestoreRssi = _FALSE;
+	//bool		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
+	//bool		bRestoreRssi = _FALSE;
 	//PADAPTER	BuddyAdapter = pAdapter->pbuddy_adapter;
 #endif
 
@@ -1730,8 +1730,8 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 	s32			Y, ele_C;
 	s8			OFDM_index[2], CCK_index=0, OFDM_index_old[2], CCK_index_old=0;
 	s32			i = 0;
-	BOOLEAN		is2T = IS_92D_SINGLEPHY(pHalData->VersionID);
-	BOOLEAN		bInteralPA = _FALSE;
+	bool		is2T = IS_92D_SINGLEPHY(pHalData->VersionID);
+	bool		bInteralPA = _FALSE;
 
 	u8			OFDM_min_index = 6, OFDM_min_index_internalPA = 12, rf; //OFDM BB Swing should be less than +3.0dB, which is required by Arthur
 	u8			Indexforchannel = rtl8192d_GetRightChnlPlaceforIQK(pHalData->CurrentChannel);
@@ -2623,8 +2623,8 @@ rtl8192d_HalDmWatchDog(
 	IN	PADAPTER	Adapter
 	)
 {
-	BOOLEAN		bFwCurrentInPSMode = _FALSE;
-	BOOLEAN		bFwPSAwake = _TRUE;
+	bool		bFwCurrentInPSMode = _FALSE;
+	bool		bFwPSAwake = _TRUE;
 	u8 hw_init_completed = _FALSE;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;

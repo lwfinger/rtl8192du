@@ -86,7 +86,7 @@ static s32  translate2dbm(u8 signal_strength_idx)
 }
 
 
-static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy_stat, BOOLEAN bPacketMatchBSSID)
+static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy_stat, bool bPacketMatchBSSID)
 {
 	PHY_STS_OFDM_8192CD_T	*pOfdm_buf;
 	PHY_STS_CCK_8192CD_T	*pCck_buf;

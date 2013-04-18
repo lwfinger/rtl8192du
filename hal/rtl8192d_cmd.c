@@ -31,14 +31,14 @@
 
 #include <rtl8192d_hal.h>
 
-static BOOLEAN
+static bool
 CheckWriteH2C(
 	IN	PADAPTER		Adapter,
 	IN	u8		BoxNum
 )
 {
 	u8	valHMETFR;
-	BOOLEAN	Result = _FALSE;
+	bool	Result = _FALSE;
 
 	valHMETFR = rtw_read8(Adapter, REG_HMETFR);
 
@@ -49,14 +49,14 @@ CheckWriteH2C(
 
 }
 
-static BOOLEAN
+static bool
 CheckFwReadLastH2C(
 	IN	PADAPTER		Adapter,
 	IN	u8		BoxNum
 )
 {
 	u8	valHMETFR;
-	BOOLEAN	 Result = _FALSE;
+	bool	 Result = _FALSE;
 
 	valHMETFR = rtw_read8(Adapter, REG_HMETFR);
 	//RT_TRACE(COMP_INIT,DBG_LOUD,("REG[%x] = %x\n",	REG_HMETFR, valHMETFR));
@@ -521,8 +521,8 @@ void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 	*pLength = 16;
 }
 
-void ConstructNullFunctionData(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, BOOLEAN bForcePowerSave);
-void ConstructNullFunctionData(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, BOOLEAN bForcePowerSave)
+void ConstructNullFunctionData(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bForcePowerSave);
+void ConstructNullFunctionData(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bForcePowerSave)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -575,8 +575,8 @@ void ConstructNullFunctionData(_adapter *padapter, u8 *pframe, u32 *pLength, u8 
 	*pLength = pktlen;
 }
 
-void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, BOOLEAN bHideSSID);
-void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, BOOLEAN bHideSSID)
+void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID);
+void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -627,7 +627,7 @@ FillFakeTxDescriptor92D(
 	IN PADAPTER		Adapter,
 	IN u8*			pDesc,
 	IN u32			BufferLen,
-	IN BOOLEAN		IsPsPoll
+	IN bool		IsPsPoll
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -681,8 +681,8 @@ FillFakeTxDescriptor92D(
 //			      TRUE: At the second time, we should send the first packet (default:beacon)
 //						to Hw again and set the lengh in descriptor to the real beacon lengh.
 // 2009.10.15 by tynli.
-void SetFwRsvdPagePkt(PADAPTER Adapter, BOOLEAN bDLFinished);
-void SetFwRsvdPagePkt(PADAPTER Adapter, BOOLEAN bDLFinished)
+void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished);
+void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct xmit_frame	*pmgntframe;
@@ -696,7 +696,7 @@ void SetFwRsvdPagePkt(PADAPTER Adapter, BOOLEAN bDLFinished)
 	u16	BufIndex=0;
 	u32	TotalPacketLen;
 	u8	u1RsvdPageLoc[3]={0};
-	BOOLEAN	bDLOK = _FALSE;
+	bool	bDLOK = _FALSE;
 
 	DBG_871X("%s\n", __FUNCTION__);
 
@@ -829,7 +829,7 @@ void rtl8192d_set_FwJoinBssReport_cmd(_adapter* padapter, u8 mstatus)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	BOOLEAN	bRecover = _FALSE;
+	bool	bRecover = _FALSE;
 
 _func_enter_;
 

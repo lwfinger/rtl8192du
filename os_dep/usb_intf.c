@@ -37,11 +37,6 @@ extern int rtw_cbw40_enable;
 extern int rtw_ampdu_enable;//for enable tx_ampdu
 #endif
 
-#ifdef CONFIG_GLOBAL_UI_PID
-int ui_pid[3] = {0, 0, 0};
-#endif
-
-
 extern int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
 static int rtw_resume(struct usb_interface *intf);
@@ -1335,13 +1330,6 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 		}
 	}
 #endif //CONFIG_MULTI_VIR_IFACES
-#endif
-
-#ifdef CONFIG_GLOBAL_UI_PID
-	if (ui_pid[1]!=0) {
-		DBG_871X("ui_pid[1]:%d\n",ui_pid[1]);
-		rtw_signal_process(ui_pid[1], SIGUSR2);
-	}
 #endif
 
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-871x_drv - drv_init, success!\n"));

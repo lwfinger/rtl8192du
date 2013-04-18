@@ -3599,7 +3599,7 @@ SelectRTSInitialRate(
 
 	_rtw_memcpy(SupportRateSet, cur_network->SupportedRates, NDIS_802_11_LENGTH_RATES_EX);
 
-	HalSetBrateCfg( Adapter, SupportRateSet, &BasicRateCfg );
+	halsetbratecfg( Adapter, SupportRateSet, &BasicRateCfg );
 
 	if( bUseProtection &&
 		(!(pmlmeext->cur_wireless_mode == WIRELESS_11A|| pmlmeext->cur_wireless_mode == WIRELESS_11A_5N)))// 5G not support cck rate
@@ -4549,7 +4549,7 @@ _func_enter_;
 				// Select RRSR (in Legacy-OFDM and CCK)
 				// For 8190, we select only 24M, 12M, 6M, 11M, 5.5M, 2M, and 1M from the Basic rate.
 				// We do not use other rates.
-				HalSetBrateCfg( Adapter, val, &BrateCfg );
+				halsetbratecfg( Adapter, val, &BrateCfg );
 
 				if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
 					b2GBand = _TRUE;

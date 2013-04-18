@@ -352,7 +352,7 @@ if (padapter->registrypriv.mp_mode == 0)
 			if (pmlmeinfo->preamble_mode == PREAMBLE_SHORT)
 				ptxdesc->txdw4 |= cpu_to_le32(BIT(24));// DATA_SHORT
 
-			ptxdesc->txdw5 |= cpu_to_le32(MRateToHwRate(pmlmeext->tx_rate));
+			ptxdesc->txdw5 |= cpu_to_le32(ratetohwrate(pmlmeext->tx_rate));
 		}
 
 #ifdef CONFIG_P2P
@@ -433,7 +433,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		else
 #endif
 		{
-			ptxdesc->txdw5 |= cpu_to_le32(MRateToHwRate(pmlmeext->tx_rate));
+			ptxdesc->txdw5 |= cpu_to_le32(ratetohwrate(pmlmeext->tx_rate));
 		}
 	}
 	else if((pxmitframe->frame_tag&0x0f) == TXAGG_FRAMETAG)
@@ -464,7 +464,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		ptxdesc->txdw4 |= cpu_to_le32(BIT(8));//driver uses rate
 
 		//offset 20
-		ptxdesc->txdw5 |= cpu_to_le32(MRateToHwRate(pmlmeext->tx_rate));
+		ptxdesc->txdw5 |= cpu_to_le32(ratetohwrate(pmlmeext->tx_rate));
 	}
 
 	// 2009.11.05. tynli_test. Suggested by SD4 Filen for FW LPS.

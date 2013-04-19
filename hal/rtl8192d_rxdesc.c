@@ -125,7 +125,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 		if(padapter->pwrctrlpriv.rf_pwrstate == rf_on)
 			cck_highpwr = (u8)pHalData->bCckHighPower;
 		else
-			cck_highpwr = _FALSE;
+			cck_highpwr = false;
 
 		if(!cck_highpwr)
 		{
@@ -563,9 +563,9 @@ void rtl8192d_translate_rx_signal_stuff(union recv_frame *precvframe, struct phy
 {
 	struct rx_pkt_attrib	*pattrib = &precvframe->u.hdr.attrib;
 	_adapter				*padapter = precvframe->u.hdr.adapter;
-	u8	bPacketMatchBSSID =_FALSE;
-	u8	bPacketToSelf = _FALSE;
-	u8	bPacketBeacon = _FALSE;
+	u8	bPacketMatchBSSID =false;
+	u8	bPacketToSelf = false;
+	u8	bPacketBeacon = false;
 
 	if((pattrib->physt) && (pphy_info != NULL))
 	{
@@ -580,7 +580,7 @@ void rtl8192d_translate_rx_signal_stuff(union recv_frame *precvframe, struct phy
 		query_rx_phy_status(precvframe, pphy_info, bPacketMatchBSSID);
 
 		precvframe->u.hdr.psta = NULL;
-		if(bPacketMatchBSSID && check_fwstate(&padapter->mlmepriv, WIFI_AP_STATE) == _TRUE)
+		if(bPacketMatchBSSID && check_fwstate(&padapter->mlmepriv, WIFI_AP_STATE) == true)
 		{
 			u8 *sa;
 			struct sta_info *psta=NULL;
@@ -597,7 +597,7 @@ void rtl8192d_translate_rx_signal_stuff(union recv_frame *precvframe, struct phy
 		}
 		else if(bPacketToSelf || bPacketBeacon)
 		{
-			if(check_fwstate(&padapter->mlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == _TRUE)
+			if(check_fwstate(&padapter->mlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == true)
 			{
 				u8 *sa;
 				struct sta_info *psta=NULL;

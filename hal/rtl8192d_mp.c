@@ -278,15 +278,15 @@ s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable)
 		return _FAIL;
 	}
 
-	if (check_fwstate(&padapter->mlmepriv, WIFI_MP_STATE) == _FALSE) {
+	if (check_fwstate(&padapter->mlmepriv, WIFI_MP_STATE) == false) {
 		RT_TRACE(_module_mp_, _drv_warning_, ("SetPowerTracking! Fail: not in MP mode!\n"));
 		return _FAIL;
 	}
 
 	if (enable)
-		pdmpriv->TxPowerTrackControl = _TRUE;
+		pdmpriv->TxPowerTrackControl = true;
 	else
-		pdmpriv->TxPowerTrackControl = _FALSE;
+		pdmpriv->TxPowerTrackControl = false;
 
 	return _SUCCESS;
 }
@@ -432,7 +432,7 @@ s32 Hal_SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
 		return _FAIL;
 	}
 
-	if (check_fwstate(&pAdapter->mlmepriv, WIFI_MP_STATE) == _FALSE) {
+	if (check_fwstate(&pAdapter->mlmepriv, WIFI_MP_STATE) == false) {
 		RT_TRACE(_module_mp_, _drv_warning_, ("SetThermalMeter: Fail! not in MP mode!\n"));
 		return _FAIL;
 	}
@@ -615,8 +615,8 @@ static  VOID Hal_mpt_StartCckContTx(PADAPTER pAdapter,bool bScrambleOn)
     PHY_SetBBReg(pAdapter, rCCK0_System, bCCKBBMode, 0x2);    //transmit mode
     PHY_SetBBReg(pAdapter, rCCK0_System, bCCKScramble, 0x1);  //turn on scramble setting
 
-    pMptCtx->bCckContTx = _TRUE;
-    pMptCtx->bOfdmContTx = _FALSE;
+    pMptCtx->bCckContTx = true;
+    pMptCtx->bOfdmContTx = false;
 
 }   /* mpt_StartCckContTx */
 
@@ -628,8 +628,8 @@ static  VOID Hal_mpt_StopCckCoNtTx(PADAPTER pAdapter)
 
     u8          u1bReg;
 
-    pMptCtx->bCckContTx = _FALSE;
-    pMptCtx->bOfdmContTx = _FALSE;
+    pMptCtx->bCckContTx = false;
+    pMptCtx->bOfdmContTx = false;
 
     PHY_SetBBReg(pAdapter, rCCK0_System, bCCKBBMode, 0x0);    //normal mode
     PHY_SetBBReg(pAdapter, rCCK0_System, bCCKScramble, 0x1);  //turn on scramble setting
@@ -668,9 +668,9 @@ static  VOID Hal_mpt_StartOfdmContTx( PADAPTER pAdapter )
        PHY_SetBBReg(pAdapter, rOFDM1_LSTF, bOFDMSingleCarrier, bDisable);
        PHY_SetBBReg(pAdapter, rOFDM1_LSTF, bOFDMSingleTone, bDisable);
 
-    pMptCtx->bCckContTx = _FALSE;
-    pMptCtx->bOfdmContTx = _TRUE;
-    //pMptCtx->bCtxTriggerPktSent = _FALSE;
+    pMptCtx->bCckContTx = false;
+    pMptCtx->bOfdmContTx = true;
+    //pMptCtx->bCtxTriggerPktSent = false;
 
 }   /* mpt_StartOfdmContTx */
 
@@ -682,8 +682,8 @@ static  VOID Hal_mpt_StopOfdmContTx( PADAPTER pAdapter)
     u8          u1bReg;
     u32          data;
 
-    pMptCtx->bCckContTx = _FALSE;
-    pMptCtx->bOfdmContTx = _FALSE;
+    pMptCtx->bCckContTx = false;
+    pMptCtx->bOfdmContTx = false;
 
     PHY_SetBBReg(pAdapter, rOFDM1_LSTF, bOFDMContinueTx, bDisable);
     PHY_SetBBReg(pAdapter, rOFDM1_LSTF, bOFDMSingleCarrier, bDisable);
@@ -706,16 +706,16 @@ void Hal_SetContinuousTx (PADAPTER pAdapter, u8 bStart)
     { // Start Continuous Tx.
         if( pAdapter->mppriv.rateidx >= MPT_RATE_1M &&
             pAdapter->mppriv.rateidx <= MPT_RATE_11M )
-            Hal_mpt_StartCckContTx(pAdapter, _TRUE);
+            Hal_mpt_StartCckContTx(pAdapter, true);
         else if(pAdapter->mppriv.rateidx >= MPT_RATE_6M &&
                 pAdapter->mppriv.rateidx <= MPT_RATE_MCS15 )
             Hal_mpt_StartOfdmContTx(pAdapter);
         else
         {
-            //RT_ASSERT(_FALSE, ("MPT_ProSetUpContTx(): Unknown wireless rate index: %d\n", pMptCtx->MptRateIndex));
-            pMptCtx->bStartContTx = _FALSE;
-            pMptCtx->bCckContTx = _FALSE;
-            pMptCtx->bOfdmContTx = _FALSE;
+            //RT_ASSERT(false, ("MPT_ProSetUpContTx(): Unknown wireless rate index: %d\n", pMptCtx->MptRateIndex));
+            pMptCtx->bStartContTx = false;
+            pMptCtx->bCckContTx = false;
+            pMptCtx->bOfdmContTx = false;
         }
 
     }
@@ -724,15 +724,15 @@ void Hal_SetContinuousTx (PADAPTER pAdapter, u8 bStart)
         bool bCckContTx = pMptCtx->bCckContTx;
         bool bOfdmContTx = pMptCtx->bOfdmContTx;
 
-        if(bCckContTx == _TRUE && bOfdmContTx == _FALSE)
+        if(bCckContTx == true && bOfdmContTx == false)
         { // Stop CCK Continuous Tx.
             Hal_mpt_StopCckCoNtTx(pAdapter);
         }
-        else if(bCckContTx == _FALSE && bOfdmContTx == _TRUE)
+        else if(bCckContTx == false && bOfdmContTx == true)
         { // Stop OFDM Continuous Tx.
             Hal_mpt_StopOfdmContTx(pAdapter);
         }
-        else if(bCckContTx == _FALSE && bOfdmContTx == _FALSE)
+        else if(bCckContTx == false && bOfdmContTx == false)
         { // We've already stopped Continuous Tx.
         }
         else
@@ -831,8 +831,8 @@ PHY_PowerDownAnotherPHY(
 {
 //	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u1Byte					u1bTmp;
-	u1Byte			MAC_REG = (bMac0==_TRUE)? REG_MAC1:REG_MAC0;
-	u1Byte			MAC_ON_BIT = (bMac0==_TRUE)? MAC1_ON:MAC0_ON;
+	u1Byte			MAC_REG = (bMac0==true)? REG_MAC1:REG_MAC0;
+	u1Byte			MAC_ON_BIT = (bMac0==true)? MAC1_ON:MAC0_ON;
 	u4Byte			MaskforPhySet = 0;
 
 	  // check MAC0 enable or not again now, if enabled, not power down radio A.
@@ -861,9 +861,9 @@ PHY_EnableAnotherPHY(
 	)
 {
 	u1Byte					u1bTmp;
-	u1Byte			MAC_REG = (bMac0==_TRUE)?REG_MAC1:REG_MAC0;
-	u1Byte			MAC_ON_BIT = bMac0==_TRUE?MAC1_ON:MAC0_ON;
-	bool			bResult = _TRUE; //true: need to enable BB/RF power
+	u1Byte			MAC_REG = (bMac0==true)?REG_MAC1:REG_MAC0;
+	u1Byte			MAC_ON_BIT = bMac0==true?MAC1_ON:MAC0_ON;
+	bool			bResult = true; //true: need to enable BB/RF power
 	//MAC0 Need PHY1 load radio_b.txt . Driver use DBI to write.
 	 u1bTmp = _rtw_read8(Adapter, MAC_REG);
 
@@ -877,7 +877,7 @@ PHY_EnableAnotherPHY(
 		_rtw_write16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet, _rtw_read16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet)|BIT13|BIT0|BIT1);
 	} else {
 		// We think if MAC1 is ON,then radio_a.txt and radio_b.txt has been load.
-		bResult = _FALSE;
+		bResult = false;
 	}
 	return bResult;
 }
@@ -1008,7 +1008,7 @@ VOID
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	u8		path = pHalData->CurrentBandType92D == BAND_ON_5G?RF_PATH_A:RF_PATH_B;
 	u8		index = 0,	i = 0, eRFPath = RF_PATH_A;
-	bool		bNeedPowerDownRadio = _FALSE, bInteralPA = _FALSE;
+	bool		bNeedPowerDownRadio = false, bInteralPA = false;
 	u32		u4RegValue = 0, mask = 0x1C000, value = 0, u4tmp, u4tmp2,MaskforPhySet=0;
 	//Query regB30 bit27
 	u32		Regb30 = PHY_QueryBBReg(Adapter, 0xb30, BIT27);
@@ -1041,7 +1041,7 @@ VOID
 
 		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
 		{
-			bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, _FALSE);
+			bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, false);
 			MaskforPhySet = MAC1_ACCESS_PHY0;
 			//asume no this case
 			if(bNeedPowerDownRadio)
@@ -1053,7 +1053,7 @@ VOID
 		{
 			//RT_TRACE(COMP_MLME, DBG_LOUD, ("===============phy_SwitchRfSetting8192D interface %ld,B30&BIT27=1!!!!\n", Adapter->interfaceIndex));
 
-			bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, _TRUE);
+			bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, true);
 			MaskforPhySet= MAC0_ACCESS_PHY1;
 			//asume no this case
 			if(bNeedPowerDownRadio)
@@ -1103,7 +1103,7 @@ VOID
 			{
 				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
-			PHY_PowerDownAnotherPHY(Adapter, _FALSE);
+			PHY_PowerDownAnotherPHY(Adapter, false);
 		}
 
 		if(Regb30 && pHalData->interfaceIndex == 0)
@@ -1112,7 +1112,7 @@ VOID
 			{
 				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
-			PHY_PowerDownAnotherPHY(Adapter, _TRUE);
+			PHY_PowerDownAnotherPHY(Adapter, true);
 		}
 
 		if(channel < 149)
@@ -1172,7 +1172,7 @@ VOID
 			path = RF_PATH_A;
 			if(pHalData->interfaceIndex == 0)
 			{
-				bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, _TRUE);
+				bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, true);
 				MaskforPhySet = MAC0_ACCESS_PHY1;
 				if(bNeedPowerDownRadio)
 					phy_EnableRFENV(Adapter, path,MaskforPhySet,&u4RegValue);
@@ -1183,7 +1183,7 @@ VOID
 			{
 				//RT_TRACE(COMP_MLME, DBG_LOUD, ("===============phy_SwitchRfSetting8192D interface %ld,B30&BIT27=1!!!!\n", Adapter->interfaceIndex));
 
-				bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, _FALSE);
+				bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, false);
 				MaskforPhySet= MAC1_ACCESS_PHY0;
 				//asume no this case
 				if(bNeedPowerDownRadio)
@@ -1221,7 +1221,7 @@ VOID
 			if(bNeedPowerDownRadio){
 				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
-			PHY_PowerDownAnotherPHY(Adapter, _TRUE);
+			PHY_PowerDownAnotherPHY(Adapter, true);
 		}
 
 		if(Regb30 && pHalData->interfaceIndex == 1)
@@ -1230,7 +1230,7 @@ VOID
 			{
 				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
-			PHY_PowerDownAnotherPHY(Adapter, _FALSE);
+			PHY_PowerDownAnotherPHY(Adapter, false);
 		}
 	}
 
@@ -1247,7 +1247,7 @@ void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
 	u8 ulRateIdx = pmp->rateidx;
 	u8 ulbandwidth = pmp->bandwidth;
 	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
-    bool             bInteralPA = _FALSE;
+    bool             bInteralPA = false;
     u32				value = 0;
     phy_SwitchRfSetting8192D(pAdapter,ChannelToSw);
 #if 0
@@ -1407,11 +1407,11 @@ void Hal_SetChannel(PADAPTER pAdapter)
 	SelectChannel(pAdapter, channel);
 
 	if (pHalData->CurrentChannel == 14 && !pHalData->dmpriv.bCCKinCH14) {
-		pHalData->dmpriv.bCCKinCH14 = _TRUE;
+		pHalData->dmpriv.bCCKinCH14 = true;
 		MPT_CCKTxPowerAdjust(pAdapter, pHalData->dmpriv.bCCKinCH14);
 	}
 	else if (pHalData->CurrentChannel != 14 && pHalData->dmpriv.bCCKinCH14) {
-		pHalData->dmpriv.bCCKinCH14 = _FALSE;
+		pHalData->dmpriv.bCCKinCH14 = false;
 		MPT_CCKTxPowerAdjust(pAdapter, pHalData->dmpriv.bCCKinCH14);
 	}
 
@@ -1551,7 +1551,7 @@ void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rPMAC_Reset, bBBResetB, 0x1);
 	}
 
-	pAdapter->mppriv.MptCtx.bCckContTx = _FALSE;
+	pAdapter->mppriv.MptCtx.bCckContTx = false;
 	pAdapter->mppriv.MptCtx.bOfdmContTx = bStart;
 }/* mpt_StartOfdmContTx */
 
@@ -1613,7 +1613,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 	}
 
 	pAdapter->mppriv.MptCtx.bCckContTx = bStart;
-	pAdapter->mppriv.MptCtx.bOfdmContTx = _FALSE;
+	pAdapter->mppriv.MptCtx.bOfdmContTx = false;
 }/* mpt_StartCckContTx */
 
 

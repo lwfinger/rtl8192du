@@ -263,7 +263,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 if (padapter->registrypriv.mp_mode == 0)
 {
 
-	if((_FALSE == bagg_pkt) && (urb_zero_packet_chk(padapter, sz)==0))
+	if((false == bagg_pkt) && (urb_zero_packet_chk(padapter, sz)==0))
 	{
 		ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
 		pull = 1;
@@ -288,10 +288,10 @@ if (padapter->registrypriv.mp_mode == 0)
 
 		fill_txdesc_sectype(pattrib, ptxdesc);
 
-		if(pattrib->ampdu_en==_TRUE){
+		if(pattrib->ampdu_en==true){
 			ptxdesc->txdw1 |= cpu_to_le32(BIT(5));//AGG EN
 			//Insert Early Mode Content after tx desc position.
-			if((pHalData->bEarlyModeEnable) && (_TRUE == bagg_pkt)){
+			if((pHalData->bEarlyModeEnable) && (true == bagg_pkt)){
 				ptxdesc->txdw0 |= cpu_to_le32(((USB_HWDESC_HEADER_LEN-8) << OFFSET_SHT) & 0x00ff0000);//32 bytes for TX Desc
 				if(pxmitframe->EMPktNum > 0){
 					InsertEMContent(pxmitframe, pmem+TXDESC_SIZE);
@@ -411,7 +411,7 @@ if (padapter->registrypriv.mp_mode == 0)
 
 		//offset 20
 #ifdef CONFIG_AP_MODE
-		if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
+		if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 		{
 			ptxdesc->txdw5 |= cpu_to_le32(BIT(17));//retry limit enable
 #ifdef CONFIG_P2P
@@ -426,7 +426,7 @@ if (padapter->registrypriv.mp_mode == 0)
 #endif
 
 #ifdef CONFIG_INTEL_PROXIM
-		if((padapter->proximity.proxim_on==_TRUE)&&(pattrib->intel_proxim==_TRUE)){
+		if((padapter->proximity.proxim_on==true)&&(pattrib->intel_proxim==true)){
 			printk("\n %s pattrib->rate=%d\n",__FUNCTION__,pattrib->rate);
 			ptxdesc->txdw5 |= cpu_to_le32( pattrib->rate);
 		}
@@ -568,7 +568,7 @@ s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 			sz = pattrib->last_txcmdsz;
 		}
 
-		pull = update_txdesc(pxmitframe, mem_addr, sz, _FALSE);
+		pull = update_txdesc(pxmitframe, mem_addr, sz, false);
 
 		if(pull)
 		{
@@ -648,7 +648,7 @@ void UpdateEarlyModeInfo8192D(_adapter *padapter, struct xmit_frame *pxmitframe,
 
 	xmitframe_phead = get_list_head(&ptxservq->sta_pending);
 	xmitframe_plist = get_next(xmitframe_phead);
-	while ((rtw_end_of_queue_search(xmitframe_phead, xmitframe_plist) == _FALSE)&&(pxmitframe->EMPktNum < 5))
+	while ((rtw_end_of_queue_search(xmitframe_phead, xmitframe_plist) == false)&&(pxmitframe->EMPktNum < 5))
 	{
 		pxmitframe = LIST_CONTAINOR(xmitframe_plist, struct xmit_frame, list);
 		xmitframe_plist = get_next(xmitframe_plist);
@@ -683,8 +683,8 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	u32	bulkPtr=0;
 	u8	descCount=0;
 	u8	ac_index;
-	u8	bfirst = _TRUE;//first aggregation xmitframe
-	u8	bulkstart = _FALSE;
+	u8	bfirst = true;//first aggregation xmitframe
+	u8	bulkstart = false;
 
 	// dump frame variable
 	u32 ff_hwaddr;
@@ -698,7 +698,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	// check xmitbuffer is ok
 	if (pxmitbuf == NULL) {
 		pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
-		if (pxmitbuf == NULL) return _FALSE;
+		if (pxmitbuf == NULL) return false;
 	}
 
 	if(pHalData->MacPhyMode92D==SINGLEMAC_SINGLEPHY)
@@ -714,7 +714,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 			if (pxmitframe == NULL) {
 				// no more xmit frame, release xmit buffer
 				rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
-				return _FALSE;
+				return false;
 			}
 
 			pxmitframe->pxmitbuf = pxmitbuf;
@@ -735,7 +735,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 			// dequeue same priority packet from station tx queue
 			_enter_critical_bh(&pxmitpriv->lock, &irqL);
 
-			if (_rtw_queue_empty(&ptxservq->sta_pending) == _FALSE)
+			if (_rtw_queue_empty(&ptxservq->sta_pending) == false)
 			{
 				xmitframe_phead = get_list_head(&ptxservq->sta_pending);
 				xmitframe_plist = get_next(xmitframe_phead);
@@ -746,7 +746,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 				len = xmitframe_need_length(pxmitframe) + TXDESC_SIZE + ((USB_92D_DUMMY_OFFSET - 1) * PACKET_OFFSET_SZ);
 				if (pbuf + _RND8(len) > aggMaxLength)
 				{
-					bulkstart = _TRUE;
+					bulkstart = true;
 				}
 				else
 				{
@@ -755,13 +755,13 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 					phwxmit[ac_index].accnt--;
 
 					//Remove sta node when there is no pending packets.
-					if (_rtw_queue_empty(&ptxservq->sta_pending) == _TRUE)
+					if (_rtw_queue_empty(&ptxservq->sta_pending) == true)
 						rtw_list_delete(&ptxservq->tx_pending);
 				}
 			}
 			else
 			{
-				bulkstart = _TRUE;
+				bulkstart = true;
 			}
 
 			_exit_critical_bh(&pxmitpriv->lock, &irqL);
@@ -784,7 +784,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
 #else
 		res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
-		if (res == _FALSE) {
+		if (res == false) {
 			rtw_free_xmitframe(pxmitpriv, pxmitframe);
 			continue;
 		}
@@ -801,11 +801,11 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 
 			descCount = 0;
 			bulkPtr = bulkSize;
-			bfirst = _FALSE;
+			bfirst = false;
 		}
 		else
 		{
-			update_txdesc(pxmitframe, pxmitframe->buf_addr, pxmitframe->attrib.last_txcmdsz, _TRUE);
+			update_txdesc(pxmitframe, pxmitframe->buf_addr, pxmitframe->attrib.last_txcmdsz, true);
 
 			// don't need xmitframe any more
 			rtw_free_xmitframe(pxmitpriv, pxmitframe);
@@ -849,7 +849,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		pfirstframe->pkt_offset--;
 	}
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_TX
-	update_txdesc(pfirstframe, pfirstframe->buf_addr, pfirstframe->attrib.last_txcmdsz, _TRUE);
+	update_txdesc(pfirstframe, pfirstframe->buf_addr, pfirstframe->attrib.last_txcmdsz, true);
 
 	//3 4. write xmit buffer to USB FIFO
 	ff_hwaddr = rtw_get_ff_hwaddr(pfirstframe);
@@ -866,7 +866,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 
 	rtw_free_xmitframe(pxmitpriv, pfirstframe);
 
-	return _TRUE;
+	return true;
 }
 
 #else
@@ -889,7 +889,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
 		if(!pxmitbuf)
 		{
-			return _FALSE;
+			return false;
 		}
 	}
 
@@ -935,14 +935,14 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		else
 		{
 			rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
-			return _FALSE;
+			return false;
 		}
 
 		break;
 
 	}while(0/*xcnt < (NR_XMITFRAME >> 3)*/);
 
-	return _TRUE;
+	return true;
 
 }
 #endif
@@ -963,8 +963,8 @@ static s32 xmitframe_direct(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 /*
  * Return
- *	_TRUE	dump packet directly
- *	_FALSE	enqueue packet
+ *	true	dump packet directly
+ *	false	enqueue packet
  */
 static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
@@ -979,18 +979,18 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 	if (rtw_txframes_sta_ac_pending(padapter, pattrib) > 0
 #ifdef CONFIG_DUALMAC_CONCURRENT
-		|| (dc_check_xmit(padapter)== _FALSE)
+		|| (dc_check_xmit(padapter)== false)
 #endif
 		)
 		goto enqueue;
 
 
 
-	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == _TRUE)
+	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
 		goto enqueue;
 
 #ifdef CONFIG_CONCURRENT_MODE
-	if (check_buddy_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == _TRUE)
+	if (check_buddy_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
 		goto enqueue;
 #endif //CONFIG_CONCURRENT_MODE
 
@@ -1009,7 +1009,7 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
 	}
 
-	return _TRUE;
+	return true;
 
 enqueue:
 	res = rtw_xmitframe_enqueue(padapter, pxmitframe);
@@ -1022,10 +1022,10 @@ enqueue:
 		// Trick, make the statistics correct
 		pxmitpriv->tx_pkts--;
 		pxmitpriv->tx_drop++;
-		return _TRUE;
+		return true;
 	}
 
-	return _FALSE;
+	return false;
 }
 
 s32 rtl8192du_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe)
@@ -1035,8 +1035,8 @@ s32 rtl8192du_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe)
 
 /*
  * Return
- *	_TRUE	dump packet directly ok
- *	_FALSE	temporary can't transmit packets to hardware
+ *	true	dump packet directly ok
+ *	false	temporary can't transmit packets to hardware
  */
 s32 rtl8192du_hal_xmit(_adapter *padapter, struct xmit_frame *pxmitframe)
 {

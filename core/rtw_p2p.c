@@ -44,7 +44,7 @@ int	is_any_client_associated( _adapter *padapter )
 {
 	_irqL irqL;
 	_list	*phead, *plist;
-	int	intFound = _FALSE;
+	int	intFound = false;
 
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -52,17 +52,17 @@ int	is_any_client_associated( _adapter *padapter )
 	phead = &pstapriv->asoc_list;
 	plist = get_next(phead);
 
-	if ( rtw_end_of_queue_search(phead, plist) == _TRUE )
+	if ( rtw_end_of_queue_search(phead, plist) == true )
 	{
-		intFound = _FALSE;
+		intFound = false;
 	}
 	else
 	{
-		intFound = _TRUE;
+		intFound = true;
 	}
 
-	if ((intFound == _FALSE && pstapriv->asoc_list_cnt)
-		|| (intFound == _TRUE && !pstapriv->asoc_list_cnt)) {
+	if ((intFound == false && pstapriv->asoc_list_cnt)
+		|| (intFound == true && !pstapriv->asoc_list_cnt)) {
 		DBG_871X("%s intFound:%d, asoc_list_cnt:%u mismatch\n", __func__
 			, intFound, pstapriv->asoc_list_cnt);
 	}
@@ -96,7 +96,7 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	plist = get_next(phead);
 
 	//look up sta asoc_queue
-	while ((rtw_end_of_queue_search(phead, plist)) == _FALSE)
+	while ((rtw_end_of_queue_search(phead, plist)) == false)
 	{
 		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 
@@ -624,7 +624,7 @@ u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -737,7 +737,7 @@ u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -811,7 +811,7 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 	//	WFD device information
 	//	WFD primary sink + available for WFD session + WiFi Direct mode
 
-	if (  _TRUE == pwdinfo->session_available )
+	if (  true == pwdinfo->session_available )
 	{
 		if ( P2P_ROLE_GO == pwdinfo->role )
 		{
@@ -895,7 +895,7 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -1039,7 +1039,7 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -1137,7 +1137,7 @@ u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -1235,7 +1235,7 @@ u32 build_nego_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -1333,7 +1333,7 @@ u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -1432,7 +1432,7 @@ u32 build_nego_confirm_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -1531,7 +1531,7 @@ u32 build_invitation_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -1644,7 +1644,7 @@ u32 build_invitation_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -1757,7 +1757,7 @@ u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -1856,7 +1856,7 @@ u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Value:
 	//	Associated BSSID
-	if ( check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE )
+	if ( check_fwstate(pmlmepriv, _FW_LINKED) == true )
 	{
 		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
@@ -1991,7 +1991,7 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	//	+ NumofSecondDevType (1byte) + WPS Device Name ID field (2bytes) + WPS Device Name Len field (2bytes)
 	//*(u16*) ( p2pie + p2pielen ) = cpu_to_le16( 21 + pwdinfo->device_name_len );
 #ifdef CONFIG_INTEL_WIDI
-	if( _rtw_memcmp( pwdinfo->padapter->mlmepriv.sa_ext, zero_array_check, L2SDTA_SERVICE_VE_LEN ) == _FALSE )
+	if( _rtw_memcmp( pwdinfo->padapter->mlmepriv.sa_ext, zero_array_check, L2SDTA_SERVICE_VE_LEN ) == false )
 	{
 		RTW_PUT_LE16(p2pie + p2pielen, 21 + 8 + pwdinfo->device_name_len);
 	}
@@ -2029,7 +2029,7 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	//	Number of Secondary Device Types
 #ifdef CONFIG_INTEL_WIDI
-	if( _rtw_memcmp( pwdinfo->padapter->mlmepriv.sa_ext, zero_array_check, L2SDTA_SERVICE_VE_LEN ) == _FALSE )
+	if( _rtw_memcmp( pwdinfo->padapter->mlmepriv.sa_ext, zero_array_check, L2SDTA_SERVICE_VE_LEN ) == false )
 	{
 		p2pie[ p2pielen++ ] = 0x01;
 
@@ -2255,7 +2255,7 @@ u32 build_deauth_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 u32 process_probe_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint len)
 {
 	u8 *p;
-	u32 ret=_FALSE;
+	u32 ret=false;
 	u8 *p2pie;
 	u32	p2pielen = 0;
 	int ssid_len=0, rate_cnt = 0;
@@ -2314,11 +2314,11 @@ u32 process_probe_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 				//Check Requested Device Type attributes in WSC IE.
 				//Check Device ID attribute in P2P IE
 
-				ret = _TRUE;
+				ret = true;
 			}
 			else if ( (p != NULL) && ( ssid_len == 0 ) )
 			{
-				ret = _TRUE;
+				ret = true;
 			}
 		}
 		else
@@ -2496,7 +2496,7 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 					plist = get_next(phead);
 
 					//look up sta asoc_queue
-					while ((rtw_end_of_queue_search(phead, plist)) == _FALSE)
+					while ((rtw_end_of_queue_search(phead, plist)) == false)
 					{
 						psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 
@@ -2544,13 +2544,13 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 	issue_p2p_devdisc_resp(pwdinfo, GetAddr2Ptr(pframe), status, dialogToken);
 
 
-	return (status==P2P_STATUS_SUCCESS) ? _TRUE:_FALSE;
+	return (status==P2P_STATUS_SUCCESS) ? true:false;
 
 }
 
 u32 process_p2p_devdisc_resp(struct wifidirect_info *pwdinfo, u8 *pframe, uint len)
 {
-	return _TRUE;
+	return true;
 }
 
 u8 process_p2p_provdisc_req(struct wifidirect_info *pwdinfo,  u8 *pframe, uint len )
@@ -2595,14 +2595,14 @@ u8 process_p2p_provdisc_req(struct wifidirect_info *pwdinfo,  u8 *pframe, uint l
 		}
 	}
 	DBG_871X( "[%s] config method = %s\n", __FUNCTION__, pwdinfo->rx_prov_disc_info.strconfig_method_desc_of_prov_disc_req );
-	return _TRUE;
+	return true;
 
 }
 
 u8 process_p2p_provdisc_resp(struct wifidirect_info *pwdinfo,  u8 *pframe)
 {
 
-	return _TRUE;
+	return true;
 }
 
 u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_content, u8 ch_cnt, u8 *peer_ch_list)
@@ -2763,7 +2763,7 @@ u8 process_p2p_group_negotation_req( struct wifidirect_info *pwdinfo, u8 *pframe
 
 #if defined(CONFIG_WFD) && defined(CONFIG_TDLS)
 			if(!(cap_attr & P2P_GRPCAP_INTRABSS) )
-				ptdlsinfo->ap_prohibited = _TRUE;
+				ptdlsinfo->ap_prohibited = true;
 #endif //defined(CONFIG_WFD) && defined(CONFIG_TDLS)
 		}
 
@@ -2965,7 +2965,7 @@ u8 process_p2p_group_negotation_resp( struct wifidirect_info *pwdinfo, u8 *pfram
 				cap_attr = le16_to_cpu(cap_attr);
 #if defined(CONFIG_WFD) && defined(CONFIG_TDLS)
 			if(!(cap_attr & P2P_GRPCAP_INTRABSS) )
-				ptdlsinfo->ap_prohibited = _TRUE;
+				ptdlsinfo->ap_prohibited = true;
 #endif //defined(CONFIG_WFD) && defined(CONFIG_TDLS)
 			}
 
@@ -3275,7 +3275,7 @@ u8 process_p2p_presence_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 
 	issue_p2p_presence_resp(pwdinfo, GetAddr2Ptr(pframe), status, dialogToken);
 
-	return _TRUE;
+	return true;
 }
 
 void find_phase_handler( _adapter*	padapter )
@@ -3440,7 +3440,7 @@ _func_enter_;
 		}
 		else if ( rtw_p2p_chk_state(pwdinfo, P2P_STATE_LISTEN) ||
 				rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_FAIL) ||
-				( rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_ING) && pwdinfo->nego_req_info.benable == _FALSE ) ||
+				( rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_ING) && pwdinfo->nego_req_info.benable == false ) ||
 				rtw_p2p_chk_state(pwdinfo, P2P_STATE_RX_PROVISION_DIS_REQ) )
 		{
 			//	Now, the driver is in the listen state of P2P mode.
@@ -3478,7 +3478,7 @@ _func_enter_;
 			issue_probereq_p2p(padapter, NULL);
 			_set_timer( &pwdinfo->pre_tx_scan_timer, P2P_TX_PRESCAN_TIMEOUT );
 		}
-		else if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_ING) && pwdinfo->nego_req_info.benable == _TRUE)
+		else if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_ING) && pwdinfo->nego_req_info.benable == true)
 		{
 			val8 = 1;
 			set_channel_bwmode(padapter, pwdinfo->nego_req_info.peer_channel_num[0], HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
@@ -3486,7 +3486,7 @@ _func_enter_;
 			issue_probereq_p2p(padapter, NULL);
 			_set_timer( &pwdinfo->pre_tx_scan_timer, P2P_TX_PRESCAN_TIMEOUT );
 		}
-		else if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_TX_INVITE_REQ ) && pwdinfo->invitereq_info.benable == _TRUE)
+		else if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_TX_INVITE_REQ ) && pwdinfo->invitereq_info.benable == true)
 		{
 			/*
 			val8 = 1;
@@ -3546,7 +3546,7 @@ _func_enter_;
 #endif
 	}
 
-	pcfg80211_wdinfo->is_ro_ch = _FALSE;
+	pcfg80211_wdinfo->is_ro_ch = false;
 
 	DBG_871X("cfg80211_remain_on_channel_expired\n");
 
@@ -3642,7 +3642,7 @@ void rtw_append_wfd_ie(_adapter *padapter, u8 *buf, u32* len)
 	{
 		action = frame_body[1];
 		if (action == ACT_PUBLIC_VENDOR
-			&& _rtw_memcmp(frame_body+2, P2P_OUI, 4) == _TRUE
+			&& _rtw_memcmp(frame_body+2, P2P_OUI, 4) == true
 		)
 		{
 			OUI_Subtype = frame_body[6];
@@ -3760,7 +3760,7 @@ int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx)
 	{
 		action = frame_body[1];
 		if (action == ACT_PUBLIC_VENDOR
-			&& _rtw_memcmp(frame_body+2, P2P_OUI, 4) == _TRUE
+			&& _rtw_memcmp(frame_body+2, P2P_OUI, 4) == true
 		)
 		{
 			OUI_Subtype = frame_body[6];
@@ -3781,15 +3781,15 @@ int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx)
 				u8 *cont;
 				uint cont_len;
 				case P2P_GO_NEGO_REQ:
-					DBG_871X("RTW_%s:P2P_GO_NEGO_REQ, dialogToken=%d\n", (tx==_TRUE)?"Tx":"Rx", dialogToken);
+					DBG_871X("RTW_%s:P2P_GO_NEGO_REQ, dialogToken=%d\n", (tx==true)?"Tx":"Rx", dialogToken);
 
 					if(tx)
 					{
 #ifdef CONFIG_DRV_ISSUE_PROV_REQ // IOT FOR S2
-						if(pwdev_priv->provdisc_req_issued == _FALSE)
+						if(pwdev_priv->provdisc_req_issued == false)
 						{
 							rtw_cfg80211_issue_p2p_provision_request(padapter, buf, len);
-							pwdev_priv->provdisc_req_issued = _TRUE;
+							pwdev_priv->provdisc_req_issued = true;
 							rtw_msleep_os(200);
 						}
 #endif //CONFIG_DRV_ISSUE_PROV_REQ
@@ -3803,11 +3803,11 @@ int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx)
 					break;
 				case P2P_GO_NEGO_RESP:
 					cont = rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_STATUS, NULL, &cont_len);
-					DBG_871X("RTW_%s:P2P_GO_NEGO_RESP, dialogToken=%d, status:%d\n", (tx==_TRUE)?"Tx":"Rx", dialogToken, cont?*cont:-1);
+					DBG_871X("RTW_%s:P2P_GO_NEGO_RESP, dialogToken=%d, status:%d\n", (tx==true)?"Tx":"Rx", dialogToken, cont?*cont:-1);
 
 					if(!tx)
 					{
-						pwdev_priv->provdisc_req_issued = _FALSE;
+						pwdev_priv->provdisc_req_issued = false;
 					}
 #ifdef CONFIG_CONCURRENT_MODE
 					else
@@ -3819,7 +3819,7 @@ int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx)
 					break;
 				case P2P_GO_NEGO_CONF:
 					cont = rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_STATUS, NULL, &cont_len);
-					DBG_871X("RTW_%s:P2P_GO_NEGO_CONF, dialogToken=%d, status:%d\n", (tx==_TRUE)?"Tx":"Rx", dialogToken, cont?*cont:-1);
+					DBG_871X("RTW_%s:P2P_GO_NEGO_CONF, dialogToken=%d, status:%d\n", (tx==true)?"Tx":"Rx", dialogToken, cont?*cont:-1);
 #ifdef CONFIG_CONCURRENT_MODE
 					if(tx)
 					{
@@ -3854,7 +3854,7 @@ int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx)
 					invit_info->flags = (flags==-1) ? 0x0 : flags;
 					invit_info->req_op_ch= op_ch;
 
-					DBG_871X("RTW_%s:P2P_INVIT_REQ, dialogToken=%d, flags:0x%02x, op_ch:%d\n", (tx==_TRUE)?"Tx":"Rx", dialogToken, flags, op_ch);
+					DBG_871X("RTW_%s:P2P_INVIT_REQ, dialogToken=%d, flags:0x%02x, op_ch:%d\n", (tx==true)?"Tx":"Rx", dialogToken, flags, op_ch);
 					break;
 				}
 				case P2P_INVIT_RESP:
@@ -3884,15 +3884,15 @@ int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx)
 						invit_info->rsp_op_ch= op_ch;
 					}
 
-					DBG_871X("RTW_%s:P2P_INVIT_RESP, dialogToken=%d, status:%d, op_ch:%d\n", (tx==_TRUE)?"Tx":"Rx", dialogToken, status, op_ch);
+					DBG_871X("RTW_%s:P2P_INVIT_RESP, dialogToken=%d, status:%d, op_ch:%d\n", (tx==true)?"Tx":"Rx", dialogToken, status, op_ch);
 					break;
 				}
 				case P2P_DEVDISC_REQ:
-					DBG_871X("RTW_%s:P2P_DEVDISC_REQ, dialogToken=%d\n", (tx==_TRUE)?"Tx":"Rx", dialogToken);
+					DBG_871X("RTW_%s:P2P_DEVDISC_REQ, dialogToken=%d\n", (tx==true)?"Tx":"Rx", dialogToken);
 					break;
 				case P2P_DEVDISC_RESP:
 					cont = rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_STATUS, NULL, &cont_len);
-					DBG_871X("RTW_%s:P2P_DEVDISC_RESP, dialogToken=%d, status:%d\n", (tx==_TRUE)?"Tx":"Rx", dialogToken, cont?*cont:-1);
+					DBG_871X("RTW_%s:P2P_DEVDISC_RESP, dialogToken=%d, status:%d\n", (tx==true)?"Tx":"Rx", dialogToken, cont?*cont:-1);
 					break;
 				case P2P_PROVISION_DISC_REQ:
 				{
@@ -3901,25 +3901,25 @@ int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx)
 					uint p2p_ielen = 0;
 					uint contentlen = 0;
 
-					DBG_871X("RTW_%s:P2P_PROVISION_DISC_REQ, dialogToken=%d\n", (tx==_TRUE)?"Tx":"Rx", dialogToken);
+					DBG_871X("RTW_%s:P2P_PROVISION_DISC_REQ, dialogToken=%d\n", (tx==true)?"Tx":"Rx", dialogToken);
 
 					//if(tx)
 					{
-						pwdev_priv->provdisc_req_issued = _FALSE;
+						pwdev_priv->provdisc_req_issued = false;
 
 						if( (p2p_ie=rtw_get_p2p_ie( frame_body + _PUBLIC_ACTION_IE_OFFSET_, frame_body_len - _PUBLIC_ACTION_IE_OFFSET_, NULL, &p2p_ielen)))
 						{
 
 							if(rtw_get_p2p_attr_content( p2p_ie, p2p_ielen, P2P_ATTR_GROUP_ID, NULL, &contentlen))
 							{
-								pwdev_priv->provdisc_req_issued = _FALSE;//case: p2p_client join p2p GO
+								pwdev_priv->provdisc_req_issued = false;//case: p2p_client join p2p GO
 							}
 							else
 							{
 								#ifdef CONFIG_DEBUG_CFG80211
-								DBG_871X("provdisc_req_issued is _TRUE\n");
+								DBG_871X("provdisc_req_issued is true\n");
 								#endif //CONFIG_DEBUG_CFG80211
-								pwdev_priv->provdisc_req_issued = _TRUE;//case: p2p_devices connection before Nego req.
+								pwdev_priv->provdisc_req_issued = true;//case: p2p_devices connection before Nego req.
 							}
 
 						}
@@ -3927,10 +3927,10 @@ int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx)
 				}
 					break;
 				case P2P_PROVISION_DISC_RESP:
-					DBG_871X("RTW_%s:P2P_PROVISION_DISC_RESP, dialogToken=%d\n", (tx==_TRUE)?"Tx":"Rx", dialogToken);
+					DBG_871X("RTW_%s:P2P_PROVISION_DISC_RESP, dialogToken=%d\n", (tx==true)?"Tx":"Rx", dialogToken);
 					break;
 				default:
-					DBG_871X("RTW_%s:OUI_Subtype=%d, dialogToken=%d\n", (tx==_TRUE)?"Tx":"Rx", OUI_Subtype, dialogToken);
+					DBG_871X("RTW_%s:OUI_Subtype=%d, dialogToken=%d\n", (tx==true)?"Tx":"Rx", OUI_Subtype, dialogToken);
 					break;
 			}
 
@@ -3952,26 +3952,26 @@ int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx)
 		switch(OUI_Subtype)
 		{
 			case P2P_NOTICE_OF_ABSENCE:
-				DBG_871X("RTW_%s:P2P_NOTICE_OF_ABSENCE, dialogToken=%d\n", (tx==_TRUE)?"TX":"RX", dialogToken);
+				DBG_871X("RTW_%s:P2P_NOTICE_OF_ABSENCE, dialogToken=%d\n", (tx==true)?"TX":"RX", dialogToken);
 				break;
 			case P2P_PRESENCE_REQUEST:
-				DBG_871X("RTW_%s:P2P_PRESENCE_REQUEST, dialogToken=%d\n", (tx==_TRUE)?"TX":"RX", dialogToken);
+				DBG_871X("RTW_%s:P2P_PRESENCE_REQUEST, dialogToken=%d\n", (tx==true)?"TX":"RX", dialogToken);
 				break;
 			case P2P_PRESENCE_RESPONSE:
-				DBG_871X("RTW_%s:P2P_PRESENCE_RESPONSE, dialogToken=%d\n", (tx==_TRUE)?"TX":"RX", dialogToken);
+				DBG_871X("RTW_%s:P2P_PRESENCE_RESPONSE, dialogToken=%d\n", (tx==true)?"TX":"RX", dialogToken);
 				break;
 			case P2P_GO_DISC_REQUEST:
-				DBG_871X("RTW_%s:P2P_GO_DISC_REQUEST, dialogToken=%d\n", (tx==_TRUE)?"TX":"RX", dialogToken);
+				DBG_871X("RTW_%s:P2P_GO_DISC_REQUEST, dialogToken=%d\n", (tx==true)?"TX":"RX", dialogToken);
 				break;
 			default:
-				DBG_871X("RTW_%s:OUI_Subtype=%d, dialogToken=%d\n", (tx==_TRUE)?"TX":"RX", OUI_Subtype, dialogToken);
+				DBG_871X("RTW_%s:OUI_Subtype=%d, dialogToken=%d\n", (tx==true)?"TX":"RX", OUI_Subtype, dialogToken);
 				break;
 		}
 
 	}
 	else
 	{
-		DBG_871X("RTW_%s:action frame category=%d\n", (tx==_TRUE)?"TX":"RX", category);
+		DBG_871X("RTW_%s:action frame category=%d\n", (tx==true)?"TX":"RX", category);
 		//is_p2p_frame = (-1);
 	}
 
@@ -4087,7 +4087,7 @@ void process_p2p_ps_ie(PADAPTER padapter, u8 *IEs, u32 IELength)
 	u32	attr_contentlen = 0;
 
 	struct wifidirect_info	*pwdinfo = &( padapter->wdinfo );
-	u8	find_p2p = _FALSE, find_p2p_ps = _FALSE;
+	u8	find_p2p = false, find_p2p_ps = false;
 	u8	noa_offset, noa_num, noa_index;
 
 _func_enter_;
@@ -4111,11 +4111,11 @@ _func_enter_;
 
 	while(p2p_ie)
 	{
-		find_p2p = _TRUE;
+		find_p2p = true;
 		// Get Notice of Absence IE.
 		if(rtw_get_p2p_attr_content( p2p_ie, p2p_ielen, P2P_ATTR_NOA, noa_attr, &attr_contentlen))
 		{
-			find_p2p_ps = _TRUE;
+			find_p2p_ps = true;
 			noa_index = noa_attr[0];
 
 			if( (pwdinfo->p2p_ps_mode == P2P_PS_NONE) ||
@@ -4154,7 +4154,7 @@ _func_enter_;
 				{
 					pwdinfo->p2p_ps_mode = P2P_PS_CTWINDOW;
 					// driver should wait LPS for entering CTWindow
-					if(padapter->pwrctrlpriv.bFwCurrentInPSMode == _TRUE)
+					if(padapter->pwrctrlpriv.bFwCurrentInPSMode == true)
 					{
 						p2p_ps_wk_cmd(padapter, P2P_PS_ENABLE, 1);
 					}
@@ -4178,9 +4178,9 @@ _func_enter_;
 
 	}
 
-	if(find_p2p == _TRUE)
+	if(find_p2p == true)
 	{
-		if( (pwdinfo->p2p_ps_mode > P2P_PS_NONE) && (find_p2p_ps == _FALSE) )
+		if( (pwdinfo->p2p_ps_mode > P2P_PS_NONE) && (find_p2p_ps == false) )
 		{
 			p2p_ps_wk_cmd(padapter, P2P_PS_DISABLE, 1);
 		}
@@ -4208,7 +4208,7 @@ _func_enter_;
 			pwdinfo->opp_ps = 0;
 			pwdinfo->noa_num = 0;
 			pwdinfo->p2p_ps_mode = P2P_PS_NONE;
-			if(padapter->pwrctrlpriv.bFwCurrentInPSMode == _TRUE)
+			if(padapter->pwrctrlpriv.bFwCurrentInPSMode == true)
 			{
 				if(pwrpriv->smart_ps == 0)
 				{
@@ -4361,7 +4361,7 @@ static void pre_tx_scan_timer_process (void *FunctionContext)
 
 	if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_TX_PROVISION_DIS_REQ))
 	{
-		if ( _TRUE == pwdinfo->tx_prov_disc_info.benable )	//	the provision discovery request frame is trigger to send or not
+		if ( true == pwdinfo->tx_prov_disc_info.benable )	//	the provision discovery request frame is trigger to send or not
 		{
 			p2p_protocol_wk_cmd( adapter, P2P_PRE_TX_PROVDISC_PROCESS_WK );
 			//issue_probereq_p2p(adapter, NULL);
@@ -4370,7 +4370,7 @@ static void pre_tx_scan_timer_process (void *FunctionContext)
 	}
 	else if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_ING))
 	{
-		if ( _TRUE == pwdinfo->nego_req_info.benable )
+		if ( true == pwdinfo->nego_req_info.benable )
 		{
 			p2p_protocol_wk_cmd( adapter, P2P_PRE_TX_NEGOREQ_PROCESS_WK );
 			//issue_probereq_p2p(adapter, NULL);
@@ -4379,7 +4379,7 @@ static void pre_tx_scan_timer_process (void *FunctionContext)
 	}
 	else if ( rtw_p2p_chk_state(pwdinfo, P2P_STATE_TX_INVITE_REQ ) )
 	{
-		if ( _TRUE == pwdinfo->invitereq_info.benable )
+		if ( true == pwdinfo->invitereq_info.benable )
 		{
 			p2p_protocol_wk_cmd( adapter, P2P_PRE_TX_INVITEREQ_PROCESS_WK );
 		}
@@ -4431,7 +4431,7 @@ void reset_global_wifidirect_info( _adapter* padapter )
 
 	pwdinfo = &padapter->wdinfo;
 	pwdinfo->persistent_supported = 0;
-	pwdinfo->session_available = _TRUE;
+	pwdinfo->session_available = true;
 	pwdinfo->wfd_tdls_enable = 0;
 	pwdinfo->wfd_tdls_weaksec = 0;
 }
@@ -4445,13 +4445,13 @@ int rtw_init_wifi_display_info(_adapter* padapter)
 	// Used in P2P and TDLS
 	pwfd_info->rtsp_ctrlport = 554;
 	pwfd_info->peer_rtsp_ctrlport = 0;	//	Reset to 0
-	pwfd_info->wfd_enable = _FALSE;
+	pwfd_info->wfd_enable = false;
 	pwfd_info->wfd_device_type = WFD_DEVINFO_PSINK;
 	pwfd_info->scan_result_type = SCAN_RESULT_P2P_ONLY;
 
 	// Used in P2P
-	pwfd_info->peer_session_avail = _TRUE;
-	pwfd_info->wfd_pc = _FALSE;
+	pwfd_info->peer_session_avail = true;
+	pwfd_info->wfd_pc = false;
 
 	// Used in TDLS
 	_rtw_memset( pwfd_info->ip_address, 0x00, 4 );
@@ -4520,7 +4520,7 @@ void init_wifidirect_info( _adapter* padapter, enum P2P_ROLE role)
 		pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
 	}
 
-	if ( ( check_buddy_fwstate(padapter, _FW_LINKED ) == _TRUE ) &&
+	if ( ( check_buddy_fwstate(padapter, _FW_LINKED ) == true ) &&
 	      ( ( pbuddy_mlmeext->cur_channel == 1) || ( pbuddy_mlmeext->cur_channel == 6 ) || ( pbuddy_mlmeext->cur_channel == 11 ) )
 	   )
 	{
@@ -4539,7 +4539,7 @@ void init_wifidirect_info( _adapter* padapter, enum P2P_ROLE role)
 	{
 		rtw_p2p_set_role(pwdinfo, P2P_ROLE_DEVICE);
 		#ifdef CONFIG_CONCURRENT_MODE
-		if ( check_buddy_fwstate(padapter, _FW_LINKED ) == _TRUE )
+		if ( check_buddy_fwstate(padapter, _FW_LINKED ) == true )
 		{
 			rtw_p2p_set_state(pwdinfo, P2P_STATE_IDLE);
 		}

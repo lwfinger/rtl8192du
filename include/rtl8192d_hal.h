@@ -474,25 +474,25 @@ typedef enum _USB_RX_AGG_MODE{
 #define GET_CVID_ROM_VERSION(version)		((version) & ROM_VERSION_MASK)
 #define GET_CVID_CUT_VERSION(version)		((version) & CUT_VERSION_MASK)
 
-#define IS_81XXC(version)					((GET_CVID_IC_TYPE(version) == 0)? _TRUE : _FALSE)
-#define IS_8723_SERIES(version)				((GET_CVID_IC_TYPE(version) == CHIP_8723)? _TRUE : _FALSE)
-#define IS_92D(version)						((GET_CVID_IC_TYPE(version) == CHIP_92D)? _TRUE : _FALSE)
-#define IS_1T1R(version)						((GET_CVID_RF_TYPE(version))? _FALSE : _TRUE)
-#define IS_1T2R(version)						((GET_CVID_RF_TYPE(version) == RF_TYPE_1T2R)? _TRUE : _FALSE)
-#define IS_2T2R(version)						((GET_CVID_RF_TYPE(version) == RF_TYPE_2T2R)? _TRUE : _FALSE)
-#define IS_CHIP_VENDOR_UMC(version)			((GET_CVID_MANUFACTUER(version))? _TRUE: _FALSE)
+#define IS_81XXC(version)					((GET_CVID_IC_TYPE(version) == 0)? true : false)
+#define IS_8723_SERIES(version)				((GET_CVID_IC_TYPE(version) == CHIP_8723)? true : false)
+#define IS_92D(version)						((GET_CVID_IC_TYPE(version) == CHIP_92D)? true : false)
+#define IS_1T1R(version)						((GET_CVID_RF_TYPE(version))? false : true)
+#define IS_1T2R(version)						((GET_CVID_RF_TYPE(version) == RF_TYPE_1T2R)? true : false)
+#define IS_2T2R(version)						((GET_CVID_RF_TYPE(version) == RF_TYPE_2T2R)? true : false)
+#define IS_CHIP_VENDOR_UMC(version)			((GET_CVID_MANUFACTUER(version))? true: false)
 
-#define IS_92C_SERIAL(version)					((IS_81XXC(version) && IS_2T2R(version)) ? _TRUE : _FALSE)
-#define IS_VENDOR_UMC_A_CUT(version)		((IS_CHIP_VENDOR_UMC(version)) ? ((GET_CVID_CUT_VERSION(version)) ? _FALSE : _TRUE) : _FALSE)
-#define IS_VENDOR_8723_A_CUT(version)		((IS_8723_SERIES(version)) ? ((GET_CVID_CUT_VERSION(version)) ? _FALSE : _TRUE) : _FALSE)
+#define IS_92C_SERIAL(version)					((IS_81XXC(version) && IS_2T2R(version)) ? true : false)
+#define IS_VENDOR_UMC_A_CUT(version)		((IS_CHIP_VENDOR_UMC(version)) ? ((GET_CVID_CUT_VERSION(version)) ? false : true) : false)
+#define IS_VENDOR_8723_A_CUT(version)		((IS_8723_SERIES(version)) ? ((GET_CVID_CUT_VERSION(version)) ? false : true) : false)
 // <tynli_Note> 88/92C UMC B-cut vendor is set to TSMC so we need to check CHIP_VENDOR_UMC bit is not 1.
-#define IS_81xxC_VENDOR_UMC_B_CUT(version)	((IS_CHIP_VENDOR_UMC(version)) ? ((GET_CVID_CUT_VERSION(version) == B_CUT_VERSION) ? _TRUE : _FALSE):_FALSE)
-#define IS_92D_SINGLEPHY(version)			((IS_92D(version)) ? (IS_2T2R(version) ? _TRUE: _FALSE) : _FALSE)
+#define IS_81xxC_VENDOR_UMC_B_CUT(version)	((IS_CHIP_VENDOR_UMC(version)) ? ((GET_CVID_CUT_VERSION(version) == B_CUT_VERSION) ? true : false):false)
+#define IS_92D_SINGLEPHY(version)			((IS_92D(version)) ? (IS_2T2R(version) ? true: false) : false)
 
-#define IS_92D_C_CUT(version)				((IS_92D(version)) ? ((GET_CVID_CUT_VERSION(version) == C_CUT_VERSION) ? _TRUE : _FALSE) : _FALSE)
-#define IS_92D_D_CUT(version)				((IS_92D(version)) ? ((GET_CVID_CUT_VERSION(version) == D_CUT_VERSION) ? _TRUE : _FALSE) : _FALSE)
-#define IS_92D_E_CUT(version)				((IS_92D(version)) ? ((GET_CVID_CUT_VERSION(version) == E_CUT_VERSION) ? _TRUE : _FALSE) : _FALSE)
-#define IS_NORMAL_CHIP92D(version)		((GET_CVID_CHIP_TYPE(version))? _TRUE: _FALSE)
+#define IS_92D_C_CUT(version)				((IS_92D(version)) ? ((GET_CVID_CUT_VERSION(version) == C_CUT_VERSION) ? true : false) : false)
+#define IS_92D_D_CUT(version)				((IS_92D(version)) ? ((GET_CVID_CUT_VERSION(version) == D_CUT_VERSION) ? true : false) : false)
+#define IS_92D_E_CUT(version)				((IS_92D(version)) ? ((GET_CVID_CUT_VERSION(version) == E_CUT_VERSION) ? true : false) : false)
+#define IS_NORMAL_CHIP92D(version)		((GET_CVID_CHIP_TYPE(version)) ? true : false)
 
 typedef enum _VERSION_8192D{
 	VERSION_TEST_CHIP_88C = 0x0000,

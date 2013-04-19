@@ -77,7 +77,7 @@ static void dm_DIGInit(
 	pDIG_T	pDM_DigTable = &pdmpriv->DM_DigTable;
 
 
-	pDM_DigTable->Dig_Enable_Flag = _TRUE;
+	pDM_DigTable->Dig_Enable_Flag = true;
 	pDM_DigTable->Dig_Ext_Port_Stage = DIG_EXT_PORT_STAGE_MAX;
 
 	pDM_DigTable->CurIGValue = 0x20;
@@ -121,20 +121,20 @@ dm_DualMacGetParameterFromBuddyAdapter(
 	struct mlme_priv *pbuddy_mlmepriv = &(BuddyAdapter->mlmepriv);
 
 	if(pHalData->MacPhyMode92D != DUALMAC_SINGLEPHY)
-		return _FALSE;
+		return false;
 
 	if(BuddyAdapter == NULL)
-		return _FALSE;
+		return false;
 
 	if(pHalData->bSlaveOfDMSP)
-		return _FALSE;
+		return false;
 
 //sherry sync with 92C_92D, 20110701
 	if((check_fwstate(pbuddy_mlmepriv, _FW_LINKED)) && (!check_fwstate(pmlmepriv, _FW_LINKED))
 		&& (!check_fwstate(pmlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) ))
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 #endif
 
@@ -154,7 +154,7 @@ odm_FalseAlarmCounterStatistics_ForSlaveOfDMSP(
 	if(BuddyAdapter == NULL)
 		return;
 
-	if (Adapter->DualMacConcurrent == _FALSE)
+	if (Adapter->DualMacConcurrent == false)
 		return;
 
 	Buddydmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
@@ -279,7 +279,7 @@ odm_FalseAlarmCounterStatistics(
 	{
 		if(pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY)
 		{
-			if((pHalData->CurrentBandType92D == BAND_ON_2_4G) && pHalData->bMasterOfDMSP && (check_fwstate(pmlmepriv, _FW_LINKED) == _FALSE))
+			if((pHalData->CurrentBandType92D == BAND_ON_2_4G) && pHalData->bMasterOfDMSP && (check_fwstate(pmlmepriv, _FW_LINKED) == false))
 			{
 				//before BB reset should do clock gated
 				rtw_write32(Adapter, rFPGA0_XCD_RFParameter, rtw_read32(Adapter, rFPGA0_XCD_RFParameter)|(BIT31));
@@ -292,9 +292,9 @@ odm_FalseAlarmCounterStatistics(
 		}
 		else
 		{
-			if((pHalData->CurrentBandType92D == BAND_ON_2_4G) &&(check_fwstate(pmlmepriv, _FW_LINKED) == _FALSE)
+			if((pHalData->CurrentBandType92D == BAND_ON_2_4G) &&(check_fwstate(pmlmepriv, _FW_LINKED) == false)
 #ifdef CONFIG_CONCURRENT_MODE
-				 && (check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == _FALSE)
+				 && (check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == false)
 #endif //CONFIG_CONCURRENT_MODE
 			)
 			{
@@ -308,7 +308,7 @@ odm_FalseAlarmCounterStatistics(
 			}
 		}
 	}
-	else if(check_fwstate(pmlmepriv, _FW_LINKED) == _FALSE)
+	else if(check_fwstate(pmlmepriv, _FW_LINKED) == false)
 	{
 		//before BB reset should do clock gated
 		rtw_write32(Adapter, rFPGA0_XCD_RFParameter, rtw_read32(Adapter, rFPGA0_XCD_RFParameter)|(BIT31));
@@ -330,7 +330,7 @@ odm_FindMinimumRSSI_Dmsp(
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	s32	Rssi_val_min_back_for_mac0;
 	bool		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
-	bool		bRestoreRssi = _FALSE;
+	bool		bRestoreRssi = false;
 	PADAPTER	BuddyAdapter = pAdapter->pbuddy_adapter;
 	struct dm_priv	*Buddydmpriv;
 
@@ -349,7 +349,7 @@ odm_FindMinimumRSSI_Dmsp(
 				if(bGetValueFromBuddyAdapter)
 				{
 					//DBG_871X("get new RSSI\n");
-					bRestoreRssi = _TRUE;
+					bRestoreRssi = true;
 					Rssi_val_min_back_for_mac0 = pdmpriv->MinUndecoratedPWDBForDM;
 					pdmpriv->MinUndecoratedPWDBForDM = pdmpriv->RssiValMinForAnotherMacOfDMSP;
 				}
@@ -360,7 +360,7 @@ odm_FindMinimumRSSI_Dmsp(
 
 	if(bRestoreRssi)
 	{
-		bRestoreRssi = _FALSE;
+		bRestoreRssi = false;
 		pdmpriv->MinUndecoratedPWDBForDM = Rssi_val_min_back_for_mac0;
 	}
 #endif
@@ -376,17 +376,17 @@ IN	PADAPTER	pAdapter
 	struct mlme_priv	*pmlmepriv = &pAdapter->mlmepriv;
 
 	//1 1.Determine the minimum RSSI
-	if((check_fwstate(pmlmepriv, _FW_LINKED) == _FALSE) &&
+	if((check_fwstate(pmlmepriv, _FW_LINKED) == false) &&
 		(pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0))
 	{
 		pdmpriv->MinUndecoratedPWDBForDM = 0;
 		//RT_TRACE(COMP_BB_POWERSAVING, DBG_LOUD, ("Not connected to any \n"));
 	}
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)	// Default port
+	if(check_fwstate(pmlmepriv, _FW_LINKED) == true)	// Default port
 	{
-		if((check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) ||
-			(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == _TRUE) ||
-			(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == _TRUE))
+		if((check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) ||
+			(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true) ||
+			(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true))
 		{
 			pdmpriv->MinUndecoratedPWDBForDM = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
 			//RT_TRACE(COMP_BB_POWERSAVING, DBG_LOUD, ("AP Client PWDB = 0x%x \n", pHalData->MinUndecoratedPWDBForDM));
@@ -462,7 +462,7 @@ DM_Write_DIG_DMSP(
 		//DBG_871X("DM_Write_DIG_DMSP(): mac 0 set mac 1 value \n");
 		if(pdmpriv->bWriteDigForAnotherMacOfDMSP)
 		{
-			pdmpriv->bWriteDigForAnotherMacOfDMSP = _FALSE;
+			pdmpriv->bWriteDigForAnotherMacOfDMSP = false;
 			PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, 0x7f, pdmpriv->CurDigValueForAnotherMacOfDMSP);
 			PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, 0x7f, pdmpriv->CurDigValueForAnotherMacOfDMSP);
 		}
@@ -480,7 +480,7 @@ DM_Write_DIG_DMSP(
 		 if(pHalData->bSlaveOfDMSP)
 		 {
 			//DBG_871X("DM_Write_DIG_DMSP(): slave case \n");
-			Buddydmpriv->bWriteDigForAnotherMacOfDMSP = _TRUE;
+			Buddydmpriv->bWriteDigForAnotherMacOfDMSP = true;
 			Buddydmpriv->CurDigValueForAnotherMacOfDMSP =  pDM_DigTable->CurIGValue;
 		 }
 		else
@@ -511,7 +511,7 @@ DM_Write_DIG(
 	//			pDM_DigTable->CurIGValue, pDM_DigTable->PreIGValue, pDM_DigTable->BackoffVal));
 	//DBG_871X("CurIGValue = 0x%x, PreIGValue = 0x%x\n", pDM_DigTable->CurIGValue, pDM_DigTable->PreIGValue);
 
-	if (pDM_DigTable->Dig_Enable_Flag == _FALSE)
+	if (pDM_DigTable->Dig_Enable_Flag == false)
 	{
 		//DBG_871X("DIG is disabled\n");
 		//pDM_DigTable->PreIGValue = 0x17;
@@ -544,8 +544,8 @@ static void odm_DIG(
 	static u8	DIG_Dynamic_MIN_0 = 0x25;
 	static u8	DIG_Dynamic_MIN_1 = 0x25;
 	u8	DIG_Dynamic_MIN;
-	static bool	bMediaConnect_0 = _FALSE;
-	static bool	bMediaConnect_1 = _FALSE;
+	static bool	bMediaConnect_0 = false;
+	static bool	bMediaConnect_1 = false;
 	bool		FirstConnect;
 	u8	TxRate = rtw_read8(pAdapter, REG_INIDATA_RATE_SEL);
 #ifdef CONFIG_CONCURRENT_MODE
@@ -564,13 +564,13 @@ static void odm_DIG(
 			if(pHalData->bMasterOfDMSP)
 			{
 				DIG_Dynamic_MIN = DIG_Dynamic_MIN_0;
-				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) && (bMediaConnect_0 == _FALSE);
+				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true) && (bMediaConnect_0 == false);
 				//DBG_871X("bMediaConnect_0=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_0, check_fwstate(pmlmepriv, _FW_LINKED));
 			}
 			else
 			{
 				DIG_Dynamic_MIN = DIG_Dynamic_MIN_1;
-				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) && (bMediaConnect_1 == _FALSE);
+				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true) && (bMediaConnect_1 == false);
 				//DBG_871X("bMediaConnect_1=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_1, check_fwstate(pmlmepriv, _FW_LINKED));
 			}
 			//DBG_871X("pHalData->CurrentBandType92D = %s\n",(pHalData->CurrentBandType92D==BAND_ON_2_4G)?"2.4G":"5G");
@@ -581,10 +581,10 @@ static void odm_DIG(
 			{
 				DIG_Dynamic_MIN = DIG_Dynamic_MIN_0;
 #ifdef CONFIG_CONCURRENT_MODE
-				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE ||check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == _TRUE
-				) && (bMediaConnect_0 == _FALSE);
+				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true ||check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == true
+				) && (bMediaConnect_0 == false);
 #else
-				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) && (bMediaConnect_0 == _FALSE);
+				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true) && (bMediaConnect_0 == false);
 #endif //CONFIG_CONCURRENT_MODE
 				//DBG_871X("bMediaConnect_5G=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_0, check_fwstate(pmlmepriv, _FW_LINKED));
 			}
@@ -592,10 +592,10 @@ static void odm_DIG(
 			{
 				DIG_Dynamic_MIN = DIG_Dynamic_MIN_1;
 #ifdef CONFIG_CONCURRENT_MODE
-				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE || check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == _TRUE
-				) && (bMediaConnect_1 == _FALSE);
+				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true || check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == true
+				) && (bMediaConnect_1 == false);
 #else
-				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) && (bMediaConnect_1 == _FALSE);
+				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true) && (bMediaConnect_1 == false);
 #endif //CONFIG_CONCURRENT_MODE
 				//DBG_871X("bMediaConnect_2.4G=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_1, check_fwstate(pmlmepriv, _FW_LINKED));
 			}
@@ -605,10 +605,10 @@ static void odm_DIG(
 	{
 		DIG_Dynamic_MIN = DIG_Dynamic_MIN_0;
 #ifdef CONFIG_CONCURRENT_MODE
-		FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE || check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == _TRUE
-		) && (bMediaConnect_0 == _FALSE);
+		FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true || check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == true
+		) && (bMediaConnect_0 == false);
 #else
-		FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) && (bMediaConnect_0 == _FALSE);
+		FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true) && (bMediaConnect_0 == false);
 #endif //CONFIG_CONCURRENT_MODE
 		//DBG_871X("bMediaConnect=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_0, check_fwstate(pmlmepriv, _FW_LINKED));
 	}
@@ -624,7 +624,7 @@ static void odm_DIG(
 	//DBG_871X("RX Rate =  0x%x, TX Rate = 0x%x \n", pHalData->RxRate, TxRate);
 
 #ifndef CONFIG_CONCURRENT_MODE
-	if(pdmpriv->bDMInitialGainEnable == _FALSE)
+	if(pdmpriv->bDMInitialGainEnable == false)
 		return;
 #endif //CONFIG_CONCURRENT_MODE
 
@@ -651,9 +651,9 @@ static void odm_DIG(
 
 	//1 Boundary Decision
 #ifdef CONFIG_CONCURRENT_MODE
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE || check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == _TRUE)
+	if(check_fwstate(pmlmepriv, _FW_LINKED) == true || check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == true)
 #else
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)
+	if(check_fwstate(pmlmepriv, _FW_LINKED) == true)
 #endif //CONFIG_CONCURRENT_MODE
 	{
 		//2 Get minimum RSSI value among associated devices
@@ -728,9 +728,9 @@ static void odm_DIG(
 
 	//1 Adjust initial gain by false alarm
 #ifdef CONFIG_CONCURRENT_MODE
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE || check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == _TRUE)
+	if(check_fwstate(pmlmepriv, _FW_LINKED) == true || check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == true)
 #else
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)
+	if(check_fwstate(pmlmepriv, _FW_LINKED) == true)
 #endif //CONFIG_CONCURRENT_MODE
 	{
 		if(FirstConnect)
@@ -860,9 +860,9 @@ static void odm_DIG(
 	{
 		//for Use 2 path Tx to transmit MCS0~7 and legacy mode
 #ifdef CONFIG_CONCURRENT_MODE
-		if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE || check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == _TRUE)
+		if(check_fwstate(pmlmepriv, _FW_LINKED) == true || check_fwstate(pbuddy_pmlmepriv, _FW_LINKED) == true)
 #else
-		if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)
+		if(check_fwstate(pmlmepriv, _FW_LINKED) == true)
 #endif //CONFIG_CONCURRENT_MODE
 		{
 			if(pDM_DigTable->Rssi_val_min  <= 30)   //low rate 2T2R settings
@@ -953,7 +953,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 	struct dm_priv	*Buddydmpriv;
 
 
-	//if (pAdapter->DualMacSmartConcurrent == _FALSE)
+	//if (pAdapter->DualMacSmartConcurrent == false)
 	//	return;
 
 	if(pDM_DigTable->CurSTAConnectState == DIG_STA_CONNECT)
@@ -1005,7 +1005,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 				//if(IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
 					//PHY_SetBBReg(pAdapter, rCCK0_FalseAlarmReport , bMaskByte2, 0xd3);
 			}
-			pdmpriv->bChangeCCKPDStateForAnotherMacOfDMSP = _FALSE;
+			pdmpriv->bChangeCCKPDStateForAnotherMacOfDMSP = false;
 		}
 	}
 
@@ -1052,7 +1052,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 		{
 			Buddydmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
 			DBG_871X("dm_CCK_PacketDetectionThresh_DMSP(): bslave case \n");
-			Buddydmpriv->bChangeCCKPDStateForAnotherMacOfDMSP = _TRUE;
+			Buddydmpriv->bChangeCCKPDStateForAnotherMacOfDMSP = true;
 			Buddydmpriv->CurCCKPDStateForAnotherMacOfDMSP = pDM_DigTable->CurCCKPDState;
 		}
 		else
@@ -1230,7 +1230,7 @@ static void dm_InitDynamicTxPower(IN	PADAPTER	Adapter)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
-	pdmpriv->bDynamicTxPowerEnable = _FALSE;
+	pdmpriv->bDynamicTxPowerEnable = false;
 
 	pdmpriv->LastDTPLvl = TxHighPwrLevel_Normal;
 	pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
@@ -1251,7 +1251,7 @@ static void odm_DynamicTxPower_92D(IN	PADAPTER	Adapter)
 #endif
 
 	// If dynamic high power is disabled.
-	if( (pdmpriv->bDynamicTxPowerEnable != _TRUE) ||
+	if( (pdmpriv->bDynamicTxPowerEnable != true) ||
 		(!(pdmpriv->DMFlag & DYNAMIC_FUNC_HP)) )
 	{
 		pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
@@ -1259,7 +1259,7 @@ static void odm_DynamicTxPower_92D(IN	PADAPTER	Adapter)
 	}
 
 	// STA not connected and AP not connected
-	if((check_fwstate(pmlmepriv, _FW_LINKED) != _TRUE) &&
+	if((check_fwstate(pmlmepriv, _FW_LINKED) != true) &&
 		(pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0))
 	{
 		//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("Not connected to any \n"));
@@ -1272,11 +1272,11 @@ static void odm_DynamicTxPower_92D(IN	PADAPTER	Adapter)
 		return;
 	}
 
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)	// Default port
+	if(check_fwstate(pmlmepriv, _FW_LINKED) == true)	// Default port
 	{
 		//todo: AP Mode
-		if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == _TRUE) ||
-		       (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == _TRUE))
+		if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true) ||
+		       (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true))
 		{
 			UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
 			//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("AP Client PWDB = 0x%x \n", UndecoratedSmoothedPWDB));
@@ -1342,7 +1342,7 @@ static void odm_DynamicTxPower_92D(IN	PADAPTER	Adapter)
 			pdmpriv->DynamicTxHighPowerLvl = pdmpriv->CurTxHighLvlForAnotherMacOfDMSP;
 			PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
 			pdmpriv->DynamicTxHighPowerLvl = HighPowerLvlBackForMac0;
-			pdmpriv->bChangeTxHighPowerLvlForAnotherMacOfDMSP = _FALSE;
+			pdmpriv->bChangeTxHighPowerLvlForAnotherMacOfDMSP = false;
 		}
 	}
 #endif
@@ -1351,7 +1351,7 @@ static void odm_DynamicTxPower_92D(IN	PADAPTER	Adapter)
 	{
 		//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("PHY_SetTxPowerLevel8192D() Channel = %d \n" , pHalData->CurrentChannel));
 #ifdef CONFIG_DUALMAC_CONCURRENT
-		if(Adapter->DualMacConcurrent == _TRUE)
+		if(Adapter->DualMacConcurrent == true)
 		{
 			if(BuddyAdapter == NULL)
 			{
@@ -1370,7 +1370,7 @@ static void odm_DynamicTxPower_92D(IN	PADAPTER	Adapter)
 					{
 						DBG_871X("dm_DynamicTxPower() bslave case  \n");
 						pbuddy_dmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
-						pbuddy_dmpriv->bChangeTxHighPowerLvlForAnotherMacOfDMSP = _TRUE;
+						pbuddy_dmpriv->bChangeTxHighPowerLvlForAnotherMacOfDMSP = true;
 						pbuddy_dmpriv->CurTxHighLvlForAnotherMacOfDMSP = pdmpriv->DynamicTxHighPowerLvl;
 					}
 					else
@@ -1413,7 +1413,7 @@ static VOID PWDB_Monitor(
 	u32	PWDB_rssi[NUM_STA]={0};//[0~15]:MACID, [16~31]:PWDB_rssi
 
 
-	if(check_fwstate(&Adapter->mlmepriv, WIFI_AP_STATE|WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == _TRUE)
+	if(check_fwstate(&Adapter->mlmepriv, WIFI_AP_STATE|WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == true)
 	{
 		_irqL irqL;
 		_list	*plist, *phead;
@@ -1428,7 +1428,7 @@ static VOID PWDB_Monitor(
 			phead = &(pstapriv->sta_hash[i]);
 			plist = get_next(phead);
 
-			while ((rtw_end_of_queue_search(phead, plist)) == _FALSE)
+			while ((rtw_end_of_queue_search(phead, plist)) == false)
 			{
 				psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 
@@ -1454,7 +1454,7 @@ static VOID PWDB_Monitor(
 
 		_exit_critical_bh(&pstapriv->sta_hash_lock, &irqL);
 
-		if(pHalData->fw_ractrl == _TRUE)
+		if(pHalData->fw_ractrl == true)
 		{
 			// Report every sta's RSSI to FW
 			for(i=0; i< sta_cnt; i++)
@@ -1483,11 +1483,11 @@ static VOID PWDB_Monitor(
 		pdmpriv->EntryMinUndecoratedSmoothedPWDB = 0;
 	}
 
-	if(check_fwstate(&Adapter->mlmepriv, WIFI_STATION_STATE) == _TRUE
-		&& check_fwstate(&Adapter->mlmepriv, _FW_LINKED) == _TRUE)
+	if(check_fwstate(&Adapter->mlmepriv, WIFI_STATION_STATE) == true
+		&& check_fwstate(&Adapter->mlmepriv, _FW_LINKED) == true)
 	{
 		// Indicate Rx signal strength to FW.
-		if(pHalData->fw_ractrl == _TRUE)
+		if(pHalData->fw_ractrl == true)
 		{
 			u32	temp = 0;
 			//DBG_8192C("RxSS: %lx =%ld\n", pdmpriv->UndecoratedSmoothedPWDB, pdmpriv->UndecoratedSmoothedPWDB);
@@ -1521,8 +1521,8 @@ DM_InitEdcaTurbo(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
-	pHalData->bCurrentTurboEDCA = _FALSE;
-	Adapter->recvpriv.bIsAnyNonBEPkts = _FALSE;
+	pHalData->bCurrentTurboEDCA = false;
+	Adapter->recvpriv.bIsAnyNonBEPkts = false;
 }	// DM_InitEdcaTurbo
 
 static void
@@ -1535,7 +1535,7 @@ dm_CheckEdcaTurbo(
 	u64	cur_tx_bytes = 0;
 	u64	cur_rx_bytes = 0;
 	u32	EDCA_BE[2] = {0x5ea42b, 0x5ea42b};
-	u8	bbtchange = _FALSE;
+	u8	bbtchange = false;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv		*pdmpriv = &pHalData->dmpriv;
 	struct xmit_priv		*pxmitpriv = &(Adapter->xmitpriv);
@@ -1629,7 +1629,7 @@ dm_CheckEdcaTurbo(
 			pdmpriv->prv_traffic_idx = trafficIndex;
 		}
 
-		pHalData->bCurrentTurboEDCA = _TRUE;
+		pHalData->bCurrentTurboEDCA = true;
 	}
 	else
 	{
@@ -1640,13 +1640,13 @@ dm_CheckEdcaTurbo(
 		 if(pHalData->bCurrentTurboEDCA)
 		{
 			rtw_write32(Adapter, REG_EDCA_BE_PARAM, pHalData->AcParam_BE);
-			pHalData->bCurrentTurboEDCA = _FALSE;
+			pHalData->bCurrentTurboEDCA = false;
 		}
 	}
 
 dm_CheckEdcaTurbo_EXIT:
 	// Set variables for next time.
-	precvpriv->bIsAnyNonBEPkts = _FALSE;
+	precvpriv->bIsAnyNonBEPkts = false;
 	pxmitpriv->last_tx_bytes = pxmitpriv->tx_bytes;
 	precvpriv->last_rx_bytes = precvpriv->rx_bytes;
 
@@ -1676,7 +1676,7 @@ IN	PADAPTER	pAdapter
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	//s32			Rssi_val_min_back_for_mac0;
 	//bool		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
-	//bool		bRestoreRssi = _FALSE;
+	//bool		bRestoreRssi = false;
 	//PADAPTER	BuddyAdapter = pAdapter->pbuddy_adapter;
 #endif
 
@@ -1731,7 +1731,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 	s8			OFDM_index[2], CCK_index=0, OFDM_index_old[2], CCK_index_old=0;
 	s32			i = 0;
 	bool		is2T = IS_92D_SINGLEPHY(pHalData->VersionID);
-	bool		bInteralPA = _FALSE;
+	bool		bInteralPA = false;
 
 	u8			OFDM_min_index = 6, OFDM_min_index_internalPA = 12, rf; //OFDM BB Swing should be less than +3.0dB, which is required by Arthur
 	u8			Indexforchannel = rtl8192d_GetRightChnlPlaceforIQK(pHalData->CurrentChannel);
@@ -1772,12 +1772,12 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 //#endif
 
 	pdmpriv->TXPowerTrackingCallbackCnt++;	//cosa add for debug
-	pdmpriv->bTXPowerTrackingInit = _TRUE;
+	pdmpriv->bTXPowerTrackingInit = true;
 
 	if(pHalData->CurrentChannel == 14 && !pdmpriv->bCCKinCH14)
-		pdmpriv->bCCKinCH14 = _TRUE;
+		pdmpriv->bCCKinCH14 = true;
 	else if(pHalData->CurrentChannel != 14 && pdmpriv->bCCKinCH14)
-		pdmpriv->bCCKinCH14 = _FALSE;
+		pdmpriv->bCCKinCH14 = false;
 
 	//RT_TRACE(COMP_POWER_TRACKING, DBG_LOUD,("===>dm_TXPowerTrackingCallback_ThermalMeter_92D interface %d txpowercontrol %d\n", pHalData->interfaceIndex, pdmpriv->TxPowerTrackControl));
 
@@ -1837,7 +1837,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 				{
 					if(pdmpriv->bCCKinCH14)
 					{
-						if(_rtw_memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch14[i][2], 4)==_TRUE)
+						if(_rtw_memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch14[i][2], 4)==true)
 						{
 							CCK_index_old =(u8)i;
 							//RT_TRACE(COMP_POWER_TRACKING, DBG_LOUD,("Initial reg0x%x = 0x%lx, CCK_index=0x%x, ch 14 %d\n",
@@ -1847,7 +1847,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 					}
 					else
 					{
-						if(_rtw_memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch1_Ch13[i][2], 4)==_TRUE)
+						if(_rtw_memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch1_Ch13[i][2], 4)==true)
 						{
 							CCK_index_old =(u8)i;
 							//RT_TRACE(COMP_POWER_TRACKING, DBG_LOUD,("Initial reg0x%x = 0x%lx, CCK_index=0x%x, ch14 %d\n",
@@ -1904,8 +1904,8 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 		if(pdmpriv->bReloadtxpowerindex)
 		{
 			delta = ThermalValue > pHalData->EEPROMThermalMeter?(ThermalValue - pHalData->EEPROMThermalMeter):(pHalData->EEPROMThermalMeter - ThermalValue);
-			pdmpriv->bReloadtxpowerindex = _FALSE;
-			pdmpriv->bDoneTxpower = _FALSE;
+			pdmpriv->bReloadtxpowerindex = false;
+			pdmpriv->bDoneTxpower = false;
 		}
 		else if(pdmpriv->bDoneTxpower)
 		{
@@ -2071,7 +2071,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 			//Config by SwingTable
 			if(pdmpriv->TxPowerTrackControl && !pHalData->bNOPG)
 			{
-				pdmpriv->bDoneTxpower = _TRUE;
+				pdmpriv->bDoneTxpower = true;
 
 				//Adujst OFDM Ant_A according to IQK result
 				ele_D = (OFDMSwingTable[(u8)OFDM_index[0]] & 0xFFC00000)>>22;
@@ -2195,7 +2195,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 		}
 
 		if(delta_RxGain > 0 && pHalData->CurrentBandType92D == BAND_ON_5G
-			&& ThermalValue <= pHalData->EEPROMThermalMeter && pHalData->bNOPG == _FALSE)
+			&& ThermalValue <= pHalData->EEPROMThermalMeter && pHalData->bNOPG == false)
 		{
 			pdmpriv->ThermalValue_RxGain = ThermalValue;
 			dm_RXGainTrackingCallback_ThermalMeter_92D(Adapter);
@@ -2225,11 +2225,11 @@ dm_InitializeTXPowerTracking_ThermalMeter(
 
 	//if(IS_HARDWARE_TYPE_8192C(pHalData))
 	{
-		pdmpriv->bTXPowerTracking = _TRUE;
+		pdmpriv->bTXPowerTracking = true;
 		pdmpriv->TXPowercount = 0;
-		pdmpriv->bTXPowerTrackingInit = _FALSE;
+		pdmpriv->bTXPowerTrackingInit = false;
 #if	(MP_DRIVER != 1)		//for mp driver, turn off txpwrtracking as default
-		pdmpriv->TxPowerTrackControl = _TRUE;
+		pdmpriv->TxPowerTrackControl = true;
 #endif
 	}
 	MSG_8192C("pdmpriv->TxPowerTrackControl = %d\n", pdmpriv->TxPowerTrackControl);
@@ -2359,7 +2359,7 @@ dm_CheckRfCtrlGPIO(
 static void	dm_CheckPbcGPIO(IN PADAPTER padapter)
 {
 	u8	tmp1byte;
-	u8	bPbcPressed = _FALSE;
+	u8	bPbcPressed = false;
 	int i=0;
 
 	if(!padapter->registrypriv.hw_wps_pbc)
@@ -2383,20 +2383,20 @@ static void	dm_CheckPbcGPIO(IN PADAPTER padapter)
 
 	if (tmp1byte == 0xff)
 	{
-		bPbcPressed = _FALSE;
+		bPbcPressed = false;
 		break ;
 	}
 
 	if (tmp1byte&HAL_8192C_HW_GPIO_WPS_BIT)
 	{
-		bPbcPressed = _TRUE;
+		bPbcPressed = true;
 
 		if(i<=3)
 			rtw_msleep_os(50);
 	}
-	}while(i<=3 && bPbcPressed == _TRUE);
+	}while(i<=3 && bPbcPressed == true);
 
-	if( _TRUE == bPbcPressed)
+	if( true == bPbcPressed)
 	{
 		// Here we only set bPbcPressed to true
 		// After trigger PBC, the variable will be set to false
@@ -2425,9 +2425,9 @@ dm_InitRateAdaptiveMask(
 	pRA->PreRATRState = DM_RATR_STA_INIT;
 
 	if (pdmpriv->DM_Type == DM_Type_ByDriver)
-		pdmpriv->bUseRAMask = _TRUE;
+		pdmpriv->bUseRAMask = true;
 	else
-		pdmpriv->bUseRAMask = _FALSE;
+		pdmpriv->bUseRAMask = false;
 }
 
 
@@ -2515,7 +2515,7 @@ rtl8192d_InitHalDm(
 	//pdmpriv->UndecoratedSmoothedCCK = (-1);
 
 	//.1 DIG INIT
-	pdmpriv->bDMInitialGainEnable = _TRUE;
+	pdmpriv->bDMInitialGainEnable = true;
 	pdmpriv->DMFlag |= DYNAMIC_FUNC_DIG;
 	dm_DIGInit(Adapter);
 
@@ -2563,12 +2563,12 @@ static void FindMinimumRSSI(PADAPTER Adapter)
 	pbuddy_dmpriv = &pbuddy_HalData->dmpriv;
 
 	//get min. [PWDB] when both interfaces are connected
-	if((check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE
+	if((check_fwstate(pmlmepriv, WIFI_AP_STATE) == true
 		&& Adapter->stapriv.asoc_sta_count > 2
 		&& check_buddy_fwstate(Adapter, _FW_LINKED)) ||
-		(check_buddy_fwstate(Adapter, WIFI_AP_STATE) == _TRUE
+		(check_buddy_fwstate(Adapter, WIFI_AP_STATE) == true
 		&& pbuddy_adapter->stapriv.asoc_sta_count > 2
-		&& check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) ||
+		&& check_fwstate(pmlmepriv, _FW_LINKED) == true) ||
 		(check_fwstate(pmlmepriv, WIFI_STATION_STATE)
 		&& check_fwstate(pmlmepriv, _FW_LINKED)
 		&& check_buddy_fwstate(Adapter,WIFI_STATION_STATE)
@@ -2578,7 +2578,7 @@ static void FindMinimumRSSI(PADAPTER Adapter)
 		if(pdmpriv->UndecoratedSmoothedPWDB > pbuddy_dmpriv->UndecoratedSmoothedPWDB)
 			pdmpriv->UndecoratedSmoothedPWDB = pbuddy_dmpriv->UndecoratedSmoothedPWDB;
 	}//secondary interface is connected
-	else if((check_buddy_fwstate(Adapter, WIFI_AP_STATE) == _TRUE
+	else if((check_buddy_fwstate(Adapter, WIFI_AP_STATE) == true
 		&& pbuddy_adapter->stapriv.asoc_sta_count > 2) ||
 		(check_buddy_fwstate(Adapter,WIFI_STATION_STATE)
 		&& check_buddy_fwstate(Adapter,_FW_LINKED)))
@@ -2587,7 +2587,7 @@ static void FindMinimumRSSI(PADAPTER Adapter)
 		pdmpriv->UndecoratedSmoothedPWDB = pbuddy_dmpriv->UndecoratedSmoothedPWDB;
 	}
 	//primary is connected
-	else if((check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE
+	else if((check_fwstate(pmlmepriv, WIFI_AP_STATE) == true
 		&& Adapter->stapriv.asoc_sta_count > 2) ||
 		(check_fwstate(pmlmepriv, WIFI_STATION_STATE)
 		&& check_fwstate(pmlmepriv, _FW_LINKED)))
@@ -2603,11 +2603,11 @@ static void FindMinimumRSSI(PADAPTER Adapter)
 	}
 
 	//primary interface is ap mode
-	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE && Adapter->stapriv.asoc_sta_count > 2)
+	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true && Adapter->stapriv.asoc_sta_count > 2)
 	{
 		pbuddy_dmpriv->EntryMinUndecoratedSmoothedPWDB = 0;
 	}//secondary interface is ap mode
-	else if(check_buddy_fwstate(Adapter, WIFI_AP_STATE) == _TRUE && pbuddy_adapter->stapriv.asoc_sta_count > 2)
+	else if(check_buddy_fwstate(Adapter, WIFI_AP_STATE) == true && pbuddy_adapter->stapriv.asoc_sta_count > 2)
 	{
 		pdmpriv->EntryMinUndecoratedSmoothedPWDB = pbuddy_dmpriv->EntryMinUndecoratedSmoothedPWDB;
 	}
@@ -2623,9 +2623,9 @@ rtl8192d_HalDmWatchDog(
 	IN	PADAPTER	Adapter
 	)
 {
-	bool		bFwCurrentInPSMode = _FALSE;
-	bool		bFwPSAwake = _TRUE;
-	u8 hw_init_completed = _FALSE;
+	bool		bFwCurrentInPSMode = false;
+	bool		bFwPSAwake = true;
+	u8 hw_init_completed = false;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 #ifdef CONFIG_CONCURRENT_MODE
@@ -2641,7 +2641,7 @@ rtl8192d_HalDmWatchDog(
 #endif
 
 	#if defined(CONFIG_CONCURRENT_MODE)
-	if (Adapter->isprimary == _FALSE && pbuddy_adapter) {
+	if (Adapter->isprimary == false && pbuddy_adapter) {
 		hw_init_completed = pbuddy_adapter->hw_init_completed;
 	} else
 	#endif
@@ -2649,7 +2649,7 @@ rtl8192d_HalDmWatchDog(
 		hw_init_completed = Adapter->hw_init_completed;
 	}
 
-	if (hw_init_completed == _FALSE)
+	if (hw_init_completed == false)
 		goto skip_dm;
 
 #ifdef CONFIG_LPS
@@ -2669,7 +2669,7 @@ rtl8192d_HalDmWatchDog(
 	// Fw is under p2p powersaving mode, driver should stop dynamic mechanism.
 	// modifed by thomas. 2011.06.11.
 	if(Adapter->wdinfo.p2p_ps_mode)
-		bFwPSAwake = _FALSE;
+		bFwPSAwake = false;
 #endif // CONFIG_P2P_PS
 
 	// Stop dynamic mechanism when:
@@ -2682,7 +2682,7 @@ rtl8192d_HalDmWatchDog(
 	// 4. RFChangeInProgress is TRUE. (Prevent from broken by IPS/HW/SW Rf off.)
 	// Noted by tynli. 2010.06.01.
 	//if(rfState == eRfOn)
-	if( (hw_init_completed == _TRUE)
+	if( (hw_init_completed == true)
 		&& ((!bFwCurrentInPSMode) && bFwPSAwake))
 	{
 		//
@@ -2738,7 +2738,7 @@ rtl8192d_HalDmWatchDog(
 		//
 		//TX power tracking will make 92de DMDP MAC0's throughput bad.
 #ifdef CONFIG_DUALMAC_CONCURRENT
-		if(!pHalData->bSlaveOfDMSP || Adapter->DualMacConcurrent == _FALSE)
+		if(!pHalData->bSlaveOfDMSP || Adapter->DualMacConcurrent == false)
 #endif
 			rtl8192d_dm_CheckTXPowerTracking(Adapter);
 
@@ -2766,7 +2766,7 @@ rtl8192d_HalDmWatchDog(
 _record_initrate:
 
 		// Read REG_INIDATA_RATE_SEL value for TXDESC.
-		if(check_fwstate(&Adapter->mlmepriv, WIFI_STATION_STATE) == _TRUE)
+		if(check_fwstate(&Adapter->mlmepriv, WIFI_STATION_STATE) == true)
 		{
 			pdmpriv->INIDATA_RATE[0] = rtw_read8(Adapter, REG_INIDATA_RATE_SEL) & 0x3f;
 

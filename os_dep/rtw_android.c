@@ -115,7 +115,7 @@ typedef struct android_wifi_priv_cmd {
  * time (only) in dhd_open, subsequential wifi on will be handled by
  * wl_android_wifi_on
  */
-static int g_wifi_on = _TRUE;
+static int g_wifi_on = true;
 
 
 #ifdef PNO_SUPPORT
@@ -243,7 +243,7 @@ static int rtw_android_get_rssi(struct net_device *net, char *command, int total
 	struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
 	int bytes_written = 0;
 
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) {
+	if(check_fwstate(pmlmepriv, _FW_LINKED) == true) {
 		bytes_written += snprintf(&command[bytes_written], total_len, "%s rssi %d",
 			pcur_network->network.Ssid.Ssid, padapter->recvpriv.rssi);
 	}
@@ -304,7 +304,7 @@ static int rtw_android_set_block(struct net_device *net, char *command, int tota
 	char *block_value = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_BLOCK]) + 1;
 
 	#ifdef CONFIG_IOCTL_CFG80211
-	wdev_to_priv(adapter->rtw_wdev)->block = (*block_value=='0')?_FALSE:_TRUE;
+	wdev_to_priv(adapter->rtw_wdev)->block = (*block_value=='0')?false:true;
 	#endif
 
 	return 0;
@@ -470,7 +470,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
 
 		pwfd_info = &padapter->wfd_info;
-		pwfd_info->wfd_enable = _TRUE;
+		pwfd_info->wfd_enable = true;
 		break;
 	}
 	case ANDROID_WIFI_CMD_WFD_DISABLE:
@@ -483,7 +483,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
 
 		pwfd_info = &padapter->wfd_info;
-		pwfd_info->wfd_enable = _FALSE;
+		pwfd_info->wfd_enable = false;
 		break;
 	}
 	case ANDROID_WIFI_CMD_WFD_SET_TCPPORT:

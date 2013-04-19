@@ -234,10 +234,10 @@ int rtw_IOL_exec_empty_cmds_sync(ADAPTER *adapter, u32 max_wating_ms)
 bool rtw_IOL_applied(ADAPTER *adapter)
 {
 	if(adapter->registrypriv.force_iol)
-		return _TRUE;
+		return true;
 	if(!adapter_to_dvobj(adapter)->ishighspeed)
-		return _TRUE;
-	return _FALSE;
+		return true;
+	return false;
 }
 
 #endif //CONFIG_IOL

@@ -38,12 +38,12 @@ CheckWriteH2C(
 )
 {
 	u8	valHMETFR;
-	bool	Result = _FALSE;
+	bool	Result = false;
 
 	valHMETFR = rtw_read8(Adapter, REG_HMETFR);
 
 	if(((valHMETFR>>BoxNum)&BIT0) == 1)
-		Result = _TRUE;
+		Result = true;
 
 	return Result;
 
@@ -56,14 +56,14 @@ CheckFwReadLastH2C(
 )
 {
 	u8	valHMETFR;
-	bool	 Result = _FALSE;
+	bool	 Result = false;
 
 	valHMETFR = rtw_read8(Adapter, REG_HMETFR);
 	//RT_TRACE(COMP_INIT,DBG_LOUD,("REG[%x] = %x\n",	REG_HMETFR, valHMETFR));
 
 	// Do not seperate to 91C and 88C, we use the same setting. Suggested by SD4 Filen. 2009.12.03.
 	if(((valHMETFR>>BoxNum)&BIT0) == 0)
-		Result = _TRUE;
+		Result = true;
 
 	return Result;
 }
@@ -94,8 +94,8 @@ static void _FillH2CCmd92D(_adapter* padapter, u8 ElementID, u32 CmdLen, u8* pCm
 	u8	BoxContent[4], BoxExtContent[2];
 	u8	BufIndex=0;
 	u8	U1btmp; //Read 0x1bf
-	u8	bWriteSucess = _FALSE;
-	u8	IsFwRead = _FALSE;
+	u8	bWriteSucess = false;
+	u8	IsFwRead = false;
 	u8	WaitH2cLimmit = 100;
 	u8	WaitWriteH2cLimmit = 100;
 	u8	idx=0;
@@ -253,7 +253,7 @@ _func_enter_;
 
 		// 5. Normal chip does not need to check if the H2C cmd has be written successfully.
 		// 92D test chip does not need to check,
-		bWriteSucess = _TRUE;
+		bWriteSucess = true;
 
 		// Record the next BoxNum
 		pHalData->LastHMEBoxNum = BoxNum+1;
@@ -281,7 +281,7 @@ FillH2CCmd92D(
 
 	//Adapter = ADJUST_TO_ADAPTIVE_ADAPTER(Adapter, TRUE);
 
-	if(Adapter->bFWReady == _FALSE)
+	if(Adapter->bFWReady == false)
 	{
 		DBG_8192C("FillH2CCmd92D(): return H2C cmd because of Fw download fail!!!\n");
 		return;
@@ -345,21 +345,21 @@ void rtl8192d_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg)
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 
-	if(pHalData->fw_ractrl == _TRUE)
+	if(pHalData->fw_ractrl == true)
 	{
 		rtl8192d_set_raid_cmd(pAdapter, bitmap, arg);
 	}
 	else
 	{
-		u8 macid, init_rate, shortGIrate=_FALSE;
+		u8 macid, init_rate, shortGIrate=false;
 
 		init_rate = get_highest_rate_idx(bitmap&0x0fffffff)&0x3f;
 
 		macid = arg&0x1f;
 
-		shortGIrate = (arg&BIT(5)) ? _TRUE:_FALSE;
+		shortGIrate = (arg&BIT(5)) ? true:false;
 
-		if (shortGIrate==_TRUE)
+		if (shortGIrate==true)
 			init_rate |= BIT(6);
 
 		rtw_write8(pAdapter, (REG_INIDATA_RATE_SEL+macid), (u8)init_rate);
@@ -696,7 +696,7 @@ void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished)
 	u16	BufIndex=0;
 	u32	TotalPacketLen;
 	u8	u1RsvdPageLoc[3]={0};
-	bool	bDLOK = _FALSE;
+	bool	bDLOK = false;
 
 	DBG_871X("%s\n", __FUNCTION__);
 
@@ -736,7 +736,7 @@ void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished)
 	//(2) ps-poll
 	ConstructPSPoll(Adapter, &ReservedPagePacket[BufIndex],&PSPollLength);
 
-	FillFakeTxDescriptor92D(Adapter, &ReservedPagePacket[BufIndex-TxDescLen], PSPollLength, _TRUE);
+	FillFakeTxDescriptor92D(Adapter, &ReservedPagePacket[BufIndex-TxDescLen], PSPollLength, true);
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_,
 		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: PS-POLL\n",
@@ -757,9 +757,9 @@ void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished)
 		&ReservedPagePacket[BufIndex],
 		&NullFunctionDataLength,
 		get_my_bssid(&(pmlmeinfo->network)),
-		_FALSE);
+		false);
 
-	FillFakeTxDescriptor92D(Adapter, &ReservedPagePacket[BufIndex-TxDescLen], NullFunctionDataLength, _FALSE);
+	FillFakeTxDescriptor92D(Adapter, &ReservedPagePacket[BufIndex-TxDescLen], NullFunctionDataLength, false);
 
 	SET_H2CCMD_RSVDPAGE_LOC_NULL_DATA(u1RsvdPageLoc, PageNum);
 
@@ -779,9 +779,9 @@ void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished)
 		&ReservedPagePacket[BufIndex],
 		&ProbeRspLength,
 		get_my_bssid(&(pmlmeinfo->network)),
-		_FALSE);
+		false);
 
-	FillFakeTxDescriptor92D(Adapter, &ReservedPagePacket[BufIndex-TxDescLen], ProbeRspLength, _FALSE);
+	FillFakeTxDescriptor92D(Adapter, &ReservedPagePacket[BufIndex-TxDescLen], ProbeRspLength, false);
 
 	SET_H2CCMD_RSVDPAGE_LOC_PROBE_RSP(u1RsvdPageLoc, PageNum);
 
@@ -811,7 +811,7 @@ void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished)
 
 	rtw_hal_mgnt_xmit(Adapter, pmgntframe);
 
-	bDLOK = _TRUE;
+	bDLOK = true;
 
 	if(bDLOK)
 	{
@@ -829,7 +829,7 @@ void rtl8192d_set_FwJoinBssReport_cmd(_adapter* padapter, u8 mstatus)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	bool	bRecover = _FALSE;
+	bool	bRecover = false;
 
 _func_enter_;
 
@@ -858,7 +858,7 @@ _func_enter_;
 
 		// Set FWHW_TXQ_CTRL 0x422[6]=0 to tell Hw the packet is not a real beacon frame.
 		if(pHalData->RegFwHwTxQCtrl&BIT6)
-			bRecover = _TRUE;
+			bRecover = true;
 		rtw_write8(padapter, REG_FWHW_TXQ_CTRL+2, (pHalData->RegFwHwTxQCtrl&(~BIT6)));
 		pHalData->RegFwHwTxQCtrl &= (~BIT6);
 		SetFwRsvdPagePkt(padapter, 0);
@@ -1044,7 +1044,7 @@ int reset_tsf(PADAPTER Adapter, u8 reset_port )
 		reset_cnt_after = rtw_read8(Adapter, reg_reset_tsf_cnt);
 	}
 
-	return(loop_cnt >= 10) ? _FAIL : _TRUE;
+	return(loop_cnt >= 10) ? _FAIL : true;
 }
 
 
@@ -1071,7 +1071,7 @@ _func_enter_;
 
 
 
-	if(pwrpriv->wowlan_mode ==_TRUE){
+	if(pwrpriv->wowlan_mode ==true){
 		//pause RX DMA
 		test = rtw_read8(padapter, REG_RXPKT_NUM+2);
 		test |= BIT(2);
@@ -1094,15 +1094,15 @@ _func_enter_;
 
 		pwowlan_parm.mode |=FW_WOWLAN_FUN_EN;
 		//printk("\n %s 1.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
-		if(pwrpriv->wowlan_pattern ==_TRUE){
+		if(pwrpriv->wowlan_pattern ==true){
 			pwowlan_parm.mode |= FW_WOWLAN_PATTERN_MATCH;
 		//printk("\n %s 2.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
 		}
-		if(pwrpriv->wowlan_magic ==_TRUE){
+		if(pwrpriv->wowlan_magic ==true){
 			//pwowlan_parm.mode |=FW_WOWLAN_MAGIC_PKT;
 		//printk("\n %s 3.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
 		}
-		if(pwrpriv->wowlan_unicast ==_TRUE){
+		if(pwrpriv->wowlan_unicast ==true){
 			pwowlan_parm.mode |=FW_WOWLAN_UNICAST;
 		//printk("\n %s 4.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
 		}

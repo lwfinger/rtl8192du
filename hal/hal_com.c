@@ -200,15 +200,15 @@ hal_com_get_channel_plan(
 	u8 swconfig;
 	u8 chnlplan;
 
-	swconfig = _TRUE;
+	swconfig = true;
 	if (!autoloadfail) {
 		if (!rtw_is_channel_plan_valid(sw_channel_plan))
-			swconfig = _FALSE;
+			swconfig = false;
 		if (hw_channel_plan & EEPROM_CHANNEL_PLAN_BY_HW_MASK)
-			swconfig = _FALSE;
+			swconfig = false;
 	}
 
-	if (swconfig == _TRUE)
+	if (swconfig == true)
 		chnlplan = sw_channel_plan;
 	else
 		chnlplan = hw_channel_plan & (~EEPROM_CHANNEL_PLAN_BY_HW_MASK);

@@ -178,19 +178,19 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
 	u32			TxAGC[2]={0, 0}, tmpval=0;
-	bool		TurboScanOff = _FALSE;
+	bool		TurboScanOff = false;
 	u8			idx1, idx2;
 	u8*			ptr;
 
 	if(pHalData->EEPROMRegulatory != 0)
-		TurboScanOff = _TRUE;
+		TurboScanOff = true;
 
 	if(pmlmeext->sitesurvey_res.state == SCAN_PROCESS)
 	{
 		TxAGC[RF_PATH_A] = 0x3f3f3f3f;
 		TxAGC[RF_PATH_B] = 0x3f3f3f3f;
 
-		TurboScanOff =  _TRUE;//disable Turbo scan
+		TurboScanOff =  true;//disable Turbo scan
 
 		if(TurboScanOff)
 		{
@@ -573,9 +573,9 @@ rtl8192d_PHY_EnableAnotherPHY(
 	)
 {
 	u8			u1bTmp;
-	u8			MAC_REG = bMac0==_TRUE?REG_MAC1:REG_MAC0;
-	u8			MAC_ON_BIT = bMac0==_TRUE?MAC1_ON:MAC0_ON;
-	bool		bResult = _TRUE;	//true: need to enable BB/RF power
+	u8			MAC_REG = bMac0==true?REG_MAC1:REG_MAC0;
+	u8			MAC_ON_BIT = bMac0==true?MAC1_ON:MAC0_ON;
+	bool		bResult = true;	//true: need to enable BB/RF power
 	u32			MaskForPHYSet = 0;
 
 	//MAC0 Need PHY1 load radio_b.txt . Driver use DBI to write.
@@ -592,7 +592,7 @@ rtl8192d_PHY_EnableAnotherPHY(
 		rtw_write16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet, rtw_read16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet)|BIT13|BIT0|BIT1);
 	} else {
 		// We think if MAC1 is ON,then radio_a.txt and radio_b.txt has been load.
-		bResult = _FALSE;
+		bResult = false;
 	}
 	return bResult;
 }
@@ -604,8 +604,8 @@ rtl8192d_PHY_PowerDownAnotherPHY(
 	)
 {
 	u8	u1bTmp;
-	u8	MAC_REG = bMac0==_TRUE?REG_MAC1:REG_MAC0;
-	u8	MAC_ON_BIT = bMac0==_TRUE?MAC1_ON:MAC0_ON;
+	u8	MAC_REG = bMac0==true?REG_MAC1:REG_MAC0;
+	u8	MAC_ON_BIT = bMac0==true?MAC1_ON:MAC0_ON;
 	u32	MaskforPhySet = 0;
 
 	// check MAC0 enable or not again now, if enabled, not power down radio A.
@@ -639,9 +639,9 @@ phy_RF6052_Config_ParaFile(
 	static s8		sz92DRadioBFile[] = RTL8192D_PHY_RADIO_B;
 	static s8		sz92DRadioAintPAFile[] = RTL8192D_PHY_RADIO_A_intPA;
 	static s8		sz92DRadioBintPAFile[] = RTL8192D_PHY_RADIO_B_intPA;
-	bool		bMac1NeedInitRadioAFirst = _FALSE,bMac0NeedInitRadioBFirst = _FALSE;
-	bool		bNeedPowerDownRadioA = _FALSE,bNeedPowerDownRadioB = _FALSE;
-	bool		bTrueBPath = _FALSE;//vivi added this for read parameter from header, 20100908
+	bool		bMac1NeedInitRadioAFirst = false,bMac0NeedInitRadioBFirst = false;
+	bool		bNeedPowerDownRadioA = false,bNeedPowerDownRadioB = false;
+	bool		bTrueBPath = false;//vivi added this for read parameter from header, 20100908
 	u32	MaskforPhySet = 0; //For 92d PHY cross access, 88c must set value 0.
 
 
@@ -659,10 +659,10 @@ phy_RF6052_Config_ParaFile(
 		if(pHalData->CurrentBandType92D == BAND_ON_2_4G && pHalData->interfaceIndex == 0)
 		{
 			//MAC0 Need PHY1 load radio_b.txt . Driver use DBI to write.
-			if(rtl8192d_PHY_EnableAnotherPHY(Adapter, _TRUE))
+			if(rtl8192d_PHY_EnableAnotherPHY(Adapter, true))
 			{
 				pHalData->NumTotalRFPath = 2;
-				bMac0NeedInitRadioBFirst = _TRUE;
+				bMac0NeedInitRadioBFirst = true;
 			}
 			else
 			{
@@ -673,10 +673,10 @@ phy_RF6052_Config_ParaFile(
 		else if(pHalData->CurrentBandType92D == BAND_ON_5G && pHalData->interfaceIndex == 1)
 		{
 			//MAC1 Need PHY0 load radio_a.txt . Driver use DBI to write.
-			if(rtl8192d_PHY_EnableAnotherPHY(Adapter, _FALSE))
+			if(rtl8192d_PHY_EnableAnotherPHY(Adapter, false))
 			{
 				pHalData->NumTotalRFPath = 2;
-				bMac1NeedInitRadioAFirst = _TRUE;
+				bMac1NeedInitRadioAFirst = true;
 			}
 			else
 			{
@@ -688,7 +688,7 @@ phy_RF6052_Config_ParaFile(
 		{
 			// MAC0 enabled, only init radia B.
 			pszRadioAFile = pszRadioBFile;
-			bTrueBPath = _TRUE;  //vivi added this for read parameter from header, 20100909
+			bTrueBPath = true;  //vivi added this for read parameter from header, 20100909
 		}
 	}
 
@@ -704,15 +704,15 @@ phy_RF6052_Config_ParaFile(
 		{
 			if (eRFPath == RF_PATH_A)
 			{
-				bNeedPowerDownRadioA = _TRUE;
+				bNeedPowerDownRadioA = true;
 				MaskforPhySet = MAC1_ACCESS_PHY0;
 			}
 			else if (eRFPath == RF_PATH_B)
 			{
 				MaskforPhySet = 0;
-				bMac1NeedInitRadioAFirst = _FALSE;
+				bMac1NeedInitRadioAFirst = false;
 				eRFPath = RF_PATH_A;
-				bTrueBPath = _TRUE;
+				bTrueBPath = true;
 				pszRadioAFile = pszRadioBFile;
 				pHalData->NumTotalRFPath = 1;
 			}
@@ -727,10 +727,10 @@ phy_RF6052_Config_ParaFile(
 			if (eRFPath == RF_PATH_B)
 			{
 				MaskforPhySet = MAC0_ACCESS_PHY1;
-				bMac0NeedInitRadioBFirst = _FALSE;
-				bNeedPowerDownRadioB = _TRUE;
+				bMac0NeedInitRadioBFirst = false;
+				bNeedPowerDownRadioB = true;
 				eRFPath = RF_PATH_A;
-				bTrueBPath = _TRUE;
+				bTrueBPath = true;
 				pszRadioAFile = pszRadioBFile;
 				pHalData->NumTotalRFPath = 1;
 			}
@@ -772,7 +772,7 @@ phy_RF6052_Config_ParaFile(
 			case RF_PATH_A:
 #ifdef CONFIG_EMBEDDED_FWIMG
 				//vivi added this for read parameter from header, 20100908
-				if(bTrueBPath == _TRUE)
+				if(bTrueBPath == true)
 					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radiob_txt|MaskforPhySet, (RF_RADIO_PATH_E)eRFPath);
 				else
 					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radioa_txt|MaskforPhySet, (RF_RADIO_PATH_E)eRFPath);
@@ -816,12 +816,12 @@ phy_RF6052_Config_ParaFile(
 	if (bNeedPowerDownRadioA)
 	{
 		// check MAC0 enable or not again now, if enabled, not power down radio A.
-		rtl8192d_PHY_PowerDownAnotherPHY(Adapter, _FALSE);
+		rtl8192d_PHY_PowerDownAnotherPHY(Adapter, false);
 	}
 	else  if (bNeedPowerDownRadioB)
 	{
 		// check MAC1 enable or not again now, if enabled, not power down radio B.
-		rtl8192d_PHY_PowerDownAnotherPHY(Adapter, _TRUE);
+		rtl8192d_PHY_PowerDownAnotherPHY(Adapter, true);
 	}
 
 	for(eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
@@ -921,7 +921,7 @@ PHY_RFShadowWrite(
 	u32				Data)
 {
 	RF_Shadow[eRFPath][Offset].Value = (Data & bRFRegOffsetMask);
-	RF_Shadow[eRFPath][Offset].Driver_Write = _TRUE;
+	RF_Shadow[eRFPath][Offset].Driver_Write = true;
 
 }	/* PHY_RFShadowWrite */
 
@@ -938,21 +938,21 @@ PHY_RFShadowCompare(
 {
 	u32	reg;
 	// Check if we need to check the register
-	if (RF_Shadow[eRFPath][Offset].Compare == _TRUE)
+	if (RF_Shadow[eRFPath][Offset].Compare == true)
 	{
 		reg = PHY_QueryRFReg(Adapter, eRFPath, Offset, bRFRegOffsetMask);
 		// Compare shadow and real rf register for 20bits!!
 		if (RF_Shadow[eRFPath][Offset].Value != reg)
 		{
 			// Locate error position.
-			RF_Shadow[eRFPath][Offset].ErrorOrNot = _TRUE;
+			RF_Shadow[eRFPath][Offset].ErrorOrNot = true;
 			//RT_TRACE(COMP_INIT, DBG_LOUD,
 			//("PHY_RFShadowCompare RF-%d Addr%02lx Err = %05lx\n",
 			//eRFPath, Offset, reg));
 		}
 		return RF_Shadow[eRFPath][Offset].ErrorOrNot ;
 	}
-	return _FALSE;
+	return false;
 }	/* PHY_RFShadowCompare */
 VOID
 PHY_RFShadowRecorver(
@@ -966,10 +966,10 @@ PHY_RFShadowRecorver(
 	u32				Offset)
 {
 	// Check if the address is error
-	if (RF_Shadow[eRFPath][Offset].ErrorOrNot == _TRUE)
+	if (RF_Shadow[eRFPath][Offset].ErrorOrNot == true)
 	{
 		// Check if we need to recorver the register.
-		if (RF_Shadow[eRFPath][Offset].Recorver == _TRUE)
+		if (RF_Shadow[eRFPath][Offset].Recorver == true)
 		{
 			PHY_SetRFReg(Adapter, eRFPath, Offset, bRFRegOffsetMask,
 							RF_Shadow[eRFPath][Offset].Value);
@@ -1068,9 +1068,9 @@ PHY_RFShadowCompareFlagSetAll(
 		{
 			// 2008/11/20 MH For S3S4 test, we only check reg 26/27 now!!!!
 			if (Offset != 0x26 && Offset != 0x27)
-				PHY_RFShadowCompareFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, _FALSE);
+				PHY_RFShadowCompareFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, false);
 			else
-				PHY_RFShadowCompareFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, _TRUE);
+				PHY_RFShadowCompareFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, true);
 		}
 	}
 
@@ -1091,9 +1091,9 @@ PHY_RFShadowRecorverFlagSetAll(
 		{
 			// 2008/11/20 MH For S3S4 test, we only check reg 26/27 now!!!!
 			if (Offset != 0x26 && Offset != 0x27)
-				PHY_RFShadowRecorverFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, _FALSE);
+				PHY_RFShadowRecorverFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, false);
 			else
-				PHY_RFShadowRecorverFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, _TRUE);
+				PHY_RFShadowRecorverFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, true);
 		}
 	}
 
@@ -1113,10 +1113,10 @@ PHY_RFShadowRefresh(
 		for (Offset = 0; Offset <= RF6052_MAX_REG; Offset++)
 		{
 			RF_Shadow[eRFPath][Offset].Value = 0;
-			RF_Shadow[eRFPath][Offset].Compare = _FALSE;
-			RF_Shadow[eRFPath][Offset].Recorver  = _FALSE;
-			RF_Shadow[eRFPath][Offset].ErrorOrNot = _FALSE;
-			RF_Shadow[eRFPath][Offset].Driver_Write = _FALSE;
+			RF_Shadow[eRFPath][Offset].Compare = false;
+			RF_Shadow[eRFPath][Offset].Recorver  = false;
+			RF_Shadow[eRFPath][Offset].ErrorOrNot = false;
+			RF_Shadow[eRFPath][Offset].Driver_Write = false;
 		}
 	}
 

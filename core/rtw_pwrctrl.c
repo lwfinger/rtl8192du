@@ -31,11 +31,6 @@ void ips_enter(_adapter * padapter)
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 
-#ifdef CONFIG_INTEL_PROXIM
-	if(padapter->proximity.proxim_on==true){
-		return;
-	}
-#endif
 	_enter_pwrlock(&pwrpriv->lock);
 
 	pwrpriv->bips_processing = true;
@@ -576,23 +571,17 @@ _func_enter_;
 	}
 #endif
 
-#ifdef CONFIG_INTEL_PROXIM
-	if(padapter->proximity.proxim_on==true){
-		return;
-	}
-#endif
-	if (	(check_fwstate(pmlmepriv, _FW_LINKED) == false) ||
-		(check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == true) ||
-		(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) ||
-		(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true) ||
-		(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true) )
+	if ((check_fwstate(pmlmepriv, _FW_LINKED) == false) ||
+	    (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == true) ||
+	    (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) ||
+	    (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true) ||
+	    (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true) )
 		return;
 
-	if(true == pwrpriv->bInSuspend )
+	if (true == pwrpriv->bInSuspend)
 		return ;
 
-	if (pwrpriv->bLeisurePs)
-	{
+	if (pwrpriv->bLeisurePs) {
 		// Idle for a while if we connect to AP a while ago.
 		if(pwrpriv->LpsIdleCount >= 2) //  4 Sec
 		{

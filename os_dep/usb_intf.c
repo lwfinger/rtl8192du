@@ -1470,11 +1470,3 @@ EXPORT_SYMBOL(rtw_suspend_toshiba);
 EXPORT_SYMBOL(rtw_resume_toshiba);
 #endif //CONFIG_WOWLAN_MANUAL
 #endif //CONFIG_WOWLAN
-
-#ifdef CONFIG_INTEL_PROXIM
-_adapter  *rtw_usb_get_sw_pointer(void)
-{
-	return rtw_sw_export;
-}
-EXPORT_SYMBOL(rtw_usb_get_sw_pointer);
-#endif	//CONFIG_INTEL_PROXIM

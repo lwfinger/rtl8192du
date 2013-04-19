@@ -36,6 +36,7 @@ enum {
 	UP_LINK,
 	DOWN_LINK,
 };
+
 typedef struct _ADAPTER _adapter, ADAPTER,*PADAPTER;
 
 #ifdef CONFIG_80211N_HT
@@ -90,14 +91,11 @@ typedef struct _ADAPTER _adapter, ADAPTER,*PADAPTER;
 struct specific_device_id{
 
 	u32		flags;
-
 	u16		idVendor;
 	u16		idProduct;
-
 };
 
-struct registry_priv
-{
+struct registry_priv {
 	u8	chip_version;
 	u8	rfintfs;
 	u8	lbkmode;
@@ -112,7 +110,7 @@ struct registry_priv
 	u8	vrtl_carrier_sense;//Enable, Disable, Auto
 	u8	vcs_type;//RTS/CTS, CTS-to-self
 	u16	rts_thresh;
-	u16  frag_thresh;
+	u16	frag_thresh;
 	u8	adhoc_tx_pwr;
 	u8	soft_ap;
 	u8	power_mgnt;
@@ -220,8 +218,7 @@ enum _IFACE_ID {
 	IFACE_ID_MAX,
 };
 
-struct dvobj_priv
-{
+struct dvobj_priv {
 	_adapter *if1; //PRIMARY_ADAPTER
 	_adapter *if2; //SECONDARY_ADAPTER
 
@@ -237,8 +234,6 @@ struct dvobj_priv
 
 #ifdef CONFIG_CONCURRENT_MODE
 	//extend to support mulitu interface
-	//padapters[IFACE_ID0] == if1
-	//padapters[IFACE_ID1] == if2
 	_adapter *padapters[IFACE_ID_MAX];
 	u8 iface_nums; // total number of ifaces used runtime
 #endif //CONFIG_CONCURRENT_MODE
@@ -285,8 +280,6 @@ struct dvobj_priv
 static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 {
 	/* todo: get interface type from dvobj and the return the dev accordingly */
-#ifdef RTW_DVOBJ_CHIP_HW_TYPE
-#endif
 	return &dvobj->pusbintf->dev;
 }
 
@@ -302,42 +295,13 @@ enum _ADAPTER_TYPE {
 	MAX_ADAPTER = 0xFF,
 };
 
-typedef enum _DRIVER_STATE{
+enum DRIVER_STATE {
 	DRIVER_NORMAL = 0,
 	DRIVER_DISAPPEAR = 1,
 	DRIVER_REPLACE_DONGLE = 2,
-}DRIVER_STATE;
-
-#ifdef CONFIG_INTEL_PROXIM
-struct proxim {
-	bool proxim_support;
-	bool proxim_on;
-
-	void *proximity_priv;
-	int (*proxim_rx)(_adapter *padapter,
-		union recv_frame *precv_frame);
-	u8	(*proxim_get_var)(_adapter* padapter, u8 type);
 };
-#endif	//CONFIG_INTEL_PROXIM
 
-#ifdef RTL8723A_SDIO_LOOPBACK
-typedef struct loopbackdata
-{
-	_sema	sema;
-	_thread_hdl_ lbkthread;
-	u8 bstop;
-	u32 cnt;
-	u16 size;
-	u16 txsize;
-	u8 txbuf[0x8000];
-	u16 rxsize;
-	u8 rxbuf[0x8000];
-	u8 msg[100];
-
-}LOOPBACKDATA, *PLOOPBACKDATA;
-#endif
-
-struct _ADAPTER{
+struct _ADAPTER {
 	int	DriverState;// for disable driver using module, use dongle to replace module.
 	int	pid[3];//process id from UI, 0:wps, 1:hostapd, 2:dhcpcd
 	int	bDongle;//build-in module or external dongle
@@ -350,7 +314,6 @@ struct _ADAPTER{
 	struct	mlme_ext_priv mlmeextpriv;
 	struct	cmd_priv	cmdpriv;
 	struct	evt_priv	evtpriv;
-	//struct	io_queue	*pio_queue;
 	struct	io_priv	iopriv;
 	struct	xmit_priv	xmitpriv;
 	struct	recv_priv	recvpriv;
@@ -395,9 +358,6 @@ struct _ADAPTER{
 	u32 hal_data_sz;
 	struct hal_ops	HalFunc;
 
-#ifdef CONFIG_BT_COEXIST
-	//struct	btcoexist_priv	bt_coexist;
-#endif
 	s32	bDriverStopped;
 	s32	bSurpriseRemoved;
 	s32  bCardDisableWOHSM;
@@ -488,7 +448,6 @@ struct _ADAPTER{
 
 #ifdef CONFIG_BR_EXT
 	_lock					br_ext_lock;
-	//unsigned int			macclone_completed;
 	struct nat25_network_db_entry	*nethash[NAT25_HASH_SIZE];
 	int				pppoe_connection_in_progress;
 	unsigned char			pppoe_addr[MACADDRLEN];
@@ -500,18 +459,6 @@ struct _ADAPTER{
 
 	struct br_ext_info		ethBrExtInfo;
 #endif	// CONFIG_BR_EXT
-
-#ifdef CONFIG_INTEL_PROXIM
-	/* intel Proximity, should be alloc mem
-	 * in intel Proximity module and can only
-	 * be used in intel Proximity mode */
-	struct proxim proximity;
-#endif	//CONFIG_INTEL_PROXIM
-
-#ifdef RTL8723A_SDIO_LOOPBACK
-	PLOOPBACKDATA ploopback;
-#endif
-
 };
 
 #define adapter_to_dvobj(adapter) (adapter->dvobj)
@@ -522,6 +469,5 @@ __inline static u8 *myid(struct eeprom_priv *peepriv)
 {
 	return (peepriv->mac_addr);
 }
-
 
 #endif //__DRV_TYPES_H__

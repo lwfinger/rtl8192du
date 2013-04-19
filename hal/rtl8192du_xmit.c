@@ -411,43 +411,27 @@ if (padapter->registrypriv.mp_mode == 0)
 
 		//offset 20
 #ifdef CONFIG_AP_MODE
-		if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
-		{
+		if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 			ptxdesc->txdw5 |= cpu_to_le32(BIT(17));//retry limit enable
 #ifdef CONFIG_P2P
-			if(!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-			{
+			if(!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)) {
 				ptxdesc->txdw5 |= cpu_to_le32(0x00080000);//retry limit = 2
-			}
-			else
+			} else
 #endif //CONFIG_P2P
 				ptxdesc->txdw5 |= cpu_to_le32(0x00180000);//retry limit = 6
 		}
 #endif
 
-#ifdef CONFIG_INTEL_PROXIM
-		if((padapter->proximity.proxim_on==true)&&(pattrib->intel_proxim==true)){
-			printk("\n %s pattrib->rate=%d\n",__FUNCTION__,pattrib->rate);
-			ptxdesc->txdw5 |= cpu_to_le32( pattrib->rate);
-		}
-		else
-#endif
-		{
-			ptxdesc->txdw5 |= cpu_to_le32(ratetohwrate(pmlmeext->tx_rate));
-		}
-	}
-	else if((pxmitframe->frame_tag&0x0f) == TXAGG_FRAMETAG)
-	{
+		ptxdesc->txdw5 |= cpu_to_le32(ratetohwrate(pmlmeext->tx_rate));
+	} else if((pxmitframe->frame_tag&0x0f) == TXAGG_FRAMETAG) {
 		DBG_8192C("pxmitframe->frame_tag == TXAGG_FRAMETAG\n");
 	}
 #ifdef CONFIG_MP_INCLUDED
-	else if((pxmitframe->frame_tag&0x0f) == MP_FRAMETAG)
-	{
+	else if((pxmitframe->frame_tag&0x0f) == MP_FRAMETAG) {
 		fill_txdesc_for_mp(padapter, ptxdesc);
 	}
 #endif
-	else
-	{
+	else {
 		DBG_8192C("pxmitframe->frame_tag = %d\n", pxmitframe->frame_tag);
 
 		//offset 4

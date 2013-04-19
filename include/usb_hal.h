@@ -24,13 +24,11 @@
 void rtl8192cu_set_hal_ops(_adapter * padapter);
 
 void rtl8192du_set_hal_ops(_adapter * padapter);
-#ifdef CONFIG_INTEL_PROXIM
-extern _adapter  *rtw_usb_get_sw_pointer(void);
-#endif	//CONFIG_INTEL_PROXIM
 #ifdef CONFIG_WOWLAN
 #ifdef CONFIG_WOWLAN_MANUAL
 extern int rtw_suspend_toshiba(PADAPTER Adapter);
 extern int rtw_resume_toshiba(PADAPTER Adapter);
 #endif // CONFIG_WOWLAN_MANUAL
 #endif //CONFIG_WOWLAN
+
 #endif //__USB_HAL_H__

@@ -61,7 +61,7 @@ extern bool GlobalFirstConfigurationForNormalChip;
 // bult out: 5 (Low) for 3 out_ep
 
 
-static VOID
+static void
 _OneOutEpMapping(
 	HAL_DATA_TYPE	*pHalData
 	)
@@ -80,7 +80,7 @@ _OneOutEpMapping(
 }
 
 
-static VOID
+static void
 _TwoOutEpMapping(
 	HAL_DATA_TYPE	*pHalData,
 	bool			bWIFICfg
@@ -126,7 +126,7 @@ _TwoOutEpMapping(
 }
 
 
-static VOID _ThreeOutEpMapping(
+static void _ThreeOutEpMapping(
 	HAL_DATA_TYPE	*pHalData,
 	bool			bWIFICfg
 	)
@@ -201,7 +201,7 @@ _MappingOutEP(
 
 }
 
-static VOID
+static void
 _ConfigChipOutEP(
 	PADAPTER	pAdapter,
 	u8		NumOutPipe
@@ -782,7 +782,7 @@ static u8 InitLLTTable(
 //	MAC init functions
 //
 //---------------------------------------------------------------
-static VOID
+static void
 _SetMacID(
 	IN  PADAPTER Adapter, u8* MacID
 	)
@@ -798,7 +798,7 @@ _SetMacID(
 	}
 }
 
-static VOID
+static void
 _SetBSSID(
 	IN  PADAPTER Adapter, u8* BSSID
 	)
@@ -815,7 +815,7 @@ _SetBSSID(
 }
 
 // Shall USB interface init this?
-static VOID
+static void
 _InitInterrupt(
 	IN  PADAPTER Adapter
 	)
@@ -831,7 +831,7 @@ _InitInterrupt(
 }
 
 
-static VOID
+static void
 _InitQueueReservedPage(
 	IN  PADAPTER Adapter
 	)
@@ -920,7 +920,7 @@ _InitQueueReservedPage(
 	rtw_write32(Adapter, REG_RQPN, value32);
 }
 
-static VOID
+static void
 _InitTxBufferBoundary(
 	IN  PADAPTER Adapter
 	)
@@ -949,7 +949,7 @@ _InitTxBufferBoundary(
 }
 
 
-static VOID
+static void
 _InitNormalChipRegPriority(
 	PADAPTER	Adapter,
 	u16		beQ,
@@ -969,7 +969,7 @@ _InitNormalChipRegPriority(
 	rtw_write16(Adapter, REG_TRXDMA_CTRL, value16);
 }
 
-static VOID
+static void
 _InitNormalChipOneOutEpPriority(
 	PADAPTER Adapter
 	)
@@ -1004,7 +1004,7 @@ _InitNormalChipOneOutEpPriority(
 
 }
 
-static VOID
+static void
 _InitNormalChipTwoOutEpPriority(
 	PADAPTER Adapter
 	)
@@ -1057,7 +1057,7 @@ _InitNormalChipTwoOutEpPriority(
 
 }
 
-static VOID
+static void
 _InitNormalChipThreeOutEpPriority(
 	PADAPTER Adapter
 	)
@@ -1084,7 +1084,7 @@ _InitNormalChipThreeOutEpPriority(
 	_InitNormalChipRegPriority(Adapter,beQ,bkQ,viQ,voQ,mgtQ,hiQ);
 }
 
-static VOID
+static void
 _InitQueuePriority(
 	IN  PADAPTER Adapter
 	)
@@ -1108,7 +1108,7 @@ _InitQueuePriority(
 	}
 }
 #if ENABLE_USB_DROP_INCORRECT_OUT //amy,temp remove
-static VOID
+static void
 _InitHardwareDropIncorrectBulkOut(
 	IN  PADAPTER Adapter
 	)
@@ -1118,7 +1118,7 @@ _InitHardwareDropIncorrectBulkOut(
 	rtw_write32(Adapter, REG_TXDMA_OFFSET_CHK, value32);
 }
 #endif //ENABLE_USB_DROP_INCORRECT_OUT, amy,temp remove
-static VOID
+static void
 _InitNetworkType(
 	IN  PADAPTER Adapter
 	)
@@ -1137,7 +1137,7 @@ _InitNetworkType(
 //	RASSERT(pIoBase->rtw_read8(REG_CR + 2) == 0x2);
 }
 
-static VOID
+static void
 _InitTransferPageSize(
 	IN  PADAPTER Adapter
 	)
@@ -1149,7 +1149,7 @@ _InitTransferPageSize(
 	rtw_write8(Adapter, REG_PBP, value8);
 }
 
-static VOID
+static void
 _InitDriverInfoSize(
 	IN  PADAPTER	Adapter,
 	u8		drvInfoSize
@@ -1158,7 +1158,7 @@ _InitDriverInfoSize(
 	rtw_write8(Adapter,REG_RX_DRVINFO_SZ, drvInfoSize);
 }
 
-static VOID
+static void
 _InitWMACSetting(
 	IN  PADAPTER Adapter
 	)
@@ -1196,7 +1196,7 @@ _InitWMACSetting(
 	//rtw_write16(Adapter,REG_RXFLTMAP1,0x0);
 }
 
-static VOID
+static void
 _InitAdaptiveCtrl(
 	IN  PADAPTER Adapter
 	)
@@ -1231,7 +1231,7 @@ _InitAdaptiveCtrl(
 
 }
 
-static VOID
+static void
 _InitRateFallback(
 	IN  PADAPTER Adapter
 	)
@@ -1244,7 +1244,7 @@ _InitRateFallback(
 }
 
 
-static VOID
+static void
 _InitEDCA(
 	IN  PADAPTER Adapter
 	)
@@ -1301,7 +1301,7 @@ _InitEDCA(
 }
 
 
-static VOID
+static void
 _InitAMPDUAggregation(
 	IN  PADAPTER Adapter
 	)
@@ -1320,7 +1320,7 @@ _InitAMPDUAggregation(
 	rtw_write8(Adapter, REG_AGGR_BREAK_TIME, 0x16);
 }
 
-static VOID
+static void
 _InitBeaconMaxError(
 	IN  PADAPTER	Adapter,
 	bool		InfraMode
@@ -1333,7 +1333,7 @@ _InitBeaconMaxError(
 #endif
 }
 
-static VOID
+static void
 _InitRDGSetting(
 	PADAPTER Adapter
 	)
@@ -1343,7 +1343,7 @@ _InitRDGSetting(
 	rtw_write8(Adapter,REG_RD_RESP_PKT_TH,0x05);
 }
 
-static VOID
+static void
 _InitRetryFunction(
 	IN  PADAPTER Adapter
 	)
@@ -1359,7 +1359,7 @@ _InitRetryFunction(
 }
 
 
-static VOID
+static void
 _InitUsbAggregationSetting(
 	IN  PADAPTER Adapter
 	)
@@ -1475,7 +1475,7 @@ _InitUsbAggregationSetting(
 }
 
 
-static VOID
+static void
 _InitOperationMode(
 	PADAPTER			Adapter
 	)
@@ -1565,7 +1565,7 @@ _InitOperationMode(
 }
 
 
-static VOID
+static void
 _InitSecuritySetting(
 	IN  PADAPTER Adapter
 	)
@@ -1573,7 +1573,7 @@ _InitSecuritySetting(
 	invalidate_cam_all(Adapter);
 }
 
- static VOID
+ static void
 _InitBeaconParameters(
 	IN  PADAPTER Adapter
 	)
@@ -1597,7 +1597,7 @@ _InitBeaconParameters(
 	rtw_write16(Adapter, REG_BCNTCFG, 0x660F);
 }
 
-static VOID
+static void
 _InitRFType(
 	PADAPTER Adapter
 	)
@@ -1622,7 +1622,7 @@ _InitRFType(
 }
 
 #if RTL8192CU_ADHOC_WORKAROUND_SETTING
-static VOID _InitAdhocWorkaroundParams(IN PADAPTER Adapter)
+static void _InitAdhocWorkaroundParams(IN PADAPTER Adapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	pHalData->RegBcnCtrlVal = rtw_read8(Adapter, REG_BCN_CTRL);
@@ -1633,7 +1633,7 @@ static VOID _InitAdhocWorkaroundParams(IN PADAPTER Adapter)
 }
 #endif
 
-static VOID
+static void
 _BeaconFunctionEnable(
 	PADAPTER		Adapter,
 	bool			Enable,
@@ -1651,7 +1651,7 @@ _BeaconFunctionEnable(
 
 
 // Set CCK and OFDM Block "ON"
-static VOID _BBTurnOnBlock(
+static void _BBTurnOnBlock(
 	PADAPTER		Adapter
 	)
 {
@@ -1666,7 +1666,7 @@ static VOID _BBTurnOnBlock(
 		PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bCCKEn|bOFDMEn, 0x3);
 }
 
-static VOID _RfPowerSave(
+static void _RfPowerSave(
 	PADAPTER		Adapter
 	)
 {
@@ -2379,7 +2379,7 @@ _func_exit_;
 }
 
 
-static VOID
+static void
 _DisableGPIO(
 	PADAPTER	Adapter
 	)
@@ -2416,7 +2416,7 @@ n. LEDCFG 0x4C[15:0] = 0x8080
 	//RT_TRACE(COMP_INIT, DBG_LOUD, ("======> Disable GPIO and LED.\n"));
 
 } //end of _DisableGPIO()
-static VOID
+static void
 _ResetFWDownloadRegister(
 	IN PADAPTER			Adapter
 	)
@@ -2466,7 +2466,7 @@ _DisableRF_AFE(
 
 }
 
-static VOID
+static void
 _ResetBB(
 	IN PADAPTER			Adapter
 	)
@@ -2481,7 +2481,7 @@ _ResetBB(
 	//RT_TRACE(COMP_INIT, DBG_LOUD, ("Reset BB.\n"));
 }
 
-static VOID
+static void
 _ResetMCU(
 	IN PADAPTER			Adapter
 	)
@@ -2495,7 +2495,7 @@ _ResetMCU(
 	//RT_TRACE(COMP_INIT, DBG_LOUD, ("Reset MCU.\n"));
 }
 
-static VOID
+static void
 _DisableMAC_AFE_PLL(
 	IN PADAPTER			Adapter
 	)
@@ -2512,7 +2512,7 @@ _DisableMAC_AFE_PLL(
 	//RT_TRACE(COMP_INIT, DBG_LOUD, ("Disable MAC, AFE PLL.\n"));
 }
 
-static VOID
+static void
 _AutoPowerDownToHostOff(
 	PADAPTER		Adapter
 	)
@@ -2533,7 +2533,7 @@ _AutoPowerDownToHostOff(
 
 }
 
-static VOID
+static void
 _SetUsbSuspend(
 	IN PADAPTER			Adapter
 	)
@@ -2551,7 +2551,7 @@ _SetUsbSuspend(
 
 }
 
-static VOID
+static void
 _DisableRFAFEAndResetBB8192D(
 	IN PADAPTER			Adapter
 	)
@@ -2597,7 +2597,7 @@ e.	SYS_FUNC_EN 0x02[7:0] = 0x14		//reset BB state machine
 	//RT_TRACE(COMP_INIT, DBG_LOUD, ("======> RF off and reset BB.\n"));
 }
 
-static VOID
+static void
 _DisableRFAFEAndResetBB(
 	IN PADAPTER			Adapter
 	)
@@ -2605,7 +2605,7 @@ _DisableRFAFEAndResetBB(
 	_DisableRFAFEAndResetBB8192D(Adapter);
 }
 
-static VOID
+static void
 _ResetDigitalProcedure1(
 	PADAPTER			Adapter,
 	bool				bWithoutHWSM
@@ -2676,7 +2676,7 @@ _ResetDigitalProcedure1(
 
 }
 
-static VOID
+static void
 _ResetDigitalProcedure2(
 	PADAPTER			Adapter
 )
@@ -2694,7 +2694,7 @@ m.	SYS_ISO_CTRL 0x01[7:0] = 0x83			// isolated ELDR to PON
 	rtw_write8(Adapter, REG_SYS_ISO_CTRL+1, 0x82); //modify to 0x82 by Scott.
 }
 
-static VOID
+static void
 _DisableAnalog(
 	IN PADAPTER			Adapter,
 	IN bool			bWithoutHWSM
@@ -3141,7 +3141,7 @@ _ReadIDs(
 	MSG_8192C("EEPROMSubCustomerID: 0x%02x\n", pHalData->EEPROMSubCustomerID);
 }
 
-static VOID
+static void
 _ReadMACAddress(
 	PADAPTER	Adapter,
 	u8*		PROMContent,
@@ -3195,7 +3195,7 @@ _ReadMACAddress(
 }
 
 
-static VOID
+static void
 hal_ReadMacPhyModeFromPROM92DU(
 	PADAPTER	Adapter,
 	u8*		PROMContent
@@ -3238,7 +3238,7 @@ hal_ReadMacPhyModeFromPROM92DU(
 
 }
 
-static VOID
+static void
 hal_ReadMacPhyMode_92D(
 	PADAPTER	Adapter,
 	u8			*PROMContent,
@@ -3290,7 +3290,7 @@ hal_ReadMacPhyMode_92D(
 
 }
 
-static VOID
+static void
 _ReadBoardType(
 	PADAPTER	Adapter,
 	u8*		PROMContent,
@@ -3313,7 +3313,7 @@ _ReadBoardType(
 }
 
 
-static VOID
+static void
 _ReadLEDSetting(
 	PADAPTER	Adapter,
 	u8*		PROMContent,
@@ -3341,7 +3341,7 @@ _ReadLEDSetting(
 }
 
 #ifdef CONFIG_WOWLAN
-static VOID
+static void
 _ReadWOWLAN(
 	PADAPTER	Adapter,
 	u8*		PROMContent,
@@ -3442,7 +3442,7 @@ static void _ReadPROMContent(
 }
 
 
-static VOID
+static void
 _InitOtherVariable(
 	IN PADAPTER		Adapter
 	)
@@ -3468,7 +3468,7 @@ _InitOtherVariable(
 
 }
 
-static VOID
+static void
 _ReadRFType(
 	PADAPTER	Adapter
 	)
@@ -3525,7 +3525,7 @@ static void rtl8192du_trigger_gpio_0(_adapter *padapter)
 
 }
 
-static VOID
+static void
 StopTxBeacon(
 	PADAPTER	Adapter
 	)
@@ -3544,7 +3544,7 @@ StopTxBeacon(
 
 }
 
-static VOID
+static void
 ResumeTxBeacon(
 	PADAPTER	Adapter
 	)
@@ -3681,13 +3681,13 @@ SelectRTSInitialRate(
 // Description: Selcet the RTS init rate and set the rate to HW.
 // 2010.11.25. Created by tynli.
 //
-VOID
+void
 SetRTSRateWorkItemCallback(
-	IN PVOID			pContext
+	IN void *			pContext
 );
-VOID
+void
 SetRTSRateWorkItemCallback(
-	IN PVOID			pContext
+	IN void *			pContext
 )
 {
 	PADAPTER		Adapter =  (PADAPTER)pContext;
@@ -5398,13 +5398,13 @@ u8
 GetHalDefVar8192DUsb(
 	PADAPTER				Adapter,
 	HAL_DEF_VARIABLE		eVariable,
-	PVOID					pValue
+	void *					pValue
 	);
 u8
 GetHalDefVar8192DUsb(
 	PADAPTER				Adapter,
 	HAL_DEF_VARIABLE		eVariable,
-	PVOID					pValue
+	void *					pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -5441,13 +5441,13 @@ u8
 SetHalDefVar8192DUsb(
 	PADAPTER				Adapter,
 	HAL_DEF_VARIABLE		eVariable,
-	PVOID					pValue
+	void *pValue
 	);
 u8
 SetHalDefVar8192DUsb(
 	PADAPTER				Adapter,
 	HAL_DEF_VARIABLE		eVariable,
-	PVOID					pValue
+	void *pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

@@ -47,7 +47,7 @@ _IsFWDownloaded(
 	return ((rtw_read32(Adapter, REG_MCUFWDL) & MCUFWDL_RDY) ? true : false);
 }
 
-static VOID
+static void
 _FWDownloadEnable(
 	PADAPTER		Adapter,
 	bool			enable
@@ -104,7 +104,7 @@ _FWDownloadEnable(
 static int
 _BlockWrite_92d(
 		PADAPTER		Adapter,
-		PVOID			buffer,
+		void *			buffer,
 		u32				size
 	)
 {
@@ -175,7 +175,7 @@ static int
 _PageWrite(
 		PADAPTER		Adapter,
 		u32			page,
-		PVOID			buffer,
+		void *			buffer,
 		u32			size
 	)
 {
@@ -190,7 +190,7 @@ _PageWrite(
 static int
 _WriteFW(
 		PADAPTER		Adapter,
-		PVOID			buffer,
+		void *			buffer,
 		u32			size
 	)
 {
@@ -251,7 +251,7 @@ int _FWFreeToGo_92D(
 
 }
 
-VOID
+void
 rtl8192d_FirmwareSelfReset(
 	PADAPTER		Adapter
 )
@@ -607,7 +607,7 @@ Exit:
 }
 
 #ifdef CONFIG_WOWLAN
-VOID
+void
 InitializeFirmwareVars92D(
 	PADAPTER		Adapter
 )
@@ -635,7 +635,7 @@ InitializeFirmwareVars92D(
 //
 // 2011.04.12 by tynli.
 //
-VOID
+void
 SetFwRelatedForWoWLAN8192DU(
 	PADAPTER			padapter,
 	u8			bHostIsGoingtoSleep
@@ -707,7 +707,7 @@ static u8 Hal_GetChnlGroupfromArray(u8 chnl)
 	return group;
 }
 
-VOID
+void
 rtl8192d_ReadChipVersion(
 	IN PADAPTER			Adapter
 	)
@@ -744,7 +744,7 @@ rtl8192d_ReadChipVersion(
 //
 //-------------------------------------------------------------------------
 
-VOID
+void
 rtl8192d_EfuseParseChnlPlan(
 	PADAPTER	Adapter,
 	u8*			hwinfo,
@@ -768,7 +768,7 @@ rtl8192d_EfuseParseChnlPlan(
 //
 //-------------------------------------------------------------------------
 
-static VOID
+static void
 hal_ReadPowerValueFromPROM92D(
 	PADAPTER		Adapter,
 	PTxPowerInfo	pwrInfo,
@@ -904,7 +904,7 @@ hal_ReadPowerValueFromPROM92D(
 	}
 }
 
-VOID
+void
 rtl8192d_ReadTxPowerInfo(
 	PADAPTER		Adapter,
 	u8*			PROMContent,
@@ -1104,7 +1104,7 @@ rtl8192d_ReadTxPowerInfo(
 //
 //	Assumption:
 //
-VOID rtl8192d_ResetDualMacSwitchVariables(
+void rtl8192d_ResetDualMacSwitchVariables(
 		IN PADAPTER			Adapter
 )
 {
@@ -1203,7 +1203,7 @@ PHY_CheckPowerOffFor8192D(
 /************************************************************
 Function: Synchrosize for power off/on with dual mac
 *************************************************************/
-VOID
+void
 PHY_SetPowerOnFor8192D(
 	PADAPTER	Adapter
 )
@@ -1289,7 +1289,7 @@ enum{
 		LDOE25_SHIFT						= 28 ,
 	};
 
-static VOID
+static void
 rtl8192d_EfusePowerSwitch(
 	PADAPTER	pAdapter,
 	u8		bWrite,
@@ -1338,7 +1338,7 @@ rtl8192d_EfusePowerSwitch(
 	}
 }
 
-static VOID
+static void
 ReadEFuse_RTL8192D(
 	PADAPTER	Adapter,
 	u8			efuseType,
@@ -1512,7 +1512,7 @@ ReadEFuse_RTL8192D(
 	//rtw_hal_set_hwreg(dev, HW_VAR_EFUSE_USAGE, (u8*)&efuse_usage);
 }
 
-static VOID
+static void
 hal_EfuseUpdateNormalChipVersion_92D(
 	PADAPTER	Adapter
 )
@@ -1587,7 +1587,7 @@ hal_EfuseMacMode_ISVS_92D(
 	return bResult;
 }
 
-static VOID
+static void
 rtl8192d_ReadEFuse(
 	PADAPTER	Adapter,
 	u8			efuseType,
@@ -1605,12 +1605,12 @@ rtl8192d_ReadEFuse(
 	pHalData->bIsVS = hal_EfuseMacMode_ISVS_92D(Adapter);
 }
 
-static VOID
+static void
 rtl8192d_EFUSE_GetEfuseDefinition(
 		PADAPTER	pAdapter,
 		u8		efuseType,
 		u8		type,
-	OUT		PVOID		*pOut,
+	OUT		void *		*pOut,
 		bool		bPseudoTest
 	)
 {
@@ -1743,8 +1743,8 @@ rtl8192d_Efuse_PgPacketRead(	PADAPTER	pAdapter,
 	if(offset>=EFUSE_MAX_SECTION)		return false;
 
 
-	_rtw_memset((PVOID)data, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
-	_rtw_memset((PVOID)tmpdata, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
+	_rtw_memset((void *)data, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
+	_rtw_memset((void *)tmpdata, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
 
 	//RT_PRINT_DATA(COMP_EFUSE, DBG_LOUD, ("efuse_PgPacketRead-1\n"), data, 8);
 
@@ -1887,7 +1887,7 @@ rtl8192d_Efuse_PgPacketWrite(PADAPTER	pAdapter,
 	//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite target offset 0x%x word_en 0x%x \n", target_pkt.offset, target_pkt.word_en));
 
 
-	_rtw_memset((PVOID)target_pkt.data, 0xFF, sizeof(u8)*8);
+	_rtw_memset((void *)target_pkt.data, 0xFF, sizeof(u8)*8);
 
 	efuse_WordEnableDataRead(word_en, data, target_pkt.data);
 	target_word_cnts = Efuse_CalculateWordCnts(target_pkt.word_en);
@@ -2181,7 +2181,7 @@ rtl8192d_Efuse_PgPacketWrite(PADAPTER	pAdapter,
 
 					//************  s1-2-A :cover the exist data *******************
 					//memset(originaldata,0xff,sizeof(UINT8)*8);
-					_rtw_memset((PVOID)originaldata, 0xff, sizeof(u8)*8);
+					_rtw_memset((void *)originaldata, 0xff, sizeof(u8)*8);
 
 					if(Efuse_PgPacketRead( pAdapter, tmp_pkt.offset,originaldata, bPseudoTest))
 					{	//check if data exist
@@ -2275,7 +2275,7 @@ rtl8192d_Efuse_WordEnableDataWrite(	PADAPTER	pAdapter,
 	u8	tmpdata[8];
 
 	//memset(tmpdata,0xff,PGPKT_DATA_SIZE);
-	_rtw_memset((PVOID)tmpdata, 0xff, PGPKT_DATA_SIZE);
+	_rtw_memset((void *)tmpdata, 0xff, PGPKT_DATA_SIZE);
 	//RT_TRACE(COMP_EFUSE, DBG_LOUD, ("word_en = %x efuse_addr=%x\n", word_en, efuse_addr));
 
 	//RT_PRINT_DATA(COMP_EFUSE, DBG_LOUD, ("U-EFUSE\n"), data, 8);

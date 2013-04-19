@@ -179,7 +179,7 @@ exit:
 
 }
 
-static void usb_read_reg_rf_byfw(struct intf_hdl *pintfhdl, u16 byteCount, u32 registerIndex, PVOID buffer)
+static void usb_read_reg_rf_byfw(struct intf_hdl *pintfhdl, u16 byteCount, u32 registerIndex, void *buffer)
 {
 	u16	wPage = 0x0000, offset;
 	u32	BufferLengthRead;

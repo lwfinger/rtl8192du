@@ -222,9 +222,9 @@ Len1	Len0	Pkt_num
 Len4	Len3	Len2
 
 */
-VOID
+void
 InsertEMContent(IN struct xmit_frame *pxmitframe, IN u8 *VirtualAddress);
-VOID
+void
 InsertEMContent(IN struct xmit_frame *pxmitframe, IN u8 *VirtualAddress)
 {
 	_rtw_memset(VirtualAddress, 0, 8);

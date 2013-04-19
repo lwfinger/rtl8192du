@@ -8169,7 +8169,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		DBG_871X("cnts = %d \n" ,cnts);
 		//_rtw_memset(extra, '\0', wrqu->data.length);
 
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, false);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 		if ((addr + cnts) > max_available_size) {
 			DBG_871X("(addr + cnts parameter error \n");
 			return -EFAULT;
@@ -8231,7 +8231,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		if (tmp[1]==NULL || tmp[2]==NULL) return	-EINVAL;
 		addr = 0x19;
 		cnts = 6;
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, false);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 		if ((addr + mapLen) > max_available_size) {
 			DBG_871X("(addr + cnts parameter error \n");
 			return -EFAULT;
@@ -8257,7 +8257,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		if (tmp[1]==NULL || tmp[2]==NULL) return	-EINVAL;
 		addr = 0x0c;
 		cnts = 4;
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, false);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 		if ((addr + mapLen) > max_available_size) {
 			DBG_871X("(addr + cnts parameter error \n");
 			return -EFAULT;
@@ -8344,7 +8344,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 				setdata[jj] = key_2char2num(tmp[2][kk], tmp[2][kk+ 1]);
 			}
 
-			EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, false);
+			EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 
 			if ((addr + cnts) > max_available_size) {
 						DBG_871X("parameter error \n");
@@ -8402,7 +8402,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 					setdata[jj] = key_2char2num(tmp[1][kk], tmp[1][kk+ 1]);
 				}
 
-				EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, false);
+				EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 
 				if ((addr + cnts) > max_available_size) {
 						DBG_871X("parameter error \n");
@@ -8432,7 +8432,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 				setdata[jj] = key_2char2num(tmp[1][kk], tmp[1][kk+ 1]);
 			}
 
-			EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, false);
+			EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 
 			if ((addr + cnts) > max_available_size) {
 				DBG_871X("parameter error \n");
@@ -9263,7 +9263,7 @@ static int rtw_mp_thermal(struct net_device *dev,
 	 Hal_GetThermalMeter(padapter, &val);
 
 	 if (bwrite == 0) {
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, false);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 		if (2 > max_available_size) {
 			DBG_871X("no available efuse!\n");
 			return -EFAULT;

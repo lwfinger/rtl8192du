@@ -31,7 +31,7 @@
 #define dm_CheckTXPowerTracking(a)	rtl8192d_dm_CheckTXPowerTracking(a)
 #define PHY_SetRFPathSwitch(a,b)	rtl8192d_PHY_SetRFPathSwitch(a,b)
 
-VOID Hal_MptSet8256CCKTxPower( PADAPTER pAdapter,u8 *pTxPower)
+void Hal_MptSet8256CCKTxPower( PADAPTER pAdapter,u8 *pTxPower)
 {
 	u8				TxAGC[2]={0, 0};
 	u32			 tmpval=0;
@@ -54,7 +54,7 @@ VOID Hal_MptSet8256CCKTxPower( PADAPTER pAdapter,u8 *pTxPower)
 }
 
 
-VOID Hal_MptSet8256OFDMTxPower(PADAPTER pAdapter,u8 *pTxPower)
+void Hal_MptSet8256OFDMTxPower(PADAPTER pAdapter,u8 *pTxPower)
 {
 	u32			 TxAGC=0;
 	u8 tmpval=0;
@@ -449,7 +449,7 @@ s32 Hal_SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
 }
 
 
-VOID Hal_TriggerRFThermalMeter( PADAPTER pAdapter )
+void Hal_TriggerRFThermalMeter( PADAPTER pAdapter )
 {
    // PADAPTER			  pAdapter = (PADAPTER)Context;
 	PHY_SetRFReg(pAdapter, RF_PATH_A, RF_T_METER, BIT17 | BIT16, 0x03);
@@ -573,7 +573,7 @@ void Hal_SetSingleCarrierTx (PADAPTER pAdapter, u8 bStart)
     }
 }
 
-static  VOID Hal_mpt_StartCckContTx(PADAPTER pAdapter,bool bScrambleOn)
+static  void Hal_mpt_StartCckContTx(PADAPTER pAdapter,bool bScrambleOn)
 {
 
     HAL_DATA_TYPE   *pHalData   = GET_HAL_DATA(pAdapter);
@@ -621,7 +621,7 @@ static  VOID Hal_mpt_StartCckContTx(PADAPTER pAdapter,bool bScrambleOn)
 }   /* mpt_StartCckContTx */
 
 
-static  VOID Hal_mpt_StopCckCoNtTx(PADAPTER pAdapter)
+static  void Hal_mpt_StopCckCoNtTx(PADAPTER pAdapter)
 {
     HAL_DATA_TYPE   *pHalData   = GET_HAL_DATA(pAdapter);
     PMPT_CONTEXT        pMptCtx = &(pAdapter->mppriv.MptCtx);
@@ -641,7 +641,7 @@ static  VOID Hal_mpt_StopCckCoNtTx(PADAPTER pAdapter)
 }   /* mpt_StopCckCoNtTx */
 
 
-static  VOID Hal_mpt_StartOfdmContTx( PADAPTER pAdapter )
+static  void Hal_mpt_StartOfdmContTx( PADAPTER pAdapter )
 {
 
     HAL_DATA_TYPE   *pHalData   = GET_HAL_DATA(pAdapter);
@@ -675,7 +675,7 @@ static  VOID Hal_mpt_StartOfdmContTx( PADAPTER pAdapter )
 }   /* mpt_StartOfdmContTx */
 
 
-static  VOID Hal_mpt_StopOfdmContTx( PADAPTER pAdapter)
+static  void Hal_mpt_StopOfdmContTx( PADAPTER pAdapter)
 {
     HAL_DATA_TYPE   *pHalData   = GET_HAL_DATA(pAdapter);
     PMPT_CONTEXT        pMptCtx = &(pAdapter->mppriv.MptCtx);
@@ -823,7 +823,7 @@ HalReadPCIDwordDBI8192C(
 }
 
 
-VOID
+void
 PHY_PowerDownAnotherPHY(
 	IN	PADAPTER		Adapter,
 	IN	bool			bMac0
@@ -883,7 +883,7 @@ PHY_EnableAnotherPHY(
 }
 
 
-VOID
+void
 phy_RestoreRFENV(
 	IN	PADAPTER		Adapter,
 	IN	u8			eRFPath,
@@ -912,7 +912,7 @@ phy_RestoreRFENV(
 
 }
 
-VOID
+void
 phy_EnableRFENV(
 	IN	PADAPTER		Adapter,
 	IN	u1Byte			eRFPath ,
@@ -999,7 +999,7 @@ static u8 GetRightChnlPlace(u8 chnl)
 }
 
 
-VOID
+void
  phy_SwitchRfSetting8192D(
 	PADAPTER				Adapter,
 	u8					channel

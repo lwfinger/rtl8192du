@@ -175,8 +175,8 @@ struct hal_ops {
 	void	(*SetHwRegHandler)(PADAPTER Adapter, u8	variable,u8* val);
 	void	(*GetHwRegHandler)(PADAPTER Adapter, u8	variable,u8* val);
 
-	u8	(*GetHalDefVarHandler)(PADAPTER Adapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
-	u8	(*SetHalDefVarHandler)(PADAPTER Adapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
+	u8	(*GetHalDefVarHandler)(PADAPTER Adapter, HAL_DEF_VARIABLE eVariable, void * pValue);
+	u8	(*SetHalDefVarHandler)(PADAPTER Adapter, HAL_DEF_VARIABLE eVariable, void * pValue);
 
 	void	(*UpdateRAMaskHandler)(PADAPTER Adapter, u32 mac_id);
 	void	(*SetBeaconRelatedRegistersHandler)(PADAPTER Adapter);
@@ -202,7 +202,7 @@ struct hal_ops {
 #endif
 	void (*EfusePowerSwitch)(PADAPTER pAdapter, u8 bWrite, u8 PwrState);
 	void (*ReadEFuse)(PADAPTER Adapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest);
-	void (*EFUSEGetEfuseDefinition)(PADAPTER pAdapter, u8 efuseType, u8 type, PVOID *pOut, bool bPseudoTest);
+	void (*EFUSEGetEfuseDefinition)(PADAPTER pAdapter, u8 efuseType, u8 type, void * *pOut, bool bPseudoTest);
 	u16	(*EfuseGetCurrentSize)(PADAPTER pAdapter, u8 efuseType, bool bPseudoTest);
 	int	(*Efuse_PgPacketRead)(PADAPTER pAdapter, u8 offset, u8 *data, bool bPseudoTest);
 	int	(*Efuse_PgPacketWrite)(PADAPTER pAdapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
@@ -328,8 +328,8 @@ void rtw_hal_chip_configure(_adapter *padapter);
 void rtw_hal_read_chip_info(_adapter *padapter);
 void rtw_hal_read_chip_version(_adapter *padapter);
 
-u8 rtw_hal_set_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
-u8 rtw_hal_get_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
+u8 rtw_hal_set_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
+u8 rtw_hal_get_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
 
 void rtw_hal_enable_interrupt(_adapter *padapter);
 void rtw_hal_disable_interrupt(_adapter *padapter);

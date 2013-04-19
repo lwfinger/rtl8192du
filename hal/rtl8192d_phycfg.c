@@ -76,7 +76,7 @@ extern atomic_t GlobalCounterForMutex;
 /*--------------------Define export function prototype-----------------------*/
 
 /*---------------------Define local function prototype-----------------------*/
-static VOID
+static void
 phy_PathAFillIQKMatrix(
 	IN PADAPTER	pAdapter,
 	IN bool	bIQKOK,
@@ -85,7 +85,7 @@ phy_PathAFillIQKMatrix(
 	IN bool	bTxOnly
 	);
 
-static VOID
+static void
 phy_PathAFillIQKMatrix_5G_Normal(
 	IN PADAPTER	pAdapter,
 	IN bool	bIQKOK,
@@ -94,7 +94,7 @@ phy_PathAFillIQKMatrix_5G_Normal(
 	IN bool	bTxOnly
 	);
 
-static VOID
+static void
 phy_PathBFillIQKMatrix(
 	IN PADAPTER	pAdapter,
 	IN bool	bIQKOK,
@@ -103,7 +103,7 @@ phy_PathBFillIQKMatrix(
 	IN bool	bTxOnly
 	);
 
-static VOID
+static void
 phy_PathBFillIQKMatrix_5G_Normal(
 	IN PADAPTER	pAdapter,
 	IN bool	bIQKOK,
@@ -194,7 +194,7 @@ phy_CalculateBitShift(
 //
 //To avoid miswrite Reg0x800 for 92D
 //
-VOID
+void
 rtl8192d_PHY_SetBBReg1Byte(
 	IN	PADAPTER	Adapter,
 	IN	u32		RegAddr,
@@ -273,7 +273,7 @@ rtl8192d_PHY_QueryBBReg(
 * Note:		This function is equal to "PutRegSetting" in PHY programming guide
 */
 
-VOID
+void
 rtl8192d_PHY_SetBBReg(
 	IN	PADAPTER	Adapter,
 	IN	u32		RegAddr,
@@ -346,7 +346,7 @@ phy_FwRFSerialRead(
  *	01/21/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-static	VOID
+static	void
 phy_FwRFSerialWrite(
 	IN	PADAPTER			Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -499,7 +499,7 @@ phy_RFSerialRead(
  *
  *
 */
-static	VOID
+static	void
 phy_RFSerialWrite(
 	IN	PADAPTER			Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -619,7 +619,7 @@ rtl8192d_PHY_QueryRFReg(
 * Return:		None
 * Note:		This function is equal to "PutRFRegSetting" in PHY programming guide
 */
-VOID
+void
 rtl8192d_PHY_SetRFReg(
 	IN	PADAPTER			Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -802,7 +802,7 @@ PHY_MACConfig8192D(
 * Return:		None
 * Note:		The initialization value is constant and it should never be changes
 */
-static	VOID
+static	void
 phy_InitBBRFRegisterDefinition(
 	IN	PADAPTER		Adapter
 )
@@ -1079,7 +1079,7 @@ phy_ConfigBBWithParaFile(
 }
 #endif //CONFIG_EMBEDDED_FWIMG
 #if MP_DRIVER != 1
-static VOID
+static void
 storePwrIndexDiffRateOffset(
 	IN	PADAPTER	Adapter,
 	IN	u32		RegAddr,
@@ -1913,7 +1913,7 @@ rtl8192d_PHY_CheckBBAndRFOK(
 }
 
 
-VOID
+void
 rtl8192d_PHY_GetHWRegOriginalValue(
 	IN	PADAPTER		Adapter
 	)
@@ -2052,7 +2052,7 @@ phy_TxPwrIdxToDbm(
  * Return:      NONE
  *
  *---------------------------------------------------------------------------*/
-VOID
+void
 PHY_GetTxPowerLevel8192D(
 	IN	PADAPTER		Adapter,
 	OUT u32*		powerlevel
@@ -2149,7 +2149,7 @@ static void ccxPowerIndexCheck(
  *	2009/01/21	MHC		Support new EEPROM format from SD3 requirement.
  *
  *---------------------------------------------------------------------------*/
-VOID
+void
 PHY_SetTxPowerLevel8192D(
 	IN	PADAPTER		Adapter,
 	IN	u8			channel
@@ -2245,7 +2245,7 @@ rtl8192d_PHY_SetBeaconHwReg(
 }
 
 
-VOID
+void
 PHY_ScanOperationBackup8192D(
 	IN	PADAPTER	Adapter,
 	IN	u8		Operation
@@ -2268,7 +2268,7 @@ PHY_ScanOperationBackup8192D(
  *			(2) Will two workitem of "switch channel" and "switch channel bandwidth" run
  *			     concurrently?
  *---------------------------------------------------------------------------*/
-static VOID
+static void
 _PHY_SetBWMode92D(
 	IN	PADAPTER	Adapter
 )
@@ -2435,7 +2435,7 @@ _PHY_SetBWMode92D(
  *
  * Note:		We do not take j mode into consideration now
  *---------------------------------------------------------------------------*/
-VOID
+void
 PHY_SetBWMode8192D(
 	IN	PADAPTER					Adapter,
 	IN	HT_CHANNEL_WIDTH	Bandwidth,	// 20M or 40M
@@ -2501,7 +2501,7 @@ Descriptor:
 			stop TRX Before change bandType dynamically
 
 ********************************************************************/
-VOID
+void
 PHY_StopTRXBeforeChangeBand8192D(
 	  PADAPTER		Adapter
 )
@@ -2658,7 +2658,7 @@ PHY_SwitchWirelessBand(
 }
 
 
-static VOID
+static void
 PHY_EnableRFENV(
 	IN	PADAPTER		Adapter,
 	IN	u8				eRFPath	,
@@ -2703,7 +2703,7 @@ PHY_EnableRFENV(
 
 }
 
-static VOID
+static void
 PHY_RestoreRFENV(
 	IN	PADAPTER		Adapter,
 	IN	u8				eRFPath,
@@ -2750,7 +2750,7 @@ PHY_RestoreRFENV(
  * 01/09/2009	MHC		Add CCK modification for 40MHZ. Suggestion from SD3.
  *
  *---------------------------------------------------------------------------*/
- static	VOID
+ static	void
  phy_SwitchRfSetting(
 	IN	PADAPTER			Adapter,
 	IN	u8					channel
@@ -3008,7 +3008,7 @@ PHY_RestoreRFENV(
  * 01/09/2009	MHC		Add CCK modification for 40MHZ. Suggestion from SD3.
  *
  *---------------------------------------------------------------------------*/
-static  VOID
+static  void
  phy_ReloadLCKSetting(
 	IN	PADAPTER				Adapter,
 	IN	u8					channel
@@ -3098,7 +3098,7 @@ static  VOID
  * 01/09/2009	MHC		Add CCK modification for 40MHZ. Suggestion from SD3.
  *
  *---------------------------------------------------------------------------*/
- static VOID
+ static void
  phy_ReloadIMRSetting(
 	IN	PADAPTER				Adapter,
 	IN	u8					channel,
@@ -3176,7 +3176,7 @@ static  VOID
  * 01/09/2009	MHC		Add CCK modification for 40MHZ. Suggestion from SD3.
  *
  *---------------------------------------------------------------------------*/
- static VOID
+ static void
  phy_ReloadIQKSetting(
 	IN	PADAPTER				Adapter,
 	IN	u8					channel
@@ -3348,7 +3348,7 @@ static void _PHY_SwChnl8192D(PADAPTER Adapter, u8 channel)
 }
 
 
-VOID
+void
 PHY_SwChnl8192D(	// Call after initialization
 	IN	PADAPTER	Adapter,
 	IN	u8		channel
@@ -3558,7 +3558,7 @@ phy_FinishSwChnlNow(	// We should not call this function directly
 // However, this procedure is performed synchronously  which should be running under
 // passive level.
 //
-VOID
+void
 PHY_SwChnlPhy8192D(	// Only called during initialize
 	IN	PADAPTER	Adapter,
 	IN	u8		channel
@@ -3604,7 +3604,7 @@ PHY_SwChnlPhy8192D(	// Only called during initialize
 //		Note, because we possibly need to configure BB and RF in this function,
 //		so caller should in PASSIVE_LEVEL. 080118, by rcnjko.
 //
-VOID
+void
 PHY_SetMonitorMode8192D(
 	IN	PADAPTER			pAdapter,
 	IN	bool				bEnableMonitorMode
@@ -4037,7 +4037,7 @@ phy_PathB_IQK_5G_Normal(
 	return result;
 }
 
-static VOID
+static void
 phy_PathAFillIQKMatrix(
 	IN PADAPTER	pAdapter,
 	IN bool	bIQKOK,
@@ -4104,7 +4104,7 @@ phy_PathAFillIQKMatrix(
 	}
 }
 
-static VOID
+static void
 phy_PathAFillIQKMatrix_5G_Normal(
 	IN PADAPTER	pAdapter,
 	IN bool	bIQKOK,
@@ -4172,7 +4172,7 @@ phy_PathAFillIQKMatrix_5G_Normal(
 	}
 }
 
-static VOID
+static void
 phy_PathBFillIQKMatrix(
 	IN PADAPTER	pAdapter,
 	IN bool	bIQKOK,
@@ -4233,7 +4233,7 @@ phy_PathBFillIQKMatrix(
 	}
 }
 
-static VOID
+static void
 phy_PathBFillIQKMatrix_5G_Normal(
 	IN PADAPTER	pAdapter,
 	IN bool	bIQKOK,
@@ -4289,7 +4289,7 @@ phy_PathBFillIQKMatrix_5G_Normal(
 	}
 }
 
-static VOID
+static void
 phy_SaveADDARegisters(
 	IN	PADAPTER	pAdapter,
 	IN	u32*		ADDAReg,
@@ -4308,7 +4308,7 @@ phy_SaveADDARegisters(
 	}
 }
 
-static VOID
+static void
 phy_SaveMACRegisters(
 	IN	PADAPTER	pAdapter,
 	IN	u32*		MACReg,
@@ -4325,7 +4325,7 @@ phy_SaveMACRegisters(
 
 }
 
-static VOID
+static void
 phy_ReloadADDARegisters(
 	IN	PADAPTER	pAdapter,
 	IN	u32*		ADDAReg,
@@ -4344,7 +4344,7 @@ phy_ReloadADDARegisters(
 	}
 }
 
-static VOID
+static void
 phy_ReloadMACRegisters(
 	IN	PADAPTER	pAdapter,
 	IN	u32*		MACReg,
@@ -4360,7 +4360,7 @@ phy_ReloadMACRegisters(
 	rtw_write32(pAdapter, MACReg[i], MACBackup[i]);
 }
 
-static VOID
+static void
 phy_PathADDAOn(
 	IN	PADAPTER	pAdapter,
 	IN	u32*		ADDAReg,
@@ -4385,7 +4385,7 @@ phy_PathADDAOn(
 	}
 }
 
-static VOID
+static void
 phy_MACSettingCalibration(
 	IN	PADAPTER	pAdapter,
 	IN	u32*		MACReg,
@@ -4405,7 +4405,7 @@ phy_MACSettingCalibration(
 
 }
 
-static VOID
+static void
 phy_PathAStandBy(
 	IN	PADAPTER	pAdapter
 	)
@@ -4417,7 +4417,7 @@ phy_PathAStandBy(
 	PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0x80800000);
 }
 
-static VOID
+static void
 phy_PIModeSwitch(
 	IN	PADAPTER	pAdapter,
 	IN	bool		PIMode
@@ -4535,7 +4535,7 @@ phy_SimularityCompare(
 	return phy_SimularityCompare_92D(pAdapter, result, c1, c2);
 }
 
-static VOID
+static void
 phy_IQCalibrate(
 	IN	PADAPTER	pAdapter,
 	IN	int		result[][8],
@@ -4765,7 +4765,7 @@ phy_IQCalibrate(
 }
 
 
-static VOID
+static void
 phy_IQCalibrate_5G(
 	IN	PADAPTER	pAdapter,
 	IN	int		result[][8]
@@ -5146,7 +5146,7 @@ Exit_IQK:
 
 }
 
-static VOID
+static void
 phy_IQCalibrate_5G_Normal(
 	IN	PADAPTER	pAdapter,
 	IN	int		result[][8],
@@ -5355,7 +5355,7 @@ phy_IQCalibrate_5G_Normal(
 }
 
 #if SWLCK != 1
-static VOID
+static void
 phy_LCCalibrate92D(
 	IN	PADAPTER	pAdapter,
 	IN	bool		is2T
@@ -5463,7 +5463,7 @@ get_abs(
 #define	BASE_CHNL_NUM		6
 #define	BASE_CHNL_NUM_2G	2
 
-static VOID
+static void
 phy_CalcCurvIndex(
 	IN	PADAPTER	pAdapter,
 	IN	u32*		TargetChnl,
@@ -5556,7 +5556,7 @@ phy_CalcCurvIndex(
 	}
 }
 
-static VOID
+static void
 phy_LCCalibrate92DSW(
 	IN	PADAPTER	pAdapter,
 	IN	bool		is2T
@@ -5706,7 +5706,7 @@ phy_LCCalibrate92DSW(
 }
 
 
-static VOID
+static void
 phy_LCCalibrate(
 	IN	PADAPTER	pAdapter,
 	IN	bool		is2T
@@ -5726,7 +5726,7 @@ phy_LCCalibrate(
 #define		APK_CURVE_REG_NUM 4
 #define		PATH_NUM		2
 
-static VOID
+static void
 phy_APCalibrate(
 	IN	PADAPTER	pAdapter,
 	IN	char		delta,
@@ -6148,7 +6148,7 @@ phy_APCalibrate(
 	//RTPRINT(FINIT, INIT_IQK, ("<==PHY_APCalibrate()\n"));
 }
 
-static VOID phy_SetRFPathSwitch(
+static void phy_SetRFPathSwitch(
 	IN	PADAPTER	pAdapter,
 	IN	bool		bMain,
 	IN	bool		is2T
@@ -6170,7 +6170,7 @@ static VOID phy_SetRFPathSwitch(
 
 }
 
-VOID
+void
 rtl8192d_PHY_IQCalibrate(
 	IN	PADAPTER	pAdapter
 	)
@@ -6360,7 +6360,7 @@ rtl8192d_PHY_IQCalibrate(
 }
 
 
-VOID
+void
 rtl8192d_PHY_LCCalibrate(
 	IN	PADAPTER	pAdapter
 	)
@@ -6423,7 +6423,7 @@ rtl8192d_PHY_LCCalibrate(
 	//RTPRINT(FINIT, INIT_IQK, ("LCK:Finish!!!interface %d\n", pHalData->interfaceIndex));
 }
 
-VOID
+void
 rtl8192d_PHY_APCalibrate(
 	IN	PADAPTER	pAdapter,
 	IN	char		delta
@@ -6451,7 +6451,7 @@ rtl8192d_PHY_APCalibrate(
 	}
 }
 
-VOID
+void
 PHY_UpdateBBRFConfiguration8192D(
 	IN PADAPTER Adapter,
 	IN bool bisBandSwitch
@@ -6788,7 +6788,7 @@ PHY_UpdateBBRFConfiguration8192D(
 //		1. Boot from EEPROM and CR9346 regiser has verified.
 //		2. PASSIVE_LEVEL (USB interface)
 //
-VOID PHY_ReadMacPhyMode92D(
+void PHY_ReadMacPhyMode92D(
 		IN PADAPTER			Adapter,
 		IN	bool		AutoloadFail
 )
@@ -6831,7 +6831,7 @@ VOID PHY_ReadMacPhyMode92D(
 //		1. Boot from EEPROM and CR9346 regiser has verified.
 //		2. PASSIVE_LEVEL (USB interface)
 //
-VOID PHY_ConfigMacPhyMode92D(
+void PHY_ConfigMacPhyMode92D(
 		IN PADAPTER			Adapter
 )
 {
@@ -6870,7 +6870,7 @@ VOID PHY_ConfigMacPhyMode92D(
 //		1. Boot from EEPROM and CR9346 regiser has verified.
 //		2. PASSIVE_LEVEL (USB interface)
 //
-VOID PHY_ConfigMacPhyModeInfo92D(
+void PHY_ConfigMacPhyModeInfo92D(
 		IN PADAPTER			Adapter
 )
 {
@@ -7016,7 +7016,7 @@ VOID PHY_ConfigMacPhyModeInfo92D(
 //		1. Boot from EEPROM and CR9346 regiser has verified.
 //		2. PASSIVE_LEVEL (USB interface)
 //
-VOID PHY_ConfigMacCoexist_RFPage92D(
+void PHY_ConfigMacCoexist_RFPage92D(
 		IN PADAPTER			Adapter
 )
 {
@@ -7044,7 +7044,7 @@ VOID PHY_ConfigMacCoexist_RFPage92D(
 	}
 }
 
-VOID
+void
 rtl8192d_PHY_InitRxSetting(
 	IN	PADAPTER Adapter
 	)
@@ -7068,7 +7068,7 @@ rtl8192d_PHY_InitRxSetting(
 }
 
 
-VOID
+void
 rtl8192d_PHY_ResetIQKResult(
 	IN	PADAPTER Adapter
 )
@@ -7098,7 +7098,7 @@ rtl8192d_PHY_ResetIQKResult(
 	}
 }
 
-VOID rtl8192d_PHY_SetRFPathSwitch(
+void rtl8192d_PHY_SetRFPathSwitch(
 	IN	PADAPTER	pAdapter,
 	IN	bool		bMain
 	)
@@ -7119,7 +7119,7 @@ VOID rtl8192d_PHY_SetRFPathSwitch(
 	}
 }
 
-VOID
+void
 HalChangeCCKStatus8192D(
 	IN	PADAPTER	Adapter,
 	IN	bool		bCCKDisable
@@ -7201,7 +7201,7 @@ HalChangeCCKStatus8192D(
 	}
 }
 
-VOID
+void
 PHY_InitPABias92D(IN	PADAPTER Adapter)
 {
 	u8	tmpU1b;

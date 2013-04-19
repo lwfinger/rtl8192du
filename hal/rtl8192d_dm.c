@@ -138,7 +138,7 @@ dm_DualMacGetParameterFromBuddyAdapter(
 }
 #endif
 
-static VOID
+static void
 odm_FalseAlarmCounterStatistics_ForSlaveOfDMSP(
 	IN	PADAPTER	Adapter
 )
@@ -194,7 +194,7 @@ odm_FalseAlarmCounterStatistics_ForSlaveOfDMSP(
 #endif
 }
 
-static VOID
+static void
 odm_FalseAlarmCounterStatistics(
 	IN	PADAPTER	Adapter
 	)
@@ -320,7 +320,7 @@ odm_FalseAlarmCounterStatistics(
 	}
 }
 
-static VOID
+static void
 odm_FindMinimumRSSI_Dmsp(
 	IN	PADAPTER	pAdapter
 )
@@ -425,7 +425,7 @@ odm_initial_gain_MinPWDB(
 	return (u8)Rssi_val_min;
 }
 
-static VOID
+static void
 DM_Write_DIG_DMSP(
 	IN	PADAPTER	pAdapter
 	)
@@ -498,7 +498,7 @@ DM_Write_DIG_DMSP(
 #endif
 }
 
-static VOID
+static void
 DM_Write_DIG(
 	IN	PADAPTER	pAdapter
 	)
@@ -1401,7 +1401,7 @@ static void odm_DynamicTxPower_92D(IN	PADAPTER	Adapter)
 }
 
 
-static VOID PWDB_Monitor(
+static void PWDB_Monitor(
 	IN	PADAPTER	Adapter
 	)
 {
@@ -1691,7 +1691,7 @@ IN	PADAPTER	pAdapter
 	}
 }
 
-static	VOID
+static	void
 dm_RXGainTrackingCallback_ThermalMeter_92D(
 	IN PADAPTER	Adapter)
 {
@@ -1717,7 +1717,7 @@ dm_RXGainTrackingCallback_ThermalMeter_92D(
 };
 
 //091212 chiyokolin
-static	VOID
+static	void
 dm_TXPowerTrackingCallback_ThermalMeter_92D(
             IN PADAPTER	Adapter)
 {
@@ -2216,7 +2216,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 }
 
 
-static	VOID
+static	void
 dm_InitializeTXPowerTracking_ThermalMeter(
 	IN	PADAPTER		Adapter)
 {
@@ -2236,7 +2236,7 @@ dm_InitializeTXPowerTracking_ThermalMeter(
 }
 
 
-static VOID
+static void
 DM_InitializeTXPowerTracking(
 	IN	PADAPTER		Adapter)
 {
@@ -2259,14 +2259,14 @@ DM_InitializeTXPowerTracking(
 //
 //	Added by Roger, 2009.06.18.
 //
-static VOID
+static void
 DM_TXPowerTracking92CDirectCall(
             IN	PADAPTER		Adapter)
 {
 	dm_TXPowerTrackingCallback_ThermalMeter_92D(Adapter);
 }
 
-static VOID
+static void
 dm_CheckTXPowerTracking_ThermalMeter(
 	IN	PADAPTER		Adapter)
 {
@@ -2303,7 +2303,7 @@ dm_CheckTXPowerTracking_ThermalMeter(
 }
 
 
-VOID
+void
 rtl8192d_dm_CheckTXPowerTracking(
 	IN	PADAPTER		Adapter)
 {
@@ -2332,7 +2332,7 @@ rtl8192d_dm_CheckTXPowerTracking(
  *	01/10/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-static VOID
+static void
 dm_CheckRfCtrlGPIO(
 	IN	PADAPTER	Adapter
 	)
@@ -2412,7 +2412,7 @@ static void	dm_CheckPbcGPIO(IN PADAPTER padapter)
 	}
 }
 
-static VOID
+static void
 dm_InitRateAdaptiveMask(
 	IN	PADAPTER	Adapter
 	)
@@ -2447,18 +2447,18 @@ dm_InitRateAdaptiveMask(
  *	05/27/2009	hpfan	Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-static VOID
+static void
 dm_RefreshRateAdaptiveMask(	IN	PADAPTER	pAdapter)
 {
 }
-static VOID
+static void
 dm_CheckProtection(
 	IN	PADAPTER	Adapter
 	)
 {
 }
 
-static VOID
+static void
 dm_CheckStatistics(
 	IN	PADAPTER	Adapter
 	)
@@ -2618,7 +2618,7 @@ static void FindMinimumRSSI(PADAPTER Adapter)
 }
 #endif //CONFIG_CONCURRENT_MODE
 
-VOID
+void
 rtl8192d_HalDmWatchDog(
 	IN	PADAPTER	Adapter
 	)

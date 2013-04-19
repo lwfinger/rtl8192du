@@ -269,7 +269,7 @@ _func_enter_;
 _func_exit_;
 }
 
-VOID
+void
 FillH2CCmd92D(
 	IN	PADAPTER	Adapter,
 	IN	u8	ElementID,
@@ -622,7 +622,7 @@ void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr
 //			Fw can tell Hw to send these packet derectly.
 // Added by tynli. 2009.10.15.
 //
-static VOID
+static void
 FillFakeTxDescriptor92D(
 	IN PADAPTER		Adapter,
 	IN u8*			pDesc,

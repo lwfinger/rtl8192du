@@ -152,12 +152,12 @@ static inline unsigned char *skb_end_pointer(const struct sk_buff *skb)
 }
 #endif
 
-__inline static _list *get_next(_list	*list)
+static inline _list *get_next(_list	*list)
 {
 	return list->next;
 }
 
-__inline static _list	*get_list_head(_queue	*queue)
+static inline _list	*get_list_head(_queue	*queue)
 {
 	return (&(queue->queue));
 }
@@ -167,37 +167,37 @@ __inline static _list	*get_list_head(_queue	*queue)
         ((type *)((char *)(ptr)-(SIZE_T)(&((type *)0)->member)))
 
 
-__inline static void _enter_critical(_lock *plock, _irqL *pirqL)
+static inline void _enter_critical(_lock *plock, _irqL *pirqL)
 {
 	spin_lock_irqsave(plock, *pirqL);
 }
 
-__inline static void _exit_critical(_lock *plock, _irqL *pirqL)
+static inline void _exit_critical(_lock *plock, _irqL *pirqL)
 {
 	spin_unlock_irqrestore(plock, *pirqL);
 }
 
-__inline static void _enter_critical_ex(_lock *plock, _irqL *pirqL)
+static inline void _enter_critical_ex(_lock *plock, _irqL *pirqL)
 {
 	spin_lock_irqsave(plock, *pirqL);
 }
 
-__inline static void _exit_critical_ex(_lock *plock, _irqL *pirqL)
+static inline void _exit_critical_ex(_lock *plock, _irqL *pirqL)
 {
 	spin_unlock_irqrestore(plock, *pirqL);
 }
 
-__inline static void _enter_critical_bh(_lock *plock, _irqL *pirqL)
+static inline void _enter_critical_bh(_lock *plock, _irqL *pirqL)
 {
 	spin_lock_bh(plock);
 }
 
-__inline static void _exit_critical_bh(_lock *plock, _irqL *pirqL)
+static inline void _exit_critical_bh(_lock *plock, _irqL *pirqL)
 {
 	spin_unlock_bh(plock);
 }
 
-__inline static void _enter_critical_mutex(_mutex *pmutex, _irqL *pirqL)
+static inline void _enter_critical_mutex(_mutex *pmutex, _irqL *pirqL)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 		mutex_lock(pmutex);
@@ -207,7 +207,7 @@ __inline static void _enter_critical_mutex(_mutex *pmutex, _irqL *pirqL)
 }
 
 
-__inline static void _exit_critical_mutex(_mutex *pmutex, _irqL *pirqL)
+static inline void _exit_critical_mutex(_mutex *pmutex, _irqL *pirqL)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 		mutex_unlock(pmutex);
@@ -216,12 +216,12 @@ __inline static void _exit_critical_mutex(_mutex *pmutex, _irqL *pirqL)
 #endif
 }
 
-__inline static void rtw_list_delete(_list *plist)
+static inline void rtw_list_delete(_list *plist)
 {
 	list_del_init(plist);
 }
 
-__inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
+static inline void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
 {
 	//setup_timer(ptimer, pfunc,(u32)cntx);
 	ptimer->function = pfunc;
@@ -229,12 +229,12 @@ __inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,voi
 	init_timer(ptimer);
 }
 
-__inline static void _set_timer(_timer *ptimer,u32 delay_time)
+static inline void _set_timer(_timer *ptimer,u32 delay_time)
 {
 	mod_timer(ptimer , (jiffies+(delay_time*HZ/1000)));
 }
 
-__inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
+static inline void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 {
 	del_timer_sync(ptimer);
 	*bcancelled=  true;
@@ -246,7 +246,7 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 #define RTW_DECLARE_TIMER_HDL(name) void RTW_TIMER_HDL_NAME(name)(RTW_TIMER_HDL_ARGS)
 
 
-__inline static void _init_workitem(_workitem *pwork, void *pfunc, PVOID cntx)
+static inline void _init_workitem(_workitem *pwork, void *pfunc, void * cntx)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,20))
 	INIT_WORK(pwork, pfunc);
@@ -255,12 +255,12 @@ __inline static void _init_workitem(_workitem *pwork, void *pfunc, PVOID cntx)
 #endif
 }
 
-__inline static void _set_workitem(_workitem *pwork)
+static inline void _set_workitem(_workitem *pwork)
 {
 	schedule_work(pwork);
 }
 
-__inline static void _cancel_workitem_sync(_workitem *pwork)
+static inline void _cancel_workitem_sync(_workitem *pwork)
 {
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22))
 	cancel_work_sync(pwork);
@@ -450,7 +450,7 @@ extern void	rtw_udelay_os(int us);
 extern void rtw_yield_os(void);
 
 
-__inline static unsigned char _cancel_timer_ex(_timer *ptimer)
+static inline unsigned char _cancel_timer_ex(_timer *ptimer)
 {
 	return del_timer_sync(ptimer);
 }
@@ -463,13 +463,13 @@ static __inline void thread_enter(char *name)
 	allow_signal(SIGTERM);
 }
 
-__inline static void flush_signals_thread(void)
+static inline void flush_signals_thread(void)
 {
 	if (signal_pending (current))
 		flush_signals(current);
 }
 
-__inline static _OS_STATUS res_to_status(sint res)
+static inline _OS_STATUS res_to_status(sint res)
 {
 	return res;
 }
@@ -477,7 +477,7 @@ __inline static _OS_STATUS res_to_status(sint res)
 #define _RND(sz, r) ((((sz)+((r)-1))/(r))*(r))
 #define RND4(x)	(((x >> 2) + (((x & 3) == 0) ?  0: 1)) << 2)
 
-__inline static u32 _RND4(u32 sz)
+static inline u32 _RND4(u32 sz)
 {
 
 	u32	val;
@@ -488,7 +488,7 @@ __inline static u32 _RND4(u32 sz)
 
 }
 
-__inline static u32 _RND8(u32 sz)
+static inline u32 _RND8(u32 sz)
 {
 
 	u32	val;
@@ -499,7 +499,7 @@ __inline static u32 _RND8(u32 sz)
 
 }
 
-__inline static u32 _RND128(u32 sz)
+static inline u32 _RND128(u32 sz)
 {
 
 	u32	val;
@@ -510,7 +510,7 @@ __inline static u32 _RND128(u32 sz)
 
 }
 
-__inline static u32 _RND256(u32 sz)
+static inline u32 _RND256(u32 sz)
 {
 
 	u32	val;
@@ -521,7 +521,7 @@ __inline static u32 _RND256(u32 sz)
 
 }
 
-__inline static u32 _RND512(u32 sz)
+static inline u32 _RND512(u32 sz)
 {
 
 	u32	val;
@@ -532,7 +532,7 @@ __inline static u32 _RND512(u32 sz)
 
 }
 
-__inline static u32 bitshift(u32 bitmask)
+static inline u32 bitshift(u32 bitmask)
 {
 	u32 i;
 

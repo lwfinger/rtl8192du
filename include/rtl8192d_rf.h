@@ -76,10 +76,10 @@ void		rtl8192d_RF_ChangeTxPath(	PADAPTER	Adapter,
 void		rtl8192d_PHY_RF6052SetBandwidth(
 										PADAPTER				Adapter,
 										HT_CHANNEL_WIDTH		Bandwidth);
-VOID	rtl8192d_PHY_RF6052SetCckTxPower(
+void	rtl8192d_PHY_RF6052SetCckTxPower(
 										PADAPTER	Adapter,
 										u8*		pPowerlevel);
-VOID	rtl8192d_PHY_RF6052SetOFDMTxPower(
+void	rtl8192d_PHY_RF6052SetOFDMTxPower(
 										PADAPTER	Adapter,
 										u8*		pPowerLevel,
 										u8		Channel);

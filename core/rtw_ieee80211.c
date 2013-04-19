@@ -1251,7 +1251,7 @@ void rtw_macaddr_cfg(u8 *mac_addr)
 		DBG_871X("MAC Address from efuse error, assign default one !!!\n");
 	}
 
-	DBG_871X("rtw_macaddr_cfg MAC Address  = "MAC_FMT"\n", MAC_ARG(mac_addr));
+	DBG_871X("rtw_macaddr_cfg MAC Address  = %pM\n", mac_addr);
 }
 
 void dump_ies(u8 *buf, u32 buf_len) {

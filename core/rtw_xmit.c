@@ -669,9 +669,9 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 	} else {
 		psta = rtw_get_stainfo(pstapriv, pattrib->ra);
 		if (psta == NULL)	{ // if we cannot get psta => drrp the pkt
-			RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:" MAC_FMT"\n", MAC_ARG(pattrib->ra)));
+			RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:%pM\n", pattrib->ra));
 			#ifdef DBG_TX_DROP_FRAME
-			DBG_871X("DBG_TX_DROP_FRAME %s get sta_info fail, ra:" MAC_FMT"\n", __FUNCTION__, MAC_ARG(pattrib->ra));
+			DBG_871X("DBG_TX_DROP_FRAME %s get sta_info fail, ra:%pM\n", __FUNCTION__, pattrib->ra);
 			#endif
 			res =_FAIL;
 			goto exit;
@@ -691,9 +691,9 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 	else
 	{
 		// if we cannot get psta => drop the pkt
-		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:" MAC_FMT "\n", MAC_ARG(pattrib->ra)));
+		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:%pM\n", pattrib->ra));
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_871X("DBG_TX_DROP_FRAME %s get sta_info fail, ra:" MAC_FMT"\n", __FUNCTION__, MAC_ARG(pattrib->ra));
+		DBG_871X("DBG_TX_DROP_FRAME %s get sta_info fail, ra:%pM\n", __FUNCTION__, pattrib->ra);
 		#endif
 		res = _FAIL;
 		goto exit;

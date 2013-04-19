@@ -1720,7 +1720,7 @@ _adapter *rtw_drv_add_vir_if (_adapter *primary_padapter, char *name,
 		goto error_rtw_drv_add_iface;
 	}
 
-	DBG_871X("MAC Address(%s) = "MAC_FMT"\n", pnetdev->name, MAC_ARG(mac));
+	DBG_871X("MAC Address(%s) = %pM\n", pnetdev->name, mac);
 
 	res = _SUCCESS;
 
@@ -2090,7 +2090,7 @@ _adapter *rtw_drv_if2_init(_adapter *primary_padapter, char *name,
 
 	_rtw_memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
 
-	DBG_871X("MAC Address (if2) = "MAC_FMT"\n", MAC_ARG(mac));
+	DBG_871X("MAC Address (if2) = %pM\n", mac);
 
 	primary_padapter->pbuddy_adapter = padapter;
 	pr_debug("pbuddy_adapter: %p\n", padapter);
@@ -2255,7 +2255,7 @@ int _netdev_open(struct net_device *pnetdev)
 			goto netdev_open_error;
 		}
 
-		DBG_871X("MAC Address = "MAC_FMT"\n", MAC_ARG(pnetdev->dev_addr));
+		DBG_871X("MAC Address = %pM\n", pnetdev->dev_addr);
 
 
 		status = rtw_start_drv_threads(padapter);

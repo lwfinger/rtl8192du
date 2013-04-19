@@ -3191,7 +3191,7 @@ _ReadMACAddress(
 
 	//NicIFSetMacAddress(Adapter, Adapter->PermanentAddress);
 	//RT_PRINT_ADDR(COMP_INIT|COMP_EFUSE, DBG_LOUD, "MAC Addr: %s", Adapter->PermanentAddress);
-	DBG_8192C("MAC Address from EFUSE = "MAC_FMT"\n", MAC_ARG(pEEPROM->mac_addr));
+	DBG_8192C("MAC Address from EFUSE = %pM\n", pEEPROM->mac_addr);
 }
 
 

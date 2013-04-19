@@ -219,7 +219,7 @@ u8 rtw_set_802_11_bssid(_adapter* padapter, u8 *bssid)
 _func_enter_;
 
 	RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_notice_,
-		 ("+rtw_set_802_11_bssid: bssid="MAC_FMT"\n", MAC_ARG(bssid) ));
+		 ("+rtw_set_802_11_bssid: bssid=%pM\n", bssid));
 
 	if ((bssid[0]==0x00 && bssid[1]==0x00 && bssid[2]==0x00 && bssid[3]==0x00 && bssid[4]==0x00 &&bssid[5]==0x00) ||
 	    (bssid[0]==0xFF && bssid[1]==0xFF && bssid[2]==0xFF && bssid[3]==0xFF && bssid[4]==0xFF &&bssid[5]==0xFF))
@@ -248,8 +248,8 @@ _func_enter_;
 				goto release_mlme_lock;//it means driver is in WIFI_ADHOC_MASTER_STATE, we needn't create bss again.
 		} else {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("Set BSSID not the same bssid\n"));
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("set_bssid="MAC_FMT"\n", MAC_ARG(bssid) ));
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("cur_bssid="MAC_FMT"\n", MAC_ARG(pmlmepriv->cur_network.network.MacAddress) ));
+			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("set_bssid=%pM\n", bssid));
+			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("cur_bssid=%pM\n", pmlmepriv->cur_network.network.MacAddress));
 
 			rtw_disassoc_cmd(padapter, 0, true);
 

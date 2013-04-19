@@ -1153,7 +1153,7 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 	pstat = rtw_get_stainfo(pstapriv, sa);
 	if (pstat == NULL) {
 		// allocate a new one
-		DBG_871X("going to alloc stainfo for sa="MAC_FMT"\n",  MAC_ARG(sa));
+		DBG_871X("going to alloc stainfo for sa=%pM\n",  sa);
 		pstat = rtw_alloc_stainfo(pstapriv, sa);
 		if (pstat == NULL)
 		{
@@ -1508,8 +1508,8 @@ unsigned int OnAssocReq(_adapter *padapter, union recv_frame *precv_frame)
 	//now parse all ieee802_11 ie to point to elems
 	if (rtw_ieee802_11_parse_elems(pos, left, &elems, 1) == ParseFailed ||
 	    !elems.ssid) {
-		DBG_871X("STA " MAC_FMT " sent invalid association request\n",
-		       MAC_ARG(pstat->hwaddr));
+		DBG_871X("STA %pM sent invalid association request\n",
+		         pstat->hwaddr);
 		status = _STATS_FAILURE_;
 		goto OnAssocReqFail;
 	}
@@ -1691,8 +1691,8 @@ unsigned int OnAssocReq(_adapter *padapter, union recv_frame *precv_frame)
 
 		if(psecuritypriv->wpa_psk == 0)
 		{
-			DBG_871X("STA " MAC_FMT ": WPA/RSN IE in association "
-			"request, but AP don't support WPA/RSN\n", MAC_ARG(pstat->hwaddr));
+			DBG_871X("STA %pM: WPA/RSN IE in association "
+			"request, but AP don't support WPA/RSN\n", pstat->hwaddr);
 
 			status = WLAN_STATUS_INVALID_IE;
 
@@ -1810,8 +1810,8 @@ unsigned int OnAssocReq(_adapter *padapter, union recv_frame *precv_frame)
 		    ((pstat->wpa2_pairwise_cipher&WPA_CIPHER_TKIP) ||
 		      (pstat->wpa_pairwise_cipher&WPA_CIPHER_TKIP)))
 	{
-		DBG_871X("HT: " MAC_FMT " tried to "
-				   "use TKIP with HT association\n", MAC_ARG(pstat->hwaddr));
+		DBG_871X("HT: %pM tried to use TKIP with HT association\n",
+			 pstat->hwaddr);
 
 		//status = WLAN_STATUS_CIPHER_REJECTED_PER_POLICY;
 		//goto OnAssocReqFail;
@@ -2156,7 +2156,7 @@ unsigned int OnDeAuth(_adapter *padapter, union recv_frame *precv_frame)
 		//rtw_free_stainfo(padapter, psta);
 		//_exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL);
 
-		DBG_871X("%s, STA:" MAC_FMT "\n", __FUNCTION__, MAC_ARG(GetAddr2Ptr(pframe)));
+		DBG_871X("%s, STA: %pM\n", __FUNCTION__, GetAddr2Ptr(pframe));
 
 		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
 		if(psta)
@@ -2182,7 +2182,7 @@ unsigned int OnDeAuth(_adapter *padapter, union recv_frame *precv_frame)
 	else
 #endif
 	{
-		DBG_871X("%s, STA:" MAC_FMT "\n", __FUNCTION__, MAC_ARG(GetAddr3Ptr(pframe)));
+		DBG_871X("%s, STA: %pM\n", __FUNCTION__, GetAddr3Ptr(pframe));
 
 		receive_disconnect(padapter, GetAddr3Ptr(pframe) ,reason);
 	}
@@ -2229,7 +2229,7 @@ unsigned int OnDisassoc(_adapter *padapter, union recv_frame *precv_frame)
 		//rtw_free_stainfo(padapter, psta);
 		//_exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL);
 
-		DBG_871X("%s, STA:" MAC_FMT "\n", __FUNCTION__, MAC_ARG(GetAddr2Ptr(pframe)));
+		DBG_871X("%s, STA: %pM\n", __FUNCTION__, GetAddr2Ptr(pframe));
 
 		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
 		if(psta)
@@ -2254,7 +2254,7 @@ unsigned int OnDisassoc(_adapter *padapter, union recv_frame *precv_frame)
 	else
 #endif
 	{
-		DBG_871X("%s, STA:" MAC_FMT "\n", __FUNCTION__, MAC_ARG(GetAddr3Ptr(pframe)));
+		DBG_871X("%s, STA: %pM\n", __FUNCTION__, GetAddr3Ptr(pframe));
 
 		receive_disconnect(padapter, GetAddr3Ptr(pframe), reason);
 	}
@@ -2287,8 +2287,8 @@ unsigned int on_action_spct_ch_switch(_adapter *padapter, struct sta_info *psta,
 		u8 bwmode;
 		struct ieee80211_info_element *ie;
 
-		DBG_871X(FUNC_NDEV_FMT" from "MAC_FMT"\n",
-			FUNC_NDEV_ARG(padapter->pnetdev), MAC_ARG(psta->hwaddr));
+		DBG_871X(FUNC_NDEV_FMT" from %pM\n",
+			FUNC_NDEV_ARG(padapter->pnetdev), psta->hwaddr);
 
 		for_each_ie(ie, ies, ies_len) {
 			if (ie->id == WLAN_EID_CHANNEL_SWITCH) {
@@ -5180,8 +5180,8 @@ int issue_probereq_p2p_ex(_adapter *adapter, u8 *da, int try_cnt, int wait_ms)
 
 	if (try_cnt && wait_ms) {
 		if (da)
-			DBG_871X(FUNC_ADPT_FMT" to "MAC_FMT", ch:%u%s, %d/%d in %u ms\n",
-				FUNC_ADPT_ARG(adapter), MAC_ARG(da), rtw_get_oper_ch(adapter),
+			DBG_871X(FUNC_ADPT_FMT" to %pM, ch:%u%s, %d/%d in %u ms\n",
+				FUNC_ADPT_ARG(adapter), da, rtw_get_oper_ch(adapter),
 				ret==_SUCCESS?", acked":"", i, try_cnt, rtw_get_passing_time_ms(start));
 		else
 			DBG_871X(FUNC_ADPT_FMT", ch:%u%s, %d/%d in %u ms\n",
@@ -6709,8 +6709,8 @@ int issue_probereq_ex(_adapter *padapter, NDIS_802_11_SSID *pssid, u8 *da,
 
 	if (try_cnt && wait_ms) {
 		if (da)
-			DBG_871X(FUNC_ADPT_FMT" to "MAC_FMT", ch:%u%s, %d/%d in %u ms\n",
-				FUNC_ADPT_ARG(padapter), MAC_ARG(da), rtw_get_oper_ch(padapter),
+			DBG_871X(FUNC_ADPT_FMT" to %pM, ch:%u%s, %d/%d in %u ms\n",
+				FUNC_ADPT_ARG(padapter), da, rtw_get_oper_ch(padapter),
 				ret==_SUCCESS?", acked":"", i, try_cnt, rtw_get_passing_time_ms(start));
 		else
 			DBG_871X(FUNC_ADPT_FMT", ch:%u%s, %d/%d in %u ms\n",
@@ -7678,8 +7678,8 @@ int issue_nulldata(_adapter *padapter, unsigned char *da, unsigned int power_mod
 
 	if (try_cnt && wait_ms) {
 		if (da)
-			DBG_871X(FUNC_ADPT_FMT" to "MAC_FMT", ch:%u%s, %d/%d in %u ms\n",
-				FUNC_ADPT_ARG(padapter), MAC_ARG(da), rtw_get_oper_ch(padapter),
+			DBG_871X(FUNC_ADPT_FMT" to %pM, ch:%u%s, %d/%d in %u ms\n",
+				FUNC_ADPT_ARG(padapter), da, rtw_get_oper_ch(padapter),
 				ret==_SUCCESS?", acked":"", i, try_cnt, rtw_get_passing_time_ms(start));
 		else
 			DBG_871X(FUNC_ADPT_FMT", ch:%u%s, %d/%d in %u ms\n",
@@ -7812,8 +7812,8 @@ int issue_qos_nulldata(_adapter *padapter, unsigned char *da, u16 tid, int try_c
 
 	if (try_cnt && wait_ms) {
 		if (da)
-			DBG_871X(FUNC_ADPT_FMT" to "MAC_FMT", ch:%u%s, %d/%d in %u ms\n",
-				FUNC_ADPT_ARG(padapter), MAC_ARG(da), rtw_get_oper_ch(padapter),
+			DBG_871X(FUNC_ADPT_FMT" to %pM, ch:%u%s, %d/%d in %u ms\n",
+				FUNC_ADPT_ARG(padapter), da, rtw_get_oper_ch(padapter),
 				ret==_SUCCESS?", acked":"", i, try_cnt, rtw_get_passing_time_ms(start));
 		else
 			DBG_871X(FUNC_ADPT_FMT", ch:%u%s, %d/%d in %u ms\n",
@@ -7838,8 +7838,6 @@ static int _issue_deauth(_adapter *padapter, unsigned char *da, unsigned short r
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 #endif //CONFIG_P2P
-
-	//DBG_871X("%s to "MAC_FMT"\n", __func__, MAC_ARG(da));
 
 #ifdef CONFIG_P2P
 	if ( !( rtw_p2p_chk_state( pwdinfo, P2P_STATE_NONE ) ) && ( pwdinfo->rx_invitereq_info.scan_op_ch_only ) )
@@ -7900,7 +7898,7 @@ exit:
 
 int issue_deauth(_adapter *padapter, unsigned char *da, unsigned short reason)
 {
-	DBG_871X("%s to "MAC_FMT"\n", __func__, MAC_ARG(da));
+	DBG_871X("%s to %pM\n", __func__, da);
 	return _issue_deauth(padapter, da, reason, false);
 }
 
@@ -7934,8 +7932,8 @@ int issue_deauth_ex(_adapter *padapter, u8 *da, unsigned short reason, int try_c
 
 	if (try_cnt && wait_ms) {
 		if (da)
-			DBG_871X(FUNC_ADPT_FMT" to "MAC_FMT", ch:%u%s, %d/%d in %u ms\n",
-				FUNC_ADPT_ARG(padapter), MAC_ARG(da), rtw_get_oper_ch(padapter),
+			DBG_871X(FUNC_ADPT_FMT" to %pM, ch:%u%s, %d/%d in %u ms\n",
+				FUNC_ADPT_ARG(padapter), da, rtw_get_oper_ch(padapter),
 				ret==_SUCCESS?", acked":"", i, try_cnt, rtw_get_passing_time_ms(start));
 		else
 			DBG_871X(FUNC_ADPT_FMT", ch:%u%s, %d/%d in %u ms\n",
@@ -7961,8 +7959,8 @@ void issue_action_spct_ch_switch(_adapter *padapter, u8 *ra, u8 new_ch, u8 ch_of
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 
-	DBG_871X(FUNC_NDEV_FMT" ra="MAC_FMT", ch:%u, offset:%u\n",
-		FUNC_NDEV_ARG(padapter->pnetdev), MAC_ARG(ra), new_ch, ch_offset);
+	DBG_871X(FUNC_NDEV_FMT" ra=%pM, ch:%u, offset:%u\n",
+		FUNC_NDEV_ARG(padapter->pnetdev), ra, new_ch, ch_offset);
 
 	if ((pmgntframe = alloc_mgtxmitframe(pxmitpriv)) == NULL)
 		return;
@@ -8951,8 +8949,8 @@ u8 collect_bss_info(_adapter *padapter, union recv_frame *precv_frame, WLAN_BSSI
 
 	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) & 1
 	if(strcmp(bssid->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
-		DBG_871X("Receiving %s("MAC_FMT", DSConfig:%u) from ch%u with ss:%3u, sq:%3u, RawRSSI:%3ld\n"
-			, bssid->Ssid.Ssid, MAC_ARG(bssid->MacAddress), bssid->Configuration.DSConfig
+		DBG_871X("Receiving %s(%pM, DSConfig:%u) from ch%u with ss:%3u, sq:%3u, RawRSSI:%3ld\n"
+			, bssid->Ssid.Ssid, bssid->MacAddress, bssid->Configuration.DSConfig
 			, rtw_get_oper_ch(padapter)
 			, bssid->PhyInfo.SignalStrength, bssid->PhyInfo.SignalQuality, bssid->Rssi
 		);
@@ -12337,7 +12335,7 @@ u8 tdls_hdl(_adapter *padapter, unsigned char *pbuf)
 			//As long as TDLS handshake success, we should set RCR_CBSSID_DATA bit to 0
 			//such we can receive all kinds of data frames.
 			rtw_hal_set_hwreg(padapter, HW_VAR_TDLS_WRCR, 0);
-			DBG_871X("TDLS with "MAC_FMT"\n", MAC_ARG(ptdls_sta->hwaddr));
+			DBG_871X("TDLS with %pM\n", ptdls_sta->hwaddr);
 
 			pmlmeinfo->FW_sta_info[ptdls_sta->mac_id].psta = ptdls_sta;
 			//set TDLS sta rate.

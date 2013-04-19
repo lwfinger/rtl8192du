@@ -365,7 +365,7 @@ int proc_get_ap_info(char *page, char **start,
 		struct recv_reorder_ctrl *preorder_ctrl;
 
 		len += snprintf(page + len, count - len, "SSID=%s\n", cur_network->network.Ssid.Ssid);
-		len += snprintf(page + len, count - len, "sta's macaddr:" MAC_FMT "\n", MAC_ARG(psta->hwaddr));
+		len += snprintf(page + len, count - len, "sta's macaddr:%pM\n", psta->hwaddr);
 		len += snprintf(page + len, count - len, "cur_channel=%d, cur_bwmode=%d, cur_ch_offset=%d\n", pmlmeext->cur_channel, pmlmeext->cur_bwmode, pmlmeext->cur_ch_offset);
 		len += snprintf(page + len, count - len, "rtsen=%d, cts2slef=%d\n", psta->rtsen, psta->cts2self);
 		len += snprintf(page + len, count - len, "qos_en=%d, ht_en=%d, init_rate=%d\n", psta->qos_option, psta->htpriv.ht_option, psta->init_rate);
@@ -386,7 +386,7 @@ int proc_get_ap_info(char *page, char **start,
 	}
 	else
 	{
-		len += snprintf(page + len, count - len, "can't get sta's macaddr, cur_network's macaddr:" MAC_FMT "\n", MAC_ARG(cur_network->network.MacAddress));
+		len += snprintf(page + len, count - len, "can't get sta's macaddr, cur_network's macaddr:%pM\n", cur_network->network.MacAddress);
 	}
 
 	*eof = 1;
@@ -1070,7 +1070,7 @@ int proc_get_all_sta_info(char *page, char **start,
 
 			//if(extra_arg == psta->aid)
 			{
-				len += snprintf(page + len, count - len, "sta's macaddr:" MAC_FMT "\n", MAC_ARG(psta->hwaddr));
+				len += snprintf(page + len, count - len, "sta's macaddr:%pM\n", psta->hwaddr);
 				len += snprintf(page + len, count - len, "rtsen=%d, cts2slef=%d\n", psta->rtsen, psta->cts2self);
 				len += snprintf(page + len, count - len, "qos_en=%d, ht_en=%d, init_rate=%d\n", psta->qos_option, psta->htpriv.ht_option, psta->init_rate);
 				len += snprintf(page + len, count - len, "state=0x%x, aid=%d, macid=%d, raid=%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);

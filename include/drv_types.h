@@ -32,16 +32,7 @@
 #include <wlan_bssdef.h>
 #include <drv_types_linux.h>
 
-enum _NIC_VERSION {
-
-	RTL8711_NIC,
-	RTL8712_NIC,
-	RTL8713_NIC,
-	RTL8716_NIC
-
-};
-
-enum{
+enum {
 	UP_LINK,
 	DOWN_LINK,
 };

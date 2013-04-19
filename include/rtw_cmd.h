@@ -27,8 +27,6 @@
 
 #define C2H_MEM_SZ (16*1024)
 
-#ifndef CONFIG_RTL8711FW
-
 	#include <osdep_service.h>
 	#include <ieee80211.h> // <ieee80211/ieee80211.h>
 
@@ -148,10 +146,6 @@ extern void rtw_evt_notify_isr(struct evt_priv *pevtpriv);
 #ifdef CONFIG_P2P
 u8 p2p_protocol_wk_cmd(_adapter*padapter, int intCmdType );
 #endif //CONFIG_P2P
-
-#else
-	#include <ieee80211.h>
-#endif	/* CONFIG_RTL8711FW */
 
 enum rtw_drvextra_cmd_id
 {

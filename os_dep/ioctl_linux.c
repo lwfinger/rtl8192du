@@ -513,7 +513,7 @@ static char *translate_scan(_adapter *padapter,
 		u8 wpa_ie[255],rsn_ie[255];
 		u16 wpa_len=0,rsn_len=0;
 		u8 *p;
-		sint out_len=0;
+		int out_len=0;
 		out_len=rtw_get_sec_ie(pnetwork->network.IEs ,pnetwork->network.IELength,rsn_ie,&rsn_len,wpa_ie,&wpa_len);
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_wx_get_scan: ssid=%s\n",pnetwork->network.Ssid.Ssid));
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_wx_get_scan: wpa_len=%d rsn_len=%d\n",wpa_len,rsn_len));
@@ -1942,7 +1942,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	u32 ret = 0;
 	u32 cnt=0;
 	u32 wait_for_surveydone;
-	sint wait_status;
+	int wait_status;
 #ifdef CONFIG_CONCURRENT_MODE
 	//PADAPTER pbuddy_adapter = padapter->pbuddy_adapter;
 	//struct mlme_priv *pbuddy_mlmepriv = &(pbuddy_adapter->mlmepriv);
@@ -7651,7 +7651,7 @@ static int rtw_set_hidden_ssid(struct net_device *dev, struct ieee_param *param,
 	int ie_len;
 	u8 *ssid_ie;
 	char ssid[NDIS_802_11_LENGTH_SSID + 1];
-	sint ssid_len;
+	int ssid_len;
 	u8 ignore_broadcast_ssid;
 
 	if (check_fwstate(mlmepriv, WIFI_AP_STATE) != true)

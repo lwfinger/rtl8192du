@@ -469,7 +469,7 @@ static inline void flush_signals_thread(void)
 		flush_signals(current);
 }
 
-static inline _OS_STATUS res_to_status(sint res)
+static inline _OS_STATUS res_to_status(int res)
 {
 	return res;
 }

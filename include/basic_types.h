@@ -28,8 +28,6 @@
 
 #include <linux/types.h>
 
-typedef	signed int sint;
-
 typedef void (*proc_t)(void*);
 
 typedef		__kernel_size_t	SIZE_T;

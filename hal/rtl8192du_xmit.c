@@ -252,7 +252,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct pkt_attrib		*pattrib = &pxmitframe->attrib;
 	struct tx_desc		*ptxdesc = (struct tx_desc *)pmem;
-	sint	bmcst = IS_MCAST(pattrib->ra);
+	int	bmcst = IS_MCAST(pattrib->ra);
 #ifdef CONFIG_P2P
 	struct wifidirect_info	*pwdinfo = &padapter->wdinfo;
 	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
@@ -859,7 +859,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 {
 
 	struct hw_xmit *phwxmits;
-	sint hwentry;
+	int hwentry;
 	struct xmit_frame *pxmitframe=NULL;
 	int res=_SUCCESS, xcnt = 0;
 

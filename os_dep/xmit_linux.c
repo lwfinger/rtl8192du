@@ -71,7 +71,7 @@ _func_exit_;
 	return len;
 }
 
-sint rtw_endofpktfile(struct pkt_file *pfile)
+int rtw_endofpktfile(struct pkt_file *pfile)
 {
 _func_enter_;
 

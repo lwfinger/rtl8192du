@@ -267,8 +267,8 @@ struct dvobj_priv {
 #endif
 
 #ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
-	u8 * usb_alloc_vendor_req_buf;
-	u8 * usb_vendor_req_buf;
+	u8 *usb_alloc_vendor_req_buf;
+	u8 *usb_vendor_req_buf;
 #endif
 
 	struct usb_interface *pusbintf;

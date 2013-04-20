@@ -87,7 +87,7 @@ int	PHY_RF6052_Config8192D(	PADAPTER		Adapter	);
 
 bool	rtl8192d_PHY_EnableAnotherPHY(PADAPTER Adapter, bool	 bMac0);
 
-void	rtl8192d_PHY_PowerDownAnotherPHY(IN PADAPTER Adapter, IN bool bMac0);
+void	rtl8192d_PHY_PowerDownAnotherPHY(PADAPTER Adapter, bool bMac0);
 
 
 /*--------------------------Exported Function prototype---------------------*/

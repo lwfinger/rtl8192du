@@ -267,8 +267,8 @@ static void getPowerBase(
 	PADAPTER	Adapter,
 	u8		*pPowerLevel,
 	u8		Channel,
-	IN OUT u32	*OfdmBase,
-	IN OUT u32	*MCSBase
+	u32	*OfdmBase,
+	u32	*MCSBase
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -334,7 +334,7 @@ static void getTxPowerWriteValByRegulatory(
 		u8			index,
 		u32*		powerBase0,
 		u32*		powerBase1,
-	OUT		u32*		pOutWriteVal
+		u32*		pOutWriteVal
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

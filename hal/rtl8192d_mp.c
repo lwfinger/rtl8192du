@@ -885,10 +885,10 @@ PHY_EnableAnotherPHY(
 
 void
 phy_RestoreRFENV(
-	IN	PADAPTER		Adapter,
-	IN	u8			eRFPath,
-	IN  u32			MaskforPhySet,
-	IN	u32*		pu4RegValue
+	PADAPTER		Adapter,
+	u8			eRFPath,
+	u32			MaskforPhySet,
+	u32*		pu4RegValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

@@ -301,10 +301,10 @@ rtl8192d_FirmwareSelfReset(
 // description :polling fw ready
 //
 int _FWInit(
-	IN PADAPTER			  Adapter
+	PADAPTER			  Adapter
 	);
 int _FWInit(
-	IN PADAPTER			  Adapter
+	PADAPTER			  Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -709,7 +709,7 @@ static u8 Hal_GetChnlGroupfromArray(u8 chnl)
 
 void
 rtl8192d_ReadChipVersion(
-	IN PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	u32	value32;
@@ -1105,7 +1105,7 @@ rtl8192d_ReadTxPowerInfo(
 //	Assumption:
 //
 void rtl8192d_ResetDualMacSwitchVariables(
-		IN PADAPTER			Adapter
+		PADAPTER			Adapter
 )
 {
 #ifdef CONFIG_DUALMAC_CONCURRENT
@@ -1345,7 +1345,7 @@ ReadEFuse_RTL8192D(
 	u16			_offset,
 	u16			_size_byte,
 	u8			*pbuf,
-	IN bool	bPseudoTest
+	bool	bPseudoTest
 	)
 {
 	u8	efuseTbl[EFUSE_MAP_LEN];
@@ -1553,7 +1553,7 @@ hal_EfuseUpdateNormalChipVersion_92D(
 
 static bool
 hal_EfuseMacMode_ISVS_92D(
-     IN     PADAPTER     Adapter
+         PADAPTER     Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1594,7 +1594,7 @@ rtl8192d_ReadEFuse(
 	u16			_offset,
 	u16			_size_byte,
 	u8			*pbuf,
-	IN bool	bPseudoTest
+	bool	bPseudoTest
 	)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
@@ -1610,7 +1610,7 @@ rtl8192d_EFUSE_GetEfuseDefinition(
 		PADAPTER	pAdapter,
 		u8		efuseType,
 		u8		type,
-	OUT		void *		*pOut,
+		void *		*pOut,
 		bool		bPseudoTest
 	)
 {

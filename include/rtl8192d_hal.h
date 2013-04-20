@@ -529,7 +529,7 @@ enum ChannelPlan{
 	CHPL_FCC	= 0,
 	CHPL_IC		= 1,
 	CHPL_ETSI	= 2,
-	CHPL_SPAIN	= 3,
+	CHPL_SPA= 3,
 	CHPL_FRANCE	= 4,
 	CHPL_MKK	= 5,
 	CHPL_MKK1	= 6,
@@ -781,12 +781,12 @@ typedef struct hal_data_8192du HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define GET_HAL_DATA(__pAdapter)	((HAL_DATA_TYPE *)((__pAdapter)->HalData))
 #define GET_RF_TYPE(priv)	(GET_HAL_DATA(priv)->rf_type)
 
-int FirmwareDownload92D(IN	PADAPTER Adapter,IN	bool  bUsedWoWLANFw);
-void rtl8192d_FirmwareSelfReset(IN PADAPTER Adapter);
-void rtl8192d_ReadChipVersion(IN PADAPTER Adapter);
+int FirmwareDownload92D(PADAPTER Adapter,bool  bUsedWoWLANFw);
+void rtl8192d_FirmwareSelfReset(PADAPTER Adapter);
+void rtl8192d_ReadChipVersion(PADAPTER Adapter);
 void rtl8192d_EfuseParseChnlPlan(PADAPTER Adapter, u8 *hwinfo, bool AutoLoadFail);
 void rtl8192d_ReadTxPowerInfo(PADAPTER Adapter, u8* PROMContent, bool AutoLoadFail);
-void rtl8192d_ResetDualMacSwitchVariables(IN PADAPTER Adapter);
+void rtl8192d_ResetDualMacSwitchVariables(PADAPTER Adapter);
 u8 GetEEPROMSize8192D(PADAPTER Adapter);
 bool PHY_CheckPowerOffFor8192D(PADAPTER Adapter);
 void PHY_SetPowerOnFor8192D(PADAPTER Adapter);

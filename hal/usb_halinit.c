@@ -662,7 +662,7 @@ void rtw_wowlan_reload_pattern(_adapter *padapter){
 //
 //-------------------------------------------------------------------------
 static u8 _LLTWrite(
-	IN  PADAPTER	Adapter,
+	PADAPTER	Adapter,
 	u32		address,
 	u32		data
 	)
@@ -693,7 +693,7 @@ static u8 _LLTWrite(
 }
 
 static u8 _LLTRead(
-	IN  PADAPTER	Adapter,
+	PADAPTER	Adapter,
 	u32		address
 	)
 {
@@ -721,7 +721,7 @@ static u8 _LLTRead(
 }
 
 static u8 InitLLTTable(
-	IN  PADAPTER	Adapter,
+	PADAPTER	Adapter,
 	u32		boundary
 	)
 {
@@ -784,7 +784,7 @@ static u8 InitLLTTable(
 //---------------------------------------------------------------
 static void
 _SetMacID(
-	IN  PADAPTER Adapter, u8* MacID
+	PADAPTER Adapter, u8* MacID
 	)
 {
 	u32 i;
@@ -800,7 +800,7 @@ _SetMacID(
 
 static void
 _SetBSSID(
-	IN  PADAPTER Adapter, u8* BSSID
+	PADAPTER Adapter, u8* BSSID
 	)
 {
 	u32 i;
@@ -817,7 +817,7 @@ _SetBSSID(
 // Shall USB interface init this?
 static void
 _InitInterrupt(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	u32	value32;
@@ -833,7 +833,7 @@ _InitInterrupt(
 
 static void
 _InitQueueReservedPage(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -922,7 +922,7 @@ _InitQueueReservedPage(
 
 static void
 _InitTxBufferBoundary(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
@@ -1086,7 +1086,7 @@ _InitNormalChipThreeOutEpPriority(
 
 static void
 _InitQueuePriority(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -1110,7 +1110,7 @@ _InitQueuePriority(
 #if ENABLE_USB_DROP_INCORRECT_OUT //amy,temp remove
 static void
 _InitHardwareDropIncorrectBulkOut(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	u32	value32 = rtw_read32(Adapter, REG_TXDMA_OFFSET_CHK);
@@ -1120,7 +1120,7 @@ _InitHardwareDropIncorrectBulkOut(
 #endif //ENABLE_USB_DROP_INCORRECT_OUT, amy,temp remove
 static void
 _InitNetworkType(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	u32	value32;
@@ -1139,7 +1139,7 @@ _InitNetworkType(
 
 static void
 _InitTransferPageSize(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	// Tx page size is always 128.
@@ -1151,7 +1151,7 @@ _InitTransferPageSize(
 
 static void
 _InitDriverInfoSize(
-	IN  PADAPTER	Adapter,
+	PADAPTER	Adapter,
 	u8		drvInfoSize
 	)
 {
@@ -1160,7 +1160,7 @@ _InitDriverInfoSize(
 
 static void
 _InitWMACSetting(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	//u4Byte			value32;
@@ -1198,7 +1198,7 @@ _InitWMACSetting(
 
 static void
 _InitAdaptiveCtrl(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	u16	value16;
@@ -1233,7 +1233,7 @@ _InitAdaptiveCtrl(
 
 static void
 _InitRateFallback(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	// Set Data Auto Rate Fallback Retry Count register.
@@ -1246,7 +1246,7 @@ _InitRateFallback(
 
 static void
 _InitEDCA(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	//PHAL_DATA_8192CUSB	pHalData = GetHalData8192CUsb(Adapter);
@@ -1303,7 +1303,7 @@ _InitEDCA(
 
 static void
 _InitAMPDUAggregation(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -1322,7 +1322,7 @@ _InitAMPDUAggregation(
 
 static void
 _InitBeaconMaxError(
-	IN  PADAPTER	Adapter,
+	PADAPTER	Adapter,
 	bool		InfraMode
 	)
 {
@@ -1345,7 +1345,7 @@ _InitRDGSetting(
 
 static void
 _InitRetryFunction(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	u8	value8;
@@ -1361,7 +1361,7 @@ _InitRetryFunction(
 
 static void
 _InitUsbAggregationSetting(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 #ifdef CONFIG_USB_TX_AGGREGATION
@@ -1567,7 +1567,7 @@ _InitOperationMode(
 
 static void
 _InitSecuritySetting(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	invalidate_cam_all(Adapter);
@@ -1575,7 +1575,7 @@ _InitSecuritySetting(
 
  static void
 _InitBeaconParameters(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 //	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1622,7 +1622,7 @@ _InitRFType(
 }
 
 #if RTL8192CU_ADHOC_WORKAROUND_SETTING
-static void _InitAdhocWorkaroundParams(IN PADAPTER Adapter)
+static void _InitAdhocWorkaroundParams(PADAPTER Adapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	pHalData->RegBcnCtrlVal = rtw_read8(Adapter, REG_BCN_CTRL);
@@ -2418,7 +2418,7 @@ n. LEDCFG 0x4C[15:0] = 0x8080
 } //end of _DisableGPIO()
 static void
 _ResetFWDownloadRegister(
-	IN PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	u32	value32;
@@ -2431,7 +2431,7 @@ _ResetFWDownloadRegister(
 
 static int
 _DisableRF_AFE(
-	IN PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	int		rtStatus = _SUCCESS;
@@ -2468,7 +2468,7 @@ _DisableRF_AFE(
 
 static void
 _ResetBB(
-	IN PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	u16	value16;
@@ -2483,7 +2483,7 @@ _ResetBB(
 
 static void
 _ResetMCU(
-	IN PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	u16	value16;
@@ -2497,7 +2497,7 @@ _ResetMCU(
 
 static void
 _DisableMAC_AFE_PLL(
-	IN PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	u32	value32;
@@ -2535,7 +2535,7 @@ _AutoPowerDownToHostOff(
 
 static void
 _SetUsbSuspend(
-	IN PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	u32			value32;
@@ -2553,7 +2553,7 @@ _SetUsbSuspend(
 
 static void
 _DisableRFAFEAndResetBB8192D(
-	IN PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 /**************************************
@@ -2599,7 +2599,7 @@ e.	SYS_FUNC_EN 0x02[7:0] = 0x14		//reset BB state machine
 
 static void
 _DisableRFAFEAndResetBB(
-	IN PADAPTER			Adapter
+	PADAPTER			Adapter
 	)
 {
 	_DisableRFAFEAndResetBB8192D(Adapter);
@@ -2696,8 +2696,8 @@ m.	SYS_ISO_CTRL 0x01[7:0] = 0x83			// isolated ELDR to PON
 
 static void
 _DisableAnalog(
-	IN PADAPTER			Adapter,
-	IN bool			bWithoutHWSM
+	PADAPTER			Adapter,
+	bool			bWithoutHWSM
 	)
 {
 	u32 value16 = 0;
@@ -3380,7 +3380,7 @@ static void _InitAdapterVariablesByPROM(
 }
 
 static void _ReadPROMContent(
-	IN PADAPTER		Adapter
+	PADAPTER		Adapter
 	)
 {
 	EEPROM_EFUSE_PRIV	*pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
@@ -3444,7 +3444,7 @@ static void _ReadPROMContent(
 
 static void
 _InitOtherVariable(
-	IN PADAPTER		Adapter
+	PADAPTER		Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3683,11 +3683,11 @@ SelectRTSInitialRate(
 //
 void
 SetRTSRateWorkItemCallback(
-	IN void *			pContext
+	void *			pContext
 );
 void
 SetRTSRateWorkItemCallback(
-	IN void *			pContext
+	void *			pContext
 )
 {
 	PADAPTER		Adapter =  (PADAPTER)pContext;

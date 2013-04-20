@@ -78,38 +78,38 @@ extern atomic_t GlobalCounterForMutex;
 /*---------------------Define local function prototype-----------------------*/
 static void
 phy_PathAFillIQKMatrix(
-	IN PADAPTER	pAdapter,
-	IN bool	bIQKOK,
-	IN int		result[][8],
-	IN u8		final_candidate,
-	IN bool	bTxOnly
+	PADAPTER	pAdapter,
+	bool	bIQKOK,
+	int		result[][8],
+	u8		final_candidate,
+	bool	bTxOnly
 	);
 
 static void
 phy_PathAFillIQKMatrix_5G_Normal(
-	IN PADAPTER	pAdapter,
-	IN bool	bIQKOK,
-	IN int		result[][8],
-	IN u8		final_candidate,
-	IN bool	bTxOnly
+	PADAPTER	pAdapter,
+	bool	bIQKOK,
+	int		result[][8],
+	u8		final_candidate,
+	bool	bTxOnly
 	);
 
 static void
 phy_PathBFillIQKMatrix(
-	IN PADAPTER	pAdapter,
-	IN bool	bIQKOK,
-	IN int		result[][8],
-	IN u8		final_candidate,
-	IN bool	bTxOnly
+	PADAPTER	pAdapter,
+	bool	bIQKOK,
+	int		result[][8],
+	u8		final_candidate,
+	bool	bTxOnly
 	);
 
 static void
 phy_PathBFillIQKMatrix_5G_Normal(
-	IN PADAPTER	pAdapter,
-	IN bool	bIQKOK,
-	IN int		result[][8],
-	IN u8		final_candidate,
-	IN bool	bTxOnly
+	PADAPTER	pAdapter,
+	bool	bIQKOK,
+	int		result[][8],
+	u8		final_candidate,
+	bool	bTxOnly
 	);
 /*----------------------------Function Body----------------------------------*/
 
@@ -196,10 +196,10 @@ phy_CalculateBitShift(
 //
 void
 rtl8192d_PHY_SetBBReg1Byte(
-	IN	PADAPTER	Adapter,
-	IN	u32		RegAddr,
-	IN	u32		BitMask,
-	IN	u32		Data
+	PADAPTER	Adapter,
+	u32		RegAddr,
+	u32		BitMask,
+	u32		Data
 	)
 {
 	u32			OriginalValue, BitShift,offset = 0;
@@ -238,9 +238,9 @@ rtl8192d_PHY_SetBBReg1Byte(
 */
 u32
 rtl8192d_PHY_QueryBBReg(
-	IN	PADAPTER	Adapter,
-	IN	u32		RegAddr,
-	IN	u32		BitMask
+	PADAPTER	Adapter,
+	u32		RegAddr,
+	u32		BitMask
 	)
 {
 	u32	ReturnValue = 0, OriginalValue, BitShift;
@@ -275,10 +275,10 @@ rtl8192d_PHY_QueryBBReg(
 
 void
 rtl8192d_PHY_SetBBReg(
-	IN	PADAPTER	Adapter,
-	IN	u32		RegAddr,
-	IN	u32		BitMask,
-	IN	u32		Data
+	PADAPTER	Adapter,
+	u32		RegAddr,
+	u32		BitMask,
+	u32		Data
 	)
 {
 	u32	OriginalValue, BitShift;
@@ -319,9 +319,9 @@ rtl8192d_PHY_SetBBReg(
  *---------------------------------------------------------------------------*/
 static	u32
 phy_FwRFSerialRead(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset	)
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset	)
 {
 	u32		retValue = 0;
 	//RT_ASSERT(FALSE,("deprecate!\n"));
@@ -348,10 +348,10 @@ phy_FwRFSerialRead(
  *---------------------------------------------------------------------------*/
 static	void
 phy_FwRFSerialWrite(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset,
-	IN	u32				Data	)
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset,
+	u32				Data	)
 {
 }
 
@@ -376,9 +376,9 @@ phy_FwRFSerialWrite(
 */
 static	u32
 phy_RFSerialRead(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset
 	)
 {
 	u32	retValue = 0;
@@ -501,10 +501,10 @@ phy_RFSerialRead(
 */
 static	void
 phy_RFSerialWrite(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				Offset,
-	IN	u32				Data
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				Offset,
+	u32				Data
 	)
 {
 	u32	DataAndAddr = 0;
@@ -573,10 +573,10 @@ phy_RFSerialWrite(
 */
 u32
 rtl8192d_PHY_QueryRFReg(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				RegAddr,
-	IN	u32				BitMask
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				RegAddr,
+	u32				BitMask
 	)
 {
 	u32 Original_Value, Readback_Value, BitShift;
@@ -621,11 +621,11 @@ rtl8192d_PHY_QueryRFReg(
 */
 void
 rtl8192d_PHY_SetRFReg(
-	IN	PADAPTER			Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				RegAddr,
-	IN	u32				BitMask,
-	IN	u32				Data
+	PADAPTER			Adapter,
+	RF_RADIO_PATH_E	eRFPath,
+	u32				RegAddr,
+	u32				BitMask,
+	u32				Data
 	)
 {
 
@@ -677,8 +677,8 @@ rtl8192d_PHY_SetRFReg(
 #ifndef CONFIG_EMBEDDED_FWIMG
 static	int
 phy_ConfigMACWithParaFile(
-	IN	PADAPTER		Adapter,
-	IN	u8*			pFileName
+	PADAPTER		Adapter,
+	u8*			pFileName
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -706,7 +706,7 @@ phy_ConfigMACWithParaFile(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigMACWithHeaderFile(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 )
 {
 	u32					i = 0;
@@ -747,7 +747,7 @@ phy_ConfigMACWithHeaderFile(
  *---------------------------------------------------------------------------*/
 extern	int
 PHY_MACConfig8192D(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -804,7 +804,7 @@ PHY_MACConfig8192D(
 */
 static	void
 phy_InitBBRFRegisterDefinition(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -926,8 +926,8 @@ phy_InitBBRFRegisterDefinition(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigBBWithHeaderFile(
-	IN	PADAPTER		Adapter,
-	IN	u8			ConfigType
+	PADAPTER		Adapter,
+	u8			ConfigType
 )
 {
 	int i;
@@ -1067,8 +1067,8 @@ phy_ConfigBBWithHeaderFile(
 #ifndef CONFIG_EMBEDDED_FWIMG
 static	int
 phy_ConfigBBWithParaFile(
-	IN	PADAPTER		Adapter,
-	IN	u8*			pFileName
+	PADAPTER		Adapter,
+	u8*			pFileName
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1081,10 +1081,10 @@ phy_ConfigBBWithParaFile(
 #if MP_DRIVER != 1
 static void
 storePwrIndexDiffRateOffset(
-	IN	PADAPTER	Adapter,
-	IN	u32		RegAddr,
-	IN	u32		BitMask,
-	IN	u32		Data
+	PADAPTER	Adapter,
+	u32		RegAddr,
+	u32		BitMask,
+	u32		Data
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1206,8 +1206,8 @@ storePwrIndexDiffRateOffset(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigBBWithPgHeaderFile(
-	IN	PADAPTER		Adapter,
-	IN	u8			ConfigType)
+	PADAPTER		Adapter,
+	u8			ConfigType)
 {
 	int i;
 	u32*	Rtl819XPHY_REGArray_Table_PG;
@@ -1275,8 +1275,8 @@ phy_ConfigBBWithPgHeaderFile(
 #ifndef CONFIG_EMBEDDED_FWIMG
 static	int
 phy_ConfigBBWithPgParaFile(
-	IN	PADAPTER		Adapter,
-	IN	u8*			pFileName)
+	PADAPTER		Adapter,
+	u8*			pFileName)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
@@ -1307,8 +1307,8 @@ phy_ConfigBBWithPgParaFile(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigBBWithMpParaFile(
-	IN	PADAPTER	Adapter,
-	IN	s8			*pFileName
+	PADAPTER	Adapter,
+	s8			*pFileName
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1335,8 +1335,8 @@ phy_ConfigBBWithMpParaFile(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigBBWithMpHeaderFile(
-	IN	PADAPTER		Adapter,
-	IN	u1Byte			ConfigType)
+	PADAPTER		Adapter,
+	u1Byte			ConfigType)
 {
 	int	i;
 	u32	*Rtl8192CPHY_REGArray_Table_MP;
@@ -1388,7 +1388,7 @@ phy_ConfigBBWithMpHeaderFile(
 
 static	int
 phy_BB8192D_Config_ParaFile(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 	)
 {
 #if MP_DRIVER != 1
@@ -1517,7 +1517,7 @@ phy_BB8190_Config_ParaFile_Fail:
 
 int
 PHY_BBConfig8192D(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 	)
 {
 	int	rtStatus = _SUCCESS;
@@ -1608,7 +1608,7 @@ PHY_BBConfig8192D(
 
 extern	int
 PHY_RFConfig8192D(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 	)
 {
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1644,8 +1644,8 @@ PHY_RFConfig8192D(
  *---------------------------------------------------------------------------*/
 int
 rtl8192d_PHY_ConfigRFWithParaFile(
-	IN	PADAPTER			Adapter,
-	IN	u8*				pFileName,
+	PADAPTER			Adapter,
+	u8*				pFileName,
 	RF_RADIO_PATH_E		eRFPath
 )
 {
@@ -1674,7 +1674,7 @@ rtl8192d_PHY_ConfigRFWithParaFile(
  *---------------------------------------------------------------------------*/
 int
 rtl8192d_PHY_ConfigRFWithHeaderFile(
-	IN	PADAPTER			Adapter,
+	PADAPTER			Adapter,
 	RF_CONTENT				Content,
 	RF_RADIO_PATH_E		eRFPath
 )
@@ -1840,9 +1840,9 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
  *---------------------------------------------------------------------------*/
 int
 rtl8192d_PHY_CheckBBAndRFOK(
-	IN	PADAPTER			Adapter,
-	IN	HW90_BLOCK_E		CheckBlock,
-	IN	RF_RADIO_PATH_E	eRFPath
+	PADAPTER			Adapter,
+	HW90_BLOCK_E		CheckBlock,
+	RF_RADIO_PATH_E	eRFPath
 	)
 {
 	int			rtStatus = _SUCCESS;
@@ -1915,7 +1915,7 @@ rtl8192d_PHY_CheckBBAndRFOK(
 
 void
 rtl8192d_PHY_GetHWRegOriginalValue(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1947,9 +1947,9 @@ rtl8192d_PHY_GetHWRegOriginalValue(
 //
 static	u8
 phy_DbmToTxPwrIdx(
-	IN	PADAPTER		Adapter,
-	IN	WIRELESS_MODE	WirelessMode,
-	IN	int			PowerInDbm
+	PADAPTER		Adapter,
+	WIRELESS_MODE	WirelessMode,
+	int			PowerInDbm
 	)
 {
 	u8				TxPwrIdx = 0;
@@ -2004,9 +2004,9 @@ phy_DbmToTxPwrIdx(
 //
 static int
 phy_TxPwrIdxToDbm(
-	IN	PADAPTER		Adapter,
-	IN	WIRELESS_MODE	WirelessMode,
-	IN	u8			TxPwrIdx
+	PADAPTER		Adapter,
+	WIRELESS_MODE	WirelessMode,
+	u8			TxPwrIdx
 	)
 {
 	int				Offset = 0;
@@ -2054,8 +2054,8 @@ phy_TxPwrIdxToDbm(
  *---------------------------------------------------------------------------*/
 void
 PHY_GetTxPowerLevel8192D(
-	IN	PADAPTER		Adapter,
-	OUT u32*		powerlevel
+	PADAPTER		Adapter,
+	u32*		powerlevel
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2090,10 +2090,10 @@ PHY_GetTxPowerLevel8192D(
 
 
 static void getTxPowerIndex(
-	IN	PADAPTER		Adapter,
-	IN	u8			channel,
-	IN OUT u8*		cckPowerLevel,
-	IN OUT u8*		ofdmPowerLevel
+	PADAPTER		Adapter,
+	u8			channel,
+	u8*		cckPowerLevel,
+	u8*		ofdmPowerLevel
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2125,10 +2125,10 @@ static void getTxPowerIndex(
 }
 
 static void ccxPowerIndexCheck(
-	IN	PADAPTER		Adapter,
-	IN	u8			channel,
-	IN OUT u8*		cckPowerLevel,
-	IN OUT u8*		ofdmPowerLevel
+	PADAPTER		Adapter,
+	u8			channel,
+	u8*		cckPowerLevel,
+	u8*		ofdmPowerLevel
 	)
 {
 }
@@ -2151,8 +2151,8 @@ static void ccxPowerIndexCheck(
  *---------------------------------------------------------------------------*/
 void
 PHY_SetTxPowerLevel8192D(
-	IN	PADAPTER		Adapter,
-	IN	u8			channel
+	PADAPTER		Adapter,
+	u8			channel
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -2190,8 +2190,8 @@ PHY_SetTxPowerLevel8192D(
 //
 bool
 PHY_UpdateTxPowerDbm8192D(
-	IN	PADAPTER	Adapter,
-	IN	int		powerInDbm
+	PADAPTER	Adapter,
+	int		powerInDbm
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2237,8 +2237,8 @@ PHY_UpdateTxPowerDbm8192D(
 
 void
 rtl8192d_PHY_SetBeaconHwReg(
-	IN	PADAPTER		Adapter,
-	IN	u16			BeaconInterval
+	PADAPTER		Adapter,
+	u16			BeaconInterval
 	)
 {
 
@@ -2247,8 +2247,8 @@ rtl8192d_PHY_SetBeaconHwReg(
 
 void
 PHY_ScanOperationBackup8192D(
-	IN	PADAPTER	Adapter,
-	IN	u8		Operation
+	PADAPTER	Adapter,
+	u8		Operation
 	)
 {
 }
@@ -2270,7 +2270,7 @@ PHY_ScanOperationBackup8192D(
  *---------------------------------------------------------------------------*/
 static void
 _PHY_SetBWMode92D(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -2437,9 +2437,9 @@ _PHY_SetBWMode92D(
  *---------------------------------------------------------------------------*/
 void
 PHY_SetBWMode8192D(
-	IN	PADAPTER					Adapter,
-	IN	HT_CHANNEL_WIDTH	Bandwidth,	// 20M or 40M
-	IN	unsigned char	Offset		// Upper, Lower, or Don't care
+	PADAPTER					Adapter,
+	HT_CHANNEL_WIDTH	Bandwidth,	// 20M or 40M
+	unsigned char	Offset		// Upper, Lower, or Don't care
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2525,12 +2525,12 @@ PHY_StopTRXBeforeChangeBand8192D(
 */
 void
 PHY_SwitchWirelessBand(
-	IN PADAPTER		 Adapter,
-	IN u8		Band);
+	PADAPTER		 Adapter,
+	u8		Band);
 void
 PHY_SwitchWirelessBand(
-	IN PADAPTER		 Adapter,
-	IN u8		Band)
+	PADAPTER		 Adapter,
+	u8		Band)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -2660,10 +2660,10 @@ PHY_SwitchWirelessBand(
 
 static void
 PHY_EnableRFENV(
-	IN	PADAPTER		Adapter,
-	IN	u8				eRFPath	,
-	IN	u32				MaskforPhySet,
-	OUT	u32*			pu4RegValue
+	PADAPTER		Adapter,
+	u8				eRFPath	,
+	u32				MaskforPhySet,
+	u32*			pu4RegValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2705,10 +2705,10 @@ PHY_EnableRFENV(
 
 static void
 PHY_RestoreRFENV(
-	IN	PADAPTER		Adapter,
-	IN	u8				eRFPath,
-	IN	u32				MaskforPhySet,
-	IN	u32*			pu4RegValue
+	PADAPTER		Adapter,
+	u8				eRFPath,
+	u32				MaskforPhySet,
+	u32*			pu4RegValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2738,7 +2738,7 @@ PHY_RestoreRFENV(
  *
  * Overview:	Change RF Setting when we siwthc channel for 92D C-cut.
  *
- * Input:       IN	PADAPTER				pAdapter
+ * Input:       PADAPTER				pAdapter
  *
  * Output:      NONE
  *
@@ -2752,8 +2752,8 @@ PHY_RestoreRFENV(
  *---------------------------------------------------------------------------*/
  static	void
  phy_SwitchRfSetting(
-	IN	PADAPTER			Adapter,
-	IN	u8					channel
+	PADAPTER			Adapter,
+	u8					channel
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -2996,7 +2996,7 @@ PHY_RestoreRFENV(
  *
  * Overview:	Change RF Setting when we siwthc channel for 92D C-cut.
  *
- * Input:       IN	PADAPTER				pAdapter
+ * Input:       PADAPTER				pAdapter
  *
  * Output:      NONE
  *
@@ -3010,8 +3010,8 @@ PHY_RestoreRFENV(
  *---------------------------------------------------------------------------*/
 static  void
  phy_ReloadLCKSetting(
-	IN	PADAPTER				Adapter,
-	IN	u8					channel
+	PADAPTER				Adapter,
+	u8					channel
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -3086,7 +3086,7 @@ static  void
  *
  * Overview:	Change RF Setting when we siwthc channel for 92D C-cut.
  *
- * Input:       IN	PADAPTER				pAdapter
+ * Input:       PADAPTER				pAdapter
  *
  * Output:      NONE
  *
@@ -3100,9 +3100,9 @@ static  void
  *---------------------------------------------------------------------------*/
  static void
  phy_ReloadIMRSetting(
-	IN	PADAPTER				Adapter,
-	IN	u8					channel,
-	IN	u8					eRFPath
+	PADAPTER				Adapter,
+	u8					channel,
+	u8					eRFPath
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -3164,7 +3164,7 @@ static  void
  *
  * Overview:	Change RF Setting when we siwthc channel for 92D C-cut.
  *
- * Input:       IN	PADAPTER				pAdapter
+ * Input:       PADAPTER				pAdapter
  *
  * Output:      NONE
  *
@@ -3178,8 +3178,8 @@ static  void
  *---------------------------------------------------------------------------*/
  static void
  phy_ReloadIQKSetting(
-	IN	PADAPTER				Adapter,
-	IN	u8					channel
+	PADAPTER				Adapter,
+	u8					channel
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3350,8 +3350,8 @@ static void _PHY_SwChnl8192D(PADAPTER Adapter, u8 channel)
 
 void
 PHY_SwChnl8192D(	// Call after initialization
-	IN	PADAPTER	Adapter,
-	IN	u8		channel
+	PADAPTER	Adapter,
+	u8		channel
 	)
 {
 	//PADAPTER Adapter =  ADJUST_TO_ADAPTIVE_ADAPTER(pAdapter, true);
@@ -3502,11 +3502,11 @@ PHY_SwChnl8192D(	// Call after initialization
 
 static	bool
 phy_SwChnlStepByStep(
-	IN	PADAPTER	Adapter,
-	IN	u8		channel,
-	IN	u8		*stage,
-	IN	u8		*step,
-	OUT u32		*delay
+	PADAPTER	Adapter,
+	u8		channel,
+	u8		*stage,
+	u8		*step,
+	u32		*delay
 	)
 {
 	return true;
@@ -3542,8 +3542,8 @@ phy_SetSwChnlCmdArray(
 
 static	void
 phy_FinishSwChnlNow(	// We should not call this function directly
-		IN	PADAPTER	Adapter,
-		IN	u8		channel
+		PADAPTER	Adapter,
+		u8		channel
 		)
 {
 }
@@ -3560,8 +3560,8 @@ phy_FinishSwChnlNow(	// We should not call this function directly
 //
 void
 PHY_SwChnlPhy8192D(	// Only called during initialize
-	IN	PADAPTER	Adapter,
-	IN	u8		channel
+	PADAPTER	Adapter,
+	u8		channel
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3606,8 +3606,8 @@ PHY_SwChnlPhy8192D(	// Only called during initialize
 //
 void
 PHY_SetMonitorMode8192D(
-	IN	PADAPTER			pAdapter,
-	IN	bool				bEnableMonitorMode
+	PADAPTER			pAdapter,
+	bool				bEnableMonitorMode
 	)
 {
 }
@@ -3632,8 +3632,8 @@ PHY_SetMonitorMode8192D(
  *---------------------------------------------------------------------------*/
 bool
 PHY_CheckIsLegalRfPath8192D(
-	IN	PADAPTER	pAdapter,
-	IN	u32	eRFPath)
+	PADAPTER	pAdapter,
+	u32	eRFPath)
 {
 //	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	bool				rtValue = true;
@@ -3654,8 +3654,8 @@ PHY_CheckIsLegalRfPath8192D(
 
 static u8			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK(
-	IN	PADAPTER	pAdapter,
-	IN	bool		configPathB
+	PADAPTER	pAdapter,
+	bool		configPathB
 	)
 {
 	u32	regEAC, regE94, regE9C, regEA4;
@@ -3741,8 +3741,8 @@ phy_PathA_IQK(
 
 static u8			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK_5G_Normal(
-	IN	PADAPTER	pAdapter,
-	IN	bool		configPathB
+	PADAPTER	pAdapter,
+	bool		configPathB
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -3875,7 +3875,7 @@ phy_PathA_IQK_5G_Normal(
 
 static u8				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathB_IQK(
-	IN	PADAPTER	pAdapter
+	PADAPTER	pAdapter
 	)
 {
 	u32 regEAC, regEB4, regEBC, regEC4, regECC;
@@ -3924,7 +3924,7 @@ phy_PathB_IQK(
 
 static u8				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathB_IQK_5G_Normal(
-	IN	PADAPTER	pAdapter
+	PADAPTER	pAdapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -4039,11 +4039,11 @@ phy_PathB_IQK_5G_Normal(
 
 static void
 phy_PathAFillIQKMatrix(
-	IN PADAPTER	pAdapter,
-	IN bool	bIQKOK,
-	IN int		result[][8],
-	IN u8		final_candidate,
-	IN bool	bTxOnly
+	PADAPTER	pAdapter,
+	bool	bIQKOK,
+	int		result[][8],
+	u8		final_candidate,
+	bool	bTxOnly
 	)
 {
 	u32	Oldval_0, X, TX0_A, reg;
@@ -4106,11 +4106,11 @@ phy_PathAFillIQKMatrix(
 
 static void
 phy_PathAFillIQKMatrix_5G_Normal(
-	IN PADAPTER	pAdapter,
-	IN bool	bIQKOK,
-	IN int		result[][8],
-	IN u8		final_candidate,
-	IN bool	bTxOnly
+	PADAPTER	pAdapter,
+	bool	bIQKOK,
+	int		result[][8],
+	u8		final_candidate,
+	bool	bTxOnly
 	)
 {
 	u32	X, reg;
@@ -4174,11 +4174,11 @@ phy_PathAFillIQKMatrix_5G_Normal(
 
 static void
 phy_PathBFillIQKMatrix(
-	IN PADAPTER	pAdapter,
-	IN bool	bIQKOK,
-	IN int		result[][8],
-	IN u8		final_candidate,
-	IN bool	bTxOnly			//do Tx only
+	PADAPTER	pAdapter,
+	bool	bIQKOK,
+	int		result[][8],
+	u8		final_candidate,
+	bool	bTxOnly			//do Tx only
 	)
 {
 	u32	Oldval_1, X, TX1_A, reg;
@@ -4235,11 +4235,11 @@ phy_PathBFillIQKMatrix(
 
 static void
 phy_PathBFillIQKMatrix_5G_Normal(
-	IN PADAPTER	pAdapter,
-	IN bool	bIQKOK,
-	IN int		result[][8],
-	IN u8		final_candidate,
-	IN bool	bTxOnly			//do Tx only
+	PADAPTER	pAdapter,
+	bool	bIQKOK,
+	int		result[][8],
+	u8		final_candidate,
+	bool	bTxOnly			//do Tx only
 	)
 {
 	u32	X, reg;
@@ -4291,10 +4291,10 @@ phy_PathBFillIQKMatrix_5G_Normal(
 
 static void
 phy_SaveADDARegisters(
-	IN	PADAPTER	pAdapter,
-	IN	u32*		ADDAReg,
-	IN	u32*		ADDABackup,
-	IN	u32			RegisterNum
+	PADAPTER	pAdapter,
+	u32*		ADDAReg,
+	u32*		ADDABackup,
+	u32			RegisterNum
 	)
 {
 	u32	i;
@@ -4310,9 +4310,9 @@ phy_SaveADDARegisters(
 
 static void
 phy_SaveMACRegisters(
-	IN	PADAPTER	pAdapter,
-	IN	u32*		MACReg,
-	IN	u32*		MACBackup
+	PADAPTER	pAdapter,
+	u32*		MACReg,
+	u32*		MACBackup
 	)
 {
 	u32	i;
@@ -4327,10 +4327,10 @@ phy_SaveMACRegisters(
 
 static void
 phy_ReloadADDARegisters(
-	IN	PADAPTER	pAdapter,
-	IN	u32*		ADDAReg,
-	IN	u32*		ADDABackup,
-	IN	u32			RegiesterNum
+	PADAPTER	pAdapter,
+	u32*		ADDAReg,
+	u32*		ADDABackup,
+	u32			RegiesterNum
 	)
 {
 	u32	i;
@@ -4346,9 +4346,9 @@ phy_ReloadADDARegisters(
 
 static void
 phy_ReloadMACRegisters(
-	IN	PADAPTER	pAdapter,
-	IN	u32*		MACReg,
-	IN	u32*		MACBackup
+	PADAPTER	pAdapter,
+	u32*		MACReg,
+	u32*		MACBackup
 	)
 {
 	u32	i;
@@ -4362,10 +4362,10 @@ phy_ReloadMACRegisters(
 
 static void
 phy_PathADDAOn(
-	IN	PADAPTER	pAdapter,
-	IN	u32*		ADDAReg,
-	IN	bool		isPathAOn,
-	IN	bool		is2T
+	PADAPTER	pAdapter,
+	u32*		ADDAReg,
+	bool		isPathAOn,
+	bool		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -4387,9 +4387,9 @@ phy_PathADDAOn(
 
 static void
 phy_MACSettingCalibration(
-	IN	PADAPTER	pAdapter,
-	IN	u32*		MACReg,
-	IN	u32*		MACBackup
+	PADAPTER	pAdapter,
+	u32*		MACReg,
+	u32*		MACBackup
 	)
 {
 	u32	i = 0;
@@ -4407,7 +4407,7 @@ phy_MACSettingCalibration(
 
 static void
 phy_PathAStandBy(
-	IN	PADAPTER	pAdapter
+	PADAPTER	pAdapter
 	)
 {
 	//RTPRINT(FINIT, INIT_IQK, ("Path-A standby mode!\n"));
@@ -4419,8 +4419,8 @@ phy_PathAStandBy(
 
 static void
 phy_PIModeSwitch(
-	IN	PADAPTER	pAdapter,
-	IN	bool		PIMode
+	PADAPTER	pAdapter,
+	bool		PIMode
 	)
 {
 	u32	mode;
@@ -4434,10 +4434,10 @@ phy_PIModeSwitch(
 
 static bool
 phy_SimularityCompare_92D(
-	IN	PADAPTER	pAdapter,
-	IN	int		result[][8],
-	IN	u8		 c1,
-	IN	u8		 c2
+	PADAPTER	pAdapter,
+	int		result[][8],
+	u8		 c1,
+	u8		 c2
 	)
 {
 	u32	i, j, diff, SimularityBitMap, bound = 0, u4temp = 0;
@@ -4526,10 +4526,10 @@ return false => do IQK again
 */
 static bool
 phy_SimularityCompare(
-	IN	PADAPTER	pAdapter,
-	IN	int		result[][8],
-	IN	u8		 c1,
-	IN	u8		 c2
+	PADAPTER	pAdapter,
+	int		result[][8],
+	u8		 c1,
+	u8		 c2
 	)
 {
 	return phy_SimularityCompare_92D(pAdapter, result, c1, c2);
@@ -4537,10 +4537,10 @@ phy_SimularityCompare(
 
 static void
 phy_IQCalibrate(
-	IN	PADAPTER	pAdapter,
-	IN	int		result[][8],
-	IN	u8		t,
-	IN	bool		is2T
+	PADAPTER	pAdapter,
+	int		result[][8],
+	u8		t,
+	bool		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -4767,8 +4767,8 @@ phy_IQCalibrate(
 
 static void
 phy_IQCalibrate_5G(
-	IN	PADAPTER	pAdapter,
-	IN	int		result[][8]
+	PADAPTER	pAdapter,
+	int		result[][8]
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -5148,9 +5148,9 @@ Exit_IQK:
 
 static void
 phy_IQCalibrate_5G_Normal(
-	IN	PADAPTER	pAdapter,
-	IN	int		result[][8],
-	IN	u8		t
+	PADAPTER	pAdapter,
+	int		result[][8],
+	u8		t
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -5357,8 +5357,8 @@ phy_IQCalibrate_5G_Normal(
 #if SWLCK != 1
 static void
 phy_LCCalibrate92D(
-	IN	PADAPTER	pAdapter,
-	IN	bool		is2T
+	PADAPTER	pAdapter,
+	bool		is2T
 	)
 {
 	u8	tmpReg, index = 0;
@@ -5442,8 +5442,8 @@ phy_LCCalibrate92D(
 
 static u32
 get_abs(
-	IN	u32	val1,
-	IN	u32	val2
+	u32	val1,
+	u32	val2
 	)
 {
 	u32 ret=0;
@@ -5465,11 +5465,11 @@ get_abs(
 
 static void
 phy_CalcCurvIndex(
-	IN	PADAPTER	pAdapter,
-	IN	u32*		TargetChnl,
-	IN	u32*		CurveCountVal,
-	IN	bool		is5G,
-	OUT	u32*		CurveIndex
+	PADAPTER	pAdapter,
+	u32*		TargetChnl,
+	u32*		CurveCountVal,
+	bool		is5G,
+	u32*		CurveIndex
 	)
 {
 	u32	smallestABSVal = 0xffffffff, u4tmp;
@@ -5558,8 +5558,8 @@ phy_CalcCurvIndex(
 
 static void
 phy_LCCalibrate92DSW(
-	IN	PADAPTER	pAdapter,
-	IN	bool		is2T
+	PADAPTER	pAdapter,
+	bool		is2T
 	)
 {
 	u8	RF_mode[2], tmpReg, index = 0;
@@ -5708,8 +5708,8 @@ phy_LCCalibrate92DSW(
 
 static void
 phy_LCCalibrate(
-	IN	PADAPTER	pAdapter,
-	IN	bool		is2T
+	PADAPTER	pAdapter,
+	bool		is2T
 	)
 {
 #if SWLCK == 1
@@ -5728,9 +5728,9 @@ phy_LCCalibrate(
 
 static void
 phy_APCalibrate(
-	IN	PADAPTER	pAdapter,
-	IN	char		delta,
-	IN	bool		is2T
+	PADAPTER	pAdapter,
+	char		delta,
+	bool		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -6149,9 +6149,9 @@ phy_APCalibrate(
 }
 
 static void phy_SetRFPathSwitch(
-	IN	PADAPTER	pAdapter,
-	IN	bool		bMain,
-	IN	bool		is2T
+	PADAPTER	pAdapter,
+	bool		bMain,
+	bool		is2T
 	)
 {
 
@@ -6172,7 +6172,7 @@ static void phy_SetRFPathSwitch(
 
 void
 rtl8192d_PHY_IQCalibrate(
-	IN	PADAPTER	pAdapter
+	PADAPTER	pAdapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -6362,7 +6362,7 @@ rtl8192d_PHY_IQCalibrate(
 
 void
 rtl8192d_PHY_LCCalibrate(
-	IN	PADAPTER	pAdapter
+	PADAPTER	pAdapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -6425,8 +6425,8 @@ rtl8192d_PHY_LCCalibrate(
 
 void
 rtl8192d_PHY_APCalibrate(
-	IN	PADAPTER	pAdapter,
-	IN	char		delta
+	PADAPTER	pAdapter,
+	char		delta
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -6453,8 +6453,8 @@ rtl8192d_PHY_APCalibrate(
 
 void
 PHY_UpdateBBRFConfiguration8192D(
-	IN PADAPTER Adapter,
-	IN bool bisBandSwitch
+	PADAPTER Adapter,
+	bool bisBandSwitch
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -6789,8 +6789,8 @@ PHY_UpdateBBRFConfiguration8192D(
 //		2. PASSIVE_LEVEL (USB interface)
 //
 void PHY_ReadMacPhyMode92D(
-		IN PADAPTER			Adapter,
-		IN	bool		AutoloadFail
+		PADAPTER			Adapter,
+		bool		AutoloadFail
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -6832,7 +6832,7 @@ void PHY_ReadMacPhyMode92D(
 //		2. PASSIVE_LEVEL (USB interface)
 //
 void PHY_ConfigMacPhyMode92D(
-		IN PADAPTER			Adapter
+		PADAPTER			Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -6871,7 +6871,7 @@ void PHY_ConfigMacPhyMode92D(
 //		2. PASSIVE_LEVEL (USB interface)
 //
 void PHY_ConfigMacPhyModeInfo92D(
-		IN PADAPTER			Adapter
+		PADAPTER			Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -7017,7 +7017,7 @@ void PHY_ConfigMacPhyModeInfo92D(
 //		2. PASSIVE_LEVEL (USB interface)
 //
 void PHY_ConfigMacCoexist_RFPage92D(
-		IN PADAPTER			Adapter
+		PADAPTER			Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -7046,7 +7046,7 @@ void PHY_ConfigMacCoexist_RFPage92D(
 
 void
 rtl8192d_PHY_InitRxSetting(
-	IN	PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -7070,7 +7070,7 @@ rtl8192d_PHY_InitRxSetting(
 
 void
 rtl8192d_PHY_ResetIQKResult(
-	IN	PADAPTER Adapter
+	PADAPTER Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -7099,8 +7099,8 @@ rtl8192d_PHY_ResetIQKResult(
 }
 
 void rtl8192d_PHY_SetRFPathSwitch(
-	IN	PADAPTER	pAdapter,
-	IN	bool		bMain
+	PADAPTER	pAdapter,
+	bool		bMain
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -7121,8 +7121,8 @@ void rtl8192d_PHY_SetRFPathSwitch(
 
 void
 HalChangeCCKStatus8192D(
-	IN	PADAPTER	Adapter,
-	IN	bool		bCCKDisable
+	PADAPTER	Adapter,
+	bool		bCCKDisable
 )
 {
 	//PADAPTER	BuddyAdapter = Adapter->BuddyAdapter;
@@ -7202,7 +7202,7 @@ HalChangeCCKStatus8192D(
 }
 
 void
-PHY_InitPABias92D(IN	PADAPTER Adapter)
+PHY_InitPABias92D(PADAPTER Adapter)
 {
 	u8	tmpU1b;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

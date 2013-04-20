@@ -54,12 +54,12 @@ bool
 Efuse_Read1ByteFromFakeContent(
 		PADAPTER	pAdapter,
 		u16		Offset,
-	IN OUT	u8		*Value	);
+	u8		*Value	);
 bool
 Efuse_Read1ByteFromFakeContent(
 		PADAPTER	pAdapter,
 		u16		Offset,
-	IN OUT	u8		*Value	)
+	u8		*Value	)
 {
 	if(Offset >= EFUSE_MAX_HW_SIZE)
 	{
@@ -142,9 +142,9 @@ Efuse_PowerSwitch(
  *---------------------------------------------------------------------------*/
 u16
 Efuse_GetCurrentSize(
-	IN PADAPTER		pAdapter,
-	IN u8			efuseType,
-	IN bool		bPseudoTest)
+	PADAPTER		pAdapter,
+	u8			efuseType,
+	bool		bPseudoTest)
 {
 	u16 ret=0;
 
@@ -155,7 +155,7 @@ Efuse_GetCurrentSize(
 
 /*  11/16/2008 MH Add description. Get current efuse area enabled word!!. */
 u8
-Efuse_CalculateWordCnts(IN u8	word_en)
+Efuse_CalculateWordCnts(u8	word_en)
 {
 	u8 word_cnts = 0;
 	if(!(word_en & BIT(0)))	word_cnts++; // 0 : write enable
@@ -181,7 +181,7 @@ ReadEFuseByte(
 		PADAPTER	Adapter,
 		u16			_offset,
 		u8			*pbuf,
-		IN bool	bPseudoTest)
+		bool	bPseudoTest)
 {
 	u32	value32;
 	u8	readbyte;
@@ -271,7 +271,7 @@ EFUSE_GetEfuseDefinition(
 		PADAPTER	pAdapter,
 		u8		efuseType,
 		u8		type,
-	OUT		void		*pOut,
+		void		*pOut,
 		bool		bPseudoTest
 	)
 {
@@ -785,13 +785,13 @@ void
 Efuse_ReadAllMap(
 		PADAPTER	pAdapter,
 		u8		efuseType,
-	IN OUT	u8		*Efuse,
+	u8		*Efuse,
 		bool		bPseudoTest);
 void
 Efuse_ReadAllMap(
 		PADAPTER	pAdapter,
 		u8		efuseType,
-	IN OUT	u8		*Efuse,
+	u8		*Efuse,
 		bool		bPseudoTest)
 {
 	u16	mapLen=0;
@@ -827,7 +827,7 @@ static void
 efuse_ShadowRead1Byte(
 	PADAPTER	pAdapter,
 	u16		Offset,
-	IN OUT	u8		*Value)
+	u8		*Value)
 {
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(pAdapter);
 
@@ -840,7 +840,7 @@ static void
 efuse_ShadowRead2Byte(
 	PADAPTER	pAdapter,
 	u16		Offset,
-	IN OUT	u16		*Value)
+	u16		*Value)
 {
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(pAdapter);
 
@@ -854,7 +854,7 @@ static void
 efuse_ShadowRead4Byte(
 	PADAPTER	pAdapter,
 	u16		Offset,
-	IN OUT	u32		*Value)
+	u32		*Value)
 {
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(pAdapter);
 
@@ -943,9 +943,9 @@ efuse_ShadowWrite4Byte(
  *
  *---------------------------------------------------------------------------*/
 void EFUSE_ShadowMapUpdate(
-	IN PADAPTER	pAdapter,
-	IN u8		efuseType,
-	IN bool	bPseudoTest)
+	PADAPTER	pAdapter,
+	u8		efuseType,
+	bool	bPseudoTest)
 {
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(pAdapter);
 	u16	mapLen=0;
@@ -996,7 +996,7 @@ EFUSE_ShadowRead(
 		PADAPTER	pAdapter,
 		u8		Type,
 		u16		Offset,
-	IN OUT	u32		*Value	)
+	u32		*Value	)
 {
 	if (Type == 1)
 		efuse_ShadowRead1Byte(pAdapter, Offset, (u8 *)Value);
@@ -1028,13 +1028,13 @@ EFUSE_ShadowWrite(
 	PADAPTER	pAdapter,
 	u8		Type,
 	u16		Offset,
-	IN OUT	u32		Value);
+	u32		Value);
 void
 EFUSE_ShadowWrite(
 	PADAPTER	pAdapter,
 	u8		Type,
 	u16		Offset,
-	IN OUT	u32		Value)
+	u32		Value)
 {
 #if (MP_DRIVER == 0)
 	return;

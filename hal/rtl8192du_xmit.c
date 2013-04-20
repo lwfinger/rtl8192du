@@ -223,9 +223,9 @@ Len4	Len3	Len2
 
 */
 void
-InsertEMContent(IN struct xmit_frame *pxmitframe, IN u8 *VirtualAddress);
+InsertEMContent(struct xmit_frame *pxmitframe, u8 *VirtualAddress);
 void
-InsertEMContent(IN struct xmit_frame *pxmitframe, IN u8 *VirtualAddress)
+InsertEMContent(struct xmit_frame *pxmitframe, u8 *VirtualAddress)
 {
 	_rtw_memset(VirtualAddress, 0, 8);
 	SET_EARLYMODE_PKTNUM(VirtualAddress, pxmitframe->EMPktNum);

@@ -147,9 +147,9 @@ odm_FalseAlarmCounterStatistics_ForSlaveOfDMSP(
 	PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PFALSE_ALARM_STATISTICS FalseAlmCnt = &(pdmpriv->FalseAlmCnt);
+	struct FALSE_ALARM_STATISTICS *FalseAlmCnt = &(pdmpriv->FalseAlmCnt);
 	struct dm_priv	*Buddydmpriv;
-	PFALSE_ALARM_STATISTICS	FlaseAlmCntBuddyAdapter;
+	struct FALSE_ALARM_STATISTICS *FlaseAlmCntBuddyAdapter;
 
 	if(BuddyAdapter == NULL)
 		return;
@@ -203,7 +203,7 @@ odm_FalseAlarmCounterStatistics(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PFALSE_ALARM_STATISTICS FalseAlmCnt = &(pdmpriv->FalseAlmCnt);
+	struct FALSE_ALARM_STATISTICS *FalseAlmCnt = &(pdmpriv->FalseAlmCnt);
 	u8	BBReset;
 #ifdef CONFIG_CONCURRENT_MODE
 	PADAPTER pbuddy_adapter = Adapter->pbuddy_adapter;
@@ -539,7 +539,7 @@ static void odm_DIG(
 	struct mlme_priv	*pmlmepriv = &(pAdapter->mlmepriv);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct registry_priv	 *pregistrypriv = &pAdapter->registrypriv;
-	PFALSE_ALARM_STATISTICS FalseAlmCnt = &(pdmpriv->FalseAlmCnt);
+	struct FALSE_ALARM_STATISTICS *FalseAlmCnt = &(pdmpriv->FalseAlmCnt);
 	pDIG_T	pDM_DigTable = &pdmpriv->DM_DigTable;
 	static u8	DIG_Dynamic_MIN_0 = 0x25;
 	static u8	DIG_Dynamic_MIN_1 = 0x25;

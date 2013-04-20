@@ -36,7 +36,7 @@ extern u32 EDCAParam[maxAP][3] ;
 // structure and define
 //============================================================
 
-typedef struct _FALSE_ALARM_STATISTICS{
+struct FALSE_ALARM_STATISTICS {
 	u32	Cnt_Parity_Fail;
 	u32	Cnt_Rate_Illegal;
 	u32	Cnt_Crc8_fail;
@@ -46,7 +46,7 @@ typedef struct _FALSE_ALARM_STATISTICS{
 	u32	Cnt_all;
 	u32	Cnt_Fast_Fsync;
 	u32	Cnt_SB_Search_fail;
-}FALSE_ALARM_STATISTICS, *PFALSE_ALARM_STATISTICS;
+};
 
 typedef struct _Dynamic_Power_Saving_
 {
@@ -285,7 +285,7 @@ struct	dm_priv
 
 	PS_T	DM_PSTable;
 
-	FALSE_ALARM_STATISTICS	FalseAlmCnt;
+	struct FALSE_ALARM_STATISTICS	FalseAlmCnt;
 
 	//for rate adaptive, in fact,  88c/92c fw will handle this
 	u8	bUseRAMask;

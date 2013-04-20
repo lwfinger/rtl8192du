@@ -32,11 +32,6 @@
 
 typedef	signed int sint;
 
-       #define UCHAR u8
-#define USHORT u16
-#define UINT u32
-#define ULONG u32
-
 typedef void (*proc_t)(void*);
 
 typedef		__kernel_size_t	SIZE_T;

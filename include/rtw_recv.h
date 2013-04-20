@@ -196,11 +196,9 @@ struct recv_priv
 	_sema	terminate_recvthread_sema;
 #endif
 
-	//_queue	blk_strms[MAX_RX_NUMBLKS];    // keeping the block ack frame until return ack
 	_queue	free_recv_queue;
 	_queue	recv_pending_queue;
 	_queue	uc_swdec_pending_queue;
-
 
 	u8 *pallocated_frame_buf;
 	u8 *precv_frame_buf;
@@ -258,7 +256,7 @@ struct recv_priv
 	u8 noise;
 	int RxSNRdB[2];
 	s8 RxRssi[2];
-	int FalseAlmCnt_all;
+	int falsealmcnt_all;
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	_timer signal_stat_timer;

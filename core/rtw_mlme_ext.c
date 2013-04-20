@@ -10028,7 +10028,7 @@ void _linked_rx_signal_strehgth_display(_adapter *padapter)
 		rtw_read16(padapter,0xDA2),rtw_read16(padapter,0xDA4),rtw_read16(padapter,0xDA6),rtw_read16(padapter,0xDA8));
 
 	DBG_871X(" CCK -Alarm A5B(0x%02x),A5C(0x%02x)\n",rtw_read8(padapter,0xA5B),rtw_read8(padapter,0xA5C));
-	DBG_871X(" FalseAlmCnt_all(%d)\n",padapter->recvpriv.FalseAlmCnt_all);
+	DBG_871X(" FalseAlmCnt_all(%d)\n",padapter->recvpriv.falsealmcnt_all);
 
 }
 

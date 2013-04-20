@@ -49,44 +49,44 @@ struct FALSE_ALARM_STATISTICS {
 };
 
 struct PS_T {
-	u8		PreCCAState;
-	u8		CurCCAState;
+	u8		preccastate;
+	u8		curccastate;
 
-	u8		PreRFState;
-	u8		CurRFState;
+	u8		prerfstate;
+	u8		currfstate;
 };
 
 struct DIG_T {
-	u8		Dig_Enable_Flag;
-	u8		Dig_Ext_Port_Stage;
+	u8		dig_enable_flag;
+	u8		dig_ext_port_stage;
 
-	int		RssiLowThresh;
-	int		RssiHighThresh;
+	int		rssilowthresh;
+	int		rssihighthresh;
 
-	u32		FALowThresh;
-	u32		FAHighThresh;
+	u32		falowthresh;
+	u32		fahighthresh;
 
-	u8		CurSTAConnectState;
-	u8		PreSTAConnectState;
-	u8		CurMultiSTAConnectState;
+	u8		curstaconnectstate;
+	u8		prestaconnectstate;
+	u8		curmultistaconnectstate;
 
-	u8		PreIGValue;
-	u8		CurIGValue;
-	u8	       BackupIGValue;
+	u8		preigvalue;
+	u8		curigvalue;
+	u8		backupigvalue;
 
-	char		BackoffVal;
-	char		BackoffVal_range_max;
-	char		BackoffVal_range_min;
+	char		backoffval;
+	char		backoffval_range_max;
+	char		backoffval_range_min;
 	u8		rx_gain_range_max;
 	u8		rx_gain_range_min;
-	u8		Rssi_val_min;
+	u8		rssi_val_min;
 
-	u8		PreCCKPDState;
-	u8		CurCCKPDState;
+	u8		precckpdstate;
+	u8		curcckpdstate;
 
-	u8		LargeFAHit;
-	u8		ForbiddenIGI;
-	u32		Recover_cnt;
+	u8		largefahit;
+	u8		forbiddenigi;
+	u32		recover_cnt;
 	u8		rx_gain_range_min_nolink;
 };
 
@@ -94,20 +94,19 @@ typedef enum tag_Dynamic_Init_Gain_Operation_Type_Definition
 {
 	DIG_TYPE_THRESH_HIGH	= 0,
 	DIG_TYPE_THRESH_LOW	= 1,
-	DIG_TYPE_BACKOFF		= 2,
+	DIG_TYPE_BACKOFF	= 2,
 	DIG_TYPE_RX_GAIN_MIN	= 3,
 	DIG_TYPE_RX_GAIN_MAX	= 4,
-	DIG_TYPE_ENABLE			= 5,
-	DIG_TYPE_DISABLE		= 6,
+	DIG_TYPE_ENABLE		= 5,
+	DIG_TYPE_DISABLE	= 6,
 	DIG_OP_TYPE_MAX
 }DM_DIG_OP_E;
 
-typedef enum tag_CCK_Packet_Detection_Threshold_Type_Definition
-{
-	CCK_PD_STAGE_LowRssi = 0,
-	CCK_PD_STAGE_HighRssi = 1,
+enum DM_CCK_PDTH_E {
+	CCK_PD_STAGE_LOWRSSI = 0,
+	CCK_PD_STAGE_HIGHRSSI = 1,
 	CCK_PD_STAGE_MAX = 3,
-}DM_CCK_PDTH_E;
+};
 
 typedef enum tag_1R_CCA_Type_Definition
 {
@@ -280,7 +279,7 @@ struct	dm_priv
 
 	struct PS_T	DM_PSTable;
 
-	struct FALSE_ALARM_STATISTICS	FalseAlmCnt;
+	struct FALSE_ALARM_STATISTICS	falsealmcnt;
 
 	//for rate adaptive, in fact,  88c/92c fw will handle this
 	u8	bUseRAMask;

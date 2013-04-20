@@ -5065,19 +5065,19 @@ _func_enter_;
 #endif //CONFIG_TDLS
 		case HW_VAR_INITIAL_GAIN:
 			{
-				DIG_T	*pDigTable = &pdmpriv->DM_DigTable;
+				struct DIG_T *dig_table = &pdmpriv->DM_DigTable;
 				u32		rx_gain = ((u32 *)(val))[0];
 
 				if(rx_gain == 0xff){//restore rx gain
-					pDigTable->CurIGValue = pDigTable->BackupIGValue;
-					PHY_SetBBReg(Adapter, rOFDM0_XAAGCCore1, 0x7f,pDigTable->CurIGValue );
-					PHY_SetBBReg(Adapter, rOFDM0_XBAGCCore1, 0x7f,pDigTable->CurIGValue);
+					dig_table->CurIGValue = dig_table->BackupIGValue;
+					PHY_SetBBReg(Adapter, rOFDM0_XAAGCCore1, 0x7f,dig_table->CurIGValue );
+					PHY_SetBBReg(Adapter, rOFDM0_XBAGCCore1, 0x7f,dig_table->CurIGValue);
 				}
 				else{
-					pDigTable->BackupIGValue = pDigTable->CurIGValue;
+					dig_table->BackupIGValue = dig_table->CurIGValue;
 					PHY_SetBBReg(Adapter, rOFDM0_XAAGCCore1, 0x7f,rx_gain );
 					PHY_SetBBReg(Adapter, rOFDM0_XBAGCCore1, 0x7f,rx_gain);
-					pDigTable->CurIGValue = (u8)rx_gain;
+					dig_table->CurIGValue = (u8)rx_gain;
 				}
 			}
 			break;
@@ -5485,8 +5485,8 @@ SetHalDefVar8192DUsb(
 					if(!(pdmpriv->DMFlag & DYNAMIC_FUNC_DIG))
 					{
 						struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-						DIG_T	*pDigTable = &pdmpriv->DM_DigTable;
-						pDigTable->PreIGValue = rtw_read8(Adapter,0xc50);
+						struct DIG_T	*dig_table = &pdmpriv->DM_DigTable;
+						dig_table->PreIGValue = rtw_read8(Adapter,0xc50);
 					}
 
 					pdmpriv->DMFlag |= (DYNAMIC_FUNC_DIG|DYNAMIC_FUNC_HP|DYNAMIC_FUNC_SS|
@@ -5504,7 +5504,6 @@ SetHalDefVar8192DUsb(
 	return bResult;
 }
 
-u32  _update_92cu_basic_rate(_adapter *padapter, unsigned int mask);
 u32  _update_92cu_basic_rate(_adapter *padapter, unsigned int mask)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);

@@ -56,8 +56,7 @@ struct PS_T {
 	u8		CurRFState;
 };
 
-typedef struct _Dynamic_Initial_Gain_Threshold_
-{
+struct DIG_T {
 	u8		Dig_Enable_Flag;
 	u8		Dig_Ext_Port_Stage;
 
@@ -89,7 +88,7 @@ typedef struct _Dynamic_Initial_Gain_Threshold_
 	u8		ForbiddenIGI;
 	u32		Recover_cnt;
 	u8		rx_gain_range_min_nolink;
-}DIG_T,*pDIG_T;
+};
 
 typedef enum tag_Dynamic_Init_Gain_Operation_Type_Definition
 {
@@ -277,7 +276,7 @@ struct	dm_priv
 	//for DIG
 	u8	bDMInitialGainEnable;
 	//u8	binitialized; // for dm_initial_gain_Multi_STA use.
-	DIG_T	DM_DigTable;
+	struct DIG_T	DM_DigTable;
 
 	struct PS_T	DM_PSTable;
 

@@ -74,39 +74,39 @@ static void dm_DIGInit(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	pDIG_T	pDM_DigTable = &pdmpriv->DM_DigTable;
+	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 
 
-	pDM_DigTable->Dig_Enable_Flag = true;
-	pDM_DigTable->Dig_Ext_Port_Stage = DIG_EXT_PORT_STAGE_MAX;
+	dm_digtable->Dig_Enable_Flag = true;
+	dm_digtable->Dig_Ext_Port_Stage = DIG_EXT_PORT_STAGE_MAX;
 
-	pDM_DigTable->CurIGValue = 0x20;
-	pDM_DigTable->PreIGValue = 0x0;
+	dm_digtable->CurIGValue = 0x20;
+	dm_digtable->PreIGValue = 0x0;
 
-	pDM_DigTable->CurSTAConnectState = pDM_DigTable->PreSTAConnectState = DIG_STA_DISCONNECT;
-	pDM_DigTable->CurMultiSTAConnectState = DIG_MultiSTA_DISCONNECT;
+	dm_digtable->CurSTAConnectState = dm_digtable->PreSTAConnectState = DIG_STA_DISCONNECT;
+	dm_digtable->CurMultiSTAConnectState = DIG_MultiSTA_DISCONNECT;
 
-	pDM_DigTable->RssiLowThresh	= DM_DIG_THRESH_LOW;
-	pDM_DigTable->RssiHighThresh	= DM_DIG_THRESH_HIGH;
+	dm_digtable->RssiLowThresh	= DM_DIG_THRESH_LOW;
+	dm_digtable->RssiHighThresh	= DM_DIG_THRESH_HIGH;
 
-	pDM_DigTable->FALowThresh	= DM_FALSEALARM_THRESH_LOW;
-	pDM_DigTable->FAHighThresh	= DM_FALSEALARM_THRESH_HIGH;
+	dm_digtable->FALowThresh	= DM_FALSEALARM_THRESH_LOW;
+	dm_digtable->FAHighThresh	= DM_FALSEALARM_THRESH_HIGH;
 
 
-	pDM_DigTable->rx_gain_range_max = DM_DIG_MAX;
-	pDM_DigTable->rx_gain_range_min = DM_DIG_MIN;
-	pDM_DigTable->rx_gain_range_min_nolink = 0;
+	dm_digtable->rx_gain_range_max = DM_DIG_MAX;
+	dm_digtable->rx_gain_range_min = DM_DIG_MIN;
+	dm_digtable->rx_gain_range_min_nolink = 0;
 
-	pDM_DigTable->BackoffVal = DM_DIG_BACKOFF_DEFAULT;
-	pDM_DigTable->BackoffVal_range_max = DM_DIG_BACKOFF_MAX;
-	pDM_DigTable->BackoffVal_range_min = DM_DIG_BACKOFF_MIN;
+	dm_digtable->BackoffVal = DM_DIG_BACKOFF_DEFAULT;
+	dm_digtable->BackoffVal_range_max = DM_DIG_BACKOFF_MAX;
+	dm_digtable->BackoffVal_range_min = DM_DIG_BACKOFF_MIN;
 
-	pDM_DigTable->PreCCKPDState = CCK_PD_STAGE_MAX;
-	pDM_DigTable->CurCCKPDState = CCK_PD_STAGE_LowRssi;
-	pDM_DigTable->ForbiddenIGI = DM_DIG_MIN;
+	dm_digtable->PreCCKPDState = CCK_PD_STAGE_MAX;
+	dm_digtable->CurCCKPDState = CCK_PD_STAGE_LowRssi;
+	dm_digtable->ForbiddenIGI = DM_DIG_MIN;
 
-	pDM_DigTable->LargeFAHit = 0;
-	pDM_DigTable->Recover_cnt = 0;
+	dm_digtable->LargeFAHit = 0;
+	dm_digtable->Recover_cnt = 0;
 }
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
@@ -433,25 +433,25 @@ DM_Write_DIG_DMSP(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	pDIG_T		pDM_DigTable = &pdmpriv->DM_DigTable;
+	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 	PADAPTER	BuddyAdapter = pAdapter->pbuddy_adapter;
 	bool		bGetValueFromOtherMac = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
 	struct dm_priv	*Buddydmpriv;
 
-	//DBG_871X(("CurIGValue = 0x%x, PreIGValue = 0x%x\n", pDM_DigTable->CurIGValue, pDM_DigTable->PreIGValue);
+	//DBG_871X(("CurIGValue = 0x%x, PreIGValue = 0x%x\n", dm_digtable->CurIGValue, dm_digtable->PreIGValue);
 
 	if(BuddyAdapter == NULL)
 	{
 		//DBG_871X("DM_Write_DIG_DMSP(): not find buddyAdapter\n");
 		if(pHalData->bMasterOfDMSP)
 		{
-			PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, 0x7f, pDM_DigTable->CurIGValue);
-			PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, 0x7f, pDM_DigTable->CurIGValue);
-			pDM_DigTable->PreIGValue = pDM_DigTable->CurIGValue;
+			PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, 0x7f, dm_digtable->CurIGValue);
+			PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, 0x7f, dm_digtable->CurIGValue);
+			dm_digtable->PreIGValue = dm_digtable->CurIGValue;
 		}
 		else
 		{
-			pDM_DigTable->PreIGValue = pDM_DigTable->CurIGValue;
+			dm_digtable->PreIGValue = dm_digtable->CurIGValue;
 		}
 		return;
 	}
@@ -470,18 +470,18 @@ DM_Write_DIG_DMSP(
 
 	Buddydmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
 
-	if(pDM_DigTable->PreIGValue != pDM_DigTable->CurIGValue)
+	if(dm_digtable->PreIGValue != dm_digtable->CurIGValue)
 	{
 		// Set initial gain.
 		// 20100211 Joseph: Set only BIT0~BIT6 for DIG. BIT7 is the function switch of Antenna diversity.
 		// Just not to modified it for SD3 testing.
-		//PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, bMaskByte0, pDM_DigTable->CurIGValue);
-		//PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, bMaskByte0, pDM_DigTable->CurIGValue);
+		//PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, bMaskByte0, dm_digtable->CurIGValue);
+		//PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, bMaskByte0, dm_digtable->CurIGValue);
 		 if(pHalData->bSlaveOfDMSP)
 		 {
 			//DBG_871X("DM_Write_DIG_DMSP(): slave case \n");
 			Buddydmpriv->bWriteDigForAnotherMacOfDMSP = true;
-			Buddydmpriv->CurDigValueForAnotherMacOfDMSP =  pDM_DigTable->CurIGValue;
+			Buddydmpriv->CurDigValueForAnotherMacOfDMSP =  dm_digtable->CurIGValue;
 		 }
 		else
 		{
@@ -489,11 +489,11 @@ DM_Write_DIG_DMSP(
 			if(!bGetValueFromOtherMac)
 			{
 				//DBG_871X("DM_Write_DIG_DMSP(): mac 0 set mac 0 value \n");
-				PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, 0x7f, pDM_DigTable->CurIGValue);
-				PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, 0x7f, pDM_DigTable->CurIGValue);
+				PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, 0x7f, dm_digtable->CurIGValue);
+				PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, 0x7f, dm_digtable->CurIGValue);
 			}
 		}
-		pDM_DigTable->PreIGValue = pDM_DigTable->CurIGValue;
+		dm_digtable->PreIGValue = dm_digtable->CurIGValue;
 	}
 #endif
 }
@@ -505,30 +505,20 @@ DM_Write_DIG(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	pDIG_T	pDM_DigTable = &pdmpriv->DM_DigTable;
+	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 
-	//RT_TRACE(	COMP_DIG, DBG_LOUD, ("CurIGValue = 0x%x, PreIGValue = 0x%x, BackoffVal = %d\n",
-	//			pDM_DigTable->CurIGValue, pDM_DigTable->PreIGValue, pDM_DigTable->BackoffVal));
-	//DBG_871X("CurIGValue = 0x%x, PreIGValue = 0x%x\n", pDM_DigTable->CurIGValue, pDM_DigTable->PreIGValue);
-
-	if (pDM_DigTable->Dig_Enable_Flag == false)
-	{
-		//DBG_871X("DIG is disabled\n");
-		//pDM_DigTable->PreIGValue = 0x17;
+	if (dm_digtable->Dig_Enable_Flag == false)
 		return;
-	}
 
-	if( (pDM_DigTable->PreIGValue != pDM_DigTable->CurIGValue) || ( pAdapter->bForceWriteInitGain ) )
+	if( (dm_digtable->PreIGValue != dm_digtable->CurIGValue) || ( pAdapter->bForceWriteInitGain ) )
 	{
 		// Set initial gain.
 		// 20100211 Joseph: Set only BIT0~BIT6 for DIG. BIT7 is the function switch of Antenna diversity.
 		// Just not to modified it for SD3 testing.
-		//PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, bMaskByte0, DM_DigTable.CurIGValue);
-		//PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, bMaskByte0, DM_DigTable.CurIGValue);
-		PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, 0x7f, pDM_DigTable->CurIGValue);
-		PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, 0x7f, pDM_DigTable->CurIGValue);
-		if(pDM_DigTable->CurIGValue != 0x17)
-			pDM_DigTable->PreIGValue = pDM_DigTable->CurIGValue;
+		PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, 0x7f, dm_digtable->CurIGValue);
+		PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, 0x7f, dm_digtable->CurIGValue);
+		if(dm_digtable->CurIGValue != 0x17)
+			dm_digtable->PreIGValue = dm_digtable->CurIGValue;
 	}
 }
 
@@ -540,7 +530,7 @@ static void odm_DIG(
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct registry_priv	 *pregistrypriv = &pAdapter->registrypriv;
 	struct FALSE_ALARM_STATISTICS *FalseAlmCnt = &(pdmpriv->FalseAlmCnt);
-	pDIG_T	pDM_DigTable = &pdmpriv->DM_DigTable;
+	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 	static u8	DIG_Dynamic_MIN_0 = 0x25;
 	static u8	DIG_Dynamic_MIN_1 = 0x25;
 	u8	DIG_Dynamic_MIN;
@@ -628,7 +618,7 @@ static void odm_DIG(
 		return;
 #endif //CONFIG_CONCURRENT_MODE
 
-	//if (pDM_DigTable->Dig_Enable_Flag == FALSE)
+	//if (dm_digtable->Dig_Enable_Flag == FALSE)
 		//return;
 #ifdef CONFIG_CONCURRENT_MODE
 	if(!(pdmpriv->DMFlag & DYNAMIC_FUNC_DIG) || !(pbuddy_pdmpriv->DMFlag & DYNAMIC_FUNC_DIG))
@@ -657,22 +647,22 @@ static void odm_DIG(
 #endif //CONFIG_CONCURRENT_MODE
 	{
 		//2 Get minimum RSSI value among associated devices
-		pDM_DigTable->Rssi_val_min = odm_initial_gain_MinPWDB(pAdapter);
+		dm_digtable->Rssi_val_min = odm_initial_gain_MinPWDB(pAdapter);
 
 		//2 Modify DIG upper bound
-		if((pDM_DigTable->Rssi_val_min + 20) > DM_DIG_MAX )
-			pDM_DigTable->rx_gain_range_max = DM_DIG_MAX;
+		if((dm_digtable->Rssi_val_min + 20) > DM_DIG_MAX )
+			dm_digtable->rx_gain_range_max = DM_DIG_MAX;
 		else
-			pDM_DigTable->rx_gain_range_max = pDM_DigTable->Rssi_val_min + 20;
+			dm_digtable->rx_gain_range_max = dm_digtable->Rssi_val_min + 20;
 		//2 Modify DIG lower bound
 		if((FalseAlmCnt->Cnt_all > 500)&&(DIG_Dynamic_MIN < 0x25))
 			DIG_Dynamic_MIN++;
 		if((FalseAlmCnt->Cnt_all < 500)&&(DIG_Dynamic_MIN > DM_DIG_MIN))
 			DIG_Dynamic_MIN--;
-		if((pDM_DigTable->Rssi_val_min < 8) && (DIG_Dynamic_MIN > DM_DIG_MIN))
+		if((dm_digtable->Rssi_val_min < 8) && (DIG_Dynamic_MIN > DM_DIG_MIN))
 			DIG_Dynamic_MIN--;
 	} else {
-		pDM_DigTable->rx_gain_range_max = DM_DIG_MAX;
+		dm_digtable->rx_gain_range_max = DM_DIG_MAX;
 		DIG_Dynamic_MIN = DM_DIG_MIN;
 	}
 
@@ -681,46 +671,46 @@ static void odm_DIG(
 	{
 		//DBG_871X("dm_DIG(): Abnornally false alarm case. \n");
 
-		pDM_DigTable->LargeFAHit++;
-		if(pDM_DigTable->ForbiddenIGI < pDM_DigTable->CurIGValue)
+		dm_digtable->LargeFAHit++;
+		if(dm_digtable->ForbiddenIGI < dm_digtable->CurIGValue)
 		{
-			pDM_DigTable->ForbiddenIGI = pDM_DigTable->CurIGValue;
-			pDM_DigTable->LargeFAHit = 1;
+			dm_digtable->ForbiddenIGI = dm_digtable->CurIGValue;
+			dm_digtable->LargeFAHit = 1;
 		}
 
-		if(pDM_DigTable->LargeFAHit >= 3)
+		if(dm_digtable->LargeFAHit >= 3)
 		{
-			if((pDM_DigTable->ForbiddenIGI+1) >pDM_DigTable->rx_gain_range_max)
-				pDM_DigTable->rx_gain_range_min = pDM_DigTable->rx_gain_range_max;
+			if((dm_digtable->ForbiddenIGI+1) >dm_digtable->rx_gain_range_max)
+				dm_digtable->rx_gain_range_min = dm_digtable->rx_gain_range_max;
 			else
-				pDM_DigTable->rx_gain_range_min = (pDM_DigTable->ForbiddenIGI + 1);
-			pDM_DigTable->Recover_cnt = 3600; //3600=2hr
+				dm_digtable->rx_gain_range_min = (dm_digtable->ForbiddenIGI + 1);
+			dm_digtable->Recover_cnt = 3600; //3600=2hr
 		}
 
 	}
 	else
 	{
 		//Recovery mechanism for IGI lower bound
-		if(pDM_DigTable->Recover_cnt != 0)
-			pDM_DigTable->Recover_cnt --;
+		if(dm_digtable->Recover_cnt != 0)
+			dm_digtable->Recover_cnt --;
 		else
 		{
-			if(pDM_DigTable->LargeFAHit == 0 )
+			if(dm_digtable->LargeFAHit == 0 )
 			{
-				if((pDM_DigTable->ForbiddenIGI -1) < DIG_Dynamic_MIN) //DM_DIG_MIN)
+				if((dm_digtable->ForbiddenIGI -1) < DIG_Dynamic_MIN) //DM_DIG_MIN)
 				{
-					pDM_DigTable->ForbiddenIGI = DIG_Dynamic_MIN; //DM_DIG_MIN;
-					pDM_DigTable->rx_gain_range_min = DIG_Dynamic_MIN; //DM_DIG_MIN;
+					dm_digtable->ForbiddenIGI = DIG_Dynamic_MIN; //DM_DIG_MIN;
+					dm_digtable->rx_gain_range_min = DIG_Dynamic_MIN; //DM_DIG_MIN;
 				}
 				else
 				{
-					pDM_DigTable->ForbiddenIGI --;
-					pDM_DigTable->rx_gain_range_min = (pDM_DigTable->ForbiddenIGI + 1);
+					dm_digtable->ForbiddenIGI --;
+					dm_digtable->rx_gain_range_min = (dm_digtable->ForbiddenIGI + 1);
 				}
 			}
-			else if(pDM_DigTable->LargeFAHit == 3 )
+			else if(dm_digtable->LargeFAHit == 3 )
 			{
-				pDM_DigTable->LargeFAHit = 0;
+				dm_digtable->LargeFAHit = 0;
 			}
 		}
 
@@ -735,7 +725,7 @@ static void odm_DIG(
 	{
 		if(FirstConnect)
 		{
-			pDM_DigTable->CurIGValue = pDM_DigTable->Rssi_val_min;
+			dm_digtable->CurIGValue = dm_digtable->Rssi_val_min;
 			//DBG_871X("DIG: First Connect\n");
 		}
 		else
@@ -743,64 +733,64 @@ static void odm_DIG(
 			if(IS_HARDWARE_TYPE_8192D(pAdapter))
 			{
 				if(FalseAlmCnt->Cnt_all > DM_DIG_FA_TH2_92D)
-					pDM_DigTable->CurIGValue = pDM_DigTable->PreIGValue+2;
+					dm_digtable->CurIGValue = dm_digtable->PreIGValue+2;
 				else if (FalseAlmCnt->Cnt_all > DM_DIG_FA_TH1_92D)
-					pDM_DigTable->CurIGValue = pDM_DigTable->PreIGValue+1;
+					dm_digtable->CurIGValue = dm_digtable->PreIGValue+1;
 				else if(FalseAlmCnt->Cnt_all < DM_DIG_FA_TH0_92D)
-					pDM_DigTable->CurIGValue =pDM_DigTable->PreIGValue-1;
+					dm_digtable->CurIGValue =dm_digtable->PreIGValue-1;
 			}
 			else
 			{
 				if(FalseAlmCnt->Cnt_all > DM_DIG_FA_TH2)
-					pDM_DigTable->CurIGValue = pDM_DigTable->PreIGValue+2;
+					dm_digtable->CurIGValue = dm_digtable->PreIGValue+2;
 				else if (FalseAlmCnt->Cnt_all > DM_DIG_FA_TH1)
-					pDM_DigTable->CurIGValue = pDM_DigTable->PreIGValue+1;
+					dm_digtable->CurIGValue = dm_digtable->PreIGValue+1;
 				else if(FalseAlmCnt->Cnt_all < DM_DIG_FA_TH0)
-					pDM_DigTable->CurIGValue =pDM_DigTable->PreIGValue-1;
+					dm_digtable->CurIGValue =dm_digtable->PreIGValue-1;
 			}
 		}
 	}
 	else
 	{
 		//	There is no network interface connects to AP.
-		if ( 0 == pDM_DigTable->rx_gain_range_min_nolink )
+		if ( 0 == dm_digtable->rx_gain_range_min_nolink )
 		{
 			//	First time to enter odm_DIG function and set the default value to rx_gain_range_min_nolink
-			pDM_DigTable->rx_gain_range_min_nolink = 0x30;
+			dm_digtable->rx_gain_range_min_nolink = 0x30;
 		}
 		else
 		{
 			if ( ( FalseAlmCnt->Cnt_all > 1000 ) && ( FalseAlmCnt->Cnt_all < 2000 ) )
 			{
-				pDM_DigTable->rx_gain_range_min_nolink = ( ( pDM_DigTable->rx_gain_range_min_nolink + 1 ) > 0x3e ) ?
-							0x3e : ( pDM_DigTable->rx_gain_range_min_nolink + 1 ) ;
+				dm_digtable->rx_gain_range_min_nolink = ( ( dm_digtable->rx_gain_range_min_nolink + 1 ) > 0x3e ) ?
+							0x3e : ( dm_digtable->rx_gain_range_min_nolink + 1 ) ;
 			}
 			else if ( FalseAlmCnt->Cnt_all >= 2000 )
 			{
-				pDM_DigTable->rx_gain_range_min_nolink = ( ( pDM_DigTable->rx_gain_range_min_nolink + 2 ) > 0x3e ) ?
-							0x3e : ( pDM_DigTable->rx_gain_range_min_nolink + 2 ) ;
+				dm_digtable->rx_gain_range_min_nolink = ( ( dm_digtable->rx_gain_range_min_nolink + 2 ) > 0x3e ) ?
+							0x3e : ( dm_digtable->rx_gain_range_min_nolink + 2 ) ;
 			}
 			else if ( FalseAlmCnt->Cnt_all < 500 )
 			{
-				pDM_DigTable->rx_gain_range_min_nolink = ( ( pDM_DigTable->rx_gain_range_min_nolink - 1 ) < 0x1e ) ?
-							0x1e : ( pDM_DigTable->rx_gain_range_min_nolink - 1 ) ;
+				dm_digtable->rx_gain_range_min_nolink = ( ( dm_digtable->rx_gain_range_min_nolink - 1 ) < 0x1e ) ?
+							0x1e : ( dm_digtable->rx_gain_range_min_nolink - 1 ) ;
 			}
 		}
 
-		pDM_DigTable->CurIGValue = pDM_DigTable->rx_gain_range_min_nolink;
+		dm_digtable->CurIGValue = dm_digtable->rx_gain_range_min_nolink;
 	}
 	//1 Check initial gain by upper/lower bound
-	if(pDM_DigTable->CurIGValue > pDM_DigTable->rx_gain_range_max)
-		pDM_DigTable->CurIGValue = pDM_DigTable->rx_gain_range_max;
+	if(dm_digtable->CurIGValue > dm_digtable->rx_gain_range_max)
+		dm_digtable->CurIGValue = dm_digtable->rx_gain_range_max;
 
-	if(pDM_DigTable->CurIGValue < pDM_DigTable->rx_gain_range_min)
-		pDM_DigTable->CurIGValue = pDM_DigTable->rx_gain_range_min;
+	if(dm_digtable->CurIGValue < dm_digtable->rx_gain_range_min)
+		dm_digtable->CurIGValue = dm_digtable->rx_gain_range_min;
 
 	if ( pAdapter->bRxRSSIDisplay )
 	{
 		DBG_871X("Modify DIG algorithm for DMP DIG: RxGainMin = %X, RxGainMax = %X\n",
-			pDM_DigTable->rx_gain_range_min,
-			pDM_DigTable->rx_gain_range_max );
+			dm_digtable->rx_gain_range_min,
+			dm_digtable->rx_gain_range_max );
 	}
 
 	if(IS_HARDWARE_TYPE_8192D(pAdapter))
@@ -822,7 +812,7 @@ static void odm_DIG(
 		}
 		else
 		{
-			//printk("%s CurIGValue(0x%02x)  FalseAlmCnt_all(%d) <====\n",__FUNCTION__,pDM_DigTable->CurIGValue, FalseAlmCnt->Cnt_all  );
+			//printk("%s CurIGValue(0x%02x)  FalseAlmCnt_all(%d) <====\n",__FUNCTION__,dm_digtable->CurIGValue, FalseAlmCnt->Cnt_all  );
 			DM_Write_DIG(pAdapter);
 			if(pHalData->CurrentBandType92D==BAND_ON_5G)
 			{
@@ -865,7 +855,7 @@ static void odm_DIG(
 		if(check_fwstate(pmlmepriv, _FW_LINKED) == true)
 #endif //CONFIG_CONCURRENT_MODE
 		{
-			if(pDM_DigTable->Rssi_val_min  <= 30)   //low rate 2T2R settings
+			if(dm_digtable->Rssi_val_min  <= 30)   //low rate 2T2R settings
 			{
 				//Reg90C=0x83321333 (OFDM 2T)
 				//RegA07=0xc1            (CCK 2T2R)
@@ -884,7 +874,7 @@ static void odm_DIG(
 				rtw_write8(pAdapter, 0xA75, 0x01);
 
 			}
-			else if(pDM_DigTable->Rssi_val_min  >= 35)  //low rate 1T1R Settings
+			else if(dm_digtable->Rssi_val_min  >= 35)  //low rate 1T1R Settings
 			{
 				//Reg90C=0x81121313
 				//RegA07=0x80
@@ -920,22 +910,21 @@ dm_initial_gain_MinPWDB(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	s32	Rssi_val_min = 0;
-	pDIG_T		pDM_DigTable = &pdmpriv->DM_DigTable;
+	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 
 
-	if(	(pDM_DigTable->CurMultiSTAConnectState == DIG_MultiSTA_CONNECT) &&
-		(pDM_DigTable->CurSTAConnectState == DIG_STA_CONNECT) )
-	{
+	if((dm_digtable->CurMultiSTAConnectState == DIG_MultiSTA_CONNECT) &&
+	   (dm_digtable->CurSTAConnectState == DIG_STA_CONNECT) ) {
 		if(pdmpriv->EntryMinUndecoratedSmoothedPWDB != 0)
 			Rssi_val_min  =  (pdmpriv->EntryMinUndecoratedSmoothedPWDB > pdmpriv->UndecoratedSmoothedPWDB)?
 					pdmpriv->UndecoratedSmoothedPWDB:pdmpriv->EntryMinUndecoratedSmoothedPWDB;
 		else
 			Rssi_val_min = pdmpriv->UndecoratedSmoothedPWDB;
 	}
-	else if(	pDM_DigTable->CurSTAConnectState == DIG_STA_CONNECT ||
-			pDM_DigTable->CurSTAConnectState == DIG_STA_BEFORE_CONNECT)
+	else if(	dm_digtable->CurSTAConnectState == DIG_STA_CONNECT ||
+			dm_digtable->CurSTAConnectState == DIG_STA_BEFORE_CONNECT)
 		Rssi_val_min = pdmpriv->UndecoratedSmoothedPWDB;
-	else if(pDM_DigTable->CurMultiSTAConnectState == DIG_MultiSTA_CONNECT)
+	else if(dm_digtable->CurMultiSTAConnectState == DIG_MultiSTA_CONNECT)
 		Rssi_val_min = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
 
 	return (u8)Rssi_val_min;
@@ -947,7 +936,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	pDIG_T		pDM_DigTable = &pdmpriv->DM_DigTable;
+	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 	PADAPTER	BuddyAdapter = pAdapter->pbuddy_adapter;
 	bool		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
 	struct dm_priv	*Buddydmpriv;
@@ -956,25 +945,25 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 	//if (pAdapter->DualMacSmartConcurrent == false)
 	//	return;
 
-	if(pDM_DigTable->CurSTAConnectState == DIG_STA_CONNECT)
+	if(dm_digtable->CurSTAConnectState == DIG_STA_CONNECT)
 	{
-		pDM_DigTable->Rssi_val_min = dm_initial_gain_MinPWDB(pAdapter);
-		if(pDM_DigTable->PreCCKPDState == CCK_PD_STAGE_LowRssi)
+		dm_digtable->Rssi_val_min = dm_initial_gain_MinPWDB(pAdapter);
+		if(dm_digtable->PreCCKPDState == CCK_PD_STAGE_LowRssi)
 		{
-			if(pDM_DigTable->Rssi_val_min <= 25)
-				pDM_DigTable->CurCCKPDState = CCK_PD_STAGE_LowRssi;
+			if(dm_digtable->Rssi_val_min <= 25)
+				dm_digtable->CurCCKPDState = CCK_PD_STAGE_LowRssi;
 			else
-				pDM_DigTable->CurCCKPDState = CCK_PD_STAGE_HighRssi;
+				dm_digtable->CurCCKPDState = CCK_PD_STAGE_HighRssi;
 		}
 		else{
-			if(pDM_DigTable->Rssi_val_min <= 20)
-				pDM_DigTable->CurCCKPDState = CCK_PD_STAGE_LowRssi;
+			if(dm_digtable->Rssi_val_min <= 20)
+				dm_digtable->CurCCKPDState = CCK_PD_STAGE_LowRssi;
 			else
-				pDM_DigTable->CurCCKPDState = CCK_PD_STAGE_HighRssi;
+				dm_digtable->CurCCKPDState = CCK_PD_STAGE_HighRssi;
 		}
 	}
 	else
-		pDM_DigTable->CurCCKPDState=CCK_PD_STAGE_MAX;
+		dm_digtable->CurCCKPDState=CCK_PD_STAGE_MAX;
 
 	if(bGetValueFromBuddyAdapter)
 	{
@@ -1009,18 +998,18 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 		}
 	}
 
-	if(pDM_DigTable->PreCCKPDState != pDM_DigTable->CurCCKPDState)
+	if(dm_digtable->PreCCKPDState != dm_digtable->CurCCKPDState)
 	{
 		if(BuddyAdapter == NULL)
 		{
 			DBG_871X("dm_CCK_PacketDetectionThresh_DMSP(): BuddyAdapter == NULL case \n");
 			if(pHalData->bSlaveOfDMSP)
 			{
-				pDM_DigTable->PreCCKPDState = pDM_DigTable->CurCCKPDState;
+				dm_digtable->PreCCKPDState = dm_digtable->CurCCKPDState;
 			}
 			else
 			{
-				if(pDM_DigTable->CurCCKPDState == CCK_PD_STAGE_LowRssi)
+				if(dm_digtable->CurCCKPDState == CCK_PD_STAGE_LowRssi)
 				{
 					//AcquireCCKAndRWPageAControl(pAdapter);
 					//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection \n"));
@@ -1043,7 +1032,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 					//if(IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
 						//PHY_SetBBReg(pAdapter, rCCK0_FalseAlarmReport , bMaskByte2, 0xd3);
 				}
-				pDM_DigTable->PreCCKPDState = pDM_DigTable->CurCCKPDState;
+				dm_digtable->PreCCKPDState = dm_digtable->CurCCKPDState;
 			}
 			return;
 		}
@@ -1053,14 +1042,14 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 			Buddydmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
 			DBG_871X("dm_CCK_PacketDetectionThresh_DMSP(): bslave case \n");
 			Buddydmpriv->bChangeCCKPDStateForAnotherMacOfDMSP = true;
-			Buddydmpriv->CurCCKPDStateForAnotherMacOfDMSP = pDM_DigTable->CurCCKPDState;
+			Buddydmpriv->CurCCKPDStateForAnotherMacOfDMSP = dm_digtable->CurCCKPDState;
 		}
 		else
 		{
 			if(!bGetValueFromBuddyAdapter)
 			{
 				DBG_871X("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac0 \n");
-				if(pDM_DigTable->CurCCKPDState == CCK_PD_STAGE_LowRssi)
+				if(dm_digtable->CurCCKPDState == CCK_PD_STAGE_LowRssi)
 				{
 					//AcquireCCKAndRWPageAControl(pAdapter);
 					//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection \n"));
@@ -1085,75 +1074,47 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 				}
 			}
 		}
-		pDM_DigTable->PreCCKPDState = pDM_DigTable->CurCCKPDState;
+		dm_digtable->PreCCKPDState = dm_digtable->CurCCKPDState;
 	}
-	//DBG_871X("CCKPDStage=%x\n",pDM_DigTable->CurCCKPDState);
+	//DBG_871X("CCKPDStage=%x\n",dm_digtable->CurCCKPDState);
 	//DBG_871X("is92C=%x\n",IS_92C_SERIAL(pHalData->VersionID));
 	//DBG_871X("is92d single phy =%x\n",IS_92D_SINGLEPHY(pHalData->VersionID));
 #endif
 }
 
-static void dm_CCK_PacketDetectionThresh(
-	PADAPTER	pAdapter)
+static void dm_CCK_PacketDetectionThresh(PADAPTER	pAdapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	pDIG_T		pDM_DigTable = &pdmpriv->DM_DigTable;
+	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 
-	if(pDM_DigTable->CurSTAConnectState == DIG_STA_CONNECT)
-	{
-		if(pDM_DigTable->PreCCKPDState == CCK_PD_STAGE_LowRssi)
-		{
+	if(dm_digtable->CurSTAConnectState == DIG_STA_CONNECT) {
+		if(dm_digtable->PreCCKPDState == CCK_PD_STAGE_LowRssi) {
 			if(pdmpriv->MinUndecoratedPWDBForDM <= 25)
-				pDM_DigTable->CurCCKPDState = CCK_PD_STAGE_LowRssi;
+				dm_digtable->CurCCKPDState = CCK_PD_STAGE_LowRssi;
 			else
-				pDM_DigTable->CurCCKPDState = CCK_PD_STAGE_HighRssi;
-		}
-		else{
+				dm_digtable->CurCCKPDState = CCK_PD_STAGE_HighRssi;
+		} else {
 			if(pdmpriv->MinUndecoratedPWDBForDM <= 20)
-				pDM_DigTable->CurCCKPDState = CCK_PD_STAGE_LowRssi;
+				dm_digtable->CurCCKPDState = CCK_PD_STAGE_LowRssi;
 			else
-				pDM_DigTable->CurCCKPDState = CCK_PD_STAGE_HighRssi;
+				dm_digtable->CurCCKPDState = CCK_PD_STAGE_HighRssi;
 		}
+	} else {
+		dm_digtable->CurCCKPDState=CCK_PD_STAGE_LowRssi;
 	}
-	else
-		pDM_DigTable->CurCCKPDState=CCK_PD_STAGE_LowRssi;
 
-	if(pDM_DigTable->PreCCKPDState != pDM_DigTable->CurCCKPDState)
-	{
-		if(pDM_DigTable->CurCCKPDState == CCK_PD_STAGE_LowRssi)
-		{
-			//AcquireCCKAndRWPageAControl(pAdapter);
-			//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection \n"));
+	if(dm_digtable->PreCCKPDState != dm_digtable->CurCCKPDState) {
+		if(dm_digtable->CurCCKPDState == CCK_PD_STAGE_LowRssi)
 			PHY_SetBBReg(pAdapter, rCCK0_CCA, bMaskByte2, 0x83);
-			//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection \n"));
-			//ReleaseCCKAndRWPageAControl(pAdapter);
-			//PHY_SetBBReg(pAdapter, rCCK0_System, bMaskByte1, 0x40);
-			//if(IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
-				//PHY_SetBBReg(pAdapter, rCCK0_FalseAlarmReport , bMaskByte2, 0xd7);
-		}
 		else
-		{
-			//AcquireCCKAndRWPageAControl(pAdapter);
-			//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection \n"));
 			PHY_SetBBReg(pAdapter, rCCK0_CCA, bMaskByte2, 0xcd);
-			//ReleaseCCKAndRWPageAControl(pAdapter);
-			//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection \n"));
-
-			//PHY_SetBBReg(pAdapter,rCCK0_System, bMaskByte1, 0x47);
-			//if(IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
-				//PHY_SetBBReg(pAdapter, rCCK0_FalseAlarmReport , bMaskByte2, 0xd3);
-		}
-		pDM_DigTable->PreCCKPDState = pDM_DigTable->CurCCKPDState;
+		dm_digtable->PreCCKPDState = dm_digtable->CurCCKPDState;
 	}
 
-	//RT_TRACE(	COMP_DIG, DBG_LOUD, ("CurSTAConnectState=%s\n",(pDigTable->CurSTAConnectState == DIG_STA_CONNECT?"DIG_STA_CONNECT ":"DIG_STA_DISCONNECT")));
-	//RT_TRACE(	COMP_DIG, DBG_LOUD, ("CCKPDStage=%s\n",(pDigTable->CurCCKPDState==CCK_PD_STAGE_LowRssi?"Low RSSI ":"High RSSI ")));
-	//RT_TRACE(	COMP_DIG, DBG_LOUD, ("is92d single phy =%x\n",IS_92D_SINGLEPHY(pHalData->VersionID)));
 }
 
-static void dm_1R_CCA(
-	PADAPTER	pAdapter)
+static void dm_1R_CCA(PADAPTER	pAdapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;

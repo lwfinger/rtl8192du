@@ -88,7 +88,7 @@ struct oid_funs_node {
 struct oid_par_priv
 {
 	void		*adapter_context;
-	NDIS_OID	oid;
+	uint	oid;
 	void		*information_buf;
 	u32		information_buf_len;
 	u32		*bytes_rw;
@@ -99,15 +99,15 @@ struct oid_par_priv
 
 struct oid_obj_priv {
 	unsigned char	dbg; // 0: without OID debug message  1: with OID debug message
-	NDIS_STATUS (*oidfuns)(struct oid_par_priv *poid_par_priv);
+	uint (*oidfuns)(struct oid_par_priv *poid_par_priv);
 };
 
 #if (defined(CONFIG_MP_INCLUDED) && defined(_RTW_MP_IOCTL_C_))
-static NDIS_STATUS oid_null_function(struct oid_par_priv* poid_par_priv)
+static uint oid_null_function(struct oid_par_priv* poid_par_priv)
 {
 	_func_enter_;
 	_func_exit_;
-	return NDIS_STATUS_SUCCESS;
+	return uint_SUCCESS;
 }
 #endif
 
@@ -116,18 +116,18 @@ static NDIS_STATUS oid_null_function(struct oid_par_priv* poid_par_priv)
 extern struct iw_handler_def  rtw_handlers_def;
 #endif
 
-extern	NDIS_STATUS drv_query_info(
+extern	uint drv_query_info(
 	_nic_hdl		MiniportAdapterContext,
-	NDIS_OID		Oid,
+	uint		Oid,
 	void *			InformationBuffer,
 	u32			InformationBufferLength,
 	u32*			BytesWritten,
 	u32*			BytesNeeded
 	);
 
-extern	NDIS_STATUS	drv_set_info(
+extern	uint	drv_set_info(
 	_nic_hdl		MiniportAdapterContext,
-	NDIS_OID		Oid,
+	uint		Oid,
 	void *			InformationBuffer,
 	u32			InformationBufferLength,
 	u32*			BytesRead,

@@ -48,17 +48,13 @@ struct FALSE_ALARM_STATISTICS {
 	u32	Cnt_SB_Search_fail;
 };
 
-typedef struct _Dynamic_Power_Saving_
-{
+struct PS_T {
 	u8		PreCCAState;
 	u8		CurCCAState;
 
 	u8		PreRFState;
 	u8		CurRFState;
-
-	//int		Rssi_val_min;
-
-}PS_T,*pPS_T;
+};
 
 typedef struct _Dynamic_Initial_Gain_Threshold_
 {
@@ -283,7 +279,7 @@ struct	dm_priv
 	//u8	binitialized; // for dm_initial_gain_Multi_STA use.
 	DIG_T	DM_DigTable;
 
-	PS_T	DM_PSTable;
+	struct PS_T	DM_PSTable;
 
 	struct FALSE_ALARM_STATISTICS	FalseAlmCnt;
 

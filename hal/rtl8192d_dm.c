@@ -1157,36 +1157,36 @@ static void dm_1R_CCA(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	pPS_T pDM_PSTable = &pdmpriv->DM_PSTable;
+	struct PS_T *dm_pstable = &pdmpriv->DM_PSTable;
 	struct registry_priv *pregistrypriv = &pAdapter->registrypriv;
 
       if(pHalData->CurrentBandType92D == BAND_ON_5G)
       {
 		if(pdmpriv->MinUndecoratedPWDBForDM != 0)
 		{
-			if(pDM_PSTable->PreCCAState == CCA_2R || pDM_PSTable->PreCCAState == CCA_MAX)
+			if(dm_pstable->PreCCAState == CCA_2R || dm_pstable->PreCCAState == CCA_MAX)
 			{
 				if(pdmpriv->MinUndecoratedPWDBForDM >= 35)
-					pDM_PSTable->CurCCAState = CCA_1R;
+					dm_pstable->CurCCAState = CCA_1R;
 				else
-					pDM_PSTable->CurCCAState = CCA_2R;
+					dm_pstable->CurCCAState = CCA_2R;
 
 			}
 			else{
 				if(pdmpriv->MinUndecoratedPWDBForDM <= 30)
-					pDM_PSTable->CurCCAState = CCA_2R;
+					dm_pstable->CurCCAState = CCA_2R;
 				else
-					pDM_PSTable->CurCCAState = CCA_1R;
+					dm_pstable->CurCCAState = CCA_1R;
 			}
 		}
 		else	//disconnect
 		{
-			pDM_PSTable->CurCCAState=CCA_MAX;
+			dm_pstable->CurCCAState=CCA_MAX;
 		}
 
-		if(pDM_PSTable->PreCCAState != pDM_PSTable->CurCCAState)
+		if(dm_pstable->PreCCAState != dm_pstable->CurCCAState)
 		{
-			if(pDM_PSTable->CurCCAState == CCA_1R)
+			if(dm_pstable->CurCCAState == CCA_1R)
 			{
 				if(pHalData->rf_type == RF_2T2R)
 				{
@@ -1209,7 +1209,7 @@ static void dm_1R_CCA(
 					//PHY_SetBBReg(pAdapter, 0xe70, 0x7fc00000, 0x10c); // Set RegE70[30:22] = 9b'100001100
 				}
 			}
-			else if (pDM_PSTable->CurCCAState == CCA_2R || pDM_PSTable->CurCCAState == CCA_MAX)
+			else if (dm_pstable->CurCCAState == CCA_2R || dm_pstable->CurCCAState == CCA_MAX)
 			{
 				if(pregistrypriv->special_rf_path == 1) // path A only
 					PHY_SetBBReg(pAdapter, rOFDM0_TRxPathEnable  , bMaskByte0, 0x11);
@@ -1219,9 +1219,9 @@ static void dm_1R_CCA(
 					PHY_SetBBReg(pAdapter, rOFDM0_TRxPathEnable  , bMaskByte0, 0x33);
 				//PHY_SetBBReg(pAdapter,0xe70, bMaskByte3, 0x63);
 			}
-			pDM_PSTable->PreCCAState = pDM_PSTable->CurCCAState;
+			dm_pstable->PreCCAState = dm_pstable->CurCCAState;
 		}
-		//RT_TRACE(	COMP_BB_POWERSAVING|COMP_INIT, DBG_LOUD, ("CCAStage = %d\n",pDM_PSTable->CurCCAState));
+		//RT_TRACE(	COMP_BB_POWERSAVING|COMP_INIT, DBG_LOUD, ("CCAStage = %d\n",dm_pstable->CurCCAState));
 	}
 }
 
@@ -1658,12 +1658,12 @@ static void dm_InitDynamicBBPowerSaving(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	pPS_T pDM_PSTable = &pdmpriv->DM_PSTable;
+	struct PS_T *dm_pstable = &pdmpriv->DM_PSTable;
 
-	pDM_PSTable->PreCCAState = CCA_MAX;
-	pDM_PSTable->CurCCAState = CCA_MAX;
-	pDM_PSTable->PreRFState = RF_MAX;
-	pDM_PSTable->CurRFState = RF_MAX;
+	dm_pstable->PreCCAState = CCA_MAX;
+	dm_pstable->CurCCAState = CCA_MAX;
+	dm_pstable->PreRFState = RF_MAX;
+	dm_pstable->CurRFState = RF_MAX;
 }
 
 static void

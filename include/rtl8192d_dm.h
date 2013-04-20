@@ -90,8 +90,7 @@ struct DIG_T {
 	u8		rx_gain_range_min_nolink;
 };
 
-typedef enum tag_Dynamic_Init_Gain_Operation_Type_Definition
-{
+enum DM_DIG_OP_E {
 	DIG_TYPE_THRESH_HIGH	= 0,
 	DIG_TYPE_THRESH_LOW	= 1,
 	DIG_TYPE_BACKOFF	= 2,
@@ -100,7 +99,7 @@ typedef enum tag_Dynamic_Init_Gain_Operation_Type_Definition
 	DIG_TYPE_ENABLE		= 5,
 	DIG_TYPE_DISABLE	= 6,
 	DIG_OP_TYPE_MAX
-}DM_DIG_OP_E;
+};
 
 enum DM_CCK_PDTH_E {
 	CCK_PD_STAGE_LOWRSSI = 0,
@@ -108,40 +107,36 @@ enum DM_CCK_PDTH_E {
 	CCK_PD_STAGE_MAX = 3,
 };
 
-typedef enum tag_1R_CCA_Type_Definition
-{
+enum DM_1R_CCA_E {
 	CCA_MIN = 0,
 	CCA_1R =1,
 	CCA_2R = 2,
 	CCA_MAX = 3,
-}DM_1R_CCA_E;
+};
 
-typedef enum tag_RF_Type_Definition
-{
+enum DM_RF_E {
 	RF_Save =0,
 	RF_Normal = 1,
 	RF_MAX = 2,
-}DM_RF_E;
+};
 
-typedef enum tag_DIG_EXT_PORT_ALGO_Definition
-{
+enum DM_DIG_EXT_PORT_ALG_E {
 	DIG_EXT_PORT_STAGE_0 = 0,
 	DIG_EXT_PORT_STAGE_1 = 1,
 	DIG_EXT_PORT_STAGE_2 = 2,
 	DIG_EXT_PORT_STAGE_3 = 3,
 	DIG_EXT_PORT_STAGE_MAX = 4,
-}DM_DIG_EXT_PORT_ALG_E;
+};
 
 
-typedef enum tag_DIG_Connect_Definition
-{
+enum DM_DIG_CONNECT_E {
 	DIG_STA_DISCONNECT = 0,
 	DIG_STA_CONNECT = 1,
 	DIG_STA_BEFORE_CONNECT = 2,
 	DIG_MultiSTA_DISCONNECT = 3,
 	DIG_MultiSTA_CONNECT = 4,
 	DIG_CONNECT_MAX
-}DM_DIG_CONNECT_E;
+};
 
 
 #define		DM_DIG_THRESH_HIGH			40
@@ -175,8 +170,8 @@ typedef enum tag_DIG_Connect_Definition
 
 #define		DM_RATR_STA_INIT			0
 #define		DM_RATR_STA_HIGH			1
-#define			DM_RATR_STA_MIDDLE		2
-#define			DM_RATR_STA_LOW			3
+#define		DM_RATR_STA_MIDDLE		2
+#define		DM_RATR_STA_LOW			3
 
 #define		CTSToSelfTHVal					30
 #define		RegC38_TH						20
@@ -226,12 +221,11 @@ typedef struct _RATE_ADAPTIVE
 
 } RATE_ADAPTIVE, *PRATE_ADAPTIVE;
 
-typedef enum tag_SW_Antenna_Switch_Definition
-{
+enum DM_SWAS_E {
 	Antenna_B = 1,
 	Antenna_A = 2,
 	Antenna_MAX = 3,
-}DM_SWAS_E;
+};
 
 // 20100514 Joseph: Add definition for antenna switching test after link.
 // This indicates two different the steps.

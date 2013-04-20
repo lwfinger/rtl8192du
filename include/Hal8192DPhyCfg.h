@@ -299,11 +299,11 @@ void	rtl8192d_PHY_SetBBReg(	PADAPTER	Adapter,
 								u32		BitMask,
 								u32		Data	);
 u32	rtl8192d_PHY_QueryRFReg(	PADAPTER			Adapter,
-								RF_RADIO_PATH_E	eRFPath,
+								enum RF_RADIO_PATH_E	eRFPath,
 								u32				RegAddr,
 								u32				BitMask	);
 void	rtl8192d_PHY_SetRFReg(	PADAPTER			Adapter,
-								RF_RADIO_PATH_E	eRFPath,
+								enum RF_RADIO_PATH_E	eRFPath,
 								u32				RegAddr,
 								u32				BitMask,
 								u32				Data	);
@@ -317,15 +317,15 @@ extern	int	PHY_BBConfig8192D(	PADAPTER	Adapter	);
 extern	int	PHY_RFConfig8192D(	PADAPTER	Adapter	);
 /* RF config */
 int	rtl8192d_PHY_ConfigRFWithParaFile(	PADAPTER	Adapter,
-												u8*	pFileName,
-												RF_RADIO_PATH_E	eRFPath);
+						u8 *pFileName,
+						enum RF_RADIO_PATH_E	eRFPath);
 int	rtl8192d_PHY_ConfigRFWithHeaderFile(	PADAPTER			Adapter,
-												RF_CONTENT			Content,
-												RF_RADIO_PATH_E	eRFPath);
+						RF_CONTENT			Content,
+						enum RF_RADIO_PATH_E	eRFPath);
 /* BB/RF readback check for making sure init OK */
 int	rtl8192d_PHY_CheckBBAndRFOK(	PADAPTER			Adapter,
-										HW90_BLOCK_E		CheckBlock,
-										RF_RADIO_PATH_E	eRFPath	  );
+				HW90_BLOCK_E		CheckBlock,
+				enum RF_RADIO_PATH_E	eRFPath	  );
 /* Read initi reg value for tx power setting. */
 void	rtl8192d_PHY_GetHWRegOriginalValue(	PADAPTER		Adapter	);
 
@@ -355,7 +355,7 @@ PHY_ScanOperationBackup8192D(PADAPTER	Adapter,
 //
 //void	PHY_SetBWModeCallback8192C(	PRT_TIMER		pTimer	);
 void	PHY_SetBWMode8192D(	PADAPTER			pAdapter,
-									HT_CHANNEL_WIDTH	ChnlWidth,
+			enum HT_CHANNEL_WIDTH	ChnlWidth,
 									unsigned char	Offset	);
 
 //

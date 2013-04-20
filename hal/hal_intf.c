@@ -357,7 +357,7 @@ s32 rtw_hal_interrupt_handler(_adapter *padapter)
 	return _FAIL;
 }
 
-void rtw_hal_set_bwmode(_adapter *padapter, HT_CHANNEL_WIDTH Bandwidth, u8 Offset)
+void rtw_hal_set_bwmode(_adapter *padapter, enum HT_CHANNEL_WIDTH Bandwidth, u8 Offset)
 {
 	if(padapter->HalFunc.set_bwmode_handler)
 		padapter->HalFunc.set_bwmode_handler(padapter, Bandwidth, Offset);

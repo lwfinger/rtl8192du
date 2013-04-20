@@ -64,7 +64,7 @@ struct	regulatory_class {
 	u8	modem;
 };
 
-typedef enum _CAPABILITY{
+enum CAPABILITY {
 	cESS			= 0x0001,
 	cIBSS			= 0x0002,
 	cPollable		= 0x0004,
@@ -81,24 +81,24 @@ typedef enum _CAPABILITY{
 	cDSSS_OFDM	= 0x2000,
 	cDelayedBA		= 0x4000,
 	cImmediateBA	= 0x8000,
-}CAPABILITY, *PCAPABILITY;
+};
 
-enum	_REG_PREAMBLE_MODE{
+enum	_REG_PREAMBLE_MODE {
 	PREAMBLE_LONG	= 1,
 	PREAMBLE_AUTO	= 2,
 	PREAMBLE_SHORT	= 3,
 };
 
 
-enum _RTL8712_RF_MIMO_CONFIG_{
- RTL8712_RFCONFIG_1T=0x10,
- RTL8712_RFCONFIG_2T=0x20,
- RTL8712_RFCONFIG_1R=0x01,
- RTL8712_RFCONFIG_2R=0x02,
- RTL8712_RFCONFIG_1T1R=0x11,
- RTL8712_RFCONFIG_1T2R=0x12,
- RTL8712_RFCONFIG_TURBO=0x92,
- RTL8712_RFCONFIG_2T2R=0x22
+enum _RTL8712_RF_MIMO_CONFIG_ {
+	RTL8712_RFCONFIG_1T = 0x10,
+	RTL8712_RFCONFIG_2T = 0x20,
+	RTL8712_RFCONFIG_1R = 0x01,
+	RTL8712_RFCONFIG_2R = 0x02,
+	RTL8712_RFCONFIG_1T1R = 0x11,
+	RTL8712_RFCONFIG_1T2R = 0x12,
+	RTL8712_RFCONFIG_TURBO = 0x92,
+	RTL8712_RFCONFIG_2T2R = 0x22
 };
 
 
@@ -109,40 +109,39 @@ enum _RTL8712_RF_MIMO_CONFIG_{
 
 // Represent Channel Width in HT Capabilities
 //
-typedef enum _HT_CHANNEL_WIDTH {
+enum HT_CHANNEL_WIDTH {
 	HT_CHANNEL_WIDTH_20 = 0,
 	HT_CHANNEL_WIDTH_40 = 1,
-}HT_CHANNEL_WIDTH, *PHT_CHANNEL_WIDTH;
+};
 
 //
 // Represent Extention Channel Offset in HT Capabilities
 // This is available only in 40Mhz mode.
 //
-typedef enum _HT_EXTCHNL_OFFSET{
+enum HT_EXTCHNL_OFFSET {
 	HT_EXTCHNL_OFFSET_NO_EXT = 0,
 	HT_EXTCHNL_OFFSET_UPPER = 1,
 	HT_EXTCHNL_OFFSET_NO_DEF = 2,
 	HT_EXTCHNL_OFFSET_LOWER = 3,
-}HT_EXTCHNL_OFFSET, *PHT_EXTCHNL_OFFSET;
+};
 
 /* 2007/11/15 MH Define different RF type. */
-typedef	enum _RT_RF_TYPE_DEFINITION
-{
+enum RT_RF_TYPE_DEF_E {
 	RF_1T2R = 0,
 	RF_2T4R = 1,
 	RF_2T2R = 2,
 	RF_1T1R = 3,
 	RF_2T2R_GREEN = 4,
 	RF_819X_MAX_TYPE = 5,
-}RT_RF_TYPE_DEF_E;
+};
 
-typedef enum _RF_RADIO_PATH{
+enum RF_RADIO_PATH_E {
 	RF_PATH_A = 0,			//Radio Path A
 	RF_PATH_B = 1,			//Radio Path B
 	RF_PATH_C = 2,			//Radio Path C
 	RF_PATH_D = 3,			//Radio Path D
 	//RF_PATH_MAX				//Max RF number 90 support
-}RF_RADIO_PATH_E, *PRF_RADIO_PATH_E;
+};
 
 u32 rtw_ch2freq(u32 ch);
 u32 rtw_freq2ch(u32 freq);

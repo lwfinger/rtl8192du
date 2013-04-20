@@ -251,20 +251,20 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	// channel 1~14
 
 #define MAX_PAGE_SIZE				4096	// @ page : 4k bytes
 
-typedef enum _FIRMWARE_SOURCE{
+enum FIRMWARE_SOURCE {
 	FW_SOURCE_IMG_FILE = 0,
-	FW_SOURCE_HEADER_FILE = 1,		//from header file
-}FIRMWARE_SOURCE, *PFIRMWARE_SOURCE;
+	FW_SOURCE_HEADER_FILE = 1,              //from header file
+};
 
-typedef struct _RT_FIRMWARE{
-	FIRMWARE_SOURCE	eFWSource;
+struct RT_FIRMWARE_92D {
+	enum FIRMWARE_SOURCE	eFWSource;
 	u8*			szFwBuffer;
 	u32			ulFwLength;
 #ifdef CONFIG_WOWLAN
 	u8*			szWoWLANFwBuffer;
 	u32			ulWoWLANFwLength;
 #endif //CONFIG_WOWLAN
-}RT_FIRMWARE, *PRT_FIRMWARE, RT_FIRMWARE_92D, *PRT_FIRMWARE_92D;
+};
 
 //
 // This structure must be cared byte-ordering
@@ -360,12 +360,12 @@ typedef struct _IQK_MATRIX_REGS_SETTING{
 
 #ifdef CONFIG_USB_RX_AGGREGATION
 
-typedef enum _USB_RX_AGG_MODE{
+enum USB_RX_AGG_MODE {
 	USB_RX_AGG_DISABLE,
 	USB_RX_AGG_DMA,
 	USB_RX_AGG_USB,
 	USB_RX_AGG_DMA_USB
-}USB_RX_AGG_MODE;
+};
 
 #define MAX_RX_DMA_BUFFER_SIZE	10240		// 10K for 8192C RX DMA buffer
 
@@ -494,7 +494,7 @@ typedef enum _USB_RX_AGG_MODE{
 #define IS_92D_E_CUT(version)				((IS_92D(version)) ? ((GET_CVID_CUT_VERSION(version) == E_CUT_VERSION) ? true : false) : false)
 #define IS_NORMAL_CHIP92D(version)		((GET_CVID_CHIP_TYPE(version)) ? true : false)
 
-typedef enum _VERSION_8192D{
+enum VERSION_8192D {
 	VERSION_TEST_CHIP_88C = 0x0000,
 	VERSION_TEST_CHIP_92C = 0x0020,
 	VERSION_TEST_UMC_CHIP_8723 = 0x0081,
@@ -519,7 +519,7 @@ typedef enum _VERSION_8192D{
 	VERSION_NORMAL_CHIP_92D_D_CUT_DUALPHY = 0x300a,
 	VERSION_NORMAL_CHIP_92D_E_CUT_SINGLEPHY = 0x402a,
 	VERSION_NORMAL_CHIP_92D_E_CUT_DUALPHY = 0x400a,
-}VERSION_8192D,*PVERSION_8192D;
+};
 
 
 //-------------------------------------------------------------------------
@@ -563,11 +563,11 @@ typedef struct _TxPowerInfo{
 // | 2byte|----8bytes----|1byte|--7bytes--| //92D
 #define EFUSE_OOB_PROTECT_BYTES		18 // PG data exclude header, dummy 7 bytes frome CP test and reserved 1byte.
 
-typedef enum _PA_MODE {
+enum PA_MODE {
 	PA_MODE_EXTERNAL = 0x00,
 	PA_MODE_INTERNAL_SP3T = 0x01,
 	PA_MODE_INTERNAL_SPDT = 0x02
-} PA_MODE;
+};
 
 /* Copy from rtl8192c */
 enum c2h_id_8192d {
@@ -598,7 +598,7 @@ typedef INTERFACE_SELECT_8192DUSB INTERFACE_SELECT_USB;
 
 struct hal_data_8192du
 {
-	VERSION_8192D	VersionID;
+	enum VERSION_8192D	VersionID;
 
 	// add for 92D Phy mode/mac/Band mode
 	MACPHY_MODE_8192D	MacPhyMode92D;
@@ -624,7 +624,7 @@ struct hal_data_8192du
 	//current WIFI_PHY values
 	u32	ReceiveConfig;
 	WIRELESS_MODE	CurrentWirelessMode;
-	HT_CHANNEL_WIDTH	CurrentChannelBW;
+	enum HT_CHANNEL_WIDTH	CurrentChannelBW;
 	u8	CurrentChannel;
 	u8	nCur40MhzPrimeSC;// Control channel sub-carrier
 	u16	BasicRateSet;
@@ -760,7 +760,7 @@ struct hal_data_8192du
 	u16	HwRxPageSize;				// Hardware setting
 	u32	MaxUsbRxAggBlock;
 
-	USB_RX_AGG_MODE	UsbRxAggMode;
+	enum USB_RX_AGG_MODE	UsbRxAggMode;
 	u8	UsbRxAggBlockCount;			// USB Block count. Block size is 512-byte in hight speed and 64-byte in full speed
 	u8	UsbRxAggBlockTimeout;
 	u8	UsbRxAggPageCount;			// 8192C DMA page count

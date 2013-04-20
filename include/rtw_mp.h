@@ -341,7 +341,7 @@ struct bb_reg_param {
 #define BB_REG_BASE_ADDR		0x800
 
 /* MP variables */
-typedef enum _MP_MODE_ {
+enum MP_MODE {
 	MP_OFF,
 	MP_ON,
 	MP_ERR,
@@ -351,7 +351,7 @@ typedef enum _MP_MODE_ {
 	MP_SINGLE_TONE_TX,
 	MP_PACKET_TX,
 	MP_PACKET_RX
-} MP_MODE;
+};
 
 #define RF_PATH_A	0
 #define RF_PATH_B	1
@@ -363,8 +363,7 @@ typedef enum _MP_MODE_ {
 extern u8 mpdatarate[NumRates];
 
 /* MP set force data rate base on the definition. */
-typedef enum _MPT_RATE_INDEX
-{
+enum MPT_RATE_E {
 	/* CCK rate. */
 	MPT_RATE_1M,	/* 0 */
 	MPT_RATE_2M,
@@ -399,33 +398,33 @@ typedef enum _MPT_RATE_INDEX
 	MPT_RATE_MCS14,
 	MPT_RATE_MCS15,	/* 27 */
 	MPT_RATE_LAST
-}MPT_RATE_E, *PMPT_RATE_E;
+};
 
 #define MAX_TX_PWR_INDEX_N_MODE 64	// 0x3F
 
-typedef enum _POWER_MODE_ {
+enum POWER_MODE {
 	POWER_LOW = 0,
 	POWER_NORMAL
-}POWER_MODE;
+};
 
 
 #define RX_PKT_BROADCAST	1
 #define RX_PKT_DEST_ADDR	2
 #define RX_PKT_PHY_MATCH	3
 
-typedef enum _ENCRY_CTRL_STATE_ {
+enum ENCRY_CTRL_STATE {
 	HW_CONTROL,		//hw encryption& decryption
 	SW_CONTROL,		//sw encryption& decryption
 	HW_ENCRY_SW_DECRY,	//hw encryption & sw decryption
 	SW_ENCRY_HW_DECRY	//sw encryption & hw decryption
-}ENCRY_CTRL_STATE;
+};
 
-typedef enum _OFDM_TX_MODE {
+enum OFDM_TX_MODE {
 	OFDM_ALL_OFF		= 0,
 	OFDM_ContinuousTx	= 1,
 	OFDM_SingleCarrier	= 2,
 	OFDM_SingleTone		= 4,
-} OFDM_TX_MODE;
+};
 
 //=======================================================================
 //extern struct mp_xmit_frame *alloc_mp_xmitframe(struct mp_priv *pmp_priv);

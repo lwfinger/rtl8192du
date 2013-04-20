@@ -119,7 +119,7 @@ void rtl8192d_RF_ChangeTxPath(	PADAPTER	Adapter,
 void
 rtl8192d_PHY_RF6052SetBandwidth(
 	PADAPTER				Adapter,
-	HT_CHANNEL_WIDTH		Bandwidth)	//20M or 40M
+	enum HT_CHANNEL_WIDTH		Bandwidth)	//20M or 40M
 {
 	u8			eRFPath;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -130,7 +130,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 			for(eRFPath=0;eRFPath<pHalData->NumTotalRFPath;eRFPath++)
 			{
 				pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffff3ff) | 0x0400);
-				PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT10|BIT11, 0x01);
+				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT10|BIT11, 0x01);
 
 			}
 			break;
@@ -140,7 +140,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 			{
 				pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffff3ff));
 				//PHY_SetRFReg(Adapter, eRFPath, RF_CHNLBW, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
-				PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT10|BIT11, 0x00);
+				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT10|BIT11, 0x00);
 				//RT_TRACE(COMP_RF, DBG_LOUD, ("PHY_RF6052SetBandwidth 40M RF 0x18 = 0x%x interface index %d\n",pHalData->RfRegChnlVal[eRFPath],  Adapter->interfaceIndex));
 			}
 			break;
@@ -773,18 +773,18 @@ phy_RF6052_Config_ParaFile(
 #ifdef CONFIG_EMBEDDED_FWIMG
 				//vivi added this for read parameter from header, 20100908
 				if(bTrueBPath == true)
-					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radiob_txt|MaskforPhySet, (RF_RADIO_PATH_E)eRFPath);
+					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radiob_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
 				else
-					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radioa_txt|MaskforPhySet, (RF_RADIO_PATH_E)eRFPath);
+					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radioa_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
 #else
-				rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(Adapter, pszRadioAFile, (RF_RADIO_PATH_E)eRFPath);
+				rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(Adapter, pszRadioAFile, (enum RF_RADIO_PATH_E)eRFPath);
 #endif
 				break;
 			case RF_PATH_B:
 #ifdef CONFIG_EMBEDDED_FWIMG
-			rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radiob_txt, (RF_RADIO_PATH_E)eRFPath);
+			rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radiob_txt, (enum RF_RADIO_PATH_E)eRFPath);
 #else
-			rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(Adapter, pszRadioBFile, (RF_RADIO_PATH_E)eRFPath);
+			rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(Adapter, pszRadioBFile, (enum RF_RADIO_PATH_E)eRFPath);
 #endif
 				break;
 			case RF_PATH_C:
@@ -905,7 +905,7 @@ PHY_RF6052_Config8192D(
 u32
 PHY_RFShadowRead(
 	PADAPTER			Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset)
 {
 	return	RF_Shadow[eRFPath][Offset].Value;
@@ -916,7 +916,7 @@ PHY_RFShadowRead(
 void
 PHY_RFShadowWrite(
 	PADAPTER			Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset,
 	u32				Data)
 {
@@ -928,12 +928,12 @@ PHY_RFShadowWrite(
 bool
 PHY_RFShadowCompare(
 	PADAPTER			Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset);
 bool
 PHY_RFShadowCompare(
 	PADAPTER			Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset)
 {
 	u32	reg;
@@ -957,12 +957,12 @@ PHY_RFShadowCompare(
 void
 PHY_RFShadowRecorver(
 	PADAPTER			Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset);
 void
 PHY_RFShadowRecorver(
 	PADAPTER			Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset)
 {
 	// Check if the address is error
@@ -994,7 +994,7 @@ PHY_RFShadowCompareAll(
 	{
 		for (Offset = 0; Offset <= RF6052_MAX_REG; Offset++)
 		{
-			PHY_RFShadowCompare(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset);
+			PHY_RFShadowCompare(Adapter, (enum RF_RADIO_PATH_E)eRFPath, Offset);
 		}
 	}
 
@@ -1013,7 +1013,7 @@ PHY_RFShadowRecorverAll(
 	{
 		for (Offset = 0; Offset <= RF6052_MAX_REG; Offset++)
 		{
-			PHY_RFShadowRecorver(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset);
+			PHY_RFShadowRecorver(Adapter, (enum RF_RADIO_PATH_E)eRFPath, Offset);
 		}
 	}
 
@@ -1021,13 +1021,13 @@ PHY_RFShadowRecorverAll(
 void
 PHY_RFShadowCompareFlagSet(
 	PADAPTER			Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset,
 	u8				Type);
 void
 PHY_RFShadowCompareFlagSet(
 	PADAPTER			Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset,
 	u8				Type)
 {
@@ -1038,13 +1038,13 @@ PHY_RFShadowCompareFlagSet(
 void
 PHY_RFShadowRecorverFlagSet(
 	PADAPTER			Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset,
 	u8				Type);
 void
 PHY_RFShadowRecorverFlagSet(
 	PADAPTER			Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset,
 	u8				Type)
 {
@@ -1068,9 +1068,9 @@ PHY_RFShadowCompareFlagSetAll(
 		{
 			// 2008/11/20 MH For S3S4 test, we only check reg 26/27 now!!!!
 			if (Offset != 0x26 && Offset != 0x27)
-				PHY_RFShadowCompareFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, false);
+				PHY_RFShadowCompareFlagSet(Adapter, (enum RF_RADIO_PATH_E)eRFPath, Offset, false);
 			else
-				PHY_RFShadowCompareFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, true);
+				PHY_RFShadowCompareFlagSet(Adapter, (enum RF_RADIO_PATH_E)eRFPath, Offset, true);
 		}
 	}
 
@@ -1091,9 +1091,9 @@ PHY_RFShadowRecorverFlagSetAll(
 		{
 			// 2008/11/20 MH For S3S4 test, we only check reg 26/27 now!!!!
 			if (Offset != 0x26 && Offset != 0x27)
-				PHY_RFShadowRecorverFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, false);
+				PHY_RFShadowRecorverFlagSet(Adapter, (enum RF_RADIO_PATH_E)eRFPath, Offset, false);
 			else
-				PHY_RFShadowRecorverFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, true);
+				PHY_RFShadowRecorverFlagSet(Adapter, (enum RF_RADIO_PATH_E)eRFPath, Offset, true);
 		}
 	}
 

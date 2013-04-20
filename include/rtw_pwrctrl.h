@@ -143,14 +143,13 @@ __inline static void _exit_pwrlock(_pwrlock *plock)
 #define EXE_PWR_LPS		0x04
 
 // RF state.
-typedef enum _rt_rf_power_state
-{
+enum rt_rf_power_state {
 	rf_on,		// RF is on after RFSleep or RFOff
 	rf_sleep,	// 802.11 Power Save mode
 	rf_off,		// HW/SW Radio OFF or Inactive Power Save
 	//=====Add the new RF state above this line=====//
 	rf_max
-}rt_rf_power_state;
+};
 
 // RF Off Level for IPS or HW/SW radio off
 #define	RT_RF_OFF_LEVL_ASPM			BIT(0)	// PCI ASPM
@@ -237,9 +236,9 @@ struct pwrctrl_priv
 
 	int		ps_flag;
 
-	rt_rf_power_state	rf_pwrstate;//cur power state
+	enum rt_rf_power_state	rf_pwrstate;//cur power state
 	//rt_rf_power_state	current_rfpwrstate;
-	rt_rf_power_state	change_rfpwrstate;
+	enum rt_rf_power_state	change_rfpwrstate;
 
 	u8		wepkeymask;
 	u8		bHWPowerdown;//if support hw power down

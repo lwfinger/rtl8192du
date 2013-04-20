@@ -1635,7 +1635,7 @@ dm_RXGainTrackingCallback_ThermalMeter_92D(
 	//DBG_8192C("===>dm_RXGainTrackingCallback_ThermalMeter_92D interface %d  Rx Gain %x\n", pHalData->interfaceIndex, u4tmp);
 
 	for(eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++){
-		PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, RF_RXRF_A3, bRFRegOffsetMask, (pdmpriv->RegRF3C[eRFPath]&(~(0xF000)))|u4tmp);
+		PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_RXRF_A3, bRFRegOffsetMask, (pdmpriv->RegRF3C[eRFPath]&(~(0xF000)))|u4tmp);
 	}
 
 };

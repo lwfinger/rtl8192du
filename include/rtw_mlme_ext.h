@@ -99,8 +99,7 @@ extern unsigned char WMM_PARA_OUI[];
 //	If you just wnat to customize the acitions(scan period or join actions) about one of the channel plan,
 //	customize them in RT_CHANNEL_INFO in the RT_CHANNEL_LIST.
 //
-typedef enum _RT_CHANNEL_DOMAIN
-{
+enum RT_CHANNEL_DOMAIN {
 	//===== old channel plan mapping =====//
 	RT_CHANNEL_DOMAIN_FCC = 0x00,
 	RT_CHANNEL_DOMAIN_IC = 0x01,
@@ -150,10 +149,9 @@ typedef enum _RT_CHANNEL_DOMAIN
 	//===== Add new channel plan above this line===============//
 	RT_CHANNEL_DOMAIN_MAX,
 	RT_CHANNEL_DOMAIN_REALTEK_DEFINE = 0x7F,
-}RT_CHANNEL_DOMAIN, *PRT_CHANNEL_DOMAIN;
+};
 
-typedef enum _RT_CHANNEL_DOMAIN_2G
-{
+enum RT_CHANNEL_DOMAIN_2G {
 	RT_CHANNEL_DOMAIN_2G_WORLD = 0x00,		//Worldwird 13
 	RT_CHANNEL_DOMAIN_2G_ETSI1 = 0x01,		//Europe
 	RT_CHANNEL_DOMAIN_2G_FCC1 = 0x02,		//US
@@ -162,10 +160,9 @@ typedef enum _RT_CHANNEL_DOMAIN_2G
 	RT_CHANNEL_DOMAIN_2G_NULL = 0x05,
 	//===== Add new channel plan above this line===============//
 	RT_CHANNEL_DOMAIN_2G_MAX,
-}RT_CHANNEL_DOMAIN_2G, *PRT_CHANNEL_DOMAIN_2G;
+};
 
-typedef enum _RT_CHANNEL_DOMAIN_5G
-{
+enum RT_CHANNEL_DOMAIN_5G {
 	RT_CHANNEL_DOMAIN_5G_NULL = 0x00,
 	RT_CHANNEL_DOMAIN_5G_ETSI1 = 0x01,		//Europe
 	RT_CHANNEL_DOMAIN_5G_ETSI2 = 0x02,		//Australia, New Zealand
@@ -189,7 +186,7 @@ typedef enum _RT_CHANNEL_DOMAIN_5G
 	RT_CHANNEL_DOMAIN_5G_JAPAN_NO_DFS = 0x12,
 	RT_CHANNEL_DOMAIN_5G_FCC4_NO_DFS = 0x13,
 	RT_CHANNEL_DOMAIN_5G_MAX,
-}RT_CHANNEL_DOMAIN_5G, *PRT_CHANNEL_DOMAIN_5G;
+};
 
 #define rtw_is_channel_plan_valid(chplan) (chplan<RT_CHANNEL_DOMAIN_MAX || chplan == RT_CHANNEL_DOMAIN_REALTEK_DEFINE)
 

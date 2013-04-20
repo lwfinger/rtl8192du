@@ -1687,7 +1687,7 @@ static void _RfPowerSave(
 			return;
 #endif
 		for(eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
-			PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, 0x4, 0xC00, 0x0);
+			PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, 0x4, 0xC00, 0x0);
 	}
 	else if(pwrctrlpriv->rfoff_reason > RF_CHANGE_BY_PS){ // H/W or S/W RF OFF before sleep.
 		//RT_TRACE((COMP_INIT|COMP_RF), DBG_LOUD, ("InitializeAdapter8192CUsb(): Turn off RF for RfOffReason(%ld).\n", pMgntInfo->RfOffReason));
@@ -2251,14 +2251,14 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_LCK);
 				rtw_udelay_os(MAX_STALL_TIME);
 				if(pHalData->rf_type == RF_1T1R)
 				{
-					tmpRega = PHY_QueryRFReg(padapter, (RF_RADIO_PATH_E)RF_PATH_A, 0x2a, bMaskDWord);
+					tmpRega = PHY_QueryRFReg(padapter, (enum RF_RADIO_PATH_E)RF_PATH_A, 0x2a, bMaskDWord);
 					if((tmpRega&BIT11)==BIT11)
 						break;
 				}
 				else
 				{
-					tmpRega = PHY_QueryRFReg(padapter, (RF_RADIO_PATH_E)RF_PATH_A, 0x2a, bMaskDWord);
-					tmpRegb = PHY_QueryRFReg(padapter, (RF_RADIO_PATH_E)RF_PATH_B, 0x2a, bMaskDWord);
+					tmpRega = PHY_QueryRFReg(padapter, (enum RF_RADIO_PATH_E)RF_PATH_A, 0x2a, bMaskDWord);
+					tmpRegb = PHY_QueryRFReg(padapter, (enum RF_RADIO_PATH_E)RF_PATH_B, 0x2a, bMaskDWord);
 					if(((tmpRega&BIT11)==BIT11)&&((tmpRegb&BIT11)==BIT11))
 						break;
 					// temply add for DMSP
@@ -2567,7 +2567,7 @@ e.	SYS_FUNC_EN 0x02[7:0] = 0x14		//reset BB state machine
 	u8	eRFPath = 0,value8 = 0;
 
 	PHY_SetBBReg(Adapter, rFPGA0_AnalogParameter4, 0x00f00000,  0xf);
-	PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, 0x0,bRFRegOffsetMask, 0x0);
+	PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, 0x0,bRFRegOffsetMask, 0x0);
 
 	value8 |= APSDOFF;
 	rtw_write8(Adapter, REG_APSD_CTRL, value8);//0x40

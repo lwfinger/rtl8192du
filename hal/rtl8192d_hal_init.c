@@ -372,7 +372,7 @@ int FirmwareDownload92D(
 	u8*			FwImageWoWLAN;
 	u32			FwImageWoWLANLen;
 #endif //CONFIG_WOWLAN
-	PRT_FIRMWARE_92D	pFirmware = NULL;
+	struct RT_FIRMWARE_92D	*pFirmware = NULL;
 	PRT_8192D_FIRMWARE_HDR		pFwHdr = NULL;
 	u8		*pFirmwareBuf;
 	u32		FirmwareLen;
@@ -384,9 +384,8 @@ int FirmwareDownload92D(
 		return _FAIL;
 	}
 
-	pFirmware = (PRT_FIRMWARE_92D)rtw_zvmalloc(sizeof(RT_FIRMWARE_92D));
-	if(!pFirmware)
-	{
+	pFirmware = (struct RT_FIRMWARE_92D *)rtw_zvmalloc(sizeof(struct RT_FIRMWARE_92D));
+	if(!pFirmware) {
 		rtStatus = _FAIL;
 		goto Exit;
 	}
@@ -598,7 +597,7 @@ Exit:
 	rtStatus =_FWInit(Adapter);
 
 	if(pFirmware) {
-		rtw_vmfree((u8*)pFirmware, sizeof(RT_FIRMWARE_92D));
+		rtw_vmfree((u8*)pFirmware, sizeof(struct RT_FIRMWARE_92D));
 	}
 
 	//RT_TRACE(COMP_INIT, DBG_LOUD, (" <=== FirmwareDownload91C()\n"));
@@ -714,12 +713,12 @@ rtl8192d_ReadChipVersion(
 {
 	u32	value32;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	VERSION_8192D	ChipVersion = VERSION_TEST_CHIP_88C;
+	enum VERSION_8192D	ChipVersion = VERSION_TEST_CHIP_88C;
 
 	value32 = rtw_read32(Adapter, REG_SYS_CFG);
 	DBG_871X("ReadChipVersion8192D 0xF0 = 0x%x \n", value32);
 
-	ChipVersion = (VERSION_8192D)(VERSION_NORMAL_CHIP_92D_SINGLEPHY | CHIP_92D);
+	ChipVersion = (enum VERSION_8192D)(VERSION_NORMAL_CHIP_92D_SINGLEPHY | CHIP_92D);
 
 	//Decide TestChip or NormalChip here.
 	//92D's RF_type will be decided when the reg0x2c is filled.
@@ -730,7 +729,7 @@ rtl8192d_ReadChipVersion(
 	}
 	else
 	{
-		ChipVersion = (VERSION_8192D)( ChipVersion | NORMAL_CHIP);
+		ChipVersion = (enum VERSION_8192D)( ChipVersion | NORMAL_CHIP);
 		DBG_871X("Normal CHIP!!!\n");
 	}
 
@@ -1518,7 +1517,7 @@ hal_EfuseUpdateNormalChipVersion_92D(
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	VERSION_8192D	ChipVer = pHalData->VersionID;
+	enum VERSION_8192D	ChipVer = pHalData->VersionID;
 	u8	CutValue[2];
 	u16	ChipValue=0;
 
@@ -1529,21 +1528,21 @@ hal_EfuseUpdateNormalChipVersion_92D(
 	switch(ChipValue){
 		case 0xAA55:
 			//ChipVer |= CHIP_92D_C_CUT;
-			ChipVer = (VERSION_8192D)( ChipVer | C_CUT_VERSION);
+			ChipVer = (enum VERSION_8192D)( ChipVer | C_CUT_VERSION);
 			MSG_8192C("C-CUT!!!\n");
 			break;
 		case 0x9966:
 			//ChipVer |= CHIP_92D_D_CUT;
-			ChipVer = (VERSION_8192D)( ChipVer | D_CUT_VERSION);
+			ChipVer = (enum VERSION_8192D)( ChipVer | D_CUT_VERSION);
 			MSG_8192C("D-CUT!!!\n");
 			break;
 		case 0xCC33:
-			ChipVer = (VERSION_8192D)( ChipVer | E_CUT_VERSION);
+			ChipVer = (enum VERSION_8192D)( ChipVer | E_CUT_VERSION);
 			MSG_8192C("E-CUT!!!\n");
 			break;
 		default:
 			//ChipVer |= CHIP_92D_D_CUT;
-			ChipVer = (VERSION_8192D)( ChipVer | D_CUT_VERSION);
+			ChipVer = (enum VERSION_8192D)( ChipVer | D_CUT_VERSION);
 			MSG_8192C("Unkown CUT!\n");
 			break;
 	}

@@ -782,10 +782,10 @@ _func_enter_;
 				if(psecuritypriv->binstallGrpkey==false)
 				{
 					res=_FAIL;
-					DBG_8192C("%s:rx bc/mc packets,but didn't install group key!!!!!!!!!!\n",__FUNCTION__);
+					DBG_8192D("%s:rx bc/mc packets,but didn't install group key!!!!!!!!!!\n",__FUNCTION__);
 					goto exit;
 				}
-				//DBG_871X("rx bc/mc packets, to perform sw rtw_tkip_decrypt\n");
+				//DBG_8192D("rx bc/mc packets, to perform sw rtw_tkip_decrypt\n");
 				//prwskey = psecuritypriv->dot118021XGrpKey[psecuritypriv->dot118021XGrpKeyid].skey;
 				prwskey = psecuritypriv->dot118021XGrpKey[prxattrib->key_index].skey;
 				prwskeylen=16;
@@ -1553,7 +1553,7 @@ _func_enter_;
 				ptdls_sta=rtw_get_stainfo(&padapter->stapriv ,&pattrib->dst[0] );
 				if((ptdls_sta != NULL) && (ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE) )
 				{
-					DBG_871X("[%s] for tdls link\n", __FUNCTION__);
+					DBG_8192D("[%s] for tdls link\n", __FUNCTION__);
 					prwskey=&ptdls_sta->tpk.tk[0];
 				}
 			}
@@ -1851,7 +1851,7 @@ _func_enter_;
 		{
 			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x) \n",
 						i,pframe[hdrlen+8+plen-8+i],message[hdrlen+8+plen-8+i]));
-			DBG_871X("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x) \n",
+			DBG_8192D("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x) \n",
 						i,pframe[hdrlen+8+plen-8+i],message[hdrlen+8+plen-8+i]);
 			res = _FAIL;
 		}
@@ -1861,8 +1861,8 @@ _func_enter_;
 	{
 		int gg=0;
 		for(gg=0; gg < 32; gg++)
-			DBG_871X(" [%d]=%02x ", gg, pframe[gg]);
-		DBG_871X("error packet header \n");
+			DBG_8192D(" [%d]=%02x ", gg, pframe[gg]);
+		DBG_8192D("error packet header \n");
 	}
 
 _func_exit_;
@@ -1899,17 +1899,17 @@ _func_enter_;
 			if(IS_MCAST(prxattrib->ra))
 			{
 				//in concurrent we should use sw descrypt in group key, so we remove this message
-				//DBG_871X("rx bc/mc packets, to perform sw rtw_aes_decrypt\n");
+				//DBG_8192D("rx bc/mc packets, to perform sw rtw_aes_decrypt\n");
 				//prwskey = psecuritypriv->dot118021XGrpKey[psecuritypriv->dot118021XGrpKeyid].skey;
 				if(psecuritypriv->binstallGrpkey==false) {
 					res=_FAIL;
-					DBG_8192C("%s:rx bc/mc packets,but didn't install group key!!!!!!!!!!\n",__FUNCTION__);
+					DBG_8192D("%s:rx bc/mc packets,but didn't install group key!!!!!!!!!!\n",__FUNCTION__);
 					goto exit;
 				}
 				prwskey = psecuritypriv->dot118021XGrpKey[prxattrib->key_index].skey;
 
 				if(psecuritypriv->dot118021XGrpKeyid != prxattrib->key_index) {
-					DBG_871X("not match packet_index=%d, install_index=%d \n"
+					DBG_8192D("not match packet_index=%d, install_index=%d \n"
 					, prxattrib->key_index, psecuritypriv->dot118021XGrpKeyid);
 					res=_FAIL;
 					goto exit;
@@ -2713,7 +2713,7 @@ int wpa_tdls_ftie_mic(u8 *kck, u8 trans_seq,
 		2 + timeoutie[1] + 2 + ftie[1];
 	buf = rtw_zmalloc(len);
 	if (!buf) {
-		DBG_871X("TDLS: No memory for MIC calculation\n");
+		DBG_8192D("TDLS: No memory for MIC calculation\n");
 		return -1;
 	}
 
@@ -2805,7 +2805,7 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 	}
 
 	//Invalid MIC
-	DBG_871X( "[%s] Invalid MIC\n", __FUNCTION__);
+	DBG_8192D( "[%s] Invalid MIC\n", __FUNCTION__);
 	return 0;
 
 }

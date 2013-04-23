@@ -221,7 +221,7 @@ ReadEFuseByte(
 	value32 = rtw_read32(Adapter, EFUSE_CTRL);
 
 	*pbuf = (u8)(value32 & 0xff);
-	//DBG_871X("ReadEFuseByte _offset:%08u, in %d ms\n",_offset ,rtw_get_passing_time_ms(start));
+	//DBG_8192D("ReadEFuseByte _offset:%08u, in %d ms\n",_offset ,rtw_get_passing_time_ms(start));
 
 }
 
@@ -736,12 +736,12 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 
 		if (word_en != 0xF) {
 			ret = Efuse_PgPacketWrite(padapter, offset, word_en, newdata, false);
-			DBG_871X("offset=%x \n",offset);
-			DBG_871X("word_en=%x \n",word_en);
+			DBG_8192D("offset=%x \n",offset);
+			DBG_8192D("word_en=%x \n",word_en);
 
 			for(i=0;i<PGPKT_DATA_SIZE;i++)
 			{
-				DBG_871X("data=%x \t",newdata[i]);
+				DBG_8192D("data=%x \t",newdata[i]);
 			}
 			if (ret == _FAIL) break;
 		}
@@ -1097,7 +1097,7 @@ int storeAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv)
 		else
 			ret = _FAIL;
 	} else {
-		DBG_871X("%s NULL pointer\n",__FUNCTION__);
+		DBG_8192D("%s NULL pointer\n",__FUNCTION__);
 		ret =  _FAIL;
 	}
 	return ret;
@@ -1118,7 +1118,7 @@ int retriveAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv)
 		else
 			ret = _FAIL;
 	} else {
-		DBG_871X("%s NULL pointer\n",__FUNCTION__);
+		DBG_8192D("%s NULL pointer\n",__FUNCTION__);
 		ret = _FAIL;
 	}
 	return ret;

@@ -162,7 +162,7 @@ void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
 
 static void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
 {
-	//DBG_8192C("cvs_mode=%d\n", pattrib->vcs_mode);
+	//DBG_8192D("cvs_mode=%d\n", pattrib->vcs_mode);
 
 	switch(pattrib->vcs_mode)
 	{
@@ -199,7 +199,7 @@ static void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
 
 static void fill_txdesc_phy(struct pkt_attrib *pattrib, u32 *pdw)
 {
-	//DBG_8192C("bwmode=%d, ch_off=%d\n", pattrib->bwmode, pattrib->ch_offset);
+	//DBG_8192D("bwmode=%d, ch_off=%d\n", pattrib->bwmode, pattrib->ch_offset);
 
 	if(pattrib->ht_en)
 	{
@@ -276,7 +276,7 @@ if (padapter->registrypriv.mp_mode == 0)
 
 	if((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG)
 	{
-		//DBG_8192C("pxmitframe->frame_tag == DATA_FRAMETAG\n");
+		//DBG_8192D("pxmitframe->frame_tag == DATA_FRAMETAG\n");
 
 		//offset 4
 		ptxdesc->txdw1 |= cpu_to_le32(pattrib->mac_id&0x1f);
@@ -374,13 +374,13 @@ if (padapter->registrypriv.mp_mode == 0)
 			// ptxdesc->txdw6 = 0; // clear TCP_CHECKSUM and IP_CHECKSUM. It's zero already!!
 			u8 ip_hdr_offset = 32 + pattrib->hdrlen + pattrib->iv_len + 8;
 			ptxdesc->txdw7 = (1 << 31) | (ip_hdr_offset << 16);
-			DBG_8192C("ptxdesc->txdw7 = %08x\n", ptxdesc->txdw7);
+			DBG_8192D("ptxdesc->txdw7 = %08x\n", ptxdesc->txdw7);
 		}
 #endif
 	}
 	else if((pxmitframe->frame_tag&0x0f)== MGNT_FRAMETAG)
 	{
-		//DBG_8192C("pxmitframe->frame_tag == MGNT_FRAMETAG\n");
+		//DBG_8192D("pxmitframe->frame_tag == MGNT_FRAMETAG\n");
 
 		//offset 4
 		ptxdesc->txdw1 |= cpu_to_le32(pattrib->mac_id&0x1f);
@@ -398,7 +398,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		if (pxmitframe->ack_report) {
 			ptxdesc->txdw2 |= cpu_to_le32(BIT(19));
 			#ifdef DBG_CCX
-			DBG_871X("%s set ccx\n", __func__);
+			DBG_8192D("%s set ccx\n", __func__);
 			#endif
 		}
 #endif //CONFIG_XMIT_ACK
@@ -424,7 +424,7 @@ if (padapter->registrypriv.mp_mode == 0)
 
 		ptxdesc->txdw5 |= cpu_to_le32(ratetohwrate(pmlmeext->tx_rate));
 	} else if((pxmitframe->frame_tag&0x0f) == TXAGG_FRAMETAG) {
-		DBG_8192C("pxmitframe->frame_tag == TXAGG_FRAMETAG\n");
+		DBG_8192D("pxmitframe->frame_tag == TXAGG_FRAMETAG\n");
 	}
 #ifdef CONFIG_MP_INCLUDED
 	else if((pxmitframe->frame_tag&0x0f) == MP_FRAMETAG) {
@@ -432,7 +432,7 @@ if (padapter->registrypriv.mp_mode == 0)
 	}
 #endif
 	else {
-		DBG_8192C("pxmitframe->frame_tag = %d\n", pxmitframe->frame_tag);
+		DBG_8192D("pxmitframe->frame_tag = %d\n", pxmitframe->frame_tag);
 
 		//offset 4
 		ptxdesc->txdw1 |= cpu_to_le32((4)&0x1f);//CAM_ID(MAC_ID)
@@ -576,7 +576,7 @@ s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 
 		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_write_port, w_sz=%d\n", w_sz));
-		//DBG_8192C("rtw_write_port, w_sz=%d, sz=%d, txdesc_sz=%d, tid=%d\n", w_sz, sz, w_sz-sz, pattrib->priority);
+		//DBG_8192D("rtw_write_port, w_sz=%d, sz=%d, txdesc_sz=%d, tid=%d\n", w_sz, sz, w_sz-sz, pattrib->priority);
 
 		mem_addr += w_sz;
 
@@ -1052,7 +1052,7 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
 
 
-	//DBG_8192C("%s\n", __FUNCTION__);
+	//DBG_8192D("%s\n", __FUNCTION__);
 
 	skb = pkt;
 
@@ -1124,7 +1124,7 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 	pxmitbuf = pxmitbuf + TXDESC_SIZE;
 	_rtw_memcpy(pxmitbuf, skb->data, len);
 
-	//DBG_8192C("mgnt_xmit, len=%x\n", pxmit_skb->len);
+	//DBG_8192D("mgnt_xmit, len=%x\n", pxmit_skb->len);
 
 
 	// ----- prepare urb for submit -----

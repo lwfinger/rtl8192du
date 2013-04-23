@@ -74,7 +74,7 @@ _FWDownloadEnable(
 		{
 			u8 val;
 			if( (val=rtw_read8(Adapter, REG_MCUFWDL)))
-				DBG_871X("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __FUNCTION__, __LINE__, val);
+				DBG_8192D("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __FUNCTION__, __LINE__, val);
 		}
 		#endif
 		// 8051 enable
@@ -219,7 +219,7 @@ _WriteFW(
 		if(ret == _FAIL)
 			goto exit;
 	}
-	DBG_8192C("_WriteFW Done- for Normal chip.\n");
+	DBG_8192D("_WriteFW Done- for Normal chip.\n");
 
 exit:
 	return ret;
@@ -239,10 +239,10 @@ int _FWFreeToGo_92D(
 	}while((counter ++ < POLLING_READY_TIMEOUT_COUNT) && (!(value32 & FWDL_ChkSum_rpt  )));
 
 	if(counter >= POLLING_READY_TIMEOUT_COUNT){
-		DBG_8192C("chksum report faill ! REG_MCUFWDL:0x%08x .\n",value32);
+		DBG_8192D("chksum report faill ! REG_MCUFWDL:0x%08x .\n",value32);
 		return _FAIL;
 	}
-	DBG_8192C("Checksum report OK ! REG_MCUFWDL:0x%08x .\n",value32);
+	DBG_8192D("Checksum report OK ! REG_MCUFWDL:0x%08x .\n",value32);
 
 	value32 = rtw_read32(Adapter, REG_MCUFWDL);
 	value32 |= MCUFWDL_RDY;
@@ -311,7 +311,7 @@ int _FWInit(
 	u32			counter = 0;
 
 
-	DBG_8192C("FW already have download ; \n");
+	DBG_8192D("FW already have download ; \n");
 
 	// polling for FW ready
 	counter = 0;
@@ -319,14 +319,14 @@ int _FWInit(
 	{
 		if(pHalData->interfaceIndex==0){
 			if(rtw_read8(Adapter, FW_MAC0_ready) & mac0_ready){
-				DBG_8192C("Polling FW ready success!! FW_MAC0_ready:0x%x .\n",rtw_read8(Adapter, FW_MAC0_ready));
+				DBG_8192D("Polling FW ready success!! FW_MAC0_ready:0x%x .\n",rtw_read8(Adapter, FW_MAC0_ready));
 				return _SUCCESS;
 			}
 			rtw_udelay_os(5);
 		}
 		else{
 			if(rtw_read8(Adapter, FW_MAC1_ready) &mac1_ready){
-				DBG_8192C("Polling FW ready success!! FW_MAC1_ready:0x%x .\n",rtw_read8(Adapter, FW_MAC1_ready));
+				DBG_8192D("Polling FW ready success!! FW_MAC1_ready:0x%x .\n",rtw_read8(Adapter, FW_MAC1_ready));
 				return _SUCCESS;
 			}
 			rtw_udelay_os(5);
@@ -335,13 +335,13 @@ int _FWInit(
 	}while(counter++ < POLLING_READY_TIMEOUT_COUNT);
 
 	if(pHalData->interfaceIndex==0){
-		DBG_8192C("Polling FW ready fail!! MAC0 FW init not ready:0x%x .\n",rtw_read8(Adapter, FW_MAC0_ready) );
+		DBG_8192D("Polling FW ready fail!! MAC0 FW init not ready:0x%x .\n",rtw_read8(Adapter, FW_MAC0_ready) );
 	}
 	else{
-		DBG_8192C("Polling FW ready fail!! MAC1 FW init not ready:0x%x .\n",rtw_read8(Adapter, FW_MAC1_ready) );
+		DBG_8192D("Polling FW ready fail!! MAC1 FW init not ready:0x%x .\n",rtw_read8(Adapter, FW_MAC1_ready) );
 	}
 
-	DBG_8192C("Polling FW ready fail!! REG_MCUFWDL:0x%x .\n",rtw_read32(Adapter, REG_MCUFWDL));
+	DBG_8192D("Polling FW ready fail!! REG_MCUFWDL:0x%x .\n",rtw_read32(Adapter, REG_MCUFWDL));
 	return _FAIL;
 
 }
@@ -397,18 +397,18 @@ int FirmwareDownload92D(
 	FwImageWoWLAN= Rtl8192D_FwWWImageArray;
 	FwImageWoWLANLen =DUWWImgArrayLength ;
 #endif //CONFIG_WOWLAN
-	DBG_8192C(" ===> FirmwareDownload92D() fw:Rtl8192D_FwImageArray\n");
+	DBG_8192D(" ===> FirmwareDownload92D() fw:Rtl8192D_FwImageArray\n");
 
 	#ifdef CONFIG_FILE_FWIMG
 	if(rtw_is_file_readable(rtw_fw_file_path) == true)
 	{
-		DBG_871X("%s accquire FW from file:%s\n", __FUNCTION__, rtw_fw_file_path);
+		DBG_8192D("%s accquire FW from file:%s\n", __FUNCTION__, rtw_fw_file_path);
 		pFirmware->eFWSource = FW_SOURCE_IMG_FILE; // We should decided by Reg.
 	}
 	else
 	#endif //CONFIG_FILE_FWIMG
 	{
-		DBG_871X("%s accquire FW from embedded image\n", __FUNCTION__);
+		DBG_8192D("%s accquire FW from embedded image\n", __FUNCTION__);
 		pFirmware->eFWSource = FW_SOURCE_HEADER_FILE;
 	}
 
@@ -475,11 +475,11 @@ int FirmwareDownload92D(
 	pHalData->FirmwareVersion =  le16_to_cpu(pFwHdr->Version);
 	pHalData->FirmwareSubVersion = le16_to_cpu(pFwHdr->Subversion);
 
-	DBG_8192C(" FirmwareVersion(%#x), Signature(%#x)\n", pHalData->FirmwareVersion, le16_to_cpu(pFwHdr->Signature));
+	DBG_8192D(" FirmwareVersion(%#x), Signature(%#x)\n", pHalData->FirmwareVersion, le16_to_cpu(pFwHdr->Signature));
 
 	if(IS_FW_HEADER_EXIST(pFwHdr))
 	{
-		//DBG_8192C("Shift 32 bytes for FW header!!\n");
+		//DBG_8192D("Shift 32 bytes for FW header!!\n");
 		pFirmwareBuf = pFirmwareBuf + 32;
 		FirmwareLen = FirmwareLen -32;
 	}
@@ -530,7 +530,7 @@ int FirmwareDownload92D(
 			else if(!bFwDownloadInProcess)
 				break;
 			else
-				DBG_8192C("Wait for another mac download fw \n");
+				DBG_8192D("Wait for another mac download fw \n");
 		}
 		ACQUIRE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 		value=rtw_read8(Adapter, 0x1f);
@@ -550,7 +550,7 @@ int FirmwareDownload92D(
 	// or it will cause download Fw fail. 2010.02.01. by tynli.
 	if(rtw_read8(Adapter, REG_MCUFWDL)&BIT7) //8051 RAM code
 	{
-		DBG_871X("Firmware self reset\n");
+		DBG_8192D("Firmware self reset\n");
 		rtl8192d_FirmwareSelfReset(Adapter);
 		rtw_write8(Adapter, REG_MCUFWDL, 0x00);
 	}
@@ -568,14 +568,14 @@ int FirmwareDownload92D(
 		)
 			break;
 
-		DBG_871X("%s writeFW_retry:%u, time after fwdl_start_time:%ums\n", __FUNCTION__
+		DBG_8192D("%s writeFW_retry:%u, time after fwdl_start_time:%ums\n", __FUNCTION__
 			, writeFW_retry
 			, rtw_get_passing_time_ms(fwdl_start_time)
 		);
 	}
 	_FWDownloadEnable(Adapter, false);
 	if(_SUCCESS != rtStatus){
-		DBG_871X("DL Firmware failed!\n");
+		DBG_8192D("DL Firmware failed!\n");
 		goto Exit;
 	}
 
@@ -588,7 +588,7 @@ int FirmwareDownload92D(
 	RELEASE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 
 	if(_SUCCESS != rtStatus){
-		DBG_8192C("Firmware is not ready to run!\n");
+		DBG_8192D("Firmware is not ready to run!\n");
 		goto Exit;
 	}
 
@@ -652,12 +652,12 @@ SetFwRelatedForWoWLAN8192DU(
 		status = FirmwareDownload92D(padapter, bHostIsGoingtoSleep);
 		if(status != _SUCCESS)
 		{
-			DBG_8192C("ConfigFwRelatedForWoWLAN8192DU(): Re-Download Firmware failed!!\n");
+			DBG_8192D("ConfigFwRelatedForWoWLAN8192DU(): Re-Download Firmware failed!!\n");
 			return;
 		}
 		else
 		{
-			DBG_8192C("ConfigFwRelatedForWoWLAN8192DU(): Re-Download Firmware Success !!\n");
+			DBG_8192D("ConfigFwRelatedForWoWLAN8192DU(): Re-Download Firmware Success !!\n");
 		}
 
 		//
@@ -716,7 +716,7 @@ rtl8192d_ReadChipVersion(
 	enum VERSION_8192D	ChipVersion = VERSION_TEST_CHIP_88C;
 
 	value32 = rtw_read32(Adapter, REG_SYS_CFG);
-	DBG_871X("ReadChipVersion8192D 0xF0 = 0x%x \n", value32);
+	DBG_8192D("ReadChipVersion8192D 0xF0 = 0x%x \n", value32);
 
 	ChipVersion = (enum VERSION_8192D)(VERSION_NORMAL_CHIP_92D_SINGLEPHY | CHIP_92D);
 
@@ -725,12 +725,12 @@ rtl8192d_ReadChipVersion(
 	if (!(value32 & 0x000f0000))
 	{ //Test or Normal Chip:  hardward id 0xf0[19:16] =0 test chip
 		ChipVersion = VERSION_TEST_CHIP_92D_SINGLEPHY;
-		DBG_871X("TEST CHIP!!!\n");
+		DBG_8192D("TEST CHIP!!!\n");
 	}
 	else
 	{
 		ChipVersion = (enum VERSION_8192D)( ChipVersion | NORMAL_CHIP);
-		DBG_871X("Normal CHIP!!!\n");
+		DBG_8192D("Normal CHIP!!!\n");
 	}
 
 	pHalData->VersionID = ChipVersion;
@@ -758,7 +758,7 @@ rtl8192d_EfuseParseChnlPlan(
 		, AutoLoadFail
 	);
 
-	DBG_871X("mlmepriv.ChannelPlan = 0x%02x\n" , Adapter->mlmepriv.ChannelPlan);
+	DBG_8192D("mlmepriv.ChannelPlan = 0x%02x\n" , Adapter->mlmepriv.ChannelPlan);
 }
 
 //-------------------------------------------------------------------------
@@ -930,7 +930,7 @@ rtl8192d_ReadTxPowerInfo(
 		{
 			pHalData->InternalPA5G[0] = !((PROMContent[EEPROM_TSSI_A_5G] & BIT6) >> 6);
 			pHalData->InternalPA5G[1] = !((PROMContent[EEPROM_TSSI_B_5G] & BIT6) >> 6);
-			DBG_8192C("Is D/E cut,Internal PA0 %d Internal PA1 %d\n",pHalData->InternalPA5G[0],pHalData->InternalPA5G[1]);
+			DBG_8192D("Is D/E cut,Internal PA0 %d Internal PA1 %d\n",pHalData->InternalPA5G[0],pHalData->InternalPA5G[1]);
 		}
 		pHalData->EEPROMC9 = PROMContent[EEPROM_RF_OPT6];
 		pHalData->EEPROMCC = PROMContent[EEPROM_RF_OPT7];
@@ -977,7 +977,7 @@ rtl8192d_ReadTxPowerInfo(
 				break;
 		}
 	}
-	DBG_871X("PHY_SetPAMode mode %d, c9 = 0x%x cc = 0x%x interface index %d\n", pHalData->PAMode, pHalData->EEPROMC9, pHalData->EEPROMCC, pHalData->interfaceIndex);
+	DBG_8192D("PHY_SetPAMode mode %d, c9 = 0x%x cc = 0x%x interface index %d\n", pHalData->PAMode, pHalData->EEPROMC9, pHalData->EEPROMCC, pHalData->interfaceIndex);
 
 	//Use default value to fill parameters if efuse is not filled on some place.
 
@@ -1061,7 +1061,7 @@ rtl8192d_ReadTxPowerInfo(
 		for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
 			if(ch < CHANNEL_MAX_NUMBER_2G)
 			{
-				DBG_8192C("RF(%d)-Ch(%d) [CCK / HT40_1S / HT40_2S] = [0x%x / 0x%x / 0x%x]\n",
+				DBG_8192D("RF(%d)-Ch(%d) [CCK / HT40_1S / HT40_2S] = [0x%x / 0x%x / 0x%x]\n",
 					rfPath, ch,
 					pHalData->TxPwrLevelCck[rfPath][ch],
 					pHalData->TxPwrLevelHT40_1S[rfPath][ch],
@@ -1069,7 +1069,7 @@ rtl8192d_ReadTxPowerInfo(
 			}
 			else
 			{
-				DBG_8192C("RF(%d)-Ch(%d) [HT40_1S / HT40_2S] = [0x%x / 0x%x]\n",
+				DBG_8192D("RF(%d)-Ch(%d) [HT40_1S / HT40_2S] = [0x%x / 0x%x]\n",
 					rfPath, ch,
 					pHalData->TxPwrLevelHT40_1S[rfPath][ch],
 					pHalData->TxPwrLevelHT40_2S[rfPath][ch]);
@@ -1078,19 +1078,19 @@ rtl8192d_ReadTxPowerInfo(
 	}
 
 	for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
-		DBG_8192C("RF-A Ht20 to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrHt20Diff[RF_PATH_A][ch]);
+		DBG_8192D("RF-A Ht20 to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrHt20Diff[RF_PATH_A][ch]);
 	}
 
 	for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
-		DBG_8192C("RF-A Legacy to Ht40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrLegacyHtDiff[RF_PATH_A][ch]);
+		DBG_8192D("RF-A Legacy to Ht40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrLegacyHtDiff[RF_PATH_A][ch]);
 	}
 
 	for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
-		DBG_8192C("RF-B Ht20 to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrHt20Diff[RF_PATH_B][ch]);
+		DBG_8192D("RF-B Ht20 to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrHt20Diff[RF_PATH_B][ch]);
 	}
 
 	for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
-		DBG_8192C("RF-B Legacy to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrLegacyHtDiff[RF_PATH_B][ch]);
+		DBG_8192D("RF-B Legacy to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrLegacyHtDiff[RF_PATH_B][ch]);
 	}
 
 #endif
@@ -1146,7 +1146,7 @@ u8 GetEEPROMSize8192D(PADAPTER Adapter)
 	curRCR = rtw_read16(Adapter, REG_9346CR);
 	size = (curRCR & BOOT_FROM_EEPROM) ? 6 : 4; // 6: EEPROM used is 93C46, 4: boot from E-Fuse.
 
-	MSG_8192C("EEPROM type is %s\n", size==4 ? "E-FUSE" : "93C46");
+	MSG_8192D("EEPROM type is %s\n", size==4 ? "E-FUSE" : "93C46");
 
 	return size;
 }
@@ -1262,7 +1262,7 @@ PHY_SetPowerOnFor8192D(
 		}
 
 		if(i==200)
-			DBG_8192C("Another mac power off over time \n");
+			DBG_8192D("Another mac power off over time \n");
 	}
 }
 
@@ -1270,7 +1270,7 @@ void rtl8192d_free_hal_data(_adapter * padapter)
 {
 _func_enter_;
 
-	DBG_8192C("===== rtl8192du_free_hal_data =====\n");
+	DBG_8192D("===== rtl8192du_free_hal_data =====\n");
 
 	if(padapter->HalData)
 		rtw_mfree(padapter->HalData, sizeof(HAL_DATA_TYPE));
@@ -1362,7 +1362,7 @@ ReadEFuse_RTL8192D(
 	//
 	if((_offset + _size_byte)>EFUSE_MAP_LEN)
 	{// total E-Fuse table is 128bytes
-		DBG_8192C("ReadEFuse(): Invalid offset(%#x) with read bytes(%#x)!!\n",_offset, _size_byte);
+		DBG_8192D("ReadEFuse(): Invalid offset(%#x) with read bytes(%#x)!!\n",_offset, _size_byte);
 		return;
 	}
 
@@ -1529,21 +1529,21 @@ hal_EfuseUpdateNormalChipVersion_92D(
 		case 0xAA55:
 			//ChipVer |= CHIP_92D_C_CUT;
 			ChipVer = (enum VERSION_8192D)( ChipVer | C_CUT_VERSION);
-			MSG_8192C("C-CUT!!!\n");
+			MSG_8192D("C-CUT!!!\n");
 			break;
 		case 0x9966:
 			//ChipVer |= CHIP_92D_D_CUT;
 			ChipVer = (enum VERSION_8192D)( ChipVer | D_CUT_VERSION);
-			MSG_8192C("D-CUT!!!\n");
+			MSG_8192D("D-CUT!!!\n");
 			break;
 		case 0xCC33:
 			ChipVer = (enum VERSION_8192D)( ChipVer | E_CUT_VERSION);
-			MSG_8192C("E-CUT!!!\n");
+			MSG_8192D("E-CUT!!!\n");
 			break;
 		default:
 			//ChipVer |= CHIP_92D_D_CUT;
 			ChipVer = (enum VERSION_8192D)( ChipVer | D_CUT_VERSION);
-			MSG_8192C("Unkown CUT!\n");
+			MSG_8192D("Unkown CUT!\n");
 			break;
 	}
 
@@ -2332,10 +2332,10 @@ rtl8192d_Efuse_WordEnableDataWrite(	PADAPTER	pAdapter,
 void hal_notch_filter_8192d(_adapter *adapter, bool enable)
 {
 	if (enable) {
-		DBG_871X("Enable notch filter\n");
+		DBG_8192D("Enable notch filter\n");
 		rtw_write8(adapter, rOFDM0_RxDSP+1, rtw_read8(adapter, rOFDM0_RxDSP+1) | BIT1);
 	} else {
-		DBG_871X("Disable notch filter\n");
+		DBG_8192D("Disable notch filter\n");
 		rtw_write8(adapter, rOFDM0_RxDSP+1, rtw_read8(adapter, rOFDM0_RxDSP+1) & ~BIT1);
 	}
 }
@@ -2355,7 +2355,7 @@ static s32 c2h_handler_8192d(_adapter *padapter, struct c2h_evt_hdr *c2h_evt)
 	u8 i = 0;
 
 	if (c2h_evt == NULL) {
-		DBG_871X("%s c2h_evt is NULL\n", __FUNCTION__);
+		DBG_8192D("%s c2h_evt is NULL\n", __FUNCTION__);
 		ret = _FAIL;
 		goto exit;
 	}

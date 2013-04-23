@@ -29,7 +29,7 @@ void dump_txrpt_ccx_8192d(void *buf)
 {
 	struct txrpt_ccx_8192d *txrpt_ccx = buf;
 
-	DBG_871X("%s:\n"
+	DBG_8192D("%s:\n"
 		"retry_cnt:%u, rsvd_0:%u, rts_retry_cnt:%u, rsvd_1:%u\n"
 		"ccx_qtime:%u, missed_pkt_num:%u, rsvd_4:%u\n"
 		"mac_id:%u, des1_fragssn:%u\n"

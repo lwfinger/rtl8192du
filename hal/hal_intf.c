@@ -87,13 +87,13 @@ uint	 rtw_hal_init(_adapter *padapter)
 
 	if(padapter->hw_init_completed == true)
 	{
-		DBG_871X("rtw_hal_init: hw_init_completed == true\n");
+		DBG_8192D("rtw_hal_init: hw_init_completed == true\n");
 		return status;
 	}
 #ifdef CONFIG_DEINIT_BEFORE_INIT
 	status = padapter->HalFunc.hal_deinit(padapter);
 	if(status != _SUCCESS){
-		DBG_871X("rtw_hal_init: hal_deinit before hal_init FAIL !!\n");
+		DBG_8192D("rtw_hal_init: hal_deinit before hal_init FAIL !!\n");
 		return status;
 	}
 #endif
@@ -105,14 +105,14 @@ uint	 rtw_hal_init(_adapter *padapter)
 	{
 		if(padapter->pbuddy_adapter->hw_init_completed == true)
 		{
-			DBG_871X("rtw_hal_init: pbuddy_adapter hw_init_completed == true\n");
+			DBG_8192D("rtw_hal_init: pbuddy_adapter hw_init_completed == true\n");
 		}
 		else
 		{
 #ifdef CONFIG_DEINIT_BEFORE_INIT
 			status = padapter->HalFunc.hal_deinit(padapter->pbuddy_adapter);
 			if(status != _SUCCESS){
-				DBG_871X("rtw_hal_init: hal_deinit before hal_init FAIL !!(pbuddy_adapter)\n");
+				DBG_8192D("rtw_hal_init: hal_deinit before hal_init FAIL !!(pbuddy_adapter)\n");
 				return status;
 			}
 #endif
@@ -137,7 +137,7 @@ uint	 rtw_hal_init(_adapter *padapter)
 #ifdef CONFIG_DEINIT_BEFORE_INIT
 			status = padapter->HalFunc.hal_deinit(padapter->pbuddy_adapter);
 			if(status != _SUCCESS){
-				DBG_871X("rtw_hal_init: hal_deinit before hal_init FAIL !!(pbuddy_adapter)\n");
+				DBG_8192D("rtw_hal_init: hal_deinit before hal_init FAIL !!(pbuddy_adapter)\n");
 				return status;
 			}
 #endif
@@ -228,7 +228,7 @@ void rtw_hal_enable_interrupt(_adapter *padapter)
 	if (padapter->HalFunc.enable_interrupt)
 		padapter->HalFunc.enable_interrupt(padapter);
 	else
-		DBG_871X("%s: HalFunc.enable_interrupt is NULL!\n", __FUNCTION__);
+		DBG_8192D("%s: HalFunc.enable_interrupt is NULL!\n", __FUNCTION__);
 
 }
 void rtw_hal_disable_interrupt(_adapter *padapter)
@@ -236,7 +236,7 @@ void rtw_hal_disable_interrupt(_adapter *padapter)
 	if (padapter->HalFunc.disable_interrupt)
 		padapter->HalFunc.disable_interrupt(padapter);
 	else
-		DBG_871X("%s: HalFunc.disable_interrupt is NULL!\n", __FUNCTION__);
+		DBG_8192D("%s: HalFunc.disable_interrupt is NULL!\n", __FUNCTION__);
 
 }
 
@@ -246,7 +246,7 @@ u32	rtw_hal_inirp_init(_adapter *padapter)
 	if(padapter->HalFunc.inirp_init)
 		rst = padapter->HalFunc.inirp_init(padapter);
 	else
-		DBG_871X(" %s HalFunc.inirp_init is NULL!!!\n",__FUNCTION__);
+		DBG_8192D(" %s HalFunc.inirp_init is NULL!!!\n",__FUNCTION__);
 	return rst;
 }
 

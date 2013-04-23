@@ -230,43 +230,17 @@
 
 #endif /* CONFIG_DEBUG_RTL819X */
 
-
-	#define DBG_871X(x, ...) do {} while(0)
-	#define MSG_8192C(x, ...) do {} while(0)
-	#define DBG_8192C(x,...) do {} while(0)
-	#define WRN_8192C(x,...) do {} while(0)
-	#define ERR_8192C(x,...) do {} while(0)
-
 extern u32 GlobalDebugLevel;
 #define LOG_LEVEL(level, ...)\
-                do {\
-                        if(level <= GlobalDebugLevel) {\
-                                printk(__VA_ARGS__);\
-                        }\
-                }while(0)
+	do {\
+		if (level <= GlobalDebugLevel) {\
+			pr_debug(__VA_ARGS__);\
+		}\
+	} while (0)
 
+#define DBG_8192D(...) LOG_LEVEL(_drv_debug_ ,  __VA_ARGS__)
 
-#if     defined (_dbgdump)
-        #undef DBG_871X
-//      #define DBG_871X _dbgdump
-        #define DBG_871X(...) LOG_LEVEL(_drv_emerg_ , __VA_ARGS__)
-
-        #undef MSG_8192C
-//      #define MSG_8192C _dbgdump
-        #define MSG_8192C(...) LOG_LEVEL(_drv_emerg_ , __VA_ARGS__)
-
-        #undef DBG_8192C
-//      #define DBG_8192C _dbgdump
-        #define DBG_8192C(...) LOG_LEVEL(_drv_emerg_ ,  __VA_ARGS__)
-
-
-	#undef WRN_8192C
-	#define WRN_8192C _dbgdump
-
-	#undef ERR_8192C
-	#define ERR_8192C _dbgdump
-#endif
-
+#define MSG_8192D(...) pr_info(__VA_ARGS__)
 
 #ifdef CONFIG_PROC_DEBUG
 

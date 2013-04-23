@@ -107,14 +107,14 @@ _func_enter_;
 
 	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex), NULL);
 
-	//DBG_8192C("FillH2CCmd : ElementID=%d \n",ElementID);
+	//DBG_8192D("FillH2CCmd : ElementID=%d \n",ElementID);
 
 	while(!bWriteSucess)
 	{
 		WaitWriteH2cLimmit--;
 		if(WaitWriteH2cLimmit == 0)
 		{
-			DBG_8192C("FillH2CCmd92C():Write H2C fail because no trigger for FW INT!!!!!!!!\n");
+			DBG_8192D("FillH2CCmd92C():Write H2C fail because no trigger for FW INT!!!!!!!!\n");
 			break;
 		}
 
@@ -150,19 +150,19 @@ _func_enter_;
 			WaitH2cLimmit--;
 			if(WaitH2cLimmit == 0)
 			{
-				DBG_8192C("FillH2CCmd92C(): Wating too long for FW read clear HMEBox(%d)!!!\n", BoxNum);
+				DBG_8192D("FillH2CCmd92C(): Wating too long for FW read clear HMEBox(%d)!!!\n", BoxNum);
 				break;
 			}
 			rtw_udelay_os(10); //us
 			IsFwRead = CheckFwReadLastH2C(padapter, BoxNum);
 			U1btmp = rtw_read8(padapter, 0x1BF);
-			//DBG_8192C("FillH2CCmd92C(): Wating for FW read clear HMEBox(%d)!!! 0x1BF = %2x\n", BoxNum, U1btmp);
+			//DBG_8192D("FillH2CCmd92C(): Wating for FW read clear HMEBox(%d)!!! 0x1BF = %2x\n", BoxNum, U1btmp);
 		}
 
 		// If Fw has not read the last H2C cmd, break and give up this H2C.
 		if(!IsFwRead)
 		{
-			DBG_8192C("FillH2CCmd92C():  Write H2C register BOX[%d] fail!!!!! Fw do not read. \n", BoxNum);
+			DBG_8192D("FillH2CCmd92C():  Write H2C register BOX[%d] fail!!!!! Fw do not read. \n", BoxNum);
 			break;
 		}
 
@@ -172,7 +172,7 @@ _func_enter_;
 
 		BoxContent[0] = ElementID; // Fill element ID
 
-		//DBG_8192C("FillH2CCmd92C():Write ElementID BOXReg(%4x) = %2x \n", BOXReg, ElementID);
+		//DBG_8192D("FillH2CCmd92C():Write ElementID BOXReg(%4x) = %2x \n", BOXReg, ElementID);
 
 		switch(CmdLen)
 		{
@@ -248,8 +248,8 @@ _func_enter_;
 				break;
 		}
 
-		//DBG_8192C("FillH2CCmd(): BoxExtContent=0x%04x\n", *(u16*)BoxExtContent);
-		//DBG_8192C("FillH2CCmd(): BoxContent=0x%08x\n", *(u32*)BoxContent);
+		//DBG_8192D("FillH2CCmd(): BoxExtContent=0x%04x\n", *(u16*)BoxExtContent);
+		//DBG_8192D("FillH2CCmd(): BoxContent=0x%08x\n", *(u32*)BoxContent);
 
 		// 5. Normal chip does not need to check if the H2C cmd has be written successfully.
 		// 92D test chip does not need to check,
@@ -260,7 +260,7 @@ _func_enter_;
 		if(pHalData->LastHMEBoxNum == 4) // loop to 0
 			pHalData->LastHMEBoxNum = 0;
 
-		//DBG_8192C("FillH2CCmd92C():pHalData->LastHMEBoxNum  = %d\n", pHalData->LastHMEBoxNum);
+		//DBG_8192D("FillH2CCmd92C():pHalData->LastHMEBoxNum  = %d\n", pHalData->LastHMEBoxNum);
 
 	}
 
@@ -283,7 +283,7 @@ FillH2CCmd92D(
 
 	if(Adapter->bFWReady == false)
 	{
-		DBG_8192C("FillH2CCmd92D(): return H2C cmd because of Fw download fail!!!\n");
+		DBG_8192D("FillH2CCmd92D(): return H2C cmd because of Fw download fail!!!\n");
 		return;
 	}
 
@@ -376,7 +376,7 @@ void rtl8192d_set_FwPwrMode_cmd(_adapter*padapter, u8 Mode)
 
 _func_enter_;
 
-	DBG_871X("%s(): Mode = %d, SmartPS = %d\n", __FUNCTION__,Mode,pwrpriv->smart_ps);
+	DBG_8192D("%s(): Mode = %d, SmartPS = %d\n", __FUNCTION__,Mode,pwrpriv->smart_ps);
 
 	SET_H2CCMD_PWRMODE_PARM_MODE(u1H2CSetPwrMode, Mode);
 	SET_H2CCMD_PWRMODE_PARM_SMART_PS(u1H2CSetPwrMode, pwrpriv->smart_ps);
@@ -399,7 +399,7 @@ void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
 	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 
-	//DBG_871X("%s\n", __FUNCTION__);
+	//DBG_8192D("%s\n", __FUNCTION__);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -436,7 +436,7 @@ void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
 
 	if( (pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
 	{
-		DBG_871X("ie len=%u\n", cur_network->IELength);
+		DBG_8192D("ie len=%u\n", cur_network->IELength);
 		pktlen += cur_network->IELength - sizeof(NDIS_802_11_FIXED_IEs);
 		_rtw_memcpy(pframe, cur_network->IEs+sizeof(NDIS_802_11_FIXED_IEs), pktlen);
 
@@ -481,13 +481,13 @@ _ConstructBeacon:
 
 	if ((pktlen + TXDESC_SIZE) > 512)
 	{
-		DBG_871X("beacon frame too large\n");
+		DBG_8192D("beacon frame too large\n");
 		return;
 	}
 
 	*pLength = pktlen;
 
-	//DBG_871X("%s bcn_sz=%u\n", __FUNCTION__, pktlen);
+	//DBG_8192D("%s bcn_sz=%u\n", __FUNCTION__, pktlen);
 
 }
 
@@ -499,7 +499,7 @@ void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	//DBG_871X("%s\n", __FUNCTION__);
+	//DBG_8192D("%s\n", __FUNCTION__);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -532,7 +532,7 @@ void ConstructNullFunctionData(_adapter *padapter, u8 *pframe, u32 *pLength, u8 
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	//DBG_871X("%s:%d\n", __FUNCTION__, bForcePowerSave);
+	//DBG_8192D("%s:%d\n", __FUNCTION__, bForcePowerSave);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -587,7 +587,7 @@ void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr
 	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
 
 
-	//DBG_871X("%s\n", __FUNCTION__);
+	//DBG_8192D("%s\n", __FUNCTION__);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -698,11 +698,11 @@ void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished)
 	u8	u1RsvdPageLoc[3]={0};
 	bool	bDLOK = false;
 
-	DBG_871X("%s\n", __FUNCTION__);
+	DBG_8192D("%s\n", __FUNCTION__);
 
 	ReservedPagePacket = (u8*)rtw_malloc(1000);
 	if(ReservedPagePacket == NULL){
-		DBG_871X("%s(): alloc ReservedPagePacket fail !!!\n", __FUNCTION__);
+		DBG_8192D("%s(): alloc ReservedPagePacket fail !!!\n", __FUNCTION__);
 		return;
 	}
 
@@ -815,7 +815,7 @@ void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished)
 
 	if(bDLOK)
 	{
-		DBG_871X("Set RSVD page location to Fw.\n");
+		DBG_8192D("Set RSVD page location to Fw.\n");
 		FillH2CCmd92D(Adapter, H2C_RSVDPAGE, sizeof(u1RsvdPageLoc), u1RsvdPageLoc);
 		//FillH2CCmd92D(Adapter, H2C_RSVDPAGE, sizeof(RsvdPageLoc), (u8 *)&RsvdPageLoc);
 	}
@@ -833,7 +833,7 @@ void rtl8192d_set_FwJoinBssReport_cmd(_adapter* padapter, u8 mstatus)
 
 _func_enter_;
 
-	DBG_871X("%s\n", __FUNCTION__);
+	DBG_8192D("%s\n", __FUNCTION__);
 
 	if(mstatus == 1)
 	{
@@ -916,11 +916,11 @@ _func_enter_;
 	switch(p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
-			DBG_8192C("P2P_PS_DISABLE \n");
+			DBG_8192D("P2P_PS_DISABLE \n");
 			_rtw_memset(p2p_ps_offload, 0 ,1);
 			break;
 		case P2P_PS_ENABLE:
-			DBG_8192C("P2P_PS_ENABLE \n");
+			DBG_8192D("P2P_PS_ENABLE \n");
 			// update CTWindow value.
 			if( pwdinfo->ctwindow > 0 )
 			{
@@ -958,7 +958,7 @@ _func_enter_;
 							pwdinfo->noa_count[i]--;
 					}
 				}
-				//DBG_8192C("%s(): start_time = %x\n",__FUNCTION__,start_time);
+				//DBG_8192D("%s(): start_time = %x\n",__FUNCTION__,start_time);
 				rtw_write32(padapter, 0x5E8, start_time);
 
 				rtw_write8(padapter, 0x5EC, pwdinfo->noa_count[i]);
@@ -985,11 +985,11 @@ _func_enter_;
 			}
 			break;
 		case P2P_PS_SCAN:
-			DBG_8192C("P2P_PS_SCAN \n");
+			DBG_8192D("P2P_PS_SCAN \n");
 			p2p_ps_offload->discovery = 1;
 			break;
 		case P2P_PS_SCAN_DONE:
-			DBG_8192C("P2P_PS_SCAN_DONE \n");
+			DBG_8192D("P2P_PS_SCAN_DONE \n");
 			p2p_ps_offload->discovery = 0;
 			pwdinfo->p2p_ps_state = P2P_PS_ENABLE;
 			break;

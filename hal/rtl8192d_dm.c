@@ -341,14 +341,14 @@ odm_FindMinimumRSSI_Dmsp(
 			Buddydmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
 			if(pHalData->bSlaveOfDMSP)
 			{
-				//DBG_871X("bSlavecase of dmsp\n");
+				//DBG_8192D("bSlavecase of dmsp\n");
 				Buddydmpriv->RssiValMinForAnotherMacOfDMSP = pdmpriv->MinUndecoratedPWDBForDM;
 			}
 			else
 			{
 				if(bGetValueFromBuddyAdapter)
 				{
-					//DBG_871X("get new RSSI\n");
+					//DBG_8192D("get new RSSI\n");
 					rest_rssi = true;
 					rssi_val_min_back_for_mac0 = pdmpriv->MinUndecoratedPWDBForDM;
 					pdmpriv->MinUndecoratedPWDBForDM = pdmpriv->RssiValMinForAnotherMacOfDMSP;
@@ -438,11 +438,11 @@ DM_Write_DIG_DMSP(
 	bool		bGetValueFromOtherMac = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
 	struct dm_priv	*Buddydmpriv;
 
-	//DBG_871X(("curigvalue = 0x%x, preigvalue = 0x%x\n", dm_digtable->curigvalue, dm_digtable->preigvalue);
+	//DBG_8192D(("curigvalue = 0x%x, preigvalue = 0x%x\n", dm_digtable->curigvalue, dm_digtable->preigvalue);
 
 	if(BuddyAdapter == NULL)
 	{
-		//DBG_871X("DM_Write_DIG_DMSP(): not find buddyAdapter\n");
+		//DBG_8192D("DM_Write_DIG_DMSP(): not find buddyAdapter\n");
 		if(pHalData->bMasterOfDMSP)
 		{
 			PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, 0x7f, dm_digtable->curigvalue);
@@ -456,10 +456,10 @@ DM_Write_DIG_DMSP(
 		return;
 	}
 
-	//DBG_871X("bGetValueFromOtherMac %d \n",bGetValueFromOtherMac);
+	//DBG_8192D("bGetValueFromOtherMac %d \n",bGetValueFromOtherMac);
 	if(bGetValueFromOtherMac)
 	{
-		//DBG_871X("DM_Write_DIG_DMSP(): mac 0 set mac 1 value \n");
+		//DBG_8192D("DM_Write_DIG_DMSP(): mac 0 set mac 1 value \n");
 		if(pdmpriv->bWriteDigForAnotherMacOfDMSP)
 		{
 			pdmpriv->bWriteDigForAnotherMacOfDMSP = false;
@@ -479,16 +479,16 @@ DM_Write_DIG_DMSP(
 		//PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, bMaskByte0, dm_digtable->curigvalue);
 		 if(pHalData->bSlaveOfDMSP)
 		 {
-			//DBG_871X("DM_Write_DIG_DMSP(): slave case \n");
+			//DBG_8192D("DM_Write_DIG_DMSP(): slave case \n");
 			Buddydmpriv->bWriteDigForAnotherMacOfDMSP = true;
 			Buddydmpriv->CurDigValueForAnotherMacOfDMSP =  dm_digtable->curigvalue;
 		 }
 		else
 		{
-			//DBG_871X("DM_Write_DIG_DMSP(): master case \n");
+			//DBG_8192D("DM_Write_DIG_DMSP(): master case \n");
 			if(!bGetValueFromOtherMac)
 			{
-				//DBG_871X("DM_Write_DIG_DMSP(): mac 0 set mac 0 value \n");
+				//DBG_8192D("DM_Write_DIG_DMSP(): mac 0 set mac 0 value \n");
 				PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, 0x7f, dm_digtable->curigvalue);
 				PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, 0x7f, dm_digtable->curigvalue);
 			}
@@ -555,15 +555,15 @@ static void odm_DIG(
 			{
 				DIG_Dynamic_MIN = DIG_Dynamic_MIN_0;
 				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true) && (bMediaConnect_0 == false);
-				//DBG_871X("bMediaConnect_0=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_0, check_fwstate(pmlmepriv, _FW_LINKED));
+				//DBG_8192D("bMediaConnect_0=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_0, check_fwstate(pmlmepriv, _FW_LINKED));
 			}
 			else
 			{
 				DIG_Dynamic_MIN = DIG_Dynamic_MIN_1;
 				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true) && (bMediaConnect_1 == false);
-				//DBG_871X("bMediaConnect_1=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_1, check_fwstate(pmlmepriv, _FW_LINKED));
+				//DBG_8192D("bMediaConnect_1=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_1, check_fwstate(pmlmepriv, _FW_LINKED));
 			}
-			//DBG_871X("pHalData->CurrentBandType92D = %s\n",(pHalData->CurrentBandType92D==BAND_ON_2_4G)?"2.4G":"5G");
+			//DBG_8192D("pHalData->CurrentBandType92D = %s\n",(pHalData->CurrentBandType92D==BAND_ON_2_4G)?"2.4G":"5G");
 		}
 		else
 		{
@@ -576,7 +576,7 @@ static void odm_DIG(
 #else
 				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true) && (bMediaConnect_0 == false);
 #endif //CONFIG_CONCURRENT_MODE
-				//DBG_871X("bMediaConnect_5G=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_0, check_fwstate(pmlmepriv, _FW_LINKED));
+				//DBG_8192D("bMediaConnect_5G=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_0, check_fwstate(pmlmepriv, _FW_LINKED));
 			}
 			else
 			{
@@ -587,7 +587,7 @@ static void odm_DIG(
 #else
 				FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true) && (bMediaConnect_1 == false);
 #endif //CONFIG_CONCURRENT_MODE
-				//DBG_871X("bMediaConnect_2.4G=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_1, check_fwstate(pmlmepriv, _FW_LINKED));
+				//DBG_8192D("bMediaConnect_2.4G=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_1, check_fwstate(pmlmepriv, _FW_LINKED));
 			}
 		}
 	}
@@ -600,18 +600,18 @@ static void odm_DIG(
 #else
 		FirstConnect = (check_fwstate(pmlmepriv, _FW_LINKED) == true) && (bMediaConnect_0 == false);
 #endif //CONFIG_CONCURRENT_MODE
-		//DBG_871X("bMediaConnect=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_0, check_fwstate(pmlmepriv, _FW_LINKED));
+		//DBG_8192D("bMediaConnect=%d,  pMgntInfo->bMediaConnect=%d\n", bMediaConnect_0, check_fwstate(pmlmepriv, _FW_LINKED));
 	}
 
-	//DBG_871X("Cnt_Parity_Fail = %d, Cnt_Rate_Illegal = %d, Cnt_Crc8_fail = %d, Cnt_Mcs_fail = %d\n",
+	//DBG_8192D("Cnt_Parity_Fail = %d, Cnt_Rate_Illegal = %d, Cnt_Crc8_fail = %d, Cnt_Mcs_fail = %d\n",
 	//			falsealmcnt->Cnt_Parity_Fail, falsealmcnt->Cnt_Rate_Illegal, falsealmcnt->Cnt_Crc8_fail, falsealmcnt->Cnt_Mcs_fail);
-	//DBG_871X("Cnt_Fast_Fsync = %d, Cnt_SB_Search_fail = %d\n",
+	//DBG_8192D("Cnt_Fast_Fsync = %d, Cnt_SB_Search_fail = %d\n",
 	//			falsealmcnt->Cnt_Fast_Fsync, falsealmcnt->Cnt_SB_Search_fail);
-	//DBG_871X("Cnt_Ofdm_fail = %d, Cnt_Cck_fail = %d, Cnt_all = %d\n",
+	//DBG_8192D("Cnt_Ofdm_fail = %d, Cnt_Cck_fail = %d, Cnt_all = %d\n",
 	//			falsealmcnt->Cnt_Ofdm_fail, falsealmcnt->Cnt_Cck_fail, falsealmcnt->Cnt_all);
-	//DBG_871X("RSSI_A=%d, RSSI_B=%d, RSSI_Ave=%d, RSSI_CCK=%d\n",
+	//DBG_8192D("RSSI_A=%d, RSSI_B=%d, RSSI_Ave=%d, RSSI_CCK=%d\n",
 	//	pAdapter->RxStats.RxRSSIPercentage[0], pAdapter->RxStats.RxRSSIPercentage[1], pdmpriv->UndecoratedSmoothedPWDB,pdmpriv->UndecoratedSmoothedCCK);
-	//DBG_871X("RX Rate =  0x%x, TX Rate = 0x%x \n", pHalData->RxRate, TxRate);
+	//DBG_8192D("RX Rate =  0x%x, TX Rate = 0x%x \n", pHalData->RxRate, TxRate);
 
 #ifndef CONFIG_CONCURRENT_MODE
 	if(pdmpriv->bDMInitialGainEnable == false)
@@ -662,7 +662,7 @@ static void odm_DIG(
 	//1 Modify DIG lower bound, deal with abnorally large false alarm
 	if(falsealmcnt->Cnt_all > 10000)
 	{
-		//DBG_871X("dm_DIG(): Abnornally false alarm case. \n");
+		//DBG_8192D("dm_DIG(): Abnornally false alarm case. \n");
 
 		dm_digtable->largefahit++;
 		if(dm_digtable->forbiddenigi < dm_digtable->curigvalue)
@@ -764,7 +764,7 @@ static void odm_DIG(
 
 	if ( pAdapter->bRxRSSIDisplay )
 	{
-		DBG_871X("Modify DIG algorithm for DMP DIG: RxGainMin = %X, RxGainMax = %X\n",
+		DBG_8192D("Modify DIG algorithm for DMP DIG: RxGainMin = %X, RxGainMax = %X\n",
 			dm_digtable->rx_gain_range_min,
 			dm_digtable->rx_gain_range_max );
 	}
@@ -942,10 +942,10 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 
 	if(bGetValueFromBuddyAdapter)
 	{
-		DBG_871X("dm_CCK_PacketDetectionThresh_DMSP(): mac 1 connect,mac 0 disconnect case  \n");
+		DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 1 connect,mac 0 disconnect case  \n");
 		if(pdmpriv->bChangeCCKPDStateForAnotherMacOfDMSP)
 		{
-			DBG_871X("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac1 \n");
+			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac1 \n");
 			if(pdmpriv->curcckpdstateForAnotherMacOfDMSP == CCK_PD_STAGE_LOWRSSI)
 			{
 				//AcquireCCKAndRWPageAControl(pAdapter);
@@ -977,7 +977,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 	{
 		if(BuddyAdapter == NULL)
 		{
-			DBG_871X("dm_CCK_PacketDetectionThresh_DMSP(): BuddyAdapter == NULL case \n");
+			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): BuddyAdapter == NULL case \n");
 			if(pHalData->bSlaveOfDMSP)
 			{
 				dm_digtable->precckpdstate = dm_digtable->curcckpdstate;
@@ -1015,7 +1015,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 		if(pHalData->bSlaveOfDMSP)
 		{
 			Buddydmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
-			DBG_871X("dm_CCK_PacketDetectionThresh_DMSP(): bslave case \n");
+			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): bslave case \n");
 			Buddydmpriv->bChangeCCKPDStateForAnotherMacOfDMSP = true;
 			Buddydmpriv->curcckpdstateForAnotherMacOfDMSP = dm_digtable->curcckpdstate;
 		}
@@ -1023,7 +1023,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 		{
 			if(!bGetValueFromBuddyAdapter)
 			{
-				DBG_871X("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac0 \n");
+				DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac0 \n");
 				if(dm_digtable->curcckpdstate == CCK_PD_STAGE_LOWRSSI)
 				{
 					//AcquireCCKAndRWPageAControl(pAdapter);
@@ -1051,9 +1051,9 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 		}
 		dm_digtable->precckpdstate = dm_digtable->curcckpdstate;
 	}
-	//DBG_871X("CCKPDStage=%x\n",dm_digtable->curcckpdstate);
-	//DBG_871X("is92C=%x\n",IS_92C_SERIAL(pHalData->VersionID));
-	//DBG_871X("is92d single phy =%x\n",IS_92D_SINGLEPHY(pHalData->VersionID));
+	//DBG_8192D("CCKPDStage=%x\n",dm_digtable->curcckpdstate);
+	//DBG_8192D("is92C=%x\n",IS_92C_SERIAL(pHalData->VersionID));
+	//DBG_8192D("is92d single phy =%x\n",IS_92D_SINGLEPHY(pHalData->VersionID));
 #endif
 }
 
@@ -1266,10 +1266,10 @@ static void odm_DynamicTxPower_92D(PADAPTER	Adapter)
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if(bGetValueFromBuddyAdapter)
 	{
-		DBG_871X("dm_DynamicTxPower() mac 0 for mac 1 \n");
+		DBG_8192D("dm_DynamicTxPower() mac 0 for mac 1 \n");
 		if(pdmpriv->bChangeTxHighPowerLvlForAnotherMacOfDMSP)
 		{
-			DBG_871X("dm_DynamicTxPower() change value \n");
+			DBG_8192D("dm_DynamicTxPower() change value \n");
 			HighPowerLvlBackForMac0 = pdmpriv->DynamicTxHighPowerLvl;
 			pdmpriv->DynamicTxHighPowerLvl = pdmpriv->CurTxHighLvlForAnotherMacOfDMSP;
 			PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
@@ -1287,7 +1287,7 @@ static void odm_DynamicTxPower_92D(PADAPTER	Adapter)
 		{
 			if(BuddyAdapter == NULL)
 			{
-				DBG_871X("dm_DynamicTxPower() BuddyAdapter == NULL case \n");
+				DBG_8192D("dm_DynamicTxPower() BuddyAdapter == NULL case \n");
 				if(!pHalData->bSlaveOfDMSP)
 				{
 					PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
@@ -1297,27 +1297,27 @@ static void odm_DynamicTxPower_92D(PADAPTER	Adapter)
 			{
 				if(pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY)
 				{
-					DBG_871X("dm_DynamicTxPower() BuddyAdapter DMSP \n");
+					DBG_8192D("dm_DynamicTxPower() BuddyAdapter DMSP \n");
 					if(pHalData->bSlaveOfDMSP)
 					{
-						DBG_871X("dm_DynamicTxPower() bslave case  \n");
+						DBG_8192D("dm_DynamicTxPower() bslave case  \n");
 						pbuddy_dmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
 						pbuddy_dmpriv->bChangeTxHighPowerLvlForAnotherMacOfDMSP = true;
 						pbuddy_dmpriv->CurTxHighLvlForAnotherMacOfDMSP = pdmpriv->DynamicTxHighPowerLvl;
 					}
 					else
 					{
-						DBG_871X("dm_DynamicTxPower() master case  \n");
+						DBG_8192D("dm_DynamicTxPower() master case  \n");
 						if(!bGetValueFromBuddyAdapter)
 						{
-							DBG_871X("dm_DynamicTxPower() mac 0 for mac 0 \n");
+							DBG_8192D("dm_DynamicTxPower() mac 0 for mac 0 \n");
 							PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
 						}
 					}
 				}
 				else
 				{
-					DBG_871X("dm_DynamicTxPower() BuddyAdapter DMDP\n");
+					DBG_8192D("dm_DynamicTxPower() BuddyAdapter DMDP\n");
 					PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
 				}
 			}
@@ -1422,7 +1422,7 @@ static void PWDB_Monitor(
 		if(pHalData->fw_ractrl == true)
 		{
 			u32	temp = 0;
-			//DBG_8192C("RxSS: %lx =%ld\n", pdmpriv->UndecoratedSmoothedPWDB, pdmpriv->UndecoratedSmoothedPWDB);
+			//DBG_8192D("RxSS: %lx =%ld\n", pdmpriv->UndecoratedSmoothedPWDB, pdmpriv->UndecoratedSmoothedPWDB);
 
 			temp = pdmpriv->UndecoratedSmoothedPWDB;
 			temp = temp << 16;
@@ -1441,7 +1441,7 @@ static void PWDB_Monitor(
 		else
 		{
 			rtw_write8(Adapter, 0x4fe, (u8)pdmpriv->UndecoratedSmoothedPWDB);
-			//DBG_8192C("0x4fe write %x %d\n", pdmpriv->UndecoratedSmoothedPWDB, pdmpriv->UndecoratedSmoothedPWDB);
+			//DBG_8192D("0x4fe write %x %d\n", pdmpriv->UndecoratedSmoothedPWDB, pdmpriv->UndecoratedSmoothedPWDB);
 		}
 	}
 }
@@ -1632,7 +1632,7 @@ dm_RXGainTrackingCallback_ThermalMeter_92D(
 
 	u4tmp = (index_mapping[(pHalData->EEPROMThermalMeter - pdmpriv->ThermalValue_RxGain)]) << 12;
 
-	//DBG_8192C("===>dm_RXGainTrackingCallback_ThermalMeter_92D interface %d  Rx Gain %x\n", pHalData->interfaceIndex, u4tmp);
+	//DBG_8192D("===>dm_RXGainTrackingCallback_ThermalMeter_92D interface %d  Rx Gain %x\n", pHalData->interfaceIndex, u4tmp);
 
 	for(eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++){
 		PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_RXRF_A3, bRFRegOffsetMask, (pdmpriv->RegRF3C[eRFPath]&(~(0xF000)))|u4tmp);
@@ -1801,7 +1801,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 
 			if(pdmpriv->bReloadtxpowerindex)
 			{
-				DBG_871X("reload ofdm index for band switch\n");
+				DBG_8192D("reload ofdm index for band switch\n");
 			}
 
 			//calculate average thermal meter
@@ -1946,12 +1946,12 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 
 				/*if(is2T)
 				{
-					DBG_871X("temp OFDM_A_index=0x%x, OFDM_B_index=0x%x, CCK_index=0x%x\n",
+					DBG_8192D("temp OFDM_A_index=0x%x, OFDM_B_index=0x%x, CCK_index=0x%x\n",
 						pdmpriv->OFDM_index[0], pdmpriv->OFDM_index[1], pdmpriv->CCK_index);
 				}
 				else
 				{
-					DBG_871X("temp OFDM_A_index=0x%x, CCK_index=0x%x\n",
+					DBG_8192D("temp OFDM_A_index=0x%x, CCK_index=0x%x\n",
 						pdmpriv->OFDM_index[0], pdmpriv->CCK_index);
 				}*/
 
@@ -1982,12 +1982,12 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 
 				/*if(is2T)
 				{
-					DBG_871X("new OFDM_A_index=0x%x, OFDM_B_index=0x%x, CCK_index=0x%x\n",
+					DBG_8192D("new OFDM_A_index=0x%x, OFDM_B_index=0x%x, CCK_index=0x%x\n",
 						OFDM_index[0], OFDM_index[1], CCK_index);
 				}
 				else
 				{
-					DBG_871X("new OFDM_A_index=0x%x, CCK_index=0x%x\n",
+					DBG_8192D("new OFDM_A_index=0x%x, CCK_index=0x%x\n",
 						OFDM_index[0], CCK_index);
 				}*/
 			}
@@ -2033,7 +2033,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 					PHY_SetBBReg(Adapter, rOFDM0_ECCAThreshold, BIT24, 0x00);
 				}
 
-				//DBG_871X("TxPwrTracking for interface %d path A: X = 0x%x, Y = 0x%x ele_A = 0x%x ele_C = 0x%x ele_D = 0x%x 0xe94 = 0x%x 0xe9c = 0x%x\n", Adapter->interfaceIndex, X, Y, ele_A, ele_C, ele_D, X, Y);
+				//DBG_8192D("TxPwrTracking for interface %d path A: X = 0x%x, Y = 0x%x ele_A = 0x%x ele_C = 0x%x ele_D = 0x%x 0xe94 = 0x%x 0xe9c = 0x%x\n", Adapter->interfaceIndex, X, Y, ele_A, ele_C, ele_D, X, Y);
 
 				if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
 				{
@@ -2099,10 +2099,10 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 						PHY_SetBBReg(Adapter, rOFDM0_ECCAThreshold, BIT28, 0x00);
 					}
 
-					//DBG_871X("TxPwrTracking path B: X = 0x%x, Y = 0x%x ele_A = 0x%x ele_C = 0x%x ele_D = 0x%x 0xeb4 = 0x%x 0xebc = 0x%x\n", X, Y, ele_A, ele_C, ele_D, X, Y);
+					//DBG_8192D("TxPwrTracking path B: X = 0x%x, Y = 0x%x ele_A = 0x%x ele_C = 0x%x ele_D = 0x%x 0xeb4 = 0x%x 0xebc = 0x%x\n", X, Y, ele_A, ele_C, ele_D, X, Y);
 				}
 
-				//DBG_871X("TxPwrTracking 0xc80 = 0x%x, 0xc94 = 0x%x RF 0x24 = 0x%x\n", PHY_QueryBBReg(Adapter, 0xc80, bMaskDWord), PHY_QueryBBReg(Adapter, 0xc94, bMaskDWord), PHY_QueryRFReg(Adapter, RF_PATH_A, 0x24, bRFRegOffsetMask));
+				//DBG_8192D("TxPwrTracking 0xc80 = 0x%x, 0xc94 = 0x%x RF 0x24 = 0x%x\n", PHY_QueryBBReg(Adapter, 0xc80, bMaskDWord), PHY_QueryBBReg(Adapter, 0xc94, bMaskDWord), PHY_QueryRFReg(Adapter, RF_PATH_A, 0x24, bRFRegOffsetMask));
 			}
 		}
 
@@ -2156,7 +2156,7 @@ dm_InitializeTXPowerTracking_ThermalMeter(
 		pdmpriv->TxPowerTrackControl = true;
 #endif
 	}
-	MSG_8192C("pdmpriv->TxPowerTrackControl = %d\n", pdmpriv->TxPowerTrackControl);
+	MSG_8192D("pdmpriv->TxPowerTrackControl = %d\n", pdmpriv->TxPowerTrackControl);
 }
 
 
@@ -2324,7 +2324,7 @@ static void	dm_CheckPbcGPIO(PADAPTER padapter)
 	{
 		// Here we only set bPbcPressed to true
 		// After trigger PBC, the variable will be set to false
-		DBG_8192C("CheckPbcGPIO - PBC is pressed, try_cnt=%d\n", i-1);
+		DBG_8192D("CheckPbcGPIO - PBC is pressed, try_cnt=%d\n", i-1);
 
 
 		if ( padapter->pid[0] == 0 )
@@ -2559,7 +2559,7 @@ rtl8192d_HalDmWatchDog(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if((pHalData->bInModeSwitchProcess))
 	{
-		DBG_871X("HalDmWatchDog(): During dual mac mode switch or slave mac \n");
+		DBG_8192D("HalDmWatchDog(): During dual mac mode switch or slave mac \n");
 		return;
 	}
 #endif

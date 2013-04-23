@@ -71,11 +71,11 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 
 	precvpriv->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
 	if(precvpriv->int_in_urb == NULL){
-		DBG_8192C("alloc_urb for interrupt in endpoint fail !!!!\n");
+		DBG_8192D("alloc_urb for interrupt in endpoint fail !!!!\n");
 	}
 	precvpriv->int_in_buf = rtw_malloc(sizeof(INTERRUPT_MSG_FORMAT_EX));
 	if(precvpriv->int_in_buf == NULL){
-		DBG_8192C("alloc_mem for interrupt in endpoint fail !!!!\n");
+		DBG_8192D("alloc_mem for interrupt in endpoint fail !!!!\n");
 	}
 #endif //CONFIG_USB_INTERRUPT_IN_PIPE
 
@@ -190,7 +190,7 @@ void rtl8192du_free_recv_priv (_adapter *padapter)
 #endif
 
 	if (skb_queue_len(&precvpriv->rx_skb_queue)) {
-		DBG_8192C(KERN_WARNING "rx_skb_queue not empty\n");
+		DBG_8192D(KERN_WARNING "rx_skb_queue not empty\n");
 	}
 
 	skb_queue_purge(&precvpriv->rx_skb_queue);
@@ -198,7 +198,7 @@ void rtl8192du_free_recv_priv (_adapter *padapter)
 #ifdef CONFIG_PREALLOC_RECV_SKB
 
 	if (skb_queue_len(&precvpriv->free_recv_skb_queue)) {
-		DBG_8192C(KERN_WARNING "free_recv_skb_queue not empty, %d\n", skb_queue_len(&precvpriv->free_recv_skb_queue));
+		DBG_8192D(KERN_WARNING "free_recv_skb_queue not empty, %d\n", skb_queue_len(&precvpriv->free_recv_skb_queue));
 	}
 
 	skb_queue_purge(&precvpriv->free_recv_skb_queue);

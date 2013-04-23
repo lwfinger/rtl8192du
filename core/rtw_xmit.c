@@ -543,7 +543,7 @@ u8	qos_acm(u8 acm_mask, u8 priority)
 				change_priority = 5;
 			break;
 		default:
-			DBG_871X("qos_acm(): invalid pattrib->priority: %d!!!\n", priority);
+			DBG_8192D("qos_acm(): invalid pattrib->priority: %d!!!\n", priority);
 			break;
 	}
 
@@ -671,7 +671,7 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 		if (psta == NULL)	{ // if we cannot get psta => drrp the pkt
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:%pM\n", pattrib->ra));
 			#ifdef DBG_TX_DROP_FRAME
-			DBG_871X("DBG_TX_DROP_FRAME %s get sta_info fail, ra:%pM\n", __FUNCTION__, pattrib->ra);
+			DBG_8192D("DBG_TX_DROP_FRAME %s get sta_info fail, ra:%pM\n", __FUNCTION__, pattrib->ra);
 			#endif
 			res =_FAIL;
 			goto exit;
@@ -693,7 +693,7 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 		// if we cannot get psta => drop the pkt
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:%pM\n", pattrib->ra));
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_871X("DBG_TX_DROP_FRAME %s get sta_info fail, ra:%pM\n", __FUNCTION__, pattrib->ra);
+		DBG_8192D("DBG_TX_DROP_FRAME %s get sta_info fail, ra:%pM\n", __FUNCTION__, pattrib->ra);
 		#endif
 		res = _FAIL;
 		goto exit;
@@ -737,7 +737,7 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 		{
 			RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("\npsta->ieee8021x_blocked == true,  pattrib->ether_type(%.4x) != 0x888e\n",pattrib->ether_type));
 			#ifdef DBG_TX_DROP_FRAME
-			DBG_871X("DBG_TX_DROP_FRAME %s psta->ieee8021x_blocked == true,  pattrib->ether_type(%.4x) != 0x888e\n", __FUNCTION__,pattrib->ether_type);
+			DBG_8192D("DBG_TX_DROP_FRAME %s psta->ieee8021x_blocked == true,  pattrib->ether_type(%.4x) != 0x888e\n", __FUNCTION__,pattrib->ether_type);
 			#endif
 			res = _FAIL;
 			goto exit;
@@ -784,7 +784,7 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 			{
 				RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("\npadapter->securitypriv.busetkipkey(%d)==_FAIL drop packet\n", padapter->securitypriv.busetkipkey));
 				#ifdef DBG_TX_DROP_FRAME
-				DBG_871X("DBG_TX_DROP_FRAME %s padapter->securitypriv.busetkipkey(%d)==_FAIL drop packet\n", __FUNCTION__, padapter->securitypriv.busetkipkey);
+				DBG_8192D("DBG_TX_DROP_FRAME %s padapter->securitypriv.busetkipkey(%d)==_FAIL drop packet\n", __FUNCTION__, padapter->securitypriv.busetkipkey);
 				#endif
 				res =_FAIL;
 				goto exit;
@@ -977,7 +977,7 @@ _func_enter_;
 	//if((psecuritypriv->sw_encrypt)||(pattrib->bswenc))
 	if(pattrib->bswenc)
 	{
-		//DBG_871X("start xmitframe_swencrypt\n");
+		//DBG_8192D("start xmitframe_swencrypt\n");
 		RT_TRACE(_module_rtl871x_xmit_c_,_drv_alert_,("### xmitframe_swencrypt\n"));
 		switch(pattrib->encrypt){
 		case _WEP40_:
@@ -1157,7 +1157,7 @@ _func_enter_;
 					//check BA_starting_seqctrl
 					if(SN_LESS(pattrib->seqnum, tx_seq))
 					{
-						//DBG_871X("tx ampdu seqnum(%d) < tx_seq(%d)\n", pattrib->seqnum, tx_seq);
+						//DBG_8192D("tx ampdu seqnum(%d) < tx_seq(%d)\n", pattrib->seqnum, tx_seq);
 						pattrib->ampdu_en = false;//AGG BK
 					}
 					else if(SN_EQUAL(pattrib->seqnum, tx_seq))
@@ -1168,7 +1168,7 @@ _func_enter_;
 					}
 					else
 					{
-						//DBG_871X("tx ampdu over run\n");
+						//DBG_8192D("tx ampdu over run\n");
 						psta->BA_starting_seqctrl[pattrib->priority & 0x0f] = (pattrib->seqnum+1)&0xfff;
 						pattrib->ampdu_en = true;//AGG EN
 					}
@@ -1872,14 +1872,14 @@ _func_enter_;
 	{
 		pxmitpriv->free_xmit_extbuf_cnt--;
 		#ifdef DBG_XMIT_BUF
-		DBG_871X("DBG_XMIT_BUF ALLOC no=%d,  free_xmit_extbuf_cnt=%d\n",pxmitbuf->no, pxmitpriv->free_xmit_extbuf_cnt);
+		DBG_8192D("DBG_XMIT_BUF ALLOC no=%d,  free_xmit_extbuf_cnt=%d\n",pxmitbuf->no, pxmitpriv->free_xmit_extbuf_cnt);
 		#endif
 
 
 		pxmitbuf->priv_data = NULL;
 
 		if (pxmitbuf->sctx) {
-			DBG_871X("%s pxmitbuf->sctx is not NULL\n", __func__);
+			DBG_8192D("%s pxmitbuf->sctx is not NULL\n", __func__);
 			rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_ALLOC);
 		}
 
@@ -1911,7 +1911,7 @@ _func_enter_;
 	rtw_list_insert_tail(&(pxmitbuf->list), get_list_head(pfree_queue));
 	pxmitpriv->free_xmit_extbuf_cnt++;
 	#ifdef DBG_XMIT_BUF
-	DBG_871X("DBG_XMIT_BUF FREE no=%d, free_xmit_extbuf_cnt=%d\n",pxmitbuf->no ,pxmitpriv->free_xmit_extbuf_cnt);
+	DBG_8192D("DBG_XMIT_BUF FREE no=%d, free_xmit_extbuf_cnt=%d\n",pxmitbuf->no ,pxmitpriv->free_xmit_extbuf_cnt);
 	#endif
 
 	_exit_critical(&pfree_queue->lock, &irqL);
@@ -1930,7 +1930,7 @@ struct xmit_buf *rtw_alloc_xmitbuf(struct xmit_priv *pxmitpriv)
 
 _func_enter_;
 
-	//DBG_871X("+rtw_alloc_xmitbuf\n");
+	//DBG_8192D("+rtw_alloc_xmitbuf\n");
 
 	_enter_critical(&pfree_xmitbuf_queue->lock, &irqL);
 
@@ -1951,21 +1951,21 @@ _func_enter_;
 	{
 		pxmitpriv->free_xmitbuf_cnt--;
 		#ifdef DBG_XMIT_BUF
-		DBG_871X("DBG_XMIT_BUF ALLOC no=%d,  free_xmitbuf_cnt=%d\n",pxmitbuf->no, pxmitpriv->free_xmitbuf_cnt);
+		DBG_8192D("DBG_XMIT_BUF ALLOC no=%d,  free_xmitbuf_cnt=%d\n",pxmitbuf->no, pxmitpriv->free_xmitbuf_cnt);
 		#endif
-		//DBG_871X("alloc, free_xmitbuf_cnt=%d\n", pxmitpriv->free_xmitbuf_cnt);
+		//DBG_8192D("alloc, free_xmitbuf_cnt=%d\n", pxmitpriv->free_xmitbuf_cnt);
 
 		pxmitbuf->priv_data = NULL;
 
 		if (pxmitbuf->sctx) {
-			DBG_871X("%s pxmitbuf->sctx is not NULL\n", __func__);
+			DBG_8192D("%s pxmitbuf->sctx is not NULL\n", __func__);
 			rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_ALLOC);
 		}
 	}
 	#ifdef DBG_XMIT_BUF
 	else
 	{
-		DBG_871X("DBG_XMIT_BUF rtw_alloc_xmitbuf return NULL\n");
+		DBG_8192D("DBG_XMIT_BUF rtw_alloc_xmitbuf return NULL\n");
 	}
 	#endif
 
@@ -1983,7 +1983,7 @@ s32 rtw_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 
 _func_enter_;
 
-	//DBG_871X("+rtw_free_xmitbuf\n");
+	//DBG_8192D("+rtw_free_xmitbuf\n");
 
 	if(pxmitbuf==NULL)
 	{
@@ -1991,7 +1991,7 @@ _func_enter_;
 	}
 
 	if (pxmitbuf->sctx) {
-		DBG_871X("%s pxmitbuf->sctx is not NULL\n", __func__);
+		DBG_8192D("%s pxmitbuf->sctx is not NULL\n", __func__);
 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_FREE);
 	}
 
@@ -2008,9 +2008,9 @@ _func_enter_;
 		rtw_list_insert_tail(&(pxmitbuf->list), get_list_head(pfree_xmitbuf_queue));
 
 		pxmitpriv->free_xmitbuf_cnt++;
-		//DBG_871X("FREE, free_xmitbuf_cnt=%d\n", pxmitpriv->free_xmitbuf_cnt);
+		//DBG_8192D("FREE, free_xmitbuf_cnt=%d\n", pxmitpriv->free_xmitbuf_cnt);
 		#ifdef DBG_XMIT_BUF
-		DBG_871X("DBG_XMIT_BUF FREE no=%d, free_xmitbuf_cnt=%d\n",pxmitbuf->no ,pxmitpriv->free_xmitbuf_cnt);
+		DBG_8192D("DBG_XMIT_BUF FREE no=%d, free_xmitbuf_cnt=%d\n",pxmitbuf->no ,pxmitpriv->free_xmitbuf_cnt);
 		#endif
 		_exit_critical(&pfree_xmitbuf_queue->lock, &irqL);
 	}
@@ -2708,7 +2708,7 @@ s32 rtw_xmit(_adapter *padapter, _pkt **ppkt)
 	if (pxmitframe == NULL) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("rtw_xmit: no more pxmitframe\n"));
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_871X("DBG_TX_DROP_FRAME %s no more pxmitframe\n", __FUNCTION__);
+		DBG_8192D("DBG_TX_DROP_FRAME %s no more pxmitframe\n", __FUNCTION__);
 		#endif
 		return -1;
 	}
@@ -2739,7 +2739,7 @@ s32 rtw_xmit(_adapter *padapter, _pkt **ppkt)
 	if (res == _FAIL) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("rtw_xmit: update attrib fail\n"));
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_871X("DBG_TX_DROP_FRAME %s update attrib fail\n", __FUNCTION__);
+		DBG_8192D("DBG_TX_DROP_FRAME %s update attrib fail\n", __FUNCTION__);
 		#endif
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
 		return -1;
@@ -2879,7 +2879,7 @@ int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *px
 
 	if(pattrib->triggered==1)
 	{
-		//DBG_871X("directly xmit pspoll_triggered packet\n");
+		//DBG_8192D("directly xmit pspoll_triggered packet\n");
 
 		//pattrib->triggered=0;
 
@@ -2910,7 +2910,7 @@ int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *px
 			pstapriv->tim_bitmap |= BIT(0);//
 			pstapriv->sta_dz_bitmap |= BIT(0);
 
-			//DBG_871X("enqueue, sq_len=%d, tim=%x\n", psta->sleepq_len, pstapriv->tim_bitmap);
+			//DBG_8192D("enqueue, sq_len=%d, tim=%x\n", psta->sleepq_len, pstapriv->tim_bitmap);
 
 			update_beacon(padapter, _TIM_IE_, NULL, false);//tx bc/mc packets after upate bcn
 
@@ -2971,11 +2971,11 @@ int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *px
 			{
 				pstapriv->tim_bitmap |= BIT(psta->aid);
 
-				//DBG_871X("enqueue, sq_len=%d, tim=%x\n", psta->sleepq_len, pstapriv->tim_bitmap);
+				//DBG_8192D("enqueue, sq_len=%d, tim=%x\n", psta->sleepq_len, pstapriv->tim_bitmap);
 
 				if(psta->sleepq_len==1)
 				{
-					//DBG_871X("sleepq_len==1, update BCNTIM\n");
+					//DBG_8192D("sleepq_len==1, update BCNTIM\n");
 					//upate BCN for TIM IE
 					update_beacon(padapter, _TIM_IE_, NULL, false);
 				}
@@ -3182,7 +3182,7 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 #endif //CONFIG_TDLS
 		pstapriv->tim_bitmap &= ~BIT(psta->aid);
 
-		//DBG_871X("wakeup to xmit, qlen==0, update_BCNTIM, tim=%x\n", pstapriv->tim_bitmap);
+		//DBG_8192D("wakeup to xmit, qlen==0, update_BCNTIM, tim=%x\n", pstapriv->tim_bitmap);
 		//upate BCN for TIM IE
 		//update_BCNTIM(padapter);
 		update_mask = BIT(0);
@@ -3246,7 +3246,7 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 			pstapriv->tim_bitmap &= ~BIT(0);
 			pstapriv->sta_dz_bitmap &= ~BIT(0);
 
-			//DBG_871X("wakeup to xmit, qlen==0, update_BCNTIM, tim=%x\n", pstapriv->tim_bitmap);
+			//DBG_8192D("wakeup to xmit, qlen==0, update_BCNTIM, tim=%x\n", pstapriv->tim_bitmap);
 			//upate BCN for TIM IE
 			//update_BCNTIM(padapter);
 			update_mask |= BIT(1);
@@ -3342,7 +3342,7 @@ void xmit_delivery_enabled_frames(_adapter *padapter, struct sta_info *psta)
 #endif //CONFIG_TDLS
 			pstapriv->tim_bitmap &= ~BIT(psta->aid);
 
-			//DBG_871X("wakeup to xmit, qlen==0, update_BCNTIM, tim=%x\n", pstapriv->tim_bitmap);
+			//DBG_8192D("wakeup to xmit, qlen==0, update_BCNTIM, tim=%x\n", pstapriv->tim_bitmap);
 			//upate BCN for TIM IE
 			//update_BCNTIM(padapter);
 			update_beacon(padapter, _TIM_IE_, NULL, false);
@@ -3375,7 +3375,7 @@ int rtw_sctx_wait(struct submit_ctx *sctx)
 	if (!wait_for_completion_timeout(&sctx->done, expire)) {
 		/* timeout, do something?? */
 		status = RTW_SCTX_DONE_TIMEOUT;
-		DBG_871X("%s timeout\n", __func__);
+		DBG_8192D("%s timeout\n", __func__);
 	} else {
 		status = sctx->status;
 	}
@@ -3406,7 +3406,7 @@ void rtw_sctx_done_err(struct submit_ctx **sctx, int status)
 {
 	if (*sctx) {
 		if (rtw_sctx_chk_waring_status(status))
-			DBG_871X("%s status:%d\n", __func__, status);
+			DBG_8192D("%s status:%d\n", __func__, status);
 		(*sctx)->status = status;
 		complete(&((*sctx)->done));
 		*sctx = NULL;
@@ -3461,7 +3461,7 @@ int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 
 	if (pack_tx_ops->status == RTW_SCTX_SUBMITTED) {
 		pack_tx_ops->status = RTW_SCTX_DONE_TIMEOUT;
-		DBG_871X("%s timeout\n", __func__);
+		DBG_8192D("%s timeout\n", __func__);
 	}
 
 	if (pack_tx_ops->status == RTW_SCTX_DONE_SUCCESS)
@@ -3493,7 +3493,7 @@ void rtw_ack_tx_done(struct xmit_priv *pxmitpriv, int status)
 	if (pxmitpriv->ack_tx) {
 		rtw_sctx_done_err(&pack_tx_ops, status);
 	} else {
-		DBG_871X("%s ack_tx not set\n", __func__);
+		DBG_8192D("%s ack_tx not set\n", __func__);
 	}
 }
 #endif //CONFIG_XMIT_ACK

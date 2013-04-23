@@ -514,7 +514,7 @@ void set_channel_bwmode(_adapter *padapter, unsigned char channel, unsigned char
 
 	if ( padapter->bNotifyChannelChange )
 	{
-		DBG_871X( "[%s] ch = %d, offset = %d, bwmode = %d\n", __FUNCTION__, channel, channel_offset, bwmode );
+		DBG_8192D( "[%s] ch = %d, offset = %d, bwmode = %d\n", __FUNCTION__, channel, channel_offset, bwmode );
 	}
 
 	if((bwmode == HT_CHANNEL_WIDTH_20)||(channel_offset == HAL_PRIME_CHNL_OFFSET_DONT_CARE))
@@ -718,7 +718,7 @@ void write_cam(_adapter *padapter, u8 entry, u16 ctrl, u8 *mac, u8 *key)
 		//cmd = CAM_POLLINIG | CAM_WRITE | (addr + j);
 		//rtw_write32(padapter, RWCAM, cmd);
 
-		//DBG_871X("%s=> cam write: %x, %x\n",__FUNCTION__, cmd, val);
+		//DBG_8192D("%s=> cam write: %x, %x\n",__FUNCTION__, cmd, val);
 
 	}
 
@@ -825,7 +825,7 @@ int WFD_info_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
 		if ( attr_contentlen )
 		{
 			pwdinfo->wfd_info->peer_rtsp_ctrlport = RTW_GET_BE16( attr_content + 2 );
-			DBG_8192C( "[%s] Peer PORT NUM = %d\n", __FUNCTION__, pwdinfo->wfd_info->peer_rtsp_ctrlport );
+			DBG_8192D( "[%s] Peer PORT NUM = %d\n", __FUNCTION__, pwdinfo->wfd_info->peer_rtsp_ctrlport );
 			return( true );
 		}
 	}
@@ -936,7 +936,7 @@ void WMMOnAssocRsp(_adapter *padapter)
 				break;
 		}
 
-		DBG_871X("WMM(%x): %x, %x\n", ACI, ACM, acParm);
+		DBG_8192D("WMM(%x): %x, %x\n", ACI, ACM, acParm);
 	}
 
 	if(padapter->registrypriv.acm_method == 1)
@@ -1173,7 +1173,7 @@ void HTOnAssocRsp(_adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	DBG_871X("%s\n", __FUNCTION__);
+	DBG_8192D("%s\n", __FUNCTION__);
 
 	if ((pmlmeinfo->HT_info_enable) && (pmlmeinfo->HT_caps_enable))
 	{
@@ -1625,39 +1625,39 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
 			case _VENDOR_SPECIFIC_IE_:
 				if ((_rtw_memcmp(pIE->data, ARTHEROS_OUI1, 3)) || (_rtw_memcmp(pIE->data, ARTHEROS_OUI2, 3)))
 				{
-					DBG_871X("link to Artheros AP\n");
+					DBG_8192D("link to Artheros AP\n");
 					return atherosAP;
 				}
 				else if ((_rtw_memcmp(pIE->data, BROADCOM_OUI1, 3))
 							|| (_rtw_memcmp(pIE->data, BROADCOM_OUI2, 3))
 							|| (_rtw_memcmp(pIE->data, BROADCOM_OUI2, 3)))
 				{
-					DBG_871X("link to Broadcom AP\n");
+					DBG_8192D("link to Broadcom AP\n");
 					return broadcomAP;
 				}
 				else if (_rtw_memcmp(pIE->data, MARVELL_OUI, 3))
 				{
-					DBG_871X("link to Marvell AP\n");
+					DBG_8192D("link to Marvell AP\n");
 					return marvellAP;
 				}
 				else if (_rtw_memcmp(pIE->data, RALINK_OUI, 3))
 				{
-					DBG_871X("link to Ralink AP\n");
+					DBG_8192D("link to Ralink AP\n");
 					return ralinkAP;
 				}
 				else if (_rtw_memcmp(pIE->data, CISCO_OUI, 3))
 				{
-					DBG_871X("link to Cisco AP\n");
+					DBG_8192D("link to Cisco AP\n");
 					return ciscoAP;
 				}
 				else if (_rtw_memcmp(pIE->data, REALTEK_OUI, 3))
 				{
-					DBG_871X("link to Realtek 96B\n");
+					DBG_8192D("link to Realtek 96B\n");
 					return realtekAP;
 				}
 				else if (_rtw_memcmp(pIE->data, AIRGOCAP_OUI,3))
 				{
-					DBG_871X("link to Airgo Cap\n");
+					DBG_8192D("link to Airgo Cap\n");
 					return airgocapAP;
 				}
 				else
@@ -1672,7 +1672,7 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
 		i += (pIE->Length + 2);
 	}
 
-	DBG_871X("link to new AP\n");
+	DBG_8192D("link to new AP\n");
 	return unknownAP;
 }
 
@@ -1933,7 +1933,7 @@ void process_addba_req(_adapter *padapter, u8 *paddba_req, u8 *addr)
 		#ifdef CONFIG_UPDATE_INDICATE_SEQ_WHILE_PROCESS_ADDBA_REQ
 		preorder_ctrl->indicate_seq = start_seq;
 		#ifdef DBG_RX_SEQ
-		DBG_871X("DBG_RX_SEQ %s:%d IndicateSeq: %d, start_seq: %d\n", __FUNCTION__, __LINE__,
+		DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, start_seq: %d\n", __FUNCTION__, __LINE__,
 			preorder_ctrl->indicate_seq, start_seq);
 		#endif
 		#else
@@ -1986,20 +1986,20 @@ int rtw_handle_dualmac(_adapter *adapter, bool init)
 
 		/* For SMSP on 92DU-VC, driver do not probe another Interface. */
 		if ((dvobj->DualMacMode != true) && (dvobj->InterfaceNumber != 0)) {
-			DBG_871X("%s(): Do not init another USB Interface because SMSP\n",__FUNCTION__);
+			DBG_8192D("%s(): Do not init another USB Interface because SMSP\n",__FUNCTION__);
 			status = _FAIL;
 			goto exit;
 		}
 #ifdef CONFIG_DUALMAC_CONCURRENT
 		if (pbuddy_padapter == NULL) {
 			pbuddy_padapter = adapter;
-			DBG_871X("%s(): pbuddy_padapter == NULL, Set pbuddy_padapter\n",__FUNCTION__);
+			DBG_8192D("%s(): pbuddy_padapter == NULL, Set pbuddy_padapter\n",__FUNCTION__);
 		} else {
 			adapter->pbuddy_adapter = pbuddy_padapter;
 			pbuddy_padapter->pbuddy_adapter = adapter;
 			// clear global value
 			pbuddy_padapter = NULL;
-			DBG_871X("%s(): pbuddy_padapter exist, Exchange Information\n",__FUNCTION__);
+			DBG_8192D("%s(): pbuddy_padapter exist, Exchange Information\n",__FUNCTION__);
 		}
 
 		if (dvobj->InterfaceNumber == 0) {
@@ -2007,13 +2007,13 @@ int rtw_handle_dualmac(_adapter *adapter, bool init)
 			adapter->isprimary = true;
 			adapter->adapter_type = PRIMARY_ADAPTER;
 			adapter->iface_type = IFACE_PORT0;
-			DBG_871X("%s(): PRIMARY_ADAPTER\n",__FUNCTION__);
+			DBG_8192D("%s(): PRIMARY_ADAPTER\n",__FUNCTION__);
 		} else {
 			//set adapter_type/iface type
 			adapter->isprimary = false;
 			adapter->adapter_type = SECONDARY_ADAPTER;
 			adapter->iface_type = IFACE_PORT1;
-			DBG_871X("%s(): SECONDARY_ADAPTER\n",__FUNCTION__);
+			DBG_8192D("%s(): SECONDARY_ADAPTER\n",__FUNCTION__);
 		}
 #endif
 	}else {

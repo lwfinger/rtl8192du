@@ -185,7 +185,7 @@ void rtw_dump_mem_stat (void)
 	rx_peak=ATOMIC_READ(&rtw_dbg_mem_stat.rx_peak);
 	rx_alloc_err=ATOMIC_READ(&rtw_dbg_mem_stat.rx_alloc_err);
 
-	DBG_871X(	"vir_alloc:%d, vir_peak:%d, vir_alloc_err:%d\n"
+	DBG_8192D(	"vir_alloc:%d, vir_peak:%d, vir_alloc_err:%d\n"
 				"phy_alloc:%d, phy_peak:%d, phy_alloc_err:%d\n"
 				"tx_alloc:%d, tx_peak:%d, tx_alloc_err:%d\n"
 				"rx_alloc:%d, rx_peak:%d, rx_alloc_err:%d\n"
@@ -285,7 +285,7 @@ void rtw_update_mem_stat(u8 flag, u32 sz)
 inline u8* dbg_rtw_vmalloc(u32 sz, const char *func, int line)
 {
 	u8  *p;
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func,  line, __FUNCTION__, (sz));
+	//DBG_8192D("DBG_MEM_ALLOC %s:%d %s(%d)\n", func,  line, __FUNCTION__, (sz));
 
 	p=_rtw_vmalloc((sz));
 
@@ -300,7 +300,7 @@ inline u8* dbg_rtw_vmalloc(u32 sz, const char *func, int line)
 inline u8* dbg_rtw_zvmalloc(u32 sz, const char *func, int line)
 {
 	u8 *p;
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
+	//DBG_8192D("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
 
 	p=_rtw_zvmalloc((sz));
 
@@ -314,7 +314,7 @@ inline u8* dbg_rtw_zvmalloc(u32 sz, const char *func, int line)
 
 inline void dbg_rtw_vmfree(u8 *pbuf, u32 sz, const char *func, int line)
 {
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%p,%d)\n",  func, line, __FUNCTION__, (pbuf), (sz));
+	//DBG_8192D("DBG_MEM_ALLOC %s:%d %s(%p,%d)\n",  func, line, __FUNCTION__, (pbuf), (sz));
 
 	_rtw_vmfree((pbuf), (sz));
 
@@ -330,7 +330,7 @@ inline u8* dbg_rtw_malloc(u32 sz, const char *func, int line)
 	u8 *p;
 
 	if((sz)>4096)
-		DBG_871X("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
+		DBG_8192D("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
 
 	p=_rtw_malloc((sz));
 
@@ -347,7 +347,7 @@ inline u8* dbg_rtw_zmalloc(u32 sz, const char *func, int line)
 	u8 *p;
 
 	if((sz)>4096)
-		DBG_871X("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
+		DBG_8192D("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
 
 	p = _rtw_zmalloc((sz));
 
@@ -363,7 +363,7 @@ inline u8* dbg_rtw_zmalloc(u32 sz, const char *func, int line)
 inline void dbg_rtw_mfree(u8 *pbuf, u32 sz, const char *func, int line)
 {
 	if((sz)>4096)
-		DBG_871X("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%p,%d)\n", func, line, __FUNCTION__, (pbuf), (sz));
+		DBG_8192D("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%p,%d)\n", func, line, __FUNCTION__, (pbuf), (sz));
 
 	_rtw_mfree((pbuf), (sz));
 
@@ -576,13 +576,13 @@ void rtw_usleep_os(int us)
 #ifdef DBG_DELAY_OS
 void _rtw_mdelay_os(int ms, const char *func, const int line)
 {
-	DBG_871X("%s:%d %s(%d)\n", func, line, __FUNCTION__, ms);
+	DBG_8192D("%s:%d %s(%d)\n", func, line, __FUNCTION__, ms);
 	mdelay((unsigned long)ms);
 }
 
 void _rtw_udelay_os(int us, const char *func, const int line)
 {
-	DBG_871X("%s:%d %s(%d)\n", func, line, __FUNCTION__, us);
+	DBG_8192D("%s:%d %s(%d)\n", func, line, __FUNCTION__, us);
       udelay((unsigned long)us);
 }
 #else
@@ -818,20 +818,20 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 
 	if(path && buf) {
 		if( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
-			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
+			DBG_8192D("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
 			ret=readFile(fp, buf, sz);
 			set_fs(oldfs);
 			closeFile(fp);
 
-			DBG_871X("%s readFile, ret:%d\n",__FUNCTION__, ret);
+			DBG_8192D("%s readFile, ret:%d\n",__FUNCTION__, ret);
 
 		} else {
-			DBG_871X("%s openFile path:%s Fail, ret:%d\n",__FUNCTION__, path, ret);
+			DBG_8192D("%s openFile path:%s Fail, ret:%d\n",__FUNCTION__, path, ret);
 		}
 	} else {
-		DBG_871X("%s NULL pointer\n",__FUNCTION__);
+		DBG_8192D("%s NULL pointer\n",__FUNCTION__);
 		ret =  -EINVAL;
 	}
 	return ret;
@@ -852,20 +852,20 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 
 	if(path && buf) {
 		if( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
-			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
+			DBG_8192D("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
 			ret=writeFile(fp, buf, sz);
 			set_fs(oldfs);
 			closeFile(fp);
 
-			DBG_871X("%s writeFile, ret:%d\n",__FUNCTION__, ret);
+			DBG_8192D("%s writeFile, ret:%d\n",__FUNCTION__, ret);
 
 		} else {
-			DBG_871X("%s openFile path:%s Fail, ret:%d\n",__FUNCTION__, path, ret);
+			DBG_8192D("%s openFile path:%s Fail, ret:%d\n",__FUNCTION__, path, ret);
 		}
 	} else {
-		DBG_871X("%s NULL pointer\n",__FUNCTION__);
+		DBG_8192D("%s NULL pointer\n",__FUNCTION__);
 		ret =  -EINVAL;
 	}
 	return ret;
@@ -1141,7 +1141,7 @@ bool rtw_cbuf_push(struct rtw_cbuf *cbuf, void *buf)
 		return _FAIL;
 
 	if (0)
-		DBG_871X("%s on %u\n", __func__, cbuf->write);
+		DBG_8192D("%s on %u\n", __func__, cbuf->write);
 	cbuf->bufs[cbuf->write] = buf;
 	cbuf->write = (cbuf->write+1)%cbuf->size;
 
@@ -1162,7 +1162,7 @@ void *rtw_cbuf_pop(struct rtw_cbuf *cbuf)
 		return NULL;
 
 	if (0)
-		DBG_871X("%s on %u\n", __func__, cbuf->read);
+		DBG_8192D("%s on %u\n", __func__, cbuf->read);
 	buf = cbuf->bufs[cbuf->read];
 	cbuf->read = (cbuf->read+1)%cbuf->size;
 

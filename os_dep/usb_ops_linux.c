@@ -191,7 +191,7 @@ static void usb_bulkout_zero_complete(struct urb *purb, struct pt_regs *regs)
 {
 	struct zero_bulkout_context *pcontext = (struct zero_bulkout_context *)purb->context;
 
-	//DBG_8192C("+usb_bulkout_zero_complete\n");
+	//DBG_8192D("+usb_bulkout_zero_complete\n");
 
 	if(pcontext)
 	{
@@ -223,7 +223,7 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
 	struct usb_device *pusbd = pdvobj->pusbdev;
 
-	//DBG_871X("%s\n", __func__);
+	//DBG_8192D("%s\n", __func__);
 
 
 	if((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx))
@@ -287,7 +287,7 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 	_adapter	*padapter = pintfhdl->padapter;
 	precvbuf = (struct recv_buf *)padapter->recvpriv.precv_buf;
 
-	DBG_871X("%s\n", __func__);
+	DBG_8192D("%s\n", __func__);
 
 	padapter->bReadPortCancel = true;
 
@@ -295,7 +295,7 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 
 		precvbuf->reuse = true;
 		if (precvbuf->purb)	 {
-			//DBG_8192C("usb_read_port_cancel : usb_kill_urb \n");
+			//DBG_8192D("usb_read_port_cancel : usb_kill_urb \n");
 			usb_kill_urb(precvbuf->purb);
 		}
 		precvbuf++;
@@ -353,23 +353,23 @@ _func_enter_;
 		case 1:
 		case 2:
 			pxmitpriv->bkq_cnt--;
-			//DBG_8192C("pxmitpriv->bkq_cnt=%d\n", pxmitpriv->bkq_cnt);
+			//DBG_8192D("pxmitpriv->bkq_cnt=%d\n", pxmitpriv->bkq_cnt);
 			break;
 		case 4:
 		case 5:
 			pxmitpriv->viq_cnt--;
-			//DBG_8192C("pxmitpriv->viq_cnt=%d\n", pxmitpriv->viq_cnt);
+			//DBG_8192D("pxmitpriv->viq_cnt=%d\n", pxmitpriv->viq_cnt);
 			break;
 		case 6:
 		case 7:
 			pxmitpriv->voq_cnt--;
-			//DBG_8192C("pxmitpriv->voq_cnt=%d\n", pxmitpriv->voq_cnt);
+			//DBG_8192D("pxmitpriv->voq_cnt=%d\n", pxmitpriv->voq_cnt);
 			break;
 		case 0:
 		case 3:
 		default:
 			pxmitpriv->beq_cnt--;
-			//DBG_8192C("pxmitpriv->beq_cnt=%d\n", pxmitpriv->beq_cnt);
+			//DBG_8192D("pxmitpriv->beq_cnt=%d\n", pxmitpriv->beq_cnt);
 			break;
 
 	}
@@ -388,7 +388,7 @@ _func_enter_;
 	if(padapter->bSurpriseRemoved || padapter->bDriverStopped ||padapter->bWritePortCancel)
 	{
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete:bDriverStopped(%d) OR bSurpriseRemoved(%d)", padapter->bDriverStopped, padapter->bSurpriseRemoved));
-		DBG_8192C("%s(): TX Warning! bDriverStopped(%d) OR bSurpriseRemoved(%d) bWritePortCancel(%d) pxmitbuf->ext_tag(%x) \n",
+		DBG_8192D("%s(): TX Warning! bDriverStopped(%d) OR bSurpriseRemoved(%d) bWritePortCancel(%d) pxmitbuf->ext_tag(%x) \n",
 		__FUNCTION__,padapter->bDriverStopped, padapter->bSurpriseRemoved,padapter->bReadPortCancel,pxmitbuf->ext_tag);
 
 		goto check_completion;
@@ -399,7 +399,7 @@ _func_enter_;
 
 	} else {
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete : purb->status(%d) != 0 \n", purb->status));
-		DBG_871X("###=> urb_write_port_complete status(%d)\n",purb->status);
+		DBG_8192D("###=> urb_write_port_complete status(%d)\n",purb->status);
 		if((purb->status==-EPIPE)||(purb->status==-EPROTO))
 		{
 			//usb_clear_halt(pusbdev, purb->pipe);
@@ -410,11 +410,11 @@ _func_enter_;
 			goto check_completion;
 
 		} else if (purb->status == -ENOENT) {
-			DBG_871X("%s: -ENOENT\n", __func__);
+			DBG_8192D("%s: -ENOENT\n", __func__);
 			goto check_completion;
 
 		} else if (purb->status == -ECONNRESET) {
-			DBG_871X("%s: -ECONNRESET\n", __func__);
+			DBG_8192D("%s: -ECONNRESET\n", __func__);
 			goto check_completion;
 
 		} else if (purb->status == -ESHUTDOWN) {
@@ -427,7 +427,7 @@ _func_enter_;
 		else
 		{
 			padapter->bSurpriseRemoved=true;
-			DBG_8192C("bSurpriseRemoved=TRUE\n");
+			DBG_8192D("bSurpriseRemoved=TRUE\n");
 			//rtl8192cu_trigger_gpio_0(padapter);
 			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete:bSurpriseRemoved=TRUE\n"));
 
@@ -478,7 +478,7 @@ _func_enter_;
 
 	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx)) {
 		#ifdef DBG_TX
-		DBG_871X(" DBG_TX %s:%d bDriverStopped%d, bSurpriseRemoved:%d, pnp_bstop_trx:%d\n",__FUNCTION__, __LINE__
+		DBG_8192D(" DBG_TX %s:%d bDriverStopped%d, bSurpriseRemoved:%d, pnp_bstop_trx:%d\n",__FUNCTION__, __LINE__
 			,padapter->bDriverStopped, padapter->bSurpriseRemoved, padapter->pwrctrlpriv.pnp_bstop_trx );
 		#endif
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port:( padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
@@ -523,7 +523,7 @@ _func_enter_;
 	{
 		if(cnt> 0 && cnt%512 == 0)
 		{
-			//DBG_8192C("ishighspeed, cnt=%d\n", cnt);
+			//DBG_8192D("ishighspeed, cnt=%d\n", cnt);
 			bwritezero = true;
 		}
 	}
@@ -531,7 +531,7 @@ _func_enter_;
 	{
 		if(cnt > 0 && cnt%64 == 0)
 		{
-			//DBG_8192C("cnt=%d\n", cnt);
+			//DBG_8192D("cnt=%d\n", cnt);
 			bwritezero = true;
 		}
 	}
@@ -547,7 +547,7 @@ _func_enter_;
 		purb->transfer_flags  &=  (~URB_NO_INTERRUPT);
 	} else {
 		purb->transfer_flags  |=  URB_NO_INTERRUPT;
-		//DBG_8192C("URB_NO_INTERRUPT ");
+		//DBG_8192D("URB_NO_INTERRUPT ");
 	}
 #endif
 
@@ -581,7 +581,7 @@ _func_enter_;
 		#endif
 	} else {
 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_WRITE_PORT_ERR);
-		DBG_871X("usb_write_port, status=%d\n", status);
+		DBG_8192D("usb_write_port, status=%d\n", status);
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port(): usb_submit_urb, status=%x\n", status));
 
 		switch (status) {
@@ -621,7 +621,7 @@ void usb_write_port_cancel(struct intf_hdl *pintfhdl)
 	_adapter	*padapter = pintfhdl->padapter;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)padapter->xmitpriv.pxmitbuf;
 
-	DBG_871X("%s \n", __func__);
+	DBG_8192D("%s \n", __func__);
 
 	padapter->bWritePortCancel = true;
 

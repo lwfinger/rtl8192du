@@ -1534,7 +1534,7 @@ static int rtw_wx_set_wap(struct net_device *dev,
 #ifdef CONFIG_CONCURRENT_MODE
 	if (check_buddy_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
 	{
-		printk("set bssid, but buddy_intf is under scanning or linking\n");
+		DBG_8192D("set bssid, but buddy_intf is under scanning or linking\n");
 
 		ret = -EINVAL;
 
@@ -1545,7 +1545,7 @@ static int rtw_wx_set_wap(struct net_device *dev,
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (dc_check_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING)== true)
 	{
-		printk("set bssid, but buddy_intf is under scanning or linking\n");
+		DBG_8192D("set bssid, but buddy_intf is under scanning or linking\n");
 		ret = -EINVAL;
 		goto exit;
 	}
@@ -1662,12 +1662,12 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 	if (mlme==NULL)
 		return -1;
 
-	printk("%s\n", __func__);
+	DBG_8192D("%s\n", __func__);
 
 	reason = cpu_to_le16(mlme->reason_code);
 
 
-	printk("%s, cmd=%d, reason=%d\n", __func__, mlme->cmd, reason);
+	DBG_8192D("%s, cmd=%d, reason=%d\n", __func__, mlme->cmd, reason);
 
 	switch (mlme->cmd)
 	{
@@ -1770,7 +1770,7 @@ _func_enter_;
 	{
 		if (check_buddy_fwstate(padapter, _FW_UNDER_SURVEY))
 		{
-			printk("scanning_via_buddy_intf\n");
+			DBG_8192D("scanning_via_buddy_intf\n");
 			pmlmepriv->scanning_via_buddy_intf = true;
 		}
 
@@ -2123,7 +2123,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 #ifdef CONFIG_CONCURRENT_MODE
 	if (check_buddy_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
 	{
-		printk("set ssid, but buddy_intf is under scanning or linking\n");
+		DBG_8192D("set ssid, but buddy_intf is under scanning or linking\n");
 
 		ret = -EINVAL;
 
@@ -2134,7 +2134,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (dc_check_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING)== true)
 	{
-		printk("set bssid, but buddy_intf is under scanning or linking\n");
+		DBG_8192D("set bssid, but buddy_intf is under scanning or linking\n");
 		ret = -EINVAL;
 		goto exit;
 	}
@@ -3045,10 +3045,10 @@ static int rtw_wx_read32(struct net_device *dev,
 			sprintf(extra, "0x%08X", data32);
 			break;
 		default:
-			printk(KERN_INFO "%s: usage> read [bytes],[address(hex)]\n", __func__);
+			DBG_8192D("%s: usage> read [bytes],[address(hex)]\n", __func__);
 			return -EINVAL;
 	}
-	printk(KERN_INFO "%s: addr=0x%08X data=%s\n", __func__, addr, extra);
+	DBG_8192D("%s: addr=0x%08X data=%s\n", __func__, addr, extra);
 
 	rtw_mfree(ptmp, len);
 
@@ -3074,18 +3074,18 @@ static int rtw_wx_write32(struct net_device *dev,
 	switch (bytes) {
 		case 1:
 			rtw_write8(padapter, addr, (u8)data32);
-			printk(KERN_INFO "%s: addr=0x%08X data=0x%02X\n", __func__, addr, (u8)data32);
+			DBG_8192D("%s: addr=0x%08X data=0x%02X\n", __func__, addr, (u8)data32);
 			break;
 		case 2:
 			rtw_write16(padapter, addr, (u16)data32);
-			printk(KERN_INFO "%s: addr=0x%08X data=0x%04X\n", __func__, addr, (u16)data32);
+			DBG_8192D("%s: addr=0x%08X data=0x%04X\n", __func__, addr, (u16)data32);
 			break;
 		case 4:
 			rtw_write32(padapter, addr, data32);
-			printk(KERN_INFO "%s: addr=0x%08X data=0x%08X\n", __func__, addr, data32);
+			DBG_8192D("%s: addr=0x%08X data=0x%08X\n", __func__, addr, data32);
 			break;
 		default:
-			printk(KERN_INFO "%s: usage> write [bytes],[address(hex)],[data(hex)]\n", __func__);
+			DBG_8192D("%s: usage> write [bytes],[address(hex)],[data(hex)]\n", __func__);
 			return -EINVAL;
 	}
 
@@ -5077,7 +5077,7 @@ static int rtw_p2p_set_persistent(struct net_device *dev,
 			pwdinfo->persistent_supported = false;
 		}
 	}
-	printk("[%s] persistent_supported = %d\n", __func__, pwdinfo->persistent_supported);
+	DBG_8192D("[%s] persistent_supported = %d\n", __func__, pwdinfo->persistent_supported);
 
 exit:
 
@@ -5150,11 +5150,11 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 		{
 			//	The P2P Device ID attribute is included in the Beacon frame.
 			//	The P2P Device Info attribute is included in the probe response frame.
-			printk("[%s] Got P2P IE\n", __func__);
+			DBG_8192D("[%s] Got P2P IE\n", __func__);
 			if (rtw_get_p2p_attr_content(p2pie, p2pielen, P2P_ATTR_DEVICE_ID, attr_content, &attr_contentlen))
 			{
 				//	Handle the P2P Device ID attribute of Beacon first
-				printk("[%s] P2P_ATTR_DEVICE_ID \n", __func__);
+				DBG_8192D("[%s] P2P_ATTR_DEVICE_ID \n", __func__);
 				if (_rtw_memcmp(attr_content, peerMAC, ETH_ALEN))
 				{
 					uintPeerChannel = pnetwork->network.Configuration.DSConfig;
@@ -5164,7 +5164,7 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 			else if (rtw_get_p2p_attr_content(p2pie, p2pielen, P2P_ATTR_DEVICE_INFO, attr_content, &attr_contentlen))
 			{
 				//	Handle the P2P Device Info attribute of probe response
-				printk("[%s] P2P_ATTR_DEVICE_INFO \n", __func__);
+				DBG_8192D("[%s] P2P_ATTR_DEVICE_INFO \n", __func__);
 				if (_rtw_memcmp(attr_content, peerMAC, ETH_ALEN))
 				{
 					uintPeerChannel = pnetwork->network.Configuration.DSConfig;
@@ -5179,7 +5179,7 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 	}
 
 	_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
-	printk("[%s] channel = %d\n", __func__, uintPeerChannel);
+	DBG_8192D("[%s] channel = %d\n", __func__, uintPeerChannel);
 
 	if (uintPeerChannel)
 	{
@@ -5333,7 +5333,7 @@ static int rtw_p2p_set_sa(struct net_device *dev,
 			pwdinfo->session_available = false;
 		}
 	}
-	printk("[%s] session available = %d\n", __func__, pwdinfo->session_available);
+	DBG_8192D("[%s] session available = %d\n", __func__, pwdinfo->session_available);
 
 exit:
 
@@ -7963,7 +7963,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
 			//_rtw_memcpy(pmlmepriv->probereq_wpsie, probereq_wpsie, cp_sz);
 			//pmlmepriv->probereq_wpsie_len = cp_sz;
 
-			printk("probe_req_wps_ielen=%d\n", cp_sz);
+			DBG_8192D("probe_req_wps_ielen=%d\n", cp_sz);
 
 			if (pmlmepriv->wps_probe_req_ie)
 			{
@@ -7975,7 +7975,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
 
 			pmlmepriv->wps_probe_req_ie = rtw_malloc(cp_sz);
 			if (pmlmepriv->wps_probe_req_ie == NULL) {
-				printk("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192D("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
 				ret =  -EINVAL;
 				goto FREE_EXT;
 
@@ -9574,7 +9574,7 @@ static int rtw_wfd_tdls_enable(struct net_device *dev,
 
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 
-	printk("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
 
 	if (extra[ 0 ] == '0')
 	{
@@ -9636,7 +9636,7 @@ static int rtw_tdls_enable(struct net_device *dev,
 	u8 tdls_sta[NUM_STA][ETH_ALEN];
 	u8 empty_hwaddr[ETH_ALEN] = { 0x00 };
 
-	printk("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
 
 	_rtw_memset(tdls_sta, 0x00, sizeof(tdls_sta));
 
@@ -9671,7 +9671,7 @@ static int rtw_tdls_enable(struct net_device *dev,
 		{
 			if (!_rtw_memcmp(tdls_sta[index], empty_hwaddr, ETH_ALEN))
 			{
-				printk("issue tear down to %pM\n", tdls_sta[index]);
+				DBG_8192D("issue tear down to %pM\n", tdls_sta[index]);
 				issue_tdls_teardown(padapter, tdls_sta[index]);
 			}
 		}
@@ -9701,7 +9701,7 @@ static int rtw_tdls_setup(struct net_device *dev,
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 #endif // CONFIG_WFD
 
-	printk("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
 
 	for(i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -9744,7 +9744,7 @@ static int rtw_tdls_teardown(struct net_device *dev,
 	struct sta_info *ptdls_sta = NULL;
 	u8 mac_addr[ETH_ALEN];
 
-	printk("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
 
 	for(i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -9775,7 +9775,7 @@ static int rtw_tdls_discovery(struct net_device *dev,
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	printk("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
 
 	issue_tdls_dis_req(padapter, NULL);
 
@@ -9797,7 +9797,7 @@ static int rtw_tdls_ch_switch(struct net_device *dev,
 	u8 i, j, mac_addr[ETH_ALEN];
 	struct sta_info *ptdls_sta = NULL;
 
-	printk("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192S("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
 
 	for(i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -9829,7 +9829,7 @@ static int rtw_tdls_pson(struct net_device *dev,
 	u8 i, j, mac_addr[ETH_ALEN];
 	struct sta_info *ptdls_sta = NULL;
 
-	printk("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
 
 	for(i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -9858,7 +9858,7 @@ static int rtw_tdls_psoff(struct net_device *dev,
 	u8 i, j, mac_addr[ETH_ALEN];
 	struct sta_info *ptdls_sta = NULL;
 
-	printk("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
 
 	for(i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -9887,7 +9887,7 @@ static int rtw_tdls_setip(struct net_device *dev,
 	struct wifi_display_info *pwfd_info = ptdlsinfo->wfd_info;
 	u8 i=0, j=0, k=0, tag=0, ip[3] = { 0xff }, *ptr = extra;
 
-	printk("[%s] %s %d\n", __func__, extra, wrqu->data.length - 1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length - 1 );
 
 
 	while(i < 4)
@@ -9910,7 +9910,7 @@ static int rtw_tdls_setip(struct net_device *dev,
 		i++;
 	}
 
-	printk("[%s] Set IP = %u.%u.%u.%u \n", __func__,
+	DBG_8192D("[%s] Set IP = %u.%u.%u.%u \n", __func__,
 		ptdlsinfo->wfd_info->ip_address[0], ptdlsinfo->wfd_info->ip_address[1],
 		ptdlsinfo->wfd_info->ip_address[2], ptdlsinfo->wfd_info->ip_address[3]
 	);
@@ -9934,14 +9934,14 @@ static int rtw_tdls_getip(struct net_device *dev,
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 	struct wifi_display_info *pwfd_info = ptdlsinfo->wfd_info;
 
-	printk("[%s]\n", __func__);
+	DBG_8192D("[%s]\n", __func__);
 
 	sprintf(extra, "\n\n%u.%u.%u.%u\n",
 		pwfd_info->peer_ip_address[0], pwfd_info->peer_ip_address[1],
 		pwfd_info->peer_ip_address[2], pwfd_info->peer_ip_address[3]
 		);
 
-	printk("[%s] IP=%u.%u.%u.%u\n", __func__,
+	DBG_8192D("[%s] IP=%u.%u.%u.%u\n", __func__,
 		pwfd_info->peer_ip_address[0], pwfd_info->peer_ip_address[1],
 		pwfd_info->peer_ip_address[2], pwfd_info->peer_ip_address[3]
 		);
@@ -9968,10 +9968,10 @@ static int rtw_tdls_getport(struct net_device *dev,
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 	struct wifi_display_info *pwfd_info = ptdlsinfo->wfd_info;
 
-	printk("[%s]\n", __func__);
+	DBG_8192D("[%s]\n", __func__);
 
 	sprintf(extra, "\n\n%d\n", pwfd_info->peer_rtsp_ctrlport);
-	printk("[%s] remote port = %d\n", __func__, pwfd_info->peer_rtsp_ctrlport);
+	DBG_8192D("[%s] remote port = %d\n", __func__, pwfd_info->peer_rtsp_ctrlport);
 
 	wrqu->data.length = strlen(extra);
 
@@ -9997,7 +9997,7 @@ static int rtw_tdls_dis_result(struct net_device *dev,
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 	struct wifi_display_info *pwfd_info = ptdlsinfo->wfd_info;
 
-	printk("[%s]\n", __func__);
+	DBG_8192D("[%s]\n", __func__);
 
 	if (ptdlsinfo->dev_discovered == 1)
 	{
@@ -10029,7 +10029,7 @@ static int rtw_wfd_tdls_status(struct net_device *dev,
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 	struct wifi_display_info *pwfd_info = ptdlsinfo->wfd_info;
 
-	printk("[%s]\n", __func__);
+	DBG_8192D("[%s]\n", __func__);
 
 	if (ptdlsinfo->setup_state == TDLS_LINKED_STATE)
 	{
@@ -10061,7 +10061,7 @@ static int rtw_tdls_ch_switch_off(struct net_device *dev,
 	u8 i, j, mac_addr[ETH_ALEN];
 	struct sta_info *ptdls_sta = NULL;
 
-	printk("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
 
 	for(i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -10092,7 +10092,7 @@ static int rtw_tdls(struct net_device *dev,
 #ifdef CONFIG_TDLS
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 
-	printk("[%s] extra = %s\n", __func__, extra);
+	DBG_8192D("[%s] extra = %s\n", __func__, extra);
 	//	WFD Sigma will use the tdls enable command to let the driver know we want to test the tdls now!
 	if (_rtw_memcmp(extra, "wfdenable=", 10))
 	{
@@ -10115,7 +10115,7 @@ static int rtw_tdls(struct net_device *dev,
 
 	if (padapter->tdlsinfo.enable == 0)
 	{
-		printk("tdls haven't enabled\n");
+		DBG_8192D("tdls haven't enabled\n");
 		return 0;
 	}
 
@@ -10328,7 +10328,7 @@ static int rtw_test(
 	struct iw_request_info *info,
 	union iwreq_data *wrqu, char *extra)
 {
-	printk("%s\n", __func__);
+	DBG_8192D("%s\n", __func__);
 	return 0;
 }
 

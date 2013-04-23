@@ -2577,7 +2577,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 					newskb = skb_copy(skb, GFP_ATOMIC);
 					if (newskb == NULL) {
 						//priv->ext_stats.tx_drops++;
-						DEBUG_ERR("TX DROP: skb_copy fail!\n");
+						ERR_8192D("TX DROP: skb_copy fail!\n");
 						//goto stop_proc;
 						return -1;
 					}
@@ -2593,7 +2593,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 				}
 
 				if (skb_is_nonlinear(skb))
-					DEBUG_ERR("%s(): skb_is_nonlinear!!\n", __FUNCTION__);
+					ERR_8192D("%s(): skb_is_nonlinear!!\n", __FUNCTION__);
 
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 18))
@@ -2602,7 +2602,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 				res = skb_linearize(skb);
 #endif	// (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 18))
 				if (res < 0) {
-						DEBUG_ERR("TX DROP: skb_linearize fail!\n");
+						ERR_8192D("TX DROP: skb_linearize fail!\n");
 						//goto free_and_stop;
 						return -1;
 				}
@@ -2611,7 +2611,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 				if (res < 0) {
 					if (res == -2) {
 						//priv->ext_stats.tx_drops++;
-						DEBUG_ERR("TX DROP: nat25_db_handle fail!\n");
+						ERR_8192D("TX DROP: nat25_db_handle fail!\n");
 						//goto free_and_stop;
 						return -1;
 
@@ -2657,7 +2657,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 		// check if SA is equal to our MAC
 		if (memcmp(skb->data+MACADDRLEN, GET_MY_HWADDR(padapter), MACADDRLEN)) {
 			//priv->ext_stats.tx_drops++;
-			DEBUG_ERR("TX DROP: untransformed frame SA:%02X%02X%02X%02X%02X%02X!\n",
+			ERR_8192D("TX DROP: untransformed frame SA:%02X%02X%02X%02X%02X%02X!\n",
 				skb->data[6],skb->data[7],skb->data[8],skb->data[9],skb->data[10],skb->data[11]);
 			//goto free_and_stop;
 			return -1;

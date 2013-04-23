@@ -6842,17 +6842,17 @@ void PHY_ConfigMacPhyMode92D(
 	temp &= ~(BIT(0)|BIT(1)|BIT(2));
 	switch(pHalData->MacPhyMode92D){
 		case DUALMAC_DUALPHY:
-			DBG_8192D("MacPhyMode: DUALMAC_DUALPHY \n");
+			MSG_8192D("MacPhyMode: DUALMAC_DUALPHY \n");
 			rtw_write8(Adapter, offset, temp | BIT(0)|BIT(1));
 			//rtw_write8(Adapter, offset, 0xF3);
 			break;
 		case SINGLEMAC_SINGLEPHY:
-			DBG_8192D("MacPhyMode: SINGLEMAC_SINGLEPHY \n");
+			MSG_8192D("MacPhyMode: SINGLEMAC_SINGLEPHY \n");
 			rtw_write8(Adapter, offset, temp | BIT(2));
 			//rtw_write8(Adapter, offset, 0xF4);
 			break;
 		case DUALMAC_SINGLEPHY:
-			DBG_8192D("MacPhyMode: DUALMAC_SINGLEPHY \n");
+			MSG_8192D("MacPhyMode: DUALMAC_SINGLEPHY \n");
 			rtw_write8(Adapter, offset, temp | BIT(0));
 			//rtw_write8(Adapter, offset, 0xF1);
 			break;

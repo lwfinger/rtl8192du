@@ -242,6 +242,8 @@ extern u32 GlobalDebugLevel;
 
 #define MSG_8192D(...) pr_info(__VA_ARGS__)
 
+#define ERR_8192D(...) pr_err(__VA_ARGS__)
+
 #ifdef CONFIG_PROC_DEBUG
 
 	int proc_get_drv_version(char *page, char **start,

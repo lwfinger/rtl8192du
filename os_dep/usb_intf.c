@@ -822,7 +822,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 #ifdef CONFIG_LAYER2_ROAMING_RESUME
 	if(check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED) )
 	{
-		//printk("%s:%d assoc_ssid:%s\n", __FUNCTION__, __LINE__, pmlmepriv->assoc_ssid.Ssid);
+		//DBG_8192D("%s:%d assoc_ssid:%s\n", __FUNCTION__, __LINE__, pmlmepriv->assoc_ssid.Ssid);
 		DBG_8192D("%s:%d %s(%pM), length:%d assoc_ssid.length:%d\n",__FUNCTION__, __LINE__,
 				pmlmepriv->cur_network.network.Ssid.Ssid,
 				pmlmepriv->cur_network.network.MacAddress,

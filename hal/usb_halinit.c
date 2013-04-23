@@ -3135,10 +3135,10 @@ _ReadIDs(
 
 	}
 
-	MSG_8192D("EEPROMVID = 0x%04x\n", pHalData->EEPROMVID);
-	MSG_8192D("EEPROMPID = 0x%04x\n", pHalData->EEPROMPID);
-	MSG_8192D("EEPROMCustomerID : 0x%02x\n", pHalData->EEPROMCustomerID);
-	MSG_8192D("EEPROMSubCustomerID: 0x%02x\n", pHalData->EEPROMSubCustomerID);
+	DBG_8192D("EEPROMVID = 0x%04x\n", pHalData->EEPROMVID);
+	DBG_8192D("EEPROMPID = 0x%04x\n", pHalData->EEPROMPID);
+	DBG_8192D("EEPROMCustomerID : 0x%02x\n", pHalData->EEPROMCustomerID);
+	DBG_8192D("EEPROMSubCustomerID: 0x%02x\n", pHalData->EEPROMSubCustomerID);
 }
 
 static void

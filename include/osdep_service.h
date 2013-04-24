@@ -111,8 +111,6 @@
 	typedef struct	__queue	_queue;
 	typedef struct	list_head	_list;
 	typedef	int	_OS_STATUS;
-	//typedef u32	_irqL;
-	typedef unsigned long _irqL;
 	typedef	struct	net_device * _nic_hdl;
 
 	typedef void*		_thread_hdl_;
@@ -165,17 +163,6 @@ static inline _list	*get_list_head(_queue	*queue)
 
 #define LIST_CONTAINOR(ptr, type, member) \
         ((type *)((char *)(ptr)-(__kernel_size_t)(&((type *)0)->member)))
-
-
-static inline void _enter_critical(_lock *plock, _irqL *pirqL)
-{
-	spin_lock_irqsave(plock, *pirqL);
-}
-
-static inline void _exit_critical(_lock *plock, _irqL *pirqL)
-{
-	spin_unlock_irqrestore(plock, *pirqL);
-}
 
 static inline void _enter_critical_mutex(_mutex *pmutex)
 {

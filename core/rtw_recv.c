@@ -364,29 +364,29 @@ u32 rtw_free_uc_swdec_pending_queue(_adapter *adapter)
 
 int rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, _queue *queue)
 {
-	_irqL irqL;
+	long unsigned int irqL;
 
-	_enter_critical(&queue->lock, &irqL);
+	spin_lock_irqsave(&queue->lock, irqL);
 
 	rtw_list_delete(&precvbuf->list);
 	rtw_list_insert_head(&precvbuf->list, get_list_head(queue));
 
-	_exit_critical(&queue->lock, &irqL);
+	spin_unlock_irqrestore(&queue->lock, irqL);
 
 	return _SUCCESS;
 }
 
 int rtw_enqueue_recvbuf(struct recv_buf *precvbuf, _queue *queue)
 {
-	_irqL irqL;
+	long unsigned int irqL;
 
-	_enter_critical(&queue->lock, &irqL);
+	spin_lock_irqsave(&queue->lock, irqL);
 
 	rtw_list_delete(&precvbuf->list);
 
 	rtw_list_insert_tail(&precvbuf->list, get_list_head(queue));
 
-	_exit_critical(&queue->lock, &irqL);
+	spin_unlock_irqrestore(&queue->lock, irqL);
 
 
 	return _SUCCESS;
@@ -395,11 +395,11 @@ int rtw_enqueue_recvbuf(struct recv_buf *precvbuf, _queue *queue)
 
 struct recv_buf *rtw_dequeue_recvbuf (_queue *queue)
 {
-	_irqL irqL;
+	long unsigned int irqL;
 	struct recv_buf *precvbuf;
 	_list	*plist, *phead;
 
-	_enter_critical(&queue->lock, &irqL);
+	spin_lock_irqsave(&queue->lock, irqL);
 
 	if(_rtw_queue_empty(queue) == true)
 	{
@@ -417,7 +417,7 @@ struct recv_buf *rtw_dequeue_recvbuf (_queue *queue)
 
 	}
 
-	_exit_critical(&queue->lock, &irqL);
+	spin_unlock_irqrestore(&queue->lock, irqL);
 
 
 	return precvbuf;
@@ -2479,7 +2479,7 @@ int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, union rec
 
 	//DbgPrint("+enqueue_reorder_recvframe()\n");
 
-	//_enter_critical(&ppending_recvframe_queue->lock, &irql);
+	//spin_lock_irqsave(&ppending_recvframe_queue->lock, &irql);
 	//_rtw_spinlock_ex(&ppending_recvframe_queue->lock);
 
 
@@ -2500,7 +2500,7 @@ int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, union rec
 			//Duplicate entry is found!! Do not insert current entry.
 			//RT_TRACE(COMP_RX_REORDER, DBG_TRACE, ("InsertRxReorderList(): Duplicate packet is dropped!! IndicateSeq: %d, NewSeq: %d\n", pTS->RxIndicateSeq, SeqNum));
 
-			//_exit_critical(&ppending_recvframe_queue->lock, &irql);
+			//spin_unlock_irqrestore(&ppending_recvframe_queue->lock, &irql);
 
 			return false;
 		}
@@ -2514,7 +2514,7 @@ int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, union rec
 	}
 
 
-	//_enter_critical(&ppending_recvframe_queue->lock, &irql);
+	//spin_lock_irqsave(&ppending_recvframe_queue->lock, &irql);
 	//_rtw_spinlock_ex(&ppending_recvframe_queue->lock);
 
 	rtw_list_delete(&(prframe->u.hdr.list));
@@ -2522,7 +2522,7 @@ int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, union rec
 	rtw_list_insert_tail(&(prframe->u.hdr.list), plist);
 
 	//_rtw_spinunlock_ex(&ppending_recvframe_queue->lock);
-	//_exit_critical(&ppending_recvframe_queue->lock, &irql);
+	//spin_unlock_irqrestore(&ppending_recvframe_queue->lock, &irql);
 
 
 	//RT_TRACE(COMP_RX_REORDER, DBG_TRACE, ("InsertRxReorderList(): Pkt insert into buffer!! IndicateSeq: %d, NewSeq: %d\n", pTS->RxIndicateSeq, SeqNum));
@@ -2548,7 +2548,7 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 	{
 		if(rtw_is_list_empty(phead))
 		{
-			// _exit_critical(&ppending_recvframe_queue->lock, &irql);
+			// spin_unlock_irqrestore(&ppending_recvframe_queue->lock, &irql);
 			//_rtw_spinunlock_ex(&ppending_recvframe_queue->lock);
 			return true;
 		}
@@ -2623,7 +2623,7 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 	}
 
 	//_rtw_spinunlock_ex(&ppending_recvframe_queue->lock);
-	//_exit_critical(&ppending_recvframe_queue->lock, &irql);
+	//spin_unlock_irqrestore(&ppending_recvframe_queue->lock, &irql);
 
 /*
 	//Release the indication lock and set to new indication step.
@@ -2640,7 +2640,7 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 		//pTS->RxIndicateState = RXTS_INDICATE_IDLE;
 	}
 */
-	//_exit_critical(&ppending_recvframe_queue->lock, &irql);
+	//spin_unlock_irqrestore(&ppending_recvframe_queue->lock, &irql);
 
 	//return true;
 	return bPktInBuf;
@@ -2752,7 +2752,7 @@ int recv_indicatepkt_reorder(_adapter *padapter, union recv_frame *prframe)
 		//pHTInfo->RxReorderDropCounter++;
 		//ReturnRFDList(Adapter, pRfd);
 		//RT_TRACE(COMP_RX_REORDER, DBG_TRACE, ("RxReorderIndicatePacket() ==> Packet Drop!!\n"));
-		//_exit_critical(&ppending_recvframe_queue->lock, &irql);
+		//spin_unlock_irqrestore(&ppending_recvframe_queue->lock, &irql);
 		//return _FAIL;
 
 		#ifdef DBG_RX_DROP_FRAME
@@ -2766,7 +2766,7 @@ int recv_indicatepkt_reorder(_adapter *padapter, union recv_frame *prframe)
 	if(!enqueue_reorder_recvframe(preorder_ctrl, prframe))
 	{
 		//DbgPrint("recv_indicatepkt_reorder, enqueue_reorder_recvframe fail!\n");
-		//_exit_critical(&ppending_recvframe_queue->lock, &irql);
+		//spin_unlock_irqrestore(&ppending_recvframe_queue->lock, &irql);
 		//return _FAIL;
 		#ifdef DBG_RX_DROP_FRAME
 		DBG_8192D("DBG_RX_DROP_FRAME %s enqueue_reorder_recvframe fail\n", __FUNCTION__);

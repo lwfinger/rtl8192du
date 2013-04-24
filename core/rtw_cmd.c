@@ -188,18 +188,18 @@ ISR/Call-Back functions can't call this sub-function.
 
 int	_rtw_enqueue_cmd(_queue *queue, struct cmd_obj *obj)
 {
-	_irqL irqL;
+	long unsigned int irqL;
 
 _func_enter_;
 
 	if (obj == NULL)
 		goto exit;
 
-	_enter_critical(&queue->lock, &irqL);
+	spin_lock_irqsave(&queue->lock, irqL);
 
 	rtw_list_insert_tail(&obj->list, &queue->queue);
 
-	_exit_critical(&queue->lock, &irqL);
+	spin_unlock_irqrestore(&queue->lock, irqL);
 
 exit:
 
@@ -210,12 +210,12 @@ _func_exit_;
 
 struct	cmd_obj	*_rtw_dequeue_cmd(_queue *queue)
 {
-	_irqL irqL;
+	long unsigned int irqL;
 	struct cmd_obj *obj;
 
 _func_enter_;
 
-	_enter_critical(&queue->lock, &irqL);
+	spin_lock_irqsave(&queue->lock, irqL);
 	if (rtw_is_list_empty(&(queue->queue)))
 		obj = NULL;
 	else
@@ -224,7 +224,7 @@ _func_enter_;
 		rtw_list_delete(&obj->list);
 	}
 
-	_exit_critical(&queue->lock, &irqL);
+	spin_unlock_irqrestore(&queue->lock, irqL);
 
 _func_exit_;
 

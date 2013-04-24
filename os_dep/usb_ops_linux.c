@@ -308,7 +308,7 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 
 static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 {
-	_irqL irqL;
+	long unsigned int irqL;
 	int i;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)purb->context;
 	//struct xmit_frame *pxmitframe = (struct xmit_frame *)pxmitbuf->priv_data;
@@ -344,7 +344,7 @@ _func_enter_;
 
 
 /*
-	_enter_critical(&pxmitpriv->lock, &irqL);
+	spin_lock_irqsave(&pxmitpriv->lock, irqL);
 
 	pxmitpriv->txirp_cnt--;
 
@@ -374,7 +374,7 @@ _func_enter_;
 
 	}
 
-	_exit_critical(&pxmitpriv->lock, &irqL);
+	spin_unlock_irqrestore(&pxmitpriv->lock, irqL);
 
 
 	if(pxmitpriv->txirp_cnt==0)
@@ -459,7 +459,7 @@ _func_exit_;
 
 u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 {
-	_irqL irqL;
+	long unsigned int irqL;
 	unsigned int pipe;
 	int status;
 	u32 ret = _FAIL, bwritezero = false;
@@ -486,7 +486,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	_enter_critical(&pxmitpriv->lock, &irqL);
+	spin_lock_irqsave(&pxmitpriv->lock, irqL);
 
 	switch(addr)
 	{
@@ -514,7 +514,7 @@ _func_enter_;
 			break;
 	}
 
-	_exit_critical(&pxmitpriv->lock, &irqL);
+	spin_unlock_irqrestore(&pxmitpriv->lock, irqL);
 
 	purb	= pxmitbuf->pxmit_urb[0];
 

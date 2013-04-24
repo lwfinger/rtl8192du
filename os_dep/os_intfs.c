@@ -1541,9 +1541,9 @@ int netdev_vir_if_open(struct net_device *pnetdev)
 	int ret;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
 
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
+	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex));
 	ret = _netdev_vir_if_open(pnetdev);
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
+	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex));
 	return ret;
 }
 
@@ -1925,9 +1925,9 @@ static int netdev_if2_open(struct net_device *pnetdev)
 	int ret;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
 
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
+	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex));
 	ret = _netdev_if2_open(pnetdev);
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
+	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex));
 	return ret;
 }
 
@@ -2341,9 +2341,9 @@ int netdev_open(struct net_device *pnetdev)
 	int ret;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
 
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
+	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex));
 	ret = _netdev_open(pnetdev);
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
+	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex));
 
 	return ret;
 }

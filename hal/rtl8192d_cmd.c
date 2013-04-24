@@ -105,7 +105,7 @@ _func_enter_;
 	padapter = GET_PRIMARY_ADAPTER(padapter);
 	pHalData = GET_HAL_DATA(padapter);
 
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex), NULL);
+	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex));
 
 	//DBG_8192D("FillH2CCmd : ElementID=%d \n",ElementID);
 
@@ -264,7 +264,7 @@ _func_enter_;
 
 	}
 
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex), NULL);
+	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex));
 
 _func_exit_;
 }

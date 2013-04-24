@@ -197,7 +197,7 @@ static inline void _exit_critical_bh(_lock *plock, _irqL *pirqL)
 	spin_unlock_bh(plock);
 }
 
-static inline void _enter_critical_mutex(_mutex *pmutex, _irqL *pirqL)
+static inline void _enter_critical_mutex(_mutex *pmutex)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 		mutex_lock(pmutex);
@@ -207,7 +207,7 @@ static inline void _enter_critical_mutex(_mutex *pmutex, _irqL *pirqL)
 }
 
 
-static inline void _exit_critical_mutex(_mutex *pmutex, _irqL *pirqL)
+static inline void _exit_critical_mutex(_mutex *pmutex)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 		mutex_unlock(pmutex);

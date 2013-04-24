@@ -1161,7 +1161,6 @@ void rtl8192du_recv_tasklet(void *priv)
 
 static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 {
-	_irqL irqL;
 	uint isevt, *pbuf;
 	struct recv_buf	*precvbuf = (struct recv_buf *)purb->context;
 	_adapter			*padapter =(_adapter *)precvbuf->adapter;
@@ -1169,18 +1168,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 
 	RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete!!!\n"));
 
-	//_enter_critical(&precvpriv->lock, &irqL);
-	//precvbuf->irp_pending=false;
-	//precvpriv->rx_pending_cnt --;
-	//_exit_critical(&precvpriv->lock, &irqL);
-
 	precvpriv->rx_pending_cnt --;
-
-	//if(precvpriv->rx_pending_cnt== 0)
-	//{
-	//	RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete: rx_pending_cnt== 0, set allrxreturnevt!\n"));
-	//	_rtw_up_sema(&precvpriv->allrxreturnevt);
-	//}
 
 	if(padapter->bSurpriseRemoved || padapter->bDriverStopped||padapter->bReadPortCancel)
 	{
@@ -1260,7 +1248,6 @@ _func_exit_;
 
 static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 {
-	_irqL irqL;
 	int err, pipe;
 	SIZE_PTR tmpaddr=0;
 	SIZE_PTR alignment=0;
@@ -1330,11 +1317,6 @@ _func_enter_;
 
 			precvbuf->reuse = false;
 		}
-
-		//_enter_critical(&precvpriv->lock, &irqL);
-		//precvpriv->rx_pending_cnt++;
-		//precvbuf->irp_pending = true;
-		//_exit_critical(&precvpriv->lock, &irqL);
 
 		precvpriv->rx_pending_cnt++;
 

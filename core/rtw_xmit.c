@@ -2040,7 +2040,6 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)//(_queue *pf
 		pfree_xmit_queue
 	*/
 
-	_irqL irqL;
 	struct xmit_frame *pxframe = NULL;
 	_list *plist, *phead;
 	_queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
@@ -2048,7 +2047,7 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)//(_queue *pf
 
 _func_enter_;
 
-	_enter_critical_bh(&pfree_xmit_queue->lock, &irqL);
+	spin_lock_bh(&pfree_xmit_queue->lock);
 
 	if (_rtw_queue_empty(pfree_xmit_queue) == true) {
 		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_alloc_xmitframe:%d\n", pxmitpriv->free_xmitframe_cnt));
@@ -2098,7 +2097,7 @@ _func_enter_;
 
 	}
 
-	_exit_critical_bh(&pfree_xmit_queue->lock, &irqL);
+	spin_unlock_bh(&pfree_xmit_queue->lock);
 
 _func_exit_;
 
@@ -2107,7 +2106,6 @@ _func_exit_;
 
 s32 rtw_free_xmitframe(struct xmit_priv *pxmitpriv, struct xmit_frame *pxmitframe)
 {
-	_irqL irqL;
 	_queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
 	_adapter *padapter = pxmitpriv->adapter;
 	_pkt *pndis_pkt = NULL;
@@ -2119,7 +2117,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	_enter_critical_bh(&pfree_xmit_queue->lock, &irqL);
+	spin_lock_bh(&pfree_xmit_queue->lock);
 
 	rtw_list_delete(&pxmitframe->list);
 
@@ -2133,7 +2131,7 @@ _func_enter_;
 	pxmitpriv->free_xmitframe_cnt++;
 	RT_TRACE(_module_rtl871x_xmit_c_, _drv_debug_, ("rtw_free_xmitframe():free_xmitframe_cnt=%d\n", pxmitpriv->free_xmitframe_cnt));
 
-	_exit_critical_bh(&pfree_xmit_queue->lock, &irqL);
+	spin_unlock_bh(&pfree_xmit_queue->lock);
 
 
 	if(pndis_pkt)
@@ -2148,13 +2146,12 @@ _func_exit_;
 
 void rtw_free_xmitframe_queue(struct xmit_priv *pxmitpriv, _queue *pframequeue)
 {
-	_irqL irqL;
 	_list	*plist, *phead;
 	struct	xmit_frame	*pxmitframe;
 
 _func_enter_;
 
-	_enter_critical_bh(&(pframequeue->lock), &irqL);
+	spin_lock_bh(&(pframequeue->lock));
 
 	phead = get_list_head(pframequeue);
 	plist = get_next(phead);
@@ -2169,7 +2166,7 @@ _func_enter_;
 		rtw_free_xmitframe(pxmitpriv,pxmitframe);
 
 	}
-	_exit_critical_bh(&(pframequeue->lock), &irqL);
+	spin_unlock_bh(&(pframequeue->lock));
 
 _func_exit_;
 }
@@ -2216,7 +2213,6 @@ static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, str
 
 struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit_i, int entry)
 {
-	_irqL irqL0;
 	_list *sta_plist, *sta_phead;
 	struct hw_xmit *phwxmit;
 	struct tx_servq *ptxservq = NULL;
@@ -2257,13 +2253,11 @@ _func_enter_;
 		}
 	}
 
-	_enter_critical_bh(&pxmitpriv->lock, &irqL0);
+	spin_lock_bh(&pxmitpriv->lock);
 
 	for(i = 0; i < entry; i++)
 	{
 		phwxmit = phwxmit_i + inx[i];
-
-		//_enter_critical_ex(&phwxmit->sta_queue->lock, &irqL0);
 
 		sta_phead = get_list_head(phwxmit->sta_queue);
 		sta_plist = get_next(sta_phead);
@@ -2285,8 +2279,6 @@ _func_enter_;
 				if(_rtw_queue_empty(pframe_queue)) //must be done after get_next and before break
 					rtw_list_delete(&ptxservq->tx_pending);
 
-				//_exit_critical_ex(&phwxmit->sta_queue->lock, &irqL0);
-
 				goto exit;
 			}
 
@@ -2294,13 +2286,11 @@ _func_enter_;
 
 		}
 
-		//_exit_critical_ex(&phwxmit->sta_queue->lock, &irqL0);
-
 	}
 
 exit:
 
-	_exit_critical_bh(&pxmitpriv->lock, &irqL0);
+	spin_unlock_bh(&pxmitpriv->lock);
 
 _func_exit_;
 
@@ -2350,7 +2340,6 @@ _func_exit_;
  */
 s32 rtw_xmit_classifier(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
-	//_irqL irqL0;
 	u8	ac_index;
 	struct sta_info	*psta;
 	struct tx_servq	*ptxservq;
@@ -2375,21 +2364,13 @@ _func_enter_;
 
 	ptxservq = rtw_get_sta_pending(padapter, psta, pattrib->priority, (u8 *)(&ac_index));
 
-	//_enter_critical(&pstapending->lock, &irqL0);
-
 	if (rtw_is_list_empty(&ptxservq->tx_pending)) {
 		rtw_list_insert_tail(&ptxservq->tx_pending, get_list_head(phwxmits[ac_index].sta_queue));
 	}
 
-	//_enter_critical(&ptxservq->sta_pending.lock, &irqL1);
-
 	rtw_list_insert_tail(&pxmitframe->list, get_list_head(&ptxservq->sta_pending));
 	ptxservq->qcnt++;
 	phwxmits[ac_index].accnt++;
-
-	//_exit_critical(&ptxservq->sta_pending.lock, &irqL1);
-
-	//_exit_critical(&pstapending->lock, &irqL0);
 
 exit:
 
@@ -2489,8 +2470,6 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 {
 	struct sk_buff *skb = *pskb;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-	_irqL irqL;
-	//if(check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true)
 	{
 		void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb);
 		int res, is_vlan_tag=0, i, do_nat25=1;
@@ -2506,7 +2485,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 		br_port = rcu_dereference(padapter->pnetdev->rx_handler_data);
 		rcu_read_unlock();
 #endif  // (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-		_enter_critical_bh(&padapter->br_ext_lock, &irqL);
+		spin_lock_bh(&padapter->br_ext_lock);
 		if (	!(skb->data[0] & 1) &&
 				br_port &&
 				memcmp(skb->data+MACADDRLEN, padapter->br_mac, MACADDRLEN) &&
@@ -2515,7 +2494,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 				!memcmp(padapter->scdb_mac, skb->data+MACADDRLEN, MACADDRLEN) && padapter->scdb_entry) {
 			memcpy(skb->data+MACADDRLEN, GET_MY_HWADDR(padapter), MACADDRLEN);
 			padapter->scdb_entry->ageing_timer = jiffies;
-			_exit_critical_bh(&padapter->br_ext_lock, &irqL);
+			spin_unlock_bh(&padapter->br_ext_lock);
 		}
 		else
 		//if (!priv->pmib->ethBrExtInfo.nat25_disable)
@@ -2558,7 +2537,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 					}
 				}
 			}
-			_exit_critical_bh(&padapter->br_ext_lock, &irqL);
+			spin_unlock_bh(&padapter->br_ext_lock);
 #endif // 1
 			if (do_nat25)
 			{
@@ -2693,7 +2672,6 @@ static void do_queue_select(_adapter	*padapter, struct pkt_attrib *pattrib)
 s32 rtw_xmit(_adapter *padapter, _pkt **ppkt)
 {
 #ifdef CONFIG_AP_MODE
-	_irqL irqL0;
 #endif
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct xmit_frame *pxmitframe = NULL;
@@ -2751,13 +2729,13 @@ s32 rtw_xmit(_adapter *padapter, _pkt **ppkt)
 	do_queue_select(padapter, &pxmitframe->attrib);
 
 #if defined(CONFIG_AP_MODE) || defined(CONFIG_TDLS)
-	_enter_critical_bh(&pxmitpriv->lock, &irqL0);
+	spin_lock_bh(&pxmitpriv->lock);
 	if(xmitframe_enqueue_for_sleeping_sta(padapter, pxmitframe) == true)
 	{
-		_exit_critical_bh(&pxmitpriv->lock, &irqL0);
+		spin_unlock_bh(&pxmitpriv->lock);
 		return 1;
 	}
-	_exit_critical_bh(&pxmitpriv->lock, &irqL0);
+	spin_unlock_bh(&pxmitpriv->lock);
 #endif
 
 	if (rtw_hal_xmit(padapter, pxmitframe) == false)
@@ -2771,7 +2749,6 @@ int xmitframe_enqueue_for_tdls_sleeping_sta(_adapter *padapter, struct xmit_fram
 {
 	int ret=false;
 
-	_irqL irqL;
 	struct sta_info *ptdls_sta=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
@@ -2789,13 +2766,11 @@ int xmitframe_enqueue_for_tdls_sleeping_sta(_adapter *padapter, struct xmit_fram
 			return ret;
 			}
 
-		_enter_critical_bh(&ptdls_sta->sleep_q.lock, &irqL);
+		spin_lock_bh(&ptdls_sta->sleep_q.lock);
 
 		if(ptdls_sta->state&WIFI_SLEEP_STATE)
 		{
 			rtw_list_delete(&pxmitframe->list);
-
-			//_enter_critical_bh(&psta->sleep_q.lock, &irqL);
 
 			rtw_list_insert_tail(&pxmitframe->list, get_list_head(&ptdls_sta->sleep_q));
 
@@ -2833,7 +2808,7 @@ int xmitframe_enqueue_for_tdls_sleeping_sta(_adapter *padapter, struct xmit_fram
 
 		}
 
-		_exit_critical_bh(&ptdls_sta->sleep_q.lock, &irqL);
+		spin_unlock_bh(&ptdls_sta->sleep_q.lock);
 	}
 
 	return ret;
@@ -2845,7 +2820,6 @@ int xmitframe_enqueue_for_tdls_sleeping_sta(_adapter *padapter, struct xmit_fram
 
 int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
-	_irqL irqL;
 	int ret=false;
 	struct sta_info *psta=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -2893,15 +2867,11 @@ int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *px
 
 	if(bmcst)
 	{
-		_enter_critical_bh(&psta->sleep_q.lock, &irqL);
+		spin_lock_bh(&psta->sleep_q.lock);
 
 		if(pstapriv->sta_dz_bitmap)//if anyone sta is in ps mode
 		{
-			//pattrib->qsel = 0x11;//HIQ
-
 			rtw_list_delete(&pxmitframe->list);
-
-			//_enter_critical_bh(&psta->sleep_q.lock, &irqL);
 
 			rtw_list_insert_tail(&pxmitframe->list, get_list_head(&psta->sleep_q));
 
@@ -2910,24 +2880,20 @@ int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *px
 			pstapriv->tim_bitmap |= BIT(0);//
 			pstapriv->sta_dz_bitmap |= BIT(0);
 
-			//DBG_8192D("enqueue, sq_len=%d, tim=%x\n", psta->sleepq_len, pstapriv->tim_bitmap);
-
 			update_beacon(padapter, _TIM_IE_, NULL, false);//tx bc/mc packets after upate bcn
-
-			//_exit_critical_bh(&psta->sleep_q.lock, &irqL);
 
 			ret = true;
 
 		}
 
-		_exit_critical_bh(&psta->sleep_q.lock, &irqL);
+		spin_unlock_bh(&psta->sleep_q.lock);
 
 		return ret;
 
 	}
 
 
-	_enter_critical_bh(&psta->sleep_q.lock, &irqL);
+	spin_lock_bh(&psta->sleep_q.lock);
 
 	if(psta->state&WIFI_SLEEP_STATE)
 	{
@@ -2936,8 +2902,6 @@ int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *px
 		if(pstapriv->sta_dz_bitmap&BIT(psta->aid))
 		{
 			rtw_list_delete(&pxmitframe->list);
-
-			//_enter_critical_bh(&psta->sleep_q.lock, &irqL);
 
 			rtw_list_insert_tail(&pxmitframe->list, get_list_head(&psta->sleep_q));
 
@@ -2971,33 +2935,19 @@ int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *px
 			{
 				pstapriv->tim_bitmap |= BIT(psta->aid);
 
-				//DBG_8192D("enqueue, sq_len=%d, tim=%x\n", psta->sleepq_len, pstapriv->tim_bitmap);
-
 				if(psta->sleepq_len==1)
 				{
-					//DBG_8192D("sleepq_len==1, update BCNTIM\n");
-					//upate BCN for TIM IE
 					update_beacon(padapter, _TIM_IE_, NULL, false);
 				}
 			}
 
-			//_exit_critical_bh(&psta->sleep_q.lock, &irqL);
-
-			//if(psta->sleepq_len > (NR_XMITFRAME>>3))
-			//{
-			//	wakeup_sta_to_xmit(padapter, psta);
-			//}
-
 			ret = true;
-
 		}
-
 	}
 
-	_exit_critical_bh(&psta->sleep_q.lock, &irqL);
+	spin_unlock_bh(&psta->sleep_q.lock);
 
 	return ret;
-
 }
 
 static void dequeue_xmitframes_to_sleeping_queue(_adapter *padapter, struct sta_info *psta, _queue *pframequeue)
@@ -3032,7 +2982,6 @@ static void dequeue_xmitframes_to_sleeping_queue(_adapter *padapter, struct sta_
 
 void stop_sta_xmit(_adapter *padapter, struct sta_info *psta)
 {
-	_irqL irqL0;
 	struct sta_info *psta_bmc;
 	struct sta_xmit_priv *pstaxmitpriv;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -3044,7 +2993,7 @@ void stop_sta_xmit(_adapter *padapter, struct sta_info *psta)
 	psta_bmc = rtw_get_bcmc_stainfo(padapter);
 
 
-	_enter_critical_bh(&pxmitpriv->lock, &irqL0);
+	spin_lock_bh(&pxmitpriv->lock);
 
 	psta->state |= WIFI_SLEEP_STATE;
 
@@ -3088,21 +3037,18 @@ void stop_sta_xmit(_adapter *padapter, struct sta_info *psta)
 		}
 	}
 #endif //CONFIG_TDLS
-	_exit_critical_bh(&pxmitpriv->lock, &irqL0);
-
-
+	spin_unlock_bh(&pxmitpriv->lock);
 }
 
 void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 {
-	_irqL irqL;
 	u8 update_mask=0, wmmps_ac=0;
 	struct sta_info *psta_bmc;
 	_list	*xmitframe_plist, *xmitframe_phead;
 	struct xmit_frame *pxmitframe=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	_enter_critical_bh(&psta->sleep_q.lock, &irqL);
+	spin_lock_bh(&psta->sleep_q.lock);
 
 	xmitframe_phead = get_list_head(&psta->sleep_q);
 	xmitframe_plist = get_next(xmitframe_phead);
@@ -3159,12 +3105,10 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 
 		pxmitframe->attrib.triggered = 1;
 
-		_exit_critical_bh(&psta->sleep_q.lock, &irqL);
+		spin_unlock_bh(&psta->sleep_q.lock);
 		if(rtw_hal_xmit(padapter, pxmitframe) == true)
-		{
 			rtw_os_xmit_complete(padapter, pxmitframe);
-		}
-		_enter_critical_bh(&psta->sleep_q.lock, &irqL);
+		spin_lock_bh(&psta->sleep_q.lock);
 
 	}
 
@@ -3176,15 +3120,12 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 			if(psta->state&WIFI_SLEEP_STATE)
 				psta->state ^= WIFI_SLEEP_STATE;
 
-			_exit_critical_bh(&psta->sleep_q.lock, &irqL);
+			spin_unlock_bh(&psta->sleep_q.lock);
 			return;
 		}
 #endif //CONFIG_TDLS
 		pstapriv->tim_bitmap &= ~BIT(psta->aid);
 
-		//DBG_8192D("wakeup to xmit, qlen==0, update_BCNTIM, tim=%x\n", pstapriv->tim_bitmap);
-		//upate BCN for TIM IE
-		//update_BCNTIM(padapter);
 		update_mask = BIT(0);
 
 		if(psta->state&WIFI_SLEEP_STATE)
@@ -3199,7 +3140,7 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 		pstapriv->sta_dz_bitmap &= ~BIT(psta->aid);
 	}
 
-	_exit_critical_bh(&psta->sleep_q.lock, &irqL);
+	spin_unlock_bh(&psta->sleep_q.lock);
 
 
 	//for BC/MC Frames
@@ -3209,7 +3150,7 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 
 	if((pstapriv->sta_dz_bitmap&0xfffe) == 0x0)//no any sta in ps mode
 	{
-		_enter_critical_bh(&psta_bmc->sleep_q.lock, &irqL);
+		spin_lock_bh(&psta_bmc->sleep_q.lock);
 
 		xmitframe_phead = get_list_head(&psta_bmc->sleep_q);
 		xmitframe_plist = get_next(xmitframe_phead);
@@ -3231,12 +3172,12 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 
 			pxmitframe->attrib.triggered = 1;
 
-			_exit_critical_bh(&psta_bmc->sleep_q.lock, &irqL);
+			spin_unlock_bh(&psta_bmc->sleep_q.lock);
 			if(rtw_hal_xmit(padapter, pxmitframe) == true)
 			{
 				rtw_os_xmit_complete(padapter, pxmitframe);
 			}
-			_enter_critical_bh(&psta_bmc->sleep_q.lock, &irqL);
+			spin_lock_bh(&psta_bmc->sleep_q.lock);
 
 
 		}
@@ -3252,7 +3193,7 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 			update_mask |= BIT(1);
 		}
 
-		_exit_critical_bh(&psta_bmc->sleep_q.lock, &irqL);
+		spin_unlock_bh(&psta_bmc->sleep_q.lock);
 
 	}
 
@@ -3267,13 +3208,12 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 
 void xmit_delivery_enabled_frames(_adapter *padapter, struct sta_info *psta)
 {
-	_irqL irqL;
 	u8 wmmps_ac=0;
 	_list	*xmitframe_plist, *xmitframe_phead;
 	struct xmit_frame *pxmitframe=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	_enter_critical_bh(&psta->sleep_q.lock, &irqL);
+	spin_lock_bh(&psta->sleep_q.lock);
 
 	xmitframe_phead = get_list_head(&psta->sleep_q);
 	xmitframe_plist = get_next(xmitframe_phead);
@@ -3336,7 +3276,7 @@ void xmit_delivery_enabled_frames(_adapter *padapter, struct sta_info *psta)
 #ifdef CONFIG_TDLS
 			if(psta->tdls_sta_state & TDLS_LINKED_STATE )
 			{
-				_exit_critical_bh(&psta->sleep_q.lock, &irqL);
+				spin_unlock_bh(&psta->sleep_q.lock);
 				return;
 			}
 #endif //CONFIG_TDLS
@@ -3351,8 +3291,7 @@ void xmit_delivery_enabled_frames(_adapter *padapter, struct sta_info *psta)
 
 	}
 
-	_exit_critical_bh(&psta->sleep_q.lock, &irqL);
-
+	spin_unlock_bh(&psta->sleep_q.lock);
 }
 
 #endif

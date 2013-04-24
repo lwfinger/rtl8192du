@@ -1482,7 +1482,6 @@ static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct wireless_dev *rtw_wdev = wiphy_to_wdev(wiphy);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	_irqL irqL;
 	_queue *queue = &pmlmepriv->scanned_queue;
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
@@ -1568,19 +1567,19 @@ static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
 
 	rtw_wdev->iftype = type;
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
-	_enter_critical_bh(&queue->lock, &irqL);
+	spin_lock_bh(&pmlmepriv->lock);
+	spin_lock_bh(&queue->lock);
 
 	if (rtw_set_802_11_infrastructure_mode(padapter, networkType) ==false)
 	{
 		rtw_wdev->iftype = old_type;
 		ret = -EPERM;
-		_exit_critical_bh(&queue->lock, &irqL);
-		_exit_critical_bh(&pmlmepriv->lock, &irqL);
+		spin_unlock_bh(&queue->lock);
+		spin_unlock_bh(&pmlmepriv->lock);
 		goto exit;
 	}
-	_exit_critical_bh(&queue->lock, &irqL);
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock_bh(&queue->lock);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 	rtw_setopmode_cmd(padapter, networkType);
 
@@ -1591,9 +1590,8 @@ exit:
 
 void rtw_cfg80211_indicate_scan_done(struct rtw_wdev_priv *pwdev_priv, bool aborted)
 {
-	_irqL	irqL;
 
-	_enter_critical_bh(&pwdev_priv->scan_req_lock, &irqL);
+	spin_lock_bh(&pwdev_priv->scan_req_lock);
 	if(pwdev_priv->scan_request != NULL)
 	{
 		//struct cfg80211_scan_request *scan_request = pwdev_priv->scan_request;
@@ -1620,12 +1618,11 @@ void rtw_cfg80211_indicate_scan_done(struct rtw_wdev_priv *pwdev_priv, bool abor
 		DBG_871X("%s without scan req\n", __FUNCTION__);
 		#endif
 	}
-	_exit_critical_bh(&pwdev_priv->scan_req_lock, &irqL);
+	spin_unlock_bh(&pwdev_priv->scan_req_lock);
 }
 
 void rtw_cfg80211_surveydone_event_callback(_adapter *padapter)
 {
-	_irqL	irqL;
 	_list					*plist, *phead;
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	_queue				*queue	= &(pmlmepriv->scanned_queue);
@@ -1643,7 +1640,7 @@ void rtw_cfg80211_surveydone_event_callback(_adapter *padapter)
 	DBG_8192C("%s\n", __func__);
 #endif
 
-	_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
+	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
 
 	phead = get_list_head(queue);
 	plist = get_next(phead);
@@ -1670,7 +1667,7 @@ void rtw_cfg80211_surveydone_event_callback(_adapter *padapter)
 
 	}
 
-	_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
+	spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 
 	//call this after other things have been done
 	rtw_cfg80211_indicate_scan_done(wdev_to_priv(padapter->rtw_wdev), false);
@@ -1793,7 +1790,6 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	struct mlme_priv *pmlmepriv= &padapter->mlmepriv;
 	NDIS_802_11_SSID ssid[RTW_SSID_SCAN_AMOUNT];
 	struct rtw_ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
-	_irqL	irqL;
 	u8 *wps_ie=NULL;
 	uint wps_ielen=0;
 	u8 *p2p_ie=NULL;
@@ -1830,9 +1826,9 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	}
 #endif
 
-	_enter_critical_bh(&pwdev_priv->scan_req_lock, &irqL);
+	spin_lock_bh(&pwdev_priv->scan_req_lock);
 	pwdev_priv->scan_request = request;
-	_exit_critical_bh(&pwdev_priv->scan_req_lock, &irqL);
+	spin_unlock_bh(&pwdev_priv->scan_req_lock);
 
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 	{
@@ -1967,7 +1963,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 		ch[i].flags = request->channels[i]->flags;
 	}
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock_bh(&pmlmepriv->lock);
 	if (request->n_channels == 1) {
 		_rtw_memcpy(&ch[1], &ch[0], sizeof(struct rtw_ieee80211_channel));
 		_rtw_memcpy(&ch[2], &ch[0], sizeof(struct rtw_ieee80211_channel));
@@ -1975,7 +1971,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	} else {
 		_status = rtw_sitesurvey_cmd(padapter, ssid, RTW_SSID_SCAN_AMOUNT, NULL, 0);
 	}
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 
 	if(_status == false)
@@ -2373,7 +2369,6 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 				 struct cfg80211_connect_params *sme)
 {
 	int ret=0;
-	_irqL irqL;
 	_list *phead;
 	struct wlan_network *pnetwork = NULL;
 	NDIS_802_11_AUTHENTICATION_MODE authmode;
@@ -2454,8 +2449,8 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		rtw_scan_abort(padapter);
 	}
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
-	_enter_critical_bh(&queue->lock, &irqL);
+	spin_lock_bh(&pmlmepriv->lock);
+	spin_lock_bh(&queue->lock);
 
 	phead = get_list_head(queue);
 	pmlmepriv->pscanned = get_next(phead);
@@ -2521,8 +2516,8 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	{
 		ret = -ENOENT;
 		DBG_8192C("connect, matched == false, goto exit\n");
-		_exit_critical_bh(&queue->lock, &irqL);
-		_exit_critical_bh(&pmlmepriv->lock, &irqL);
+		spin_unlock_bh(&queue->lock);
+		spin_unlock_bh(&pmlmepriv->lock);
 		goto exit;
 	}
 
@@ -2530,12 +2525,12 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	if (rtw_set_802_11_infrastructure_mode(padapter, pnetwork->network.InfrastructureMode) == false)
 	{
 		ret = -EPERM;
-		_exit_critical_bh(&queue->lock, &irqL);
-		_exit_critical_bh(&pmlmepriv->lock, &irqL);
+		spin_unlock_bh(&queue->lock);
+		spin_unlock_bh(&pmlmepriv->lock);
 		goto exit;
 	}
-	_exit_critical_bh(&queue->lock, &irqL);
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock_bh(&queue->lock);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 	psecuritypriv->ndisencryptstatus = Ndis802_11EncryptionDisabled;
 	psecuritypriv->dot11PrivacyAlgrthm = _NO_PRIVACY_;
@@ -3527,7 +3522,6 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 			       u8 *mac)
 {
 	int ret=0;
-	_irqL irqL;
 	_list	*phead, *plist;
 	u8 updated;
 	struct sta_info *psta = NULL;
@@ -3566,7 +3560,7 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 	}
 
 
-	_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	spin_lock_bh(&pstapriv->asoc_list_lock);
 
 	phead = &pstapriv->asoc_list;
 	plist = get_next(phead);
@@ -3591,9 +3585,9 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 				rtw_list_delete(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 
-				//_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+				//spin_unlock_bh(&pstapriv->asoc_list_lock);
 				updated = ap_free_sta(padapter, psta, true, WLAN_REASON_DEAUTH_LEAVING);
-				//_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+				//spin_lock_bh(&pstapriv->asoc_list_lock);
 
 				psta = NULL;
 
@@ -3604,7 +3598,7 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 
 	}
 
-	_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 	associated_clients_update(padapter, updated);
 

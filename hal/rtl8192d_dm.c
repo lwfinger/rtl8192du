@@ -1347,13 +1347,12 @@ static void PWDB_Monitor(
 
 	if(check_fwstate(&Adapter->mlmepriv, WIFI_AP_STATE|WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == true)
 	{
-		_irqL irqL;
 		_list	*plist, *phead;
 		struct sta_info *psta;
 		struct sta_priv *pstapriv = &Adapter->stapriv;
 		u8 bcast_addr[ETH_ALEN]= {0xff,0xff,0xff,0xff,0xff,0xff};
 
-		_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
+		spin_lock_bh(&pstapriv->sta_hash_lock);
 
 		for(i=0; i< NUM_STA; i++)
 		{
@@ -1384,7 +1383,7 @@ static void PWDB_Monitor(
 			}
 		}
 
-		_exit_critical_bh(&pstapriv->sta_hash_lock, &irqL);
+		spin_unlock_bh(&pstapriv->sta_hash_lock);
 
 		if(pHalData->fw_ractrl == true)
 		{

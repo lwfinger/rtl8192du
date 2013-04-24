@@ -615,7 +615,6 @@ static u32 xmitframe_need_length(struct xmit_frame *pxmitframe)
 void UpdateEarlyModeInfo8192D(_adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq);
 void UpdateEarlyModeInfo8192D(_adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq)
 {
-	_irqL irqL;
 	u32	len;
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	struct pkt_attrib	*pattrib = &pxmitframe->attrib;
@@ -628,7 +627,7 @@ void UpdateEarlyModeInfo8192D(_adapter *padapter, struct xmit_frame *pxmitframe,
 	pxmitframe->EMPktNum = 0;
 
 	// dequeue same priority packet from station tx queue
-	_enter_critical_bh(&pxmitpriv->lock, &irqL);
+	spin_lock_bh(&pxmitpriv->lock);
 
 	xmitframe_phead = get_list_head(&ptxservq->sta_pending);
 	xmitframe_plist = get_next(xmitframe_phead);
@@ -641,7 +640,7 @@ void UpdateEarlyModeInfo8192D(_adapter *padapter, struct xmit_frame *pxmitframe,
 		pxmitframe->EMPktLen[pxmitframe->EMPktNum] = len;
 		pxmitframe->EMPktNum++;
 	}
-	_exit_critical_bh(&pxmitpriv->lock, &irqL);
+	spin_unlock_bh(&pxmitpriv->lock);
 
 }
 
@@ -656,7 +655,6 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	struct hw_xmit	*phwxmit = pxmitpriv->hwxmits;
 	struct tx_servq	*ptxservq = NULL;
 
-	_irqL irqL;
 	_list *xmitframe_plist = NULL, *xmitframe_phead = NULL;
 
 	u32	pbuf=0; // next pkt address
@@ -709,15 +707,15 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 			pxmitframe->pkt_offset = USB_92D_DUMMY_OFFSET; // first frame of aggregation, reserve 2 offset for 512 alignment and early mode
 
 			pfirstframe = pxmitframe;
-			_enter_critical_bh(&pxmitpriv->lock, &irqL);
+			spin_lock_bh(&pxmitpriv->lock);
 			ptxservq = rtw_get_sta_pending(padapter, pfirstframe->attrib.psta, pfirstframe->attrib.priority, (u8 *)(&ac_index));
-			_exit_critical_bh(&pxmitpriv->lock, &irqL);
+			spin_unlock_bh(&pxmitpriv->lock);
 		}
 		//3 2. aggregate same priority and same DA(AP or STA) frames
 		else
 		{
 			// dequeue same priority packet from station tx queue
-			_enter_critical_bh(&pxmitpriv->lock, &irqL);
+			spin_lock_bh(&pxmitpriv->lock);
 
 			if (_rtw_queue_empty(&ptxservq->sta_pending) == false)
 			{
@@ -748,7 +746,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 				bulkstart = true;
 			}
 
-			_exit_critical_bh(&pxmitpriv->lock, &irqL);
+			spin_unlock_bh(&pxmitpriv->lock);
 
 			if(bulkstart)
 			{
@@ -952,14 +950,13 @@ static s32 xmitframe_direct(_adapter *padapter, struct xmit_frame *pxmitframe)
  */
 static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
-	_irqL irqL;
 	s32 res;
 	struct xmit_buf *pxmitbuf = NULL;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
-	_enter_critical_bh(&pxmitpriv->lock, &irqL);
+	spin_lock_bh(&pxmitpriv->lock);
 
 	if (rtw_txframes_sta_ac_pending(padapter, pattrib) > 0
 #ifdef CONFIG_DUALMAC_CONCURRENT
@@ -982,7 +979,7 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 	if (pxmitbuf == NULL)
 		goto enqueue;
 
-	_exit_critical_bh(&pxmitpriv->lock, &irqL);
+	spin_unlock_bh(&pxmitpriv->lock);
 
 	pxmitframe->pxmitbuf = pxmitbuf;
 	pxmitframe->buf_addr = pxmitbuf->pbuf;
@@ -997,7 +994,7 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 enqueue:
 	res = rtw_xmitframe_enqueue(padapter, pxmitframe);
-	_exit_critical_bh(&pxmitpriv->lock, &irqL);
+	spin_unlock_bh(&pxmitpriv->lock);
 
 	if (res != _SUCCESS) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("pre_xmitframe: enqueue xmitframe fail\n"));

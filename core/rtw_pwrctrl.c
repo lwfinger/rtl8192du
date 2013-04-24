@@ -389,7 +389,6 @@ void rtw_set_ps_mode(PADAPTER padapter, u8 ps_mode, u8 smart_ps)
 #endif //CONFIG_P2P
 #ifdef CONFIG_TDLS
 	struct sta_priv *pstapriv = &padapter->stapriv;
-	_irqL irqL;
 	int i, j;
 	_list	*plist, *phead;
 	struct sta_info *ptdls_sta;
@@ -424,10 +423,9 @@ _func_enter_;
 			DBG_8192D("rtw_set_ps_mode(): Busy Traffic , Leave 802.11 power save..\n");
 
 #ifdef CONFIG_TDLS
-			_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
+			spin_lock_bh(&pstapriv->sta_hash_lock);
 
-			for(i=0; i< NUM_STA; i++)
-			{
+			for(i=0; i< NUM_STA; i++) {
 				phead = &(pstapriv->sta_hash[i]);
 				plist = get_next(phead);
 
@@ -441,7 +439,7 @@ _func_enter_;
 				}
 			}
 
-			_exit_critical_bh(&pstapriv->sta_hash_lock, &irqL);
+			spin_unlock_bh(&pstapriv->sta_hash_lock);
 #endif //CONFIG_TDLS
 
 			pwrpriv->smart_ps = smart_ps;
@@ -478,7 +476,7 @@ _func_enter_;
 			DBG_8192D("rtw_set_ps_mode(): Enter 802.11 power save mode...\n");
 
 #ifdef CONFIG_TDLS
-			_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
+			spin_lock_bh(&pstapriv->sta_hash_lock);
 
 			for(i=0; i< NUM_STA; i++)
 			{
@@ -495,7 +493,7 @@ _func_enter_;
 				}
 			}
 
-			_exit_critical_bh(&pstapriv->sta_hash_lock, &irqL);
+			spin_unlock_bh(&pstapriv->sta_hash_lock);
 #endif //CONFIG_TDLS
 
 			pwrpriv->smart_ps = smart_ps;

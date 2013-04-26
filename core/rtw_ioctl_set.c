@@ -37,7 +37,7 @@ extern void indicate_wx_scan_complete_event(_adapter *padapter);
 		(addr[4] == 0xff) && (addr[5] == 0xff) )  ? true : false \
 )
 
-u8 rtw_validate_ssid(NDIS_802_11_SSID *ssid)
+u8 rtw_validate_ssid(struct ndis_802_11_ssid *ssid)
 {
 	u8	 i;
 	u8	ret=true;
@@ -141,8 +141,8 @@ _func_enter_;
 
 				pibss = padapter->registrypriv.dev_network.MacAddress;
 
-				_rtw_memset(&pdev_network->Ssid, 0, sizeof(NDIS_802_11_SSID));
-				_rtw_memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(NDIS_802_11_SSID));
+				_rtw_memset(&pdev_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
+				_rtw_memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(struct ndis_802_11_ssid));
 
 				rtw_update_registrypriv_dev_network(padapter);
 
@@ -303,7 +303,7 @@ _func_exit_;
 	return status;
 }
 
-u8 rtw_set_802_11_ssid(_adapter* padapter, NDIS_802_11_SSID *ssid)
+u8 rtw_set_802_11_ssid(_adapter* padapter, struct ndis_802_11_ssid *ssid)
 {
 	u8 status = _SUCCESS;
 	u32 cur_time = 0;
@@ -417,7 +417,7 @@ handle_tkip_countermeasure:
 	}
 	#endif
 
-	_rtw_memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(NDIS_802_11_SSID));
+	_rtw_memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(struct ndis_802_11_ssid));
 	pmlmepriv->assoc_by_bssid=false;
 
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == true) {
@@ -554,7 +554,7 @@ _func_exit_;
 	return true;
 }
 
-u8 rtw_set_802_11_bssid_list_scan(_adapter* padapter, NDIS_802_11_SSID *pssid, int ssid_max_num)
+u8 rtw_set_802_11_bssid_list_scan(_adapter* padapter, struct ndis_802_11_ssid *pssid, int ssid_max_num)
 {
 	struct	mlme_priv		*pmlmepriv= &padapter->mlmepriv;
 	u8	res=true;

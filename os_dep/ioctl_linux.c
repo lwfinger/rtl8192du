@@ -1694,7 +1694,7 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 	int ret = 0;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv= &padapter->mlmepriv;
-	NDIS_802_11_SSID ssid[RTW_SSID_SCAN_AMOUNT];
+	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 #endif //CONFIG_P2P
@@ -1811,7 +1811,7 @@ _func_enter_;
 	}
 #endif //CONFIG_P2P
 
-	_rtw_memset(ssid, 0, sizeof(NDIS_802_11_SSID)*RTW_SSID_SCAN_AMOUNT);
+	_rtw_memset(ssid, 0, sizeof(struct ndis_802_11_ssid)*RTW_SSID_SCAN_AMOUNT);
 
 #if WIRELESS_EXT >= 17
 	if (wrqu->data.length == sizeof(struct iw_scan_req))
@@ -2093,7 +2093,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 	s8 status = true;
 	struct wlan_network *pnetwork = NULL;
 	NDIS_802_11_AUTHENTICATION_MODE authmode;
-	NDIS_802_11_SSID ndis_ssid;
+	struct ndis_802_11_ssid ndis_ssid;
 	u8 *dst_ssid, *src_ssid;
 
 	uint ret = 0, len;
@@ -2182,7 +2182,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 		if (wrqu->essid.length != 33)
 			DBG_8192D("ssid=%s, len=%d\n", extra, wrqu->essid.length);
 
-		_rtw_memset(&ndis_ssid, 0, sizeof(NDIS_802_11_SSID));
+		_rtw_memset(&ndis_ssid, 0, sizeof(struct ndis_802_11_ssid));
 		ndis_ssid.SsidLength = len;
 		_rtw_memcpy(ndis_ssid.Ssid, extra, len);
 		src_ssid = ndis_ssid.Ssid;
@@ -5372,7 +5372,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 		//	Reset the content of struct tx_provdisc_req_info excluded the wps_config_method_request.
 		_rtw_memset(pwdinfo->tx_prov_disc_info.peerDevAddr, 0x00, ETH_ALEN);
 		_rtw_memset(pwdinfo->tx_prov_disc_info.peerIFAddr, 0x00, ETH_ALEN);
-		_rtw_memset(&pwdinfo->tx_prov_disc_info.ssid, 0x00, sizeof(NDIS_802_11_SSID));
+		_rtw_memset(&pwdinfo->tx_prov_disc_info.ssid, 0x00, sizeof(struct ndis_802_11_ssid));
 		pwdinfo->tx_prov_disc_info.peer_channel_num[ 0 ] = 0;
 		pwdinfo->tx_prov_disc_info.peer_channel_num[ 1 ] = 0;
 		pwdinfo->tx_prov_disc_info.benable = false;
@@ -5518,7 +5518,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 
 		if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_CLIENT))
 		{
-			_rtw_memcpy(&pwdinfo->tx_prov_disc_info.ssid, &pnetwork->network.Ssid, sizeof(NDIS_802_11_SSID));
+			_rtw_memcpy(&pwdinfo->tx_prov_disc_info.ssid, &pnetwork->network.Ssid, sizeof(struct ndis_802_11_ssid));
 		}
 		else if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_DEVICE) || rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO))
 		{

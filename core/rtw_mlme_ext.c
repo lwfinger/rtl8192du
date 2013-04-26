@@ -6559,7 +6559,7 @@ void issue_probersp(_adapter *padapter, unsigned char *da, u8 is_valid_p2p_probe
 
 }
 
-int _issue_probereq(_adapter *padapter, NDIS_802_11_SSID *pssid, u8 *da, int wait_ack)
+int _issue_probereq(_adapter *padapter, struct ndis_802_11_ssid *pssid, u8 *da, int wait_ack)
 {
 	int ret = _FAIL;
 	struct xmit_frame		*pmgntframe;
@@ -6661,12 +6661,12 @@ exit:
 	return ret;
 }
 
-inline void issue_probereq(_adapter *padapter, NDIS_802_11_SSID *pssid, u8 *da)
+inline void issue_probereq(_adapter *padapter, struct ndis_802_11_ssid *pssid, u8 *da)
 {
 	_issue_probereq(padapter, pssid, da, false);
 }
 
-int issue_probereq_ex(_adapter *padapter, NDIS_802_11_SSID *pssid, u8 *da,
+int issue_probereq_ex(_adapter *padapter, struct ndis_802_11_ssid *pssid, u8 *da,
 	int try_cnt, int wait_ms)
 {
 	int ret;

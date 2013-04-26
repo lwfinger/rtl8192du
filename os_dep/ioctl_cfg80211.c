@@ -1788,7 +1788,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	int ret = 0;
 	_adapter *padapter = wiphy_to_adapter(wiphy);
 	struct mlme_priv *pmlmepriv= &padapter->mlmepriv;
-	NDIS_802_11_SSID ssid[RTW_SSID_SCAN_AMOUNT];
+	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
 	struct rtw_ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
 	u8 *wps_ie=NULL;
 	uint wps_ielen=0;
@@ -1941,7 +1941,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 #endif //CONFIG_P2P
 
 
-	_rtw_memset(ssid, 0, sizeof(NDIS_802_11_SSID)*RTW_SSID_SCAN_AMOUNT);
+	_rtw_memset(ssid, 0, sizeof(struct ndis_802_11_ssid)*RTW_SSID_SCAN_AMOUNT);
 	//parsing request ssids, n_ssids
 	for (i = 0; i < request->n_ssids && i < RTW_SSID_SCAN_AMOUNT; i++) {
 		#ifdef CONFIG_DEBUG_CFG80211
@@ -2372,7 +2372,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	_list *phead;
 	struct wlan_network *pnetwork = NULL;
 	NDIS_802_11_AUTHENTICATION_MODE authmode;
-	NDIS_802_11_SSID ndis_ssid;
+	struct ndis_802_11_ssid ndis_ssid;
 	u8 *dst_ssid, *src_ssid;
 	u8 *dst_bssid, *src_bssid;
 	//u8 matched_by_bssid=false;
@@ -2429,7 +2429,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	}
 
 
-	_rtw_memset(&ndis_ssid, 0, sizeof(NDIS_802_11_SSID));
+	_rtw_memset(&ndis_ssid, 0, sizeof(struct ndis_802_11_ssid));
 	ndis_ssid.SsidLength = sme->ssid_len;
 	_rtw_memcpy(ndis_ssid.Ssid, sme->ssid, sme->ssid_len);
 

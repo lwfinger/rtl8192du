@@ -1397,7 +1397,7 @@ int rtw_check_beacon_data(_adapter *padapter, u8 *pbuf,  int len)
 	p = rtw_get_ie(ie + _BEACON_IE_OFFSET_, _SSID_IE_, &ie_len, (pbss_network->IELength -_BEACON_IE_OFFSET_));
 	if(p && ie_len>0)
 	{
-		_rtw_memset(&pbss_network->Ssid, 0, sizeof(NDIS_802_11_SSID));
+		_rtw_memset(&pbss_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
 		_rtw_memcpy(pbss_network->Ssid.Ssid, (p + 2), ie_len);
 		pbss_network->Ssid.SsidLength = ie_len;
 	}

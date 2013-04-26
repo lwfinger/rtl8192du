@@ -628,7 +628,7 @@ rtw_sitesurvey_cmd(~)
 	### NOTE:#### (!!!!)
 	MUST TAKE CARE THAT BEFORE CALLING THIS FUNC, YOU SHOULD HAVE LOCKED pmlmepriv->lock
 */
-u8 rtw_sitesurvey_cmd(_adapter  *padapter, NDIS_802_11_SSID *ssid, int ssid_num,
+u8 rtw_sitesurvey_cmd(_adapter  *padapter, struct ndis_802_11_ssid *ssid, int ssid_num,
 	struct rtw_ieee80211_channel *ch, int ch_num)
 {
 	u8 res = _FAIL;
@@ -675,7 +675,7 @@ _func_enter_;
 		int i;
 		for (i=0; i<ssid_num && i< RTW_SSID_SCAN_AMOUNT; i++) {
 			if (ssid[i].SsidLength) {
-				_rtw_memcpy(&psurveyPara->ssid[i], &ssid[i], sizeof(NDIS_802_11_SSID));
+				_rtw_memcpy(&psurveyPara->ssid[i], &ssid[i], sizeof(struct ndis_802_11_ssid));
 				psurveyPara->ssid_num++;
 				if (0)
 				DBG_8192D(FUNC_ADPT_FMT" ssid:(%s, %d)\n", FUNC_ADPT_ARG(padapter),
@@ -1110,7 +1110,7 @@ _func_enter_;
 	}
 	/* // for IEs is pointer
 	t_len = sizeof (u32) + sizeof (NDIS_802_11_MAC_ADDRESS) + 2 +
-			sizeof (NDIS_802_11_SSID) + sizeof (u32) +
+			sizeof (struct ndis_802_11_ssid) + sizeof (u32) +
 			sizeof (NDIS_802_11_RSSI) + sizeof (NDIS_802_11_NETWORK_TYPE) +
 			sizeof (NDIS_802_11_CONFIGURATION) +
 			sizeof (NDIS_802_11_NETWORK_INFRASTRUCTURE) +

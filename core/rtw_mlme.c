@@ -69,7 +69,7 @@ _func_enter_;
 
 	set_scanned_network_val(pmlmepriv, 0);
 
-	_rtw_memset(&pmlmepriv->assoc_ssid,0,sizeof(NDIS_802_11_SSID));
+	_rtw_memset(&pmlmepriv->assoc_ssid,0,sizeof(struct ndis_802_11_ssid));
 
 	pbuf = rtw_zvmalloc(MAX_BSS_CNT * (sizeof(struct wlan_network)));
 
@@ -1070,8 +1070,8 @@ _func_enter_;
 
 					RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("switching to adhoc master\n"));
 
-					_rtw_memset(&pdev_network->Ssid, 0, sizeof(NDIS_802_11_SSID));
-					_rtw_memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(NDIS_802_11_SSID));
+					_rtw_memset(&pdev_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
+					_rtw_memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(struct ndis_802_11_ssid));
 
 					rtw_update_registrypriv_dev_network(adapter);
 					rtw_generate_random_ibss(pibss);
@@ -2032,8 +2032,8 @@ _func_enter_;
 
 			_rtw_memcpy(pdev_network, &tgt_network->network, get_WLAN_BSSID_EX_sz(&tgt_network->network));
 
-			_rtw_memset(&pdev_network->Ssid, 0, sizeof(NDIS_802_11_SSID));
-			_rtw_memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(NDIS_802_11_SSID));
+			_rtw_memset(&pdev_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
+			_rtw_memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(struct ndis_802_11_ssid));
 
 			rtw_update_registrypriv_dev_network(adapter);
 
@@ -2844,7 +2844,7 @@ _func_enter_;
 
 	_rtw_memcpy(pdev_network->MacAddress, myhwaddr, ETH_ALEN);
 
-	_rtw_memcpy(&pdev_network->Ssid, &pregistrypriv->ssid, sizeof(NDIS_802_11_SSID));
+	_rtw_memcpy(&pdev_network->Ssid, &pregistrypriv->ssid, sizeof(struct ndis_802_11_ssid));
 
 	pdev_network->Configuration.Length=sizeof(NDIS_802_11_CONFIGURATION);
 	pdev_network->Configuration.BeaconPeriod = 100;
@@ -3301,7 +3301,7 @@ void _rtw_roaming(_adapter *padapter, struct wlan_network *tgt_network)
 		DBG_8192D("roaming from %s(%pM), length:%d\n",
 				pnetwork->network.Ssid.Ssid, pnetwork->network.MacAddress,
 				pnetwork->network.Ssid.SsidLength);
-		_rtw_memcpy(&pmlmepriv->assoc_ssid, &pnetwork->network.Ssid, sizeof(NDIS_802_11_SSID));
+		_rtw_memcpy(&pmlmepriv->assoc_ssid, &pnetwork->network.Ssid, sizeof(struct ndis_802_11_ssid));
 
 		pmlmepriv->assoc_by_bssid = false;
 

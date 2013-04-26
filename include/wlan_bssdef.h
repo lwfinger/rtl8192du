@@ -37,11 +37,10 @@ typedef  u32  NDIS_802_11_KEY_INDEX;
 typedef unsigned long long NDIS_802_11_KEY_RSC;
 
 
-typedef struct _NDIS_802_11_SSID
-{
-  u32  SsidLength;
-  u8  Ssid[32];
-} NDIS_802_11_SSID, *PNDIS_802_11_SSID;
+struct ndis_802_11_ssid {
+	u32  SsidLength;
+	u8  Ssid[32];
+};
 
 typedef enum _NDIS_802_11_NETWORK_TYPE
 {
@@ -101,7 +100,7 @@ typedef struct _NDIS_802_11_VARIABLE_IEs
 
 /*
 Length is the 4 bytes multiples of the sume of
-	sizeof (NDIS_802_11_MAC_ADDRESS) + 2 + sizeof (NDIS_802_11_SSID) + sizeof (u32)
+	sizeof (NDIS_802_11_MAC_ADDRESS) + 2 + sizeof (struct ndis_802_11_ssid) + sizeof (u32)
 +   sizeof (NDIS_802_11_RSSI) + sizeof (NDIS_802_11_NETWORK_TYPE) + sizeof (NDIS_802_11_CONFIGURATION)
 +   sizeof (NDIS_802_11_RATES_EX) + IELength
 
@@ -268,7 +267,7 @@ typedef struct _WLAN_BSSID_EX
   u32  Length;
   NDIS_802_11_MAC_ADDRESS  MacAddress;
   u8  Reserved[2];//[0]: IS beacon frame
-  NDIS_802_11_SSID  Ssid;
+  struct ndis_802_11_ssid  Ssid;
   u32  Privacy;
   NDIS_802_11_RSSI  Rssi;//(in dBM,raw data ,get from PHY)
   NDIS_802_11_NETWORK_TYPE  NetworkTypeInUse;

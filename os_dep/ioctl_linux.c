@@ -35,7 +35,6 @@
 //#endif
 
 #include <usb_ops.h>
-#include <rtw_version.h>
 
 #ifdef CONFIG_MP_INCLUDED
 #include <rtw_mp.h>

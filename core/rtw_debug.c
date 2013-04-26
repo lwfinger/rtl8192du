@@ -60,7 +60,6 @@
 //#endif
 
 #ifdef CONFIG_PROC_DEBUG
-#include <rtw_version.h>
 
 int proc_get_drv_version(char *page, char **start,
 			  off_t offset, int count,

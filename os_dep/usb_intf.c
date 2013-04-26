@@ -25,7 +25,6 @@
 #include <recv_osdep.h>
 #include <xmit_osdep.h>
 #include <hal_intf.h>
-#include <rtw_version.h>
 #include <usb_vendor_req.h>
 #include <usb_ops.h>
 #include <usb_osintf.h>

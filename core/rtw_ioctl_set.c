@@ -446,11 +446,11 @@ rtw_set_802_11_infrastructure_mode(~)
 	MUST TAKE CARE THAT BEFORE CALLING THIS FUNC, YOU SHOULD HAVE LOCKED pmlmepriv->lock and scanned_queue->lock in sequence
 */
 u8 rtw_set_802_11_infrastructure_mode(_adapter* padapter,
-	NDIS_802_11_NETWORK_INFRASTRUCTURE networktype)
+	enum NDIS_802_11_NETWORK_INFRASTRUCTURE networktype)
 {
 	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct	wlan_network	*cur_network = &pmlmepriv->cur_network;
-	NDIS_802_11_NETWORK_INFRASTRUCTURE* pold_state = &(cur_network->network.InfrastructureMode);
+	enum NDIS_802_11_NETWORK_INFRASTRUCTURE *pold_state = &(cur_network->network.InfrastructureMode);
 
 _func_enter_;
 
@@ -464,8 +464,7 @@ _func_enter_;
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,(" change mode!"));
 		//DBG_8192D("change mode, old_mode=%d, new_mode=%d, fw_state=0x%x\n", *pold_state, networktype, get_fwstate(pmlmepriv));
 
-		if(*pold_state==Ndis802_11APMode)
-		{
+		if (*pold_state==NDIS802_11APMODE) {
 			//change to other mode from Ndis802_11APMode
 			cur_network->join_res = -1;
 
@@ -474,14 +473,14 @@ _func_enter_;
 #endif
 		}
 
-		if((check_fwstate(pmlmepriv, _FW_LINKED)== true) ||(*pold_state==Ndis802_11IBSS))
+		if((check_fwstate(pmlmepriv, _FW_LINKED)== true) ||(*pold_state==NDIS802_11IBSS))
 			rtw_disassoc_cmd(padapter, 0, true);
 
 		if((check_fwstate(pmlmepriv, _FW_LINKED)== true) ||
 			(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)== true) )
 			rtw_free_assoc_resources(padapter, 0);
 
-		if((*pold_state == Ndis802_11Infrastructure) ||(*pold_state == Ndis802_11IBSS))
+		if((*pold_state == NDIS802_11INFRA) ||(*pold_state == NDIS802_11IBSS))
 	       {
 			if(check_fwstate(pmlmepriv, _FW_LINKED) == true)
 			{
@@ -495,15 +494,15 @@ _func_enter_;
 
 		switch(networktype)
 		{
-			case Ndis802_11IBSS:
+			case NDIS802_11IBSS:
 				set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
 				break;
 
-			case Ndis802_11Infrastructure:
+			case NDIS802_11INFRA:
 				set_fwstate(pmlmepriv, WIFI_STATION_STATE);
 				break;
 
-			case Ndis802_11APMode:
+			case NDIS802_11APMODE:
 				set_fwstate(pmlmepriv, WIFI_AP_STATE);
 #ifdef CONFIG_NATIVEAP_MLME
 				start_ap_mode(padapter);
@@ -512,8 +511,8 @@ _func_enter_;
 
 				break;
 
-			case Ndis802_11AutoUnknown:
-			case Ndis802_11InfrastructureMax:
+			case NDIS802_11AUTOUNK:
+			case NDIS802_11INFRA_MAX:
 				break;
 		}
 
@@ -605,7 +604,7 @@ _func_exit_;
 	return res;
 }
 
-u8 rtw_set_802_11_authentication_mode(_adapter* padapter, NDIS_802_11_AUTHENTICATION_MODE authmode)
+u8 rtw_set_802_11_authentication_mode(_adapter* padapter, enum NDIS_802_11_AUTHENTICATION_MODE authmode)
 {
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	int res;

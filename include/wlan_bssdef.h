@@ -42,14 +42,13 @@ struct ndis_802_11_ssid {
 	u8  Ssid[32];
 };
 
-typedef enum _NDIS_802_11_NETWORK_TYPE
-{
-    Ndis802_11FH,
-    Ndis802_11DS,
-    Ndis802_11OFDM5,
-    Ndis802_11OFDM24,
-    Ndis802_11NetworkTypeMax    // not a real type, defined as an upper bound
-} NDIS_802_11_NETWORK_TYPE, *PNDIS_802_11_NETWORK_TYPE;
+enum NDIS_802_11_NETWORK_TYPE {
+	NDIS802_11FH,
+	NDIS802_11DS,
+	NDIS802_11OFDM5,
+	NDIS802_11OFDM24,
+	NDIS802_11NetworkTypeMax    // not a real type - upper bound
+};
 
 typedef struct _NDIS_802_11_CONFIGURATION_FH
 {
@@ -75,14 +74,13 @@ typedef struct _NDIS_802_11_CONFIGURATION
 
 
 
-typedef enum _NDIS_802_11_NETWORK_INFRASTRUCTURE
-{
-    Ndis802_11IBSS,
-    Ndis802_11Infrastructure,
-    Ndis802_11AutoUnknown,
-    Ndis802_11InfrastructureMax,     // Not a real value, defined as upper bound
-    Ndis802_11APMode
-} NDIS_802_11_NETWORK_INFRASTRUCTURE, *PNDIS_802_11_NETWORK_INFRASTRUCTURE;
+enum NDIS_802_11_NETWORK_INFRASTRUCTURE {
+	NDIS802_11IBSS,
+	NDIS802_11INFRA,
+	NDIS802_11AUTOUNK,
+	NDIS802_11INFRA_MAX,     // Not a real value, defined as upper bound
+	NDIS802_11APMODE
+};
 
 typedef struct _NDIS_802_11_FIXED_IEs
 {
@@ -108,33 +106,30 @@ Except the IELength, all other fields are fixed length. Therefore, we can define
 partial sum.
 */
 
-typedef enum _NDIS_802_11_AUTHENTICATION_MODE
-{
-    Ndis802_11AuthModeOpen,
-    Ndis802_11AuthModeShared,
-    Ndis802_11AuthModeAutoSwitch,
-    Ndis802_11AuthModeWPA,
-    Ndis802_11AuthModeWPAPSK,
-    Ndis802_11AuthModeWPANone,
-    Ndis802_11AuthModeMax               // Not a real mode, defined as upper bound
-} NDIS_802_11_AUTHENTICATION_MODE, *PNDIS_802_11_AUTHENTICATION_MODE;
+enum NDIS_802_11_AUTHENTICATION_MODE {
+	NDIS802_11AUTHMODEOPEN,
+	NDIS802_11AUTHMODESHARED,
+	NDIS802_11AUTHMODESWITCH,
+	NDIS802_11AUTHMODEWPA,
+	NDIS802_11AUTHMODEWPAPSK,
+	NDIS802_11AUTHMODEWPANONE,
+	NDIS802_11AUTHMODEMAX               // Not a real mode, defined as upper bound
+};
 
-typedef enum _NDIS_802_11_WEP_STATUS
-{
-    Ndis802_11WEPEnabled,
-    Ndis802_11Encryption1Enabled = Ndis802_11WEPEnabled,
-    Ndis802_11WEPDisabled,
-    Ndis802_11EncryptionDisabled = Ndis802_11WEPDisabled,
-    Ndis802_11WEPKeyAbsent,
-    Ndis802_11Encryption1KeyAbsent = Ndis802_11WEPKeyAbsent,
-    Ndis802_11WEPNotSupported,
-    Ndis802_11EncryptionNotSupported = Ndis802_11WEPNotSupported,
-    Ndis802_11Encryption2Enabled,
-    Ndis802_11Encryption2KeyAbsent,
-    Ndis802_11Encryption3Enabled,
-    Ndis802_11Encryption3KeyAbsent
-} NDIS_802_11_WEP_STATUS, *PNDIS_802_11_WEP_STATUS,
-  NDIS_802_11_ENCRYPTION_STATUS, *PNDIS_802_11_ENCRYPTION_STATUS;
+enum NDIS_802_11_ENCRYPTION_STATUS {
+	NDIS802_11WEP_ENABLED,
+	NDIS802_11ENCRYPTION1ENABLED = NDIS802_11WEP_ENABLED,
+	NDIS802_11WEPDISABLED,
+	NDIS802_11ENCRYPTION_DISABLED = NDIS802_11WEPDISABLED,
+	NDIS802_11WEPKEYABSENT,
+	NDIS802_11ENCRYPTION1KEYABSENT = NDIS802_11WEPKEYABSENT,
+	NDIS802_11WEPNOTSUPPORTED,
+	NDIS802_11ENCRYPTIONNOTSUPPORTED = NDIS802_11WEPNOTSUPPORTED,
+	NDIS802_11ENCRYPTION2ENABLED,
+	NDIS802_11ENCRYPTION2KEYABSENT,
+	NDIS802_11ENCRYPTION3ENABLED,
+	NDIS802_11ENCRYPTION3KEYABSENT
+};
 
 #define NDIS_802_11_AI_REQFI_CAPABILITIES      1
 #define NDIS_802_11_AI_REQFI_LISTENINTERVAL    2
@@ -171,12 +166,6 @@ typedef struct _NDIS_802_11_ASSOCIATION_INFORMATION
     u32                   OffsetResponseIEs;
 } NDIS_802_11_ASSOCIATION_INFORMATION, *PNDIS_802_11_ASSOCIATION_INFORMATION;
 
-typedef enum _NDIS_802_11_RELOAD_DEFAULTS
-{
-   Ndis802_11ReloadWEPKeys
-} NDIS_802_11_RELOAD_DEFAULTS, *PNDIS_802_11_RELOAD_DEFAULTS;
-
-
 // Key mapping keys require a BSSID
 typedef struct _NDIS_802_11_KEY
 {
@@ -210,17 +199,15 @@ typedef struct _NDIS_802_11_AUTHENTICATION_REQUEST
     u32 Flags;
 } NDIS_802_11_AUTHENTICATION_REQUEST, *PNDIS_802_11_AUTHENTICATION_REQUEST;
 
-typedef enum _NDIS_802_11_STATUS_TYPE
-{
+enum NDIS_802_11_STATUS_TYPE {
 	Ndis802_11StatusType_Authentication,
 	Ndis802_11StatusType_MediaStreamMode,
 	Ndis802_11StatusType_PMKID_CandidateList,
 	Ndis802_11StatusTypeMax    // not a real type, defined as an upper bound
-} NDIS_802_11_STATUS_TYPE, *PNDIS_802_11_STATUS_TYPE;
+};
 
-typedef struct _NDIS_802_11_STATUS_INDICATION
-{
-    NDIS_802_11_STATUS_TYPE StatusType;
+typedef struct _NDIS_802_11_STATUS_INDICATION {
+	enum NDIS_802_11_STATUS_TYPE StatusType;
 } NDIS_802_11_STATUS_INDICATION, *PNDIS_802_11_STATUS_INDICATION;
 
 // mask for authentication/integrity fields
@@ -264,19 +251,19 @@ typedef struct _WLAN_PHY_INFO
 
 typedef struct _WLAN_BSSID_EX
 {
-  u32  Length;
-  NDIS_802_11_MAC_ADDRESS  MacAddress;
-  u8  Reserved[2];//[0]: IS beacon frame
-  struct ndis_802_11_ssid  Ssid;
-  u32  Privacy;
-  NDIS_802_11_RSSI  Rssi;//(in dBM,raw data ,get from PHY)
-  NDIS_802_11_NETWORK_TYPE  NetworkTypeInUse;
-  NDIS_802_11_CONFIGURATION  Configuration;
-  NDIS_802_11_NETWORK_INFRASTRUCTURE  InfrastructureMode;
-  NDIS_802_11_RATES_EX  SupportedRates;
-  WLAN_PHY_INFO	PhyInfo;
-  u32  IELength;
-  u8  IEs[MAX_IE_SZ];	//(timestamp, beacon interval, and capability information)
+	u32  Length;
+	NDIS_802_11_MAC_ADDRESS  MacAddress;
+	u8  Reserved[2];//[0]: IS beacon frame
+	struct ndis_802_11_ssid  Ssid;
+	u32  Privacy;
+	NDIS_802_11_RSSI  Rssi;//(in dBM,raw data ,get from PHY)
+	enum NDIS_802_11_NETWORK_TYPE  NetworkTypeInUse;
+	NDIS_802_11_CONFIGURATION  Configuration;
+	enum NDIS_802_11_NETWORK_INFRASTRUCTURE  InfrastructureMode;
+	NDIS_802_11_RATES_EX  SupportedRates;
+	WLAN_PHY_INFO	PhyInfo;
+	u32  IELength;
+	u8  IEs[MAX_IE_SZ];	//(timestamp, beacon interval, and capability information)
 } __attribute__((packed)) WLAN_BSSID_EX, *PWLAN_BSSID_EX;
 
 __inline  static uint get_WLAN_BSSID_EX_sz(WLAN_BSSID_EX *bss)
@@ -350,8 +337,8 @@ typedef struct _NDIS_802_11_PMKID_CANDIDATE_LIST
 
 typedef struct _NDIS_802_11_AUTHENTICATION_ENCRYPTION
 {
-	NDIS_802_11_AUTHENTICATION_MODE AuthModeSupported;
-	NDIS_802_11_ENCRYPTION_STATUS EncryptStatusSupported;
+	enum NDIS_802_11_AUTHENTICATION_MODE AuthModeSupported;
+	enum NDIS_802_11_ENCRYPTION_STATUS EncryptStatusSupported;
 
 } NDIS_802_11_AUTHENTICATION_ENCRYPTION, *PNDIS_802_11_AUTHENTICATION_ENCRYPTION;
 

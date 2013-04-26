@@ -1088,7 +1088,7 @@ u8 rtw_joinbss_cmd(_adapter  *padapter, struct wlan_network* pnetwork)
 	struct security_priv	*psecuritypriv=&padapter->securitypriv;
 	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
 	struct ht_priv			*phtpriv = &pmlmepriv->htpriv;
-	NDIS_802_11_NETWORK_INFRASTRUCTURE ndis_network_mode = pnetwork->network.InfrastructureMode;
+	enum NDIS_802_11_NETWORK_INFRASTRUCTURE ndis_network_mode = pnetwork->network.InfrastructureMode;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -1125,17 +1125,17 @@ _func_enter_;
 	{
 		switch(ndis_network_mode)
 		{
-			case Ndis802_11IBSS:
+			case NDIS802_11IBSS:
 				set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
 				break;
 
-			case Ndis802_11Infrastructure:
+			case NDIS802_11INFRA:
 				set_fwstate(pmlmepriv, WIFI_STATION_STATE);
 				break;
 
-			case Ndis802_11APMode:
-			case Ndis802_11AutoUnknown:
-			case Ndis802_11InfrastructureMax:
+			case NDIS802_11APMODE:
+			case NDIS802_11AUTOUNK:
+			case NDIS802_11INFRA_MAX:
 				break;
 
 		}
@@ -1294,7 +1294,7 @@ _func_exit_;
 	return res;
 }
 
-u8 rtw_setopmode_cmd(_adapter  *padapter, NDIS_802_11_NETWORK_INFRASTRUCTURE networktype)
+u8 rtw_setopmode_cmd(_adapter  *padapter, enum NDIS_802_11_NETWORK_INFRASTRUCTURE networktype)
 {
 	struct	cmd_obj*	ph2c;
 	struct	setopmode_parm* psetop;

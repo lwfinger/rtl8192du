@@ -45,7 +45,7 @@ static int rtw_rfintfs = HWPI;
 static int rtw_lbkmode = 0;/* RTL8712_AIR_TRX; */
 
 
-static int rtw_network_mode = Ndis802_11IBSS;
+static int rtw_network_mode = NDIS802_11IBSS;
 static int rtw_channel = 1;/* ad-hoc support requirement */
 static int rtw_wireless_mode = WIRELESS_11BG_24N;
 static int rtw_vrtl_carrier_sense = AUTO_VCS;
@@ -1142,8 +1142,8 @@ u8 rtw_init_default_value(_adapter *padapter)
 	psecuritypriv->dot118021XGrpPrivacy = _NO_PRIVACY_;
 	psecuritypriv->dot118021XGrpKeyid = 1;
 
-	psecuritypriv->ndisauthtype = Ndis802_11AuthModeOpen;
-	psecuritypriv->ndisencryptstatus = Ndis802_11WEPDisabled;
+	psecuritypriv->ndisauthtype = NDIS802_11AUTHMODEOPEN;
+	psecuritypriv->ndisencryptstatus = NDIS802_11WEPDISABLED;
 
 
 	/* pwrctrl_priv */

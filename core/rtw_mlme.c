@@ -60,7 +60,7 @@ _func_enter_;
 
 	pmlmepriv->pscanned = NULL;
 	pmlmepriv->fw_state = 0;
-	pmlmepriv->cur_network.network.InfrastructureMode = Ndis802_11AutoUnknown;
+	pmlmepriv->cur_network.network.InfrastructureMode = NDIS802_11AUTOUNK;
 	pmlmepriv->scan_mode=SCAN_ACTIVE;// 1: active, 0: pasive. Maybe someday we should rename this varable to "active_mode" (Jeff)
 
 	_rtw_spinlock_init(&(pmlmepriv->lock));
@@ -916,12 +916,12 @@ int rtw_is_desired_network(_adapter *adapter, struct wlan_network *pnetwork)
 	}
 	if (adapter->registrypriv.wifi_spec == 1) //for  correct flow of 8021X  to do....
 	{
-		if ((desired_encmode == Ndis802_11EncryptionDisabled) && (privacy != 0))
+		if ((desired_encmode == NDIS802_11ENCRYPTION_DISABLED) && (privacy != 0))
 	            bselected = false;
 	}
 
 
-	if ((desired_encmode != Ndis802_11EncryptionDisabled) && (privacy == 0)) {
+	if ((desired_encmode != NDIS802_11ENCRYPTION_DISABLED) && (privacy == 0)) {
 		DBG_8192D("desired_encmode: %d, privacy: %d\n", desired_encmode, privacy);
 		bselected = false;
 	}
@@ -1581,7 +1581,7 @@ static void rtw_joinbss_update_network(_adapter *padapter, struct wlan_network *
 	//update fw_state //will clr _FW_UNDER_LINKING here indirectly
 	switch(pnetwork->network.InfrastructureMode)
 	{
-		case Ndis802_11Infrastructure:
+		case NDIS802_11INFRA:
 
 				if(pmlmepriv->fw_state&WIFI_UNDER_WPS)
 					pmlmepriv->fw_state = WIFI_STATION_STATE|WIFI_UNDER_WPS;
@@ -1589,7 +1589,7 @@ static void rtw_joinbss_update_network(_adapter *padapter, struct wlan_network *
 					pmlmepriv->fw_state = WIFI_STATION_STATE;
 
 				break;
-		case Ndis802_11IBSS:
+		case NDIS802_11IBSS:
 				pmlmepriv->fw_state = WIFI_ADHOC_STATE;
 				break;
 		default:
@@ -2792,9 +2792,9 @@ _func_enter_;
 	//copy fixed ie only
 	_rtw_memcpy(out_ie, in_ie,12);
 	ielength=12;
-	if((ndisauthmode==Ndis802_11AuthModeWPA)||(ndisauthmode==Ndis802_11AuthModeWPAPSK))
+	if((ndisauthmode==NDIS802_11AUTHMODEWPA)||(ndisauthmode==NDIS802_11AUTHMODEWPAPSK))
 			authmode=_WPA_IE_ID_;
-	if((ndisauthmode==Ndis802_11AuthModeWPA2)||(ndisauthmode==Ndis802_11AuthModeWPA2PSK))
+	if((ndisauthmode==NDIS802_11AUTHMODEWPA2)||(ndisauthmode==NDIS802_11AUTHMODEWPA2PSK))
 			authmode=_WPA2_IE_ID_;
 
 	if(check_fwstate(pmlmepriv, WIFI_UNDER_WPS))
@@ -2873,37 +2873,36 @@ _func_enter_;
 
 	pdev_network->Rssi = 0;
 
-	switch(pregistrypriv->wireless_mode)
-	{
-		case WIRELESS_11B:
-			pdev_network->NetworkTypeInUse = (Ndis802_11DS);
-			break;
-		case WIRELESS_11G:
-		case WIRELESS_11BG:
-		case WIRELESS_11_24N:
-		case WIRELESS_11G_24N:
-		case WIRELESS_11BG_24N:
-			pdev_network->NetworkTypeInUse = (Ndis802_11OFDM24);
-			break;
-		case WIRELESS_11A:
-		case WIRELESS_11A_5N:
-			pdev_network->NetworkTypeInUse = (Ndis802_11OFDM5);
-			break;
-		case WIRELESS_11ABGN:
-			if(pregistrypriv->channel > 14)
-				pdev_network->NetworkTypeInUse = (Ndis802_11OFDM5);
-			else
-				pdev_network->NetworkTypeInUse = (Ndis802_11OFDM24);
-			break;
-		default :
-			// TODO
-			break;
+	switch(pregistrypriv->wireless_mode) {
+	case WIRELESS_11B:
+		pdev_network->NetworkTypeInUse = (NDIS802_11DS);
+		break;
+	case WIRELESS_11G:
+	case WIRELESS_11BG:
+	case WIRELESS_11_24N:
+	case WIRELESS_11G_24N:
+	case WIRELESS_11BG_24N:
+		pdev_network->NetworkTypeInUse = (NDIS802_11OFDM24);
+		break;
+	case WIRELESS_11A:
+	case WIRELESS_11A_5N:
+		pdev_network->NetworkTypeInUse = (NDIS802_11OFDM5);
+		break;
+	case WIRELESS_11ABGN:
+		if(pregistrypriv->channel > 14)
+			pdev_network->NetworkTypeInUse = (NDIS802_11OFDM5);
+		else
+			pdev_network->NetworkTypeInUse = (NDIS802_11OFDM24);
+		break;
+	default :
+		// TODO
+		break;
 	}
 
 	pdev_network->Configuration.DSConfig = (pregistrypriv->channel);
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("pregistrypriv->channel=%d, pdev_network->Configuration.DSConfig=0x%x\n", pregistrypriv->channel, pdev_network->Configuration.DSConfig));
 
-	if(cur_network->network.InfrastructureMode == Ndis802_11IBSS)
+	if(cur_network->network.InfrastructureMode == NDIS802_11IBSS)
 		pdev_network->Configuration.ATIMWindow = (0);
 
 	pdev_network->InfrastructureMode = (cur_network->network.InfrastructureMode);

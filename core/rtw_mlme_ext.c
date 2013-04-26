@@ -8848,7 +8848,7 @@ u8 collect_bss_info(_adapter *padapter, union recv_frame *precv_frame, WLAN_BSSI
 	}
 
 	//todo:
-	bssid->NetworkTypeInUse = Ndis802_11OFDM24;
+	bssid->NetworkTypeInUse = NDIS802_11OFDM24;
 
 	if (bssid->IELength < 12)
 		return _FAIL;
@@ -8885,12 +8885,12 @@ u8 collect_bss_info(_adapter *padapter, union recv_frame *precv_frame, WLAN_BSSI
 
 	if (val16 & BIT(0))
 	{
-		bssid->InfrastructureMode = Ndis802_11Infrastructure;
+		bssid->InfrastructureMode = NDIS802_11INFRA;
 		_rtw_memcpy(bssid->MacAddress, GetAddr2Ptr(pframe), ETH_ALEN);
 	}
 	else
 	{
-		bssid->InfrastructureMode = Ndis802_11IBSS;
+		bssid->InfrastructureMode = NDIS802_11IBSS;
 		_rtw_memcpy(bssid->MacAddress, GetAddr3Ptr(pframe), ETH_ALEN);
 	}
 
@@ -10354,7 +10354,7 @@ u8 setopmode_hdl(_adapter *padapter, u8 *pbuf)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct setopmode_parm *psetop = (struct setopmode_parm *)pbuf;
 
-	if(psetop->mode == Ndis802_11APMode)
+	if(psetop->mode == NDIS802_11APMODE)
 	{
 		pmlmeinfo->state = WIFI_FW_AP_STATE;
 		type = _HW_STATE_AP_;
@@ -10362,13 +10362,13 @@ u8 setopmode_hdl(_adapter *padapter, u8 *pbuf)
 		//start_ap_mode(padapter);
 #endif
 	}
-	else if(psetop->mode == Ndis802_11Infrastructure)
+	else if(psetop->mode == NDIS802_11INFRA)
 	{
 		pmlmeinfo->state &= ~(BIT(0)|BIT(1));// clear state
 		pmlmeinfo->state |= WIFI_FW_STATION_STATE;//set to	STATION_STATE
 		type = _HW_STATE_STATION_;
 	}
-	else if(psetop->mode == Ndis802_11IBSS)
+	else if(psetop->mode == NDIS802_11IBSS)
 	{
 		type = _HW_STATE_ADHOC_;
 	}
@@ -10393,7 +10393,7 @@ u8 createbss_hdl(_adapter *padapter, u8 *pbuf)
 	u32	initialgain;
 
 
-	if(pparm->network.InfrastructureMode == Ndis802_11APMode)
+	if(pparm->network.InfrastructureMode == NDIS802_11APMODE)
 	{
 #ifdef CONFIG_AP_MODE
 
@@ -10406,7 +10406,7 @@ u8 createbss_hdl(_adapter *padapter, u8 *pbuf)
 	}
 
 	//below is for ad-hoc master
-	if(pparm->network.InfrastructureMode == Ndis802_11IBSS)
+	if(pparm->network.InfrastructureMode == NDIS802_11IBSS)
 	{
 		rtw_joinbss_reset(padapter);
 

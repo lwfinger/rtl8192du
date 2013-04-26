@@ -1376,7 +1376,7 @@ int rtw_check_beacon_data(_adapter *padapter, u8 *pbuf,  int len)
 	_rtw_memcpy(ie, pbuf, pbss_network->IELength);
 
 
-	if(pbss_network->InfrastructureMode!=Ndis802_11APMode)
+	if(pbss_network->InfrastructureMode!=NDIS802_11APMODE)
 		return _FAIL;
 
 	pbss_network->Rssi = 0;
@@ -1661,19 +1661,19 @@ int rtw_check_beacon_data(_adapter *padapter, u8 *pbuf,  int len)
 	switch(network_type)
 	{
 		case WIRELESS_11B:
-			pbss_network->NetworkTypeInUse = Ndis802_11DS;
+			pbss_network->NetworkTypeInUse = NDIS802_11DS;
 			break;
 		case WIRELESS_11G:
 		case WIRELESS_11BG:
              case WIRELESS_11G_24N:
 		case WIRELESS_11BG_24N:
-			pbss_network->NetworkTypeInUse = Ndis802_11OFDM24;
+			pbss_network->NetworkTypeInUse = NDIS802_11OFDM24;
 			break;
 		case WIRELESS_11A:
-			pbss_network->NetworkTypeInUse = Ndis802_11OFDM5;
+			pbss_network->NetworkTypeInUse = NDIS802_11OFDM5;
 			break;
 		default :
-			pbss_network->NetworkTypeInUse = Ndis802_11OFDM24;
+			pbss_network->NetworkTypeInUse = NDIS802_11OFDM24;
 			break;
 	}
 
@@ -2755,8 +2755,8 @@ void stop_ap_mode(_adapter *padapter)
 
 	//reset and init security priv , this can refine with rtw_reset_securitypriv
 	_rtw_memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv));
-	padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeOpen;
-	padapter->securitypriv.ndisencryptstatus = Ndis802_11WEPDisabled;
+	padapter->securitypriv.ndisauthtype = NDIS802_11AUTHMODEOPEN;
+	padapter->securitypriv.ndisencryptstatus = NDIS802_11WEPDISABLED;
 
 	//for ACL
 	spin_lock_bh(&(pacl_node_q->lock));

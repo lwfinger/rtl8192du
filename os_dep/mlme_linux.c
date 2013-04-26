@@ -135,8 +135,8 @@ void rtw_reset_securitypriv( _adapter *adapter )
 		adapter->securitypriv.btkip_countermeasure = backupTKIPCountermeasure;
 		adapter->securitypriv.btkip_countermeasure_time = backupTKIPcountermeasure_time;
 
-		adapter->securitypriv.ndisauthtype = Ndis802_11AuthModeOpen;
-		adapter->securitypriv.ndisencryptstatus = Ndis802_11WEPDisabled;
+		adapter->securitypriv.ndisauthtype = NDIS802_11AUTHMODEOPEN;
+		adapter->securitypriv.ndisencryptstatus = NDIS802_11WEPDISABLED;
 
 	}
 	else //reset values in securitypriv
@@ -152,8 +152,8 @@ void rtw_reset_securitypriv( _adapter *adapter )
 		psec_priv->dot118021XGrpPrivacy = _NO_PRIVACY_;
 		psec_priv->dot118021XGrpKeyid = 1;
 
-		psec_priv->ndisauthtype = Ndis802_11AuthModeOpen;
-		psec_priv->ndisencryptstatus = Ndis802_11WEPDisabled;
+		psec_priv->ndisauthtype = NDIS802_11AUTHMODEOPEN;
+		psec_priv->ndisencryptstatus = NDIS802_11WEPDISABLED;
 		//}
 	}
 }

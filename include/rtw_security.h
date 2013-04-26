@@ -42,13 +42,9 @@
 #define AES_BLOCK_SIZE 16
 #define AES_PRIV_SIZE (4 * 44)
 
-#ifndef Ndis802_11AuthModeWPA2
-#define Ndis802_11AuthModeWPA2 (Ndis802_11AuthModeWPANone + 1)
-#endif
+#define NDIS802_11AUTHMODEWPA2 (NDIS802_11AUTHMODEWPANONE + 1)
 
-#ifndef Ndis802_11AuthModeWPA2PSK
-#define Ndis802_11AuthModeWPA2PSK (Ndis802_11AuthModeWPANone + 2)
-#endif
+#define NDIS802_11AUTHMODEWPA2PSK (NDIS802_11AUTHMODEWPANONE + 2)
 
 union pn48	{
 

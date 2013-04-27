@@ -81,17 +81,9 @@ ResetLedStatus(PLED_871x	pLed) {
 //		Initialize an LED_871x object.
 //
 
-void
-InitLed871x(
-	_adapter			*padapter,
+void InitLed871x(_adapter *padapter,
 	PLED_871x		pLed,
-	LED_PIN_871x	LedPin
-	);
-void
-InitLed871x(
-	_adapter			*padapter,
-	PLED_871x		pLed,
-	LED_PIN_871x	LedPin
+	enum LED_PIN_871X	LedPin
 	)
 {
 	pLed->padapter = padapter;

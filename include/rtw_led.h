@@ -47,7 +47,7 @@ enum LED_CTL_MODE {
 // LED object.
 //================================================================================
 
-typedef enum _LED_STATE_871x{
+enum LED_STATE_871X {
 	LED_UNKNOWN = 0,
 	RTW_LED_ON = 1,
 	RTW_LED_OFF = 2,
@@ -61,7 +61,7 @@ typedef enum _LED_STATE_871x{
 	LED_TXRX_BLINK = 10,
 	LED_BLINK_WPS_STOP = 11,	//for ALPHA
 	LED_BLINK_WPS_STOP_OVERLAP = 12,	//for BELKIN
-}LED_STATE_871x;
+};
 
 #define IS_LED_WPS_BLINKING(_LED_871x)	(((PLED_871x)_LED_871x)->CurrLedState==LED_BLINK_WPS \
 					|| ((PLED_871x)_LED_871x)->CurrLedState==LED_BLINK_WPS_STOP \
@@ -70,16 +70,16 @@ typedef enum _LED_STATE_871x{
 #define IS_LED_BLINKING(_LED_871x)	(((PLED_871x)_LED_871x)->bLedWPSBlinkInProgress \
 					||((PLED_871x)_LED_871x)->bLedScanBlinkInProgress)
 
-typedef enum _LED_PIN_871x{
+enum LED_PIN_871X {
 	LED_PIN_GPIO0,
 	LED_PIN_LED0,
 	LED_PIN_LED1
-}LED_PIN_871x;
+};
 
 typedef struct _LED_871x{
 	_adapter				*padapter;
-	LED_PIN_871x		LedPin;	// Identify how to implement this SW led.
-	LED_STATE_871x		CurrLedState; // Current LED state.
+	enum LED_PIN_871X		LedPin;	// Identify how to implement this SW led.
+	enum LED_STATE_871X		CurrLedState; // Current LED state.
 	u8					bLedOn; // true if LED is ON, false if LED is OFF.
 
 	u8					bSWLedCtrl;
@@ -93,7 +93,7 @@ typedef struct _LED_871x{
 	u8					bLedWPSBlinkInProgress;
 
 	u32					BlinkTimes; // Number of times to toggle led state for blinking.
-	LED_STATE_871x		BlinkingLedState; // Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are.
+	enum LED_STATE_871X		BlinkingLedState; // Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are.
 
 	_timer				BlinkTimer; // Timer object for led blinking.
 #if LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0)

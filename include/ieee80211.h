@@ -148,7 +148,7 @@ extern u8 RSN_CIPHER_SUITE_WRAP[];
 extern u8 RSN_CIPHER_SUITE_CCMP[];
 extern u8 RSN_CIPHER_SUITE_WEP104[];
 
-typedef enum _RATR_TABLE_MODE{
+enum RATR_TABLE_MODE {
 	RATR_INX_WIRELESS_NGB = 0,	// BGN 40 Mhz 2SS 1SS
 	RATR_INX_WIRELESS_NG = 1,		// GN or N
 	RATR_INX_WIRELESS_NB = 2,		// BGN 20 Mhz 2SS 1SS  or BN
@@ -158,7 +158,7 @@ typedef enum _RATR_TABLE_MODE{
 	RATR_INX_WIRELESS_B = 6,
 	RATR_INX_WIRELESS_MC = 7,
 	RATR_INX_WIRELESS_AC_N = 8,
-}RATR_TABLE_MODE, *PRATR_TABLE_MODE;
+};
 
 enum NETWORK_TYPE
 {
@@ -1216,9 +1216,13 @@ struct rtw_ieee802_11_elems {
 	u8 vendor_ht_cap_len;
 };
 
-typedef enum { ParseOK = 0, ParseUnknown = 1, ParseFailed = -1 } ParseRes;
+enum parse_res {
+	PARSE_OK = 0,
+	PARSE_UNK = 1,
+	PARSE_FAIL = -1
+};
 
-ParseRes rtw_ieee802_11_parse_elems(u8 *start, uint len,
+enum parse_res rtw_ieee802_11_parse_elems(u8 *start, uint len,
 				struct rtw_ieee802_11_elems *elems,
 				int show_errors);
 

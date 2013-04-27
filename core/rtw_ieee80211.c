@@ -1057,7 +1057,7 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
  * @show_errors: Whether to show parsing errors in debug log
  * Returns: Parsing result
  */
-ParseRes rtw_ieee802_11_parse_elems(u8 *start, uint len,
+enum parse_res rtw_ieee802_11_parse_elems(u8 *start, uint len,
 				struct rtw_ieee802_11_elems *elems,
 				int show_errors)
 {
@@ -1081,7 +1081,7 @@ ParseRes rtw_ieee802_11_parse_elems(u8 *start, uint len,
 					   "left=%lu)\n",
 					   id, elen, (unsigned long) left);
 			}
-			return ParseFailed;
+			return PARSE_FAIL;
 		}
 
 		switch (id) {
@@ -1178,13 +1178,11 @@ ParseRes rtw_ieee802_11_parse_elems(u8 *start, uint len,
 	}
 
 	if (left)
-		return ParseFailed;
+		return PARSE_FAIL;
 
-	return unknown ? ParseUnknown : ParseOK;
-
+	return unknown ? PARSE_UNK : PARSE_OK;
 }
 
-static u8 key_char2num(u8 ch);
 static u8 key_char2num(u8 ch)
 {
     if((ch>='0')&&(ch<='9'))

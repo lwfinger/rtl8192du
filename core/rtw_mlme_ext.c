@@ -1504,7 +1504,7 @@ unsigned int OnAssocReq(_adapter *padapter, union recv_frame *precv_frame)
 	pstat->capability = capab_info;
 
 	//now parse all ieee802_11 ie to point to elems
-	if (rtw_ieee802_11_parse_elems(pos, left, &elems, 1) == ParseFailed ||
+	if (rtw_ieee802_11_parse_elems(pos, left, &elems, 1) == PARSE_FAIL ||
 	    !elems.ssid) {
 		DBG_8192D("STA %pM sent invalid association request\n",
 		         pstat->hwaddr);

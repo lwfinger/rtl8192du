@@ -401,7 +401,7 @@ struct mlme_ext_info
 typedef struct _RT_CHANNEL_INFO
 {
 	u8				ChannelNum;		// The channel number.
-	RT_SCAN_TYPE	ScanType;		// Scan type such as passive or active scan.
+	enum RT_SCAN_TYPE	ScanType;		// Scan type such as passive or active scan.
 	//u16				ScanPeriod;		// Listen time in millisecond in this channel.
 	//s32				MaxTxPwrDbm;	// Max allowed tx power.
 	//u32				ExInfo;			// Extended Information for this channel.

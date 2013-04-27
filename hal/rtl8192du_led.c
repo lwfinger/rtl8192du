@@ -1301,12 +1301,12 @@ void BlinkWorkItemCallback(struct work_struct *work)
 void
 SwLedControlMode0(
 	_adapter		*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 );
 void
 SwLedControlMode0(
 	_adapter		*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 )
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
@@ -1423,12 +1423,12 @@ SwLedControlMode0(
 void
 SwLedControlMode1(
 	_adapter		*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 );
 void
 SwLedControlMode1(
 	_adapter		*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
@@ -1699,12 +1699,12 @@ SwLedControlMode1(
 void
 SwLedControlMode2(
 	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 );
 void
 SwLedControlMode2(
 	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 )
 {
 	struct led_priv	 *ledpriv = &(padapter->ledpriv);
@@ -1869,12 +1869,12 @@ SwLedControlMode2(
  void
  SwLedControlMode3(
 	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 );
  void
  SwLedControlMode3(
 	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 )
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
@@ -2053,12 +2053,12 @@ SwLedControlMode2(
 void
 SwLedControlMode4(
 	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 );
 void
 SwLedControlMode4(
 	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 )
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
@@ -2390,12 +2390,12 @@ SwLedControlMode4(
 void
 SwLedControlMode5(
 	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 );
 void
 SwLedControlMode5(
 	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -2486,12 +2486,12 @@ SwLedControlMode5(
 void
 LedControl871x(
 	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 	);
 void
 LedControl871x(
 	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE		LedAction
 	)
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);

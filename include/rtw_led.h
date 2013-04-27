@@ -24,23 +24,23 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
-#define MSECS(t)        (HZ * ((t) / 1000) + (HZ * ((t) % 1000)) / 1000)
+#define MSECS(t)	(HZ * ((t) / 1000) + (HZ * ((t) % 1000)) / 1000)
 
-typedef enum _LED_CTL_MODE{
-        LED_CTL_POWER_ON = 1,
-        LED_CTL_LINK = 2,
-        LED_CTL_NO_LINK = 3,
-        LED_CTL_TX = 4,
-        LED_CTL_RX = 5,
-        LED_CTL_SITE_SURVEY = 6,
-        LED_CTL_POWER_OFF = 7,
-        LED_CTL_START_TO_LINK = 8,
-        LED_CTL_START_WPS = 9,
-        LED_CTL_STOP_WPS = 10,
-        LED_CTL_START_WPS_BOTTON = 11, //added for runtop
-        LED_CTL_STOP_WPS_FAIL = 12, //added for ALPHA
-	 LED_CTL_STOP_WPS_FAIL_OVERLAP = 13, //added for BELKIN
-}LED_CTL_MODE;
+enum LED_CTL_MODE {
+	LED_CTL_POWER_ON = 1,
+	LED_CTL_LINK = 2,
+	LED_CTL_NO_LINK = 3,
+	LED_CTL_TX = 4,
+	LED_CTL_RX = 5,
+	LED_CTL_SITE_SURVEY = 6,
+	LED_CTL_POWER_OFF = 7,
+	LED_CTL_START_TO_LINK = 8,
+	LED_CTL_START_WPS = 9,
+	LED_CTL_STOP_WPS = 10,
+	LED_CTL_START_WPS_BOTTON = 11, //added for runtop
+	LED_CTL_STOP_WPS_FAIL = 12, //added for ALPHA
+	LED_CTL_STOP_WPS_FAIL_OVERLAP = 13, //added for BELKIN
+};
 
 
 //================================================================================
@@ -123,7 +123,7 @@ struct led_priv{
 	LED_871x			SwLed1;
 	LED_STRATEGY_871x	LedStrategy;
 	u8					bRegUseLed;
-	void (*LedControlHandler)(_adapter *padapter, LED_CTL_MODE LedAction);
+	void (*LedControlHandler)(_adapter *padapter, enum LED_CTL_MODE LedAction);
 	/* add for led controll */
 };
 

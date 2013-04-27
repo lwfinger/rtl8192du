@@ -62,8 +62,7 @@
 // Besides, CustomerID of registry has precedence of that of EEPROM.
 // defined below. 060703, by rcnjko.
 //
-typedef enum _RT_CUSTOMER_ID
-{
+enum RT_CUSTOMER_ID {
 	RT_CID_DEFAULT = 0,
 	RT_CID_8187_ALPHA0 = 1,
 	RT_CID_8187_SERCOMM_PS = 2,
@@ -101,7 +100,7 @@ typedef enum _RT_CUSTOMER_ID
 	RT_CID_819x_PRONETS = 34,
 	RT_CID_819x_Edimax_ASUS = 35,
 	RT_CID_819x_CAMEO_NETGEAR = 36,
-}RT_CUSTOMER_ID, *PRT_CUSTOMER_ID;
+};
 
 struct eeprom_priv
 {

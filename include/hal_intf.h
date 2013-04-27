@@ -45,7 +45,7 @@ enum _CHIP_TYPE {
 };
 
 
-typedef enum _HW_VARIABLES{
+enum HW_VARIABLES {
 	HW_VAR_MEDIA_STATUS,
 	HW_VAR_MEDIA_STATUS1,
 	HW_VAR_SET_OPMODE,
@@ -114,9 +114,9 @@ typedef enum _HW_VARIABLES{
 	HW_VAR_MBSSID_CAM_WRITE,
 	HW_VAR_MBSSID_CAM_CLEAR,
 	HW_VAR_RCR_MBSSID_EN,
-}HW_VARIABLES;
+};
 
-typedef enum _HAL_DEF_VARIABLE{
+enum HAL_DEF_VARIABLE {
 	HAL_DEF_UNDERCORATEDSMOOTHEDPWDB,
 	HAL_DEF_IS_SUPPORT_ANT_DIV,
 	HAL_DEF_CURRENT_ANTENNA,
@@ -126,12 +126,12 @@ typedef enum _HAL_DEF_VARIABLE{
 	HAL_DEF_DBG_DUMP_RXPKT,//for dbg
 	HAL_DEF_DBG_DM_FUNC,//for dbg
 
-}HAL_DEF_VARIABLE;
+};
 
-typedef enum _HAL_INTF_PS_FUNC{
+enum HAL_INTF_PS_FUNC {
 	HAL_USB_SELECT_SUSPEND,
 	HAL_MAX_ID,
-}HAL_INTF_PS_FUNC;
+};
 
 typedef s32 (*c2h_id_filter)(u8 id);
 
@@ -175,8 +175,8 @@ struct hal_ops {
 	void	(*SetHwRegHandler)(PADAPTER Adapter, u8	variable,u8* val);
 	void	(*GetHwRegHandler)(PADAPTER Adapter, u8	variable,u8* val);
 
-	u8	(*GetHalDefVarHandler)(PADAPTER Adapter, HAL_DEF_VARIABLE eVariable, void * pValue);
-	u8	(*SetHalDefVarHandler)(PADAPTER Adapter, HAL_DEF_VARIABLE eVariable, void * pValue);
+	u8	(*GetHalDefVarHandler)(PADAPTER Adapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
+	u8	(*SetHalDefVarHandler)(PADAPTER Adapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
 
 	void	(*UpdateRAMaskHandler)(PADAPTER Adapter, u32 mac_id);
 	void	(*SetBeaconRelatedRegistersHandler)(PADAPTER Adapter);
@@ -187,7 +187,7 @@ struct hal_ops {
 	u8	(*AntDivBeforeLinkHandler)(PADAPTER Adapter);
 	void	(*AntDivCompareHandler)(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src);
 #endif
-	u8	(*interface_ps_func)(PADAPTER Adapter,HAL_INTF_PS_FUNC efunc_id, u8* val);
+	u8	(*interface_ps_func)(PADAPTER Adapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val);
 
 	s32	(*hal_xmit)(PADAPTER Adapter, struct xmit_frame *pxmitframe);
 	s32	(*mgnt_xmit)(PADAPTER Adapter, struct xmit_frame *pmgntframe);
@@ -242,7 +242,7 @@ typedef	enum _RT_EEPROM_TYPE{
 #define RF_CHANGE_BY_HW		BIT30
 #define RF_CHANGE_BY_SW		BIT31
 
-typedef enum _HARDWARE_TYPE{
+enum HARDWARE_TYPE {
 	HARDWARE_TYPE_RTL8180,
 	HARDWARE_TYPE_RTL8185,
 	HARDWARE_TYPE_RTL8187,
@@ -263,7 +263,7 @@ typedef enum _HARDWARE_TYPE{
 	HARDWARE_TYPE_RTL8188EU,
 	HARDWARE_TYPE_RTL8188ES,
 	HARDWARE_TYPE_MAX,
-}HARDWARE_TYPE;
+};
 
 //
 // RTL8192D Series
@@ -277,7 +277,7 @@ typedef struct eeprom_priv EEPROM_EFUSE_PRIV, *PEEPROM_EFUSE_PRIV;
 #define GET_EEPROM_EFUSE_PRIV(priv)	(&priv->eeprompriv)
 
 #ifdef CONFIG_WOWLAN
-typedef enum _wowlan_subcode{
+enum wowlan_subcode {
 	WOWLAN_PATTERN_MATCH = 1,
 	WOWLAN_MAGIC_PACKET  = 2,
 	WOWLAN_UNICAST       = 3,
@@ -289,7 +289,7 @@ typedef enum _wowlan_subcode{
 	WOWLAN_DEBUG_RELOAD_FW	= 9,
 	WOWLAN_DEBUG_1		=10,
 	WOWLAN_DEBUG_2		=11
-}wowlan_subcode;
+};
 
 struct wowlan_ioctl_param{
 	unsigned int subcode;
@@ -328,8 +328,8 @@ void rtw_hal_chip_configure(_adapter *padapter);
 void rtw_hal_read_chip_info(_adapter *padapter);
 void rtw_hal_read_chip_version(_adapter *padapter);
 
-u8 rtw_hal_set_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
-u8 rtw_hal_get_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
+u8 rtw_hal_set_def_var(_adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
+u8 rtw_hal_get_def_var(_adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
 
 void rtw_hal_enable_interrupt(_adapter *padapter);
 void rtw_hal_disable_interrupt(_adapter *padapter);
@@ -337,7 +337,7 @@ void rtw_hal_disable_interrupt(_adapter *padapter);
 u32 rtw_hal_inirp_init(_adapter *padapter);
 u32 rtw_hal_inirp_deinit(_adapter *padapter);
 
-u8 rtw_hal_intf_ps_func(_adapter *padapter,HAL_INTF_PS_FUNC efunc_id, u8* val);
+u8 rtw_hal_intf_ps_func(_adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val);
 
 s32 rtw_hal_xmit(_adapter *padapter, struct xmit_frame *pxmitframe);
 s32 rtw_hal_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe);

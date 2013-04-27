@@ -5394,18 +5394,7 @@ _func_exit_;
 //	Description:
 //		Query setting of specified variable.
 //
-u8
-GetHalDefVar8192DUsb(
-	PADAPTER				Adapter,
-	HAL_DEF_VARIABLE		eVariable,
-	void *					pValue
-	);
-u8
-GetHalDefVar8192DUsb(
-	PADAPTER				Adapter,
-	HAL_DEF_VARIABLE		eVariable,
-	void *					pValue
-	)
+u8 GetHalDefVar8192DUsb(PADAPTER Adapter, enum HAL_DEF_VARIABLE eVariable, void  *pValue)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8			bResult = true;
@@ -5440,13 +5429,13 @@ GetHalDefVar8192DUsb(
 u8
 SetHalDefVar8192DUsb(
 	PADAPTER				Adapter,
-	HAL_DEF_VARIABLE		eVariable,
+	enum HAL_DEF_VARIABLE		eVariable,
 	void *pValue
 	);
 u8
 SetHalDefVar8192DUsb(
 	PADAPTER				Adapter,
-	HAL_DEF_VARIABLE		eVariable,
+	enum HAL_DEF_VARIABLE		eVariable,
 	void *pValue
 	)
 {

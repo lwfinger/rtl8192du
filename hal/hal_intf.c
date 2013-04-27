@@ -209,14 +209,14 @@ void rtw_hal_get_hwreg(_adapter *padapter, u8 variable, u8 *val)
 		padapter->HalFunc.GetHwRegHandler(padapter, variable, val);
 }
 
-u8 rtw_hal_set_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue)
+u8 rtw_hal_set_def_var(_adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue)
 {
 	if(padapter->HalFunc.SetHalDefVarHandler)
 		return padapter->HalFunc.SetHalDefVarHandler(padapter,eVariable,pValue);
 	return _FAIL;
 }
 
-u8 rtw_hal_get_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue)
+u8 rtw_hal_get_def_var(_adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue)
 {
 	if(padapter->HalFunc.GetHalDefVarHandler)
 		return padapter->HalFunc.GetHalDefVarHandler(padapter,eVariable,pValue);
@@ -260,7 +260,7 @@ u32	rtw_hal_inirp_deinit(_adapter *padapter)
 
 }
 
-u8 rtw_hal_intf_ps_func(_adapter *padapter,HAL_INTF_PS_FUNC efunc_id, u8* val)
+u8 rtw_hal_intf_ps_func(_adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val)
 {
 	if(padapter->HalFunc.interface_ps_func)
 		return padapter->HalFunc.interface_ps_func(padapter,efunc_id,val);

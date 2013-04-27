@@ -601,9 +601,9 @@ struct hal_data_8192du
 	enum VERSION_8192D	VersionID;
 
 	// add for 92D Phy mode/mac/Band mode
-	MACPHY_MODE_8192D	MacPhyMode92D;
-	BAND_TYPE	CurrentBandType92D;	//0:2.4G, 1:5G
-	BAND_TYPE	BandSet92D;
+	enum MACPHY_MODE_8192D	MacPhyMode92D;
+	enum BAND_TYPE	CurrentBandType92D;	//0:2.4G, 1:5G
+	enum BAND_TYPE	BandSet92D;
 	bool		bIsVS;
 
 	bool		bNOPG;
@@ -623,7 +623,7 @@ struct hal_data_8192du
 
 	//current WIFI_PHY values
 	u32	ReceiveConfig;
-	WIRELESS_MODE	CurrentWirelessMode;
+	enum WIRELESS_MODE	CurrentWirelessMode;
 	enum HT_CHANNEL_WIDTH	CurrentChannelBW;
 	u8	CurrentChannel;
 	u8	nCur40MhzPrimeSC;// Control channel sub-carrier

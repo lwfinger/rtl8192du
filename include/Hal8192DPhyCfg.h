@@ -64,44 +64,44 @@
 
 
 /*------------------------------Define structure----------------------------*/
-typedef enum _SwChnlCmdID{
-	CmdID_End,
-	CmdID_SetTxPowerLevel,
-	CmdID_BBRegWrite10,
-	CmdID_WritePortUlong,
-	CmdID_WritePortUshort,
-	CmdID_WritePortUchar,
-	CmdID_RF_WriteReg,
-}SwChnlCmdID;
+enum swchnl_cmdid {
+	cmdid_end,
+	cmdid_settxpowerlevel,
+	cmdid_bbregwrite10,
+	cmdid_writeportulong,
+	cmdid_writeportushort,
+	cmdid_writeportuchar,
+	cmdid_rf_writereg,
+};
 
 
 /* 1. Switch channel related */
 typedef struct _SwChnlCmd{
-	SwChnlCmdID	CmdID;
+	enum swchnl_cmdid	cmdid;
 	u32			Para1;
 	u32			Para2;
 	u32			msDelay;
-}SwChnlCmd;
+} SwChnlCmd;
 
-typedef enum _HW90_BLOCK{
+enum HW90_BLOCK {
 	HW90_BLOCK_MAC = 0,
 	HW90_BLOCK_PHY0 = 1,
 	HW90_BLOCK_PHY1 = 2,
 	HW90_BLOCK_RF = 3,
 	HW90_BLOCK_MAXIMUM = 4, // Never use this
-}HW90_BLOCK_E, *PHW90_BLOCK_E;
+};
 
 //vivi added this for read parameter from header, 20100908
-typedef enum _RF_CONTENT{
+enum RF_CONTENT {
 	radioa_txt = 0x1000,
 	radiob_txt = 0x1001,
 	radioc_txt = 0x1002,
 	radiod_txt = 0x1003
-} RF_CONTENT;
+};
 
 #define	RF_PATH_MAX			2
 
-typedef enum _WIRELESS_MODE {
+enum WIRELESS_MODE {
 	WIRELESS_MODE_UNKNOWN = 0x00,
 	WIRELESS_MODE_A = 0x01,
 	WIRELESS_MODE_B = 0x02,
@@ -109,7 +109,7 @@ typedef enum _WIRELESS_MODE {
 	WIRELESS_MODE_AUTO = 0x08,
 	WIRELESS_MODE_N_24G = 0x10,
 	WIRELESS_MODE_N_5G = 0x20
-} WIRELESS_MODE;
+};
 
 
 #define CHANNEL_MAX_NUMBER		14+24+21	// 14 is the max channel number
@@ -123,18 +123,18 @@ typedef enum _WIRELESS_MODE {
 #define	CHANNEL_GROUP_MAX_5G		9
 #define	CHANNEL_MAX_NUMBER_2G		14
 
-typedef enum _BaseBand_Config_Type{
+enum BaseBand_Config_Type {
 	BaseBand_Config_PHY_REG = 0,			//Radio Path A
 	BaseBand_Config_AGC_TAB = 1,			//Radio Path B
-}BaseBand_Config_Type, *PBaseBand_Config_Type;
+};
 
-typedef enum _MACPHY_MODE_8192D{
+enum MACPHY_MODE_8192D {
 	SINGLEMAC_SINGLEPHY,
 	DUALMAC_DUALPHY,
 	DUALMAC_SINGLEPHY,
-}MACPHY_MODE_8192D,*PMACPHY_MODE_8192D;
+};
 
-typedef enum _MACPHY_MODE_CHANGE_ACTION{
+enum MACPHY_MODE_CHANGE_ACTION {
 	DMDP2DMSP = 0,
 	DMSP2DMDP = 1,
 	DMDP2SMSP = 2,
@@ -142,16 +142,16 @@ typedef enum _MACPHY_MODE_CHANGE_ACTION{
 	DMSP2SMSP = 4,
 	SMSP2DMSP = 5,
 	MAXACTION
-}MACPHY_MODE_CHANGE_ACTION,*PMACPHY_MODE_CHANGE_ACTION;
+};
 
-typedef enum _BAND_TYPE{
+enum BAND_TYPE {
 	BAND_ON_2_4G = 0,
 	BAND_ON_5G,
 	BAND_ON_BOTH,
 	BANDMAX
-}BAND_TYPE,*PBAND_TYPE;
+};
 
-typedef enum _PHY_Rate_Tx_Power_Offset_Area{
+enum PHY_Rate_Tx_Power_Offset_Area {
 	RA_OFFSET_LEGACY_OFDM1,
 	RA_OFFSET_LEGACY_OFDM2,
 	RA_OFFSET_HT_OFDM1,
@@ -159,20 +159,19 @@ typedef enum _PHY_Rate_Tx_Power_Offset_Area{
 	RA_OFFSET_HT_OFDM3,
 	RA_OFFSET_HT_OFDM4,
 	RA_OFFSET_HT_CCK,
-}RA_OFFSET_AREA,*PRA_OFFSET_AREA;
+};
 
 
 /* BB/RF related */
-typedef	enum _RF_TYPE_8190P{
+enum RF_TYPE_8190P {
 	RF_TYPE_MIN,	// 0
 	RF_8225=1,			// 1 11b/g RF for verification only
 	RF_8256=2,			// 2 11b/g/n
 	RF_8258=3,			// 3 11a/b/g/n RF
 	RF_6052=4,		// 4 11b/g/n RF
-	//RF_6052=5,		// 4 11b/g/n RF
-	// TODO: We sholud remove this psudo PHY RF after we get new RF.
+	// TODO: We should remove this psudo PHY RF after we get new RF.
 	RF_PSEUDO_11N=5,	// 5, It is a temporality RF.
-}RF_TYPE_8190P_E,*PRF_TYPE_8190P_E;
+};
 
 typedef struct _BB_REGISTER_DEFINITION{
 	u32 rfintfs;			// set software control:
@@ -231,24 +230,24 @@ typedef struct _BB_REGISTER_DEFINITION{
 }BB_REGISTER_DEFINITION_T, *PBB_REGISTER_DEFINITION_T;
 
 #ifdef CONFIG_MP_INCLUDED
-typedef enum _ANTENNA_PATH{
+enum ANTENNA_PATH {
         ANTENNA_NONE	= 0x00,
-		ANTENNA_D		,
-		ANTENNA_C		,
-		ANTENNA_CD		,
-		ANTENNA_B		,
-		ANTENNA_BD		,
-		ANTENNA_BC		,
-		ANTENNA_BCD		,
-		ANTENNA_A		,
-		ANTENNA_AD		,
-		ANTENNA_AC		,
-		ANTENNA_ACD		,
-		ANTENNA_AB		,
-		ANTENNA_ABD		,
-		ANTENNA_ABC		,
-		ANTENNA_ABCD
-} ANTENNA_PATH;
+	ANTENNA_D,
+	ANTENNA_C,
+	ANTENNA_CD,
+	ANTENNA_B,
+	ANTENNA_BD,
+	ANTENNA_BC,
+	ANTENNA_BCD,
+	ANTENNA_A,
+	ANTENNA_AD,
+	ANTENNA_AC,
+	ANTENNA_ACD,
+	ANTENNA_AB,
+	ANTENNA_ABD,
+	ANTENNA_ABC,
+	ANTENNA_ABCD
+};
 #endif
 
 typedef struct _R_ANTENNA_SELECT_OFDM{
@@ -320,11 +319,11 @@ int	rtl8192d_PHY_ConfigRFWithParaFile(	PADAPTER	Adapter,
 						u8 *pFileName,
 						enum RF_RADIO_PATH_E	eRFPath);
 int	rtl8192d_PHY_ConfigRFWithHeaderFile(	PADAPTER			Adapter,
-						RF_CONTENT			Content,
+						enum RF_CONTENT			Content,
 						enum RF_RADIO_PATH_E	eRFPath);
 /* BB/RF readback check for making sure init OK */
 int	rtl8192d_PHY_CheckBBAndRFOK(	PADAPTER			Adapter,
-				HW90_BLOCK_E		CheckBlock,
+				enum HW90_BLOCK		CheckBlock,
 				enum RF_RADIO_PATH_E	eRFPath	  );
 /* Read initi reg value for tx power setting. */
 void	rtl8192d_PHY_GetHWRegOriginalValue(	PADAPTER		Adapter	);

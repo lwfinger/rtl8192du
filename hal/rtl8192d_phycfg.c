@@ -1675,7 +1675,7 @@ rtl8192d_PHY_ConfigRFWithParaFile(
 int
 rtl8192d_PHY_ConfigRFWithHeaderFile(
 	PADAPTER			Adapter,
-	RF_CONTENT				Content,
+	enum RF_CONTENT			Content,
 	enum RF_RADIO_PATH_E		eRFPath
 )
 {
@@ -1829,7 +1829,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
  *			  BB[PHY0, PHY1], RF[Patha, path b, path c, path d] is Ok
  *
  * Input:	PADAPTER			Adapter
- *			HW90_BLOCK_E		CheckBlock
+ *			enum HW90_BLOCK		CheckBlock
  *			enum RF_RADIO_PATH_E	eRFPath		// it is used only when CheckBlock is HW90_BLOCK_RF
  *
  * Output:      NONE
@@ -1841,7 +1841,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 int
 rtl8192d_PHY_CheckBBAndRFOK(
 	PADAPTER			Adapter,
-	HW90_BLOCK_E		CheckBlock,
+	enum HW90_BLOCK		CheckBlock,
 	enum RF_RADIO_PATH_E	eRFPath
 	)
 {
@@ -1948,7 +1948,7 @@ rtl8192d_PHY_GetHWRegOriginalValue(
 static	u8
 phy_DbmToTxPwrIdx(
 	PADAPTER		Adapter,
-	WIRELESS_MODE	WirelessMode,
+	enum WIRELESS_MODE	WirelessMode,
 	int			PowerInDbm
 	)
 {
@@ -2005,7 +2005,7 @@ phy_DbmToTxPwrIdx(
 static int
 phy_TxPwrIdxToDbm(
 	PADAPTER		Adapter,
-	WIRELESS_MODE	WirelessMode,
+	enum WIRELESS_MODE	WirelessMode,
 	u8			TxPwrIdx
 	)
 {
@@ -2545,7 +2545,7 @@ PHY_SwitchWirelessBand(
 #endif
 	//DBG_8192D("PHY_SwitchWirelessBand():Before Switch Band \n");
 
-	pHalData->BandSet92D = pHalData->CurrentBandType92D = (BAND_TYPE)Band;
+	pHalData->BandSet92D = pHalData->CurrentBandType92D = (enum BAND_TYPE)Band;
 	if(IS_92D_SINGLEPHY(pHalData->VersionID))
 		pHalData->BandSet92D = BAND_ON_BOTH;
 
@@ -3245,7 +3245,7 @@ static void _PHY_SwChnl8192D(PADAPTER Adapter, u8 channel)
 	u8	eRFPath;
 	u32	param1, param2;
 	u32	ret_value;
-	BAND_TYPE	bandtype, target_bandtype;
+	enum BAND_TYPE	bandtype, target_bandtype;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 #if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 	// FOr 92D dual mac config. and sw concurrent mode
@@ -3515,27 +3515,27 @@ phy_SwChnlStepByStep(
 
 static	bool
 phy_SetSwChnlCmdArray(
-	SwChnlCmd*		CmdTable,
-	u32			CmdTableIdx,
-	u32			CmdTableSz,
-	SwChnlCmdID		CmdID,
-	u32			Para1,
-	u32			Para2,
-	u32			msDelay
+	SwChnlCmd*		cmdtable,
+	u32			cmdtableidx,
+	u32			cmdtablesz,
+	enum swchnl_cmdid	cmdid,
+	u32			para1,
+	u32			para2,
+	u32			msdelay
 	)
 {
-	SwChnlCmd* pCmd;
+	SwChnlCmd* cmd;
 
-	if(CmdTable == NULL)
+	if(cmdtable == NULL)
 		return false;
-	if(CmdTableIdx >= CmdTableSz)
+	if(cmdtableidx >= cmdtablesz)
 		return false;
 
-	pCmd = CmdTable + CmdTableIdx;
-	pCmd->CmdID = CmdID;
-	pCmd->Para1 = Para1;
-	pCmd->Para2 = Para2;
-	pCmd->msDelay = msDelay;
+	cmd = cmdtable + cmdtableidx;
+	cmd->cmdid = cmdid;
+	cmd->Para1 = para1;
+	cmd->Para2 = para2;
+	cmd->msDelay = msdelay;
 
 	return true;
 }

@@ -198,7 +198,7 @@ struct hal_ops {
 	void	(*write_rfreg)(PADAPTER Adapter, u32 eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
 
 #ifdef CONFIG_HOSTAPD_MLME
-	s32	(*hostap_mgnt_xmit_entry)(PADAPTER Adapter, _pkt *pkt);
+	s32	(*hostap_mgnt_xmit_entry)(PADAPTER Adapter, struct sk_buff *pkt);
 #endif
 	void (*EfusePowerSwitch)(PADAPTER pAdapter, u8 bWrite, u8 PwrState);
 	void (*ReadEFuse)(PADAPTER Adapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest);
@@ -371,7 +371,7 @@ void rtw_hal_antdiv_rssi_compared(_adapter *padapter, WLAN_BSSID_EX *dst, WLAN_B
 #endif
 
 #ifdef CONFIG_HOSTAPD_MLME
-s32 rtw_hal_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt);
+s32 rtw_hal_hostap_mgnt_xmit_entry(_adapter *padapter, struct sk_buff *pkt);
 #endif
 
 #ifdef DBG_CONFIG_ERROR_DETECT

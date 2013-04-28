@@ -102,8 +102,7 @@ struct signal_stat {
 	u32	total_val;		//sum of valid elements
 };
 
-struct rx_pkt_attrib
-{
+struct rx_pkt_attrib {
 	u16	pkt_len;
 	u8	physt;
 	u8	drvinfo_sz;
@@ -310,7 +309,7 @@ struct recv_buf {
 	u32 alloc_sz;
 	u8  irp_pending;
 	int  transfer_len;
-	_pkt *pskb;
+	struct sk_buff *pskb;
 	u8	reuse;
 };
 
@@ -337,8 +336,8 @@ struct recv_frame_hdr
 	struct sk_buff	 *pkt;
 	struct sk_buff	 *pkt_newalloc;
 #else // CONFIG_BSD_RX_USE_MBUF
-	_pkt	*pkt;
-	_pkt *pkt_newalloc;
+	struct sk_buff *pkt;
+	struct sk_buff *pkt_newalloc;
 #endif // CONFIG_BSD_RX_USE_MBUF
 
 	_adapter  *adapter;
@@ -553,7 +552,7 @@ static inline union recv_frame *rxmem_to_recvframe(u8 *rxmem)
 
 }
 
-static inline union recv_frame *pkt_to_recvframe(_pkt *pkt)
+static inline union recv_frame *pkt_to_recvframe(struct sk_buff *pkt)
 {
 
 	u8 * buf_star;
@@ -563,7 +562,7 @@ static inline union recv_frame *pkt_to_recvframe(_pkt *pkt)
 	return precv_frame;
 }
 
-static inline u8 *pkt_to_recvmem(_pkt *pkt)
+static inline u8 *pkt_to_recvmem(struct sk_buff *pkt)
 {
 	// return the rx_head
 
@@ -573,7 +572,7 @@ static inline u8 *pkt_to_recvmem(_pkt *pkt)
 
 }
 
-static inline u8 *pkt_to_recvdata(_pkt *pkt)
+static inline u8 *pkt_to_recvdata(struct sk_buff *pkt)
 {
 	// return the rx_data
 

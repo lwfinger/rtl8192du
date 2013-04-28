@@ -527,7 +527,7 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 			//clone/copy to if2
 			u8 shift_sz = 0;
 			u32 alloc_sz, skb_len;
-			_pkt	 *pkt_copy = NULL;
+			struct sk_buff *pkt_copy = NULL;
 			struct rx_pkt_attrib *pattrib = NULL;
 
 			precvframe_if2 = rtw_alloc_recvframe(pfree_recv_queue);
@@ -622,7 +622,7 @@ static int recvbuf2recvframe(_adapter *padapter, struct recv_buf *precvbuf)
 	int	transfer_len;
 	struct recv_stat	*prxstat;
 	struct phy_stat	*pphy_info = NULL;
-	_pkt				*pkt_copy = NULL;
+	struct sk_buff *pkt_copy = NULL;
 	union recv_frame	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
@@ -948,7 +948,7 @@ _func_exit_;
 	return ret;
 }
 #else	// CONFIG_USE_USB_BUFFER_ALLOC_RX
-static int recvbuf2recvframe(_adapter *padapter, _pkt *pskb)
+static int recvbuf2recvframe(_adapter *padapter, struct sk_buff *pskb)
 {
 	u8	*pbuf;
 	u8	shift_sz = 0;
@@ -957,7 +957,7 @@ static int recvbuf2recvframe(_adapter *padapter, _pkt *pskb)
 	int	transfer_len;
 	struct recv_stat	*prxstat;
 	struct phy_stat	*pphy_info = NULL;
-	_pkt				*pkt_copy = NULL;
+	struct sk_buff *pkt_copy = NULL;
 	union recv_frame	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -1128,7 +1128,7 @@ _exit_recvbuf2recvframe:
 
 void rtl8192du_recv_tasklet(void *priv)
 {
-	_pkt			*pskb;
+	struct sk_buff *pskb;
 	_adapter		*padapter = (_adapter*)priv;
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 

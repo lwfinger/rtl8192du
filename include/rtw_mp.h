@@ -83,26 +83,17 @@
 #define MAX_MP_XMITBUF_SZ	2048
 #define NR_MP_XMITFRAME		8
 
-struct mp_xmit_frame
-{
+struct mp_xmit_frame {
 	_list	list;
-
 	struct pkt_attrib attrib;
-
-	_pkt *pkt;
-
+	struct sk_buff *pkt;
 	int frame_tag;
-
 	_adapter *padapter;
-
 	//insert urb, irp, and irpcnt info below...
 	//max frag_cnt = 8
-
 	u8 *mem_addr;
 	u32 sz[8];
-
 	struct urb *pxmit_urb[8];
-
 	u8 bpending[8];
 	int ac_tag[8];
 	int last[8];
@@ -111,8 +102,7 @@ struct mp_xmit_frame
 	uint mem[(MAX_MP_XMITBUF_SZ >> 2)];
 };
 
-struct mp_wiparam
-{
+struct mp_wiparam {
 	u32 bcompleted;
 	u32 act_type;
 	u32 io_offset;

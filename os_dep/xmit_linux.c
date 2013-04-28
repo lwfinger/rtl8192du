@@ -38,7 +38,7 @@ uint rtw_remainder_len(struct pkt_file *pfile)
 	return (pfile->buf_len - ((SIZE_PTR)(pfile->cur_addr) - (SIZE_PTR)(pfile->buf_start)));
 }
 
-void _rtw_open_pktfile (_pkt *pktptr, struct pkt_file *pfile)
+void _rtw_open_pktfile (struct sk_buff *pktptr, struct pkt_file *pfile)
 {
 _func_enter_;
 
@@ -85,7 +85,7 @@ _func_exit_;
 	return false;
 }
 
-void rtw_set_tx_chksum_offload(_pkt *pkt, struct pkt_attrib *pattrib)
+void rtw_set_tx_chksum_offload(struct sk_buff *pkt, struct pkt_attrib *pattrib)
 {
 
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
@@ -187,7 +187,7 @@ void rtw_os_xmit_resource_free(_adapter *padapter, struct xmit_buf *pxmitbuf,u32
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_TX
 }
 
-void rtw_os_pkt_complete(_adapter *padapter, _pkt *pkt)
+void rtw_os_pkt_complete(_adapter *padapter, struct sk_buff *pkt)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
 	u16	queue;
@@ -292,7 +292,7 @@ int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 	return true;
 }
 
-int rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev)
+int rtw_xmit_entry(struct sk_buff *pkt, _nic_hdl pnetdev)
 {
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;

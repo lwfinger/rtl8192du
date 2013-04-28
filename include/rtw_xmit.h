@@ -288,22 +288,14 @@ struct xmit_buf
 #endif
 };
 
-struct xmit_frame
-{
+struct xmit_frame {
 	_list	list;
-
 	struct pkt_attrib attrib;
-
-	_pkt *pkt;
-
+	struct sk_buff *pkt;
 	int	frame_tag;
-
 	_adapter *padapter;
-
 	u8	*buf_addr;
-
 	struct xmit_buf *pxmitbuf;
-
 #ifdef CONFIG_USB_TX_AGGREGATION
 	u8	agg_num;
 #endif
@@ -313,7 +305,6 @@ struct xmit_frame
 #ifdef CONFIG_XMIT_ACK
 	u8 ack_report;
 #endif
-
 };
 
 struct tx_servq {
@@ -324,27 +315,17 @@ struct tx_servq {
 
 
 
-struct sta_xmit_priv
-{
+struct sta_xmit_priv {
 	spinlock_t lock;
 	int	option;
 	int	apsd_setting;	//When bit mask is on, the associated edca queue supports APSD.
-
-
-	//struct tx_servq blk_q[MAX_NUMBLKS];
 	struct tx_servq	be_q;			//priority == 0,3
 	struct tx_servq	bk_q;			//priority == 1,2
 	struct tx_servq	vi_q;			//priority == 4,5
 	struct tx_servq	vo_q;			//priority == 6,7
 	_list	legacy_dz;
 	_list  apsd;
-
 	u16 txseq_tid[16];
-
-	//uint	sta_tx_bytes;
-	//u64	sta_tx_pkts;
-	//uint	sta_tx_fail;
-
 };
 
 
@@ -460,7 +441,7 @@ extern s32 rtw_xmit_classifier(_adapter *padapter, struct xmit_frame *pxmitframe
 extern thread_return rtw_xmit_thread(thread_context context);
 extern u32 rtw_calculate_wlan_pkt_size_by_attribue(struct pkt_attrib *pattrib);
 #define rtw_wlan_pkt_size(f) rtw_calculate_wlan_pkt_size_by_attribue(&f->attrib)
-extern s32 rtw_xmitframe_coalesce(_adapter *padapter, _pkt *pkt, struct xmit_frame *pxmitframe);
+extern s32 rtw_xmitframe_coalesce(_adapter *padapter, struct sk_buff *pkt, struct xmit_frame *pxmitframe);
 #ifdef CONFIG_TDLS
 s32 rtw_xmit_tdls_coalesce(_adapter *padapter, struct xmit_frame *pxmitframe, u8 action);
 #endif //CONFIG_TDLS
@@ -481,7 +462,7 @@ void rtw_alloc_hwxmits(_adapter *padapter);
 void rtw_free_hwxmits(_adapter *padapter);
 
 
-s32 rtw_xmit(_adapter *padapter, _pkt **pkt);
+s32 rtw_xmit(_adapter *padapter, struct sk_buff **pkt);
 
 #if defined(CONFIG_AP_MODE) || defined(CONFIG_TDLS)
 int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *pxmitframe);

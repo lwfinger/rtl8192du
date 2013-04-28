@@ -40,7 +40,6 @@
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,5))
 	#include <linux/kref.h>
 #endif
-	//#include <linux/smp_lock.h>
 	#include <linux/netdevice.h>
 	#include <linux/skbuff.h>
 	#include <linux/circ_buf.h>
@@ -90,14 +89,11 @@
 #endif
 #endif
 
-//	typedef	spinlock_t	_lock;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 	typedef struct mutex		_mutex;
 #else
 	typedef struct semaphore	_mutex;
 #endif
-	typedef struct timer_list _timer;
-
 	struct	__queue	{
 		struct	list_head	queue;
 		spinlock_t	lock;
@@ -186,22 +182,21 @@ static inline void rtw_list_delete(_list *plist)
 	list_del_init(plist);
 }
 
-static inline void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
+static inline void _init_timer(struct timer_list *timer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
 {
-	//setup_timer(ptimer, pfunc,(u32)cntx);
-	ptimer->function = pfunc;
-	ptimer->data = (unsigned long)cntx;
-	init_timer(ptimer);
+	timer->function = pfunc;
+	timer->data = (unsigned long)cntx;
+	init_timer(timer);
 }
 
-static inline void _set_timer(_timer *ptimer,u32 delay_time)
+static inline void _set_timer(struct timer_list *timer,u32 delay_time)
 {
-	mod_timer(ptimer , (jiffies+(delay_time*HZ/1000)));
+	mod_timer(timer , (jiffies+(delay_time*HZ/1000)));
 }
 
-static inline void _cancel_timer(_timer *ptimer,u8 *bcancelled)
+static inline void _cancel_timer(struct timer_list *timer,u8 *bcancelled)
 {
-	del_timer_sync(ptimer);
+	del_timer_sync(timer);
 	*bcancelled=  true;
 }
 
@@ -415,9 +410,9 @@ extern void	rtw_udelay_os(int us);
 extern void rtw_yield_os(void);
 
 
-static inline unsigned char _cancel_timer_ex(_timer *ptimer)
+static inline unsigned char _cancel_timer_ex(struct timer_list *timer)
 {
-	return del_timer_sync(ptimer);
+	return del_timer_sync(timer);
 }
 
 static __inline void thread_enter(char *name)

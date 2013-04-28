@@ -226,7 +226,7 @@ struct pwrctrl_priv
 	u8		wowlan_pattern_idx;
 	u32		wowlan_pattern_context[8][5];
 #endif // CONFIG_WOWLAN
-	_timer	pwr_state_check_timer;
+	struct timer_list pwr_state_check_timer;
 	int		pwr_state_check_interval;
 	u8		pwr_state_check_cnts;
 

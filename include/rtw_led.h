@@ -95,7 +95,7 @@ struct LED_871X {
 	u32					BlinkTimes; // Number of times to toggle led state for blinking.
 	enum LED_STATE_871X		BlinkingLedState; // Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are.
 
-	_timer				BlinkTimer; // Timer object for led blinking.
+	struct timer_list		BlinkTimer; // Timer object for led blinking.
 #if LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0)
 	_workitem			BlinkWorkItem; // Workitem used by BlinkTimer to manipulate H/W to blink LED.
 #endif

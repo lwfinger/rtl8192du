@@ -368,8 +368,8 @@ struct	xmit_priv	{
 
 	_lock	lock;
 
-	_sema	xmit_sema;
-	_sema	terminate_xmitthread_sema;
+	struct  semaphore xmit_sema;
+	struct  semaphore terminate_xmitthread_sema;
 
 	//_queue	blk_strms[MAX_NUMBLKS];
 	_queue	be_pending;
@@ -413,7 +413,7 @@ struct	xmit_priv	{
 
 	struct hw_xmit *hwxmits;
 	u8	hwxmit_entry;
-	_sema	tx_retevt;//all tx return event;
+	struct  semaphore tx_retevt;//all tx return event;
 	u8		txirp_cnt;//
 	struct tasklet_struct xmit_tasklet;
 	//per AC pending irp

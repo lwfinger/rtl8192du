@@ -192,8 +192,8 @@ struct recv_priv
 	  _lock	lock;
 
 #ifdef CONFIG_RECV_THREAD_MODE
-	_sema	recv_sema;
-	_sema	terminate_recvthread_sema;
+	struct  semaphore recv_sema;
+	struct  semaphore terminate_recvthread_sema;
 #endif
 
 	_queue	free_recv_queue;
@@ -218,7 +218,7 @@ struct recv_priv
 	uint  rx_smallpacket_crcerr;
 	uint  rx_middlepacket_crcerr;
 
-	_sema allrxreturnevt;
+	struct  semaphore allrxreturnevt;
 	uint	ff_hwaddr;
 	u8	rx_pending_cnt;
 

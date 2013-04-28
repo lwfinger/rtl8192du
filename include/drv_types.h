@@ -259,7 +259,7 @@ struct dvobj_priv {
 
 	int	RegUsbSS;
 
-	_sema	usb_suspend_sema;
+	struct  semaphore usb_suspend_sema;
 
 #ifdef CONFIG_USB_VENDOR_REQ_MUTEX
 	_mutex  usb_vendor_req_mutex;

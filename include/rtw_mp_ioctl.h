@@ -28,49 +28,11 @@
 #include <rtw_mp.h>
 
 //------------------------------------------------------------------------------
-typedef struct CFG_DBG_MSG_STRUCT {
-	u32 DebugLevel;
-	u32 DebugComponent_H32;
-	u32 DebugComponent_L32;
-}CFG_DBG_MSG_STRUCT,*PCFG_DBG_MSG_STRUCT;
-
-typedef struct _RW_REG {
+struct mp_rw_reg {
 	u32 offset;
 	u32 width;
 	u32 value;
-}mp_rw_reg,RW_Reg, *pRW_Reg;
-
-//for OID_RT_PRO_READ16_EEPROM & OID_RT_PRO_WRITE16_EEPROM
-typedef struct _EEPROM_RW_PARAM {
-	u32 offset;
-	u16 value;
-}eeprom_rw_param,EEPROM_RWParam, *pEEPROM_RWParam;
-
-typedef struct _EFUSE_ACCESS_STRUCT_ {
-	u16	start_addr;
-	u16	cnts;
-	u8	data[0];
-}EFUSE_ACCESS_STRUCT, *PEFUSE_ACCESS_STRUCT;
-
-typedef struct _BURST_RW_REG {
-	u32 offset;
-	u32 len;
-	u8 Data[256];
-}burst_rw_reg,Burst_RW_Reg, *pBurst_RW_Reg;
-
-typedef struct _USB_VendorReq{
-	u8	bRequest;
-	u16	wValue;
-	u16	wIndex;
-	u16	wLength;
-	u8	u8Dir;//0:OUT, 1:IN
-	u8	u8InData;
-}usb_vendor_req, USB_VendorReq, *pUSB_VendorReq;
-
-typedef struct _DR_VARIABLE_STRUCT_ {
-	u8 offset;
-	u32 variable;
-}DR_VARIABLE_STRUCT;
+};
 
 #define _irqlevel_changed_(a,b)
 
@@ -424,13 +386,15 @@ struct rfintfs_parm {
 	u32 rfintfs;
 };
 
-typedef struct _mp_xmit_parm_ {
+#if 0
+struct mp_xmit_parm {
 	u8 enable;
 	u32 count;
 	u16 length;
 	u8 payload_type;
 	u8 da[ETH_ALEN];
-}MP_XMIT_PARM, *PMP_XMIT_PARM;
+};
+#endif
 
 struct mp_xmit_packet {
 	u32 len;
@@ -440,12 +404,6 @@ struct mp_xmit_packet {
 struct psmode_param {
 	u32 ps_mode;
 	u32 smart_ps;
-};
-
-//for OID_RT_PRO_READ16_EEPROM & OID_RT_PRO_WRITE16_EEPROM
-struct eeprom_rw_param {
-	u32 offset;
-	u16 value;
 };
 
 struct mp_ioctl_handler {

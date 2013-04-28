@@ -1392,7 +1392,7 @@ phy_BB8192D_Config_ParaFile(
 	)
 {
 #if MP_DRIVER != 1
-	EEPROM_EFUSE_PRIV	*pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
 #endif
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	int		rtStatus = _SUCCESS;

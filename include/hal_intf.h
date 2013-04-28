@@ -227,11 +227,11 @@ struct hal_ops {
 	c2h_id_filter c2h_id_filter_ccx;
 };
 
-typedef	enum _RT_EEPROM_TYPE{
+enum RT_EEPROM_TYPE {
 	EEPROM_93C46,
 	EEPROM_93C56,
 	EEPROM_BOOT_EFUSE,
-}RT_EEPROM_TYPE,*PRT_EEPROM_TYPE;
+};
 
 #define USB_HIGH_SPEED_BULK_SIZE	512
 #define USB_FULL_SPEED_BULK_SIZE	64
@@ -268,12 +268,14 @@ enum HARDWARE_TYPE {
 //
 // RTL8192D Series
 //
-#define IS_HARDWARE_TYPE_8192DE(_Adapter)	(((PADAPTER)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DE)
-#define IS_HARDWARE_TYPE_8192DU(_Adapter)	(((PADAPTER)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DU)
+#define IS_HARDWARE_TYPE_8192DE(_Adapter)			\
+		(((PADAPTER)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DE)
+#define IS_HARDWARE_TYPE_8192DU(_Adapter)			\
+		(((PADAPTER)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DU)
 #define	IS_HARDWARE_TYPE_8192D(_Adapter)			\
-(IS_HARDWARE_TYPE_8192DE(_Adapter) || IS_HARDWARE_TYPE_8192DU(_Adapter))
+		(IS_HARDWARE_TYPE_8192DE(_Adapter) ||		\
+		 IS_HARDWARE_TYPE_8192DU(_Adapter))
 
-typedef struct eeprom_priv EEPROM_EFUSE_PRIV, *PEEPROM_EFUSE_PRIV;
 #define GET_EEPROM_EFUSE_PRIV(priv)	(&priv->eeprompriv)
 
 #ifdef CONFIG_WOWLAN
@@ -299,13 +301,13 @@ struct wowlan_ioctl_param{
 	unsigned char pattern[0];
 };
 
-#define Rx_Pairwisekey			BIT(0)
+#define Rx_Pairwisekey				BIT(0)
 #define Rx_GTK					BIT(1)
 #define Rx_DisAssoc				BIT(2)
 #define Rx_DeAuth				BIT(3)
-#define FWDecisionDisconnect	BIT(4)
+#define FWDecisionDisconnect			BIT(4)
 #define Rx_MagicPkt				BIT(5)
-#define FinishBtFwPatch			BIT(7)
+#define FinishBtFwPatch				BIT(7)
 
 #endif // CONFIG_WOWLAN
 
@@ -328,8 +330,10 @@ void rtw_hal_chip_configure(_adapter *padapter);
 void rtw_hal_read_chip_info(_adapter *padapter);
 void rtw_hal_read_chip_version(_adapter *padapter);
 
-u8 rtw_hal_set_def_var(_adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
-u8 rtw_hal_get_def_var(_adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
+u8 rtw_hal_set_def_var(_adapter *padapter, enum HAL_DEF_VARIABLE eVariable,
+		       void *pValue);
+u8 rtw_hal_get_def_var(_adapter *padapter, enum HAL_DEF_VARIABLE eVariable,
+		       void *pValue);
 
 void rtw_hal_enable_interrupt(_adapter *padapter);
 void rtw_hal_disable_interrupt(_adapter *padapter);

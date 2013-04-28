@@ -2335,17 +2335,14 @@ static void	dm_CheckPbcGPIO(PADAPTER padapter)
 	}
 }
 
-static void
-dm_InitRateAdaptiveMask(
-	PADAPTER	Adapter
-	)
+static void dm_InitRateAdaptiveMask(PADAPTER	Adapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PRATE_ADAPTIVE	pRA = (PRATE_ADAPTIVE)&pdmpriv->RateAdaptive;
+	struct rate_adaptive *ra = (struct rate_adaptive *)&pdmpriv->RateAdaptive;
 
-	pRA->RATRState = DM_RATR_STA_INIT;
-	pRA->PreRATRState = DM_RATR_STA_INIT;
+	ra->RATRState = DM_RATR_STA_INIT;
+	ra->PreRATRState = DM_RATR_STA_INIT;
 
 	if (pdmpriv->DM_Type == DM_Type_ByDriver)
 		pdmpriv->bUseRAMask = true;

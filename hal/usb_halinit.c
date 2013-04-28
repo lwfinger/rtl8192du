@@ -3149,7 +3149,7 @@ _ReadMACAddress(
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
-	EEPROM_EFUSE_PRIV	*pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
 
 	// Dual MAC should assign diffrent MAC address ,or, it is wil cause hang in single phy mode  zhiyuan 04/07/2010
 	//Temply random assigh mac address for  efuse mac address not ready now
@@ -3383,12 +3383,10 @@ static void _ReadPROMContent(
 	PADAPTER		Adapter
 	)
 {
-	EEPROM_EFUSE_PRIV	*pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
-//	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
 	u8			PROMContent[HWSET_MAX_SIZE]={0};
 	u8			eeValue;
 	u32			i;
-//	u16			value16;
 
 	eeValue = rtw_read8(Adapter, REG_9346CR);
 	// To check system boot selection.

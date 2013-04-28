@@ -196,8 +196,7 @@ enum DM_DIG_CONNECT_E {
 #define		DM_Type_ByFW			0
 #define		DM_Type_ByDriver		1
 
-typedef struct _RATE_ADAPTIVE
-{
+struct rate_adaptive {
 	u8				RateAdaptiveDisabled;
 	u8				RATRState;
 	u16				reserve;
@@ -218,8 +217,7 @@ typedef struct _RATE_ADAPTIVE
 	u32				PingRSSIThreshForRA;//cosa add for Netcore long range ping issue
 	u32				LastRATR;
 	u8				PreRATRState;
-
-} RATE_ADAPTIVE, *PRATE_ADAPTIVE;
+};
 
 enum DM_SWAS_E {
 	Antenna_B = 1,
@@ -244,8 +242,7 @@ enum DM_SWAS_E {
 //Neil Chen---2011--06--15--
 //==============================
 //3 PathDiv
-typedef struct _SW_Antenna_Switch_
-{
+struct sw_antenna_switch {
 	u8		try_flag;
 	s32		PreRSSI;
 	u8		CurAntenna;
@@ -258,7 +255,8 @@ typedef struct _SW_Antenna_Switch_
 	// Before link Antenna Switch check
 	u8		SWAS_NoLink_State;
 	u32		SWAS_NoLink_BK_Reg860;
-}SWAT_T, *pSWAT_T;
+};
+
 //========================================
 
 struct	dm_priv
@@ -277,7 +275,7 @@ struct	dm_priv
 
 	//for rate adaptive, in fact,  88c/92c fw will handle this
 	u8	bUseRAMask;
-	RATE_ADAPTIVE	RateAdaptive;
+	struct rate_adaptive RateAdaptive;
 
 	//* Upper and Lower Signal threshold for Rate Adaptive*/
 	int	UndecoratedSmoothedPWDB;
@@ -352,7 +350,7 @@ struct	dm_priv
 	//u8 Record_CCK_40Mindex;
 	char	OFDM_index[2];
 
-	SWAT_T DM_SWAT_Table;
+	struct sw_antenna_switch DM_SWAT_Table;
 
 	//for TxPwrTracking
 	int	RegE94;

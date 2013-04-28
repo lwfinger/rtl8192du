@@ -24,23 +24,13 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
-typedef struct _io_offload_cmd {
-	u8 rsvd0;
-	u8 cmd;
-	u16 address;
-	u32 value;
-} IO_OFFLOAD_CMD, IOL_CMD;
-
-#define IOL_CMD_LLT			0x00
-//#define IOL_CMD_R_EFUSE	0x01
+#define IOL_CMD_LLT		0x00
 #define IOL_CMD_WB_REG		0x02
-#define IOL_CMD_WW_REG	0x03
+#define IOL_CMD_WW_REG		0x03
 #define IOL_CMD_WD_REG		0x04
-//#define IOL_CMD_W_RF		0x05
 #define IOL_CMD_DELAY_US	0x80
 #define IOL_CMD_DELAY_MS	0x81
-//#define IOL_CMD_DELAY_S	0x82
-#define IOL_CMD_END			0x83
+#define IOL_CMD_END		0x83
 
 /*****************************************************
 CMD					Address			Value

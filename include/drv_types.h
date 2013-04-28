@@ -446,7 +446,7 @@ struct _ADAPTER {
 #endif
 
 #ifdef CONFIG_BR_EXT
-	_lock					br_ext_lock;
+	spinlock_t			br_ext_lock;
 	struct nat25_network_db_entry	*nethash[NAT25_HASH_SIZE];
 	int				pppoe_connection_in_progress;
 	unsigned char			pppoe_addr[MACADDRLEN];

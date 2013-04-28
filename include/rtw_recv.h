@@ -187,9 +187,8 @@ accesser of recv_priv: rtw_recv_entry(dispatch / passive level); recv_thread(pas
 
 using enter_critical section to protect
 */
-struct recv_priv
-{
-	  _lock	lock;
+struct recv_priv {
+	  spinlock_t	lock;
 
 #ifdef CONFIG_RECV_THREAD_MODE
 	struct  semaphore recv_sema;
@@ -282,27 +281,17 @@ struct recv_priv
 #endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
 
 struct sta_recv_priv {
-
-	_lock	lock;
+	spinlock_t lock;
 	int	option;
-
-	//_queue	blk_strms[MAX_RX_NUMBLKS];
 	_queue defrag_q;	 //keeping the fragment frame until defrag
-
 	struct	stainfo_rxcache rxcache;
-
-	//uint	sta_rx_bytes;
-	//uint	sta_rx_pkts;
-	//uint	sta_rx_fail;
-
 };
 
 
-struct recv_buf
-{
+struct recv_buf {
 	_list list;
 
-	_lock recvbuf_lock;
+	spinlock_t recvbuf_lock;
 
 	u32	ref_cnt;
 

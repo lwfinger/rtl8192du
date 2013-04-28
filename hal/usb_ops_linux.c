@@ -496,7 +496,7 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 	_adapter *primary_padapter = precvframe->u.hdr.adapter;
 	_adapter *secondary_padapter = primary_padapter->pbuddy_adapter;
 	struct recv_priv *precvpriv = &primary_padapter->recvpriv;
-	_queue *pfree_recv_queue = &precvpriv->free_recv_queue;
+	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
 	u8	*pbuf = precvframe->u.hdr.rx_data;
 
 	if(!secondary_padapter)
@@ -627,7 +627,7 @@ static int recvbuf2recvframe(_adapter *padapter, struct recv_buf *precvbuf)
 	struct rx_pkt_attrib	*pattrib = NULL;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
-	_queue			*pfree_recv_queue = &precvpriv->free_recv_queue;
+	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
 
 
 	transfer_len = (s32)precvbuf->transfer_len;
@@ -962,7 +962,7 @@ static int recvbuf2recvframe(_adapter *padapter, struct sk_buff *pskb)
 	struct rx_pkt_attrib	*pattrib = NULL;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
-	_queue			*pfree_recv_queue = &precvpriv->free_recv_queue;
+	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
 
 	transfer_len = pskb->len;
 	pbuf = pskb->data;

@@ -165,7 +165,7 @@ union txdesc {
 };
 
 struct	hw_xmit	{
-	_queue *sta_queue;
+	struct __queue *sta_queue;
 	int	accnt;
 };
 
@@ -309,7 +309,7 @@ struct xmit_frame {
 
 struct tx_servq {
 	struct list_head tx_pending;
-	_queue	sta_pending;
+	struct __queue sta_pending;
 	int qcnt;
 };
 
@@ -348,15 +348,11 @@ struct	xmit_priv	{
 	struct  semaphore xmit_sema;
 	struct  semaphore terminate_xmitthread_sema;
 
-	//_queue	blk_strms[MAX_NUMBLKS];
-	_queue	be_pending;
-	_queue	bk_pending;
-	_queue	vi_pending;
-	_queue	vo_pending;
-	_queue	bm_pending;
-
-	//_queue	legacy_dz_queue;
-	//_queue	apsd_queue;
+	struct __queue be_pending;
+	struct __queue bk_pending;
+	struct __queue vi_pending;
+	struct __queue vo_pending;
+	struct __queue bm_pending;
 
 	u8 *pallocated_frame_buf;
 	u8 *pxmit_frame_buf;
@@ -365,7 +361,7 @@ struct	xmit_priv	{
 	//uint mapping_addr;
 	//uint pkt_sz;
 
-	_queue	free_xmit_queue;
+	struct __queue free_xmit_queue;
 
 	//struct	hw_txqueue	be_txqueue;
 	//struct	hw_txqueue	bk_txqueue;
@@ -398,13 +394,13 @@ struct	xmit_priv	{
 	int bkq_cnt;
 	int viq_cnt;
 	int voq_cnt;
-	_queue free_xmitbuf_queue;
-	_queue pending_xmitbuf_queue;
+	struct __queue free_xmitbuf_queue;
+	struct __queue pending_xmitbuf_queue;
 	u8 *pallocated_xmitbuf;
 	u8 *pxmitbuf;
 	uint free_xmitbuf_cnt;
 
-	_queue free_xmit_extbuf_queue;
+	struct __queue free_xmit_extbuf_queue;
 	u8 *pallocated_xmit_extbuf;
 	u8 *pxmit_extbuf;
 	uint free_xmit_extbuf_cnt;
@@ -432,7 +428,7 @@ extern s32 rtw_put_snap(u8 *data, u16 h_proto);
 
 extern struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv);
 extern s32 rtw_free_xmitframe(struct xmit_priv *pxmitpriv, struct xmit_frame *pxmitframe);
-extern void rtw_free_xmitframe_queue(struct xmit_priv *pxmitpriv, _queue *pframequeue);
+extern void rtw_free_xmitframe_queue(struct xmit_priv *pxmitpriv, struct __queue *pframequeue);
 struct tx_servq *rtw_get_sta_pending(_adapter *padapter, struct sta_info *psta, int up, u8 *ac);
 extern s32 rtw_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe);
 extern struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit_i, int entry);

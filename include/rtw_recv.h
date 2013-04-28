@@ -61,7 +61,7 @@ struct recv_reorder_ctrl
 	u16 indicate_seq;//=wstart_b, init_value=0xffff
 	u16 wend_b;
 	u8 wsize_b;
-	_queue pending_recvframe_queue;
+	struct __queue pending_recvframe_queue;
 	struct timer_list reordering_ctrl_timer;
 };
 
@@ -194,9 +194,9 @@ struct recv_priv {
 	struct  semaphore terminate_recvthread_sema;
 #endif
 
-	_queue	free_recv_queue;
-	_queue	recv_pending_queue;
-	_queue	uc_swdec_pending_queue;
+	struct __queue free_recv_queue;
+	struct __queue recv_pending_queue;
+	struct __queue uc_swdec_pending_queue;
 
 	u8 *pallocated_frame_buf;
 	u8 *precv_frame_buf;
@@ -236,12 +236,12 @@ struct recv_priv {
 #endif	// CONFIG_RX_INDICATE_QUEUE
 
 #ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
-	_queue	recv_buf_pending_queue;
+	struct __queue recv_buf_pending_queue;
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_RX
 
 	u8 *pallocated_recv_buf;
 	u8 *precv_buf;    // 4 alignment
-	_queue	free_recv_buf_queue;
+	struct __queue free_recv_buf_queue;
 	u32	free_recv_buf_queue_cnt;
 
 	//For display the phy informatiom
@@ -282,7 +282,7 @@ struct recv_priv {
 struct sta_recv_priv {
 	spinlock_t lock;
 	int	option;
-	_queue defrag_q;	 //keeping the fragment frame until defrag
+	struct __queue defrag_q;	 //keeping the fragment frame until defrag
 	struct	stainfo_rxcache rxcache;
 };
 
@@ -375,21 +375,21 @@ union recv_frame{
 };
 
 
-extern union recv_frame *_rtw_alloc_recvframe (_queue *pfree_recv_queue);  //get a free recv_frame from pfree_recv_queue
-extern union recv_frame *rtw_alloc_recvframe (_queue *pfree_recv_queue);  //get a free recv_frame from pfree_recv_queue
+extern union recv_frame *_rtw_alloc_recvframe (struct __queue *pfree_recv_queue);  //get a free recv_frame from pfree_recv_queue
+extern union recv_frame *rtw_alloc_recvframe (struct __queue *pfree_recv_queue);  //get a free recv_frame from pfree_recv_queue
 extern void rtw_init_recvframe(union recv_frame *precvframe ,struct recv_priv *precvpriv);
-extern int	 rtw_free_recvframe(union recv_frame *precvframe, _queue *pfree_recv_queue);
+extern int	 rtw_free_recvframe(union recv_frame *precvframe, struct __queue *pfree_recv_queue);
 
 #define rtw_dequeue_recvframe(queue) rtw_alloc_recvframe(queue)
-extern int _rtw_enqueue_recvframe(union recv_frame *precvframe, _queue *queue);
-extern int rtw_enqueue_recvframe(union recv_frame *precvframe, _queue *queue);
+extern int _rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue);
+extern int rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue);
 
-extern void rtw_free_recvframe_queue(_queue *pframequeue,  _queue *pfree_recv_queue);
+extern void rtw_free_recvframe_queue(struct __queue *pframequeue, struct __queue *pfree_recv_queue);
 u32 rtw_free_uc_swdec_pending_queue(_adapter *adapter);
 
-int rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, _queue *queue);
-int rtw_enqueue_recvbuf(struct recv_buf *precvbuf, _queue *queue);
-struct recv_buf *rtw_dequeue_recvbuf (_queue *queue);
+int rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, struct __queue *queue);
+int rtw_enqueue_recvbuf(struct recv_buf *precvbuf, struct __queue *queue);
+struct recv_buf *rtw_dequeue_recvbuf (struct __queue *queue);
 
 void rtw_reordering_ctrl_timeout_handler(void *pcontext);
 

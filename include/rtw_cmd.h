@@ -53,7 +53,7 @@
 	struct cmd_priv {
 		struct  semaphore cmd_queue_sema;
 		struct  semaphore terminate_cmdthread_sema;
-		_queue	cmd_queue;
+		struct __queue cmd_queue;
 		u8	cmd_seq;
 		u8	*cmd_buf;	//shall be non-paged, and 4 bytes aligned
 		u8	*cmd_allocated_buf;
@@ -80,7 +80,7 @@
 #ifdef CONFIG_EVENT_THREAD_MODE
 		struct  semaphore evt_notify;
 		struct  semaphore terminate_evtthread_sema;
-		_queue	evt_queue;
+		struct __queue evt_queue;
 #endif
 
 //#define CONFIG_C2H_WK
@@ -128,7 +128,7 @@ extern void rtw_free_cmd_obj(struct cmd_obj *pcmd);
 
 #ifdef CONFIG_EVENT_THREAD_MODE
 extern u32 rtw_enqueue_evt(struct evt_priv *pevtpriv, struct evt_obj *obj);
-extern struct evt_obj *rtw_dequeue_evt(_queue *queue);
+extern struct evt_obj *rtw_dequeue_evt(struct __queue *queue);
 extern void rtw_free_evt_obj(struct evt_obj *pcmd);
 #endif
 

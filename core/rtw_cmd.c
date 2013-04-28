@@ -186,7 +186,7 @@ ISR/Call-Back functions can't call this sub-function.
 
 */
 
-int	_rtw_enqueue_cmd(_queue *queue, struct cmd_obj *obj)
+int	_rtw_enqueue_cmd(struct __queue *queue, struct cmd_obj *obj)
 {
 	long unsigned int irqL;
 
@@ -208,7 +208,7 @@ _func_exit_;
 	return _SUCCESS;
 }
 
-struct	cmd_obj	*_rtw_dequeue_cmd(_queue *queue)
+struct	cmd_obj	*_rtw_dequeue_cmd(struct __queue *queue)
 {
 	long unsigned int irqL;
 	struct cmd_obj *obj;
@@ -513,7 +513,7 @@ _func_exit_;
 u32 rtw_enqueue_evt(struct evt_priv *pevtpriv, struct evt_obj *obj)
 {
 	int	res;
-	_queue *queue = &pevtpriv->evt_queue;
+	struct __queue *queue = &pevtpriv->evt_queue;
 
 _func_enter_;
 

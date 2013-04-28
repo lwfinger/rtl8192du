@@ -1849,7 +1849,7 @@ struct xmit_buf *rtw_alloc_xmitbuf_ext(struct xmit_priv *pxmitpriv)
 	long unsigned int irqL;
 	struct xmit_buf *pxmitbuf =  NULL;
 	struct list_head *plist, *phead;
-	_queue *pfree_queue = &pxmitpriv->free_xmit_extbuf_queue;
+	struct __queue *pfree_queue = &pxmitpriv->free_xmit_extbuf_queue;
 
 _func_enter_;
 
@@ -1895,7 +1895,7 @@ _func_exit_;
 s32 rtw_free_xmitbuf_ext(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 {
 	long unsigned int irqL;
-	_queue *pfree_queue = &pxmitpriv->free_xmit_extbuf_queue;
+	struct __queue *pfree_queue = &pxmitpriv->free_xmit_extbuf_queue;
 
 _func_enter_;
 
@@ -1926,7 +1926,7 @@ struct xmit_buf *rtw_alloc_xmitbuf(struct xmit_priv *pxmitpriv)
 	long unsigned int irqL;
 	struct xmit_buf *pxmitbuf =  NULL;
 	struct list_head *plist, *phead;
-	_queue *pfree_xmitbuf_queue = &pxmitpriv->free_xmitbuf_queue;
+	struct __queue *pfree_xmitbuf_queue = &pxmitpriv->free_xmitbuf_queue;
 
 _func_enter_;
 
@@ -1979,7 +1979,7 @@ _func_exit_;
 s32 rtw_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 {
 	long unsigned int irqL;
-	_queue *pfree_xmitbuf_queue = &pxmitpriv->free_xmitbuf_queue;
+	struct __queue *pfree_xmitbuf_queue = &pxmitpriv->free_xmitbuf_queue;
 
 _func_enter_;
 
@@ -2032,7 +2032,7 @@ Must be very very cautious...
 
 */
 
-struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)//(_queue *pfree_xmit_queue)
+struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)
 {
 	/*
 		Please remember to use all the osdep_service api,
@@ -2042,7 +2042,7 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)//(_queue *pf
 
 	struct xmit_frame *pxframe = NULL;
 	struct list_head *plist, *phead;
-	_queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
+	struct __queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
 	_adapter *padapter = pxmitpriv->adapter;
 
 _func_enter_;
@@ -2106,7 +2106,7 @@ _func_exit_;
 
 s32 rtw_free_xmitframe(struct xmit_priv *pxmitpriv, struct xmit_frame *pxmitframe)
 {
-	_queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
+	struct __queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
 	_adapter *padapter = pxmitpriv->adapter;
 	struct sk_buff *pndis_pkt = NULL;
 
@@ -2144,7 +2144,7 @@ _func_exit_;
 	return _SUCCESS;
 }
 
-void rtw_free_xmitframe_queue(struct xmit_priv *pxmitpriv, _queue *pframequeue)
+void rtw_free_xmitframe_queue(struct xmit_priv *pxmitpriv, struct __queue *pframequeue)
 {
 	struct list_head *plist, *phead;
 	struct	xmit_frame	*pxmitframe;
@@ -2184,7 +2184,10 @@ s32 rtw_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe)
 	return _SUCCESS;
 }
 
-static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit, struct tx_servq *ptxservq, _queue *pframe_queue)
+static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv,
+						struct hw_xmit *phwxmit,
+						struct tx_servq *ptxservq,
+						struct __queue *pframe_queue)
 {
 	struct list_head *xmitframe_plist, *xmitframe_phead;
 	struct	xmit_frame	*pxmitframe=NULL;
@@ -2216,7 +2219,7 @@ struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
 	struct list_head *sta_plist, *sta_phead;
 	struct hw_xmit *phwxmit;
 	struct tx_servq *ptxservq = NULL;
-	_queue *pframe_queue = NULL;
+	struct __queue *pframe_queue = NULL;
 	struct xmit_frame *pxmitframe = NULL;
 	_adapter *padapter = pxmitpriv->adapter;
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
@@ -2950,7 +2953,7 @@ int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *px
 	return ret;
 }
 
-static void dequeue_xmitframes_to_sleeping_queue(_adapter *padapter, struct sta_info *psta, _queue *pframequeue)
+static void dequeue_xmitframes_to_sleeping_queue(_adapter *padapter, struct sta_info *psta, struct __queue *pframequeue)
 {
 	struct list_head *plist, *phead;
 	u8	ac_index;

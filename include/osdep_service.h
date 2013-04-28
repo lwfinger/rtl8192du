@@ -99,7 +99,6 @@
 		spinlock_t	lock;
 	};
 
-	typedef struct	__queue	_queue;
 	typedef	int	_OS_STATUS;
 
 	typedef int		thread_return;
@@ -143,7 +142,7 @@ static inline struct list_head *get_next(struct list_head *list)
 	return list->next;
 }
 
-static inline struct list_head *get_list_head(_queue	*queue)
+static inline struct list_head *get_list_head(struct __queue *queue)
 {
 	return (&(queue->queue));
 }
@@ -374,8 +373,8 @@ extern void	_rtw_spinunlock(spinlock_t	*plock);
 extern void	_rtw_spinlock_ex(spinlock_t	*plock);
 extern void	_rtw_spinunlock_ex(spinlock_t	*plock);
 
-extern void	_rtw_init_queue(_queue	*pqueue);
-extern u32	_rtw_queue_empty(_queue	*pqueue);
+extern void	_rtw_init_queue(struct __queue *pqueue);
+extern u32	_rtw_queue_empty(struct __queue *pqueue);
 extern u32	rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement);
 
 extern u32	rtw_get_current_time(void);

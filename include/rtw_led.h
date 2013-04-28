@@ -63,12 +63,12 @@ enum LED_STATE_871X {
 	LED_BLINK_WPS_STOP_OVERLAP = 12,	//for BELKIN
 };
 
-#define IS_LED_WPS_BLINKING(_LED_871x)	(((PLED_871x)_LED_871x)->CurrLedState==LED_BLINK_WPS \
-					|| ((PLED_871x)_LED_871x)->CurrLedState==LED_BLINK_WPS_STOP \
-					|| ((PLED_871x)_LED_871x)->bLedWPSBlinkInProgress)
+#define IS_LED_WPS_BLINKING(_LED_871X)	(((struct LED_871X *)_LED_871X)->CurrLedState==LED_BLINK_WPS \
+					|| ((struct LED_871X *)_LED_871X)->CurrLedState==LED_BLINK_WPS_STOP \
+					|| ((struct LED_871X *)_LED_871X)->bLedWPSBlinkInProgress)
 
-#define IS_LED_BLINKING(_LED_871x)	(((PLED_871x)_LED_871x)->bLedWPSBlinkInProgress \
-					||((PLED_871x)_LED_871x)->bLedScanBlinkInProgress)
+#define IS_LED_BLINKING(_LED_871X)	(((struct LED_871X *)_LED_871X)->bLedWPSBlinkInProgress \
+					||((struct LED_871X *)_LED_871X)->bLedScanBlinkInProgress)
 
 enum LED_PIN_871X {
 	LED_PIN_GPIO0,
@@ -76,7 +76,7 @@ enum LED_PIN_871X {
 	LED_PIN_LED1
 };
 
-typedef struct _LED_871x{
+struct LED_871X {
 	_adapter				*padapter;
 	enum LED_PIN_871X		LedPin;	// Identify how to implement this SW led.
 	enum LED_STATE_871X		CurrLedState; // Current LED state.
@@ -99,14 +99,14 @@ typedef struct _LED_871x{
 #if LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0)
 	_workitem			BlinkWorkItem; // Workitem used by BlinkTimer to manipulate H/W to blink LED.
 #endif
-} LED_871x, *PLED_871x;
+};
 
 
 //================================================================================
 // LED customization.
 //================================================================================
 
-typedef	enum _LED_STRATEGY_871x{
+enum LED_STRATEGY_871X {
 	SW_LED_MODE0, // SW control 1 LED via GPIO0. It is default option.
 	SW_LED_MODE1, // 2 LEDs, through LED0 and LED1. For ALPHA.
 	SW_LED_MODE2, // SW control 1 LED via GPIO0, customized for AzWave 8187 minicard.
@@ -115,13 +115,13 @@ typedef	enum _LED_STRATEGY_871x{
 	SW_LED_MODE5, //for Sercomm / Belkin
 	SW_LED_MODE6, //for 88CU minicard, porting from ce SW_LED_MODE7
 	HW_LED, // HW control 2 LEDs, LED0 and LED1 (there are 4 different control modes, see MAC.CONFIG1 for details.)
-}LED_STRATEGY_871x, *PLED_STRATEGY_871x;
+};
 
 struct led_priv{
 	/* add for led controll */
-	LED_871x			SwLed0;
-	LED_871x			SwLed1;
-	LED_STRATEGY_871x	LedStrategy;
+	struct LED_871X			SwLed0;
+	struct LED_871X			SwLed1;
+	enum LED_STRATEGY_871X	LedStrategy;
 	u8					bRegUseLed;
 	void (*LedControlHandler)(_adapter *padapter, enum LED_CTL_MODE LedAction);
 	/* add for led controll */
@@ -137,6 +137,6 @@ struct led_priv{
 #define rtw_led_control(adapter, LedAction)
 #endif //CONFIG_SW_LED
 
-extern void BlinkHandler(PLED_871x	 pLed);
+extern void BlinkHandler(struct LED_871X *pLed);
 
 #endif //__RTW_LED_H_

@@ -87,25 +87,23 @@ static const char *android_wifi_cmd_str[ANDROID_WIFI_CMD_MAX] = {
 #define PNO_TLV_FREQ_REPEAT		'R'
 #define PNO_TLV_FREQ_EXPO_MAX		'M'
 
-typedef struct cmd_tlv {
+struct cmd_tlv {
 	char prefix;
 	char version;
 	char subver;
 	char reserved;
-} cmd_tlv_t;
+};
 #endif /* PNO_SUPPORT */
 
-typedef struct android_wifi_priv_cmd {
-
+struct android_wifi_priv_cmd {
 #ifdef CONFIG_COMPAT
 	compat_uptr_t buf;
 #else
 	char *buf;
 #endif
-
 	int used_len;
 	int total_len;
-} android_wifi_priv_cmd;
+};
 
 /**
  * Local (static) functions and variables
@@ -124,7 +122,7 @@ static int wl_android_set_pno_setup(struct net_device *dev, char *command, int t
 	wlc_ssid_t ssids_local[MAX_PFN_LIST_COUNT];
 	int res = -1;
 	int nssid = 0;
-	cmd_tlv_t *cmd_tlv_temp;
+	struct cmd_tlv *struct cmd_tlvemp;
 	char *str_ptr;
 	int tlv_size_left;
 	int pno_time = 0;
@@ -154,7 +152,7 @@ static int wl_android_set_pno_setup(struct net_device *dev, char *command, int t
 
 	DHD_INFO(("%s: command=%s, len=%d\n", __FUNCTION__, command, total_len));
 
-	if (total_len < (strlen(CMD_PNOSETUP_SET) + sizeof(cmd_tlv_t))) {
+	if (total_len < (strlen(CMD_PNOSETUP_SET) + sizeof(struct cmd_tlv))) {
 		DBG_8192D("%s argument=%d less min size\n", __FUNCTION__, total_len);
 		goto exit_proc;
 	}
@@ -170,15 +168,15 @@ static int wl_android_set_pno_setup(struct net_device *dev, char *command, int t
 	str_ptr = command + strlen(CMD_PNOSETUP_SET);
 	tlv_size_left = total_len - strlen(CMD_PNOSETUP_SET);
 
-	cmd_tlv_temp = (cmd_tlv_t *)str_ptr;
+	struct cmd_tlvemp = (struct cmd_tlv *)str_ptr;
 	memset(ssids_local, 0, sizeof(ssids_local));
 
-	if ((cmd_tlv_temp->prefix == PNO_TLV_PREFIX) &&
-		(cmd_tlv_temp->version == PNO_TLV_VERSION) &&
-		(cmd_tlv_temp->subver == PNO_TLV_SUBVERSION)) {
+	if ((struct cmd_tlvemp->prefix == PNO_TLV_PREFIX) &&
+		(struct cmd_tlvemp->version == PNO_TLV_VERSION) &&
+		(struct cmd_tlvemp->subver == PNO_TLV_SUBVERSION)) {
 
-		str_ptr += sizeof(cmd_tlv_t);
-		tlv_size_left -= sizeof(cmd_tlv_t);
+		str_ptr += sizeof(struct cmd_tlv);
+		tlv_size_left -= sizeof(struct cmd_tlv);
 
 		if ((nssid = wl_iw_parse_ssid_list_tlv(&str_ptr, ssids_local,
 			MAX_PFN_LIST_COUNT, &tlv_size_left)) <= 0) {
@@ -332,7 +330,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	char *command = NULL;
 	int cmd_num;
 	int bytes_written = 0;
-	android_wifi_priv_cmd priv_cmd;
+	struct android_wifi_priv_cmd priv_cmd;
 
 	rtw_lock_suspend();
 
@@ -340,7 +338,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		ret = -EINVAL;
 		goto exit;
 	}
-	if (copy_from_user(&priv_cmd, ifr->ifr_data, sizeof(android_wifi_priv_cmd))) {
+	if (copy_from_user(&priv_cmd, ifr->ifr_data, sizeof(struct android_wifi_priv_cmd))) {
 		ret = -EFAULT;
 		goto exit;
 	}

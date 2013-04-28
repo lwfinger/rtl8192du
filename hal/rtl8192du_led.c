@@ -58,7 +58,7 @@ BlinkWorkItemCallback(
 	);
 
 static void
-ResetLedStatus(PLED_871x	pLed) {
+ResetLedStatus(struct LED_871X *	pLed) {
 	pLed->CurrLedState = RTW_LED_OFF; // Current LED state.
 	pLed->bLedOn = false; // true if LED is ON, false if LED is OFF.
 
@@ -78,11 +78,11 @@ ResetLedStatus(PLED_871x	pLed) {
 
 //
 //	Description:
-//		Initialize an LED_871x object.
+//		Initialize an struct LED_871X object.
 //
 
 void InitLed871x(_adapter *padapter,
-	PLED_871x		pLed,
+	struct LED_871X *		pLed,
 	enum LED_PIN_871X	LedPin
 	)
 {
@@ -105,16 +105,16 @@ void InitLed871x(_adapter *padapter,
 
 //
 //	Description:
-//		DeInitialize an LED_871x object.
+//		DeInitialize an struct LED_871X object.
 //
 
 void
 DeInitLed871x(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	);
 void
 DeInitLed871x(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	)
 {
 	//call _cancel_workitem_sync(&(pLed->BlinkWorkItem))
@@ -136,12 +136,12 @@ DeInitLed871x(
 void
 SwLedOn(
 	_adapter			*padapter,
-	PLED_871x		pLed
+	struct LED_871X *		pLed
 );
 void
 SwLedOn(
 	_adapter			*padapter,
-	PLED_871x		pLed
+	struct LED_871X *		pLed
 )
 {
 	u8	LedCfg;
@@ -188,12 +188,12 @@ SwLedOn(
 void
 SwLedOff(
 	_adapter			*padapter,
-	PLED_871x		pLed
+	struct LED_871X *		pLed
 );
 void
 SwLedOff(
 	_adapter			*padapter,
-	PLED_871x		pLed
+	struct LED_871X *		pLed
 )
 {
 	u8	LedCfg;
@@ -241,11 +241,11 @@ SwLedOff(
 //
 void
 SwLedBlink(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	);
 void
 SwLedBlink(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	)
 {
 	_adapter			*padapter = pLed->padapter;
@@ -361,18 +361,18 @@ SwLedBlink(
 }
 void
 SwLedBlink1(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	);
 void
 SwLedBlink1(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	)
 {
 	_adapter				*padapter = pLed->padapter;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
 	struct led_priv		*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
-	PLED_871x			pLed1 = &(ledpriv->SwLed1);
+	struct LED_871X *			pLed1 = &(ledpriv->SwLed1);
 	u8					bStopBlinking = false;
 
 	if(pHalData->CustomerID == RT_CID_819x_CAMEO)
@@ -592,11 +592,11 @@ SwLedBlink1(
 }
 void
 SwLedBlink2(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	);
 void
 SwLedBlink2(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	)
 {
 	_adapter				*padapter = pLed->padapter;
@@ -717,11 +717,11 @@ SwLedBlink2(
 }
 void
 SwLedBlink3(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	);
 void
 SwLedBlink3(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	)
 {
 	_adapter			*padapter = pLed->padapter;
@@ -890,16 +890,16 @@ SwLedBlink3(
 }
 void
 SwLedBlink4(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	);
 void
 SwLedBlink4(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	)
 {
 	_adapter			*padapter = pLed->padapter;
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
-	PLED_871x		pLed1 = &(ledpriv->SwLed1);
+	struct LED_871X *		pLed1 = &(ledpriv->SwLed1);
 	u8				bStopBlinking = false;
 
 	// Change LED according to BlinkingLedState specified.
@@ -1091,11 +1091,11 @@ SwLedBlink4(
 }
 void
 SwLedBlink5(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	);
 void
 SwLedBlink5(
-	PLED_871x			pLed
+	struct LED_871X *			pLed
 	)
 {
 	_adapter			*padapter = pLed->padapter;
@@ -1220,7 +1220,7 @@ BlinkTimerCallback(
 	unsigned long data
 	)
 {
-	PLED_871x	 pLed = (PLED_871x)data;
+	struct LED_871X *	 pLed = (struct LED_871X *)data;
 	_adapter		*padapter = pLed->padapter;
 
 	 if( (padapter->bSurpriseRemoved == true) || ( padapter->bDriverStopped == true))
@@ -1239,7 +1239,7 @@ BlinkTimerCallback(
 //
 void BlinkWorkItemCallback(struct work_struct *work)
 {
-	PLED_871x	 pLed = container_of(work, LED_871x, BlinkWorkItem);
+	struct LED_871X *	 pLed = container_of(work, struct LED_871X, BlinkWorkItem);
 	struct led_priv	*ledpriv = &(pLed->padapter->ledpriv);
 	_adapter		*padapter = pLed->padapter;
 
@@ -1302,7 +1302,7 @@ SwLedControlMode0(
 )
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
-	PLED_871x	pLed = &(ledpriv->SwLed1);
+	struct LED_871X *	pLed = &(ledpriv->SwLed1);
 
 	// Decide led state
 	switch(LedAction)
@@ -1425,7 +1425,7 @@ SwLedControlMode1(
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
 	struct led_priv		*ledpriv = &(padapter->ledpriv);
-	PLED_871x			pLed = &(ledpriv->SwLed0);
+	struct LED_871X *			pLed = &(ledpriv->SwLed0);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 
 	if(pHalData->CustomerID == RT_CID_819x_CAMEO)
@@ -1701,7 +1701,7 @@ SwLedControlMode2(
 {
 	struct led_priv	 *ledpriv = &(padapter->ledpriv);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-	PLED_871x		pLed = &(ledpriv->SwLed0);
+	struct LED_871X *		pLed = &(ledpriv->SwLed0);
 
 	switch(LedAction)
 	{
@@ -1871,7 +1871,7 @@ SwLedControlMode2(
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-	PLED_871x		pLed = &(ledpriv->SwLed0);
+	struct LED_871X *		pLed = &(ledpriv->SwLed0);
 
 	switch(LedAction)
 	{
@@ -2055,8 +2055,8 @@ SwLedControlMode4(
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-	PLED_871x		pLed = &(ledpriv->SwLed0);
-	PLED_871x		pLed1 = &(ledpriv->SwLed1);
+	struct LED_871X *		pLed = &(ledpriv->SwLed0);
+	struct LED_871X *		pLed1 = &(ledpriv->SwLed1);
 
 	switch(LedAction)
 	{
@@ -2393,7 +2393,7 @@ SwLedControlMode5(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-	PLED_871x		pLed = &(ledpriv->SwLed0);
+	struct LED_871X *		pLed = &(ledpriv->SwLed0);
 
 	if(pHalData->EEPROMCustomerID == RT_CID_819x_CAMEO)
 		pLed = &(ledpriv->SwLed1);
@@ -2551,16 +2551,9 @@ LedControl871x(
 
 //
 //	Description:
-//		Initialize all LED_871x objects.
+//		Initialize all struct LED_871X objects.
 //
-void
-rtl8192du_InitSwLeds(
-	_adapter	*padapter
-	);
-void
-rtl8192du_InitSwLeds(
-	_adapter	*padapter
-	)
+void rtl8192du_InitSwLeds(_adapter	*padapter)
 {
 	struct led_priv *pledpriv = &(padapter->ledpriv);
 

@@ -239,7 +239,7 @@ static uint rtw_notch_filter = RTW_NOTCH_FILTER;
 module_param(rtw_notch_filter, uint, 0644);
 MODULE_PARM_DESC(rtw_notch_filter, "0:Disable, 1:Enable, 2:Enable only for P2P");
 
-static uint loadparam( _adapter *padapter,  _nic_hdl	pnetdev);
+static uint loadparam( _adapter *padapter, struct net_device *pnetdev);
 int _netdev_open(struct net_device *pnetdev);
 int netdev_open (struct net_device *pnetdev);
 static int netdev_close (struct net_device *pnetdev);
@@ -671,8 +671,7 @@ void rtw_proc_remove_one(struct net_device *dev)
 }
 #endif
 
-uint loadparam( _adapter *padapter,  _nic_hdl	pnetdev);
-uint loadparam( _adapter *padapter,  _nic_hdl	pnetdev)
+uint loadparam( _adapter *padapter, struct net_device *pnetdev)
 {
 
 	uint status = _SUCCESS;

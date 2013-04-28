@@ -117,21 +117,21 @@ extern struct iw_handler_def  rtw_handlers_def;
 #endif
 
 extern	uint drv_query_info(
-	_nic_hdl		MiniportAdapterContext,
-	uint		Oid,
-	void *			InformationBuffer,
-	u32			InformationBufferLength,
-	u32*			BytesWritten,
-	u32*			BytesNeeded
+		struct net_device *MiniportAdapterContext,
+		uint		Oid,
+		void *InformationBuffer,
+		u32 InformationBufferLength,
+		u32 *BytesWritten,
+		u32 *BytesNeeded
 	);
 
 extern	uint	drv_set_info(
-	_nic_hdl		MiniportAdapterContext,
-	uint		Oid,
-	void *			InformationBuffer,
-	u32			InformationBufferLength,
-	u32*			BytesRead,
-	u32*			BytesNeeded
+		struct net_device *MiniportAdapterContext,
+		uint		Oid,
+		void *InformationBuffer,
+		u32	InformationBufferLength,
+		u32 *BytesRead,
+		u32 *BytesNeeded
 	);
 
 #endif // #ifndef __INC_CEINFO_

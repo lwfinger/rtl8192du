@@ -99,12 +99,9 @@
 		spinlock_t	lock;
 	};
 
-//	typedef unsigned char	_buffer;
-
 	typedef struct	__queue	_queue;
 	typedef struct	list_head	_list;
 	typedef	int	_OS_STATUS;
-	typedef	struct	net_device * _nic_hdl;
 
 	typedef void*		_thread_hdl_;
 	typedef int		thread_return;
@@ -181,7 +178,7 @@ static inline void rtw_list_delete(_list *plist)
 	list_del_init(plist);
 }
 
-static inline void _init_timer(struct timer_list *timer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
+static inline void _init_timer(struct timer_list *timer, struct net_device * nic_hdl, void *pfunc, void *cntx)
 {
 	timer->function = pfunc;
 	timer->data = (unsigned long)cntx;

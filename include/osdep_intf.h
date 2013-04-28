@@ -111,6 +111,6 @@ void rtw_drv_free_vir_ifaces(struct dvobj_priv *dvobj);
 #endif //CONFIG_MULTI_VIR_IFACES
 #endif
 
-void rtw_ndev_destructor(_nic_hdl ndev);
+void rtw_ndev_destructor(struct net_device *ndev);
 
 #endif	//_OSDEP_INTF_H_

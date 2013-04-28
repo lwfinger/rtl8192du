@@ -27,7 +27,6 @@
 #include <mlme_osdep.h>
 #include <sta_info.h>
 
-void _rtw_init_stainfo(struct sta_info *psta);
 void _rtw_init_stainfo(struct sta_info *psta)
 {
 
@@ -38,9 +37,6 @@ _func_enter_;
 	 _rtw_spinlock_init(&psta->lock);
 	_rtw_init_listhead(&psta->list);
 	_rtw_init_listhead(&psta->hash_list);
-	//_rtw_init_listhead(&psta->asoc_list);
-	//_rtw_init_listhead(&psta->sleep_list);
-	//_rtw_init_listhead(&psta->wakeup_list);
 
 	_rtw_init_queue(&psta->sleep_q);
 	psta->sleepq_len = 0;
@@ -99,7 +95,6 @@ _func_enter_;
 
 	_rtw_spinlock_init(&pstapriv->sta_hash_lock);
 
-	//_rtw_init_queue(&pstapriv->asoc_q);
 	pstapriv->asoc_sta_count = 0;
 	_rtw_init_queue(&pstapriv->sleep_q);
 	_rtw_init_queue(&pstapriv->wakeup_q);
@@ -107,8 +102,7 @@ _func_enter_;
 	psta = (struct sta_info *)(pstapriv->pstainfo_buf);
 
 
-	for(i = 0; i < NUM_STA; i++)
-	{
+	for(i = 0; i < NUM_STA; i++) {
 		_rtw_init_stainfo(psta);
 
 		_rtw_init_listhead(&(pstapriv->sta_hash[i]));
@@ -214,7 +208,7 @@ _func_exit_;
 void rtw_mfree_all_stainfo(struct sta_priv *pstapriv );
 void rtw_mfree_all_stainfo(struct sta_priv *pstapriv )
 {
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	struct sta_info *psta = NULL;
 
 _func_enter_;
@@ -263,7 +257,7 @@ void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
 
 u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 {
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	struct sta_info *psta = NULL;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	int	index;
@@ -311,7 +305,7 @@ struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 {
 	uint tmp_aid;
 	s32	index;
-	_list	*phash_list;
+	struct list_head *phash_list;
 	struct sta_info	*psta;
 	_queue *pfree_sta_queue;
 	struct recv_reorder_ctrl *preorder_ctrl;
@@ -496,7 +490,7 @@ _func_enter_;
 	//for A-MPDU Rx reordering buffer control, cancel reordering_ctrl_timer
 	for(i=0; i < 16 ; i++)
 	{
-		_list	*phead, *plist;
+		struct list_head *phead, *plist;
 		union recv_frame *prframe;
 		_queue *ppending_recvframe_queue;
 		_queue *pfree_recv_queue = &padapter->recvpriv.free_recv_queue;
@@ -585,7 +579,7 @@ _func_exit_;
 // free all stainfo which in sta_hash[all]
 void rtw_free_all_stainfo(_adapter *padapter)
 {
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	s32	index;
 	struct sta_info *psta = NULL;
 	struct	sta_priv *pstapriv = &padapter->stapriv;
@@ -627,14 +621,10 @@ _func_exit_;
 struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 {
 
-	_list	*plist, *phead;
-
+	struct list_head *plist, *phead;
 	struct sta_info *psta = NULL;
-
 	u32	index;
-
 	u8 *addr;
-
 	u8 bc_addr[ETH_ALEN] = {0xff,0xff,0xff,0xff,0xff,0xff};
 
 _func_enter_;
@@ -723,7 +713,7 @@ u8 rtw_access_ctrl(_adapter *padapter, u8 *mac_addr)
 {
 	u8 res = true;
 #ifdef  CONFIG_AP_MODE
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	struct rtw_wlan_acl_node *paclnode;
 	u8 match = false;
 	struct sta_priv *pstapriv = &padapter->stapriv;

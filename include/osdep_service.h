@@ -100,7 +100,6 @@
 	};
 
 	typedef struct	__queue	_queue;
-	typedef struct	list_head	_list;
 	typedef	int	_OS_STATUS;
 
 	typedef int		thread_return;
@@ -139,12 +138,12 @@ static inline unsigned char *skb_end_pointer(const struct sk_buff *skb)
 }
 #endif
 
-static inline _list *get_next(_list	*list)
+static inline struct list_head *get_next(struct list_head *list)
 {
 	return list->next;
 }
 
-static inline _list	*get_list_head(_queue	*queue)
+static inline struct list_head *get_list_head(_queue	*queue)
 {
 	return (&(queue->queue));
 }
@@ -172,7 +171,7 @@ static inline void _exit_critical_mutex(_mutex *pmutex)
 #endif
 }
 
-static inline void rtw_list_delete(_list *plist)
+static inline void rtw_list_delete(struct list_head *plist)
 {
 	list_del_init(plist);
 }
@@ -356,11 +355,11 @@ extern void	_rtw_memcpy(void* dec, void* sour, u32 sz);
 extern int	_rtw_memcmp(void *dst, void *src, u32 sz);
 extern void	_rtw_memset(void *pbuf, int c, u32 sz);
 
-extern void	_rtw_init_listhead(_list *list);
-extern u32	rtw_is_list_empty(_list *phead);
-extern void	rtw_list_insert_head(_list *plist, _list *phead);
-extern void	rtw_list_insert_tail(_list *plist, _list *phead);
-extern void	rtw_list_delete(_list *plist);
+extern void	_rtw_init_listhead(struct list_head *list);
+extern u32	rtw_is_list_empty(struct list_head *phead);
+extern void	rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
+extern void	rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
+extern void	rtw_list_delete(struct list_head *plist);
 
 extern void	_rtw_init_sema(struct  semaphore *sema, int init_val);
 extern void	_rtw_free_sema(struct  semaphore *sema);
@@ -377,7 +376,7 @@ extern void	_rtw_spinunlock_ex(spinlock_t	*plock);
 
 extern void	_rtw_init_queue(_queue	*pqueue);
 extern u32	_rtw_queue_empty(_queue	*pqueue);
-extern u32	rtw_end_of_queue_search(_list *queue, _list *pelement);
+extern u32	rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement);
 
 extern u32	rtw_get_current_time(void);
 extern u32	rtw_systime_to_ms(u32 systime);

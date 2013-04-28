@@ -47,7 +47,7 @@
 		u32	cmdsz;
 		u8	*rsp;
 		u32	rspsz;
-		_list	list;
+		struct list_head list;
 	};
 
 	struct cmd_priv {
@@ -72,7 +72,7 @@
 		u8	res;
 		u8	*parmbuf;
 		u32	evtsz;
-		_list	list;
+		struct list_head list;
 	};
 #endif
 

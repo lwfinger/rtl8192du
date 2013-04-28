@@ -1848,7 +1848,7 @@ struct xmit_buf *rtw_alloc_xmitbuf_ext(struct xmit_priv *pxmitpriv)
 {
 	long unsigned int irqL;
 	struct xmit_buf *pxmitbuf =  NULL;
-	_list *plist, *phead;
+	struct list_head *plist, *phead;
 	_queue *pfree_queue = &pxmitpriv->free_xmit_extbuf_queue;
 
 _func_enter_;
@@ -1925,7 +1925,7 @@ struct xmit_buf *rtw_alloc_xmitbuf(struct xmit_priv *pxmitpriv)
 {
 	long unsigned int irqL;
 	struct xmit_buf *pxmitbuf =  NULL;
-	_list *plist, *phead;
+	struct list_head *plist, *phead;
 	_queue *pfree_xmitbuf_queue = &pxmitpriv->free_xmitbuf_queue;
 
 _func_enter_;
@@ -2041,7 +2041,7 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)//(_queue *pf
 	*/
 
 	struct xmit_frame *pxframe = NULL;
-	_list *plist, *phead;
+	struct list_head *plist, *phead;
 	_queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
 	_adapter *padapter = pxmitpriv->adapter;
 
@@ -2146,7 +2146,7 @@ _func_exit_;
 
 void rtw_free_xmitframe_queue(struct xmit_priv *pxmitpriv, _queue *pframequeue)
 {
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	struct	xmit_frame	*pxmitframe;
 
 _func_enter_;
@@ -2186,7 +2186,7 @@ s32 rtw_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit, struct tx_servq *ptxservq, _queue *pframe_queue)
 {
-	_list	*xmitframe_plist, *xmitframe_phead;
+	struct list_head *xmitframe_plist, *xmitframe_phead;
 	struct	xmit_frame	*pxmitframe=NULL;
 
 	xmitframe_phead = get_list_head(pframe_queue);
@@ -2213,7 +2213,7 @@ static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, str
 
 struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit_i, int entry)
 {
-	_list *sta_plist, *sta_phead;
+	struct list_head *sta_plist, *sta_phead;
 	struct hw_xmit *phwxmit;
 	struct tx_servq *ptxservq = NULL;
 	_queue *pframe_queue = NULL;
@@ -2952,7 +2952,7 @@ int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *px
 
 static void dequeue_xmitframes_to_sleeping_queue(_adapter *padapter, struct sta_info *psta, _queue *pframequeue)
 {
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	u8	ac_index;
 	struct tx_servq	*ptxservq;
 	struct pkt_attrib	*pattrib;
@@ -3044,7 +3044,7 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 {
 	u8 update_mask=0, wmmps_ac=0;
 	struct sta_info *psta_bmc;
-	_list	*xmitframe_plist, *xmitframe_phead;
+	struct list_head *xmitframe_plist, *xmitframe_phead;
 	struct xmit_frame *pxmitframe=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -3209,7 +3209,7 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 void xmit_delivery_enabled_frames(_adapter *padapter, struct sta_info *psta)
 {
 	u8 wmmps_ac=0;
-	_list	*xmitframe_plist, *xmitframe_phead;
+	struct list_head *xmitframe_plist, *xmitframe_phead;
 	struct xmit_frame *pxmitframe=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 

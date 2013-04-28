@@ -618,7 +618,7 @@ void UpdateEarlyModeInfo8192D(_adapter *padapter, struct xmit_frame *pxmitframe,
 	u32	len;
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	struct pkt_attrib	*pattrib = &pxmitframe->attrib;
-	_list *xmitframe_plist = NULL, *xmitframe_phead = NULL;
+	struct list_head *xmitframe_plist = NULL, *xmitframe_phead = NULL;
 
 	//Some macaddr can't do early mode.
 	if(MacAddr_isBcst(pattrib->dst) ||IS_MCAST(pattrib->dst) || !!pattrib->qos_en)
@@ -655,7 +655,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	struct hw_xmit	*phwxmit = pxmitpriv->hwxmits;
 	struct tx_servq	*ptxservq = NULL;
 
-	_list *xmitframe_plist = NULL, *xmitframe_phead = NULL;
+	struct list_head *xmitframe_plist = NULL, *xmitframe_phead = NULL;
 
 	u32	pbuf=0; // next pkt address
 	u32	pbuf_tail; // last pkt tail

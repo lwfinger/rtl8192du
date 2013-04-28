@@ -349,7 +349,7 @@ u8 chk_sta_is_alive(struct sta_info *psta)
 
 void	expire_timeout_chk(_adapter *padapter)
 {
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	u8 updated;
 	struct sta_info *psta=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -369,16 +369,13 @@ void	expire_timeout_chk(_adapter *padapter)
 			, FUNC_NDEV_ARG(padapter->pnetdev), pstapriv->auth_list_cnt);
 	}
 	#endif
-	while ((rtw_end_of_queue_search(phead, plist)) == false)
-	{
+	while ((rtw_end_of_queue_search(phead, plist)) == false) {
 		psta = LIST_CONTAINOR(plist, struct sta_info, auth_list);
 		plist = get_next(plist);
 
-		if(psta->expire_to>0)
-		{
+		if (psta->expire_to > 0) {
 			psta->expire_to--;
-			if (psta->expire_to == 0)
-			{
+			if (psta->expire_to == 0) {
 				rtw_list_delete(&psta->auth_list);
 				pstapriv->auth_list_cnt--;
 
@@ -1747,7 +1744,7 @@ void rtw_set_macaddr_acl(_adapter *padapter, int mode)
 
 int rtw_acl_add_sta(_adapter *padapter, u8 *addr)
 {
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	u8 added = false;
 	int i, ret=0;
 	struct rtw_wlan_acl_node *paclnode;
@@ -1820,7 +1817,7 @@ int rtw_acl_add_sta(_adapter *padapter, u8 *addr)
 
 int rtw_acl_remove_sta(_adapter *padapter, u8 *addr)
 {
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	int i, ret=0;
 	struct rtw_wlan_acl_node *paclnode;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -2192,7 +2189,7 @@ void associated_clients_update(_adapter *padapter, u8 updated)
 	//update associcated stations cap.
 	if(updated == true)
 	{
-		_list	*phead, *plist;
+		struct list_head *phead, *plist;
 		struct sta_info *psta=NULL;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -2558,7 +2555,7 @@ u8 ap_free_sta(_adapter *padapter, struct sta_info *psta, bool active, u16 reaso
 
 int rtw_ap_inform_ch_switch(_adapter *padapter, u8 new_ch, u8 ch_offset)
 {
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	int ret=0;
 	struct sta_info *psta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -2594,7 +2591,7 @@ int rtw_ap_inform_ch_switch(_adapter *padapter, u8 new_ch, u8 ch_offset)
 
 int rtw_sta_flush(_adapter *padapter)
 {
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	int ret=0;
 	struct sta_info *psta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -2740,7 +2737,7 @@ void start_ap_mode(_adapter *padapter)
 
 void stop_ap_mode(_adapter *padapter)
 {
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	struct rtw_wlan_acl_node *paclnode;
 	struct sta_info *psta=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;

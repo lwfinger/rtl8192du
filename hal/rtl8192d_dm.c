@@ -1347,7 +1347,7 @@ static void PWDB_Monitor(
 
 	if(check_fwstate(&Adapter->mlmepriv, WIFI_AP_STATE|WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == true)
 	{
-		_list	*plist, *phead;
+		struct list_head *plist, *phead;
 		struct sta_info *psta;
 		struct sta_priv *pstapriv = &Adapter->stapriv;
 		u8 bcast_addr[ETH_ALEN]= {0xff,0xff,0xff,0xff,0xff,0xff};

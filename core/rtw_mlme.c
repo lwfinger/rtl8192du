@@ -216,7 +216,7 @@ struct	wlan_network *_rtw_alloc_network(struct	mlme_priv *pmlmepriv )//(_queue *
 {
 	struct	wlan_network	*pnetwork;
 	_queue *free_queue = &pmlmepriv->free_bss_pool;
-	_list* plist = NULL;
+	struct list_head *plist = NULL;
 
 _func_enter_;
 
@@ -329,7 +329,7 @@ _func_exit_;
 struct wlan_network *_rtw_find_network(_queue *scanned_queue, u8 *addr)
 {
 
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	struct	wlan_network *pnetwork = NULL;
 	u8 zero_addr[ETH_ALEN] = {0,0,0,0,0,0};
 
@@ -371,7 +371,7 @@ _func_exit_;
 
 void _rtw_free_network_queue(_adapter *padapter, u8 isfreeall)
 {
-	_list *phead, *plist;
+	struct list_head *phead, *plist;
 	struct wlan_network *pnetwork;
 	struct mlme_priv* pmlmepriv = &padapter->mlmepriv;
 	_queue *scanned_queue = &pmlmepriv->scanned_queue;
@@ -610,9 +610,7 @@ _func_exit_;
 
 struct	wlan_network	* rtw_get_oldest_wlan_network(_queue *scanned_queue)
 {
-	_list	*plist, *phead;
-
-
+	struct list_head *plist, *phead;
 	struct	wlan_network	*pwlan = NULL;
 	struct	wlan_network	*oldest = NULL;
 _func_enter_;
@@ -746,7 +744,7 @@ Caller must hold pmlmepriv->lock first.
 */
 void rtw_update_scanned_network(_adapter *adapter, WLAN_BSSID_EX *target)
 {
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	u32	bssid_ex_sz;
 	struct mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 	_queue	*queue	= &(pmlmepriv->scanned_queue);
@@ -1187,7 +1185,7 @@ static void free_scanqueue(struct	mlme_priv *pmlmepriv)
 {
 	_queue *free_queue = &pmlmepriv->free_bss_pool;
 	_queue *scan_queue = &pmlmepriv->scanned_queue;
-	_list	*plist, *phead, *ptemp;
+	struct list_head *plist, *phead, *ptemp;
 
 _func_enter_;
 
@@ -2441,7 +2439,7 @@ pmlmepriv->lock
 int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv )
 {
 	int ret;
-	_list	*phead;
+	struct list_head *phead;
 	_adapter *adapter;
 	_queue	*queue	= &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;

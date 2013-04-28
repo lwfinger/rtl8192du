@@ -90,9 +90,9 @@
 #endif
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
-	typedef struct mutex		_mutex;
+	#define _mutex	struct mutex
 #else
-	typedef struct semaphore	_mutex;
+	#define _mutex	struct semaphore
 #endif
 	struct	__queue	{
 		struct	list_head	queue;

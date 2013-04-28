@@ -86,15 +86,14 @@ union Keytype {
 };
 
 
-typedef struct _RT_PMKID_LIST
-{
+struct RT_PMKID_LIST {
 	u8						bUsed;
 	u8						Bssid[6];
 	u8						PMKID[16];
 	u8						SsidBuf[33];
 	u8*						ssid_octet;
 	u16						ssid_length;
-} RT_PMKID_LIST, *PRT_PMKID_LIST;
+};
 
 
 struct security_priv
@@ -168,7 +167,7 @@ struct security_priv
 	//---------------------------------------------------------------------------
 	//u8				RegEnablePreAuth;				// Default value: Pre-Authentication enabled or not, from registry "EnablePreAuth". Added by Annie, 2005-11-01.
 	//u8				EnablePreAuthentication;			// Current Value: Pre-Authentication enabled or not.
-	RT_PMKID_LIST		PMKIDList[NUM_PMKID_CACHE];	// Renamed from PreAuthKey[NUM_PRE_AUTH_KEY]. Annie, 2006-10-13.
+	struct RT_PMKID_LIST		PMKIDList[NUM_PMKID_CACHE];	// Renamed from PreAuthKey[NUM_PRE_AUTH_KEY]. Annie, 2006-10-13.
 	u8				PMKIDIndex;
 	//u32				PMKIDCount;						// Added by Annie, 2006-10-13.
 	//u8				szCapability[256];				// For WPA2-PSK using zero-config, by Annie, 2005-09-20.

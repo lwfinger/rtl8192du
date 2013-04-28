@@ -103,7 +103,6 @@
 	typedef struct	list_head	_list;
 	typedef	int	_OS_STATUS;
 
-	typedef void*		_thread_hdl_;
 	typedef int		thread_return;
 	typedef void*	thread_context;
 

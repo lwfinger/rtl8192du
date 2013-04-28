@@ -1849,9 +1849,8 @@ rtl8192d_Efuse_PgPacketWrite(PADAPTER	pAdapter,
 	u8	tmp_word_cnts=0,target_word_cnts=0;
 	u8	tmp_header,match_word_en,tmp_word_en;
 
-	PGPKT_STRUCT target_pkt;
-	PGPKT_STRUCT tmp_pkt=
-	{
+	struct pg_pkt_struct_a target_pkt;
+	struct pg_pkt_struct_a tmp_pkt = {
 		.offset=0,
 		.word_en=0,
 		.data={0,0,0,0,0,0,0,0},

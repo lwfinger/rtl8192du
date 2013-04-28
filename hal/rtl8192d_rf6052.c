@@ -51,7 +51,7 @@
 
 /*---------------------------Define Local Constant---------------------------*/
 // Define local structure for debug!!!!!
-typedef struct RF_Shadow_Compare_Map {
+struct rf_shadow_compare_map {
 	// Shadow register value
 	u32		Value;
 	// Compare or not flag
@@ -62,7 +62,7 @@ typedef struct RF_Shadow_Compare_Map {
 	u8		Recorver;
 	//
 	u8		Driver_Write;
-}RF_SHADOW_T;
+};
 /*---------------------------Define Local Constant---------------------------*/
 
 
@@ -72,8 +72,7 @@ typedef struct RF_Shadow_Compare_Map {
 
 /*------------------------Define local variable------------------------------*/
 // 2008/11/20 MH For Debug only, RF
-//static	RF_SHADOW_T	RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG] = {0};
-static	RF_SHADOW_T	RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
+static	struct rf_shadow_compare_map RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
 /*------------------------Define local variable------------------------------*/
 
 

@@ -154,7 +154,7 @@ struct sitesurvey_ctrl {
 	struct timer_list sitesurvey_ctrl_timer;
 };
 
-typedef struct _RT_LINK_DETECT_T{
+struct rt_link_detect {
 	u32				NumTxOkInPeriod;
 	u32				NumRxOkInPeriod;
 	u32				NumRxUnicastOkInPeriod;
@@ -164,7 +164,7 @@ typedef struct _RT_LINK_DETECT_T{
 	bool			bHigherBusyTraffic; // For interrupt migration purpose.
 	bool			bHigherBusyRxTraffic; // We may disable Tx interrupt according as Rx traffic.
 	bool			bHigherBusyTxTraffic; // We may disable Tx interrupt according as Tx traffic.
-}RT_LINK_DETECT_T, *PRT_LINK_DETECT_T;
+};
 
 struct profile_info {
 	u8	ssidlen;
@@ -434,7 +434,7 @@ struct mlme_priv {
 
 #endif
 
-	RT_LINK_DETECT_T	LinkDetectInfo;
+	struct rt_link_detect LinkDetectInfo;
 	struct timer_list dynamic_chk_timer; //dynamic/periodic check timer
 
 	u8	key_mask; //use for ips to set wep key after ips_leave

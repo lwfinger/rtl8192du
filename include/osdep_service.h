@@ -99,16 +99,7 @@
 		spinlock_t	lock;
 	};
 
-	typedef	int	_OS_STATUS;
-
-	typedef int		thread_return;
-	typedef void*	thread_context;
-
 	#define thread_exit() complete_and_exit(NULL, 0)
-
-	typedef void timer_hdl_return;
-	typedef void* timer_hdl_context;
-	typedef struct work_struct _workitem;
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24))
 	#define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
@@ -199,7 +190,7 @@ static inline void _cancel_timer(struct timer_list *timer,u8 *bcancelled)
 #define RTW_DECLARE_TIMER_HDL(name) void RTW_TIMER_HDL_NAME(name)(RTW_TIMER_HDL_ARGS)
 
 
-static inline void _init_workitem(_workitem *pwork, void *pfunc, void * cntx)
+static inline void _init_workitem(struct work_struct *pwork, void *pfunc, void * cntx)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,20))
 	INIT_WORK(pwork, pfunc);
@@ -208,12 +199,12 @@ static inline void _init_workitem(_workitem *pwork, void *pfunc, void * cntx)
 #endif
 }
 
-static inline void _set_workitem(_workitem *pwork)
+static inline void _set_workitem(struct work_struct *pwork)
 {
 	schedule_work(pwork);
 }
 
-static inline void _cancel_workitem_sync(_workitem *pwork)
+static inline void _cancel_workitem_sync(struct work_struct *pwork)
 {
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22))
 	cancel_work_sync(pwork);
@@ -422,7 +413,7 @@ static inline void flush_signals_thread(void)
 		flush_signals(current);
 }
 
-static inline _OS_STATUS res_to_status(int res)
+static inline int res_to_status(int res)
 {
 	return res;
 }

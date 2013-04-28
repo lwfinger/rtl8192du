@@ -245,7 +245,7 @@ struct pwrctrl_priv
 
 	#ifdef CONFIG_RESUME_IN_WORKQUEUE
 	struct workqueue_struct *rtw_workqueue;
-	_workitem resume_work;
+	struct work_struct resume_work;
 	#endif
 
 	#ifdef CONFIG_HAS_EARLYSUSPEND

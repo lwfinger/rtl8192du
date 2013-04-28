@@ -85,7 +85,7 @@
 
 //#define CONFIG_C2H_WK
 #ifdef CONFIG_C2H_WK
-		_workitem c2h_wk;
+		struct work_struct c2h_wk;
 		bool c2h_wk_alive;
 		struct rtw_cbuf *c2h_queue;
 		#define C2H_QUEUE_MAX_LEN 10
@@ -132,7 +132,7 @@ extern struct evt_obj *rtw_dequeue_evt(struct __queue *queue);
 extern void rtw_free_evt_obj(struct evt_obj *pcmd);
 #endif
 
-thread_return rtw_cmd_thread(thread_context context);
+int rtw_cmd_thread(void *context);
 
 extern u32 rtw_init_cmd_priv (struct cmd_priv *pcmdpriv);
 extern void rtw_free_cmd_priv (struct cmd_priv *pcmdpriv);

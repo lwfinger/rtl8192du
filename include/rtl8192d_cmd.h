@@ -112,13 +112,13 @@ int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port );
 #endif	// CONFIG_TSF_RESET_OFFLOAD
 
 #ifdef CONFIG_WOWLAN
-typedef struct _SETWOWLAN_PARM{
+struct set_wowlan_parm {
 	u8	mode;
 	u8	gpio_index;
 	u8	gpio_duration;
 	u8  second_mode;
 	u8  reserve;
-}SETWOWLAN_PARM, *PSETWOWLAN_PARM;
+};
 
 #define FW_WOWLAN_FUN_EN			BIT(0)
 #define FW_WOWLAN_PATTERN_MATCH		BIT(1)

@@ -121,7 +121,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 	enum HT_CHANNEL_WIDTH		Bandwidth)	//20M or 40M
 {
 	u8			eRFPath;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 
 	switch(Bandwidth)
 	{
@@ -174,7 +174,7 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 	struct rtw_adapter *		Adapter,
 	u8*			pPowerlevel)
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
 	u32			TxAGC[2]={0, 0}, tmpval=0;
 	bool		TurboScanOff = false;
@@ -270,7 +270,7 @@ static void getPowerBase(
 	u32	*MCSBase
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u32	powerBase0, powerBase1;
 	u8	Legacy_pwrdiff=0;
 	s8	HT20_pwrdiff=0;
@@ -336,7 +336,7 @@ static void getTxPowerWriteValByRegulatory(
 		u32*		pOutWriteVal
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	u8	i, chnlGroup=0, pwr_diff_limit[4], customer_pwr_limit;
 	s8	pwr_diff=0;
@@ -470,13 +470,13 @@ static void writeOFDMPowerReg(
 		u32			*pValue
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u16	RegOffset_A[6] = {	rTxAGC_A_Rate18_06, rTxAGC_A_Rate54_24,
-							rTxAGC_A_Mcs03_Mcs00, rTxAGC_A_Mcs07_Mcs04,
-							rTxAGC_A_Mcs11_Mcs08, rTxAGC_A_Mcs15_Mcs12};
-	u16	RegOffset_B[6] = {	rTxAGC_B_Rate18_06, rTxAGC_B_Rate54_24,
-							rTxAGC_B_Mcs03_Mcs00, rTxAGC_B_Mcs07_Mcs04,
-							rTxAGC_B_Mcs11_Mcs08, rTxAGC_B_Mcs15_Mcs12};
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	u16	RegOffset_A[6] = {rTxAGC_A_Rate18_06, rTxAGC_A_Rate54_24,
+				  rTxAGC_A_Mcs03_Mcs00, rTxAGC_A_Mcs07_Mcs04,
+				  rTxAGC_A_Mcs11_Mcs08, rTxAGC_A_Mcs15_Mcs12};
+	u16	RegOffset_B[6] = {rTxAGC_B_Rate18_06, rTxAGC_B_Rate54_24,
+				  rTxAGC_B_Mcs03_Mcs00, rTxAGC_B_Mcs07_Mcs04,
+				  rTxAGC_B_Mcs11_Mcs08, rTxAGC_B_Mcs15_Mcs12};
 	u8	i, rf, pwr_val[4];
 	u32	writeVal;
 	u16	RegOffset;
@@ -631,7 +631,7 @@ phy_RF6052_Config_ParaFile(
 	u8	eRFPath;
 	struct bb_register_def *pPhyReg;
 	int	rtStatus = _SUCCESS;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	u8	*pszRadioAFile = NULL, *pszRadioBFile = NULL;
 	static s8		sz92DRadioAFile[] = RTL8192D_PHY_RADIO_A;
@@ -842,8 +842,8 @@ int
 PHY_RF6052_Config8192D(
 	struct rtw_adapter *		Adapter)
 {
-	HAL_DATA_TYPE				*pHalData = GET_HAL_DATA(Adapter);
-	int					rtStatus = _SUCCESS;
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	int rtStatus = _SUCCESS;
 
 	//
 	// Initialize general global value

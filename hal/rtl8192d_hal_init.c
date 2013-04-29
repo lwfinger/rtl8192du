@@ -256,7 +256,7 @@ rtl8192d_FirmwareSelfReset(
 	struct rtw_adapter *		Adapter
 )
 {
-	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8	u1bTmp;
 	u8	Delay = 100;
 
@@ -307,7 +307,7 @@ int _FWInit(
 	struct rtw_adapter *			  Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u32			counter = 0;
 
 
@@ -363,7 +363,7 @@ int FirmwareDownload92D(
 	int	rtStatus = _SUCCESS;
 	u8 writeFW_retry = 0;
 	u32 fwdl_start_time;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	s8				R92DFwImageFileName[] ={RTL8192D_FW_IMG};
 	u8*				FwImage;
 	u32				FwImageLen;
@@ -373,7 +373,7 @@ int FirmwareDownload92D(
 	u32			FwImageWoWLANLen;
 #endif //CONFIG_WOWLAN
 	struct RT_FIRMWARE_92D	*pFirmware = NULL;
-	PRT_8192D_FIRMWARE_HDR		pFwHdr = NULL;
+	struct rt_8192d_firmware_hdr *pFwHdr = NULL;
 	u8		*pFirmwareBuf;
 	u32		FirmwareLen;
 	u8		value;
@@ -460,7 +460,7 @@ int FirmwareDownload92D(
 	if(bUsedWoWLANFw)	{
 		pFirmwareBuf = pFirmware->szWoWLANFwBuffer;
 		FirmwareLen = pFirmware->ulWoWLANFwLength;
-		pFwHdr = (PRT_8192D_FIRMWARE_HDR)pFirmware->szWoWLANFwBuffer;
+		pFwHdr = (struct rt_8192d_firmware_hdr *)pFirmware->szWoWLANFwBuffer;
 	}
 	else
 #endif //CONFIG_WOWLAN
@@ -469,7 +469,7 @@ int FirmwareDownload92D(
 	FirmwareLen = pFirmware->ulFwLength;
 
 	// To Check Fw header. Added by tynli. 2009.12.04.
-	pFwHdr = (PRT_8192D_FIRMWARE_HDR)pFirmware->szFwBuffer;
+	pFwHdr = (struct rt_8192d_firmware_hdr *)pFirmware->szFwBuffer;
 	}
 
 	pHalData->FirmwareVersion =  le16_to_cpu(pFwHdr->Version);
@@ -611,7 +611,7 @@ InitializeFirmwareVars92D(
 	struct rtw_adapter *		Adapter
 )
 {
-	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct pwrctrl_priv *pwrpriv;
 	pwrpriv = &Adapter->pwrctrlpriv;
 
@@ -641,7 +641,7 @@ SetFwRelatedForWoWLAN8192DU(
 )
 {
 	int	status=_FAIL;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter);
 	u8	 bRecover = false;
 
 	if(bHostIsGoingtoSleep)
@@ -712,7 +712,7 @@ rtl8192d_ReadChipVersion(
 	)
 {
 	u32	value32;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	enum VERSION_8192D	ChipVersion = VERSION_TEST_CHIP_88C;
 
 	value32 = rtw_read32(Adapter, REG_SYS_CFG);
@@ -769,17 +769,17 @@ rtl8192d_EfuseParseChnlPlan(
 
 static void
 hal_ReadPowerValueFromPROM92D(
-	struct rtw_adapter *		Adapter,
-	PTxPowerInfo	pwrInfo,
+	struct rtw_adapter *Adapter,
+	struct tx_power_info *pwrInfo,
 	u8*			PROMContent,
 	bool			AutoLoadFail
 	)
 {
 	u32	rfPath, eeAddr, group, offset1,offset2=0;
 	u8	i = 0;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 
-	_rtw_memset(pwrInfo, 0, sizeof(TxPowerInfo));
+	_rtw_memset(pwrInfo, 0, sizeof(struct tx_power_info));
 
 	if(AutoLoadFail){
 		for(group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
@@ -910,9 +910,9 @@ rtl8192d_ReadTxPowerInfo(
 	bool			AutoLoadFail
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	TxPowerInfo	pwrInfo;
+	struct tx_power_info pwrInfo;
 	u32			rfPath, ch, group;
 	u8			pwr, diff,tempval[2], i;
 
@@ -1108,7 +1108,7 @@ void rtl8192d_ResetDualMacSwitchVariables(
 )
 {
 #ifdef CONFIG_DUALMAC_CONCURRENT
-/*	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+/*	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct rtw_adapter *		BuddyAdapter = Adapter->BuddyAdapter;
 
 	Adapter->bNeedReConfigMac = false;
@@ -1160,10 +1160,9 @@ PHY_CheckPowerOffFor8192D(
 )
 {
 	u8 u1bTmp;
-	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 
-	if(pHalData->MacPhyMode92D==SINGLEMAC_SINGLEPHY)
-	{
+	if(pHalData->MacPhyMode92D==SINGLEMAC_SINGLEPHY) {
 		u1bTmp = rtw_read8(Adapter, REG_MAC0);
 		rtw_write8(Adapter, REG_MAC0, u1bTmp&(~MAC0_ON));
 		return true;
@@ -1204,10 +1203,10 @@ Function: Synchrosize for power off/on with dual mac
 *************************************************************/
 void
 PHY_SetPowerOnFor8192D(
-	struct rtw_adapter *	Adapter
+	struct rtw_adapter *Adapter
 )
 {
-	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8	value8;
 	u16	i;
 
@@ -1273,7 +1272,7 @@ _func_enter_;
 	DBG_8192D("===== rtl8192du_free_hal_data =====\n");
 
 	if(padapter->HalData)
-		rtw_mfree(padapter->HalData, sizeof(HAL_DATA_TYPE));
+		rtw_mfree(padapter->HalData, sizeof(struct hal_data_8192du));
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	GlobalFirstConfigurationForNormalChip = true;
 #endif
@@ -1516,7 +1515,7 @@ hal_EfuseUpdateNormalChipVersion_92D(
 	struct rtw_adapter *	Adapter
 )
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	enum VERSION_8192D	ChipVer = pHalData->VersionID;
 	u8	CutValue[2];
 	u16	ChipValue=0;
@@ -1555,7 +1554,7 @@ hal_EfuseMacMode_ISVS_92D(
          struct rtw_adapter *     Adapter
 )
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8	PartNo;
 	bool bResult = false;
 	// 92D VS not support dual mac mode
@@ -1596,7 +1595,7 @@ rtl8192d_ReadEFuse(
 	bool	bPseudoTest
 	)
 {
-	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 
 	ReadEFuse_RTL8192D(Adapter, efuseType, _offset, _size_byte, pbuf, bPseudoTest);
 

@@ -164,7 +164,7 @@ unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr)
 	int ep_num=0;
 	struct rtw_adapter *padapter = pdvobj->if1;
 	struct usb_device *pusbd = pdvobj->pusbdev;
-	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du  *pHalData = GET_HAL_DATA(padapter);
 
 	if (addr == RECV_BULK_IN_ADDR) {
 		pipe=usb_rcvbulkpipe(pusbd, pHalData->RtBulkInPipe);
@@ -437,7 +437,7 @@ _func_enter_;
 
 	#ifdef DBG_CONFIG_ERROR_DETECT
 	{
-		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+		struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
 		pHalData->srestpriv.last_tx_complete_time = rtw_get_current_time();
 	}
 	#endif
@@ -575,7 +575,7 @@ _func_enter_;
 	if (!status) {
 		#ifdef DBG_CONFIG_ERROR_DETECT
 		{
-			HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+			struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
 			pHalData->srestpriv.last_tx_time = rtw_get_current_time();
 		}
 		#endif

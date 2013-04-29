@@ -72,7 +72,7 @@ static void dm_DIGInit(
 	struct rtw_adapter *	pAdapter
 )
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 
@@ -116,7 +116,7 @@ dm_DualMacGetParameterFromBuddyAdapter(
 )
 {
 	struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
-	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct mlme_priv *pmlmepriv = &(Adapter->mlmepriv);
 	struct mlme_priv *pbuddy_mlmepriv = &(BuddyAdapter->mlmepriv);
 
@@ -145,7 +145,7 @@ odm_FalseAlarmCounterStatistics_ForSlaveOfDMSP(
 {
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct FALSE_ALARM_STATISTICS *falsealmcnt = &(pdmpriv->falsealmcnt);
 	struct dm_priv	*Buddydmpriv;
@@ -200,15 +200,15 @@ odm_FalseAlarmCounterStatistics(
 	)
 {
 	u32	ret_value;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	struct mlme_priv *pmlmepriv = &(Adapter->mlmepriv);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct FALSE_ALARM_STATISTICS *falsealmcnt = &(pdmpriv->falsealmcnt);
 	u8	BBReset;
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter * pbuddy_adapter = Adapter->pbuddy_adapter;
-	HAL_DATA_TYPE	*pbuddy_pHalData = GET_HAL_DATA(pbuddy_adapter);
-	struct mlme_priv	*pbuddy_pmlmepriv = &(pbuddy_adapter->mlmepriv);
+	struct hal_data_8192du *pbuddy_pHalData = GET_HAL_DATA(pbuddy_adapter);
+	struct mlme_priv *pbuddy_pmlmepriv = &(pbuddy_adapter->mlmepriv);
 #endif //CONFIG_CONCURRENT_MODE
 	//hold ofdm counter
 	PHY_SetBBReg(Adapter, rOFDM0_LSTF, BIT31, 1); //hold page C counter
@@ -326,7 +326,7 @@ odm_FindMinimumRSSI_Dmsp(
 )
 {
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	s32	rssi_val_min_back_for_mac0;
 	bool		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
@@ -371,7 +371,7 @@ odm_FindMinimumRSSI_92D(
 struct rtw_adapter *	pAdapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct mlme_priv	*pmlmepriv = &pAdapter->mlmepriv;
 
@@ -413,7 +413,7 @@ odm_initial_gain_MinPWDB(
 	struct rtw_adapter *	pAdapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	s32	rssi_val_min = 0;
 	if(pdmpriv->EntryMinUndecoratedSmoothedPWDB != 0)
@@ -431,7 +431,7 @@ DM_Write_DIG_DMSP(
 	)
 {
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 	struct rtw_adapter *	BuddyAdapter = pAdapter->pbuddy_adapter;
@@ -503,7 +503,7 @@ DM_Write_DIG(
 	struct rtw_adapter *	pAdapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 
@@ -525,7 +525,7 @@ DM_Write_DIG(
 static void odm_DIG(
 	struct rtw_adapter *	pAdapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct mlme_priv	*pmlmepriv = &(pAdapter->mlmepriv);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct registry_priv	 *pregistrypriv = &pAdapter->registrypriv;
@@ -540,7 +540,7 @@ static void odm_DIG(
 	u8	TxRate = rtw_read8(pAdapter, REG_INIDATA_RATE_SEL);
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter * pbuddy_adapter = pAdapter->pbuddy_adapter;
-	HAL_DATA_TYPE	*pbuddy_pHalData = GET_HAL_DATA(pbuddy_adapter);
+	struct hal_data_8192du *pbuddy_pHalData = GET_HAL_DATA(pbuddy_adapter);
 	struct mlme_priv	*pbuddy_pmlmepriv = &(pbuddy_adapter->mlmepriv);
 	struct dm_priv	*pbuddy_pdmpriv = &pbuddy_pHalData->dmpriv;
 #endif //CONFIG_CONCURRENT_MODE
@@ -882,7 +882,7 @@ dm_initial_gain_MinPWDB(
 	struct rtw_adapter *	pAdapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	s32	rssi_val_min = 0;
 	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
@@ -909,7 +909,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 	struct rtw_adapter *	pAdapter)
 {
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 	struct rtw_adapter *	BuddyAdapter = pAdapter->pbuddy_adapter;
@@ -1059,7 +1059,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 
 static void dm_CCK_PacketDetectionThresh(struct rtw_adapter *	pAdapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 
@@ -1089,9 +1089,9 @@ static void dm_CCK_PacketDetectionThresh(struct rtw_adapter *	pAdapter)
 
 }
 
-static void dm_1R_CCA(struct rtw_adapter *	pAdapter)
+static void dm_1R_CCA(struct rtw_adapter *pAdapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct PS_T *dm_pstable = &pdmpriv->DM_PSTable;
 	struct registry_priv *pregistrypriv = &pAdapter->registrypriv;
@@ -1159,7 +1159,7 @@ static void dm_1R_CCA(struct rtw_adapter *	pAdapter)
 
 static void dm_InitDynamicTxPower(struct rtw_adapter *	Adapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
 	pdmpriv->bDynamicTxPowerEnable = false;
@@ -1170,8 +1170,8 @@ static void dm_InitDynamicTxPower(struct rtw_adapter *	Adapter)
 
 static void odm_DynamicTxPower_92D(struct rtw_adapter *	Adapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	struct mlme_priv *pmlmepriv = &(Adapter->mlmepriv);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	int	UndecoratedSmoothedPWDB;
 
@@ -1337,7 +1337,7 @@ static void PWDB_Monitor(
 	struct rtw_adapter *	Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	int	i;
 	int	tmpEntryMaxPWDB=0, tmpEntryMinPWDB=0xff;
@@ -1450,16 +1450,13 @@ DM_InitEdcaTurbo(
 	struct rtw_adapter *	Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 
 	pHalData->bCurrentTurboEDCA = false;
 	Adapter->recvpriv.bIsAnyNonBEPkts = false;
 }	// DM_InitEdcaTurbo
 
-static void
-dm_CheckEdcaTurbo(
-	struct rtw_adapter *	Adapter
-	)
+static void dm_CheckEdcaTurbo(struct rtw_adapter *Adapter)
 {
 	u32	trafficIndex;
 	u32	edca_param;
@@ -1467,13 +1464,13 @@ dm_CheckEdcaTurbo(
 	u64	cur_rx_bytes = 0;
 	u32	EDCA_BE[2] = {0x5ea42b, 0x5ea42b};
 	u8	bbtchange = false;
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
-	struct dm_priv		*pdmpriv = &pHalData->dmpriv;
-	struct xmit_priv		*pxmitpriv = &(Adapter->xmitpriv);
-	struct recv_priv		*precvpriv = &(Adapter->recvpriv);
-	struct registry_priv	*pregpriv = &Adapter->registrypriv;
-	struct mlme_ext_priv	*pmlmeext = &(Adapter->mlmeextpriv);
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	struct dm_priv *pdmpriv = &pHalData->dmpriv;
+	struct xmit_priv *pxmitpriv = &(Adapter->xmitpriv);
+	struct recv_priv *precvpriv = &(Adapter->recvpriv);
+	struct registry_priv *pregpriv = &Adapter->registrypriv;
+	struct mlme_ext_priv *pmlmeext = &(Adapter->mlmeextpriv);
+	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	if(IS_92D_SINGLEPHY(pHalData->VersionID))
 	{
@@ -1587,7 +1584,7 @@ static void dm_InitDynamicBBPowerSaving(
 	struct rtw_adapter *	Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct PS_T *dm_pstable = &pdmpriv->DM_PSTable;
 
@@ -1602,7 +1599,7 @@ dm_DynamicBBPowerSaving(
 struct rtw_adapter *	pAdapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 
 	//1 Power Saving for 92C
 	if(IS_92D_SINGLEPHY(pHalData->VersionID))
@@ -1626,7 +1623,7 @@ dm_RXGainTrackingCallback_ThermalMeter_92D(
 
 	u8			eRFPath;
 	u32			u4tmp;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
 	u4tmp = (index_mapping[(pHalData->EEPROMThermalMeter - pdmpriv->ThermalValue_RxGain)]) << 12;
@@ -1644,7 +1641,7 @@ static	void
 dm_TXPowerTrackingCallback_ThermalMeter_92D(
             struct rtw_adapter *	Adapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	u8			ThermalValue = 0, delta, delta_LCK, delta_IQK, delta_RxGain, index, offset;
 	u8			ThermalValue_AVG_count = 0;
@@ -2143,7 +2140,7 @@ static	void
 dm_InitializeTXPowerTracking_ThermalMeter(
 	struct rtw_adapter *		Adapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
 	//if(IS_HARDWARE_TYPE_8192C(pHalData))
@@ -2163,7 +2160,7 @@ static void
 DM_InitializeTXPowerTracking(
 	struct rtw_adapter *		Adapter)
 {
-	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 
 	//if(IS_HARDWARE_TYPE_8192C(pHalData))
 	{
@@ -2193,9 +2190,9 @@ static void
 dm_CheckTXPowerTracking_ThermalMeter(
 	struct rtw_adapter *		Adapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	//u1Byte					TxPowerCheckCnt = 5;	//10 sec
+	//u1Byte TxPowerCheckCnt = 5;	//10 sec
 
 	if(!(pdmpriv->DMFlag & DYNAMIC_FUNC_SS))
 	{
@@ -2337,7 +2334,7 @@ static void	dm_CheckPbcGPIO(struct rtw_adapter * padapter)
 
 static void dm_InitRateAdaptiveMask(struct rtw_adapter *	Adapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct rate_adaptive *ra = (struct rate_adaptive *)&pdmpriv->RateAdaptive;
 
@@ -2406,7 +2403,7 @@ dm_InitGPIOSetting(
 //============================================================
 void rtl8192d_init_dm_priv(struct rtw_adapter * Adapter)
 {
-	//PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
+	//struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	//struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
 	//_rtw_memset(pdmpriv, 0, sizeof(struct dm_priv));
@@ -2415,7 +2412,7 @@ void rtl8192d_init_dm_priv(struct rtw_adapter * Adapter)
 
 void rtl8192d_deinit_dm_priv(struct rtw_adapter * Adapter)
 {
-	//PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
+	//struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	//struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
 }
@@ -2425,7 +2422,7 @@ rtl8192d_InitHalDm(
 	struct rtw_adapter *	Adapter
 	)
 {
-	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	u8	i;
 
@@ -2469,9 +2466,9 @@ rtl8192d_InitHalDm(
 #ifdef CONFIG_CONCURRENT_MODE
 static void FindMinimumRSSI(struct rtw_adapter * Adapter)
 {
-	PHAL_DATA_TYPE	pbuddy_HalData;
+	struct hal_data_8192du *pbuddy_HalData;
 	struct dm_priv *pbuddy_dmpriv;
-	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct rtw_adapter * pbuddy_adapter = Adapter->pbuddy_adapter;
 	struct mlme_priv *pmlmepriv = &Adapter->mlmepriv;
@@ -2546,7 +2543,7 @@ rtl8192d_HalDmWatchDog(
 	bool		bFwCurrentInPSMode = false;
 	bool		bFwPSAwake = true;
 	u8 hw_init_completed = false;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter * pbuddy_adapter = Adapter->pbuddy_adapter;

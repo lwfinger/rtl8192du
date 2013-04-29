@@ -97,7 +97,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 	u8	bcck_rate=0, rf_rx_num = 0, cck_highpwr = 0;
 	struct rtw_adapter				*padapter = prframe->u.hdr.adapter;
 	struct rx_pkt_attrib	*pattrib = &prframe->u.hdr.attrib;
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter);
 	u8	tmp_rxsnr;
 	s8	rx_snrX;
 	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
@@ -429,7 +429,7 @@ static void process_rssi(struct rtw_adapter *padapter,union recv_frame *prframe)
 static void process_PWDB(struct rtw_adapter *padapter, union recv_frame *prframe)
 {
 	int	UndecoratedSmoothedPWDB;
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter);
 	struct dm_priv		*pdmpriv = &pHalData->dmpriv;
 	struct rx_pkt_attrib	*pattrib= &prframe->u.hdr.attrib;
 	struct sta_info		*psta = prframe->u.hdr.psta;

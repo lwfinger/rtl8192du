@@ -88,7 +88,7 @@ CheckFwReadLastH2C(
 ******************************************/
 static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLen, u8* pCmdBuffer)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter);
 	u8	BoxNum;
 	u16	BOXReg=0, BOXExtReg=0;
 	u8	BoxContent[4], BoxExtContent[2];
@@ -343,7 +343,7 @@ _func_exit_;
 void rtl8192d_Add_RateATid(struct rtw_adapter * pAdapter, u32 bitmap, u8 arg)
 {
 
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 
 	if(pHalData->fw_ractrl == true)
 	{
@@ -630,7 +630,7 @@ FillFakeTxDescriptor92D(
 	bool		IsPsPoll
 )
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct tx_desc	*ptxdesc = (struct tx_desc *)pDesc;
 
 	// Clear all status
@@ -684,7 +684,7 @@ FillFakeTxDescriptor92D(
 void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished);
 void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct xmit_frame	*pmgntframe;
 	struct pkt_attrib	*pattrib;
 	struct xmit_priv	*pxmitpriv = &(Adapter->xmitpriv);
@@ -826,7 +826,7 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 void rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus)
 {
 	u8	u1JoinBssRptParm[1]={0};
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	bool	bRecover = false;
@@ -903,8 +903,8 @@ void rtl8192d_set_p2p_ctw_period_cmd(struct rtw_adapter* padapter, u8 ctwindow)
 
 void rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_state)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-	struct pwrctrl_priv		*pwrpriv = &padapter->pwrctrlpriv;
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter);
+	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct wifidirect_info	*pwdinfo = &( padapter->wdinfo );
 	struct P2P_PS_Offload_t	*p2p_ps_offload = &pHalData->p2p_ps_offload;
 	u8	i;
@@ -1058,7 +1058,7 @@ void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter)
 	u32 test=0;
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 
-	SETWOWLAN_PARM pwowlan_parm;
+	struct set_wowlan_parm pwowlan_parm;
 	struct pwrctrl_priv *pwrpriv=&padapter->pwrctrlpriv;
 
 _func_enter_;

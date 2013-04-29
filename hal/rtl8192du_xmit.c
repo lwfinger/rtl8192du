@@ -243,7 +243,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 	int	pull=0;
 	uint	qsel;
 	struct rtw_adapter				*padapter = pxmitframe->padapter;
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du 		*pHalData = GET_HAL_DATA(padapter);
 	struct dm_priv		*pdmpriv = &pHalData->dmpriv;
 #ifdef CONFIG_AP_MODE
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -647,7 +647,7 @@ void UpdateEarlyModeInfo8192D(struct rtw_adapter *padapter, struct xmit_frame *p
 #define IDEA_CONDITION 1	// check all packets before enqueue
 s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
 	struct xmit_frame *pxmitframe = NULL;
 	struct xmit_frame *pfirstframe = NULL;
 
@@ -1045,7 +1045,7 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
 	struct rtw_ieee80211_hdr *tx_hdr;
 	struct hostapd_priv *phostapdpriv = padapter->phostapdpriv;
 	struct net_device *pnetdev = padapter->pnetdev;
-	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du  *pHalData = GET_HAL_DATA(padapter);
 	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
 
 

@@ -88,8 +88,8 @@ static s32  translate2dbm(u8 signal_strength_idx)
 
 static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy_stat, bool bPacketMatchBSSID)
 {
-	PHY_STS_OFDM_8192CD_T	*pOfdm_buf;
-	PHY_STS_CCK_8192CD_T	*pCck_buf;
+	struct phy_ofdm_rx_status_report_8192cd	*pOfdm_buf;
+	struct phy_cck_rx_status_report_8192cd *pCck_buf;
 	u8	i, max_spatial_stream, evm;
 	s8	rx_pwr[4], rx_pwr_all=0;
 	u8	pwdb_all;
@@ -114,7 +114,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 		u8 report;
 
 		// CCK Driver info Structure is not the same as OFDM packet.
-		pCck_buf = (PHY_STS_CCK_8192CD_T *)pphy_stat;
+		pCck_buf = (struct phy_cck_rx_status_report_8192cd *)pphy_stat;
 		//Adapter->RxStats.NumQryPhyStatusCCK++;
 
 		//
@@ -244,7 +244,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 	}
 	else //OFDM/HT
 	{
-		pOfdm_buf = (PHY_STS_OFDM_8192CD_T *)pphy_stat;
+		pOfdm_buf = (struct phy_ofdm_rx_status_report_8192cd *)pphy_stat;
 
 		//
 		// (1)Get RSSI for HT rate

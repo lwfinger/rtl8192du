@@ -55,8 +55,7 @@ struct phy_stat {
 	unsigned int phydw7;
 };
 
-typedef struct _Phy_OFDM_Rx_Status_Report_8192cd
-{
+struct phy_ofdm_rx_status_report_8192cd {
 	unsigned char	trsw_gain_X[4];
 	unsigned char	pwdb_all;
 	unsigned char	cfosho_X[4];
@@ -68,18 +67,15 @@ typedef struct _Phy_OFDM_Rx_Status_Report_8192cd
 	unsigned char	csi_target_X[2];
 	unsigned char	sigevm;
 	unsigned char	max_ex_pwr;
-//#ifdef RTL8192SE
 #ifdef CONFIG_LITTLE_ENDIAN
 	unsigned char ex_intf_flg:1;
 	unsigned char sgi_en:1;
 	unsigned char rxsc:2;
-	//unsigned char rsvd:4;
 	unsigned char idle_long:1;
 	unsigned char r_ant_train_en:1;
 	unsigned char ANTSELB:1;
 	unsigned char ANTSEL:1;
 #else	// _BIG_ENDIAN_
-	//unsigned char rsvd:4;
 	unsigned char ANTSEL:1;
 	unsigned char ANTSELB:1;
 	unsigned char r_ant_train_en:1;
@@ -88,33 +84,18 @@ typedef struct _Phy_OFDM_Rx_Status_Report_8192cd
 	unsigned char sgi_en:1;
 	unsigned char ex_intf_flg:1;
 #endif
-//#else	// RTL8190, RTL8192E
-//	unsigned char	sgi_en;
-//	unsigned char	rxsc_sgien_exflg;
-//#endif
-}__attribute__ ((packed)) PHY_STS_OFDM_8192CD_T,PHY_RX_DRIVER_INFO_8192CD;
+} __packed;
 
-typedef struct _Phy_CCK_Rx_Status_Report_8192cd
-{
+struct phy_cck_rx_status_report_8192cd {
 	/* For CCK rate descriptor. This is a signed 8:1 variable. LSB bit presend
 		0.5. And MSB 7 bts presend a signed value. Range from -64~+63.5. */
 	u8	adc_pwdb_X[4];
 	u8	SQ_rpt;
 	u8	cck_agc_rpt;
-} PHY_STS_CCK_8192CD_T;
+};
 
 // Rx smooth factor
 #define	Rx_Smooth_Factor (20)
-
-typedef struct _INTERRUPT_MSG_FORMAT_EX{
-	unsigned int C2H_MSG0;
-	unsigned int C2H_MSG1;
-	unsigned int C2H_MSG2;
-	unsigned int C2H_MSG3;
-	unsigned int HISR; // from HISR Reg0x124, read to clear
-	unsigned int HISRE;// from HISRE Reg0x12c, read to clear
-	unsigned int  MSG_EX;
-}INTERRUPT_MSG_FORMAT_EX,*PINTERRUPT_MSG_FORMAT_EX;
 
 void rtl8192du_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf);
 int	rtl8192du_init_recv_priv(_adapter * padapter);

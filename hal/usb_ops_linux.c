@@ -136,7 +136,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 				} else {
 					#ifdef DBG_CONFIG_ERROR_DETECT
 					{
-						HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+						struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
 						pHalData->srestpriv.Wifi_Error_Status = USB_VEN_REQ_CMD_FAIL;
 					}
 					#endif
@@ -184,7 +184,7 @@ static void usb_read_reg_rf_byfw(struct intf_hdl *pintfhdl, u16 byteCount, u32 r
 	u16	wPage = 0x0000, offset;
 	u32	BufferLengthRead;
 	struct rtw_adapter *	Adapter = pintfhdl->padapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(Adapter);
 	u8	RFPath=0,nPHY=0;
 
 	RFPath =(u8) ((registerIndex&0xff0000)>>16);
@@ -214,7 +214,7 @@ static void usb_read_reg_rf_byfw(struct intf_hdl *pintfhdl, u16 byteCount, u32 r
 static void usb_read_reg(struct intf_hdl *pintfhdl, u16 value, void *pdata, u16 len)
 {
 	struct rtw_adapter		*padapter = pintfhdl->padapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
 	u8	request;
 	u8	requesttype;
 	u16	index;
@@ -237,7 +237,7 @@ static void usb_read_reg(struct intf_hdl *pintfhdl, u16 value, void *pdata, u16 
 static int usb_write_reg(struct intf_hdl *pintfhdl, u16 value, void *pdata, u16 len)
 {
 	struct rtw_adapter		*padapter = pintfhdl->padapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
 	u8	request;
 	u8	requesttype;
 	u16	index;
@@ -625,7 +625,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 	struct sk_buff *pkt_copy = NULL;
 	union recv_frame	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du 		*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
 
@@ -960,7 +960,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 	struct sk_buff *pkt_copy = NULL;
 	union recv_frame	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
 

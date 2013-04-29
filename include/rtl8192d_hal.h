@@ -270,7 +270,7 @@ struct RT_FIRMWARE_92D {
 // This structure must be cared byte-ordering
 //
 // Added by tynli. 2009.12.04.
-typedef struct _RT_8192D_FIRMWARE_HDR {//8-byte alinment required
+struct rt_8192d_firmware_hdr { //8-byte alinment required
 
 	//--- LONG WORD 0 ----
 	u16		Signature;	// 92C0: test chip; 92C, 88C0: test chip; 88C1: MP A-cut; 92C1: MP A-cut
@@ -296,67 +296,16 @@ typedef struct _RT_8192D_FIRMWARE_HDR {//8-byte alinment required
 	//--- LONG WORD 3 ----
 	u32		Rsvd4;
 	u32		Rsvd5;
-
-}RT_8192D_FIRMWARE_HDR, *PRT_8192D_FIRMWARE_HDR;
+};
 
 #define DRIVER_EARLY_INT_TIME		0x05
 #define BCN_DMA_ATIME_INT_TIME		0x02
 
-typedef	enum _BT_CoType{
-	BT_2Wire			= 0,
-	BT_ISSC_3Wire	= 1,
-	BT_Accel			= 2,
-	BT_CSR			= 3,
-	BT_CSR_ENHAN	= 4,
-	BT_RTL8756		= 5,
-} BT_CoType, *PBT_CoType;
-
-typedef	enum _BT_CurState{
-	BT_OFF		= 0,
-	BT_ON		= 1,
-} BT_CurState, *PBT_CurState;
-
-typedef	enum _BT_ServiceType{
-	BT_SCO			= 0,
-	BT_A2DP			= 1,
-	BT_HID			= 2,
-	BT_HID_Idle		= 3,
-	BT_Scan			= 4,
-	BT_Idle			= 5,
-	BT_OtherAction	= 6,
-	BT_Busy			= 7,
-	BT_OtherBusy		= 8,
-} BT_ServiceType, *PBT_ServiceType;
-
-typedef	enum _BT_RadioShared{
-	BT_Radio_Shared		= 0,
-	BT_Radio_Individual	= 1,
-} BT_RadioShared, *PBT_RadioShared;
-
-typedef struct _BT_COEXIST_STR{
-	u8					BluetoothCoexist;
-	u8					BT_Ant_Num;
-	u8					BT_CoexistType;
-	u8					BT_State;
-	u8					BT_CUR_State;		//0:on, 1:off
-	u8					BT_Ant_isolation;	//0:good, 1:bad
-	u8					BT_PapeCtrl;		//0:SW, 1:SW/HW dynamic
-	u8					BT_Service;
-	u8					BT_RadioSharedType;
-	u8					Ratio_Tx;
-	u8					Ratio_PRI;
-}BT_COEXIST_STR, *PBT_COEXIST_STR;
-
 //Added for 92D IQK setting.
-typedef struct _IQK_MATRIX_REGS_SETTING{
+struct iqk_matrix_regs_setting {
 	bool		bIQKDone;
-#if 1
 	int		Value[1][IQK_Matrix_REG_NUM];
-#else
-	u32		Mark[IQK_Matrix_REG_NUM];
-	u32		Value[IQK_Matrix_REG_NUM];
-#endif
-}IQK_MATRIX_REGS_SETTING,*PIQK_MATRIX_REGS_SETTING;
+};
 
 #ifdef CONFIG_USB_RX_AGGREGATION
 
@@ -539,7 +488,7 @@ enum ChannelPlan{
 	CHPL_WORLD	= 10,
 };
 
-typedef struct _TxPowerInfo{
+struct tx_power_info {
 	u8 CCKIndex[RF_PATH_MAX][CHANNEL_GROUP_MAX];
 	u8 HT40_1SIndex[RF_PATH_MAX][CHANNEL_GROUP_MAX];
 	u8 HT40_2SIndexDiff[RF_PATH_MAX][CHANNEL_GROUP_MAX];
@@ -551,7 +500,7 @@ typedef struct _TxPowerInfo{
 	u8 TSSI_B[3];
 	u8 TSSI_A_5G[3];		//5GL/5GM/5GH
 	u8 TSSI_B_5G[3];
-}TxPowerInfo, *PTxPowerInfo;
+};
 
 #define EFUSE_REAL_CONTENT_LEN	1024
 #define EFUSE_MAP_LEN				256
@@ -587,17 +536,14 @@ enum c2h_id_8192d {
 
 
 //should be renamed and moved to another file
-typedef	enum _INTERFACE_SELECT_8192DUSB{
-	INTF_SEL0_USB			= 0,		// USB
+enum INTERFACE_SELECT_8192DUSB {
+	INTF_SEL0_USB		= 0,		// USB
 	INTF_SEL1_MINICARD	= 1,		// Minicard
-	INTF_SEL2_EKB_PRO		= 2,		// Eee keyboard proprietary
-	INTF_SEL3_PRO			= 3,		// Customized proprietary
-} INTERFACE_SELECT_8192DUSB, *PINTERFACE_SELECT_8192DUSB;
+	INTF_SEL2_EKB_PRO	= 2,		// Eee keyboard proprietary
+	INTF_SEL3_PRO		= 3,		// Customized proprietary
+};
 
-typedef INTERFACE_SELECT_8192DUSB INTERFACE_SELECT_USB;
-
-struct hal_data_8192du
-{
+struct hal_data_8192du {
 	enum VERSION_8192D	VersionID;
 
 	// add for 92D Phy mode/mac/Band mode
@@ -629,7 +575,7 @@ struct hal_data_8192du
 	u8	nCur40MhzPrimeSC;// Control channel sub-carrier
 	u16	BasicRateSet;
 
-	INTERFACE_SELECT_8192DUSB	InterfaceSel;
+	struct tx_power_info InterfaceSel;
 
 	//rf_ctrl
 	u8	rf_chip;
@@ -718,7 +664,7 @@ struct hal_data_8192du
 
 	bool		bEarlyModeEnable;
 
-	IQK_MATRIX_REGS_SETTING IQKMatrixRegSetting[IQK_Matrix_Settings_NUM];
+	struct iqk_matrix_regs_setting IQKMatrixRegSetting[IQK_Matrix_Settings_NUM];
 
 	//for host message to fw
 	u8	LastHMEBoxNum;
@@ -776,9 +722,7 @@ struct hal_data_8192du
 #endif //CONFIG_P2P
 };
 
-typedef struct hal_data_8192du HAL_DATA_TYPE, *PHAL_DATA_TYPE;
-
-#define GET_HAL_DATA(__pAdapter)	((HAL_DATA_TYPE *)((__pAdapter)->HalData))
+#define GET_HAL_DATA(__pAdapter)	((struct hal_data_8192du *)((__pAdapter)->HalData))
 #define GET_RF_TYPE(priv)	(GET_HAL_DATA(priv)->rf_type)
 
 int FirmwareDownload92D(struct rtw_adapter * Adapter,bool  bUsedWoWLANFw);

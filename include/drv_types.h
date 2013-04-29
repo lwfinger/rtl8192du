@@ -36,8 +36,6 @@ enum {
 	DOWN_LINK,
 };
 
-// typedef struct _ADAPTER _adapter, ADAPTER,*PADAPTER;
-
 #ifdef CONFIG_80211N_HT
 #include <rtw_ht.h>
 #endif

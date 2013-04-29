@@ -369,7 +369,7 @@ SwLedBlink1(
 	)
 {
 	struct rtw_adapter				*padapter = pLed->padapter;
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du 		*pHalData = GET_HAL_DATA(padapter);
 	struct led_priv		*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 	struct LED_871X *			pLed1 = &(ledpriv->SwLed1);
@@ -1423,7 +1423,7 @@ SwLedControlMode1(
 	enum LED_CTL_MODE		LedAction
 )
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du 		*pHalData = GET_HAL_DATA(padapter);
 	struct led_priv		*ledpriv = &(padapter->ledpriv);
 	struct LED_871X *			pLed = &(ledpriv->SwLed0);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
@@ -2390,7 +2390,7 @@ SwLedControlMode5(
 	enum LED_CTL_MODE		LedAction
 )
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct LED_871X *		pLed = &(ledpriv->SwLed0);

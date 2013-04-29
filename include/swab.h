@@ -21,19 +21,19 @@
 #define _LINUX_BYTEORDER_SWAB_H
 
 #ifndef __u16
-typedef unsigned short __u16;
+  #define __u16 unsigned short
 #endif
 
 #ifndef __u32
-typedef unsigned int	__u32;
+  #define __u32 unsigned int
 #endif
 
 #ifndef __u8
-typedef unsigned char __u8;
+  #define __u8 unsigned char
 #endif
 
 #ifndef __u64
-typedef unsigned long long	__u64;
+  #define __u64 unsigned long long
 #endif
 
 

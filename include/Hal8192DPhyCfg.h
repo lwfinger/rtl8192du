@@ -76,12 +76,12 @@ enum swchnl_cmdid {
 
 
 /* 1. Switch channel related */
-typedef struct _SwChnlCmd{
+struct sw_chnl_cmd {
 	enum swchnl_cmdid	cmdid;
 	u32			Para1;
 	u32			Para2;
 	u32			msDelay;
-} SwChnlCmd;
+};
 
 enum HW90_BLOCK {
 	HW90_BLOCK_MAC = 0,
@@ -173,61 +173,43 @@ enum RF_TYPE_8190P {
 	RF_PSEUDO_11N=5,	// 5, It is a temporality RF.
 };
 
-typedef struct _BB_REGISTER_DEFINITION{
-	u32 rfintfs;			// set software control:
-							//		0x870~0x877[8 bytes]
-
-	u32 rfintfi;			// readback data:
-							//		0x8e0~0x8e7[8 bytes]
-
+struct bb_register_def {
+	u32 rfintfs;		// set software control:
+				//		0x870~0x877[8 bytes]
+	u32 rfintfi;		// readback data:
+				//		0x8e0~0x8e7[8 bytes]
 	u32 rfintfo;		// output data:
-							//		0x860~0x86f [16 bytes]
-
+				//		0x860~0x86f [16 bytes]
 	u32 rfintfe;		// output enable:
-							//		0x860~0x86f [16 bytes]
-
+				//		0x860~0x86f [16 bytes]
 	u32 rf3wireOffset;	// LSSI data:
-							//		0x840~0x84f [16 bytes]
-
+				//		0x840~0x84f [16 bytes]
 	u32 rfLSSI_Select;	// BB Band Select:
-							//		0x878~0x87f [8 bytes]
-
+				//		0x878~0x87f [8 bytes]
 	u32 rfTxGainStage;	// Tx gain stage:
-							//		0x80c~0x80f [4 bytes]
-
+				//		0x80c~0x80f [4 bytes]
 	u32 rfHSSIPara1;	// wire parameter control1 :
-							//		0x820~0x823,0x828~0x82b, 0x830~0x833, 0x838~0x83b [16 bytes]
-
+				//		0x820~0x823,0x828~0x82b, 0x830~0x833, 0x838~0x83b [16 bytes]
 	u32 rfHSSIPara2;	// wire parameter control2 :
-							//		0x824~0x827,0x82c~0x82f, 0x834~0x837, 0x83c~0x83f [16 bytes]
-
-	u32 rfSwitchControl; //Tx Rx antenna control :
-							//		0x858~0x85f [16 bytes]
-
+				//		0x824~0x827,0x82c~0x82f, 0x834~0x837, 0x83c~0x83f [16 bytes]
+	u32 rfSwitchControl;	//Tx Rx antenna control :
+				//		0x858~0x85f [16 bytes]
 	u32 rfAGCControl1;	//AGC parameter control1 :
-							//		0xc50~0xc53,0xc58~0xc5b, 0xc60~0xc63, 0xc68~0xc6b [16 bytes]
-
+				//		0xc50~0xc53,0xc58~0xc5b, 0xc60~0xc63, 0xc68~0xc6b [16 bytes]
 	u32 rfAGCControl2;	//AGC parameter control2 :
-							//		0xc54~0xc57,0xc5c~0xc5f, 0xc64~0xc67, 0xc6c~0xc6f [16 bytes]
-
-	u32 rfRxIQImbalance; //OFDM Rx IQ imbalance matrix :
-							//		0xc14~0xc17,0xc1c~0xc1f, 0xc24~0xc27, 0xc2c~0xc2f [16 bytes]
-
+				//		0xc54~0xc57,0xc5c~0xc5f, 0xc64~0xc67, 0xc6c~0xc6f [16 bytes]
+	u32 rfRxIQImbalance;	//OFDM Rx IQ imbalance matrix :
+				//		0xc14~0xc17,0xc1c~0xc1f, 0xc24~0xc27, 0xc2c~0xc2f [16 bytes]
 	u32 rfRxAFE;		//Rx IQ DC ofset and Rx digital filter, Rx DC notch filter :
-							//		0xc10~0xc13,0xc18~0xc1b, 0xc20~0xc23, 0xc28~0xc2b [16 bytes]
-
-	u32 rfTxIQImbalance; //OFDM Tx IQ imbalance matrix
-							//		0xc80~0xc83,0xc88~0xc8b, 0xc90~0xc93, 0xc98~0xc9b [16 bytes]
-
+				//		0xc10~0xc13,0xc18~0xc1b, 0xc20~0xc23, 0xc28~0xc2b [16 bytes]
+	u32 rfTxIQImbalance;	//OFDM Tx IQ imbalance matrix
+				//		0xc80~0xc83,0xc88~0xc8b, 0xc90~0xc93, 0xc98~0xc9b [16 bytes]
 	u32 rfTxAFE;		//Tx IQ DC Offset and Tx DFIR type
-							//		0xc84~0xc87,0xc8c~0xc8f, 0xc94~0xc97, 0xc9c~0xc9f [16 bytes]
-
+				//		0xc84~0xc87,0xc8c~0xc8f, 0xc94~0xc97, 0xc9c~0xc9f [16 bytes]
 	u32 rfLSSIReadBack;	//LSSI RF readback data SI mode
-								//		0x8a0~0x8af [16 bytes]
-
+				//		0x8a0~0x8af [16 bytes]
 	u32 rfLSSIReadBackPi;	//LSSI RF readback data PI mode 0x8b8-8bc for Path A and B
-
-}BB_REGISTER_DEFINITION_T, *PBB_REGISTER_DEFINITION_T;
+};
 
 #ifdef CONFIG_MP_INCLUDED
 enum ANTENNA_PATH {
@@ -250,7 +232,7 @@ enum ANTENNA_PATH {
 };
 #endif
 
-typedef struct _R_ANTENNA_SELECT_OFDM{
+struct antenna_select_ofdm {
 	u32			r_tx_antenna:4;
 	u32			r_ant_l:4;
 	u32			r_ant_non_ht:4;
@@ -260,13 +242,13 @@ typedef struct _R_ANTENNA_SELECT_OFDM{
 	u32			r_ant_non_ht_s1:4;
 	u32			OFDM_TXSC:2;
 	u32			Reserved:2;
-}R_ANTENNA_SELECT_OFDM;
+};
 
-typedef struct _R_ANTENNA_SELECT_CCK{
+struct antenna_select_cck {
 	u8			r_cckrx_enable_2:2;
 	u8			r_cckrx_enable:2;
 	u8			r_ccktx_enable:4;
-}R_ANTENNA_SELECT_CCK;
+};
 
 /*------------------------------Define structure----------------------------*/
 

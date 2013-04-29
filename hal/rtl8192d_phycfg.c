@@ -383,7 +383,7 @@ phy_RFSerialRead(
 {
 	u32	retValue = 0;
 	HAL_DATA_TYPE				*pHalData = GET_HAL_DATA(Adapter);
-	BB_REGISTER_DEFINITION_T	*pPhyReg = &pHalData->PHYRegDef[eRFPath];
+	struct bb_register_def *pPhyReg = &pHalData->PHYRegDef[eRFPath];
 	u32	NewOffset;
 	u32	tmplong,tmplong2;
 	u8	RfPiEnable=0;
@@ -509,7 +509,7 @@ phy_RFSerialWrite(
 {
 	u32	DataAndAddr = 0;
 	HAL_DATA_TYPE				*pHalData = GET_HAL_DATA(Adapter);
-	BB_REGISTER_DEFINITION_T	*pPhyReg = &pHalData->PHYRegDef[eRFPath];
+	struct bb_register_def *pPhyReg = &pHalData->PHYRegDef[eRFPath];
 	u32	NewOffset,MaskforPhySet=0;
 
 
@@ -2667,7 +2667,7 @@ PHY_EnableRFENV(
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	BB_REGISTER_DEFINITION_T	*pPhyReg = &pHalData->PHYRegDef[eRFPath];
+	struct bb_register_def *pPhyReg = &pHalData->PHYRegDef[eRFPath];
 
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("====>PHY_EnableRFENV\n"));
 
@@ -2712,7 +2712,7 @@ PHY_RestoreRFENV(
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	BB_REGISTER_DEFINITION_T	*pPhyReg = &pHalData->PHYRegDef[eRFPath];
+	struct bb_register_def *pPhyReg = &pHalData->PHYRegDef[eRFPath];
 
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("=====>PHY_RestoreRFENV\n"));
 	//If another MAC is ON,need do this?
@@ -3515,7 +3515,7 @@ phy_SwChnlStepByStep(
 
 static	bool
 phy_SetSwChnlCmdArray(
-	SwChnlCmd*		cmdtable,
+	struct sw_chnl_cmd *cmdtable,
 	u32			cmdtableidx,
 	u32			cmdtablesz,
 	enum swchnl_cmdid	cmdid,
@@ -3524,7 +3524,7 @@ phy_SetSwChnlCmdArray(
 	u32			msdelay
 	)
 {
-	SwChnlCmd* cmd;
+	struct sw_chnl_cmd *cmd;
 
 	if(cmdtable == NULL)
 		return false;

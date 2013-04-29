@@ -694,7 +694,7 @@ struct hal_data_8192du
 	u8	CurrentCckTxPwrIdx;
 	u8	CurrentOfdm24GTxPwrIdx;
 
-	BB_REGISTER_DEFINITION_T	PHYRegDef[4];	//Radio A/B/C/D
+	struct bb_register_def PHYRegDef[4];	//Radio A/B/C/D
 
 	bool		bRFPathRxEnable[4];	// We support 4 RF path now.
 

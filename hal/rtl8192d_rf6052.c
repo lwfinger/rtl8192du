@@ -629,7 +629,7 @@ phy_RF6052_Config_ParaFile(
 {
 	u32	u4RegValue=0;
 	u8	eRFPath;
-	BB_REGISTER_DEFINITION_T	*pPhyReg;
+	struct bb_register_def *pPhyReg;
 	int	rtStatus = _SUCCESS;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;

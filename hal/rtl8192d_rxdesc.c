@@ -50,7 +50,7 @@ static u8 evm_db2percentage(s8 value)
 }
 
 
-static s32 signal_scale_mapping(_adapter *padapter, s32 cur_sig )
+static s32 signal_scale_mapping(struct rtw_adapter *padapter, s32 cur_sig )
 {
 	s32 ret_sig;
 
@@ -95,7 +95,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 	u8	pwdb_all;
 	u32	rssi,total_rssi=0;
 	u8	bcck_rate=0, rf_rx_num = 0, cck_highpwr = 0;
-	_adapter				*padapter = prframe->u.hdr.adapter;
+	struct rtw_adapter				*padapter = prframe->u.hdr.adapter;
 	struct rx_pkt_attrib	*pattrib = &prframe->u.hdr.attrib;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
 	u8	tmp_rxsnr;
@@ -379,7 +379,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 }
 
 
-static void process_rssi(_adapter *padapter,union recv_frame *prframe)
+static void process_rssi(struct rtw_adapter *padapter,union recv_frame *prframe)
 {
 	u32	last_rssi, tmp_val;
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
@@ -426,7 +426,7 @@ static void process_rssi(_adapter *padapter,union recv_frame *prframe)
 }// Process_UI_RSSI_8192S
 
 
-static void process_PWDB(_adapter *padapter, union recv_frame *prframe)
+static void process_PWDB(struct rtw_adapter *padapter, union recv_frame *prframe)
 {
 	int	UndecoratedSmoothedPWDB;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
@@ -480,7 +480,7 @@ static void process_PWDB(_adapter *padapter, union recv_frame *prframe)
 }
 
 
-static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
+static void process_link_qual(struct rtw_adapter *padapter,union recv_frame *prframe)
 {
 	u32	last_evm=0,  tmpVal;
 	struct rx_pkt_attrib *pattrib;
@@ -541,7 +541,7 @@ static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
 }// Process_UiLinkQuality8192S
 
 
-static void process_phy_info(_adapter *padapter, union recv_frame *prframe)
+static void process_phy_info(struct rtw_adapter *padapter, union recv_frame *prframe)
 {
 	union recv_frame *precvframe = (union recv_frame *)prframe;
 
@@ -562,7 +562,7 @@ static void process_phy_info(_adapter *padapter, union recv_frame *prframe)
 void rtl8192d_translate_rx_signal_stuff(union recv_frame *precvframe, struct phy_stat *pphy_info)
 {
 	struct rx_pkt_attrib	*pattrib = &precvframe->u.hdr.attrib;
-	_adapter				*padapter = precvframe->u.hdr.adapter;
+	struct rtw_adapter				*padapter = precvframe->u.hdr.adapter;
 	u8	bPacketMatchBSSID =false;
 	u8	bPacketToSelf = false;
 	u8	bPacketBeacon = false;

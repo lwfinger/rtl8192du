@@ -39,7 +39,7 @@ extern int rtw_ampdu_enable;//for enable tx_ampdu
 extern int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
 static int rtw_resume(struct usb_interface *intf);
-int rtw_resume_process(_adapter *padapter);
+int rtw_resume_process(struct rtw_adapter *padapter);
 
 
 static int rtw_drv_init(struct usb_interface *pusb_intf,const struct usb_device_id *pdid);
@@ -498,7 +498,7 @@ _func_enter_;
 _func_exit_;
 }
 
-static void decide_chip_type_by_usb_device_id(_adapter *padapter, const struct usb_device_id *pdid)
+static void decide_chip_type_by_usb_device_id(struct rtw_adapter *padapter, const struct usb_device_id *pdid)
 {
 	padapter->chip_type = NULL_CHIP_TYPE;
 	padapter->chip_type = RTL8192D;
@@ -506,14 +506,14 @@ static void decide_chip_type_by_usb_device_id(_adapter *padapter, const struct u
 	DBG_8192D("CHIP TYPE: RTL8192D\n");
 }
 
-static void usb_intf_start(_adapter *padapter)
+static void usb_intf_start(struct rtw_adapter *padapter)
 {
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+usb_intf_start\n"));
 	rtw_hal_inirp_init(padapter);
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-usb_intf_start\n"));
 }
 
-static void usb_intf_stop(_adapter *padapter)
+static void usb_intf_stop(struct rtw_adapter *padapter)
 {
 
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+usb_intf_stop\n"));
@@ -538,7 +538,7 @@ static void usb_intf_stop(_adapter *padapter)
 
 }
 
-static void rtw_dev_unload(_adapter *padapter)
+static void rtw_dev_unload(struct rtw_adapter *padapter)
 {
 	struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
 	u8 val8;
@@ -623,7 +623,7 @@ static void process_spec_devid(const struct usb_device_id *pdid)
 }
 
 #ifdef SUPPORT_HW_RFOFF_DETECTED
-int rtw_hw_suspend(_adapter *padapter )
+int rtw_hw_suspend(struct rtw_adapter *padapter )
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
@@ -701,7 +701,7 @@ error_exit:
 
 }
 
-int rtw_hw_resume(_adapter *padapter)
+int rtw_hw_resume(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
@@ -755,7 +755,7 @@ error_exit:
 static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
-	_adapter *padapter = dvobj->if1;
+	struct rtw_adapter *padapter = dvobj->if1;
 	struct net_device *pnetdev = padapter->pnetdev;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
@@ -864,7 +864,7 @@ exit:
 static int rtw_resume(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
-	_adapter *padapter = dvobj->if1;
+	struct rtw_adapter *padapter = dvobj->if1;
 	struct net_device *pnetdev = padapter->pnetdev;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	 int ret = 0;
@@ -892,7 +892,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 
 }
 
-int rtw_resume_process(_adapter *padapter)
+int rtw_resume_process(struct rtw_adapter *padapter)
 {
 	struct net_device *pnetdev;
 	struct pwrctrl_priv *pwrpriv;
@@ -984,7 +984,7 @@ exit:
 }
 
 #ifdef CONFIG_AUTOSUSPEND
-void autosuspend_enter(_adapter* padapter)
+void autosuspend_enter(struct rtw_adapter* padapter)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
@@ -1017,7 +1017,7 @@ void autosuspend_enter(_adapter* padapter)
 	#endif
 
 }
-int autoresume_enter(_adapter* padapter)
+int autoresume_enter(struct rtw_adapter* padapter)
 {
 	int result = _SUCCESS;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
@@ -1058,14 +1058,14 @@ error_exit:
 }
 #endif
 
-_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
+struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	struct usb_interface *pusb_intf, const struct usb_device_id *pdid)
 {
-	_adapter *padapter = NULL;
+	struct rtw_adapter *padapter = NULL;
 	struct net_device *pnetdev = NULL;
 	int status = _FAIL;
 
-	if ((padapter = (_adapter *)rtw_zvmalloc(sizeof(*padapter))) == NULL) {
+	if ((padapter = (struct rtw_adapter *)rtw_zvmalloc(sizeof(*padapter))) == NULL) {
 		goto exit;
 	}
 	padapter->dvobj = dvobj;
@@ -1232,7 +1232,7 @@ exit:
 	return padapter;
 }
 
-static void rtw_usb_if1_deinit(_adapter *if1)
+static void rtw_usb_if1_deinit(struct rtw_adapter *if1)
 {
 	struct net_device *pnetdev = if1->pnetdev;
 	struct mlme_priv *pmlmepriv= &if1->mlmepriv;
@@ -1285,12 +1285,12 @@ static void rtw_usb_if1_deinit(_adapter *if1)
  *        We accept the new device by returning 0.
 */
 
-_adapter  *rtw_sw_export = NULL;
+struct rtw_adapter  *rtw_sw_export = NULL;
 
 static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device_id *did)
 {
 	uint status = _FAIL;
-	_adapter *if1 = NULL, *if2 = NULL;
+	struct rtw_adapter *if1 = NULL, *if2 = NULL;
 	struct dvobj_priv *dvobj = NULL;
 #ifdef CONFIG_MULTI_VIR_IFACES
 	int i;
@@ -1353,7 +1353,7 @@ exit:
 static void rtw_dev_remove(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
-	_adapter *padapter = dvobj->if1;
+	struct rtw_adapter *padapter = dvobj->if1;
 
 _func_exit_;
 
@@ -1446,7 +1446,7 @@ module_exit(rtw_drv_halt);
 #ifdef CONFIG_WOWLAN
 #ifdef CONFIG_WOWLAN_MANUAL
 
-int rtw_resume_toshiba(PADAPTER Adapter)
+int rtw_resume_toshiba(struct rtw_adapter * Adapter)
 {
 	struct dvobj_priv *pdvobjpriv;
 	pdvobjpriv = adapter_to_dvobj(Adapter);
@@ -1455,7 +1455,7 @@ int rtw_resume_toshiba(PADAPTER Adapter)
 	return 0;
 }
 
-int rtw_suspend_toshiba(PADAPTER Adapter)
+int rtw_suspend_toshiba(struct rtw_adapter * Adapter)
 {
 	pm_message_t msg;
 	struct dvobj_priv *pdvobjpriv;

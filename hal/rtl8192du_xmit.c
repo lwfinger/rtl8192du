@@ -28,7 +28,7 @@
 #include <usb_ops.h>
 #include <rtl8192d_hal.h>
 
-s32	rtl8192du_init_xmit_priv(_adapter *padapter)
+s32	rtl8192du_init_xmit_priv(struct rtw_adapter *padapter)
 {
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 
@@ -38,7 +38,7 @@ s32	rtl8192du_init_xmit_priv(_adapter *padapter)
 	return _SUCCESS;
 }
 
-void	rtl8192du_free_xmit_priv(_adapter *padapter)
+void	rtl8192du_free_xmit_priv(struct rtw_adapter *padapter)
 {
 }
 
@@ -85,8 +85,8 @@ u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe)
 
 }
 
-int urb_zero_packet_chk(_adapter *padapter, int sz);
-int urb_zero_packet_chk(_adapter *padapter, int sz)
+int urb_zero_packet_chk(struct rtw_adapter *padapter, int sz);
+int urb_zero_packet_chk(struct rtw_adapter *padapter, int sz)
 {
 	int blnSetTxDescOffset;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(padapter);
@@ -242,7 +242,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 {
 	int	pull=0;
 	uint	qsel;
-	_adapter				*padapter = pxmitframe->padapter;
+	struct rtw_adapter				*padapter = pxmitframe->padapter;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
 	struct dm_priv		*pdmpriv = &pHalData->dmpriv;
 #ifdef CONFIG_AP_MODE
@@ -493,7 +493,7 @@ if (padapter->registrypriv.mp_mode == 0)
 
 }
 
-s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
+s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 ret = _SUCCESS;
 	s32 inner_ret = _SUCCESS;
@@ -612,8 +612,8 @@ static u32 xmitframe_need_length(struct xmit_frame *pxmitframe)
 	return len;
 }
 
-void UpdateEarlyModeInfo8192D(_adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq);
-void UpdateEarlyModeInfo8192D(_adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq)
+void UpdateEarlyModeInfo8192D(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq);
+void UpdateEarlyModeInfo8192D(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq)
 {
 	u32	len;
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
@@ -645,7 +645,7 @@ void UpdateEarlyModeInfo8192D(_adapter *padapter, struct xmit_frame *pxmitframe,
 }
 
 #define IDEA_CONDITION 1	// check all packets before enqueue
-s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
+s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct xmit_frame *pxmitframe = NULL;
@@ -853,7 +853,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 
 #else
 
-s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
+s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 {
 
 	struct hw_xmit *phwxmits;
@@ -930,7 +930,7 @@ s32 rtl8192du_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 #endif
 
 
-static s32 xmitframe_direct(_adapter *padapter, struct xmit_frame *pxmitframe)
+static s32 xmitframe_direct(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 res = _SUCCESS;
 
@@ -948,7 +948,7 @@ static s32 xmitframe_direct(_adapter *padapter, struct xmit_frame *pxmitframe)
  *	true	dump packet directly
  *	false	enqueue packet
  */
-static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
+static s32 pre_xmitframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 res;
 	struct xmit_buf *pxmitbuf = NULL;
@@ -1009,7 +1009,7 @@ enqueue:
 	return false;
 }
 
-s32 rtl8192du_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe)
+s32 rtl8192du_mgnt_xmit(struct rtw_adapter *padapter, struct xmit_frame *pmgntframe)
 {
 	return rtw_dump_xframe(padapter, pmgntframe);
 }
@@ -1019,7 +1019,7 @@ s32 rtl8192du_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe)
  *	true	dump packet directly ok
  *	false	temporary can't transmit packets to hardware
  */
-s32 rtl8192du_hal_xmit(_adapter *padapter, struct xmit_frame *pxmitframe)
+s32 rtl8192du_hal_xmit(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	return pre_xmitframe(padapter, pxmitframe);
 }
@@ -1033,7 +1033,7 @@ static void rtl8192du_hostap_mgnt_xmit_cb(struct urb *urb)
 	dev_kfree_skb_any(skb);
 }
 
-s32 rtl8192du_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
+s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
 {
 	u16 fc;
 	int rc, len, pipe;

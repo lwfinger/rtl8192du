@@ -28,21 +28,21 @@
 
 void rtw_join_timeout_handler (void *FunctionContext)
 {
-	_adapter *adapter = (_adapter *)FunctionContext;
+	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
 	_rtw_join_timeout_handler(adapter);
 }
 
 
 void _rtw_scan_timeout_handler (void *FunctionContext)
 {
-	_adapter *adapter = (_adapter *)FunctionContext;
+	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
 	rtw_scan_timeout_handler(adapter);
 }
 
 
 static void _dynamic_check_timer_handlder (void *FunctionContext)
 {
-	_adapter *adapter = (_adapter *)FunctionContext;
+	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
 
 	rtw_dynamic_check_timer_handlder(adapter);
 
@@ -52,13 +52,13 @@ static void _dynamic_check_timer_handlder (void *FunctionContext)
 #ifdef CONFIG_SET_SCAN_DENY_TIMER
 void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
 {
-	_adapter *adapter = (_adapter *)FunctionContext;
+	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
 	rtw_set_scan_deny_timer_hdl(adapter);
 }
 #endif
 
 
-void rtw_init_mlme_timer(_adapter *padapter)
+void rtw_init_mlme_timer(struct rtw_adapter *padapter)
 {
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
@@ -73,10 +73,10 @@ void rtw_init_mlme_timer(_adapter *padapter)
 	#endif
 }
 
-extern void rtw_indicate_wx_assoc_event(_adapter *padapter);
-extern void rtw_indicate_wx_disassoc_event(_adapter *padapter);
+extern void rtw_indicate_wx_assoc_event(struct rtw_adapter *padapter);
+extern void rtw_indicate_wx_disassoc_event(struct rtw_adapter *padapter);
 
-void rtw_os_indicate_connect(_adapter *adapter)
+void rtw_os_indicate_connect(struct rtw_adapter *adapter)
 {
 
 _func_enter_;
@@ -94,8 +94,8 @@ _func_enter_;
 _func_exit_;
 }
 
-extern void indicate_wx_scan_complete_event(_adapter *padapter);
-void rtw_os_indicate_scan_done( _adapter *padapter, bool aborted)
+extern void indicate_wx_scan_complete_event(struct rtw_adapter *padapter);
+void rtw_os_indicate_scan_done(struct rtw_adapter *padapter, bool aborted)
 {
 #ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_indicate_scan_done(wdev_to_priv(padapter->rtw_wdev), aborted);
@@ -104,7 +104,7 @@ void rtw_os_indicate_scan_done( _adapter *padapter, bool aborted)
 }
 
 static struct RT_PMKID_LIST   backupPMKIDList[ NUM_PMKID_CACHE ];
-void rtw_reset_securitypriv( _adapter *adapter )
+void rtw_reset_securitypriv(struct rtw_adapter *adapter )
 {
 	u8	backupPMKIDIndex = 0;
 	u8	backupTKIPCountermeasure = 0x00;
@@ -158,7 +158,7 @@ void rtw_reset_securitypriv( _adapter *adapter )
 	}
 }
 
-void rtw_os_indicate_disconnect( _adapter *adapter )
+void rtw_os_indicate_disconnect(struct rtw_adapter *adapter )
 {
    //struct RT_PMKID_LIST   backupPMKIDList[ NUM_PMKID_CACHE ];
 
@@ -178,7 +178,7 @@ _func_exit_;
 
 }
 
-void rtw_report_sec_ie(_adapter *adapter,u8 authmode,u8 *sec_ie)
+void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie)
 {
 	uint	len;
 	u8	*buff,*p,i;
@@ -229,14 +229,14 @@ _func_exit_;
 
 static void _survey_timer_hdl (void *FunctionContext)
 {
-	_adapter *padapter = (_adapter *)FunctionContext;
+	struct rtw_adapter *padapter = (struct rtw_adapter *)FunctionContext;
 
 	survey_timer_hdl(padapter);
 }
 
 static void _link_timer_hdl (void *FunctionContext)
 {
-	_adapter *padapter = (_adapter *)FunctionContext;
+	struct rtw_adapter *padapter = (struct rtw_adapter *)FunctionContext;
 	link_timer_hdl(padapter);
 }
 
@@ -246,7 +246,7 @@ static void _addba_timer_hdl(void *FunctionContext)
 	addba_timer_hdl(psta);
 }
 
-void init_addba_retry_timer(_adapter *padapter, struct sta_info *psta)
+void init_addba_retry_timer(struct rtw_adapter *padapter, struct sta_info *psta)
 {
 
 	_init_timer(&psta->addba_retry_timer, padapter->pnetdev, _addba_timer_hdl, psta);
@@ -255,18 +255,18 @@ void init_addba_retry_timer(_adapter *padapter, struct sta_info *psta)
 /*
 void _reauth_timer_hdl(void *FunctionContext)
 {
-	_adapter *padapter = (_adapter *)FunctionContext;
+	struct rtw_adapter *padapter = (struct rtw_adapter *)FunctionContext;
 	reauth_timer_hdl(padapter);
 }
 
 void _reassoc_timer_hdl(void *FunctionContext)
 {
-	_adapter *padapter = (_adapter *)FunctionContext;
+	struct rtw_adapter *padapter = (struct rtw_adapter *)FunctionContext;
 	reassoc_timer_hdl(padapter);
 }
 */
 
-void init_mlme_ext_timer(_adapter *padapter)
+void init_mlme_ext_timer(struct rtw_adapter *padapter)
 {
 	struct	mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
@@ -280,7 +280,7 @@ void init_mlme_ext_timer(_adapter *padapter)
 
 #ifdef CONFIG_AP_MODE
 
-void rtw_indicate_sta_assoc_event(_adapter *padapter, struct sta_info *psta)
+void rtw_indicate_sta_assoc_event(struct rtw_adapter *padapter, struct sta_info *psta)
 {
 	union iwreq_data wrqu;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -305,7 +305,7 @@ void rtw_indicate_sta_assoc_event(_adapter *padapter, struct sta_info *psta)
 
 }
 
-void rtw_indicate_sta_disassoc_event(_adapter *padapter, struct sta_info *psta)
+void rtw_indicate_sta_disassoc_event(struct rtw_adapter *padapter, struct sta_info *psta)
 {
 	union iwreq_data wrqu;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -336,7 +336,7 @@ void rtw_indicate_sta_disassoc_event(_adapter *padapter, struct sta_info *psta)
 static int mgnt_xmit_entry(struct sk_buff *skb, struct net_device *pnetdev)
 {
 	struct hostapd_priv *phostapdpriv = rtw_netdev_priv(pnetdev);
-	_adapter *padapter = (_adapter *)phostapdpriv->padapter;
+	struct rtw_adapter *padapter = (struct rtw_adapter *)phostapdpriv->padapter;
 
 	//DBG_8192D("%s\n", __FUNCTION__);
 
@@ -393,7 +393,7 @@ static const struct net_device_ops rtl871x_mgnt_netdev_ops = {
 };
 #endif
 
-int hostapd_mode_init(_adapter *padapter)
+int hostapd_mode_init(struct rtw_adapter *padapter)
 {
 	unsigned char mac[ETH_ALEN];
 	struct hostapd_priv *phostapdpriv;
@@ -484,7 +484,7 @@ int hostapd_mode_init(_adapter *padapter)
 
 }
 
-void hostapd_mode_unload(_adapter *padapter)
+void hostapd_mode_unload(struct rtw_adapter *padapter)
 {
 	struct hostapd_priv *phostapdpriv = padapter->phostapdpriv;
 	struct net_device *pnetdev = phostapdpriv->pmgnt_netdev;

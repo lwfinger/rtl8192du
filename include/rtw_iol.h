@@ -48,7 +48,7 @@ IOL_CMD_DELAY_MS	-				B6~B7
 IOL_CMD_END		-				-
 ******************************************************/
 
-struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter);
+struct xmit_frame	*rtw_IOL_accquire_xmit_frame(struct rtw_adapter *adapter);
 int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len);
 int rtw_IOL_append_LLT_cmd(struct xmit_frame *xmit_frame, u8 page_boundary);
 int _rtw_IOL_append_WB_cmd(struct xmit_frame *xmit_frame, u16 addr, u8 value);
@@ -57,9 +57,9 @@ int _rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr, u32 value);
 int rtw_IOL_append_DELAY_US_cmd(struct xmit_frame *xmit_frame, u16 us);
 int rtw_IOL_append_DELAY_MS_cmd(struct xmit_frame *xmit_frame, u16 ms);
 int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame);
-int rtw_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms);
-int rtw_IOL_exec_cmd_array_sync(PADAPTER adapter, u8 *IOL_cmds, u32 cmd_num, u32 max_wating_ms);
-int rtw_IOL_exec_empty_cmds_sync(ADAPTER *adapter, u32 max_wating_ms);
+int rtw_IOL_exec_cmds_sync(struct rtw_adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms);
+int rtw_IOL_exec_cmd_array_sync(struct rtw_adapter *adapter, u8 *IOL_cmds, u32 cmd_num, u32 max_wating_ms);
+int rtw_IOL_exec_empty_cmds_sync(struct rtw_adapter *adapter, u32 max_wating_ms);
 
 #ifdef DBG_IO
 int dbg_rtw_IOL_append_WB_cmd(struct xmit_frame *xmit_frame, u16 addr, u8 value, const char *caller, const int line);
@@ -74,6 +74,6 @@ int dbg_rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr, u32 value
 #define rtw_IOL_append_WD_cmd(xmit_frame, addr, value) _rtw_IOL_append_WD_cmd((xmit_frame), (addr), (value))
 #endif
 
-bool rtw_IOL_applied(ADAPTER *adapter);
+bool rtw_IOL_applied(struct rtw_adapter *adapter);
 
 #endif //__RTW_IOL_H_

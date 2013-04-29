@@ -31,7 +31,7 @@
 #include <circ_buf.h>
 #include <rtl8192d_hal.h>
 
-void rtl8192du_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf)
+void rtl8192du_init_recvbuf(struct rtw_adapter *padapter, struct recv_buf *precvbuf)
 {
 
 	precvbuf->transfer_len = 0;
@@ -48,7 +48,7 @@ void rtl8192du_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf)
 
 }
 
-int	rtl8192du_init_recv_priv(_adapter *padapter)
+int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 {
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 	int	i, res = _SUCCESS;
@@ -163,7 +163,7 @@ exit:
 
 }
 
-void rtl8192du_free_recv_priv (_adapter *padapter)
+void rtl8192du_free_recv_priv (struct rtw_adapter *padapter)
 {
 	int i;
 	struct recv_buf *precvbuf;

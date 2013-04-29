@@ -44,15 +44,15 @@ struct sreset_priv {
 #define		WIFI_IF_NOT_EXIST			BIT6
 
 #if defined(DBG_CONFIG_ERROR_DETECT)
-void sreset_init_value(_adapter *padapter);
-void sreset_reset_value(_adapter *padapter);
-u8 sreset_get_wifi_status(_adapter *padapter);
-void sreset_set_wifi_error_status(_adapter *padapter, u32 status);
+void sreset_init_value(struct rtw_adapter *padapter);
+void sreset_reset_value(struct rtw_adapter *padapter);
+u8 sreset_get_wifi_status(struct rtw_adapter *padapter);
+void sreset_set_wifi_error_status(struct rtw_adapter *padapter, u32 status);
 #else
-static void sreset_init_value(_adapter *padapter){}
-static void sreset_reset_value(_adapter *padapter){}
-static u8 sreset_get_wifi_status(_adapter *padapter){return WIFI_STATUS_SUCCESS;}
-static void sreset_set_wifi_error_status(_adapter *padapter, u32 status){}
+static void sreset_init_value(struct rtw_adapter *padapter){}
+static void sreset_reset_value(struct rtw_adapter *padapter){}
+static u8 sreset_get_wifi_status(struct rtw_adapter *padapter){return WIFI_STATUS_SUCCESS;}
+static void sreset_set_wifi_error_status(struct rtw_adapter *padapter, u32 status){}
 #endif
 
 #endif

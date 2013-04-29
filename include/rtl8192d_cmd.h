@@ -95,20 +95,20 @@ struct cmd_msg_parm {
 };
 
 
-void	FillH2CCmd92D(_adapter* padapter, u8 ElementID, u32 CmdLen, u8* pCmdBuffer);
+void	FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLen, u8* pCmdBuffer);
 
 // host message to firmware cmd
-void	rtl8192d_set_FwPwrMode_cmd(_adapter*padapter, u8 Mode);
-void	rtl8192d_set_FwJoinBssReport_cmd(_adapter* padapter, u8 mstatus);
-u8	rtl8192d_set_rssi_cmd(_adapter*padapter, u8 *param);
-u8	rtl8192d_set_raid_cmd(_adapter*padapter, u32 mask, u8 arg);
-void	rtl8192d_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg);
+void	rtl8192d_set_FwPwrMode_cmd(struct rtw_adapter*padapter, u8 Mode);
+void	rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus);
+u8	rtl8192d_set_rssi_cmd(struct rtw_adapter*padapter, u8 *param);
+u8	rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg);
+void	rtl8192d_Add_RateATid(struct rtw_adapter * pAdapter, u32 bitmap, u8 arg);
 #ifdef CONFIG_P2P
-void	rtl8192d_set_p2p_ps_offload_cmd(_adapter* padapter, u8 p2p_ps_state);
+void	rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_state);
 #endif //CONFIG_P2P
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
-int reset_tsf(PADAPTER Adapter, u8 reset_port );
+int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port );
 #endif	// CONFIG_TSF_RESET_OFFLOAD
 
 #ifdef CONFIG_WOWLAN
@@ -132,8 +132,8 @@ typedef struct _SETWOWLAN_PARM{
 #define FW_WOWLAN_GPIO_WAKEUP_EN	BIT(0)
 #define FW_FW_PARSE_MAGIC_PKT		BIT(1)
 
-void rtl8192d_set_wowlan_cmd(_adapter* padapter);
-void SetFwRelatedForWoWLAN8192DU(_adapter*	padapter,u8 bHostIsGoingtoSleep);
+void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter);
+void SetFwRelatedForWoWLAN8192DU(struct rtw_adapter*	padapter,u8 bHostIsGoingtoSleep);
 #endif // CONFIG_WOWLAN
 
 #endif	// __RTL8192D_CMD_H_

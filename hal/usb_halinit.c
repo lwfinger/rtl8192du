@@ -170,7 +170,7 @@ static void _ThreeOutEpMapping(
 
 static bool
 _MappingOutEP(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u8		NumOutPipe
 	)
 {
@@ -203,7 +203,7 @@ _MappingOutEP(
 
 static void
 _ConfigChipOutEP(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u8		NumOutPipe
 	)
 {
@@ -264,7 +264,7 @@ _ConfigChipOutEP(
 }
 
 static bool HalUsbSetQueuePipeMapping8192DUsb(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u8		NumInPipe,
 	u8		NumOutPipe
 	)
@@ -287,8 +287,8 @@ static bool HalUsbSetQueuePipeMapping8192DUsb(
 
 }
 
-void rtl8192du_interface_configure(_adapter *padapter);
-void rtl8192du_interface_configure(_adapter *padapter)
+void rtl8192du_interface_configure(struct rtw_adapter *padapter);
+void rtl8192du_interface_configure(struct rtw_adapter *padapter)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
@@ -328,7 +328,7 @@ void rtl8192du_interface_configure(_adapter *padapter)
 
 }
 
-static u8 _InitPowerOn(_adapter *padapter)
+static u8 _InitPowerOn(struct rtw_adapter *padapter)
 {
 	u8	ret = _SUCCESS;
 	u16	value16=0;
@@ -492,7 +492,7 @@ u16 calc_crc(u8 * pdata,int length)
 
 
 #ifdef CONFIG_WOWLAN
-static int rtw_wowlan_set_pattern(_adapter *padapter ,u8* pbuf){
+static int rtw_wowlan_set_pattern(struct rtw_adapter *padapter ,u8* pbuf){
 	struct pwrctrl_priv *pwrpriv=&padapter->pwrctrlpriv;
 	int res=0,crc_idx;
 	u32 content=0,cmd=0;
@@ -600,7 +600,7 @@ _rtw_wowlan_set_pattern_exit:
 
 
 
-void rtw_wowlan_reload_pattern(_adapter *padapter){
+void rtw_wowlan_reload_pattern(struct rtw_adapter *padapter){
 	struct pwrctrl_priv *pwrpriv=&padapter->pwrctrlpriv;
 	u32 content=0,cmd=0;
 	u8 idx;
@@ -662,7 +662,7 @@ void rtw_wowlan_reload_pattern(_adapter *padapter){
 //
 //-------------------------------------------------------------------------
 static u8 _LLTWrite(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u32		address,
 	u32		data
 	)
@@ -693,7 +693,7 @@ static u8 _LLTWrite(
 }
 
 static u8 _LLTRead(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u32		address
 	)
 {
@@ -721,7 +721,7 @@ static u8 _LLTRead(
 }
 
 static u8 InitLLTTable(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u32		boundary
 	)
 {
@@ -784,7 +784,7 @@ static u8 InitLLTTable(
 //---------------------------------------------------------------
 static void
 _SetMacID(
-	PADAPTER Adapter, u8* MacID
+	struct rtw_adapter * Adapter, u8* MacID
 	)
 {
 	u32 i;
@@ -800,7 +800,7 @@ _SetMacID(
 
 static void
 _SetBSSID(
-	PADAPTER Adapter, u8* BSSID
+	struct rtw_adapter * Adapter, u8* BSSID
 	)
 {
 	u32 i;
@@ -817,7 +817,7 @@ _SetBSSID(
 // Shall USB interface init this?
 static void
 _InitInterrupt(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	u32	value32;
@@ -833,7 +833,7 @@ _InitInterrupt(
 
 static void
 _InitQueueReservedPage(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -922,7 +922,7 @@ _InitQueueReservedPage(
 
 static void
 _InitTxBufferBoundary(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
@@ -951,7 +951,7 @@ _InitTxBufferBoundary(
 
 static void
 _InitNormalChipRegPriority(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u16		beQ,
 	u16		bkQ,
 	u16		viQ,
@@ -971,7 +971,7 @@ _InitNormalChipRegPriority(
 
 static void
 _InitNormalChipOneOutEpPriority(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -1006,7 +1006,7 @@ _InitNormalChipOneOutEpPriority(
 
 static void
 _InitNormalChipTwoOutEpPriority(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -1059,7 +1059,7 @@ _InitNormalChipTwoOutEpPriority(
 
 static void
 _InitNormalChipThreeOutEpPriority(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
@@ -1086,7 +1086,7 @@ _InitNormalChipThreeOutEpPriority(
 
 static void
 _InitQueuePriority(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -1110,7 +1110,7 @@ _InitQueuePriority(
 #if ENABLE_USB_DROP_INCORRECT_OUT //amy,temp remove
 static void
 _InitHardwareDropIncorrectBulkOut(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	u32	value32 = rtw_read32(Adapter, REG_TXDMA_OFFSET_CHK);
@@ -1120,7 +1120,7 @@ _InitHardwareDropIncorrectBulkOut(
 #endif //ENABLE_USB_DROP_INCORRECT_OUT, amy,temp remove
 static void
 _InitNetworkType(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	u32	value32;
@@ -1139,7 +1139,7 @@ _InitNetworkType(
 
 static void
 _InitTransferPageSize(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	// Tx page size is always 128.
@@ -1151,7 +1151,7 @@ _InitTransferPageSize(
 
 static void
 _InitDriverInfoSize(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8		drvInfoSize
 	)
 {
@@ -1160,7 +1160,7 @@ _InitDriverInfoSize(
 
 static void
 _InitWMACSetting(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	//u4Byte			value32;
@@ -1198,7 +1198,7 @@ _InitWMACSetting(
 
 static void
 _InitAdaptiveCtrl(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	u16	value16;
@@ -1233,7 +1233,7 @@ _InitAdaptiveCtrl(
 
 static void
 _InitRateFallback(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	// Set Data Auto Rate Fallback Retry Count register.
@@ -1246,7 +1246,7 @@ _InitRateFallback(
 
 static void
 _InitEDCA(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	//PHAL_DATA_8192CUSB	pHalData = GetHalData8192CUsb(Adapter);
@@ -1303,7 +1303,7 @@ _InitEDCA(
 
 static void
 _InitAMPDUAggregation(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -1322,7 +1322,7 @@ _InitAMPDUAggregation(
 
 static void
 _InitBeaconMaxError(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	bool		InfraMode
 	)
 {
@@ -1335,7 +1335,7 @@ _InitBeaconMaxError(
 
 static void
 _InitRDGSetting(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	rtw_write8(Adapter,REG_RD_CTRL,0xFF);
@@ -1345,7 +1345,7 @@ _InitRDGSetting(
 
 static void
 _InitRetryFunction(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	u8	value8;
@@ -1361,7 +1361,7 @@ _InitRetryFunction(
 
 static void
 _InitUsbAggregationSetting(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 #ifdef CONFIG_USB_TX_AGGREGATION
@@ -1477,7 +1477,7 @@ _InitUsbAggregationSetting(
 
 static void
 _InitOperationMode(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1567,7 +1567,7 @@ _InitOperationMode(
 
 static void
 _InitSecuritySetting(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	invalidate_cam_all(Adapter);
@@ -1575,7 +1575,7 @@ _InitSecuritySetting(
 
  static void
 _InitBeaconParameters(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 //	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1599,7 +1599,7 @@ _InitBeaconParameters(
 
 static void
 _InitRFType(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1622,7 +1622,7 @@ _InitRFType(
 }
 
 #if RTL8192CU_ADHOC_WORKAROUND_SETTING
-static void _InitAdhocWorkaroundParams(PADAPTER Adapter)
+static void _InitAdhocWorkaroundParams(struct rtw_adapter * Adapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	pHalData->RegBcnCtrlVal = rtw_read8(Adapter, REG_BCN_CTRL);
@@ -1635,7 +1635,7 @@ static void _InitAdhocWorkaroundParams(PADAPTER Adapter)
 
 static void
 _BeaconFunctionEnable(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	bool			Enable,
 	bool			Linked
 	)
@@ -1652,7 +1652,7 @@ _BeaconFunctionEnable(
 
 // Set CCK and OFDM Block "ON"
 static void _BBTurnOnBlock(
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 	)
 {
 	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(Adapter);
@@ -1667,7 +1667,7 @@ static void _BBTurnOnBlock(
 }
 
 static void _RfPowerSave(
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -1703,7 +1703,7 @@ static void _RfPowerSave(
 }
 
 #ifdef CONFIG_LED
-static void _InitHWLed(PADAPTER Adapter)
+static void _InitHWLed(struct rtw_adapter * Adapter)
 {
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
 
@@ -1718,7 +1718,7 @@ static void _InitHWLed(PADAPTER Adapter)
 #endif //CONFIG_LED
 
 #ifdef CONFIG_WOWLAN
-static void dump_wakup_reason(_adapter *padapter)
+static void dump_wakup_reason(struct rtw_adapter *padapter)
 {
 	switch(rtw_read8(padapter, REG_WOWLAN_REASON))
 	{
@@ -1750,8 +1750,8 @@ static void dump_wakup_reason(_adapter *padapter)
 }
 #endif //CONFIG_WOWLAN
 
-u32 rtl8192du_hal_init(_adapter *padapter);
-u32 rtl8192du_hal_init(_adapter *padapter)
+u32 rtl8192du_hal_init(struct rtw_adapter *padapter);
+u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 {
 	u8	val8 = 0, tmpU1b;
 	u16	val16;
@@ -1763,7 +1763,7 @@ u32 rtl8192du_hal_init(_adapter *padapter)
 	struct pwrctrl_priv		*pwrctrlpriv = &padapter->pwrctrlpriv;
 	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	PADAPTER	BuddyAdapter = padapter->pbuddy_adapter;
+	struct rtw_adapter *	BuddyAdapter = padapter->pbuddy_adapter;
 #endif
 	u32 init_start_time = rtw_get_current_time();
 
@@ -2381,7 +2381,7 @@ _func_exit_;
 
 static void
 _DisableGPIO(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 	)
 {
 /***************************************
@@ -2418,7 +2418,7 @@ n. LEDCFG 0x4C[15:0] = 0x8080
 } //end of _DisableGPIO()
 static void
 _ResetFWDownloadRegister(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	u32	value32;
@@ -2431,7 +2431,7 @@ _ResetFWDownloadRegister(
 
 static int
 _DisableRF_AFE(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	int		rtStatus = _SUCCESS;
@@ -2468,7 +2468,7 @@ _DisableRF_AFE(
 
 static void
 _ResetBB(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	u16	value16;
@@ -2483,7 +2483,7 @@ _ResetBB(
 
 static void
 _ResetMCU(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	u16	value16;
@@ -2497,7 +2497,7 @@ _ResetMCU(
 
 static void
 _DisableMAC_AFE_PLL(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	u32	value32;
@@ -2514,7 +2514,7 @@ _DisableMAC_AFE_PLL(
 
 static void
 _AutoPowerDownToHostOff(
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 	)
 {
 	u32			value32;
@@ -2535,7 +2535,7 @@ _AutoPowerDownToHostOff(
 
 static void
 _SetUsbSuspend(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	u32			value32;
@@ -2553,7 +2553,7 @@ _SetUsbSuspend(
 
 static void
 _DisableRFAFEAndResetBB8192D(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 /**************************************
@@ -2599,7 +2599,7 @@ e.	SYS_FUNC_EN 0x02[7:0] = 0x14		//reset BB state machine
 
 static void
 _DisableRFAFEAndResetBB(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	_DisableRFAFEAndResetBB8192D(Adapter);
@@ -2607,7 +2607,7 @@ _DisableRFAFEAndResetBB(
 
 static void
 _ResetDigitalProcedure1(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	bool				bWithoutHWSM
 	)
 {
@@ -2678,7 +2678,7 @@ _ResetDigitalProcedure1(
 
 static void
 _ResetDigitalProcedure2(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 )
 {
 /*****************************
@@ -2696,7 +2696,7 @@ m.	SYS_ISO_CTRL 0x01[7:0] = 0x83			// isolated ELDR to PON
 
 static void
 _DisableAnalog(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	bool			bWithoutHWSM
 	)
 {
@@ -2735,13 +2735,13 @@ i.	APS_FSMCO 0x04[15:0] = 0x4802		// set USB suspend
 
 static bool
 CanGotoPowerOff92D(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8 u1bTmp;
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
+	struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
 #endif
 
 	if(pHalData->MacPhyMode92D==SINGLEMAC_SINGLEPHY)
@@ -2799,7 +2799,7 @@ CanGotoPowerOff92D(
 
 static int
 CardDisableHWSM( // HW Auto state machine
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	bool			resetMCU
 	)
 {
@@ -2851,7 +2851,7 @@ CardDisableHWSM( // HW Auto state machine
 
 static int
 CardDisableWithoutHWSM( // without HW Auto state machine
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2917,8 +2917,8 @@ CardDisableWithoutHWSM( // without HW Auto state machine
 	return rtStatus;
 }
 
-u32 rtl8192du_hal_deinit(_adapter *padapter);
-u32 rtl8192du_hal_deinit(_adapter *padapter)
+u32 rtl8192du_hal_deinit(struct rtw_adapter *padapter);
+u32 rtl8192du_hal_deinit(struct rtw_adapter *padapter)
  {
 	u8	u1bTmp;
 	u8	OpMode;
@@ -2969,8 +2969,8 @@ _func_exit_;
 	return _SUCCESS;
  }
 
-unsigned int rtl8192du_inirp_init(_adapter * padapter);
-unsigned int rtl8192du_inirp_init(_adapter * padapter)
+unsigned int rtl8192du_inirp_init(struct rtw_adapter * padapter);
+unsigned int rtl8192du_inirp_init(struct rtw_adapter * padapter)
 {
 	u8 i;
 	struct recv_buf *precvbuf;
@@ -3026,8 +3026,8 @@ _func_exit_;
 
 }
 
-unsigned int rtl8192du_inirp_deinit(_adapter * padapter);
-unsigned int rtl8192du_inirp_deinit(_adapter * padapter)
+unsigned int rtl8192du_inirp_deinit(struct rtw_adapter * padapter);
+unsigned int rtl8192du_inirp_deinit(struct rtw_adapter * padapter)
 {
 	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit \n"));
 
@@ -3047,7 +3047,7 @@ unsigned int rtl8192du_inirp_deinit(_adapter * padapter)
 
 static void
 _ReadPROMVersion(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8*	PROMContent,
 	bool		AutoloadFail
 	)
@@ -3085,7 +3085,7 @@ _GetChannelGroup(
 
 static void
 _ReadIDs(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8*		PROMContent,
 	bool		AutoloadFail
 	)
@@ -3143,7 +3143,7 @@ _ReadIDs(
 
 static void
 _ReadMACAddress(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8*		PROMContent,
 	bool		AutoloadFail
 	)
@@ -3197,7 +3197,7 @@ _ReadMACAddress(
 
 static void
 hal_ReadMacPhyModeFromPROM92DU(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8*		PROMContent
 )
 {
@@ -3240,7 +3240,7 @@ hal_ReadMacPhyModeFromPROM92DU(
 
 static void
 hal_ReadMacPhyMode_92D(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8			*PROMContent,
 	bool		AutoloadFail
 )
@@ -3292,7 +3292,7 @@ hal_ReadMacPhyMode_92D(
 
 static void
 _ReadBoardType(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8*		PROMContent,
 	bool		AutoloadFail
 	)
@@ -3315,7 +3315,7 @@ _ReadBoardType(
 
 static void
 _ReadLEDSetting(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8*		PROMContent,
 	bool		AutoloadFail
 	)
@@ -3343,7 +3343,7 @@ _ReadLEDSetting(
 #ifdef CONFIG_WOWLAN
 static void
 _ReadWOWLAN(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8*		PROMContent,
 	bool		AutoloadFail
 	)
@@ -3361,7 +3361,7 @@ _ReadWOWLAN(
 #endif //CONFIG_WOWLAN
 
 static void _InitAdapterVariablesByPROM(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8*		PROMContent,
 	unsigned char AutoloadFail
 	)
@@ -3380,7 +3380,7 @@ static void _InitAdapterVariablesByPROM(
 }
 
 static void _ReadPROMContent(
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 	)
 {
 	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
@@ -3442,7 +3442,7 @@ static void _ReadPROMContent(
 
 static void
 _InitOtherVariable(
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3468,7 +3468,7 @@ _InitOtherVariable(
 
 static void
 _ReadRFType(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3480,7 +3480,7 @@ _ReadRFType(
 #endif
 }
 
-static int _ReadAdapterInfo8192DU(PADAPTER	Adapter)
+static int _ReadAdapterInfo8192DU(struct rtw_adapter *	Adapter)
 {
 	u32 start=rtw_get_current_time();
 
@@ -3498,7 +3498,7 @@ static int _ReadAdapterInfo8192DU(PADAPTER	Adapter)
 	return _SUCCESS;
 }
 
-static void ReadAdapterInfo8192DU(PADAPTER Adapter)
+static void ReadAdapterInfo8192DU(struct rtw_adapter * Adapter)
 {
 	// Read EEPROM size before call any EEPROM function
 	//Adapter->EepromAddressSize=Adapter->HalFunc.GetEEPROMSizeHandler(Adapter);
@@ -3508,7 +3508,7 @@ static void ReadAdapterInfo8192DU(PADAPTER Adapter)
 }
 
 #define GPIO_DEBUG_PORT_NUM 0
-static void rtl8192du_trigger_gpio_0(_adapter *padapter)
+static void rtl8192du_trigger_gpio_0(struct rtw_adapter *padapter)
 {
 
 	u32 gpioctrl;
@@ -3525,7 +3525,7 @@ static void rtl8192du_trigger_gpio_0(_adapter *padapter)
 
 static void
 StopTxBeacon(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 	)
 {
 	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(Adapter);
@@ -3544,7 +3544,7 @@ StopTxBeacon(
 
 static void
 ResumeTxBeacon(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 	)
 {
 	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(Adapter);
@@ -3564,11 +3564,11 @@ ResumeTxBeacon(
 //
 u8
 SelectRTSInitialRate(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 );
 u8
 SelectRTSInitialRate(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 )
 {
 	struct sta_info		*psta;
@@ -3688,7 +3688,7 @@ SetRTSRateWorkItemCallback(
 	void *			pContext
 )
 {
-	PADAPTER		Adapter =  (PADAPTER)pContext;
+	struct rtw_adapter *		Adapter =  (struct rtw_adapter *)pContext;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	NewRTSInitRate = 0;
 
@@ -3702,7 +3702,7 @@ SetRTSRateWorkItemCallback(
 	DBG_8192D("HW_VAR_INIT_RTS_RATE: RateIndex(%d)\n", NewRTSInitRate);
 }
 
-static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_opmode(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 	u8	val8;
 	u8	mode = *((u8 *)val);
@@ -3869,7 +3869,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 	}
 }
 
-static void hw_var_set_macaddr(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_macaddr(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 	u8 idx = 0;
 	u32 reg_macid;
@@ -3892,7 +3892,7 @@ static void hw_var_set_macaddr(PADAPTER Adapter, u8 variable, u8* val)
 
 }
 
-static void hw_var_set_bssid(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_bssid(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 	u8	idx = 0;
 	u32 reg_bssid;
@@ -3915,7 +3915,7 @@ static void hw_var_set_bssid(PADAPTER Adapter, u8 variable, u8* val)
 
 }
 
-static void hw_var_set_bcn_func(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_bcn_func(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 	u32 bcn_ctrl_reg;
 
@@ -3949,7 +3949,7 @@ static void hw_var_set_bcn_func(PADAPTER Adapter, u8 variable, u8* val)
 	}
 }
 
-static void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_correct_tsf(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	u64	tsf;
@@ -4042,11 +4042,11 @@ static void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
 }
 
 
-static void hw_var_set_mlme_disconnect(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_mlme_disconnect(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	PADAPTER pbuddy_adapter = Adapter->pbuddy_adapter;
+	struct rtw_adapter * pbuddy_adapter = Adapter->pbuddy_adapter;
 
 
 	if(check_buddy_mlmeinfo_state(Adapter, _HW_STATE_NOLINK_))
@@ -4140,7 +4140,7 @@ static void hw_var_set_mlme_disconnect(PADAPTER Adapter, u8 variable, u8* val)
 #endif
 }
 
-static void hw_var_set_mlme_sitesurvey(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_mlme_sitesurvey(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 	u32	value_rcr, rcr_clear_bit, reg_bcn_ctl;
 	u16	value_rxfltmap2;
@@ -4246,7 +4246,7 @@ static void hw_var_set_mlme_sitesurvey(PADAPTER Adapter, u8 variable, u8* val)
 	}
 }
 
-static void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_mlme_join(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	u8	RetryLimit = 0x30;
@@ -4326,10 +4326,10 @@ static void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8* val)
 }
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-static void dc_hw_var_mlme_sitesurvey(PADAPTER Adapter, u8 sitesurvey_state)
+static void dc_hw_var_mlme_sitesurvey(struct rtw_adapter * Adapter, u8 sitesurvey_state)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(Adapter);
-	PADAPTER BuddyAdapter = Adapter->pbuddy_adapter;
+	struct rtw_adapter * BuddyAdapter = Adapter->pbuddy_adapter;
 	struct mlme_priv *pbuddy_mlmepriv;
 	struct mlme_ext_priv *pbuddy_mlmeext;
 
@@ -4360,12 +4360,12 @@ static void dc_hw_var_mlme_sitesurvey(PADAPTER Adapter, u8 sitesurvey_state)
 	}
 }
 
-static void dc_hw_var_mlme_join(PADAPTER Adapter, u8 join_state)
+static void dc_hw_var_mlme_join(struct rtw_adapter * Adapter, u8 join_state)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(Adapter);
 	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	PADAPTER BuddyAdapter = Adapter->pbuddy_adapter;
+	struct rtw_adapter * BuddyAdapter = Adapter->pbuddy_adapter;
 	struct mlme_priv *pbuddy_mlmepriv;
 	struct mlme_ext_priv *pbuddy_mlmeext;
 
@@ -4401,8 +4401,8 @@ static void dc_hw_var_mlme_join(PADAPTER Adapter, u8 join_state)
 }
 #endif
 
-void SetHwReg8192DU(PADAPTER Adapter, u8 variable, u8* val);
-void SetHwReg8192DU(PADAPTER Adapter, u8 variable, u8* val)
+void SetHwReg8192DU(struct rtw_adapter * Adapter, u8 variable, u8* val);
+void SetHwReg8192DU(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -4503,7 +4503,7 @@ _func_enter_;
 #endif //CONFIG_CONCURRENT_MODE
 			{
 #ifdef CONFIG_DUALMAC_CONCURRENT
-				PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
+				struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
 #endif
 				if(check_fwstate(&Adapter->mlmepriv, WIFI_AP_STATE) == true)
 				{
@@ -4694,7 +4694,7 @@ _func_enter_;
 				u8	type = *((u8 *)val);
 				struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
 #ifdef CONFIG_DUALMAC_CONCURRENT
-				PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
+				struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
 #endif
 
 				if(type == 0) // prepare to join
@@ -5325,8 +5325,8 @@ _func_enter_;
 _func_exit_;
 }
 
-void GetHwReg8192DU(PADAPTER Adapter, u8 variable, u8* val);
-void GetHwReg8192DU(PADAPTER Adapter, u8 variable, u8* val)
+void GetHwReg8192DU(struct rtw_adapter * Adapter, u8 variable, u8* val);
+void GetHwReg8192DU(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
@@ -5392,7 +5392,7 @@ _func_exit_;
 //	Description:
 //		Query setting of specified variable.
 //
-u8 GetHalDefVar8192DUsb(PADAPTER Adapter, enum HAL_DEF_VARIABLE eVariable, void  *pValue)
+u8 GetHalDefVar8192DUsb(struct rtw_adapter * Adapter, enum HAL_DEF_VARIABLE eVariable, void  *pValue)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8			bResult = true;
@@ -5426,13 +5426,13 @@ u8 GetHalDefVar8192DUsb(PADAPTER Adapter, enum HAL_DEF_VARIABLE eVariable, void 
 //
 u8
 SetHalDefVar8192DUsb(
-	PADAPTER				Adapter,
+	struct rtw_adapter *				Adapter,
 	enum HAL_DEF_VARIABLE		eVariable,
 	void *pValue
 	);
 u8
 SetHalDefVar8192DUsb(
-	PADAPTER				Adapter,
+	struct rtw_adapter *				Adapter,
 	enum HAL_DEF_VARIABLE		eVariable,
 	void *pValue
 	)
@@ -5491,7 +5491,7 @@ SetHalDefVar8192DUsb(
 	return bResult;
 }
 
-u32  _update_92cu_basic_rate(_adapter *padapter, unsigned int mask)
+u32  _update_92cu_basic_rate(struct rtw_adapter *padapter, unsigned int mask)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
 #ifdef CONFIG_BT_COEXIST
@@ -5519,8 +5519,8 @@ u32  _update_92cu_basic_rate(_adapter *padapter, unsigned int mask)
 	return BrateCfg;
 }
 
-void _update_response_rate(_adapter *padapter,unsigned int mask);
-void _update_response_rate(_adapter *padapter,unsigned int mask)
+void _update_response_rate(struct rtw_adapter *padapter,unsigned int mask);
+void _update_response_rate(struct rtw_adapter *padapter,unsigned int mask)
 {
 	u8	RateIndex = 0;
 	// Set RRSR rate table.
@@ -5537,8 +5537,8 @@ void _update_response_rate(_adapter *padapter,unsigned int mask)
 	rtw_write8(padapter, REG_INIRTS_RATE_SEL, RateIndex);
 }
 
-void UpdateHalRAMask8192DUsb(PADAPTER padapter, u32 mac_id);
-void UpdateHalRAMask8192DUsb(PADAPTER padapter, u32 mac_id)
+void UpdateHalRAMask8192DUsb(struct rtw_adapter * padapter, u32 mac_id);
+void UpdateHalRAMask8192DUsb(struct rtw_adapter * padapter, u32 mac_id)
 {
 	u32	value[2];
 	u8	init_rate=0;
@@ -5670,8 +5670,7 @@ void UpdateHalRAMask8192DUsb(PADAPTER padapter, u32 mac_id)
 	pdmpriv->INIDATA_RATE[mac_id] = init_rate;
 }
 
-void SetBeaconRelatedRegisters8192DUsb(PADAPTER padapter);
-void SetBeaconRelatedRegisters8192DUsb(PADAPTER padapter)
+void SetBeaconRelatedRegisters8192DUsb(struct rtw_adapter * padapter)
 {
 	u32	value32;
 //	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -5716,7 +5715,7 @@ void SetBeaconRelatedRegisters8192DUsb(PADAPTER padapter)
 
 }
 
-static void rtl8192du_init_default_value(_adapter * padapter)
+static void rtl8192du_init_default_value(struct rtw_adapter * padapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct pwrctrl_priv *pwrctrlpriv = &padapter->pwrctrlpriv;
@@ -5742,7 +5741,7 @@ static void rtl8192du_init_default_value(_adapter * padapter)
 }
 
 
-void rtl8192du_set_hal_ops(_adapter * padapter)
+void rtl8192du_set_hal_ops(struct rtw_adapter * padapter)
 {
 	struct hal_ops	*pHalFunc = &padapter->HalFunc;
 

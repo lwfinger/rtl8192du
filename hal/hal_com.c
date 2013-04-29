@@ -190,7 +190,7 @@ void dump_chip_info(HAL_VERSION	chip_ver)
 
 u8	/* return the final channel plan decision */
 hal_com_get_channel_plan(
-	PADAPTER	padapter,
+	struct rtw_adapter *	padapter,
 	u8 hw_channel_plan, /* from HW (efuse/eeprom) */
 	u8 sw_channel_plan, /* from SW (registry/module param) */
 	u8 def_channel_plan, /* used when the former two are invalid */
@@ -267,7 +267,7 @@ u8	ratetohwrate(u8 rate)
 	return ret;
 }
 
-void	halsetbratecfg(PADAPTER Adapter, u8 *brates, u16 *bratecfg)
+void	halsetbratecfg(struct rtw_adapter * Adapter, u8 *brates, u16 *bratecfg)
 {
 	u8	i, is_brate, brate;
 
@@ -318,7 +318,7 @@ void	halsetbratecfg(PADAPTER Adapter, u8 *brates, u16 *bratecfg)
 	}
 }
 
-void hal_init_macaddr(_adapter *adapter)
+void hal_init_macaddr(struct rtw_adapter *adapter)
 {
 	rtw_hal_set_hwreg(adapter, HW_VAR_MAC_ADDR,
 			  adapter->eeprompriv.mac_addr);
@@ -335,12 +335,12 @@ void hal_init_macaddr(_adapter *adapter)
 * BITS	 [127:120]	[119:16]      [15:8]		  [7:4]		   [3:0]
 */
 
-void c2h_evt_clear(_adapter *adapter)
+void c2h_evt_clear(struct rtw_adapter *adapter)
 {
 	rtw_write8(adapter, REG_C2HEVT_CLEAR, C2H_EVT_HOST_CLOSE);
 }
 
-s32 c2h_evt_read(_adapter *adapter, u8 *buf)
+s32 c2h_evt_read(struct rtw_adapter *adapter, u8 *buf)
 {
 	s32 ret = _FAIL;
 	struct c2h_evt_hdr *c2h_evt;

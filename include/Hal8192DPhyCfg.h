@@ -268,22 +268,22 @@ u8 rtl8192d_getChnlGroupfromArray(u8 chnl);
 //
 // BB and RF register read/write
 //
-void	rtl8192d_PHY_SetBBReg1Byte(	PADAPTER	Adapter,
+void	rtl8192d_PHY_SetBBReg1Byte(	struct rtw_adapter *	Adapter,
 								u32		RegAddr,
 								u32		BitMask,
 								u32		Data	);
-u32	rtl8192d_PHY_QueryBBReg(	PADAPTER	Adapter,
+u32	rtl8192d_PHY_QueryBBReg(	struct rtw_adapter *	Adapter,
 								u32		RegAddr,
 								u32		BitMask	);
-void	rtl8192d_PHY_SetBBReg(	PADAPTER	Adapter,
+void	rtl8192d_PHY_SetBBReg(	struct rtw_adapter *	Adapter,
 								u32		RegAddr,
 								u32		BitMask,
 								u32		Data	);
-u32	rtl8192d_PHY_QueryRFReg(	PADAPTER			Adapter,
+u32	rtl8192d_PHY_QueryRFReg(	struct rtw_adapter *			Adapter,
 								enum RF_RADIO_PATH_E	eRFPath,
 								u32				RegAddr,
 								u32				BitMask	);
-void	rtl8192d_PHY_SetRFReg(	PADAPTER			Adapter,
+void	rtl8192d_PHY_SetRFReg(	struct rtw_adapter *			Adapter,
 								enum RF_RADIO_PATH_E	eRFPath,
 								u32				RegAddr,
 								u32				BitMask,
@@ -293,62 +293,62 @@ void	rtl8192d_PHY_SetRFReg(	PADAPTER			Adapter,
 // Initialization related function
 //
 /* MAC/BB/RF HAL config */
-extern	int	PHY_MACConfig8192D(	PADAPTER	Adapter	);
-extern	int	PHY_BBConfig8192D(	PADAPTER	Adapter	);
-extern	int	PHY_RFConfig8192D(	PADAPTER	Adapter	);
+extern	int	PHY_MACConfig8192D(	struct rtw_adapter *	Adapter	);
+extern	int	PHY_BBConfig8192D(	struct rtw_adapter *	Adapter	);
+extern	int	PHY_RFConfig8192D(	struct rtw_adapter *	Adapter	);
 /* RF config */
-int	rtl8192d_PHY_ConfigRFWithParaFile(	PADAPTER	Adapter,
+int	rtl8192d_PHY_ConfigRFWithParaFile(	struct rtw_adapter *	Adapter,
 						u8 *pFileName,
 						enum RF_RADIO_PATH_E	eRFPath);
-int	rtl8192d_PHY_ConfigRFWithHeaderFile(	PADAPTER			Adapter,
+int	rtl8192d_PHY_ConfigRFWithHeaderFile(	struct rtw_adapter *			Adapter,
 						enum RF_CONTENT			Content,
 						enum RF_RADIO_PATH_E	eRFPath);
 /* BB/RF readback check for making sure init OK */
-int	rtl8192d_PHY_CheckBBAndRFOK(	PADAPTER			Adapter,
+int	rtl8192d_PHY_CheckBBAndRFOK(	struct rtw_adapter *			Adapter,
 				enum HW90_BLOCK		CheckBlock,
 				enum RF_RADIO_PATH_E	eRFPath	  );
 /* Read initi reg value for tx power setting. */
-void	rtl8192d_PHY_GetHWRegOriginalValue(	PADAPTER		Adapter	);
+void	rtl8192d_PHY_GetHWRegOriginalValue(	struct rtw_adapter *		Adapter	);
 
 //
 // RF Power setting
 //
-//extern	bool	PHY_SetRFPowerState(PADAPTER			Adapter,
+//extern	bool	PHY_SetRFPowerState(struct rtw_adapter *			Adapter,
 //									RT_RF_POWER_STATE	eRFPowerState);
 
 //
 // BB TX Power R/W
 //
-void	PHY_GetTxPowerLevel8192D(	PADAPTER		Adapter,
+void	PHY_GetTxPowerLevel8192D(	struct rtw_adapter *		Adapter,
 											u32*		powerlevel	);
-void	PHY_SetTxPowerLevel8192D(	PADAPTER		Adapter,
+void	PHY_SetTxPowerLevel8192D(	struct rtw_adapter *		Adapter,
 											u8			channel	);
-bool	PHY_UpdateTxPowerDbm8192D(	PADAPTER	Adapter,
+bool	PHY_UpdateTxPowerDbm8192D(	struct rtw_adapter *	Adapter,
 											int		powerInDbm	);
 
 //
 void
-PHY_ScanOperationBackup8192D(PADAPTER	Adapter,
+PHY_ScanOperationBackup8192D(struct rtw_adapter *	Adapter,
 										u8		Operation	);
 
 //
 // Switch bandwidth for 8192S
 //
 //void	PHY_SetBWModeCallback8192C(	PRT_TIMER		pTimer	);
-void	PHY_SetBWMode8192D(	PADAPTER			pAdapter,
+void	PHY_SetBWMode8192D(	struct rtw_adapter *			pAdapter,
 			enum HT_CHANNEL_WIDTH	ChnlWidth,
 									unsigned char	Offset	);
 
 //
 // Set FW CMD IO for 8192S.
 //
-//extern	bool HalSetIO8192C(	PADAPTER			Adapter,
+//extern	bool HalSetIO8192C(	struct rtw_adapter *			Adapter,
 //									IO_TYPE				IOType);
 
 //
 // Set A2 entry to fw for 8192S
 //
-extern	void FillA2Entry8192C(		PADAPTER			Adapter,
+extern	void FillA2Entry8192C(		struct rtw_adapter *			Adapter,
 										u8				index,
 										u8*				val);
 
@@ -356,113 +356,113 @@ extern	void FillA2Entry8192C(		PADAPTER			Adapter,
 //
 // channel switch related funciton
 //
-void	PHY_SwChnl8192D(	PADAPTER		pAdapter,
+void	PHY_SwChnl8192D(	struct rtw_adapter *		pAdapter,
 									u8			channel	);
 				// Call after initialization
-void	PHY_SwChnlPhy8192D(	PADAPTER		pAdapter,
+void	PHY_SwChnlPhy8192D(	struct rtw_adapter *		pAdapter,
 									u8			channel	);
 
-extern void ChkFwCmdIoDone(	PADAPTER	Adapter);
+extern void ChkFwCmdIoDone(	struct rtw_adapter *	Adapter);
 
 //
 // BB/MAC/RF other monitor API
 //
-void	PHY_SetMonitorMode8192D(PADAPTER	pAdapter,
+void	PHY_SetMonitorMode8192D(struct rtw_adapter *	pAdapter,
 										bool		bEnableMonitorMode	);
 
-bool	PHY_CheckIsLegalRfPath8192D(PADAPTER	pAdapter,
+bool	PHY_CheckIsLegalRfPath8192D(struct rtw_adapter *	pAdapter,
 											u32		eRFPath	);
 
 //
 // IQ calibrate
 //
-void	rtl8192d_PHY_IQCalibrate(	PADAPTER	pAdapter);
+void	rtl8192d_PHY_IQCalibrate(	struct rtw_adapter *	pAdapter);
 
 
 //
 // LC calibrate
 //
-void	rtl8192d_PHY_LCCalibrate(PADAPTER	pAdapter);
+void	rtl8192d_PHY_LCCalibrate(struct rtw_adapter *	pAdapter);
 
 //
 // AP calibrate
 //
-void	rtl8192d_PHY_APCalibrate(PADAPTER	pAdapter, char		delta);
+void	rtl8192d_PHY_APCalibrate(struct rtw_adapter *	pAdapter, char		delta);
 
 
 //
 // Modify the value of the hw register when beacon interval be changed.
 //
 void
-rtl8192d_PHY_SetBeaconHwReg(	PADAPTER		Adapter,
+rtl8192d_PHY_SetBeaconHwReg(	struct rtw_adapter *		Adapter,
 					u16			BeaconInterval	);
 
 
 extern	void
 PHY_SwitchEphyParameter(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	);
 
 extern	void
 PHY_EnableHostClkReq(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	);
 
 bool
 SetAntennaConfig92C(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8		DefaultAnt
 	);
 
 void
 PHY_StopTRXBeforeChangeBand8192D(
-	  PADAPTER		Adapter
+	  struct rtw_adapter *		Adapter
 );
 
 void
 PHY_UpdateBBRFConfiguration8192D(
-	PADAPTER Adapter,
+	struct rtw_adapter * Adapter,
 	bool bisBandSwitch
 );
 
 void PHY_ReadMacPhyMode92D(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	bool	AutoloadFail
 );
 
 void PHY_ConfigMacPhyMode92D(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 );
 
 void PHY_ConfigMacPhyModeInfo92D(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 );
 
 void PHY_ConfigMacCoexist_RFPage92D(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 );
 
 void
 rtl8192d_PHY_InitRxSetting(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 );
 
 void
 rtl8192d_PHY_ResetIQKResult(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 );
 
 
 void
-rtl8192d_PHY_SetRFPathSwitch(PADAPTER	pAdapter, bool		bMain);
+rtl8192d_PHY_SetRFPathSwitch(struct rtw_adapter *	pAdapter, bool		bMain);
 
 void
 HalChangeCCKStatus8192D(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	bool		bCCKDisable
 );
 
-void PHY_InitPABias92D(PADAPTER Adapter);
+void PHY_InitPABias92D(struct rtw_adapter * Adapter);
 
 /*--------------------------Exported Function prototype---------------------*/
 

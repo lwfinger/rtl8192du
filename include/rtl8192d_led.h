@@ -28,7 +28,7 @@
 //================================================================================
 // Interface to manipulate LED objects.
 //================================================================================
-void rtl8192du_InitSwLeds(_adapter *padapter);
-void rtl8192du_DeInitSwLeds(_adapter *padapter);
+void rtl8192du_InitSwLeds(struct rtw_adapter *padapter);
+void rtl8192du_DeInitSwLeds(struct rtw_adapter *padapter);
 
 #endif

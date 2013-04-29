@@ -236,7 +236,7 @@ int rtw_android_cmdstr_to_num(char *cmdstr)
 
 static int rtw_android_get_rssi(struct net_device *net, char *command, int total_len)
 {
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(net);
+	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(net);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
 	int bytes_written = 0;
@@ -251,7 +251,7 @@ static int rtw_android_get_rssi(struct net_device *net, char *command, int total
 
 static int rtw_android_get_link_speed(struct net_device *net, char *command, int total_len)
 {
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(net);
+	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(net);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
 	int bytes_written = 0;
@@ -265,7 +265,7 @@ static int rtw_android_get_link_speed(struct net_device *net, char *command, int
 
 static int rtw_android_get_macaddr(struct net_device *net, char *command, int total_len)
 {
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
+	struct rtw_adapter *adapter = (struct rtw_adapter *)rtw_netdev_priv(net);
 	int bytes_written = 0;
 
 	bytes_written = snprintf(command, total_len, "Macaddr = %pM", net->dev_addr);
@@ -274,7 +274,7 @@ static int rtw_android_get_macaddr(struct net_device *net, char *command, int to
 
 static int rtw_android_set_country(struct net_device *net, char *command, int total_len)
 {
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
+	struct rtw_adapter *adapter = (struct rtw_adapter *)rtw_netdev_priv(net);
 	char *country_code = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_COUNTRY]) + 1;
 	int ret;
 
@@ -298,7 +298,7 @@ static int rtw_android_get_p2p_dev_addr(struct net_device *net, char *command, i
 static int rtw_android_set_block(struct net_device *net, char *command, int total_len)
 {
 	int ret;
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
+	struct rtw_adapter *adapter = (struct rtw_adapter *)rtw_netdev_priv(net);
 	char *block_value = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_BLOCK]) + 1;
 
 	#ifdef CONFIG_IOCTL_CFG80211
@@ -419,7 +419,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	case ANDROID_WIFI_CMD_SETBAND:
 	{
 		uint band = *(command + strlen("SETBAND") + 1) - '0';
-		_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
+		struct rtw_adapter*	padapter = (struct rtw_adapter * ) rtw_netdev_priv(net);
 
 		if (padapter->chip_type == RTL8192D)
 			padapter->setband = band;
@@ -465,7 +465,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		//	wpa_cli driver wfd-enable
 
 		struct wifi_display_info		*pwfd_info;
-		_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
+		struct rtw_adapter*	padapter = (struct rtw_adapter * ) rtw_netdev_priv(net);
 
 		pwfd_info = &padapter->wfd_info;
 		pwfd_info->wfd_enable = true;
@@ -478,7 +478,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		//	wpa_cli driver wfd-disable
 
 		struct wifi_display_info		*pwfd_info;
-		_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
+		struct rtw_adapter*	padapter = (struct rtw_adapter * ) rtw_netdev_priv(net);
 
 		pwfd_info = &padapter->wfd_info;
 		pwfd_info->wfd_enable = false;
@@ -491,7 +491,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		//	wpa_cli driver wfd-set-tcpport = 554
 
 		struct wifi_display_info		*pwfd_info;
-		_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
+		struct rtw_adapter*	padapter = (struct rtw_adapter * ) rtw_netdev_priv(net);
 
 		pwfd_info = &padapter->wfd_info;
 		pwfd_info->rtsp_ctrlport = ( u16 ) get_int_from_command( priv_cmd.buf );
@@ -505,7 +505,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		//	Specify the WFD device type ( WFD source/primary sink )
 
 		struct wifi_display_info		*pwfd_info;
-		_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
+		struct rtw_adapter*	padapter = (struct rtw_adapter * ) rtw_netdev_priv(net);
 
 		pwfd_info = &padapter->wfd_info;
 		pwfd_info->wfd_device_type = ( u8 ) get_int_from_command( priv_cmd.buf );

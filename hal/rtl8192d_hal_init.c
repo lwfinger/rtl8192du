@@ -41,7 +41,7 @@ bool GlobalFirstConfigurationForNormalChip = true;
 
 static bool
 _IsFWDownloaded(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	return ((rtw_read32(Adapter, REG_MCUFWDL) & MCUFWDL_RDY) ? true : false);
@@ -49,7 +49,7 @@ _IsFWDownloaded(
 
 static void
 _FWDownloadEnable(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	bool			enable
 	)
 {
@@ -103,7 +103,7 @@ _FWDownloadEnable(
 
 static int
 _BlockWrite_92d(
-		PADAPTER		Adapter,
+		struct rtw_adapter *		Adapter,
 		void *			buffer,
 		u32				size
 	)
@@ -173,7 +173,7 @@ exit:
 
 static int
 _PageWrite(
-		PADAPTER		Adapter,
+		struct rtw_adapter *		Adapter,
 		u32			page,
 		void *			buffer,
 		u32			size
@@ -189,7 +189,7 @@ _PageWrite(
 
 static int
 _WriteFW(
-		PADAPTER		Adapter,
+		struct rtw_adapter *		Adapter,
 		void *			buffer,
 		u32			size
 	)
@@ -225,10 +225,10 @@ exit:
 	return ret;
 }
 int _FWFreeToGo_92D(
-		PADAPTER		Adapter
+		struct rtw_adapter *		Adapter
 	);
 int _FWFreeToGo_92D(
-		PADAPTER		Adapter
+		struct rtw_adapter *		Adapter
 	)
 {
 	u32			counter = 0;
@@ -253,7 +253,7 @@ int _FWFreeToGo_92D(
 
 void
 rtl8192d_FirmwareSelfReset(
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 )
 {
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -301,10 +301,10 @@ rtl8192d_FirmwareSelfReset(
 // description :polling fw ready
 //
 int _FWInit(
-	PADAPTER			  Adapter
+	struct rtw_adapter *			  Adapter
 	);
 int _FWInit(
-	PADAPTER			  Adapter
+	struct rtw_adapter *			  Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -356,7 +356,7 @@ u8	FwBuffer8192D[FW_8192D_SIZE];
 //
 //
 int FirmwareDownload92D(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	bool			bUsedWoWLANFw
 )
 {
@@ -608,7 +608,7 @@ Exit:
 #ifdef CONFIG_WOWLAN
 void
 InitializeFirmwareVars92D(
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 )
 {
 	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(Adapter);
@@ -636,7 +636,7 @@ InitializeFirmwareVars92D(
 //
 void
 SetFwRelatedForWoWLAN8192DU(
-	PADAPTER			padapter,
+	struct rtw_adapter *			padapter,
 	u8			bHostIsGoingtoSleep
 )
 {
@@ -708,7 +708,7 @@ static u8 Hal_GetChnlGroupfromArray(u8 chnl)
 
 void
 rtl8192d_ReadChipVersion(
-	PADAPTER			Adapter
+	struct rtw_adapter *			Adapter
 	)
 {
 	u32	value32;
@@ -745,7 +745,7 @@ rtl8192d_ReadChipVersion(
 
 void
 rtl8192d_EfuseParseChnlPlan(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8*			hwinfo,
 	bool		AutoLoadFail
 	)
@@ -769,7 +769,7 @@ rtl8192d_EfuseParseChnlPlan(
 
 static void
 hal_ReadPowerValueFromPROM92D(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	PTxPowerInfo	pwrInfo,
 	u8*			PROMContent,
 	bool			AutoLoadFail
@@ -905,7 +905,7 @@ hal_ReadPowerValueFromPROM92D(
 
 void
 rtl8192d_ReadTxPowerInfo(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8*			PROMContent,
 	bool			AutoLoadFail
 	)
@@ -1104,12 +1104,12 @@ rtl8192d_ReadTxPowerInfo(
 //	Assumption:
 //
 void rtl8192d_ResetDualMacSwitchVariables(
-		PADAPTER			Adapter
+		struct rtw_adapter *			Adapter
 )
 {
 #ifdef CONFIG_DUALMAC_CONCURRENT
 /*	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	PADAPTER		BuddyAdapter = Adapter->BuddyAdapter;
+	struct rtw_adapter *		BuddyAdapter = Adapter->BuddyAdapter;
 
 	Adapter->bNeedReConfigMac = false;
 	Adapter->bNeedReConfigPhyRf = false;
@@ -1138,7 +1138,7 @@ void rtl8192d_ResetDualMacSwitchVariables(
 
 }
 
-u8 GetEEPROMSize8192D(PADAPTER Adapter)
+u8 GetEEPROMSize8192D(struct rtw_adapter * Adapter)
 {
 	u8	size = 0;
 	u32	curRCR;
@@ -1156,7 +1156,7 @@ Function: Synchrosize for power off with dual mac
 *************************************************************/
 bool
 PHY_CheckPowerOffFor8192D(
-	PADAPTER   Adapter
+	struct rtw_adapter *   Adapter
 )
 {
 	u8 u1bTmp;
@@ -1204,7 +1204,7 @@ Function: Synchrosize for power off/on with dual mac
 *************************************************************/
 void
 PHY_SetPowerOnFor8192D(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 )
 {
 	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(Adapter);
@@ -1266,7 +1266,7 @@ PHY_SetPowerOnFor8192D(
 	}
 }
 
-void rtl8192d_free_hal_data(_adapter * padapter)
+void rtl8192d_free_hal_data(struct rtw_adapter * padapter)
 {
 _func_enter_;
 
@@ -1290,7 +1290,7 @@ enum{
 
 static void
 rtl8192d_EfusePowerSwitch(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u8		bWrite,
 	u8		PwrState)
 {
@@ -1339,7 +1339,7 @@ rtl8192d_EfusePowerSwitch(
 
 static void
 ReadEFuse_RTL8192D(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8			efuseType,
 	u16			_offset,
 	u16			_size_byte,
@@ -1513,7 +1513,7 @@ ReadEFuse_RTL8192D(
 
 static void
 hal_EfuseUpdateNormalChipVersion_92D(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1552,7 +1552,7 @@ hal_EfuseUpdateNormalChipVersion_92D(
 
 static bool
 hal_EfuseMacMode_ISVS_92D(
-         PADAPTER     Adapter
+         struct rtw_adapter *     Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1588,7 +1588,7 @@ hal_EfuseMacMode_ISVS_92D(
 
 static void
 rtl8192d_ReadEFuse(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8			efuseType,
 	u16			_offset,
 	u16			_size_byte,
@@ -1606,7 +1606,7 @@ rtl8192d_ReadEFuse(
 
 static void
 rtl8192d_EFUSE_GetEfuseDefinition(
-		PADAPTER	pAdapter,
+		struct rtw_adapter *	pAdapter,
 		u8		efuseType,
 		u8		type,
 		void *		*pOut,
@@ -1669,7 +1669,7 @@ rtl8192d_EFUSE_GetEfuseDefinition(
 
 static u16
 rtl8192d_EfuseGetCurrentSize(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u8			efuseType,
 	bool		bPseudoTest)
 {
@@ -1721,7 +1721,7 @@ rtl8192d_EfuseGetCurrentSize(
 }
 
 static int
-rtl8192d_Efuse_PgPacketRead(	PADAPTER	pAdapter,
+rtl8192d_Efuse_PgPacketRead(	struct rtw_adapter *	pAdapter,
 					u8			offset,
 					u8			*data,
 					bool		bPseudoTest)
@@ -1832,7 +1832,7 @@ rtl8192d_Efuse_PgPacketRead(	PADAPTER	pAdapter,
 }
 
 static int
-rtl8192d_Efuse_PgPacketWrite(PADAPTER	pAdapter,
+rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 					u8			offset,
 					u8			word_en,
 					u8			*data,
@@ -2261,7 +2261,7 @@ rtl8192d_Efuse_PgPacketWrite(PADAPTER	pAdapter,
 }
 
 static u8
-rtl8192d_Efuse_WordEnableDataWrite(	PADAPTER	pAdapter,
+rtl8192d_Efuse_WordEnableDataWrite(	struct rtw_adapter *	pAdapter,
 							u16		efuse_addr,
 							u8		word_en,
 							u8		*data,
@@ -2328,7 +2328,7 @@ rtl8192d_Efuse_WordEnableDataWrite(	PADAPTER	pAdapter,
 	}
 	return badworden;
 }
-void hal_notch_filter_8192d(_adapter *adapter, bool enable)
+void hal_notch_filter_8192d(struct rtw_adapter *adapter, bool enable)
 {
 	if (enable) {
 		DBG_8192D("Enable notch filter\n");
@@ -2348,7 +2348,7 @@ static s32 c2h_id_filter_ccx_8192d(u8 id)
 	return ret;
 }
 
-static s32 c2h_handler_8192d(_adapter *padapter, struct c2h_evt_hdr *c2h_evt)
+static s32 c2h_handler_8192d(struct rtw_adapter *padapter, struct c2h_evt_hdr *c2h_evt)
 {
 	s32 ret = _SUCCESS;
 	u8 i = 0;

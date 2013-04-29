@@ -33,7 +33,7 @@
 
 static bool
 CheckWriteH2C(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8		BoxNum
 )
 {
@@ -51,7 +51,7 @@ CheckWriteH2C(
 
 static bool
 CheckFwReadLastH2C(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8		BoxNum
 )
 {
@@ -86,7 +86,7 @@ CheckFwReadLastH2C(
 *| h2c_msg	|Ext_bit	|CMD_ID	|
 *
 ******************************************/
-static void _FillH2CCmd92D(_adapter* padapter, u8 ElementID, u32 CmdLen, u8* pCmdBuffer)
+static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLen, u8* pCmdBuffer)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	u8	BoxNum;
@@ -271,7 +271,7 @@ _func_exit_;
 
 void
 FillH2CCmd92D(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8	ElementID,
 	u32	CmdLen,
 	u8*	pCmdBuffer
@@ -295,8 +295,8 @@ FillH2CCmd92D(
 	return;
 }
 
-u8 rtl8192d_h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf);
-u8 rtl8192d_h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf)
+u8 rtl8192d_h2c_msg_hdl(struct rtw_adapter *padapter, unsigned char *pbuf);
+u8 rtl8192d_h2c_msg_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 {
 	u8 ElementID, CmdLen;
 	u8 *pCmdBuffer;
@@ -316,7 +316,7 @@ u8 rtl8192d_h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf)
 }
 
 
-u8 rtl8192d_set_raid_cmd(_adapter*padapter, u32 mask, u8 arg)
+u8 rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg)
 {
 	u8	buf[5];
 	u8	res=_SUCCESS;
@@ -340,7 +340,7 @@ _func_exit_;
 //bitmap[28:31]= Rate Adaptive id
 //arg[0:4] = macid
 //arg[5] = Short GI
-void rtl8192d_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg)
+void rtl8192d_Add_RateATid(struct rtw_adapter * pAdapter, u32 bitmap, u8 arg)
 {
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -368,7 +368,7 @@ void rtl8192d_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg)
 }
 
 
-void rtl8192d_set_FwPwrMode_cmd(_adapter*padapter, u8 Mode)
+void rtl8192d_set_FwPwrMode_cmd(struct rtw_adapter*padapter, u8 Mode)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	u8	u1H2CSetPwrMode[3]={0};
@@ -387,8 +387,8 @@ _func_enter_;
 _func_exit_;
 }
 
-void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength);
-void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
+void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength);
+void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -491,8 +491,8 @@ _ConstructBeacon:
 
 }
 
-void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength);
-void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
+void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength);
+void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -521,8 +521,8 @@ void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 	*pLength = 16;
 }
 
-void ConstructNullFunctionData(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bForcePowerSave);
-void ConstructNullFunctionData(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bForcePowerSave)
+void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bForcePowerSave);
+void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bForcePowerSave)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -575,8 +575,8 @@ void ConstructNullFunctionData(_adapter *padapter, u8 *pframe, u32 *pLength, u8 
 	*pLength = pktlen;
 }
 
-void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID);
-void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID)
+void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID);
+void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -624,7 +624,7 @@ void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr
 //
 static void
 FillFakeTxDescriptor92D(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8*			pDesc,
 	u32			BufferLen,
 	bool		IsPsPoll
@@ -681,8 +681,8 @@ FillFakeTxDescriptor92D(
 //			      TRUE: At the second time, we should send the first packet (default:beacon)
 //						to Hw again and set the lengh in descriptor to the real beacon lengh.
 // 2009.10.15 by tynli.
-void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished);
-void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished)
+void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished);
+void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct xmit_frame	*pmgntframe;
@@ -823,7 +823,7 @@ void SetFwRsvdPagePkt(PADAPTER Adapter, bool bDLFinished)
 	rtw_mfree(ReservedPagePacket,1000);
 }
 
-void rtl8192d_set_FwJoinBssReport_cmd(_adapter* padapter, u8 mstatus)
+void rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus)
 {
 	u8	u1JoinBssRptParm[1]={0};
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -893,7 +893,7 @@ _func_exit_;
 }
 
 #ifdef CONFIG_P2P_PS
-void rtl8192d_set_p2p_ctw_period_cmd(_adapter* padapter, u8 ctwindow)
+void rtl8192d_set_p2p_ctw_period_cmd(struct rtw_adapter* padapter, u8 ctwindow)
 {
 	u8	CTWPeriod = ctwindow;
 
@@ -901,7 +901,7 @@ void rtl8192d_set_p2p_ctw_period_cmd(_adapter* padapter, u8 ctwindow)
 
 }
 
-void rtl8192d_set_p2p_ps_offload_cmd(_adapter* padapter, u8 p2p_ps_state)
+void rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_state)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct pwrctrl_priv		*pwrpriv = &padapter->pwrctrlpriv;
@@ -1010,7 +1010,7 @@ _func_exit_;
 /*
 	ask FW to Reset sync register at Beacon early interrupt
 */
-u8 rtl8192d_reset_tsf(_adapter *padapter, u8 reset_port )
+u8 rtl8192d_reset_tsf(struct rtw_adapter *padapter, u8 reset_port )
 {
 	u8	buf[2];
 	u8	res=_SUCCESS;
@@ -1028,7 +1028,7 @@ _func_exit_;
 	return res;
 }
 
-int reset_tsf(PADAPTER Adapter, u8 reset_port )
+int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port )
 {
 	u8 reset_cnt_before = 0, reset_cnt_after = 0, loop_cnt = 0;
 	u32 reg_reset_tsf_cnt = (IFACE_PORT0==reset_port) ?
@@ -1052,7 +1052,7 @@ int reset_tsf(PADAPTER Adapter, u8 reset_port )
 
 #ifdef CONFIG_WOWLAN
 
-void rtl8192d_set_wowlan_cmd(_adapter* padapter)
+void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter)
 {
 	u8	res=_SUCCESS;
 	u32 test=0;

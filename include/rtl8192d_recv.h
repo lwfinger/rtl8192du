@@ -97,9 +97,9 @@ struct phy_cck_rx_status_report_8192cd {
 // Rx smooth factor
 #define	Rx_Smooth_Factor (20)
 
-void rtl8192du_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf);
-int	rtl8192du_init_recv_priv(_adapter * padapter);
-void	rtl8192du_free_recv_priv(_adapter * padapter);
+void rtl8192du_init_recvbuf(struct rtw_adapter *padapter, struct recv_buf *precvbuf);
+int	rtl8192du_init_recv_priv(struct rtw_adapter * padapter);
+void	rtl8192du_free_recv_priv(struct rtw_adapter * padapter);
 
 void rtl8192d_translate_rx_signal_stuff(union recv_frame *precvframe, struct phy_stat *pphy_info);
 void rtl8192d_query_rx_desc_status(union recv_frame *precvframe, struct recv_stat *pdesc);

@@ -77,7 +77,7 @@ enum LED_PIN_871X {
 };
 
 struct LED_871X {
-	_adapter				*padapter;
+	struct rtw_adapter				*padapter;
 	enum LED_PIN_871X		LedPin;	// Identify how to implement this SW led.
 	enum LED_STATE_871X		CurrLedState; // Current LED state.
 	u8					bLedOn; // true if LED is ON, false if LED is OFF.
@@ -123,7 +123,7 @@ struct led_priv{
 	struct LED_871X			SwLed1;
 	enum LED_STRATEGY_871X	LedStrategy;
 	u8					bRegUseLed;
-	void (*LedControlHandler)(_adapter *padapter, enum LED_CTL_MODE LedAction);
+	void (*LedControlHandler)(struct rtw_adapter *padapter, enum LED_CTL_MODE LedAction);
 	/* add for led controll */
 };
 

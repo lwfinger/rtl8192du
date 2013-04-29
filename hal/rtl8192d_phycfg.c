@@ -78,7 +78,7 @@ extern atomic_t GlobalCounterForMutex;
 /*---------------------Define local function prototype-----------------------*/
 static void
 phy_PathAFillIQKMatrix(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool	bIQKOK,
 	int		result[][8],
 	u8		final_candidate,
@@ -87,7 +87,7 @@ phy_PathAFillIQKMatrix(
 
 static void
 phy_PathAFillIQKMatrix_5G_Normal(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool	bIQKOK,
 	int		result[][8],
 	u8		final_candidate,
@@ -96,7 +96,7 @@ phy_PathAFillIQKMatrix_5G_Normal(
 
 static void
 phy_PathBFillIQKMatrix(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool	bIQKOK,
 	int		result[][8],
 	u8		final_candidate,
@@ -105,7 +105,7 @@ phy_PathBFillIQKMatrix(
 
 static void
 phy_PathBFillIQKMatrix_5G_Normal(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool	bIQKOK,
 	int		result[][8],
 	u8		final_candidate,
@@ -196,7 +196,7 @@ phy_CalculateBitShift(
 //
 void
 rtl8192d_PHY_SetBBReg1Byte(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u32		RegAddr,
 	u32		BitMask,
 	u32		Data
@@ -228,7 +228,7 @@ rtl8192d_PHY_SetBBReg1Byte(
 * OverView:	Read "sepcific bits" from BB register
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct rtw_adapter *		Adapter,
 *			u4Byte			RegAddr,		//The target address to be readback
 *			u4Byte			BitMask		//The target bit position in the target address
 *										//to be readback
@@ -238,7 +238,7 @@ rtl8192d_PHY_SetBBReg1Byte(
 */
 u32
 rtl8192d_PHY_QueryBBReg(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u32		RegAddr,
 	u32		BitMask
 	)
@@ -261,7 +261,7 @@ rtl8192d_PHY_QueryBBReg(
 * OverView:	Write "Specific bits" to BB register (page 8~)
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct rtw_adapter *		Adapter,
 *			u4Byte			RegAddr,		//The target address to be modified
 *			u4Byte			BitMask		//The target bit position in the target address
 *										//to be modified
@@ -275,7 +275,7 @@ rtl8192d_PHY_QueryBBReg(
 
 void
 rtl8192d_PHY_SetBBReg(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u32		RegAddr,
 	u32		BitMask,
 	u32		Data
@@ -319,7 +319,7 @@ rtl8192d_PHY_SetBBReg(
  *---------------------------------------------------------------------------*/
 static	u32
 phy_FwRFSerialRead(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset	)
 {
@@ -348,7 +348,7 @@ phy_FwRFSerialRead(
  *---------------------------------------------------------------------------*/
 static	void
 phy_FwRFSerialWrite(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset,
 	u32				Data	)
@@ -361,7 +361,7 @@ phy_FwRFSerialWrite(
 * OverView:	Read regster from RF chips
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct rtw_adapter *		Adapter,
 *			enum RF_RADIO_PATH_E	eRFPath,	//Radio path of A/B/C/D
 *			u4Byte			Offset,		//The target address to be read
 *
@@ -376,7 +376,7 @@ phy_FwRFSerialWrite(
 */
 static	u32
 phy_RFSerialRead(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset
 	)
@@ -462,7 +462,7 @@ phy_RFSerialRead(
 * OverView:	Write data to RF register (page 8~)
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct rtw_adapter *		Adapter,
 *			enum RF_RADIO_PATH_E	eRFPath,	//Radio path of A/B/C/D
 *			u4Byte			Offset,		//The target address to be read
 *			u4Byte			Data			//The new register Data in the target bit position
@@ -501,7 +501,7 @@ phy_RFSerialRead(
 */
 static	void
 phy_RFSerialWrite(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset,
 	u32				Data
@@ -561,7 +561,7 @@ phy_RFSerialWrite(
 * OverView:	Query "Specific bits" to RF register (page 8~)
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct rtw_adapter *		Adapter,
 *			enum RF_RADIO_PATH_E	eRFPath,	//Radio path of A/B/C/D
 *			u4Byte			RegAddr,		//The target address to be read
 *			u4Byte			BitMask		//The target bit position in the target address
@@ -573,7 +573,7 @@ phy_RFSerialWrite(
 */
 u32
 rtl8192d_PHY_QueryRFReg(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	enum RF_RADIO_PATH_E	eRFPath,
 	u32				RegAddr,
 	u32				BitMask
@@ -607,7 +607,7 @@ rtl8192d_PHY_QueryRFReg(
 * OverView:	Write "Specific bits" to RF register (page 8~)
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct rtw_adapter *		Adapter,
 *			enum RF_RADIO_PATH_E	eRFPath,	//Radio path of A/B/C/D
 *			u4Byte			RegAddr,		//The target address to be modified
 *			u4Byte			BitMask		//The target bit position in the target address
@@ -621,7 +621,7 @@ rtl8192d_PHY_QueryRFReg(
 */
 void
 rtl8192d_PHY_SetRFReg(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	enum RF_RADIO_PATH_E	eRFPath,
 	u32				RegAddr,
 	u32				BitMask,
@@ -664,7 +664,7 @@ rtl8192d_PHY_SetRFReg(
  * Overview:    This function read BB parameters from general file format, and do register
  *			  Read/Write
  *
- * Input:	PADAPTER		Adapter
+ * Input:	struct rtw_adapter *		Adapter
  *			ps1Byte				pFileName
  *
  * Output:      NONE
@@ -677,7 +677,7 @@ rtl8192d_PHY_SetRFReg(
 #ifndef CONFIG_EMBEDDED_FWIMG
 static	int
 phy_ConfigMACWithParaFile(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8*			pFileName
 )
 {
@@ -694,7 +694,7 @@ phy_ConfigMACWithParaFile(
  * Overview:    This function read BB parameters from Header file we gen, and do register
  *			  Read/Write
  *
- * Input:	PADAPTER		Adapter
+ * Input:	struct rtw_adapter *		Adapter
  *			ps1Byte				pFileName
  *
  * Output:      NONE
@@ -706,7 +706,7 @@ phy_ConfigMACWithParaFile(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigMACWithHeaderFile(
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 )
 {
 	u32					i = 0;
@@ -747,7 +747,7 @@ phy_ConfigMACWithHeaderFile(
  *---------------------------------------------------------------------------*/
 extern	int
 PHY_MACConfig8192D(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -796,7 +796,7 @@ PHY_MACConfig8192D(
 * OverView:	Initialize Register definition offset for Radio Path A/B/C/D
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct rtw_adapter *		Adapter,
 *
 * Output:	None
 * Return:		None
@@ -804,7 +804,7 @@ PHY_MACConfig8192D(
 */
 static	void
 phy_InitBBRFRegisterDefinition(
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -915,7 +915,7 @@ phy_InitBBRFRegisterDefinition(
  * Overview:    This function read BB parameters from general file format, and do register
  *			  Read/Write
  *
- * Input:	PADAPTER		Adapter
+ * Input:	struct rtw_adapter *		Adapter
  *			u1Byte			ConfigType     0 => PHY_CONFIG
  *										 1 =>AGC_TAB
  *
@@ -926,7 +926,7 @@ phy_InitBBRFRegisterDefinition(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigBBWithHeaderFile(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8			ConfigType
 )
 {
@@ -1054,7 +1054,7 @@ phy_ConfigBBWithHeaderFile(
  * Overview:    This function read BB parameters from general file format, and do register
  *			  Read/Write
  *
- * Input:	PADAPTER		Adapter
+ * Input:	struct rtw_adapter *		Adapter
  *			ps1Byte				pFileName
  *
  * Output:      NONE
@@ -1067,7 +1067,7 @@ phy_ConfigBBWithHeaderFile(
 #ifndef CONFIG_EMBEDDED_FWIMG
 static	int
 phy_ConfigBBWithParaFile(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8*			pFileName
 )
 {
@@ -1081,7 +1081,7 @@ phy_ConfigBBWithParaFile(
 #if MP_DRIVER != 1
 static void
 storePwrIndexDiffRateOffset(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u32		RegAddr,
 	u32		BitMask,
 	u32		Data
@@ -1206,7 +1206,7 @@ storePwrIndexDiffRateOffset(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigBBWithPgHeaderFile(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8			ConfigType)
 {
 	int i;
@@ -1275,7 +1275,7 @@ phy_ConfigBBWithPgHeaderFile(
 #ifndef CONFIG_EMBEDDED_FWIMG
 static	int
 phy_ConfigBBWithPgParaFile(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8*			pFileName)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1295,7 +1295,7 @@ phy_ConfigBBWithPgParaFile(
  * Overview:    This function read BB parameters from general file format, and do register
  *			  Read/Write
  *
- * Input:	PADAPTER		Adapter
+ * Input:	struct rtw_adapter *		Adapter
  *			ps1Byte				pFileName
  *
  * Output:      NONE
@@ -1307,7 +1307,7 @@ phy_ConfigBBWithPgParaFile(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigBBWithMpParaFile(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	s8			*pFileName
 )
 {
@@ -1335,7 +1335,7 @@ phy_ConfigBBWithMpParaFile(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigBBWithMpHeaderFile(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u1Byte			ConfigType)
 {
 	int	i;
@@ -1388,7 +1388,7 @@ phy_ConfigBBWithMpHeaderFile(
 
 static	int
 phy_BB8192D_Config_ParaFile(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 	)
 {
 #if MP_DRIVER != 1
@@ -1517,7 +1517,7 @@ phy_BB8190_Config_ParaFile_Fail:
 
 int
 PHY_BBConfig8192D(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 	)
 {
 	int	rtStatus = _SUCCESS;
@@ -1608,7 +1608,7 @@ PHY_BBConfig8192D(
 
 extern	int
 PHY_RFConfig8192D(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 	)
 {
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1632,7 +1632,7 @@ PHY_RFConfig8192D(
  *
  * Overview:    This function read RF parameters from general file format, and do RF 3-wire
  *
- * Input:	PADAPTER			Adapter
+ * Input:	struct rtw_adapter *			Adapter
  *			ps1Byte					pFileName
  *			enum RF_RADIO_PATH_E	eRFPath
  *
@@ -1644,7 +1644,7 @@ PHY_RFConfig8192D(
  *---------------------------------------------------------------------------*/
 int
 rtl8192d_PHY_ConfigRFWithParaFile(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	u8*				pFileName,
 	enum RF_RADIO_PATH_E		eRFPath
 )
@@ -1662,7 +1662,7 @@ rtl8192d_PHY_ConfigRFWithParaFile(
  *
  * Overview:    This function read RF parameters from general file format, and do RF 3-wire
  *
- * Input:	PADAPTER			Adapter
+ * Input:	struct rtw_adapter *			Adapter
  *			ps1Byte					pFileName
  *			enum RF_RADIO_PATH_E	eRFPath
  *
@@ -1674,7 +1674,7 @@ rtl8192d_PHY_ConfigRFWithParaFile(
  *---------------------------------------------------------------------------*/
 int
 rtl8192d_PHY_ConfigRFWithHeaderFile(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	enum RF_CONTENT			Content,
 	enum RF_RADIO_PATH_E		eRFPath
 )
@@ -1828,7 +1828,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
  * Overview:    This function is write register and then readback to make sure whether
  *			  BB[PHY0, PHY1], RF[Patha, path b, path c, path d] is Ok
  *
- * Input:	PADAPTER			Adapter
+ * Input:	struct rtw_adapter *			Adapter
  *			enum HW90_BLOCK		CheckBlock
  *			enum RF_RADIO_PATH_E	eRFPath		// it is used only when CheckBlock is HW90_BLOCK_RF
  *
@@ -1840,7 +1840,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
  *---------------------------------------------------------------------------*/
 int
 rtl8192d_PHY_CheckBBAndRFOK(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	enum HW90_BLOCK		CheckBlock,
 	enum RF_RADIO_PATH_E	eRFPath
 	)
@@ -1915,7 +1915,7 @@ rtl8192d_PHY_CheckBBAndRFOK(
 
 void
 rtl8192d_PHY_GetHWRegOriginalValue(
-	PADAPTER		Adapter
+	struct rtw_adapter *		Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1947,7 +1947,7 @@ rtl8192d_PHY_GetHWRegOriginalValue(
 //
 static	u8
 phy_DbmToTxPwrIdx(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	enum WIRELESS_MODE	WirelessMode,
 	int			PowerInDbm
 	)
@@ -2004,7 +2004,7 @@ phy_DbmToTxPwrIdx(
 //
 static int
 phy_TxPwrIdxToDbm(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	enum WIRELESS_MODE	WirelessMode,
 	u8			TxPwrIdx
 	)
@@ -2044,7 +2044,7 @@ phy_TxPwrIdxToDbm(
  *
  * Overview:    This function is export to "common" moudule
  *
- * Input:       PADAPTER		Adapter
+ * Input:       struct rtw_adapter *		Adapter
  *			psByte			Power Level
  *
  * Output:      NONE
@@ -2054,7 +2054,7 @@ phy_TxPwrIdxToDbm(
  *---------------------------------------------------------------------------*/
 void
 PHY_GetTxPowerLevel8192D(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u32*		powerlevel
 	)
 {
@@ -2090,7 +2090,7 @@ PHY_GetTxPowerLevel8192D(
 
 
 static void getTxPowerIndex(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8			channel,
 	u8*		cckPowerLevel,
 	u8*		ofdmPowerLevel
@@ -2125,7 +2125,7 @@ static void getTxPowerIndex(
 }
 
 static void ccxPowerIndexCheck(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8			channel,
 	u8*		cckPowerLevel,
 	u8*		ofdmPowerLevel
@@ -2138,7 +2138,7 @@ static void ccxPowerIndexCheck(
  * Overview:    This function is export to "HalCommon" moudule
  *			We must consider RF path later!!!!!!!
  *
- * Input:       PADAPTER		Adapter
+ * Input:       struct rtw_adapter *		Adapter
  *			u1Byte		channel
  *
  * Output:      NONE
@@ -2151,7 +2151,7 @@ static void ccxPowerIndexCheck(
  *---------------------------------------------------------------------------*/
 void
 PHY_SetTxPowerLevel8192D(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8			channel
 	)
 {
@@ -2190,7 +2190,7 @@ PHY_SetTxPowerLevel8192D(
 //
 bool
 PHY_UpdateTxPowerDbm8192D(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	int		powerInDbm
 	)
 {
@@ -2237,7 +2237,7 @@ PHY_UpdateTxPowerDbm8192D(
 
 void
 rtl8192d_PHY_SetBeaconHwReg(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u16			BeaconInterval
 	)
 {
@@ -2247,7 +2247,7 @@ rtl8192d_PHY_SetBeaconHwReg(
 
 void
 PHY_ScanOperationBackup8192D(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8		Operation
 	)
 {
@@ -2270,7 +2270,7 @@ PHY_ScanOperationBackup8192D(
  *---------------------------------------------------------------------------*/
 static void
 _PHY_SetBWMode92D(
-	PADAPTER	Adapter
+	struct rtw_adapter *	Adapter
 )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -2279,7 +2279,7 @@ _PHY_SetBWMode92D(
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	// FOr 92D dual mac config.
-	PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
+	struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
 	PHAL_DATA_TYPE	pHalDataBuddyAdapter;
 #endif
 
@@ -2426,7 +2426,7 @@ _PHY_SetBWMode92D(
  *
  * Overview:  This function is export to "HalCommon" moudule
  *
- * Input:		PADAPTER			Adapter
+ * Input:		struct rtw_adapter *			Adapter
  *			HT_CHANNEL_WIDTH	Bandwidth	//20M or 40M
  *
  * Output:      NONE
@@ -2437,7 +2437,7 @@ _PHY_SetBWMode92D(
  *---------------------------------------------------------------------------*/
 void
 PHY_SetBWMode8192D(
-	PADAPTER					Adapter,
+	struct rtw_adapter *					Adapter,
 	enum HT_CHANNEL_WIDTH	Bandwidth,	// 20M or 40M
 	unsigned char	Offset		// Upper, Lower, or Don't care
 )
@@ -2445,7 +2445,7 @@ PHY_SetBWMode8192D(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	enum HT_CHANNEL_WIDTH	tmpBW= pHalData->CurrentChannelBW;
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
+	struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
 #endif
 
 	//if(pHalData->SetBWModeInProgress)
@@ -2503,7 +2503,7 @@ Descriptor:
 ********************************************************************/
 void
 PHY_StopTRXBeforeChangeBand8192D(
-	  PADAPTER		Adapter
+	  struct rtw_adapter *		Adapter
 )
 {
 #if MP_DRIVER == 1
@@ -2525,11 +2525,11 @@ PHY_StopTRXBeforeChangeBand8192D(
 */
 void
 PHY_SwitchWirelessBand(
-	PADAPTER		 Adapter,
+	struct rtw_adapter *		 Adapter,
 	u8		Band);
 void
 PHY_SwitchWirelessBand(
-	PADAPTER		 Adapter,
+	struct rtw_adapter *		 Adapter,
 	u8		Band)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -2561,7 +2561,7 @@ PHY_SwitchWirelessBand(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if(pHalData->bMasterOfDMSP)
 	{
-		PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
+		struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
 		if(BuddyAdapter!=NULL)
 		{
 			if(BuddyAdapter->hw_init_completed)
@@ -2622,7 +2622,7 @@ PHY_SwitchWirelessBand(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if(pHalData->bMasterOfDMSP)
 	{
-		PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
+		struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
 		if(BuddyAdapter!=NULL)
 		{
 			if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
@@ -2660,7 +2660,7 @@ PHY_SwitchWirelessBand(
 
 static void
 PHY_EnableRFENV(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8				eRFPath	,
 	u32				MaskforPhySet,
 	u32*			pu4RegValue
@@ -2705,7 +2705,7 @@ PHY_EnableRFENV(
 
 static void
 PHY_RestoreRFENV(
-	PADAPTER		Adapter,
+	struct rtw_adapter *		Adapter,
 	u8				eRFPath,
 	u32				MaskforPhySet,
 	u32*			pu4RegValue
@@ -2738,7 +2738,7 @@ PHY_RestoreRFENV(
  *
  * Overview:	Change RF Setting when we siwthc channel for 92D C-cut.
  *
- * Input:       PADAPTER				pAdapter
+ * Input:       struct rtw_adapter *				pAdapter
  *
  * Output:      NONE
  *
@@ -2752,7 +2752,7 @@ PHY_RestoreRFENV(
  *---------------------------------------------------------------------------*/
  static	void
  phy_SwitchRfSetting(
-	PADAPTER			Adapter,
+	struct rtw_adapter *			Adapter,
 	u8					channel
 	)
 {
@@ -2996,7 +2996,7 @@ PHY_RestoreRFENV(
  *
  * Overview:	Change RF Setting when we siwthc channel for 92D C-cut.
  *
- * Input:       PADAPTER				pAdapter
+ * Input:       struct rtw_adapter *				pAdapter
  *
  * Output:      NONE
  *
@@ -3010,7 +3010,7 @@ PHY_RestoreRFENV(
  *---------------------------------------------------------------------------*/
 static  void
  phy_ReloadLCKSetting(
-	PADAPTER				Adapter,
+	struct rtw_adapter *				Adapter,
 	u8					channel
 	)
 {
@@ -3086,7 +3086,7 @@ static  void
  *
  * Overview:	Change RF Setting when we siwthc channel for 92D C-cut.
  *
- * Input:       PADAPTER				pAdapter
+ * Input:       struct rtw_adapter *				pAdapter
  *
  * Output:      NONE
  *
@@ -3100,7 +3100,7 @@ static  void
  *---------------------------------------------------------------------------*/
  static void
  phy_ReloadIMRSetting(
-	PADAPTER				Adapter,
+	struct rtw_adapter *				Adapter,
 	u8					channel,
 	u8					eRFPath
 	)
@@ -3164,7 +3164,7 @@ static  void
  *
  * Overview:	Change RF Setting when we siwthc channel for 92D C-cut.
  *
- * Input:       PADAPTER				pAdapter
+ * Input:       struct rtw_adapter *				pAdapter
  *
  * Output:      NONE
  *
@@ -3178,7 +3178,7 @@ static  void
  *---------------------------------------------------------------------------*/
  static void
  phy_ReloadIQKSetting(
-	PADAPTER				Adapter,
+	struct rtw_adapter *				Adapter,
 	u8					channel
 	)
 {
@@ -3240,7 +3240,7 @@ static  void
 }
 
 
-static void _PHY_SwChnl8192D(PADAPTER Adapter, u8 channel)
+static void _PHY_SwChnl8192D(struct rtw_adapter * Adapter, u8 channel)
 {
 	u8	eRFPath;
 	u32	param1, param2;
@@ -3249,7 +3249,7 @@ static void _PHY_SwChnl8192D(PADAPTER Adapter, u8 channel)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 #if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 	// FOr 92D dual mac config. and sw concurrent mode
-	PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
+	struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
 #endif
 
 	if ( Adapter->bNotifyChannelChange )
@@ -3350,18 +3350,18 @@ static void _PHY_SwChnl8192D(PADAPTER Adapter, u8 channel)
 
 void
 PHY_SwChnl8192D(	// Call after initialization
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8		channel
 	)
 {
-	//PADAPTER Adapter =  ADJUST_TO_ADAPTIVE_ADAPTER(pAdapter, true);
+	//struct rtw_adapter * Adapter =  ADJUST_TO_ADAPTIVE_ADAPTER(pAdapter, true);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	tmpchannel = pHalData->CurrentChannel;
 	bool  bResult = true;
 	u32	timeout = 1000, timecount = 0;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	PADAPTER	BuddyAdapter = Adapter->pbuddy_adapter;
+	struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
 	HAL_DATA_TYPE	*pHalDataBuddyAdapter;
 #endif
 
@@ -3502,7 +3502,7 @@ PHY_SwChnl8192D(	// Call after initialization
 
 static	bool
 phy_SwChnlStepByStep(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8		channel,
 	u8		*stage,
 	u8		*step,
@@ -3542,7 +3542,7 @@ phy_SetSwChnlCmdArray(
 
 static	void
 phy_FinishSwChnlNow(	// We should not call this function directly
-		PADAPTER	Adapter,
+		struct rtw_adapter *	Adapter,
 		u8		channel
 		)
 {
@@ -3560,7 +3560,7 @@ phy_FinishSwChnlNow(	// We should not call this function directly
 //
 void
 PHY_SwChnlPhy8192D(	// Only called during initialize
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	u8		channel
 	)
 {
@@ -3606,7 +3606,7 @@ PHY_SwChnlPhy8192D(	// Only called during initialize
 //
 void
 PHY_SetMonitorMode8192D(
-	PADAPTER			pAdapter,
+	struct rtw_adapter *			pAdapter,
 	bool				bEnableMonitorMode
 	)
 {
@@ -3632,7 +3632,7 @@ PHY_SetMonitorMode8192D(
  *---------------------------------------------------------------------------*/
 bool
 PHY_CheckIsLegalRfPath8192D(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u32	eRFPath)
 {
 //	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -3654,7 +3654,7 @@ PHY_CheckIsLegalRfPath8192D(
 
 static u8			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool		configPathB
 	)
 {
@@ -3741,7 +3741,7 @@ phy_PathA_IQK(
 
 static u8			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK_5G_Normal(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool		configPathB
 	)
 {
@@ -3875,7 +3875,7 @@ phy_PathA_IQK_5G_Normal(
 
 static u8				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathB_IQK(
-	PADAPTER	pAdapter
+	struct rtw_adapter *	pAdapter
 	)
 {
 	u32 regEAC, regEB4, regEBC, regEC4, regECC;
@@ -3924,7 +3924,7 @@ phy_PathB_IQK(
 
 static u8				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathB_IQK_5G_Normal(
-	PADAPTER	pAdapter
+	struct rtw_adapter *	pAdapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -4039,7 +4039,7 @@ phy_PathB_IQK_5G_Normal(
 
 static void
 phy_PathAFillIQKMatrix(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool	bIQKOK,
 	int		result[][8],
 	u8		final_candidate,
@@ -4106,7 +4106,7 @@ phy_PathAFillIQKMatrix(
 
 static void
 phy_PathAFillIQKMatrix_5G_Normal(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool	bIQKOK,
 	int		result[][8],
 	u8		final_candidate,
@@ -4174,7 +4174,7 @@ phy_PathAFillIQKMatrix_5G_Normal(
 
 static void
 phy_PathBFillIQKMatrix(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool	bIQKOK,
 	int		result[][8],
 	u8		final_candidate,
@@ -4235,7 +4235,7 @@ phy_PathBFillIQKMatrix(
 
 static void
 phy_PathBFillIQKMatrix_5G_Normal(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool	bIQKOK,
 	int		result[][8],
 	u8		final_candidate,
@@ -4291,7 +4291,7 @@ phy_PathBFillIQKMatrix_5G_Normal(
 
 static void
 phy_SaveADDARegisters(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u32*		ADDAReg,
 	u32*		ADDABackup,
 	u32			RegisterNum
@@ -4310,7 +4310,7 @@ phy_SaveADDARegisters(
 
 static void
 phy_SaveMACRegisters(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u32*		MACReg,
 	u32*		MACBackup
 	)
@@ -4327,7 +4327,7 @@ phy_SaveMACRegisters(
 
 static void
 phy_ReloadADDARegisters(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u32*		ADDAReg,
 	u32*		ADDABackup,
 	u32			RegiesterNum
@@ -4346,7 +4346,7 @@ phy_ReloadADDARegisters(
 
 static void
 phy_ReloadMACRegisters(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u32*		MACReg,
 	u32*		MACBackup
 	)
@@ -4362,7 +4362,7 @@ phy_ReloadMACRegisters(
 
 static void
 phy_PathADDAOn(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u32*		ADDAReg,
 	bool		isPathAOn,
 	bool		is2T
@@ -4387,7 +4387,7 @@ phy_PathADDAOn(
 
 static void
 phy_MACSettingCalibration(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u32*		MACReg,
 	u32*		MACBackup
 	)
@@ -4407,7 +4407,7 @@ phy_MACSettingCalibration(
 
 static void
 phy_PathAStandBy(
-	PADAPTER	pAdapter
+	struct rtw_adapter *	pAdapter
 	)
 {
 	//RTPRINT(FINIT, INIT_IQK, ("Path-A standby mode!\n"));
@@ -4419,7 +4419,7 @@ phy_PathAStandBy(
 
 static void
 phy_PIModeSwitch(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool		PIMode
 	)
 {
@@ -4434,7 +4434,7 @@ phy_PIModeSwitch(
 
 static bool
 phy_SimularityCompare_92D(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	int		result[][8],
 	u8		 c1,
 	u8		 c2
@@ -4526,7 +4526,7 @@ return false => do IQK again
 */
 static bool
 phy_SimularityCompare(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	int		result[][8],
 	u8		 c1,
 	u8		 c2
@@ -4537,7 +4537,7 @@ phy_SimularityCompare(
 
 static void
 phy_IQCalibrate(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	int		result[][8],
 	u8		t,
 	bool		is2T
@@ -4767,7 +4767,7 @@ phy_IQCalibrate(
 
 static void
 phy_IQCalibrate_5G(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	int		result[][8]
 	)
 {
@@ -5148,7 +5148,7 @@ Exit_IQK:
 
 static void
 phy_IQCalibrate_5G_Normal(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	int		result[][8],
 	u8		t
 	)
@@ -5357,7 +5357,7 @@ phy_IQCalibrate_5G_Normal(
 #if SWLCK != 1
 static void
 phy_LCCalibrate92D(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool		is2T
 	)
 {
@@ -5465,7 +5465,7 @@ get_abs(
 
 static void
 phy_CalcCurvIndex(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	u32*		TargetChnl,
 	u32*		CurveCountVal,
 	bool		is5G,
@@ -5558,7 +5558,7 @@ phy_CalcCurvIndex(
 
 static void
 phy_LCCalibrate92DSW(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool		is2T
 	)
 {
@@ -5708,7 +5708,7 @@ phy_LCCalibrate92DSW(
 
 static void
 phy_LCCalibrate(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool		is2T
 	)
 {
@@ -5728,7 +5728,7 @@ phy_LCCalibrate(
 
 static void
 phy_APCalibrate(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	char		delta,
 	bool		is2T
 	)
@@ -6149,7 +6149,7 @@ phy_APCalibrate(
 }
 
 static void phy_SetRFPathSwitch(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool		bMain,
 	bool		is2T
 	)
@@ -6172,7 +6172,7 @@ static void phy_SetRFPathSwitch(
 
 void
 rtl8192d_PHY_IQCalibrate(
-	PADAPTER	pAdapter
+	struct rtw_adapter *	pAdapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -6343,7 +6343,7 @@ rtl8192d_PHY_IQCalibrate(
 		//RT_TRACE(COMP_SCAN|COMP_MLME,DBG_LOUD,("\nIQK OK Indexforchannel %d.\n", Indexforchannel));
 #ifdef CONFIG_CONCURRENT_MODE
 		if (rtw_buddy_adapter_up(pAdapter)) {
-			PADAPTER pbuddy_adapter = pAdapter->pbuddy_adapter;
+			struct rtw_adapter * pbuddy_adapter = pAdapter->pbuddy_adapter;
 			PHAL_DATA_TYPE	pbuddy_HalData = GET_HAL_DATA(pbuddy_adapter);
 
 			for(i = 0; i < IQK_Matrix_REG_NUM; i++)
@@ -6362,7 +6362,7 @@ rtl8192d_PHY_IQCalibrate(
 
 void
 rtl8192d_PHY_LCCalibrate(
-	PADAPTER	pAdapter
+	struct rtw_adapter *	pAdapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -6370,7 +6370,7 @@ rtl8192d_PHY_LCCalibrate(
 	bool		bStartContTx = false, bSingleTone = false, bCarrierSuppression = false;
 	u32			timeout = 2000, timecount = 0;
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	PADAPTER	BuddyAdapter = pAdapter->pbuddy_adapter;
+	struct rtw_adapter *	BuddyAdapter = pAdapter->pbuddy_adapter;
 	struct mlme_priv	*pmlmeprivBuddyAdapter;
 #endif
 
@@ -6425,7 +6425,7 @@ rtl8192d_PHY_LCCalibrate(
 
 void
 rtl8192d_PHY_APCalibrate(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	char		delta
 	)
 {
@@ -6453,7 +6453,7 @@ rtl8192d_PHY_APCalibrate(
 
 void
 PHY_UpdateBBRFConfiguration8192D(
-	PADAPTER Adapter,
+	struct rtw_adapter * Adapter,
 	bool bisBandSwitch
 )
 {
@@ -6789,7 +6789,7 @@ PHY_UpdateBBRFConfiguration8192D(
 //		2. PASSIVE_LEVEL (USB interface)
 //
 void PHY_ReadMacPhyMode92D(
-		PADAPTER			Adapter,
+		struct rtw_adapter *			Adapter,
 		bool		AutoloadFail
 )
 {
@@ -6832,7 +6832,7 @@ void PHY_ReadMacPhyMode92D(
 //		2. PASSIVE_LEVEL (USB interface)
 //
 void PHY_ConfigMacPhyMode92D(
-		PADAPTER			Adapter
+		struct rtw_adapter *			Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -6871,12 +6871,12 @@ void PHY_ConfigMacPhyMode92D(
 //		2. PASSIVE_LEVEL (USB interface)
 //
 void PHY_ConfigMacPhyModeInfo92D(
-		PADAPTER			Adapter
+		struct rtw_adapter *			Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	PADAPTER		BuddyAdapter = Adapter->pbuddy_adapter;
+	struct rtw_adapter *		BuddyAdapter = Adapter->pbuddy_adapter;
 	HAL_DATA_TYPE	*pHalDataBuddyAdapter;
 #endif
 
@@ -7017,7 +7017,7 @@ void PHY_ConfigMacPhyModeInfo92D(
 //		2. PASSIVE_LEVEL (USB interface)
 //
 void PHY_ConfigMacCoexist_RFPage92D(
-		PADAPTER			Adapter
+		struct rtw_adapter *			Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -7046,7 +7046,7 @@ void PHY_ConfigMacCoexist_RFPage92D(
 
 void
 rtl8192d_PHY_InitRxSetting(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -7070,7 +7070,7 @@ rtl8192d_PHY_InitRxSetting(
 
 void
 rtl8192d_PHY_ResetIQKResult(
-	PADAPTER Adapter
+	struct rtw_adapter * Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -7099,7 +7099,7 @@ rtl8192d_PHY_ResetIQKResult(
 }
 
 void rtl8192d_PHY_SetRFPathSwitch(
-	PADAPTER	pAdapter,
+	struct rtw_adapter *	pAdapter,
 	bool		bMain
 	)
 {
@@ -7121,11 +7121,11 @@ void rtl8192d_PHY_SetRFPathSwitch(
 
 void
 HalChangeCCKStatus8192D(
-	PADAPTER	Adapter,
+	struct rtw_adapter *	Adapter,
 	bool		bCCKDisable
 )
 {
-	//PADAPTER	BuddyAdapter = Adapter->BuddyAdapter;
+	//struct rtw_adapter *	BuddyAdapter = Adapter->BuddyAdapter;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	u8	i;
 
@@ -7202,7 +7202,7 @@ HalChangeCCKStatus8192D(
 }
 
 void
-PHY_InitPABias92D(PADAPTER Adapter)
+PHY_InitPABias92D(struct rtw_adapter * Adapter)
 {
 	u8	tmpU1b;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

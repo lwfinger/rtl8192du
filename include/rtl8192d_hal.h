@@ -781,17 +781,17 @@ typedef struct hal_data_8192du HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define GET_HAL_DATA(__pAdapter)	((HAL_DATA_TYPE *)((__pAdapter)->HalData))
 #define GET_RF_TYPE(priv)	(GET_HAL_DATA(priv)->rf_type)
 
-int FirmwareDownload92D(PADAPTER Adapter,bool  bUsedWoWLANFw);
-void rtl8192d_FirmwareSelfReset(PADAPTER Adapter);
-void rtl8192d_ReadChipVersion(PADAPTER Adapter);
-void rtl8192d_EfuseParseChnlPlan(PADAPTER Adapter, u8 *hwinfo, bool AutoLoadFail);
-void rtl8192d_ReadTxPowerInfo(PADAPTER Adapter, u8* PROMContent, bool AutoLoadFail);
-void rtl8192d_ResetDualMacSwitchVariables(PADAPTER Adapter);
-u8 GetEEPROMSize8192D(PADAPTER Adapter);
-bool PHY_CheckPowerOffFor8192D(PADAPTER Adapter);
-void PHY_SetPowerOnFor8192D(PADAPTER Adapter);
-//void PHY_ConfigMacPhyMode92D(PADAPTER Adapter);
-void rtl8192d_free_hal_data(_adapter *padapter);
+int FirmwareDownload92D(struct rtw_adapter * Adapter,bool  bUsedWoWLANFw);
+void rtl8192d_FirmwareSelfReset(struct rtw_adapter * Adapter);
+void rtl8192d_ReadChipVersion(struct rtw_adapter * Adapter);
+void rtl8192d_EfuseParseChnlPlan(struct rtw_adapter * Adapter, u8 *hwinfo, bool AutoLoadFail);
+void rtl8192d_ReadTxPowerInfo(struct rtw_adapter * Adapter, u8* PROMContent, bool AutoLoadFail);
+void rtl8192d_ResetDualMacSwitchVariables(struct rtw_adapter * Adapter);
+u8 GetEEPROMSize8192D(struct rtw_adapter * Adapter);
+bool PHY_CheckPowerOffFor8192D(struct rtw_adapter * Adapter);
+void PHY_SetPowerOnFor8192D(struct rtw_adapter * Adapter);
+//void PHY_ConfigMacPhyMode92D(struct rtw_adapter * Adapter);
+void rtl8192d_free_hal_data(struct rtw_adapter *padapter);
 void rtl8192d_set_hal_ops(struct hal_ops *pHalFunc);
 
 #endif
@@ -799,32 +799,32 @@ void rtl8192d_set_hal_ops(struct hal_ops *pHalFunc);
 #ifdef CONFIG_MP_INCLUDED
 
 
-extern void Hal_SetAntenna(PADAPTER pAdapter);
-extern void Hal_SetBandwidth(PADAPTER pAdapter);
+extern void Hal_SetAntenna(struct rtw_adapter * pAdapter);
+extern void Hal_SetBandwidth(struct rtw_adapter * pAdapter);
 
-extern void Hal_SetTxPower(PADAPTER pAdapter);
-extern void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart);
-extern void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart );
-extern void Hal_SetSingleCarrierTx (PADAPTER pAdapter, u8 bStart);
-extern void Hal_SetContinuousTx (PADAPTER pAdapter, u8 bStart);
-extern void Hal_SetBandwidth(PADAPTER pAdapter);
+extern void Hal_SetTxPower(struct rtw_adapter * pAdapter);
+extern void Hal_SetCarrierSuppressionTx(struct rtw_adapter * pAdapter, u8 bStart);
+extern void Hal_SetSingleToneTx ( struct rtw_adapter * pAdapter , u8 bStart );
+extern void Hal_SetSingleCarrierTx (struct rtw_adapter * pAdapter, u8 bStart);
+extern void Hal_SetContinuousTx (struct rtw_adapter * pAdapter, u8 bStart);
+extern void Hal_SetBandwidth(struct rtw_adapter * pAdapter);
 
-extern void Hal_SetDataRate(PADAPTER pAdapter);
-extern void Hal_SetChannel(PADAPTER pAdapter);
-extern void Hal_SetAntennaPathPower(PADAPTER pAdapter);
-extern s32 Hal_SetThermalMeter(PADAPTER pAdapter, u8 target_ther);
-extern s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable);
-extern void Hal_GetPowerTracking(PADAPTER padapter, u8 *enable);
-extern void Hal_GetThermalMeter(PADAPTER pAdapter, u8 *value);
-extern void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter);
-extern void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14);
-extern void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven);
-extern void Hal_SetCCKTxPower(PADAPTER pAdapter, u8 *TxPower);
-extern void Hal_SetOFDMTxPower(PADAPTER pAdapter, u8 *TxPower);
-extern void Hal_TriggerRFThermalMeter(PADAPTER pAdapter);
-extern u8 Hal_ReadRFThermalMeter(PADAPTER pAdapter);
-extern void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart);
-extern void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart);
+extern void Hal_SetDataRate(struct rtw_adapter * pAdapter);
+extern void Hal_SetChannel(struct rtw_adapter * pAdapter);
+extern void Hal_SetAntennaPathPower(struct rtw_adapter * pAdapter);
+extern s32 Hal_SetThermalMeter(struct rtw_adapter * pAdapter, u8 target_ther);
+extern s32 Hal_SetPowerTracking(struct rtw_adapter * padapter, u8 enable);
+extern void Hal_GetPowerTracking(struct rtw_adapter * padapter, u8 *enable);
+extern void Hal_GetThermalMeter(struct rtw_adapter * pAdapter, u8 *value);
+extern void Hal_mpt_SwitchRfSetting(struct rtw_adapter * pAdapter);
+extern void Hal_MPT_CCKTxPowerAdjust(struct rtw_adapter * Adapter, bool bInCH14);
+extern void Hal_MPT_CCKTxPowerAdjustbyIndex(struct rtw_adapter * pAdapter, bool beven);
+extern void Hal_SetCCKTxPower(struct rtw_adapter * pAdapter, u8 *TxPower);
+extern void Hal_SetOFDMTxPower(struct rtw_adapter * pAdapter, u8 *TxPower);
+extern void Hal_TriggerRFThermalMeter(struct rtw_adapter * pAdapter);
+extern u8 Hal_ReadRFThermalMeter(struct rtw_adapter * pAdapter);
+extern void Hal_SetCCKContinuousTx(struct rtw_adapter * pAdapter, u8 bStart);
+extern void Hal_SetOFDMContinuousTx(struct rtw_adapter * pAdapter, u8 bStart);
 
 
 #endif //end CONFIG_MP_INCLUDED

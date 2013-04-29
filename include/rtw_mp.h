@@ -109,10 +109,7 @@ struct mp_wiparam {
 	u32 io_value;
 };
 
-typedef void(*wi_act_func)(void* padapter);
-
-struct mp_tx
-{
+struct mp_tx {
 	u8 stop;
 	u32 count, sended;
 	u8 payload;
@@ -131,27 +128,16 @@ struct mp_tx
 #define s1Byte s8
 #define u4Byte u32
 #define s4Byte s32
-typedef void (*MPT_WORK_ITEM_HANDLER)(void * Adapter);
-typedef struct _MPT_CONTEXT
-{
+
+struct mpt_context {
 	// Indicate if we have started Mass Production Test.
 	bool			bMassProdTest;
 
 	// Indicate if the driver is unloading or unloaded.
 	bool			bMptDrvUnload;
 
-	/* 8190 PCI does not support NDIS_WORK_ITEM. */
-	// Work Item for Mass Production Test.
-	//NDIS_WORK_ITEM	MptWorkItem;
-//	RT_WORK_ITEM		MptWorkItem;
-	// Event used to sync the case unloading driver and MptWorkItem is still in progress.
-//	NDIS_EVENT		MptWorkItemEvent;
-	// To protect the following variables.
-//	NDIS_SPIN_LOCK		MptWorkItemSpinLock;
 	// Indicate a MptWorkItem is scheduled and not yet finished.
 	bool			bMptWorkItemInProgress;
-	// An instance which implements function and context of MptWorkItem.
-	MPT_WORK_ITEM_HANDLER	CurrMptAct;
 
 	// 1=Start, 0=Stop from UI.
 	u32			MptTestStart;
@@ -213,7 +199,7 @@ typedef struct _MPT_CONTEXT
 	u8		backup0xc50;
 	u8		backup0xc58;
 	u8		backup0xc30;
-}MPT_CONTEXT, *PMPT_CONTEXT;
+};
 
 /* E-Fuse */
 #define EFUSE_MAP_SIZE		255
@@ -303,14 +289,8 @@ struct mp_priv
 	struct __queue free_mp_xmitqueue;
 	u32 free_mp_xmitframe_cnt;
 
-	MPT_CONTEXT MptCtx;
+	struct mpt_context MptCtx;
 };
-
-typedef struct _IOCMD_STRUCT_ {
-	u8	cmdclass;
-	u16	value;
-	u8	index;
-}IOCMD_STRUCT;
 
 struct rf_reg_param {
 	u32 path;

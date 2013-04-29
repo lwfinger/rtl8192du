@@ -97,7 +97,7 @@ extern unsigned char WMM_PARA_OUI[];
 //	We just add new channel plan when the new channel plan is different from any of the following
 //	channel plan.
 //	If you just wnat to customize the acitions(scan period or join actions) about one of the channel plan,
-//	customize them in RT_CHANNEL_INFO in the RT_CHANNEL_LIST.
+//	customize them in struct rt_channel_info in the RT_CHANNEL_LIST.
 //
 enum RT_CHANNEL_DOMAIN {
 	//===== old channel plan mapping =====//
@@ -190,29 +190,25 @@ enum RT_CHANNEL_DOMAIN_5G {
 
 #define rtw_is_channel_plan_valid(chplan) (chplan<RT_CHANNEL_DOMAIN_MAX || chplan == RT_CHANNEL_DOMAIN_REALTEK_DEFINE)
 
-typedef struct _RT_CHANNEL_PLAN
-{
+struct rt_channel_plan {
 	unsigned char	Channel[MAX_CHANNEL_NUM];
 	unsigned char	Len;
-}RT_CHANNEL_PLAN, *PRT_CHANNEL_PLAN;
+};
 
-typedef struct _RT_CHANNEL_PLAN_2G
-{
+struct rt_channel_plan_2g {
 	unsigned char	Channel[MAX_CHANNEL_NUM_2G];
 	unsigned char	Len;
-}RT_CHANNEL_PLAN_2G, *PRT_CHANNEL_PLAN_2G;
+};
 
-typedef struct _RT_CHANNEL_PLAN_5G
-{
+struct rt_channel_plan_5g {
 	unsigned char	Channel[MAX_CHANNEL_NUM_5G];
 	unsigned char	Len;
-}RT_CHANNEL_PLAN_5G, *PRT_CHANNEL_PLAN_5G;
+};
 
-typedef struct _RT_CHANNEL_PLAN_MAP
-{
+struct rt_channel_plan_map {
 	unsigned char	Index2G;
 	unsigned char	Index5G;
-}RT_CHANNEL_PLAN_MAP, *PRT_CHANNEL_PLAN_MAP;
+};
 
 enum Associated_AP
 {
@@ -398,8 +394,7 @@ struct mlme_ext_info
 };
 
 // The channel information about this channel including joining, scanning, and power constraints.
-typedef struct _RT_CHANNEL_INFO
-{
+struct rt_channel_info {
 	u8				ChannelNum;		// The channel number.
 	enum RT_SCAN_TYPE	ScanType;		// Scan type such as passive or active scan.
 	//u16				ScanPeriod;		// Listen time in millisecond in this channel.
@@ -408,9 +403,9 @@ typedef struct _RT_CHANNEL_INFO
 #ifdef CONFIG_FIND_BEST_CHANNEL
 	u32				rx_count;
 #endif
-}RT_CHANNEL_INFO, *PRT_CHANNEL_INFO;
+};
 
-int rtw_ch_set_search_ch(RT_CHANNEL_INFO *ch_set, const u32 ch);
+int rtw_ch_set_search_ch(struct rt_channel_info *ch_set, const u32 ch);
 
 // P2P_MAX_REG_CLASSES - Maximum number of regulatory classes
 #define P2P_MAX_REG_CLASSES 10
@@ -460,7 +455,7 @@ struct mlme_ext_priv
 	unsigned char	cur_wireless_mode;
 
 	unsigned char	max_chan_nums;
-	RT_CHANNEL_INFO		channel_set[MAX_CHANNEL_NUM];
+	struct rt_channel_info channel_set[MAX_CHANNEL_NUM];
 	struct p2p_channels channel_list;
 	unsigned char	basicrate[NumRates];
 	unsigned char	datarate[NumRates];

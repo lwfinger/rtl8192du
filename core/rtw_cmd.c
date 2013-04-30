@@ -1012,7 +1012,7 @@ u8 rtw_createbss_cmd(struct rtw_adapter *padapter)
 	struct cmd_obj*			pcmd;
 	struct cmd_priv				*pcmdpriv=&padapter->cmdpriv;
 	struct mlme_priv			*pmlmepriv = &padapter->mlmepriv;
-	WLAN_BSSID_EX		*pdev_network = &padapter->registrypriv.dev_network;
+	struct wlan_bssid_ex *pdev_network = &padapter->registrypriv.dev_network;
 	u8	res=_SUCCESS;
 
 _func_enter_;
@@ -1034,7 +1034,7 @@ _func_enter_;
 	_rtw_init_listhead(&pcmd->list);
 	pcmd->cmdcode = _CreateBss_CMD_;
 	pcmd->parmbuf = (unsigned char *)pdev_network;
-	pcmd->cmdsz = get_WLAN_BSSID_EX_sz((WLAN_BSSID_EX*)pdev_network);
+	pcmd->cmdsz = get_wlan_bssid_ex_sz((struct wlan_bssid_ex*)pdev_network);
 	pcmd->rsp = NULL;
 	pcmd->rspsz = 0;
 
@@ -1080,7 +1080,7 @@ u8 rtw_joinbss_cmd(struct rtw_adapter *padapter, struct wlan_network* pnetwork)
 {
 	u8	*auth, res = _SUCCESS;
 	uint	t_len = 0;
-	WLAN_BSSID_EX		*psecnetwork;
+	struct wlan_bssid_ex	*psecnetwork;
 	struct cmd_obj		*pcmd;
 	struct cmd_priv		*pcmdpriv=&padapter->cmdpriv;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -1117,7 +1117,7 @@ _func_enter_;
 			sizeof (NDIS_802_11_RATES_EX)+ sizeof(WLAN_PHY_INFO)+ sizeof (u32) + MAX_IE_SZ;
 	*/
 	//for IEs is fix buf size
-	t_len = sizeof(WLAN_BSSID_EX);
+	t_len = sizeof(struct wlan_bssid_ex);
 
 
 	//for hidden ap to set fw_state here
@@ -1141,7 +1141,7 @@ _func_enter_;
 		}
 	}
 
-	psecnetwork=(WLAN_BSSID_EX *)&psecuritypriv->sec_bss;
+	psecnetwork=(struct wlan_bssid_ex *)&psecuritypriv->sec_bss;
 	if(psecnetwork==NULL)
 	{
 		if(pcmd !=NULL)
@@ -1156,7 +1156,7 @@ _func_enter_;
 
 	_rtw_memset(psecnetwork, 0, t_len);
 
-	_rtw_memcpy(psecnetwork, &pnetwork->network, get_WLAN_BSSID_EX_sz(&pnetwork->network));
+	_rtw_memcpy(psecnetwork, &pnetwork->network, get_wlan_bssid_ex_sz(&pnetwork->network));
 
 	auth=&psecuritypriv->authenticator_ie[0];
 	psecuritypriv->authenticator_ie[0]=(unsigned char)psecnetwork->IELength;
@@ -1234,7 +1234,7 @@ _func_enter_;
 	}
 	#endif
 
-	pcmd->cmdsz = get_WLAN_BSSID_EX_sz(psecnetwork);//get cmdsz before endian conversion
+	pcmd->cmdsz = get_wlan_bssid_ex_sz(psecnetwork);//get cmdsz before endian conversion
 
 	_rtw_init_listhead(&pcmd->list);
 	pcmd->cmdcode = _JoinBss_CMD_;//GEN_CMD_CODE(_JoinBss)
@@ -2617,7 +2617,7 @@ void rtw_createbss_cmd_callback(struct rtw_adapter *padapter, struct cmd_obj *pc
 	struct sta_info *psta = NULL;
 	struct wlan_network *pwlan = NULL;
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	WLAN_BSSID_EX *pnetwork = (WLAN_BSSID_EX *)pcmd->parmbuf;
+	struct wlan_bssid_ex *pnetwork = (struct wlan_bssid_ex *)pcmd->parmbuf;
 	struct wlan_network *tgt_network = &(pmlmepriv->cur_network);
 
 _func_enter_;
@@ -2688,14 +2688,14 @@ _func_enter_;
 			rtw_list_insert_tail(&(pwlan->list), &pmlmepriv->scanned_queue.queue);
 		}
 
-		pnetwork->Length = get_WLAN_BSSID_EX_sz(pnetwork);
+		pnetwork->Length = get_wlan_bssid_ex_sz(pnetwork);
 		_rtw_memcpy(&(pwlan->network), pnetwork, pnetwork->Length);
 		//pwlan->fixed = true;
 
 		//rtw_list_insert_tail(&(pwlan->list), &pmlmepriv->scanned_queue.queue);
 
 		// copy pdev_network information to	pmlmepriv->cur_network
-		_rtw_memcpy(&tgt_network->network, pnetwork, (get_WLAN_BSSID_EX_sz(pnetwork)));
+		_rtw_memcpy(&tgt_network->network, pnetwork, (get_wlan_bssid_ex_sz(pnetwork)));
 
 		// reset DSConfig
 		//tgt_network->network.Configuration.DSConfig = (u32)rtw_ch2freq(pnetwork->Configuration.DSConfig);

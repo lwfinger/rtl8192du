@@ -671,8 +671,8 @@ __inline static void set_scanned_network_val(struct mlme_priv *pmlmepriv, int va
 	spin_unlock_bh(&pmlmepriv->lock);
 }
 
-extern u16 rtw_get_capability(WLAN_BSSID_EX *bss);
-extern void rtw_update_scanned_network(struct rtw_adapter *adapter, WLAN_BSSID_EX *target);
+extern u16 rtw_get_capability(struct wlan_bssid_ex *bss);
+extern void rtw_update_scanned_network(struct rtw_adapter *adapter, struct wlan_bssid_ex *target);
 extern void rtw_disconnect_hdl_under_linked(struct rtw_adapter* adapter, struct sta_info *psta, u8 free_assoc);
 extern void rtw_generate_random_ibss(u8 *pibss);
 extern struct wlan_network* rtw_find_network(struct __queue *scanned_queue, u8 *addr);
@@ -747,7 +747,7 @@ void rtw_issue_addbareq_cmd(struct rtw_adapter *padapter, struct xmit_frame *pxm
 #endif
 
 int rtw_is_same_ibss(struct rtw_adapter *adapter, struct wlan_network *pnetwork);
-int is_same_network(WLAN_BSSID_EX *src, WLAN_BSSID_EX *dst);
+int is_same_network(struct wlan_bssid_ex *src, struct wlan_bssid_ex *dst);
 
 #ifdef CONFIG_LAYER2_ROAMING
 void _rtw_roaming(struct rtw_adapter *adapter, struct wlan_network *tgt_network);

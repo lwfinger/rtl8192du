@@ -3575,7 +3575,7 @@ SelectRTSInitialRate(
 	struct mlme_priv		*pmlmepriv = &Adapter->mlmepriv;
 	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
+	struct wlan_bssid_ex	*cur_network = &(pmlmeinfo->network);
 	struct sta_priv		*pstapriv = &Adapter->stapriv;
 	u8	bUseProtection;
 	u16	BasicRateCfg=0;
@@ -5550,7 +5550,7 @@ void UpdateHalRAMask8192DUsb(struct rtw_adapter * padapter, u32 mac_id)
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
+	struct wlan_bssid_ex	*cur_network = &(pmlmeinfo->network);
 #ifdef CONFIG_BT_COEXIST
 	struct btcoexist_priv	*pbtpriv = &(pHalData->bt_coexist);
 #endif

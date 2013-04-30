@@ -534,15 +534,6 @@ enum c2h_id_8192d {
 	MAX_C2HEVENT
 };
 
-
-//should be renamed and moved to another file
-enum INTERFACE_SELECT_8192DUSB {
-	INTF_SEL0_USB		= 0,		// USB
-	INTF_SEL1_MINICARD	= 1,		// Minicard
-	INTF_SEL2_EKB_PRO	= 2,		// Eee keyboard proprietary
-	INTF_SEL3_PRO		= 3,		// Customized proprietary
-};
-
 struct hal_data_8192du {
 	enum VERSION_8192D	VersionID;
 
@@ -574,8 +565,6 @@ struct hal_data_8192du {
 	u8	CurrentChannel;
 	u8	nCur40MhzPrimeSC;// Control channel sub-carrier
 	u16	BasicRateSet;
-
-	struct tx_power_info InterfaceSel;
 
 	//rf_ctrl
 	u8	rf_chip;

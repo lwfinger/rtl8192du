@@ -185,7 +185,7 @@ struct hal_ops {
 
 #ifdef CONFIG_ANTENNA_DIVERSITY
 	u8	(*AntDivBeforeLinkHandler)(struct rtw_adapter * Adapter);
-	void	(*AntDivCompareHandler)(struct rtw_adapter * Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src);
+	void	(*AntDivCompareHandler)(struct rtw_adapter * Adapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
 #endif
 	u8	(*interface_ps_func)(struct rtw_adapter * Adapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val);
 
@@ -371,7 +371,7 @@ void rtw_hal_dm_watchdog(struct rtw_adapter *padapter);
 
 #ifdef CONFIG_ANTENNA_DIVERSITY
 u8 rtw_hal_antdiv_before_linked(struct rtw_adapter *padapter);
-void rtw_hal_antdiv_rssi_compared(struct rtw_adapter *padapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src);
+void rtw_hal_antdiv_rssi_compared(struct rtw_adapter *padapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
 #endif
 
 #ifdef CONFIG_HOSTAPD_MLME

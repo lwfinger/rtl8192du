@@ -34,8 +34,8 @@ extern void rtw_indicate_sta_disassoc_event(struct rtw_adapter *padapter, struct
 
 void init_mlme_ap_info(struct rtw_adapter *padapter);
 void free_mlme_ap_info(struct rtw_adapter *padapter);
-void rtw_add_bcn_ie(struct rtw_adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 index, u8 *data, u8 len);
-void rtw_remove_bcn_ie(struct rtw_adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 index);
+void rtw_add_bcn_ie(struct rtw_adapter *padapter, struct wlan_bssid_ex *pnetwork, u8 index, u8 *data, u8 len);
+void rtw_remove_bcn_ie(struct rtw_adapter *padapter, struct wlan_bssid_ex *pnetwork, u8 index);
 void update_beacon(struct rtw_adapter *padapter, u8 ie_id, u8 *oui, u8 tx);
 void expire_timeout_chk(struct rtw_adapter *padapter);
 void update_sta_info_apmode(struct rtw_adapter *padapter, struct sta_info *psta);

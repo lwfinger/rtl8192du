@@ -135,7 +135,7 @@ _func_enter_;
 				// submit createbss_cmd to change to a ADHOC_MASTER
 
 				//pmlmepriv->lock has been acquired by caller...
-				WLAN_BSSID_EX    *pdev_network = &(padapter->registrypriv.dev_network);
+				struct wlan_bssid_ex    *pdev_network = &(padapter->registrypriv.dev_network);
 
 				pmlmepriv->fw_state = WIFI_ADHOC_MASTER_STATE;
 
@@ -633,7 +633,7 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtw_set_802_11_add_wep(struct rtw_adapter* padapter, NDIS_802_11_WEP *wep){
+u8 rtw_set_802_11_add_wep(struct rtw_adapter* padapter, struct ndis_802_11_wep *wep){
 
 	u8		bdefaultkey;
 	u8		btransmitkey;
@@ -740,7 +740,7 @@ _func_exit_;
 
 }
 
-u8 rtw_set_802_11_add_key(struct rtw_adapter* padapter, NDIS_802_11_KEY *key){
+u8 rtw_set_802_11_add_key(struct rtw_adapter* padapter, struct ndis_802_11_key *key){
 
 	uint	encryptionalgo;
 	u8 * pbssid;
@@ -935,8 +935,8 @@ _func_enter_;
 	{
 		u8 ret;
 		u32 keyindex;
-		u32 len = FIELD_OFFSET(NDIS_802_11_KEY, KeyMaterial) + key->KeyLength;
-		NDIS_802_11_WEP *wep = &padapter->securitypriv.ndiswep;
+		u32 len = FIELD_OFFSET(struct ndis_802_11_key, KeyMaterial) + key->KeyLength;
+		struct ndis_802_11_wep *wep = &padapter->securitypriv.ndiswep;
 
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY: +++++ WEP key +++++\n"));
 
@@ -964,12 +964,12 @@ _func_enter_;
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY: +++++ SetRSC+++++\n"));
 		if(bgroup == true)
 		{
-			NDIS_802_11_KEY_RSC keysrc=key->KeyRSC & 0x00FFFFFFFFFFFFULL;
+			unsigned long long keysrc=key->KeyRSC & 0x00FFFFFFFFFFFFULL;
 			_rtw_memcpy(&padapter->securitypriv.dot11Grprxpn, &keysrc, 8);
 		}
 		else
 		{
-			NDIS_802_11_KEY_RSC keysrc=key->KeyRSC & 0x00FFFFFFFFFFFFULL;
+			unsigned long long keysrc=key->KeyRSC & 0x00FFFFFFFFFFFFULL;
 			_rtw_memcpy(&padapter->securitypriv.dot11Grptxpn, &keysrc, 8);
 		}
 
@@ -1105,7 +1105,7 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtw_set_802_11_remove_key(struct rtw_adapter*	padapter, NDIS_802_11_REMOVE_KEY *key){
+u8 rtw_set_802_11_remove_key(struct rtw_adapter*	padapter, struct ndis_802_11_remove_key *key){
 
 	uint				encryptionalgo;
 	u8 * pbssid;
@@ -1173,7 +1173,7 @@ u16 rtw_get_cur_max_rate(struct rtw_adapter *adapter)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct registry_priv *pregistrypriv = &adapter->registrypriv;
 	struct mlme_priv	*pmlmepriv = &adapter->mlmepriv;
-	WLAN_BSSID_EX  *pcur_bss = &pmlmepriv->cur_network.network;
+	struct wlan_bssid_ex  *pcur_bss = &pmlmepriv->cur_network.network;
 #ifdef CONFIG_80211N_HT
 	struct rtw_ieee80211_ht_cap *pht_capie;
 	u8	rf_type = 0;

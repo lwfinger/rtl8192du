@@ -657,7 +657,7 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 {
 	int ret = 0;
 	u32 wep_key_idx, wep_key_len,wep_total_len;
-	NDIS_802_11_WEP	 *pwep = NULL;
+	struct ndis_802_11_wep *pwep = NULL;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
@@ -713,8 +713,8 @@ _func_enter_;
 		if (wep_key_len > 0)
 		{
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
-			wep_total_len = wep_key_len + FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial);
-			pwep =(NDIS_802_11_WEP	 *) rtw_malloc(wep_total_len);
+			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
+			pwep =(struct ndis_802_11_wep *) rtw_malloc(wep_total_len);
 			if (pwep == NULL){
 				RT_TRACE(_module_rtl871x_ioctl_os_c,_drv_err_,(" wpa_set_encryption: pwep allocate fail !!!\n"));
 				goto exit;
@@ -1049,7 +1049,7 @@ static int rtw_wx_get_name(struct net_device *dev,
 	char *p;
 	u8 ht_cap=false;
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	WLAN_BSSID_EX  *pcur_bss = &pmlmepriv->cur_network.network;
+	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
 	NDIS_802_11_RATES_EX* prates = NULL;
 
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("cmd_code=%x\n", info->cmd));
@@ -1130,7 +1130,7 @@ static int rtw_wx_get_freq(struct net_device *dev,
 {
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	WLAN_BSSID_EX  *pcur_bss = &pmlmepriv->cur_network.network;
+	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
 
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
@@ -1618,7 +1618,7 @@ static int rtw_wx_get_wap(struct net_device *dev,
 
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	WLAN_BSSID_EX  *pcur_bss = &pmlmepriv->cur_network.network;
+	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
 
 	wrqu->ap_addr.sa_family = ARPHRD_ETHER;
 
@@ -2266,7 +2266,7 @@ static int rtw_wx_get_essid(struct net_device *dev,
 	u32 len,ret = 0;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	WLAN_BSSID_EX  *pcur_bss = &pmlmepriv->cur_network.network;
+	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
 
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_wx_get_essid\n"));
 
@@ -2517,7 +2517,7 @@ static int rtw_wx_set_enc(struct net_device *dev,
 {
 	u32 key, ret = 0;
 	u32 keyindex_provided;
-	NDIS_802_11_WEP	 wep;
+	struct ndis_802_11_wep wep;
 	enum NDIS_802_11_AUTHENTICATION_MODE authmode;
 
 	struct iw_point *erq = &(wrqu->encoding);
@@ -2525,7 +2525,7 @@ static int rtw_wx_set_enc(struct net_device *dev,
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	DBG_8192D("+rtw_wx_set_enc, flags=0x%x\n", erq->flags);
 
-	_rtw_memset(&wep, 0, sizeof(NDIS_802_11_WEP));
+	_rtw_memset(&wep, 0, sizeof(struct ndis_802_11_wep));
 
 	key = erq->flags & IW_ENCODE_INDEX;
 
@@ -2599,7 +2599,7 @@ static int rtw_wx_set_enc(struct net_device *dev,
 	{
 		wep.KeyLength = erq->length <= 5 ? 5 : 13;
 
-		wep.Length = wep.KeyLength + FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial);
+		wep.Length = wep.KeyLength + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
 	}
 	else
 	{
@@ -6864,7 +6864,7 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 {
 	int ret = 0;
 	u32 wep_key_idx, wep_key_len,wep_total_len;
-	NDIS_802_11_WEP	 *pwep = NULL;
+	struct ndis_802_11_wep *pwep = NULL;
 	struct sta_info *psta = NULL, *pbcmc_sta = NULL;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
@@ -6934,8 +6934,8 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		if (wep_key_len > 0)
 		{
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
-			wep_total_len = wep_key_len + FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial);
-			pwep =(NDIS_802_11_WEP *)rtw_malloc(wep_total_len);
+			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
+			pwep =(struct ndis_802_11_wep *)rtw_malloc(wep_total_len);
 			if (pwep == NULL){
 				DBG_8192D(" r871x_set_encryption: pwep allocate fail !!!\n");
 				goto exit;
@@ -7640,8 +7640,8 @@ static int rtw_set_hidden_ssid(struct net_device *dev, struct ieee_param *param,
 	ssid_ie = rtw_get_ie(param->u.bcn_ie.buf,  WLAN_EID_SSID, &ssid_len, ie_len);
 
 	if (ssid_ie && ssid_len) {
-		WLAN_BSSID_EX *pbss_network = &mlmepriv->cur_network.network;
-		WLAN_BSSID_EX *pbss_network_ext = &mlmeinfo->network;
+		struct wlan_bssid_ex *pbss_network = &mlmepriv->cur_network.network;
+		struct wlan_bssid_ex *pbss_network_ext = &mlmeinfo->network;
 
 		_rtw_memcpy(ssid, ssid_ie+2, ssid_len);
 		ssid[ssid_len>NDIS_802_11_LENGTH_SSID?NDIS_802_11_LENGTH_SSID:ssid_len] = 0x0;

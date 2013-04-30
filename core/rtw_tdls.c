@@ -2870,7 +2870,7 @@ u32 update_mask_tdls(_adapter *padapter, struct sta_info *psta)
 	unsigned int tx_ra_bitmap=0;
 	struct ht_priv	*psta_ht = NULL;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-	WLAN_BSSID_EX *pcur_network = (WLAN_BSSID_EX *)&pmlmepriv->cur_network.network;
+	struct wlan_bssid_ex *pcur_network = (struct wlan_bssid_ex *)&pmlmepriv->cur_network.network;
 
 	psta_ht = &psta->htpriv;
 	//b/g mode ra_bitmap

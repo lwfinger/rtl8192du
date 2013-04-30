@@ -25,6 +25,7 @@
 #include <drv_types.h>
 #include <wlan_bssdef.h>
 
+typedef unsigned char   NDIS_802_11_RATES_EX[NDIS_802_11_LENGTH_RATES_EX];
 
 //	Commented by Albert 20101105
 //	Increase the SURVEY_TO value from 100 to 150  ( 100ms to 150ms )

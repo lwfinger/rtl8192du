@@ -458,8 +458,8 @@ struct mlme_ext_priv
 	unsigned char	max_chan_nums;
 	struct rt_channel_info channel_set[MAX_CHANNEL_NUM];
 	struct p2p_channels channel_list;
-	unsigned char	basicrate[NumRates];
-	unsigned char	datarate[NumRates];
+	unsigned char	basicrate[NUMRATES];
+	unsigned char	datarate[NUMRATES];
 
 	struct ss_res		sitesurvey_res;
 	struct mlme_ext_info	mlmext_info;//for sta/adhoc mode, including current scanning/connecting/connected related info.
@@ -815,10 +815,10 @@ struct cmd_hdl wlancmds[] =
 	GEN_MLME_EXT_HANDLER(0, rtw_drvextra_cmd_hdl) /*57*/
 
 	GEN_MLME_EXT_HANDLER(0, h2c_msg_hdl) /*58*/
-	GEN_MLME_EXT_HANDLER(sizeof(struct SetChannelPlan_param), set_chplan_hdl) /*59*/
-	GEN_MLME_EXT_HANDLER(sizeof(struct LedBlink_param), led_blink_hdl) /*60*/
-	GEN_MLME_EXT_HANDLER(sizeof(struct SetChannelSwitch_param), set_csa_hdl) /*61*/
-	GEN_MLME_EXT_HANDLER(sizeof(struct TDLSoption_param), tdls_hdl) /*62*/
+	GEN_MLME_EXT_HANDLER(sizeof(struct setchannelplan_param), set_chplan_hdl) /*59*/
+	GEN_MLME_EXT_HANDLER(sizeof(struct ledblink_param), led_blink_hdl) /*60*/
+	GEN_MLME_EXT_HANDLER(sizeof(struct setchannelswitch_param), set_csa_hdl) /*61*/
+	GEN_MLME_EXT_HANDLER(sizeof(struct tdlsoption_param), tdls_hdl) /*62*/
 };
 
 #endif
@@ -853,32 +853,32 @@ void rtw_fwdbg_event_callback(struct rtw_adapter *adapter , u8 *pbuf);
 
 enum rtw_c2h_event
 {
-	GEN_EVT_CODE(_Read_MACREG)=0, /*0*/
-	GEN_EVT_CODE(_Read_BBREG),
-	GEN_EVT_CODE(_Read_RFREG),
-	GEN_EVT_CODE(_Read_EEPROM),
-	GEN_EVT_CODE(_Read_EFUSE),
-	GEN_EVT_CODE(_Read_CAM),			/*5*/
-	GEN_EVT_CODE(_Get_BasicRate),
-	GEN_EVT_CODE(_Get_DataRate),
-	GEN_EVT_CODE(_Survey),	 /*8*/
-	GEN_EVT_CODE(_SurveyDone),	 /*9*/
+	GEN_EVT_CODE(_READ_MACREG)=0, /*0*/
+	GEN_EVT_CODE(_READ_BBREG),
+	GEN_EVT_CODE(_READ_RFREG),
+	GEN_EVT_CODE(_READ_EEPROM),
+	GEN_EVT_CODE(_READ_EFUSE),
+	GEN_EVT_CODE(_READ_CAM),			/*5*/
+	GEN_EVT_CODE(_GET_BASICRATE),
+	GEN_EVT_CODE(_GET_DATARATE),
+	GEN_EVT_CODE(_SURVEY),	 /*8*/
+	GEN_EVT_CODE(_SURVEYDONE),	 /*9*/
 
-	GEN_EVT_CODE(_JoinBss) , /*10*/
-	GEN_EVT_CODE(_AddSTA),
-	GEN_EVT_CODE(_DelSTA),
-	GEN_EVT_CODE(_AtimDone) ,
-	GEN_EVT_CODE(_TX_Report),
-	GEN_EVT_CODE(_CCX_Report),			/*15*/
-	GEN_EVT_CODE(_DTM_Report),
-	GEN_EVT_CODE(_TX_Rate_Statistics),
+	GEN_EVT_CODE(_JOINBSS) , /*10*/
+	GEN_EVT_CODE(_ADDSTA),
+	GEN_EVT_CODE(_DELSTA),
+	GEN_EVT_CODE(_ATIMDONE) ,
+	GEN_EVT_CODE(_TX_REPORT),
+	GEN_EVT_CODE(_CCX_REPORT),			/*15*/
+	GEN_EVT_CODE(_DTM_REPORT),
+	GEN_EVT_CODE(_TX_RATE_STATISTICS),
 	GEN_EVT_CODE(_C2HLBK),
 	GEN_EVT_CODE(_FWDBG),
-	GEN_EVT_CODE(_C2HFEEDBACK),               /*20*/
+	GEN_EVT_CODE(_C2HFEEDBACK),            /*20*/
 	GEN_EVT_CODE(_ADDBA),
 	GEN_EVT_CODE(_C2HBCN),
-	GEN_EVT_CODE(_ReportPwrState),		//filen: only for PCIE, USB
-	GEN_EVT_CODE(_CloseRF),				//filen: only for PCIE, work around ASPM
+	GEN_EVT_CODE(_REPORTPWRSTATE),		//filen: only for PCIE, USB
+	GEN_EVT_CODE(_CLOSERF),			//filen: only for PCIE, work around ASPM
 	MAX_C2HEVT
 };
 

@@ -2303,11 +2303,11 @@ static int rtw_wx_set_rate(struct net_device *dev,
 {
 	int	i, ret = 0;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-	u8	datarates[NumRates];
+	u8	datarates[NUMRATES];
 	u32	target_rate = wrqu->bitrate.value;
 	u32	fixed = wrqu->bitrate.fixed;
 	u32	ratevalue = 0;
-	 u8 mpdatarate[NumRates]={11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0xff};
+	 u8 mpdatarate[NUMRATES]={11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0xff};
 
 _func_enter_;
 
@@ -2364,15 +2364,12 @@ _func_enter_;
 
 set_rate:
 
-	for(i=0; i<NumRates; i++)
-	{
-		if (ratevalue==mpdatarate[i])
-		{
+	for (i = 0; i < NUMRATES; i++) {
+		if (ratevalue == mpdatarate[i]) {
 			datarates[i] = mpdatarate[i];
 			if (fixed == 0)
 				break;
-		}
-		else{
+		} else {
 			datarates[i] = 0xff;
 		}
 
@@ -6755,7 +6752,7 @@ static u8 set_pairwise_key(struct rtw_adapter *padapter, struct sta_info *psta)
 		goto exit;
 	}
 
-	init_h2fwcmd_w_parm_no_rsp(ph2c, psetstakey_para, _SetStaKey_CMD_);
+	init_h2fwcmd_w_parm_no_rsp(ph2c, psetstakey_para, _SETSTAKEY_CMD_);
 
 
 	psetstakey_para->algorithm = (u8)psta->dot118021XPrivacy;
@@ -6821,7 +6818,7 @@ static int set_group_key(struct rtw_adapter *padapter, u8 *key, u8 alg, int keyi
 
 	_rtw_memcpy(&(psetkeyparm->key[0]), key, keylen);
 
-	pcmd->cmdcode = _SetKey_CMD_;
+	pcmd->cmdcode = _SETKEY_CMD_;
 	pcmd->parmbuf = (u8 *)psetkeyparm;
 	pcmd->cmdsz =  (sizeof(struct setkey_parm));
 	pcmd->rsp = NULL;

@@ -27,7 +27,7 @@
 #define MIXED_PHY		2
 #define CCK_PHY		3
 
-#define NumRates	(13)
+#define NUMRATES	(13)
 
 // slot time for 11g
 #define SHORT_SLOT_TIME					9

@@ -293,8 +293,8 @@ static void init_mlme_ext_priv_value(struct rtw_adapter* padapter)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	//unsigned char default_channel_set[MAX_CHANNEL_NUM] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 0};
-	unsigned char	mixed_datarate[NumRates] = {_1M_RATE_, _2M_RATE_, _5M_RATE_, _11M_RATE_, _6M_RATE_,_9M_RATE_, _12M_RATE_, _18M_RATE_, _24M_RATE_, _36M_RATE_, _48M_RATE_, _54M_RATE_, 0xff};
-	unsigned char	mixed_basicrate[NumRates] ={_1M_RATE_, _2M_RATE_, _5M_RATE_, _11M_RATE_, _6M_RATE_, _12M_RATE_, _24M_RATE_, 0xff,};
+	unsigned char	mixed_datarate[NUMRATES] = {_1M_RATE_, _2M_RATE_, _5M_RATE_, _11M_RATE_, _6M_RATE_,_9M_RATE_, _12M_RATE_, _18M_RATE_, _24M_RATE_, _36M_RATE_, _48M_RATE_, _54M_RATE_, 0xff};
+	unsigned char	mixed_basicrate[NUMRATES] ={_1M_RATE_, _2M_RATE_, _5M_RATE_, _11M_RATE_, _6M_RATE_, _12M_RATE_, _24M_RATE_, 0xff,};
 
 	ATOMIC_SET(&pmlmeext->event_seq, 0);
 	pmlmeext->mgnt_seq = 0;//reset to zero when disconnect at client mode
@@ -309,8 +309,8 @@ static void init_mlme_ext_priv_value(struct rtw_adapter* padapter)
 
 	//_rtw_memcpy(pmlmeext->channel_set, DefaultChannelPlan[padapter->mlmepriv.ChannelPlan].Channel, DefaultChannelPlan[padapter->mlmepriv.ChannelPlan].Len);
 	//_rtw_memcpy(pmlmeext->channel_set, default_channel_set, MAX_CHANNEL_NUM);
-	_rtw_memcpy(pmlmeext->datarate, mixed_datarate, NumRates);
-	_rtw_memcpy(pmlmeext->basicrate, mixed_basicrate, NumRates);
+	_rtw_memcpy(pmlmeext->datarate, mixed_datarate, NUMRATES);
+	_rtw_memcpy(pmlmeext->basicrate, mixed_basicrate, NUMRATES);
 
 	if(pmlmeext->cur_channel > 14)
 		pmlmeext->tx_rate = IEEE80211_OFDM_RATE_6MB;
@@ -4794,7 +4794,7 @@ int _issue_probereq_p2p(struct rtw_adapter *padapter, u8 *da, int wait_ack)
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	unsigned short		*fctrl;
 	unsigned char			*mac;
-	unsigned char			bssrate[NumRates];
+	unsigned char			bssrate[NUMRATES];
 	struct xmit_priv		*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -6568,7 +6568,7 @@ int _issue_probereq(struct rtw_adapter *padapter, struct ndis_802_11_ssid *pssid
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	unsigned short		*fctrl;
 	unsigned char			*mac;
-	unsigned char			bssrate[NumRates];
+	unsigned char			bssrate[NUMRATES];
 	struct xmit_priv		*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
@@ -7038,14 +7038,14 @@ void issue_asocrsp(struct rtw_adapter *padapter, unsigned short status, struct s
 void issue_assocreq(struct rtw_adapter *padapter)
 {
 	int ret = _FAIL;
-	struct xmit_frame				*pmgntframe;
-	struct pkt_attrib				*pattrib;
-	unsigned char					*pframe, *p;
-	struct rtw_ieee80211_hdr			*pwlanhdr;
-	unsigned short				*fctrl;
-	unsigned short				val16;
-	unsigned int					i, j, ie_len, index=0;
-	unsigned char					rf_type, bssrate[NumRates], sta_bssrate[NumRates];
+	struct xmit_frame *pmgntframe;
+	struct pkt_attrib *pattrib;
+	unsigned char *pframe, *p;
+	struct rtw_ieee80211_hdr *pwlanhdr;
+	unsigned short *fctrl;
+	unsigned short val16;
+	unsigned int i, j, ie_len, index=0;
+	unsigned char rf_type, bssrate[NUMRATES], sta_bssrate[NUMRATES];
 	struct ndis_802_11_variable_ies *pIE;
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	struct xmit_priv		*pxmitpriv = &(padapter->xmitpriv);
@@ -7170,7 +7170,7 @@ void issue_assocreq(struct rtw_adapter *padapter)
 	DBG_8192D("bssrate_len = %d\n", bssrate_len);
 
 #else	// Check if the AP's supported rates are also supported by STA.
-	for (bssrate_len = 0; bssrate_len < NumRates; bssrate_len++) {
+	for (bssrate_len = 0; bssrate_len < NUMRATES; bssrate_len++) {
 		if (pmlmeinfo->network.SupportedRates[bssrate_len] == 0) break;
 
 		if (pmlmeinfo->network.SupportedRates[bssrate_len] == 0x2C) // Avoid the proprietary data rate (22Mbps) of Handlink WSG-4000 AP
@@ -9475,7 +9475,7 @@ void report_survey_event(struct rtw_adapter *padapter, union recv_frame *precv_f
 
 	_rtw_init_listhead(&pcmd_obj->list);
 
-	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
+	pcmd_obj->cmdcode = GEN_CMD_CODE(_SET_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
 	pcmd_obj->parmbuf = pevtcmd;
 
@@ -9484,7 +9484,7 @@ void report_survey_event(struct rtw_adapter *padapter, union recv_frame *precv_f
 
 	pc2h_evt_hdr = (struct C2HEvent_Header*)(pevtcmd);
 	pc2h_evt_hdr->len = sizeof(struct survey_event);
-	pc2h_evt_hdr->ID = GEN_EVT_CODE(_Survey);
+	pc2h_evt_hdr->ID = GEN_EVT_CODE(_SURVEY);
 	pc2h_evt_hdr->seq = ATOMIC_INC_RETURN(&pmlmeext->event_seq);
 
 	psurvey_evt = (struct survey_event*)(pevtcmd + sizeof(struct C2HEvent_Header));
@@ -9532,7 +9532,7 @@ void report_surveydone_event(struct rtw_adapter *padapter)
 
 	_rtw_init_listhead(&pcmd_obj->list);
 
-	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
+	pcmd_obj->cmdcode = GEN_CMD_CODE(_SET_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
 	pcmd_obj->parmbuf = pevtcmd;
 
@@ -9541,7 +9541,7 @@ void report_surveydone_event(struct rtw_adapter *padapter)
 
 	pc2h_evt_hdr = (struct C2HEvent_Header*)(pevtcmd);
 	pc2h_evt_hdr->len = sizeof(struct surveydone_event);
-	pc2h_evt_hdr->ID = GEN_EVT_CODE(_SurveyDone);
+	pc2h_evt_hdr->ID = GEN_EVT_CODE(_SURVEYDONE);
 	pc2h_evt_hdr->seq = ATOMIC_INC_RETURN(&pmlmeext->event_seq);
 
 	psurveydone_evt = (struct surveydone_event*)(pevtcmd + sizeof(struct C2HEvent_Header));
@@ -9580,7 +9580,7 @@ void report_join_res(struct rtw_adapter *padapter, int res)
 
 	_rtw_init_listhead(&pcmd_obj->list);
 
-	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
+	pcmd_obj->cmdcode = GEN_CMD_CODE(_SET_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
 	pcmd_obj->parmbuf = pevtcmd;
 
@@ -9589,7 +9589,7 @@ void report_join_res(struct rtw_adapter *padapter, int res)
 
 	pc2h_evt_hdr = (struct C2HEvent_Header*)(pevtcmd);
 	pc2h_evt_hdr->len = sizeof(struct joinbss_event);
-	pc2h_evt_hdr->ID = GEN_EVT_CODE(_JoinBss);
+	pc2h_evt_hdr->ID = GEN_EVT_CODE(_JOINBSS);
 	pc2h_evt_hdr->seq = ATOMIC_INC_RETURN(&pmlmeext->event_seq);
 
 	pjoinbss_evt = (struct joinbss_event*)(pevtcmd + sizeof(struct C2HEvent_Header));
@@ -9634,7 +9634,7 @@ void report_del_sta_event(struct rtw_adapter *padapter, unsigned char* MacAddr, 
 
 	_rtw_init_listhead(&pcmd_obj->list);
 
-	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
+	pcmd_obj->cmdcode = GEN_CMD_CODE(_SET_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
 	pcmd_obj->parmbuf = pevtcmd;
 
@@ -9643,7 +9643,7 @@ void report_del_sta_event(struct rtw_adapter *padapter, unsigned char* MacAddr, 
 
 	pc2h_evt_hdr = (struct C2HEvent_Header*)(pevtcmd);
 	pc2h_evt_hdr->len = sizeof(struct stadel_event);
-	pc2h_evt_hdr->ID = GEN_EVT_CODE(_DelSTA);
+	pc2h_evt_hdr->ID = GEN_EVT_CODE(_DELSTA);
 	pc2h_evt_hdr->seq = ATOMIC_INC_RETURN(&pmlmeext->event_seq);
 
 	pdel_sta_evt = (struct stadel_event*)(pevtcmd + sizeof(struct C2HEvent_Header));
@@ -9690,7 +9690,7 @@ void report_add_sta_event(struct rtw_adapter *padapter, unsigned char* MacAddr, 
 
 	_rtw_init_listhead(&pcmd_obj->list);
 
-	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
+	pcmd_obj->cmdcode = GEN_CMD_CODE(_SET_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
 	pcmd_obj->parmbuf = pevtcmd;
 
@@ -9699,7 +9699,7 @@ void report_add_sta_event(struct rtw_adapter *padapter, unsigned char* MacAddr, 
 
 	pc2h_evt_hdr = (struct C2HEvent_Header*)(pevtcmd);
 	pc2h_evt_hdr->len = sizeof(struct stassoc_event);
-	pc2h_evt_hdr->ID = GEN_EVT_CODE(_AddSTA);
+	pc2h_evt_hdr->ID = GEN_EVT_CODE(_ADDSTA);
 	pc2h_evt_hdr->seq = ATOMIC_INC_RETURN(&pmlmeext->event_seq);
 
 	padd_sta_evt = (struct stassoc_event*)(pevtcmd + sizeof(struct C2HEvent_Header));
@@ -10277,7 +10277,7 @@ void survey_timer_hdl(struct rtw_adapter *padapter)
 			goto exit_survey_timer_hdl;
 		}
 
-		init_h2fwcmd_w_parm_no_rsp(ph2c, psurveyPara, GEN_CMD_CODE(_SiteSurvey));
+		init_h2fwcmd_w_parm_no_rsp(ph2c, psurveyPara, GEN_CMD_CODE(_SITESURVEY));
 		rtw_enqueue_cmd(pcmdpriv, ph2c);
 	}
 
@@ -11102,7 +11102,7 @@ _func_enter_;
 	);
 	ptxBeacon_parm->network.IELength += len_diff;
 
-	init_h2fwcmd_w_parm_no_rsp(ph2c, ptxBeacon_parm, GEN_CMD_CODE(_TX_Beacon));
+	init_h2fwcmd_w_parm_no_rsp(ph2c, ptxBeacon_parm, GEN_CMD_CODE(_TX_BEACON));
 
 	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
 
@@ -12202,16 +12202,16 @@ u8 set_ch_hdl(struct rtw_adapter *padapter, u8 *pbuf)
 
 u8 set_chplan_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 {
-	struct SetChannelPlan_param *setChannelPlan_param;
+	struct setchannelplan_param *setchannelplan_param;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 
 	if(!pbuf)
 		return H2C_PARAMETERS_ERROR;
 
-	setChannelPlan_param = (struct SetChannelPlan_param *)pbuf;
+	setchannelplan_param = (struct setchannelplan_param *)pbuf;
 
-	pmlmeext->max_chan_nums = init_channel_set(padapter, setChannelPlan_param->channel_plan, pmlmeext->channel_set);
+	pmlmeext->max_chan_nums = init_channel_set(padapter, setchannelplan_param->channel_plan, pmlmeext->channel_set);
 	init_channel_list(padapter, pmlmeext->channel_set, pmlmeext->max_chan_nums, &pmlmeext->channel_list);
 
 	return	H2C_SUCCESS;
@@ -12236,8 +12236,8 @@ u8 led_blink_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 u8 set_csa_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 {
 #ifdef CONFIG_DFS
-	struct SetChannelSwitch_param *setChannelSwitch_param;
-	struct SetChannelPlan_param *setChannelPlan_param;
+	struct setchannelswitch_param *setchannelswitch_param;
+	struct setchannelplan_param *setchannelplan_param;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &pmlmeext->mlmext_info;
@@ -12247,8 +12247,8 @@ u8 set_csa_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 	if(!pbuf)
 		return H2C_PARAMETERS_ERROR;
 
-	setChannelSwitch_param = (struct SetChannelSwitch_param *)pbuf;
-	new_ch_no = setChannelSwitch_param->new_ch_no;
+	setchannelswitch_param = (struct setchannelswitch_param *)pbuf;
+	new_ch_no = setchannelswitch_param->new_ch_no;
 
 	rtw_hal_get_hwreg(padapter, HW_VAR_TXPAUSE, &gval8);
 

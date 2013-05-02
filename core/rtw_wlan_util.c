@@ -247,7 +247,7 @@ int is_basicrate(struct rtw_adapter *padapter, unsigned char rate)
 	unsigned char val;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
-	for(i = 0; i < NumRates; i++)
+	for(i = 0; i < NUMRATES; i++)
 	{
 		val = pmlmeext->basicrate[i];
 
@@ -271,7 +271,7 @@ unsigned int ratetbl2rateset(struct rtw_adapter *padapter, unsigned char *ratese
 	unsigned int	len = 0;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
-	for (i = 0; i < NumRates; i++)
+	for (i = 0; i < NUMRATES; i++)
 	{
 		rate = pmlmeext->datarate[i];
 
@@ -302,9 +302,9 @@ unsigned int ratetbl2rateset(struct rtw_adapter *padapter, unsigned char *ratese
 
 void get_rate_set(struct rtw_adapter *padapter, unsigned char *pbssrate, int *bssrate_len)
 {
-	unsigned char supportedrates[NumRates];
+	unsigned char supportedrates[NUMRATES];
 
-	_rtw_memset(supportedrates, 0, NumRates);
+	_rtw_memset(supportedrates, 0, NUMRATES);
 	*bssrate_len = ratetbl2rateset(padapter, supportedrates);
 	_rtw_memcpy(pbssrate, supportedrates, *bssrate_len);
 }
@@ -1458,7 +1458,7 @@ unsigned int update_basic_rate(unsigned char *ptn, unsigned int ptn_sz)
 	unsigned int i, num_of_rate;
 	unsigned int mask = 0;
 
-	num_of_rate = (ptn_sz > NumRates)? NumRates: ptn_sz;
+	num_of_rate = (ptn_sz > NUMRATES)? NUMRATES: ptn_sz;
 
 	for (i = 0; i < num_of_rate; i++)
 	{
@@ -1475,7 +1475,7 @@ unsigned int update_supported_rate(unsigned char *ptn, unsigned int ptn_sz)
 	unsigned int i, num_of_rate;
 	unsigned int mask = 0;
 
-	num_of_rate = (ptn_sz > NumRates)? NumRates: ptn_sz;
+	num_of_rate = (ptn_sz > NUMRATES)? NUMRATES: ptn_sz;
 
 	for (i = 0; i < num_of_rate; i++)
 	{

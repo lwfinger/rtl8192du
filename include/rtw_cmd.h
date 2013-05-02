@@ -995,7 +995,7 @@ enum rtw_h2c_cmd
 	GEN_CMD_CODE(_Write_CAM) ,
 	GEN_CMD_CODE(_setBCNITV),
 	GEN_CMD_CODE(_setMBIDCFG),
-	GEN_CMD_CODE(_JoinBss),   /*14*/
+	GEN_CMD_CODE(_JOINBSS),   /*14*/
 	GEN_CMD_CODE(_DisConnect) , /*15*/
 	GEN_CMD_CODE(_CreateBss) ,
 	GEN_CMD_CODE(_SetOpMode) ,
@@ -1043,7 +1043,7 @@ enum rtw_h2c_cmd
 	GEN_CMD_CODE(_TX_Beacon), /*55*/
 
 	GEN_CMD_CODE(_Set_MLME_EVT), /*56*/
-	GEN_CMD_CODE(_Set_Drv_Extra), /*57*/
+	GEN_CMD_CODE(_SET_DRV_EXTRA), /*57*/
 	GEN_CMD_CODE(_Set_H2C_MSG), /*58*/
 
 	GEN_CMD_CODE(_SetChannelPlan), /*59*/
@@ -1078,7 +1078,7 @@ struct _cmd_callback	rtw_cmd_callback[] =
 	{GEN_CMD_CODE(_Write_CAM),	 NULL},
 	{GEN_CMD_CODE(_setBCNITV), NULL},
 	{GEN_CMD_CODE(_setMBIDCFG), NULL},
-	{GEN_CMD_CODE(_JoinBss), &rtw_joinbss_cmd_callback},  /*14*/
+	{GEN_CMD_CODE(_JOINBSS), &rtw_joinbss_cmd_callback},  /*14*/
 	{GEN_CMD_CODE(_DisConnect), &rtw_disassoc_cmd_callback}, /*15*/
 	{GEN_CMD_CODE(_CreateBss), &rtw_createbss_cmd_callback},
 	{GEN_CMD_CODE(_SetOpMode), NULL},
@@ -1126,7 +1126,7 @@ struct _cmd_callback	rtw_cmd_callback[] =
 	{GEN_CMD_CODE(_TX_Beacon), NULL},/*55*/
 
 	{GEN_CMD_CODE(_Set_MLME_EVT), NULL},/*56*/
-	{GEN_CMD_CODE(_Set_Drv_Extra), NULL},/*57*/
+	{GEN_CMD_CODE(_SET_DRV_EXTRA), NULL},/*57*/
 	{GEN_CMD_CODE(_Set_H2C_MSG), NULL},/*58*/
 	{GEN_CMD_CODE(_SetChannelPlan), NULL},/*59*/
 	{GEN_CMD_CODE(_LedBlink), NULL},/*60*/

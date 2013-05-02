@@ -311,8 +311,8 @@ rt_rf_power_state RfOnOffDetect(IN	struct rtw_adapter * pAdapter );
 
 
 #ifdef CONFIG_LPS
-void LPS_Enter(struct rtw_adapter * padapter);
-void LPS_Leave(struct rtw_adapter * padapter);
+void rtw_lps_enter(struct rtw_adapter * padapter);
+void rtw_lps_leave(struct rtw_adapter * padapter);
 #endif
 
 #ifdef CONFIG_RESUME_IN_WORKQUEUE

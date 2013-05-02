@@ -529,7 +529,7 @@ _func_exit_;
 //	Description:
 //		Enter the leisure power save mode.
 //
-void LPS_Enter(struct rtw_adapter * padapter)
+void rtw_lps_enter(struct rtw_adapter * padapter)
 {
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
@@ -602,7 +602,7 @@ _func_exit_;
 //	Description:
 //		Leave the leisure power save mode.
 //
-void LPS_Leave(struct rtw_adapter * padapter)
+void rtw_lps_leave(struct rtw_adapter * padapter)
 {
 #define LPS_LEAVE_TIMEOUT_MS 100
 
@@ -672,7 +672,7 @@ _func_enter_;
 #endif // CONFIG_P2P_PS
 #ifdef CONFIG_LPS
 		//DBG_8192D("==> leave LPS.......\n");
-		LPS_Leave(Adapter);
+		rtw_lps_leave(Adapter);
 #endif
 	}
 	else

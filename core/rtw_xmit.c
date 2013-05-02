@@ -2498,13 +2498,7 @@ int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 			memcpy(skb->data+MACADDRLEN, GET_MY_HWADDR(padapter), MACADDRLEN);
 			padapter->scdb_entry->ageing_timer = jiffies;
 			spin_unlock_bh(&padapter->br_ext_lock);
-		}
-		else
-		//if (!priv->pmib->ethBrExtInfo.nat25_disable)
-		{
-//			if (priv->dev->br_port &&
-//				 !memcmp(skb->data+MACADDRLEN, priv->br_mac, MACADDRLEN)) {
-#if 1
+		} else {
 			if (*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_8021Q)) {
 				is_vlan_tag = 1;
 				vlan_hdr = *((unsigned short *)(skb->data+MACADDRLEN*2+2));
@@ -2519,7 +2513,7 @@ int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 
 			if (*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)) {
 				if (memcmp(padapter->scdb_mac, skb->data+MACADDRLEN, MACADDRLEN)) {
-					void *scdb_findEntry(struct rtw_adapter *priv, unsigned char *macAddr, unsigned char *ipAddr);
+					void *scdb_findEntry(struct rtw_adapter *priv, unsigned char *macaddr, unsigned char *ipAddr);
 
 					if ((padapter->scdb_entry = (struct nat25_network_db_entry *)scdb_findEntry(padapter,
 								skb->data+MACADDRLEN, skb->data+WLAN_ETHHDR_LEN+12)) != NULL) {
@@ -2541,7 +2535,6 @@ int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 				}
 			}
 			spin_unlock_bh(&padapter->br_ext_lock);
-#endif // 1
 			if (do_nat25)
 			{
 				int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method);

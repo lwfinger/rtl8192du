@@ -2216,7 +2216,7 @@ void netdev_br_init(struct net_device *netdev)
 				printk("%s()-%d: dev_get_by_name(%s) failed!", __FUNCTION__, __LINE__, CONFIG_BR_EXT_BRNAME);
 		}
 
-		adapter->ethBrExtInfo.addPPPoETag = 1;
+		adapter->eth_br_ext_info.addPPPoETag = 1;
 	}
 
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))

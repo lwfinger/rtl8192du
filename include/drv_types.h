@@ -454,7 +454,7 @@ struct rtw_adapter {
 	unsigned char			br_mac[MACADDRLEN];
 	unsigned char			br_ip[4];
 
-	struct br_ext_info		ethBrExtInfo;
+	struct br_ext_info		eth_br_ext_info;
 #endif	// CONFIG_BR_EXT
 };
 

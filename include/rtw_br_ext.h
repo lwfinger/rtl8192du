@@ -38,10 +38,10 @@ struct nat25_network_db_entry
 {
 	struct nat25_network_db_entry	*next_hash;
 	struct nat25_network_db_entry	**pprev_hash;
-	atomic_t						use_count;
-	unsigned char					macAddr[6];
-	unsigned long					ageing_timer;
-	unsigned char					networkAddr[MAX_NETWORK_ADDR_LEN];
+	atomic_t		use_count;
+	unsigned char		macaddr[6];
+	unsigned long		ageing_timer;
+	unsigned char		networkAddr[MAX_NETWORK_ADDR_LEN];
 };
 
 enum NAT25_METHOD {

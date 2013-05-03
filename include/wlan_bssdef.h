@@ -27,7 +27,7 @@
 #define NDIS_802_11_LENGTH_RATES        8
 #define NDIS_802_11_LENGTH_RATES_EX     16
 
-typedef unsigned char   NDIS_802_11_RATES_EX[NDIS_802_11_LENGTH_RATES_EX];  // Set of 16 data rates
+//typedef unsigned char   NDIS_802_11_RATES_EX[NDIS_802_11_LENGTH_RATES_EX];  // Set of 16 data rates
 
 struct ndis_802_11_ssid {
 	u32  SsidLength;
@@ -83,9 +83,9 @@ struct ndis_802_11_variable_ies {
 
 /*
 Length is the 4 bytes multiples of the sume of
-	sizeof (6 * sizeof(unsigned char)) + 2 + sizeof (struct ndis_802_11_ssid) + sizeof (u32)
+	6 * sizeof(unsigned char) + 2 + sizeof (struct ndis_802_11_ssid) + sizeof (u32)
 +   sizeof (long) + sizeof (NDIS_802_11_NETWORK_TYPE) + sizeof (struct ndis_802_11_config)
-+   sizeof (NDIS_802_11_RATES_EX) + IELength
++   NDIS_802_11_LENGTH_RATES_EX * sizeof(unsigned char) + IELength
 
 Except the IELength, all other fields are fixed length. Therefore, we can define a marco to present the
 partial sum.
@@ -233,7 +233,7 @@ struct wlan_bssid_ex {
 	enum NDIS_802_11_NETWORK_TYPE  NetworkTypeInUse;
 	struct ndis_802_11_config  Configuration;
 	enum NDIS_802_11_NETWORK_INFRASTRUCTURE  InfrastructureMode;
-	NDIS_802_11_RATES_EX  SupportedRates;
+	unsigned char SupportedRates[NDIS_802_11_LENGTH_RATES_EX];
 	struct wlan_phy_info PhyInfo;
 	u32  IELength;
 	u8  IEs[MAX_IE_SZ];	//(timestamp, beacon interval, and capability information)

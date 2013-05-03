@@ -1050,7 +1050,7 @@ static int rtw_wx_get_name(struct net_device *dev,
 	u8 ht_cap=false;
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
-	NDIS_802_11_RATES_EX* prates = NULL;
+	unsigned char prates[NDIS_802_11_LENGTH_RATES_EX] = {0};
 
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("cmd_code=%x\n", info->cmd));
 
@@ -1065,7 +1065,7 @@ static int rtw_wx_get_name(struct net_device *dev,
 			ht_cap = true;
 		}
 
-		prates = &pcur_bss->SupportedRates;
+		memcpy(prates, pcur_bss->SupportedRates, NDIS_802_11_LENGTH_RATES_EX);
 
 		if (rtw_is_cckratesonly_included((u8*)prates) == true)
 		{

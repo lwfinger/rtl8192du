@@ -1573,7 +1573,7 @@ void set_sta_rate(struct rtw_adapter *padapter, struct sta_info *psta)
 // Update RRSR and Rate for USERATE
 void update_tx_basic_rate(struct rtw_adapter *padapter, u8 wirelessmode)
 {
-	NDIS_802_11_RATES_EX	supported_rates;
+	unsigned char supported_rates[NDIS_802_11_LENGTH_RATES_EX];
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 #ifdef CONFIG_P2P
 	struct wifidirect_info*	pwdinfo = &padapter->wdinfo;

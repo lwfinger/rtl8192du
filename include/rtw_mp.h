@@ -282,7 +282,7 @@ struct mp_priv
 //	uint ForcedDataRate;
 
 	struct wlan_network mp_network;
-	unsigned char network_macaddr[ETH_ALEN];
+	NDIS_802_11_MAC_ADDRESS network_macaddr;
 
 	u8 *pallocated_mp_xmitframe_buf;
 	u8 *pmp_xmtframe_buf;

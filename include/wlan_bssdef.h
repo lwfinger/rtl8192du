@@ -27,7 +27,9 @@
 #define NDIS_802_11_LENGTH_RATES        8
 #define NDIS_802_11_LENGTH_RATES_EX     16
 
+typedef unsigned char   NDIS_802_11_MAC_ADDRESS[6];
 typedef unsigned char   NDIS_802_11_RATES_EX[NDIS_802_11_LENGTH_RATES_EX];  // Set of 16 data rates
+typedef long		NDIS_802_11_RSSI;           // in dBm
 
 struct ndis_802_11_ssid {
 	u32  SsidLength;
@@ -83,9 +85,9 @@ struct ndis_802_11_variable_ies {
 
 /*
 Length is the 4 bytes multiples of the sume of
-	ETH_ALEN + 2 + sizeof (struct ndis_802_11_ssid) + sizeof (u32)
-+   sizeof (long) + sizeof (NDIS_802_11_NETWORK_TYPE) + sizeof (struct ndis_802_11_config)
-+   sizeof (NDIS_802_11_LENGTH_RATES * sizeof(unsigned char)) + IELength
+	sizeof (NDIS_802_11_MAC_ADDRESS) + 2 + sizeof (struct ndis_802_11_ssid) + sizeof (u32)
++   sizeof (NDIS_802_11_RSSI) + sizeof (NDIS_802_11_NETWORK_TYPE) + sizeof (struct ndis_802_11_config)
++   sizeof (NDIS_802_11_RATES_EX) + IELength
 
 Except the IELength, all other fields are fixed length. Therefore, we can define a marco to present the
 partial sum.
@@ -127,7 +129,7 @@ enum NDIS_802_11_ENCRYPTION_STATUS {
 struct ndis_802_11_ai_reqfi {
     u16 Capabilities;
     u16 ListenInterval;
-    unsigned char CurrentAPAddress[ETH_ALEN];
+    NDIS_802_11_MAC_ADDRESS  CurrentAPAddress;
 };
 
 struct ndis_802_11_ai_resfi {
@@ -153,7 +155,7 @@ struct ndis_802_11_key {
     u32           Length;             // Length of this structure
     u32           KeyIndex;
     u32           KeyLength;          // length of key in bytes
-    unsigned char BSSID[ETH_ALEN];
+    NDIS_802_11_MAC_ADDRESS BSSID;
     unsigned long long KeyRSC;
     u8           KeyMaterial[32];     // variable length depending on above field
 };
@@ -161,7 +163,7 @@ struct ndis_802_11_key {
 struct ndis_802_11_remove_key {
     u32                   Length;        // Length of this structure
     u32                   KeyIndex;
-    unsigned char  BSSID[ETH_ALEN];
+    NDIS_802_11_MAC_ADDRESS BSSID;
 };
 
 struct ndis_802_11_wep {
@@ -173,7 +175,7 @@ struct ndis_802_11_wep {
 
 struct ndis_802_11_auth_req {
     u32 Length;            // Length of structure
-    unsigned char  Bssid[ETH_ALEN];
+    NDIS_802_11_MAC_ADDRESS Bssid;
     u32 Flags;
 };
 
@@ -208,7 +210,7 @@ struct ndis_802_11_test {
     u32 Type;
     union {
         struct ndis_802_11_auth_event AuthenticationEvent;
-        long RssiTrigger;
+        NDIS_802_11_RSSI RssiTrigger;
     } tt;
 };
 
@@ -225,11 +227,11 @@ struct wlan_phy_info {
 
 struct wlan_bssid_ex {
 	u32  Length;
-	unsigned char MacAddress[ETH_ALEN];
+	NDIS_802_11_MAC_ADDRESS  MacAddress;
 	u8  Reserved[2];//[0]: IS beacon frame
 	struct ndis_802_11_ssid  Ssid;
 	u32  Privacy;
-	long  Rssi;//(in dBM,raw data ,get from PHY)
+	NDIS_802_11_RSSI  Rssi;//(in dBM,raw data ,get from PHY)
 	enum NDIS_802_11_NETWORK_TYPE  NetworkTypeInUse;
 	struct ndis_802_11_config  Configuration;
 	enum NDIS_802_11_NETWORK_INFRASTRUCTURE  InfrastructureMode;
@@ -296,7 +298,7 @@ enum UAPSD_MAX_SP
 */
 
 struct pmkid_candidate {
-	unsigned char  BSSID[ETH_ALEN];
+	NDIS_802_11_MAC_ADDRESS BSSID;
 	u32 Flags;
 };
 

@@ -598,23 +598,23 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 	pattrib->ether_type = ntohs(etherhdr.h_proto);
 
 
-	_rtw_memcpy(pattrib->dst, &etherhdr.h_dest, ETH_ALEN);
-	_rtw_memcpy(pattrib->src, &etherhdr.h_source, ETH_ALEN);
+	memcpy(pattrib->dst, &etherhdr.h_dest, ETH_ALEN);
+	memcpy(pattrib->src, &etherhdr.h_source, ETH_ALEN);
 
 	pattrib->pctrl = 0;
 
 	if ((check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true) ||
 		(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true)) {
-		_rtw_memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
-		_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+		memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
+		memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 	}
 	else if (check_fwstate(pmlmepriv, WIFI_STATION_STATE)) {
-		_rtw_memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
-		_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+		memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
+		memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 	}
 	else if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
-		_rtw_memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
-		_rtw_memcpy(pattrib->ta, get_bssid(pmlmepriv), ETH_ALEN);
+		memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
+		memcpy(pattrib->ta, get_bssid(pmlmepriv), ETH_ALEN);
 	}
 
 	pattrib->pktlen = pktfile.pkt_len;
@@ -947,7 +947,7 @@ _func_enter_;
 				mic[0],mic[1],mic[2],mic[3],mic[4],mic[5],mic[6],mic[7]));
 			//add mic code  and add the mic code length in last_txcmdsz
 
-			_rtw_memcpy(payload, &(mic[0]),8);
+			memcpy(payload, &(mic[0]),8);
 			pattrib->last_txcmdsz+=8;
 
 			RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("\n ========last pkt========\n"));
@@ -1050,26 +1050,26 @@ _func_enter_;
 				ptdls_sta = rtw_get_stainfo(pstapriv, pattrib->dst);
 				if((ptdls_sta!=NULL)&&(ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE)&&(pattrib->ether_type!=0x0806)){
 					//TDLS data transfer, ToDS=0, FrDs=0
-					_rtw_memcpy(pwlanhdr->addr1, pattrib->dst, ETH_ALEN);
-					_rtw_memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
-					_rtw_memcpy(pwlanhdr->addr3, get_bssid(pmlmepriv), ETH_ALEN);
+					memcpy(pwlanhdr->addr1, pattrib->dst, ETH_ALEN);
+					memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
+					memcpy(pwlanhdr->addr3, get_bssid(pmlmepriv), ETH_ALEN);
 					direct_link=1;
 				}else{
 					// 1.Data transfer to AP
 					// 2.Arp pkt will relayed by AP
 					SetToDs(fctrl);
-					_rtw_memcpy(pwlanhdr->addr1, get_bssid(pmlmepriv), ETH_ALEN);
-					_rtw_memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
-					_rtw_memcpy(pwlanhdr->addr3, pattrib->dst, ETH_ALEN);
+					memcpy(pwlanhdr->addr1, get_bssid(pmlmepriv), ETH_ALEN);
+					memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
+					memcpy(pwlanhdr->addr3, pattrib->dst, ETH_ALEN);
 				}
 			}else
 #endif //CONFIG_TDLS
 			{
 				//Data transfer to AP
 				SetToDs(fctrl);
-				_rtw_memcpy(pwlanhdr->addr1, get_bssid(pmlmepriv), ETH_ALEN);
-				_rtw_memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
-				_rtw_memcpy(pwlanhdr->addr3, pattrib->dst, ETH_ALEN);
+				memcpy(pwlanhdr->addr1, get_bssid(pmlmepriv), ETH_ALEN);
+				memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
+				memcpy(pwlanhdr->addr3, pattrib->dst, ETH_ALEN);
 			}
 
 			if (pqospriv->qos_option)
@@ -1079,18 +1079,18 @@ _func_enter_;
 		else if ((check_fwstate(pmlmepriv,  WIFI_AP_STATE) == true) ) {
 			//to_ds = 0, fr_ds = 1;
 			SetFrDs(fctrl);
-			_rtw_memcpy(pwlanhdr->addr1, pattrib->dst, ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr2, get_bssid(pmlmepriv), ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr3, pattrib->src, ETH_ALEN);
+			memcpy(pwlanhdr->addr1, pattrib->dst, ETH_ALEN);
+			memcpy(pwlanhdr->addr2, get_bssid(pmlmepriv), ETH_ALEN);
+			memcpy(pwlanhdr->addr3, pattrib->src, ETH_ALEN);
 
 			if(psta->qos_option)
 				qos_option = true;
 		}
 		else if ((check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true) ||
 		(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true)) {
-			_rtw_memcpy(pwlanhdr->addr1, pattrib->dst, ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr3, get_bssid(pmlmepriv), ETH_ALEN);
+			memcpy(pwlanhdr->addr1, pattrib->dst, ETH_ALEN);
+			memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
+			memcpy(pwlanhdr->addr3, get_bssid(pmlmepriv), ETH_ALEN);
 
 			if(psta->qos_option)
 				qos_option = true;
@@ -1333,32 +1333,32 @@ _func_enter_;
 		case TUNNELED_PROBE_REQ:
 		case TUNNELED_PROBE_RSP:
 			SetToDs(fctrl);
-			_rtw_memcpy(pwlanhdr->addr1, get_bssid(pmlmepriv), ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr3, pattrib->dst, ETH_ALEN);
+			memcpy(pwlanhdr->addr1, get_bssid(pmlmepriv), ETH_ALEN);
+			memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
+			memcpy(pwlanhdr->addr3, pattrib->dst, ETH_ALEN);
 			break;
 		case TDLS_CHANNEL_SWITCH_REQUEST:
 		case TDLS_CHANNEL_SWITCH_RESPONSE:
 		case TDLS_PEER_PSM_RESPONSE:
 		case TDLS_PEER_TRAFFIC_RESPONSE:
-			_rtw_memcpy(pwlanhdr->addr1, pattrib->dst, ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr3, get_bssid(pmlmepriv), ETH_ALEN);
+			memcpy(pwlanhdr->addr1, pattrib->dst, ETH_ALEN);
+			memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
+			memcpy(pwlanhdr->addr3, get_bssid(pmlmepriv), ETH_ALEN);
 			tdls_seq=1;
 			break;
 		case TDLS_DISCOVERY_REQUEST:	//unicast: directly to peer sta, Bcast: via AP
 			if(_rtw_memcmp(pattrib->dst, baddr, ETH_ALEN) )
 			{
 				SetToDs(fctrl);
-				_rtw_memcpy(pwlanhdr->addr1, get_bssid(pmlmepriv), ETH_ALEN);
-				_rtw_memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
-				_rtw_memcpy(pwlanhdr->addr3, pattrib->dst, ETH_ALEN);
+				memcpy(pwlanhdr->addr1, get_bssid(pmlmepriv), ETH_ALEN);
+				memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
+				memcpy(pwlanhdr->addr3, pattrib->dst, ETH_ALEN);
 			}
 			else
 			{
-				_rtw_memcpy(pwlanhdr->addr1, pattrib->dst, ETH_ALEN);
-				_rtw_memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
-				_rtw_memcpy(pwlanhdr->addr3, get_bssid(pmlmepriv), ETH_ALEN);
+				memcpy(pwlanhdr->addr1, pattrib->dst, ETH_ALEN);
+				memcpy(pwlanhdr->addr2, pattrib->src, ETH_ALEN);
+				memcpy(pwlanhdr->addr3, get_bssid(pmlmepriv), ETH_ALEN);
 				tdls_seq=1;
 			}
 			break;
@@ -1480,7 +1480,7 @@ _func_enter_;
 			}
 		}
 
-		_rtw_memcpy(pframe, pattrib->iv, pattrib->iv_len);
+		memcpy(pframe, pattrib->iv, pattrib->iv_len);
 		pframe += pattrib->iv_len;
 
 	}
@@ -1495,7 +1495,7 @@ _func_enter_;
 
 	if ((pattrib->icv_len >0 )&& (pattrib->bswenc)) {
 		pframe += pattrib->pktlen;
-		_rtw_memcpy(pframe, pattrib->icv, pattrib->icv_len);
+		memcpy(pframe, pattrib->icv, pattrib->icv_len);
 		pframe += pattrib->icv_len;
 	}
 
@@ -1649,7 +1649,7 @@ _func_enter_;
 				}
 			}
 
-			_rtw_memcpy(pframe, pattrib->iv, pattrib->iv_len);
+			memcpy(pframe, pattrib->iv, pattrib->iv_len);
 
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_notice_,
 				 ("rtw_xmitframe_coalesce: keyid=%d pattrib->iv[3]=%.2x pframe=%.2x %.2x %.2x %.2x\n",
@@ -1681,7 +1681,7 @@ _func_enter_;
 		pframe += mem_sz;
 
 		if ((pattrib->icv_len >0 )&& (pattrib->bswenc)) {
-			_rtw_memcpy(pframe, pattrib->icv, pattrib->icv_len);
+			memcpy(pframe, pattrib->icv, pattrib->icv_len);
 			pframe += pattrib->icv_len;
 		}
 
@@ -1704,7 +1704,7 @@ _func_enter_;
 		addr = (SIZE_PTR)(pframe);
 
 		mem_start = (unsigned char *)RND4(addr) + TXDESC_OFFSET;
-		_rtw_memcpy(mem_start, pbuf_start + TXDESC_OFFSET, pattrib->hdrlen);
+		memcpy(mem_start, pbuf_start + TXDESC_OFFSET, pattrib->hdrlen);
 	}
 
 	if (xmitframe_addmic(padapter, pxmitframe) == _FAIL)

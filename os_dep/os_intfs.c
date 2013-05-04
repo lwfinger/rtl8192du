@@ -262,15 +262,15 @@ void rtw_proc_init_one(struct net_device *dev)
 
 	if (rtw_proc == NULL) {
 		if (padapter->chip_type == RTL8188C_8192C)
-			_rtw_memcpy(rtw_proc_name, RTL8192C_PROC_NAME, sizeof(RTL8192C_PROC_NAME));
+			memcpy(rtw_proc_name, RTL8192C_PROC_NAME, sizeof(RTL8192C_PROC_NAME));
 		else if (padapter->chip_type == RTL8192D)
-			_rtw_memcpy(rtw_proc_name, RTL8192D_PROC_NAME, sizeof(RTL8192D_PROC_NAME));
+			memcpy(rtw_proc_name, RTL8192D_PROC_NAME, sizeof(RTL8192D_PROC_NAME));
 		else if (padapter->chip_type == RTL8723A)
-			_rtw_memcpy(rtw_proc_name, RTW_PROC_NAME, sizeof(RTW_PROC_NAME));
+			memcpy(rtw_proc_name, RTW_PROC_NAME, sizeof(RTW_PROC_NAME));
 		else if (padapter->chip_type == RTL8188E)
-			_rtw_memcpy(rtw_proc_name, RTW_PROC_NAME, sizeof(RTW_PROC_NAME));
+			memcpy(rtw_proc_name, RTW_PROC_NAME, sizeof(RTW_PROC_NAME));
 		else
-			_rtw_memcpy(rtw_proc_name, RTW_PROC_NAME, sizeof(RTW_PROC_NAME));
+			memcpy(rtw_proc_name, RTW_PROC_NAME, sizeof(RTW_PROC_NAME));
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
 		rtw_proc = create_proc_entry(rtw_proc_name, S_IFDIR, proc_net);
@@ -685,7 +685,7 @@ _func_enter_;
 	/* registry_par->hci = (u8)hci; */
 	registry_par->network_mode  = (u8)rtw_network_mode;
 
-	_rtw_memcpy(registry_par->ssid.Ssid, "ANY", 3);
+	memcpy(registry_par->ssid.Ssid, "ANY", 3);
 	registry_par->ssid.SsidLength = 3;
 
 	registry_par->channel = (u8)rtw_channel;
@@ -802,7 +802,7 @@ static int rtw_net_set_mac_address(struct net_device *pnetdev, void *p)
 	if (padapter->bup == false)
 	{
 		/* addr->sa_data[4], addr->sa_data[5]); */
-		_rtw_memcpy(padapter->eeprompriv.mac_addr, addr->sa_data, ETH_ALEN);
+		memcpy(padapter->eeprompriv.mac_addr, addr->sa_data, ETH_ALEN);
 	}
 
 	return 0;
@@ -882,7 +882,7 @@ u16 rtw_recv_select_queue(struct sk_buff *skb)
 	u32 priority;
 	u8 *pdata = skb->data;
 
-	_rtw_memcpy(&eth_type, pdata+(ETH_ALEN<<1), 2);
+	memcpy(&eth_type, pdata+(ETH_ALEN<<1), 2);
 
 	switch (eth_type) {
 		case htons(ETH_P_IP):
@@ -1486,7 +1486,7 @@ int _netdev_vir_if_open(struct net_device *pnetdev)
 		padapter->bSurpriseRemoved = false;
 		padapter->bCardDisableWOHSM = false;
 
-		_rtw_memcpy(padapter->HalData, primary_padapter->HalData, padapter->hal_data_sz);
+		memcpy(padapter->HalData, primary_padapter->HalData, padapter->hal_data_sz);
 
 		padapter->bFWReady = primary_padapter->bFWReady;
 
@@ -1615,7 +1615,7 @@ _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,
 
 	/****** init adapter ******/
 	padapter = rtw_netdev_priv(pnetdev);
-	_rtw_memcpy(padapter, primary_padapter, sizeof(struct rtw_adapter));
+	memcpy(padapter, primary_padapter, sizeof(struct rtw_adapter));
 
 	/*  */
 	padapter->bup = false;
@@ -1679,7 +1679,7 @@ _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,
 
 	rtw_init_netdev_name(pnetdev, name);
 	/* get mac address from primary_padapter */
-	_rtw_memcpy(mac, primary_padapter->eeprompriv.mac_addr, ETH_ALEN);
+	memcpy(mac, primary_padapter->eeprompriv.mac_addr, ETH_ALEN);
 
 	if (((mac[0]== 0xff) &&(mac[1]== 0xff) && (mac[2]== 0xff) &&
 	     (mac[3]== 0xff) && (mac[4]== 0xff) &&(mac[5]== 0xff)) ||
@@ -1703,9 +1703,9 @@ _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,
 #endif
 	}
 
-	_rtw_memcpy(padapter->eeprompriv.mac_addr, mac, ETH_ALEN);
+	memcpy(padapter->eeprompriv.mac_addr, mac, ETH_ALEN);
 
-	_rtw_memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
+	memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
 
 
 	padapter->dir_dev = NULL;
@@ -1860,7 +1860,7 @@ static int _netdev_if2_open(struct net_device *pnetdev)
 		padapter->bSurpriseRemoved = false;
 		padapter->bCardDisableWOHSM = false;
 
-		_rtw_memcpy(padapter->HalData, primary_padapter->HalData, padapter->hal_data_sz);
+		memcpy(padapter->HalData, primary_padapter->HalData, padapter->hal_data_sz);
 
 		padapter->bFWReady = primary_padapter->bFWReady;
 
@@ -1990,7 +1990,7 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 
 	/****** init adapter ******/
 	padapter = rtw_netdev_priv(pnetdev);
-	_rtw_memcpy(padapter, primary_padapter, sizeof(struct rtw_adapter));
+	memcpy(padapter, primary_padapter, sizeof(struct rtw_adapter));
 
 	/*  */
 	padapter->bup = false;
@@ -2060,7 +2060,7 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 	rtw_init_netdev_name(pnetdev, name);
 
 	/* get mac address from primary_padapter */
-	_rtw_memcpy(mac, primary_padapter->eeprompriv.mac_addr, ETH_ALEN);
+	memcpy(mac, primary_padapter->eeprompriv.mac_addr, ETH_ALEN);
 
 	if (((mac[0]== 0xff) &&(mac[1]== 0xff) && (mac[2]== 0xff) &&
 	     (mac[3]== 0xff) && (mac[4]== 0xff) &&(mac[5]== 0xff)) ||
@@ -2082,10 +2082,10 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 
 	}
 
-	_rtw_memcpy(padapter->eeprompriv.mac_addr, mac, ETH_ALEN);
+	memcpy(padapter->eeprompriv.mac_addr, mac, ETH_ALEN);
 	rtw_init_wifidirect_addrs(padapter, padapter->eeprompriv.mac_addr, padapter->eeprompriv.mac_addr);
 
-	_rtw_memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
+	memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
 
 	DBG_8192D("MAC Address (if2) = %pM\n", mac);
 

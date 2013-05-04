@@ -3156,11 +3156,11 @@ _ReadMACAddress(
 	if(AutoloadFail == false  ){
 		if(pHalData->interfaceIndex == 0){
 			//change to use memcpy, in order to avoid alignment issue. Baron 2011/6/20
-			_rtw_memcpy(&pEEPROM->mac_addr, &PROMContent[EEPROM_MAC_ADDR_MAC0_92D], ETH_ALEN);
+			memcpy(&pEEPROM->mac_addr, &PROMContent[EEPROM_MAC_ADDR_MAC0_92D], ETH_ALEN);
 		}
 		else{
 			//change to use memcpy, in order to avoid alignment issue. Baron 2011/6/20
-			_rtw_memcpy(&pEEPROM->mac_addr, &PROMContent[EEPROM_MAC_ADDR_MAC1_92D], ETH_ALEN);
+			memcpy(&pEEPROM->mac_addr, &PROMContent[EEPROM_MAC_ADDR_MAC1_92D], ETH_ALEN);
 		}
 
 		if(is_broadcast_mac_addr(pEEPROM->mac_addr) || is_multicast_mac_addr(pEEPROM->mac_addr))
@@ -3173,7 +3173,7 @@ _ReadMACAddress(
 				//sMacAddr[5] = (u8)(curtime & 0xff);
 				//sMacAddr[5] = (u8)GetRandomNumber(1, 254);
 			}
-			_rtw_memcpy(pEEPROM->mac_addr, sMacAddr, ETH_ALEN);
+			memcpy(pEEPROM->mac_addr, sMacAddr, ETH_ALEN);
 		}
 	}
 	else
@@ -3186,7 +3186,7 @@ _ReadMACAddress(
 			//sMacAddr[5] = (u8)(curtime & 0xff);
 			//sMacAddr[5] = (u8)GetRandomNumber(1, 254);
 		}
-		_rtw_memcpy(pEEPROM->mac_addr, sMacAddr, ETH_ALEN);
+		memcpy(pEEPROM->mac_addr, sMacAddr, ETH_ALEN);
 	}
 
 	//NicIFSetMacAddress(Adapter, Adapter->PermanentAddress);
@@ -3417,7 +3417,7 @@ static void _ReadPROMContent(
 			ACQUIRE_GLOBAL_MUTEX(GlobalMutexForPowerAndEfuse);
 			EFUSE_ShadowMapUpdate(Adapter, EFUSE_WIFI, false);
 			RELEASE_GLOBAL_MUTEX(GlobalMutexForPowerAndEfuse);
-			_rtw_memcpy((void*)PROMContent, (void*)pEEPROM->efuse_eeprom_data, HWSET_MAX_SIZE);
+			memcpy((void*)PROMContent, (void*)pEEPROM->efuse_eeprom_data, HWSET_MAX_SIZE);
 		}
 
 		//Double check 0x8192 autoload status again
@@ -3431,7 +3431,7 @@ static void _ReadPROMContent(
 	else if ( pEEPROM->EepromOrEfuse == false)//auto load fail
 	{
 		_rtw_memset(pEEPROM->efuse_eeprom_data, 0xff, HWSET_MAX_SIZE);
-		_rtw_memcpy((void*)PROMContent, (void*)pEEPROM->efuse_eeprom_data, HWSET_MAX_SIZE);
+		memcpy((void*)PROMContent, (void*)pEEPROM->efuse_eeprom_data, HWSET_MAX_SIZE);
 	}
 
 
@@ -3595,7 +3595,7 @@ SelectRTSInitialRate(
 	if(psta->rtsen || psta->cts2self)
 		bUseProtection = true;
 
-	_rtw_memcpy(SupportRateSet, cur_network->SupportedRates, NDIS_802_11_LENGTH_RATES_EX);
+	memcpy(SupportRateSet, cur_network->SupportedRates, NDIS_802_11_LENGTH_RATES_EX);
 
 	halsetbratecfg( Adapter, SupportRateSet, &BasicRateCfg );
 

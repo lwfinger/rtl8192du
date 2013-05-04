@@ -521,11 +521,11 @@ s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 		{
 			psta_backup = pattrib->psta;
 			pattrib->psta = ptdls_sta;
-			_rtw_memcpy(ra_backup, pattrib->ra, ETH_ALEN);
-			_rtw_memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
+			memcpy(ra_backup, pattrib->ra, ETH_ALEN);
+			memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
 			rtw_issue_addbareq_cmd(padapter, pxmitframe);
 			pattrib->psta = psta_backup;
-			_rtw_memcpy(pattrib->ra, ra_backup, ETH_ALEN);
+			memcpy(pattrib->ra, ra_backup, ETH_ALEN);
 		}
 #endif //CONFIG_TDLS
 		rtw_issue_addbareq_cmd(padapter, pxmitframe);
@@ -1119,7 +1119,7 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
 	//
 	skb_put(pxmit_skb, len + TXDESC_SIZE);
 	pxmitbuf = pxmitbuf + TXDESC_SIZE;
-	_rtw_memcpy(pxmitbuf, skb->data, len);
+	memcpy(pxmitbuf, skb->data, len);
 
 	//DBG_8192D("mgnt_xmit, len=%x\n", pxmit_skb->len);
 

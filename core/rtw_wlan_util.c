@@ -306,7 +306,7 @@ void get_rate_set(struct rtw_adapter *padapter, unsigned char *pbssrate, int *bs
 
 	_rtw_memset(supportedrates, 0, NUMRATES);
 	*bssrate_len = ratetbl2rateset(padapter, supportedrates);
-	_rtw_memcpy(pbssrate, supportedrates, *bssrate_len);
+	memcpy(pbssrate, supportedrates, *bssrate_len);
 }
 
 void UpdateBrateTbl(
@@ -591,7 +591,7 @@ __inline u8 *get_my_bssid(struct wlan_bssid_ex *pnetwork)
 u16 get_beacon_interval(struct wlan_bssid_ex *bss)
 {
 	unsigned short val;
-	_rtw_memcpy((unsigned char *)&val, rtw_get_beacon_interval_from_ie(bss->IEs), 2);
+	memcpy((unsigned char *)&val, rtw_get_beacon_interval_from_ie(bss->IEs), 2);
 
 	return le16_to_cpu(val);
 
@@ -852,7 +852,7 @@ int WMM_param_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_
 	}
 
 	pmlmeinfo->WMM_enable = 1;
-	_rtw_memcpy(&(pmlmeinfo->WMM_param), (pIE->data + 6), sizeof(struct WMM_para_element));
+	memcpy(&(pmlmeinfo->WMM_param), (pIE->data + 6), sizeof(struct WMM_para_element));
 	return true;
 
 	/*if (pregpriv->wifi_spec == 1)
@@ -865,7 +865,7 @@ int WMM_param_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_
 		else
 		{
 			pmlmeinfo->WMM_enable = 1;
-			_rtw_rtw_memcpy(&(pmlmeinfo->WMM_param), (pIE->data + 6), sizeof(struct WMM_para_element));
+			_rtwmemcpy(&(pmlmeinfo->WMM_param), (pIE->data + 6), sizeof(struct WMM_para_element));
 			return true;
 		}
 	}
@@ -1160,7 +1160,7 @@ void HT_info_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_i
 		return;
 
 	pmlmeinfo->HT_info_enable = 1;
-	_rtw_memcpy(&(pmlmeinfo->HT_info), pIE->data, pIE->Length);
+	memcpy(&(pmlmeinfo->HT_info), pIE->data, pIE->Length);
 
 	return;
 }
@@ -1210,7 +1210,7 @@ void ERP_IE_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_ie
 		return;
 
 	pmlmeinfo->ERP_enable = 1;
-	_rtw_memcpy(&(pmlmeinfo->ERP_IE), pIE->data, pIE->Length);
+	memcpy(&(pmlmeinfo->ERP_IE), pIE->data, pIE->Length);
 }
 
 void VCS_update(struct rtw_adapter *padapter, struct sta_info *psta)
@@ -1336,7 +1336,7 @@ void process_csa_ie(struct rtw_adapter *padapter, u8 *pframe, uint pkt_len)
 		switch (pIE->ElementID)
 		{
 			case _CH_SWTICH_ANNOUNCE_:
-				_rtw_memcpy(&new_ch_no, pIE->data+1, 1);
+				memcpy(&new_ch_no, pIE->data+1, 1);
 				rtw_set_csa_cmd(padapter, new_ch_no);
 				break;
 
@@ -1478,9 +1478,7 @@ unsigned int update_supported_rate(unsigned char *ptn, unsigned int ptn_sz)
 	num_of_rate = (ptn_sz > NUMRATES)? NUMRATES: ptn_sz;
 
 	for (i = 0; i < num_of_rate; i++)
-	{
 		mask |= 0x1 << wifirate2_ratetbl_inx(*(ptn + i));
-	}
 
 	return mask;
 }
@@ -1596,11 +1594,11 @@ void update_tx_basic_rate(struct rtw_adapter *padapter, u8 wirelessmode)
 		wirelessmode &= ~(WIRELESS_11B);
 
 	if ((wirelessmode & WIRELESS_11B) && (wirelessmode == WIRELESS_11B)) {
-		_rtw_memcpy(supported_rates, rtw_basic_rate_cck, 4);
+		memcpy(supported_rates, rtw_basic_rate_cck, 4);
 	} else if (wirelessmode & WIRELESS_11B) {
-		_rtw_memcpy(supported_rates, rtw_basic_rate_mix, 7);
+		memcpy(supported_rates, rtw_basic_rate_mix, 7);
 	} else {
-		_rtw_memcpy(supported_rates, rtw_basic_rate_ofdm, 3);
+		memcpy(supported_rates, rtw_basic_rate_ofdm, 3);
 	}
 
 	if (wirelessmode & WIRELESS_11B)
@@ -1874,11 +1872,11 @@ void update_bmc_sta_support_rate(struct rtw_adapter *padapter, u32 mac_id)
 	if(pmlmeext->cur_wireless_mode & WIRELESS_11B)
 	{
 		// Only B, B/G, and B/G/N AP could use CCK rate
-		_rtw_memcpy((pmlmeinfo->FW_sta_info[mac_id].SupportedRates), rtw_basic_rate_cck, 4);
+		memcpy((pmlmeinfo->FW_sta_info[mac_id].SupportedRates), rtw_basic_rate_cck, 4);
 	}
 	else
 	{
-		_rtw_memcpy((pmlmeinfo->FW_sta_info[mac_id].SupportedRates), rtw_basic_rate_ofdm, 3);
+		memcpy((pmlmeinfo->FW_sta_info[mac_id].SupportedRates), rtw_basic_rate_ofdm, 3);
 	}
 }
 
@@ -1896,14 +1894,12 @@ int update_sta_support_rate(struct rtw_adapter *padapter, u8* pvar_ie, uint var_
 		return _FAIL;
 	}
 
-	_rtw_memcpy(pmlmeinfo->FW_sta_info[cam_idx].SupportedRates, pIE->data, ie_len);
+	memcpy(pmlmeinfo->FW_sta_info[cam_idx].SupportedRates, pIE->data, ie_len);
 	supportRateNum = ie_len;
 
 	pIE = (struct ndis_802_11_variable_ies *)rtw_get_ie(pvar_ie, _EXT_SUPPORTEDRATES_IE_, &ie_len, var_ie_len);
 	if (pIE)
-	{
-		_rtw_memcpy((pmlmeinfo->FW_sta_info[cam_idx].SupportedRates + supportRateNum), pIE->data, ie_len);
-	}
+		memcpy((pmlmeinfo->FW_sta_info[cam_idx].SupportedRates + supportRateNum), pIE->data, ie_len);
 
 	return _SUCCESS;
 

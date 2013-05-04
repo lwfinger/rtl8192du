@@ -341,7 +341,6 @@ extern void	_rtw_mfree(u8 *pbuf, u32 sz);
 #define rtw_mfree(pbuf, sz)		_rtw_mfree((pbuf), (sz))
 #endif
 
-extern void	_rtw_memcpy(void* dec, void* sour, u32 sz);
 extern int	_rtw_memcmp(void *dst, void *src, u32 sz);
 extern void	_rtw_memset(void *pbuf, int c, u32 sz);
 

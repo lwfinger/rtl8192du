@@ -179,7 +179,7 @@ _func_enter_;
 			case 1:
 			{
 				BoxContent[0] &= ~(BIT7);
-				_rtw_memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex, 1);
+				memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex, 1);
 				//PlatformEFIOWrite4Byte(Adapter, BOXReg, *((pu4Byte)BoxContent));
 				//For Endian Free.
 				for(idx= 0; idx < 4; idx++)
@@ -191,7 +191,7 @@ _func_enter_;
 			case 2:
 			{
 				BoxContent[0] &= ~(BIT7);
-				_rtw_memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex, 2);
+				memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex, 2);
 				//PlatformEFIOWrite4Byte(Adapter, BOXReg, *((pu4Byte)BoxContent));
 				for(idx=0; idx < 4; idx++)
 				{
@@ -202,7 +202,7 @@ _func_enter_;
 			case 3:
 			{
 				BoxContent[0] &= ~(BIT7);
-				_rtw_memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex, 3);
+				memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex, 3);
 				//PlatformEFIOWrite4Byte(Adapter, BOXReg, *((pu4Byte)BoxContent));
 				for(idx = 0; idx < 4 ; idx++)
 				{
@@ -213,8 +213,8 @@ _func_enter_;
 			case 4:
 			{
 				BoxContent[0] |= (BIT7);
-				_rtw_memcpy((u8 *)(BoxExtContent), pCmdBuffer+BufIndex, 2);
-				_rtw_memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex+2, 2);
+				memcpy((u8 *)(BoxExtContent), pCmdBuffer+BufIndex, 2);
+				memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex+2, 2);
 				//PlatformEFIOWrite2Byte(Adapter, BOXExtReg, *((pu2Byte)BoxExtContent));
 				//PlatformEFIOWrite4Byte(Adapter, BOXReg, *((pu4Byte)BoxContent));
 				for(idx = 0 ; idx < 2 ; idx ++)
@@ -230,8 +230,8 @@ _func_enter_;
 			case 5:
 			{
 				BoxContent[0] |= (BIT7);
-				_rtw_memcpy((u8 *)(BoxExtContent), pCmdBuffer+BufIndex, 2);
-				_rtw_memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex+2, 3);
+				memcpy((u8 *)(BoxExtContent), pCmdBuffer+BufIndex, 2);
+				memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex+2, 3);
 				//PlatformEFIOWrite2Byte(Adapter, BOXExtReg, *((pu2Byte)BoxExtContent));
 				//PlatformEFIOWrite4Byte(Adapter, BOXReg, *((pu4Byte)BoxContent));
 				for(idx = 0 ; idx < 2 ; idx ++)
@@ -288,7 +288,7 @@ FillH2CCmd92D(
 	}
 
 	_rtw_memset(tmpCmdBuf, 0, 8);
-	_rtw_memcpy(tmpCmdBuf, pCmdBuffer, CmdLen);
+	memcpy(tmpCmdBuf, pCmdBuffer, CmdLen);
 
 	_FillH2CCmd92D(Adapter, ElementID, CmdLen, (u8 *)&tmpCmdBuf);
 
@@ -325,7 +325,7 @@ _func_enter_;
 
 	_rtw_memset(buf, 0, 5);
 	mask = cpu_to_le32( mask );
-	_rtw_memcpy(buf, &mask, 4);
+	memcpy(buf, &mask, 4);
 	buf[4]  = arg;
 
 	FillH2CCmd92D(padapter, H2C_RA_MASK, 5, buf);
@@ -406,9 +406,9 @@ void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	fctrl = &(pwlanhdr->frame_ctl);
 	*(fctrl) = 0;
 
-	_rtw_memcpy(pwlanhdr->addr1, bc_addr, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(cur_network), ETH_ALEN);
+	memcpy(pwlanhdr->addr1, bc_addr, ETH_ALEN);
+	memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pwlanhdr->addr3, get_my_bssid(cur_network), ETH_ALEN);
 
 	SetSeqNum(pwlanhdr, 0/*pmlmeext->mgnt_seq*/);
 
@@ -422,13 +422,13 @@ void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	pktlen += 8;
 
 	// beacon interval: 2 bytes
-	_rtw_memcpy(pframe, (unsigned char *)(rtw_get_beacon_interval_from_ie(cur_network->IEs)), 2);
+	memcpy(pframe, (unsigned char *)(rtw_get_beacon_interval_from_ie(cur_network->IEs)), 2);
 
 	pframe += 2;
 	pktlen += 2;
 
 	// capability info: 2 bytes
-	_rtw_memcpy(pframe, (unsigned char *)(rtw_get_capability_from_ie(cur_network->IEs)), 2);
+	memcpy(pframe, (unsigned char *)(rtw_get_capability_from_ie(cur_network->IEs)), 2);
 
 	pframe += 2;
 	pktlen += 2;
@@ -438,7 +438,7 @@ void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	{
 		DBG_8192D("ie len=%u\n", cur_network->IELength);
 		pktlen += cur_network->IELength - sizeof(struct ndis_802_11_fixed_ies);
-		_rtw_memcpy(pframe, cur_network->IEs+sizeof(struct ndis_802_11_fixed_ies), pktlen);
+		memcpy(pframe, cur_network->IEs+sizeof(struct ndis_802_11_fixed_ies), pktlen);
 
 		goto _ConstructBeacon;
 	}
@@ -513,10 +513,10 @@ void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	SetDuration(pframe, (pmlmeinfo->aid| 0xc000));
 
 	// BSSID.
-	_rtw_memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+	memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
 
 	// TA.
-	_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
 	*pLength = 16;
 }
@@ -547,21 +547,21 @@ void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pL
 	{
 		case NDIS802_11INFRA:
 			SetToDs(fctrl);
-			_rtw_memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr3, StaAddr, ETH_ALEN);
+			memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+			memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+			memcpy(pwlanhdr->addr3, StaAddr, ETH_ALEN);
 			break;
 		case NDIS802_11APMODE:
 			SetFrDs(fctrl);
-			_rtw_memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr2, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr3, myid(&(padapter->eeprompriv)), ETH_ALEN);
+			memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
+			memcpy(pwlanhdr->addr2, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+			memcpy(pwlanhdr->addr3, myid(&(padapter->eeprompriv)), ETH_ALEN);
 			break;
 		case NDIS802_11IBSS:
 		default:
-			_rtw_memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+			memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
+			memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+			memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
 			break;
 	}
 
@@ -596,9 +596,9 @@ void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u
 
 	fctrl = &(pwlanhdr->frame_ctl);
 	*(fctrl) = 0;
-	_rtw_memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, mac, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, bssid, ETH_ALEN);
+	memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
+	memcpy(pwlanhdr->addr2, mac, ETH_ALEN);
+	memcpy(pwlanhdr->addr3, bssid, ETH_ALEN);
 
 	SetSeqNum(pwlanhdr, 0);
 	SetFrameSubType(fctrl, WIFI_PROBERSP);
@@ -609,7 +609,7 @@ void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u
 	if(cur_network->IELength>MAX_IE_SZ)
 		return;
 
-	_rtw_memcpy(pframe, cur_network->IEs, cur_network->IELength);
+	memcpy(pframe, cur_network->IEs, cur_network->IELength);
 	pframe += cur_network->IELength;
 	pktlen += cur_network->IELength;
 
@@ -807,7 +807,7 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 	update_mgntframe_attrib(Adapter, pattrib);
 	pattrib->qsel = 0x10;
 	pattrib->pktlen = pattrib->last_txcmdsz = TotalPacketLen - TxDescLen;
-	_rtw_memcpy(pmgntframe->buf_addr, ReservedPagePacket, TotalPacketLen);
+	memcpy(pmgntframe->buf_addr, ReservedPagePacket, TotalPacketLen);
 
 	rtw_hal_mgnt_xmit(Adapter, pmgntframe);
 

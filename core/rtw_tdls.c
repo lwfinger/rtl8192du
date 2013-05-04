@@ -108,9 +108,9 @@ void issue_nulldata_to_TDLS_peer_STA(_adapter *padapter, struct sta_info *ptdls_
 		SetPwrMgt(fctrl);
 	}
 
-	_rtw_memcpy(pwlanhdr->addr1, ptdls_sta->hwaddr, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+	memcpy(pwlanhdr->addr1, ptdls_sta->hwaddr, ETH_ALEN);
+	memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
 
 	ptdls_sta->sta_xmitpriv.txseq_tid[pattrib->priority]++;
 	ptdls_sta->sta_xmitpriv.txseq_tid[pattrib->priority] &= 0xFFF;
@@ -307,7 +307,7 @@ void rtw_tdls_process_ht_cap(_adapter *adapter, struct sta_info *ptdls_sta, u8 *
 
 		ptdls_sta->flags |= WLAN_STA_WME;
 
-		_rtw_memcpy(&ptdls_sta->htpriv.ht_cap, data, sizeof(struct rtw_ieee80211_ht_cap));
+		memcpy(&ptdls_sta->htpriv.ht_cap, data, sizeof(struct rtw_ieee80211_ht_cap));
 
 	} else
 		ptdls_sta->flags &= ~WLAN_STA_HT;
@@ -373,14 +373,14 @@ u8 *rtw_tdls_set_ht_cap(_adapter *padapter, u8 *pframe, struct pkt_attrib *pattr
 	{
 		case RF_1T1R:
 			ht_capie.cap_info |= 0x0100;//RX STBC One spatial stream
-			_rtw_memcpy(ht_capie.supp_mcs_set, MCS_rate_1R, 16);
+			memcpy(ht_capie.supp_mcs_set, MCS_rate_1R, 16);
 			break;
 
 		case RF_2T2R:
 		case RF_1T2R:
 		default:
 			ht_capie.cap_info|= 0x0200;//RX STBC two spatial stream
-			_rtw_memcpy(ht_capie.supp_mcs_set, MCS_rate_2R, 16);
+			memcpy(ht_capie.supp_mcs_set, MCS_rate_2R, 16);
 			break;
 	}
 
@@ -439,7 +439,7 @@ void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 		rtw_get_wfd_attr_content( wfd_ie, wfd_ielen, WFD_ATTR_LOCAL_IP_ADDR, attr_content, &attr_contentlen);
 		if ( attr_contentlen )
 		{
-			_rtw_memcpy(ptdlsinfo->wfd_info->peer_ip_address, ( attr_content + 1 ), 4);
+			memcpy(ptdlsinfo->wfd_info->peer_ip_address, ( attr_content + 1 ), 4);
 			DBG_871X( "[%s] Peer IP = %02u.%02u.%02u.%02u \n", __FUNCTION__,
 				ptdlsinfo->wfd_info->peer_ip_address[0], ptdlsinfo->wfd_info->peer_ip_address[1],
 				ptdlsinfo->wfd_info->peer_ip_address[2], ptdlsinfo->wfd_info->peer_ip_address[3]
@@ -471,12 +471,12 @@ void issue_tunneled_probe_req(_adapter *padapter)
 	pattrib->ether_type = 0x890d;
 	pattrib->pctrl =0;
 
-	_rtw_memcpy(pattrib->dst, baddr, ETH_ALEN);
+	memcpy(pattrib->dst, baddr, ETH_ALEN);
 
-	_rtw_memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
-	_rtw_memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 	update_tdls_attrib(padapter, pattrib);
 	pattrib->qsel=pattrib->priority;
@@ -514,12 +514,12 @@ void issue_tunneled_probe_rsp(_adapter *padapter, union recv_frame *precv_frame)
 	pattrib->ether_type = 0x890d;
 	pattrib->pctrl =0;
 
-	_rtw_memcpy(pattrib->dst, rx_pkt_pattrib->src, ETH_ALEN);
+	memcpy(pattrib->dst, rx_pkt_pattrib->src, ETH_ALEN);
 
-	_rtw_memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
-	_rtw_memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 	update_tdls_attrib(padapter, pattrib);
 	pattrib->qsel=pattrib->priority;
@@ -563,11 +563,11 @@ void issue_tdls_setup_req(_adapter *padapter, u8 *mac_addr)
 	pattrib->ether_type = 0x890d;
 	pattrib->pctrl =0;
 
-	_rtw_memcpy(pattrib->dst, mac_addr, ETH_ALEN);
-	_rtw_memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->dst, mac_addr, ETH_ALEN);
+	memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
-	_rtw_memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 	update_tdls_attrib(padapter, pattrib);
 
@@ -646,11 +646,11 @@ void issue_tdls_teardown(_adapter *padapter, u8 *mac_addr)
 	pattrib->ether_type = 0x890d;
 	pattrib->pctrl =0;
 
-	_rtw_memcpy(pattrib->dst, mac_addr, ETH_ALEN);
-	_rtw_memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->dst, mac_addr, ETH_ALEN);
+	memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
-	_rtw_memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 	update_tdls_attrib(padapter, pattrib);
 	pattrib->qsel=pattrib->priority;
@@ -701,14 +701,14 @@ void issue_tdls_dis_req(_adapter *padapter, u8 *mac_addr)
 	pattrib->pctrl =0;
 
 	if(mac_addr == NULL)
-		_rtw_memcpy(pattrib->dst, baddr, ETH_ALEN);
+		memcpy(pattrib->dst, baddr, ETH_ALEN);
 	else
-		_rtw_memcpy(pattrib->dst, mac_addr, ETH_ALEN);
+		memcpy(pattrib->dst, mac_addr, ETH_ALEN);
 
-	_rtw_memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
-	_rtw_memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 	update_tdls_attrib(padapter, pattrib);
 	pattrib->qsel=pattrib->priority;
@@ -746,11 +746,11 @@ void issue_tdls_setup_rsp(_adapter *padapter, union recv_frame *precv_frame)
 	pattrib->ether_type = 0x890d;
 	pattrib->pctrl =0;
 
-	_rtw_memcpy(pattrib->dst, rx_pkt_pattrib->src, ETH_ALEN);
-	_rtw_memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->dst, rx_pkt_pattrib->src, ETH_ALEN);
+	memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
-	_rtw_memcpy(pattrib->ra, rx_pkt_pattrib->bssid, ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, rx_pkt_pattrib->bssid, ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 	update_tdls_attrib(padapter, pattrib);
 	pattrib->qsel=pattrib->priority;
@@ -789,11 +789,11 @@ void issue_tdls_setup_cfm(_adapter *padapter, union recv_frame *precv_frame)
 	pattrib->ether_type = 0x890d;
 	pattrib->pctrl =0;
 
-	_rtw_memcpy(pattrib->dst, rx_pkt_pattrib->src, ETH_ALEN);
-	_rtw_memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->dst, rx_pkt_pattrib->src, ETH_ALEN);
+	memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
-	_rtw_memcpy(pattrib->ra, rx_pkt_pattrib->bssid, ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, rx_pkt_pattrib->bssid, ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 	update_tdls_attrib(padapter, pattrib);
 	pattrib->qsel=pattrib->priority;
@@ -842,14 +842,14 @@ void issue_tdls_dis_rsp(_adapter *padapter, union recv_frame *precv_frame, u8 di
 	*(fctrl) = 0;
 
 	//	unicast probe request frame
-	_rtw_memcpy(pwlanhdr->addr1, rx_pkt_pattrib->src, ETH_ALEN);
-	_rtw_memcpy(pattrib->dst, pwlanhdr->addr1, ETH_ALEN);
+	memcpy(pwlanhdr->addr1, rx_pkt_pattrib->src, ETH_ALEN);
+	memcpy(pattrib->dst, pwlanhdr->addr1, ETH_ALEN);
 
-	_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
-	_rtw_memcpy(pattrib->src, pwlanhdr->addr2, ETH_ALEN);
+	memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->src, pwlanhdr->addr2, ETH_ALEN);
 
-	_rtw_memcpy(pwlanhdr->addr3, rx_pkt_pattrib->bssid, ETH_ALEN);
-	_rtw_memcpy(pattrib->ra, pwlanhdr->addr3, ETH_ALEN);
+	memcpy(pwlanhdr->addr3, rx_pkt_pattrib->bssid, ETH_ALEN);
+	memcpy(pattrib->ra, pwlanhdr->addr3, ETH_ALEN);
 
 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
 	pmlmeext->mgnt_seq++;
@@ -889,11 +889,11 @@ void issue_tdls_peer_traffic_indication(_adapter *padapter, struct sta_info *ptd
 	pattrib->ether_type = 0x890d;
 	pattrib->pctrl =0;
 
-	_rtw_memcpy(pattrib->dst, ptdls_sta->hwaddr, ETH_ALEN);
-	_rtw_memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->dst, ptdls_sta->hwaddr, ETH_ALEN);
+	memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
-	_rtw_memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 	//for tdls; pattrib->nr_frags is used to fill dialogtoken
 	ptdls_sta->dialog = dialogtoken;
@@ -934,11 +934,11 @@ void issue_tdls_ch_switch_req(_adapter *padapter, u8 *mac_addr)
 	pattrib->ether_type = 0x890d;
 	pattrib->pctrl =0;
 
-	_rtw_memcpy(pattrib->dst, mac_addr, ETH_ALEN);
-	_rtw_memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->dst, mac_addr, ETH_ALEN);
+	memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
-	_rtw_memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 	update_tdls_attrib(padapter, pattrib);
 
@@ -975,11 +975,11 @@ void issue_tdls_ch_switch_rsp(_adapter *padapter, u8 *mac_addr)
 	pattrib->ether_type = 0x890d;
 	pattrib->pctrl =0;
 
-	_rtw_memcpy(pattrib->dst, mac_addr, ETH_ALEN);
-	_rtw_memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pattrib->dst, mac_addr, ETH_ALEN);
+	memcpy(pattrib->src, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
-	_rtw_memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 	update_tdls_attrib(padapter, pattrib);
 
@@ -1023,14 +1023,14 @@ int On_TDLS_Dis_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 		{
 			if( _rtw_memcmp(ptdlsinfo->ss_record.macaddr, empty_addr, ETH_ALEN) )
 			{
-				_rtw_memcpy(ptdlsinfo->ss_record.macaddr, psa, ETH_ALEN);
+				memcpy(ptdlsinfo->ss_record.macaddr, psa, ETH_ALEN);
 				ptdlsinfo->ss_record.RxPWDBAll = pattrib->RxPWDBAll;
 			}
 			else
 			{
 				if( ptdlsinfo->ss_record.RxPWDBAll < pattrib->RxPWDBAll )
 				{
-					_rtw_memcpy(ptdlsinfo->ss_record.macaddr, psa, ETH_ALEN);
+					memcpy(ptdlsinfo->ss_record.macaddr, psa, ETH_ALEN);
 					ptdlsinfo->ss_record.RxPWDBAll = pattrib->RxPWDBAll;
 				}
 			}
@@ -1156,7 +1156,7 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 			switch (pIE->ElementID)
 			{
 				case _SUPPORTEDRATES_IE_:
-					_rtw_memcpy(supportRate, pIE->data, pIE->Length);
+					memcpy(supportRate, pIE->data, pIE->Length);
 					supportRateNum = pIE->Length;
 					break;
 				case _COUNTRY_IE_:
@@ -1164,7 +1164,7 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 				case _EXT_SUPPORTEDRATES_IE_:
 					if(supportRateNum<=sizeof(supportRate))
 					{
-						_rtw_memcpy(supportRate+supportRateNum, pIE->data, pIE->Length);
+						memcpy(supportRate+supportRateNum, pIE->data, pIE->Length);
 						supportRateNum += pIE->Length;
 					}
 					break;
@@ -1176,7 +1176,7 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 						prsnie=(u8*)pIE;
 						//check whether initiator STA has CCMP pairwise_cipher.
 						ppairwise_cipher=prsnie+10;
-						_rtw_memcpy(&pairwise_count, (u16*)(ppairwise_cipher-2), 1);
+						memcpy(&pairwise_count, (u16*)(ppairwise_cipher-2), 1);
 						for(k=0;k<pairwise_count;k++){
 							if(_rtw_memcmp( ppairwise_cipher+4*k, RSN_CIPHER_SUITE_CCMP, 4)==true)
 								ccmp_have=1;
@@ -1193,7 +1193,7 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 					break;
 				case _FTIE_:
 					if(prx_pkt_attrib->encrypt)
-						_rtw_memcpy(SNonce, (ptr+j+52), 32);
+						memcpy(SNonce, (ptr+j+52), 32);
 					break;
 				case _TIMEOUT_ITVL_IE_:
 					if(prx_pkt_attrib->encrypt)
@@ -1223,7 +1223,7 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 
 		//update station supportRate
 		ptdls_sta->bssratelen = supportRateNum;
-		_rtw_memcpy(ptdls_sta->bssrateset, supportRate, supportRateNum);
+		memcpy(ptdls_sta->bssrateset, supportRate, supportRateNum);
 
 		//check status code
 		//if responder STA has/hasn't security on AP, but request hasn't/has RSNIE, it should reject
@@ -1252,8 +1252,8 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 
 		ptdls_sta->tdls_sta_state|= TDLS_INITIATOR_STATE;
 		if(prx_pkt_attrib->encrypt){
-			_rtw_memcpy(ptdls_sta->SNonce, SNonce, 32);
-			_rtw_memcpy(&(ptdls_sta->TDLS_PeerKey_Lifetime), timeout_interval, 4);
+			memcpy(ptdls_sta->SNonce, SNonce, 32);
+			memcpy(&(ptdls_sta->TDLS_PeerKey_Lifetime), timeout_interval, 4);
 		}
 		spin_lock_bh(&(pstapriv->sta_hash_lock));
 		if(!(ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE))
@@ -1326,7 +1326,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 			-1
 			-FIXED_IE;
 
-	_rtw_memcpy(&stat_code, ptr+2, 2);
+	memcpy(&stat_code, ptr+2, 2);
 
 	if(stat_code!=0)
 	{
@@ -1345,7 +1345,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 		switch (pIE->ElementID)
 		{
 			case _SUPPORTEDRATES_IE_:
-				_rtw_memcpy(supportRate, pIE->data, pIE->Length);
+				memcpy(supportRate, pIE->data, pIE->Length);
 				supportRateNum = pIE->Length;
 				break;
 			case _COUNTRY_IE_:
@@ -1353,7 +1353,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 			case _EXT_SUPPORTEDRATES_IE_:
 				if(supportRateNum<=sizeof(supportRate))
 				{
-					_rtw_memcpy(supportRate+supportRateNum, pIE->data, pIE->Length);
+					memcpy(supportRate+supportRateNum, pIE->data, pIE->Length);
 					supportRateNum += pIE->Length;
 				}
 				break;
@@ -1363,7 +1363,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 				prsnie=(u8*)pIE;
 				//check whether responder STA has CCMP pairwise_cipher.
 				ppairwise_cipher=prsnie+10;
-				_rtw_memcpy(&pairwise_count, (u16*)(ppairwise_cipher-2), 2);
+				memcpy(&pairwise_count, (u16*)(ppairwise_cipher-2), 2);
 				for(k=0;k<pairwise_count;k++){
 					if(_rtw_memcmp( ppairwise_cipher+4*k, RSN_CIPHER_SUITE_CCMP, 4)==true)
 						verify_ccmp=1;
@@ -1374,7 +1374,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 				break;
 			case _FTIE_:
 				pftie=(u8*)pIE;
-				_rtw_memcpy(ptdls_sta->ANonce, (ptr+j+20), 32);
+				memcpy(ptdls_sta->ANonce, (ptr+j+20), 32);
 				break;
 			case _TIMEOUT_ITVL_IE_:
 				ptimeout_ie=(u8*)pIE;
@@ -1399,7 +1399,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 
 	//update station supportRate
 	ptdls_sta->bssratelen = supportRateNum;
-	_rtw_memcpy(ptdls_sta->bssrateset, supportRate, supportRateNum);
+	memcpy(ptdls_sta->bssrateset, supportRate, supportRateNum);
 
 #ifdef CONFIG_WFD
 	rtw_tdls_process_wfd_ie(ptdlsinfo, ptr + FIXED_IE, parsing_length - FIXED_IE);
@@ -1491,7 +1491,7 @@ int On_TDLS_Setup_Cfm(_adapter *adapter, union recv_frame *precv_frame)
 			-ETH_TYPE_LEN
 			-PAYLOAD_TYPE_LEN
 			-FIXED_IE;
-	_rtw_memcpy(&stat_code, ptr+2, 2);
+	memcpy(&stat_code, ptr+2, 2);
 
 	if(stat_code!=0){
 		DBG_871X( "[%s] stat_code = %d\n, free_tdls_sta", __FUNCTION__, stat_code );
@@ -1792,8 +1792,8 @@ int On_TDLS_Ch_Switch_Req(_adapter *adapter, union recv_frame *precv_frame)
 			case _LINK_ID_IE_:
 				break;
 			case _CH_SWITCH_TIMING_:
-				_rtw_memcpy(&ptdls_sta->ch_switch_time, pIE->data, 2);
-				_rtw_memcpy(&ptdls_sta->ch_switch_timeout, pIE->data+2, 2);
+				memcpy(&ptdls_sta->ch_switch_time, pIE->data, 2);
+				memcpy(&ptdls_sta->ch_switch_timeout, pIE->data+2, 2);
 			default:
 				break;
 		}
@@ -1867,7 +1867,7 @@ int On_TDLS_Ch_Switch_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 			-PAYLOAD_TYPE_LEN
 			-FIXED_IE;
 
-	_rtw_memcpy(&stat_code, ptr+2, 2);
+	memcpy(&stat_code, ptr+2, 2);
 
 	if(stat_code!=0){
 		return _FAIL;
@@ -1883,13 +1883,13 @@ int On_TDLS_Ch_Switch_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 			case _LINK_ID_IE_:
 				break;
 			case _CH_SWITCH_TIMING_:
-				_rtw_memcpy(&switch_time, pIE->data, 2);
+				memcpy(&switch_time, pIE->data, 2);
 				if(switch_time > ptdls_sta->ch_switch_time)
-					_rtw_memcpy(&ptdls_sta->ch_switch_time, &switch_time, 2);
+					memcpy(&ptdls_sta->ch_switch_time, &switch_time, 2);
 
-				_rtw_memcpy(&switch_timeout, pIE->data+2, 2);
+				memcpy(&switch_timeout, pIE->data+2, 2);
 				if(switch_timeout > ptdls_sta->ch_switch_timeout)
-					_rtw_memcpy(&ptdls_sta->ch_switch_timeout, &switch_timeout, 2);
+					memcpy(&ptdls_sta->ch_switch_timeout, &switch_timeout, 2);
 
 			default:
 				break;
@@ -1971,7 +1971,7 @@ void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen )
 	//	Associated BSSID
 	if ( check_fwstate( pmlmepriv, _FW_LINKED) == true )
 	{
-		_rtw_memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
+		memcpy( wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 	}
 	else
 	{
@@ -1991,7 +1991,7 @@ void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen )
 	wfdie[ wfdielen++ ] = 0x01;
 
 	//	IPv4 Address
-	_rtw_memcpy( wfdie + wfdielen, pwfd_info->ip_address, 4 );
+	memcpy( wfdie + wfdielen, pwfd_info->ip_address, 4 );
 	wfdielen += 4;
 
 	pframe = rtw_set_ie(pframe, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, pktlen);
@@ -2026,7 +2026,7 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 	if(pattrib->encrypt){
 		for(i=0;i<8;i++){
 			time=rtw_get_current_time();
-			_rtw_memcpy(&ptdls_sta->SNonce[4*i], (u8 *)&time, 4);
+			memcpy(&ptdls_sta->SNonce[4*i], (u8 *)&time, 4);
 		}
 	}
 
@@ -2038,7 +2038,7 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 	pframe = rtw_set_fixed_ie(pframe, 1, &(ptdls_sta->dialog), &(pattrib->pktlen));
 
 	//capability
-	_rtw_memcpy(pframe, rtw_get_capability_from_ie(pmlmeinfo->network.IEs), 2);
+	memcpy(pframe, rtw_get_capability_from_ie(pmlmeinfo->network.IEs), 2);
 
 	if(pattrib->encrypt)
 		*pframe =*pframe | BIT(4);
@@ -2087,13 +2087,13 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 		_rtw_memset(pframe, 0, 84);	//All fields except SNonce shall be set to 0
 		_rtw_memset(pframe, _FTIE_, 1);	//version
 		_rtw_memset((pframe+1), 82, 1);	//length
-		_rtw_memcpy((pframe+52), ptdls_sta->SNonce, 32);
+		memcpy((pframe+52), ptdls_sta->SNonce, 32);
 		pframe += 84;
 		pattrib->pktlen += 84;
 
 		//Timeout interval
 		timeout_itvl[0]=0x02;
-		_rtw_memcpy(timeout_itvl+1, (u8 *)(&ptdls_sta->TDLS_PeerKey_Lifetime), 4);
+		memcpy(timeout_itvl+1, (u8 *)(&ptdls_sta->TDLS_PeerKey_Lifetime), 4);
 		pframe = rtw_set_ie(pframe, _TIMEOUT_ITVL_IE_, 5, timeout_itvl,  &(pattrib->pktlen));
 	}
 
@@ -2107,9 +2107,9 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 	pframe = rtw_set_ie(pframe, EID_BSSCoexistence,  1, &iedata, &(pattrib->pktlen));
 
 	//Link identifier
-	_rtw_memcpy(link_id_addr, pattrib->ra, 6);
-	_rtw_memcpy((link_id_addr+6), pattrib->src, 6);
-	_rtw_memcpy((link_id_addr+12), pattrib->dst, 6);
+	memcpy(link_id_addr, pattrib->ra, 6);
+	memcpy((link_id_addr+6), pattrib->src, 6);
+	memcpy((link_id_addr+12), pattrib->dst, 6);
 	pframe = rtw_set_ie(pframe, _LINK_ID_IE_,  18, link_id_addr, &(pattrib->pktlen));
 
 #ifdef CONFIG_WFD
@@ -2154,7 +2154,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 	if(pattrib->encrypt){
 		for(k=0;k<8;k++){
 			time=rtw_get_current_time();
-			_rtw_memcpy(&ptdls_sta->ANonce[4*k], (u8*)&time, 4);
+			memcpy(&ptdls_sta->ANonce[4*k], (u8*)&time, 4);
 		}
 	}
 
@@ -2175,7 +2175,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 	pframe = rtw_set_fixed_ie(pframe, 1, &(ptdls_sta->dialog), &(pattrib->pktlen));
 
 	//capability
-	_rtw_memcpy(pframe, rtw_get_capability_from_ie(pmlmeinfo->network.IEs), 2);
+	memcpy(pframe, rtw_get_capability_from_ie(pmlmeinfo->network.IEs), 2);
 
 	if(pattrib->encrypt )
 		*pframe =*pframe | BIT(4);
@@ -2229,15 +2229,15 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 		_rtw_memset(pframe, 0, 84);	//All fields except SNonce shall be set to 0
 		_rtw_memset(pframe, _FTIE_, 1);	//version
 		_rtw_memset((pframe+1), 82, 1);	//length
-		_rtw_memcpy((pframe+20), ptdls_sta->ANonce, 32);
-		_rtw_memcpy((pframe+52), ptdls_sta->SNonce, 32);
+		memcpy((pframe+20), ptdls_sta->ANonce, 32);
+		memcpy((pframe+52), ptdls_sta->SNonce, 32);
 		pframe += 84;
 		pattrib->pktlen += 84;
 
 		//Timeout interval
 		ptimeout_ie = pframe;
 		timeout_itvl[0]=0x02;
-		_rtw_memcpy(timeout_itvl+1, (u8 *)(&ptdls_sta->TDLS_PeerKey_Lifetime), 4);
+		memcpy(timeout_itvl+1, (u8 *)(&ptdls_sta->TDLS_PeerKey_Lifetime), 4);
 		pframe = rtw_set_ie(pframe, _TIMEOUT_ITVL_IE_, 5, timeout_itvl,  &(pattrib->pktlen));
 	}
 
@@ -2252,9 +2252,9 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 
 	//Link identifier
 	plinkid_ie = pframe;
-	_rtw_memcpy(link_id_addr, pattrib->ra, 6);
-	_rtw_memcpy((link_id_addr+6), pattrib->dst, 6);
-	_rtw_memcpy((link_id_addr+12), pattrib->src, 6);
+	memcpy(link_id_addr, pattrib->ra, 6);
+	memcpy((link_id_addr+6), pattrib->dst, 6);
+	memcpy((link_id_addr+12), pattrib->src, 6);
 	pframe = rtw_set_ie(pframe, _LINK_ID_IE_,  18, link_id_addr, &(pattrib->pktlen));
 
 	//fill FTIE mic
@@ -2311,15 +2311,15 @@ void rtw_build_tdls_setup_cfm_ies(_adapter * padapter, struct xmit_frame * pxmit
 		_rtw_memset(pframe, 0, 84);	//All fields except SNonce shall be set to 0
 		_rtw_memset(pframe, _FTIE_, 1);	//version
 		_rtw_memset((pframe+1), 82, 1);	//length
-		_rtw_memcpy((pframe+20), ptdls_sta->ANonce, 32);
-		_rtw_memcpy((pframe+52), ptdls_sta->SNonce, 32);
+		memcpy((pframe+20), ptdls_sta->ANonce, 32);
+		memcpy((pframe+52), ptdls_sta->SNonce, 32);
 		pframe += 84;
 		pattrib->pktlen += 84;
 
 		//Timeout interval
 		ptimeout_ie = pframe;
 		timeout_itvl[0]=0x02;
-		_rtw_memcpy(timeout_itvl+1, (u8 *)(&ptdls_sta->TDLS_PeerKey_Lifetime), 4);
+		memcpy(timeout_itvl+1, (u8 *)(&ptdls_sta->TDLS_PeerKey_Lifetime), 4);
 		ptdls_sta->TPK_count=0;
 		_set_timer(&ptdls_sta->TPK_timer, ptdls_sta->TDLS_PeerKey_Lifetime/TPK_RESEND_COUNT);
 		pframe = rtw_set_ie(pframe, _TIMEOUT_ITVL_IE_, 5, timeout_itvl,  &(pattrib->pktlen));
@@ -2328,9 +2328,9 @@ void rtw_build_tdls_setup_cfm_ies(_adapter * padapter, struct xmit_frame * pxmit
 	//HT operation; todo
 	//Link identifier
 	plinkid_ie = pframe;
-	_rtw_memcpy(link_id_addr, pattrib->ra, 6);
-	_rtw_memcpy((link_id_addr+6), pattrib->src, 6);
-	_rtw_memcpy((link_id_addr+12), pattrib->dst, 6);
+	memcpy(link_id_addr, pattrib->ra, 6);
+	memcpy((link_id_addr+6), pattrib->src, 6);
+	memcpy((link_id_addr+12), pattrib->dst, 6);
 	pframe = rtw_set_ie(pframe, _LINK_ID_IE_,  18, link_id_addr, &(pattrib->pktlen));
 
 	//fill FTIE mic
@@ -2360,13 +2360,13 @@ void rtw_build_tdls_teardown_ies(_adapter * padapter, struct xmit_frame * pxmitf
 
 	//Link identifier
 	if(ptdls_sta->tdls_sta_state & TDLS_INITIATOR_STATE){
-		_rtw_memcpy(link_id_addr, pattrib->ra, 6);
-		_rtw_memcpy((link_id_addr+6), pattrib->src, 6);
-		_rtw_memcpy((link_id_addr+12), pattrib->dst, 6);
+		memcpy(link_id_addr, pattrib->ra, 6);
+		memcpy((link_id_addr+6), pattrib->src, 6);
+		memcpy((link_id_addr+12), pattrib->dst, 6);
 	}else  if(ptdls_sta->tdls_sta_state & TDLS_RESPONDER_STATE){
-		_rtw_memcpy(link_id_addr, pattrib->ra, 6);
-		_rtw_memcpy((link_id_addr+6), pattrib->dst, 6);
-		_rtw_memcpy((link_id_addr+12), pattrib->src, 6);
+		memcpy(link_id_addr, pattrib->ra, 6);
+		memcpy((link_id_addr+6), pattrib->dst, 6);
+		memcpy((link_id_addr+12), pattrib->src, 6);
 	}
 	pframe = rtw_set_ie(pframe, _LINK_ID_IE_,  18, link_id_addr, &(pattrib->pktlen));
 
@@ -2391,9 +2391,9 @@ void rtw_build_tdls_dis_req_ies(_adapter * padapter, struct xmit_frame * pxmitfr
 	dialogtoken = (dialogtoken+1)%256;
 
 	//Link identifier
-	_rtw_memcpy(link_id_addr, pattrib->ra, 6);
-	_rtw_memcpy((link_id_addr+6), pattrib->src, 6);
-	_rtw_memcpy((link_id_addr+12), pattrib->dst, 6);
+	memcpy(link_id_addr, pattrib->ra, 6);
+	memcpy((link_id_addr+6), pattrib->src, 6);
+	memcpy((link_id_addr+12), pattrib->dst, 6);
 	pframe = rtw_set_ie(pframe, _LINK_ID_IE_,  18, link_id_addr, &(pattrib->pktlen));
 
 }
@@ -2423,7 +2423,7 @@ void rtw_build_tdls_dis_rsp_ies(_adapter * padapter, struct xmit_frame * pxmitfr
 	pframe = rtw_set_fixed_ie(pframe, 1, &(dialog), &(pattrib->pktlen));
 
 	//capability
-	_rtw_memcpy(pframe, rtw_get_capability_from_ie(pmlmeinfo->network.IEs), 2);
+	memcpy(pframe, rtw_get_capability_from_ie(pmlmeinfo->network.IEs), 2);
 
 	if(pattrib->encrypt)
 		*pframe =*pframe | BIT(4);
@@ -2469,7 +2469,7 @@ void rtw_build_tdls_dis_rsp_ies(_adapter * padapter, struct xmit_frame * pxmitfr
 
 		//Timeout interval
 		timeout_itvl[0]=0x02;
-		_rtw_memcpy(timeout_itvl+1, &timeout_interval, 4);
+		memcpy(timeout_itvl+1, &timeout_interval, 4);
 		pframe = rtw_set_ie(pframe, _TIMEOUT_ITVL_IE_, 5, timeout_itvl,  &(pattrib->pktlen));
 	}
 
@@ -2483,9 +2483,9 @@ void rtw_build_tdls_dis_rsp_ies(_adapter * padapter, struct xmit_frame * pxmitfr
 	pframe = rtw_set_ie(pframe, EID_BSSCoexistence, 1, &iedata, &(pattrib->pktlen));
 
 	//Link identifier
-	_rtw_memcpy(link_id_addr, pattrib->ra, 6);
-	_rtw_memcpy((link_id_addr+6), pattrib->dst, 6);
-	_rtw_memcpy((link_id_addr+12), pattrib->src, 6);
+	memcpy(link_id_addr, pattrib->ra, 6);
+	memcpy((link_id_addr+6), pattrib->dst, 6);
+	memcpy((link_id_addr+12), pattrib->src, 6);
 	pframe = rtw_set_ie(pframe, _LINK_ID_IE_, 18, link_id_addr, &(pattrib->pktlen));
 
 }
@@ -2511,9 +2511,9 @@ void rtw_build_tdls_peer_traffic_indication_ies(_adapter * padapter, struct xmit
 	pframe = rtw_set_fixed_ie(pframe, 1, &(ptdls_sta->dialog), &(pattrib->pktlen));
 
 	//Link identifier
-	_rtw_memcpy(link_id_addr, pattrib->ra, 6);
-	_rtw_memcpy((link_id_addr+6), pattrib->src, 6);
-	_rtw_memcpy((link_id_addr+12), pattrib->dst, 6);
+	memcpy(link_id_addr, pattrib->ra, 6);
+	memcpy((link_id_addr+6), pattrib->src, 6);
+	memcpy((link_id_addr+12), pattrib->dst, 6);
 	pframe = rtw_set_ie(pframe, _LINK_ID_IE_,  18, link_id_addr, &(pattrib->pktlen));
 
 	//PTI control
@@ -2552,14 +2552,14 @@ void rtw_build_tdls_ch_switch_req_ies(_adapter * padapter, struct xmit_frame * p
 	pframe = rtw_set_fixed_ie(pframe, 1, &(ptdlsinfo->candidate_ch), &(pattrib->pktlen));
 
 	//Link identifier
-	_rtw_memcpy(link_id_addr, pattrib->ra, 6);
-	_rtw_memcpy((link_id_addr+6), pattrib->src, 6);
-	_rtw_memcpy((link_id_addr+12), pattrib->dst, 6);
+	memcpy(link_id_addr, pattrib->ra, 6);
+	memcpy((link_id_addr+6), pattrib->src, 6);
+	memcpy((link_id_addr+12), pattrib->dst, 6);
 	pframe = rtw_set_ie(pframe, _LINK_ID_IE_,  18, link_id_addr, &(pattrib->pktlen));
 
 	//ch switch timing
-	_rtw_memcpy(ch_switch_timing, &switch_time, 2);
-	_rtw_memcpy(ch_switch_timing+2, &switch_timeout, 2);
+	memcpy(ch_switch_timing, &switch_time, 2);
+	memcpy(ch_switch_timing+2, &switch_timeout, 2);
 	pframe = rtw_set_ie(pframe, _CH_SWITCH_TIMING_,  4, ch_switch_timing, &(pattrib->pktlen));
 
 	//update ch switch attrib to sta_info
@@ -2591,14 +2591,14 @@ void rtw_build_tdls_ch_switch_rsp_ies(_adapter * padapter, struct xmit_frame * p
 	pframe = rtw_set_fixed_ie(pframe, 2, (u8 *)&ptdls_sta->stat_code, &(pattrib->pktlen));
 
 	//Link identifier
-	_rtw_memcpy(link_id_addr, pattrib->ra, 6);
-	_rtw_memcpy((link_id_addr+6), pattrib->src, 6);
-	_rtw_memcpy((link_id_addr+12), pattrib->dst, 6);
+	memcpy(link_id_addr, pattrib->ra, 6);
+	memcpy((link_id_addr+6), pattrib->src, 6);
+	memcpy((link_id_addr+12), pattrib->dst, 6);
 	pframe = rtw_set_ie(pframe, _LINK_ID_IE_,  18, link_id_addr, &(pattrib->pktlen));
 
 	//ch switch timing
-	_rtw_memcpy(ch_switch_timing, &ptdls_sta->ch_switch_time, 2);
-	_rtw_memcpy(ch_switch_timing+2, &ptdls_sta->ch_switch_timeout, 2);
+	memcpy(ch_switch_timing, &ptdls_sta->ch_switch_time, 2);
+	memcpy(ch_switch_timing+2, &ptdls_sta->ch_switch_timeout, 2);
 	pframe = rtw_set_ie(pframe, _CH_SWITCH_TIMING_,  4, ch_switch_timing, &(pattrib->pktlen));
 
 }

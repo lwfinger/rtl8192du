@@ -1175,8 +1175,7 @@ PHY_CheckPowerOffFor8192D(
 		u1bTmp = rtw_read8(Adapter, REG_MAC1);
 		u1bTmp &=MAC1_ON;
 
-	}
-	else{
+	} else {
 		u1bTmp = rtw_read8(Adapter, REG_MAC1);
 		rtw_write8(Adapter, REG_MAC1, u1bTmp&(~MAC1_ON));
 		u1bTmp = rtw_read8(Adapter, REG_MAC0);

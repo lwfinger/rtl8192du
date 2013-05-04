@@ -374,12 +374,6 @@ inline void dbg_rtw_mfree(u8 *pbuf, u32 sz, const char *func, int line)
 }
 #endif
 
-
-void _rtw_memcpy(void* dst, void* src, u32 sz)
-{
-	memcpy(dst, src, sz);
-}
-
 int	_rtw_memcmp(void *dst, void *src, u32 sz)
 {
 //under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0
@@ -1020,7 +1014,7 @@ int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname)
 
 	rtw_init_netdev_name(pnetdev, ifname);
 
-	_rtw_memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
+	memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
 	if(!rtnl_is_locked())
@@ -1087,7 +1081,7 @@ void rtw_buf_update(u8 **buf, u32 *buf_len, u8 *src, u32 src_len)
 	dup = rtw_malloc(src_len);
 	if (dup) {
 		dup_len = src_len;
-		_rtw_memcpy(dup, src, dup_len);
+		memcpy(dup, src, dup_len);
 	}
 
 keep_ori:

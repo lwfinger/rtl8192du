@@ -1941,7 +1941,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
 
 	rtl8192d_PHY_InitRxSetting(padapter);
 	RELEASE_GLOBAL_MUTEX(GlobalMutexForPowerAndEfuse);
-	DBG_8192D("%s(): Don't Download Firmware !!\n",__FUNCTION__);
+	DBG_8192D("%s(): Don't Download Firmware !!\n",__func__);
 	padapter->bFWReady = false;
 	pHalData->fw_ractrl = false;
 
@@ -2344,7 +2344,7 @@ exit:
 
 HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 
-	DBG_8192D("%s in %dms\n", __FUNCTION__, rtw_get_passing_time_ms(init_start_time));
+	DBG_8192D("%s in %dms\n", __func__, rtw_get_passing_time_ms(init_start_time));
 
 	#ifdef DBG_HAL_INIT_PROFILING
 	hal_init_stages_timestamp[HAL_INIT_STAGES_END]=rtw_get_current_time();
@@ -2651,7 +2651,7 @@ _ResetDigitalProcedure1(
 	{
 		u8 val;
 		if( (val=rtw_read8(Adapter, REG_MCUFWDL)))
-			DBG_8192D("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __FUNCTION__, __LINE__, val);
+			DBG_8192D("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __func__, __LINE__, val);
 	}
 	#endif
 
@@ -3484,7 +3484,7 @@ static int _ReadAdapterInfo8192DU(struct rtw_adapter *	Adapter)
 {
 	u32 start=rtw_get_current_time();
 
-	DBG_8192D("====> %s\n", __FUNCTION__);
+	DBG_8192D("====> %s\n", __func__);
 
 	//rtl8192d_ReadChipVersion(Adapter);
 	_ReadRFType(Adapter);
@@ -3493,7 +3493,7 @@ static int _ReadAdapterInfo8192DU(struct rtw_adapter *	Adapter)
 	_InitOtherVariable(Adapter);
 
 	//For 92DU Phy and Mac mode set ,will initialize by EFUSE/EPPROM     zhiyuan 2010/03/25
-	DBG_8192D("<==== %s in %d ms\n", __FUNCTION__, rtw_get_passing_time_ms(start));
+	DBG_8192D("<==== %s in %d ms\n", __func__, rtw_get_passing_time_ms(start));
 
 	return _SUCCESS;
 }
@@ -3722,7 +3722,7 @@ static void hw_var_set_opmode(struct rtw_adapter * Adapter, u8 variable, u8* val
 		//reset TSF1
 		rtw_write8(Adapter, REG_DUAL_TSF_RST, BIT(1));
 
-		DBG_8192D("%s()-%d mode = %d\n", __FUNCTION__, __LINE__, mode);
+		DBG_8192D("%s()-%d mode = %d\n", __func__, __LINE__, mode);
 
 		if((mode == _HW_STATE_STATION_) || (mode == _HW_STATE_NOLINK_))
 		{
@@ -3767,7 +3767,7 @@ static void hw_var_set_opmode(struct rtw_adapter * Adapter, u8 variable, u8* val
 			//don't enable update TSF1 for if2 (due to TSF update when beacon/probe rsp are received)
 			rtw_write8(Adapter, REG_BCN_CTRL_1, (DIS_TSF_UDT0_NORMAL_CHIP|EN_BCN_FUNCTION | EN_TXBCN_RPT|BIT(1)));
 
-			DBG_8192D("%s()-%d: REG_BCN_CTRL_1 = %02x\n", __FUNCTION__, __LINE__, rtw_read8(Adapter, REG_BCN_CTRL_1));
+			DBG_8192D("%s()-%d: REG_BCN_CTRL_1 = %02x\n", __func__, __LINE__, rtw_read8(Adapter, REG_BCN_CTRL_1));
 
 			if(check_buddy_fwstate(Adapter, WIFI_FW_NULL_STATE))
 				rtw_write8(Adapter, REG_BCN_CTRL,
@@ -3780,7 +3780,7 @@ static void hw_var_set_opmode(struct rtw_adapter * Adapter, u8 variable, u8* val
 			if ( check_buddy_fwstate(Adapter, (WIFI_STATION_STATE|WIFI_ASOC_STATE)) ) {
 				if (reset_tsf(Adapter, IFACE_PORT1) == false)
 					DBG_8192D("ERROR! %s()-%d: Reset port1 TSF fail\n",
-						__FUNCTION__, __LINE__);
+						__func__, __LINE__);
 			}
 #endif	// CONFIG_TSF_RESET_OFFLOAD
 		}
@@ -3800,7 +3800,7 @@ static void hw_var_set_opmode(struct rtw_adapter * Adapter, u8 variable, u8* val
 		//reset TSF0
 		rtw_write8(Adapter, REG_DUAL_TSF_RST, BIT(0));
 
-		DBG_8192D("%s()-%d mode = %d\n", __FUNCTION__, __LINE__, mode);
+		DBG_8192D("%s()-%d mode = %d\n", __func__, __LINE__, mode);
 
 		if((mode == _HW_STATE_STATION_) || (mode == _HW_STATE_NOLINK_))
 		{
@@ -3860,7 +3860,7 @@ static void hw_var_set_opmode(struct rtw_adapter * Adapter, u8 variable, u8* val
 			if ( check_buddy_fwstate(Adapter, (WIFI_STATION_STATE|WIFI_ASOC_STATE)) ) {
 				if (reset_tsf(Adapter, IFACE_PORT0) == false)
 					DBG_8192D("ERROR! %s()-%d: Reset port0 TSF fail\n",
-						__FUNCTION__, __LINE__);
+						__func__, __LINE__);
 			}
 #endif // CONFIG_TSF_RESET_OFFLOAD
 #endif // CONFIG_CONCURRENT_MODE
@@ -3985,7 +3985,7 @@ static void hw_var_set_correct_tsf(struct rtw_adapter * Adapter, u8 variable, u8
 			&& check_buddy_fwstate(Adapter, WIFI_AP_STATE) ) {
 			if (reset_tsf(Adapter, IFACE_PORT0) == false)
 				DBG_8192D("ERROR! %s()-%d: Reset port0 TSF fail\n",
-					__FUNCTION__, __LINE__);
+					__func__, __LINE__);
 		}
 #endif	// CONFIG_TSF_RESET_OFFLOAD
 
@@ -4026,7 +4026,7 @@ static void hw_var_set_correct_tsf(struct rtw_adapter * Adapter, u8 variable, u8
 			&& check_buddy_fwstate(Adapter, WIFI_AP_STATE) ) {
 			if (reset_tsf(Adapter, IFACE_PORT1) == false)
 				DBG_8192D("ERROR! %s()-%d: Reset port1 TSF fail\n",
-					__FUNCTION__, __LINE__);
+					__func__, __LINE__);
 		}
 #endif	// CONFIG_TSF_RESET_OFFLOAD
 	}
@@ -4065,10 +4065,10 @@ static void hw_var_set_mlme_disconnect(struct rtw_adapter * Adapter, u8 variable
 
 #ifdef CONFIG_BEACON_DISABLE_OFFLOAD
 		u8 reg_bcn_disable_cnt = rtw_read8(Adapter, REG_FW_BCN_DIS_CNT);
-		DBG_8192D("%s()-%d: reg_bcn_disable_cnt=%02x\n", __FUNCTION__, __LINE__, reg_bcn_disable_cnt);
+		DBG_8192D("%s()-%d: reg_bcn_disable_cnt=%02x\n", __func__, __LINE__, reg_bcn_disable_cnt);
 
 		reg_bcn_ctrl_1 = rtw_read8(Adapter, REG_BCN_CTRL_1);
-		DBG_8192D("%s()-%d: reg_bcn_ctrl_1=%02x\n", __FUNCTION__, __LINE__, reg_bcn_ctrl_1);
+		DBG_8192D("%s()-%d: reg_bcn_ctrl_1=%02x\n", __func__, __LINE__, reg_bcn_ctrl_1);
 
 		// b. driver set h2c cmd
 		rtl8192c_dis_beacon_fun_cmd(Adapter);
@@ -4092,17 +4092,17 @@ static void hw_var_set_mlme_disconnect(struct rtw_adapter * Adapter, u8 variable
 		for (i=0; i< 10; i++) {
 			reg_bcn_ctrl_1 = rtw_read8(Adapter, REG_BCN_CTRL_1);
 			if ( (reg_bcn_ctrl_1 & BIT(3)) == 0 ) {
-				//DBG_8192D("%s()-%d: BEACON_DISABLE_OFFLOAD finished! reg=%02x\n", __FUNCTION__, __LINE__, reg);
+				//DBG_8192D("%s()-%d: BEACON_DISABLE_OFFLOAD finished! reg=%02x\n", __func__, __LINE__, reg);
 				break;
 			}
-			DBG_8192D("%s()-%d: BEACON_DISABLE_OFFLOAD not finished! REG_BCN_CTRL_1=%02x\n", __FUNCTION__, __LINE__, reg_bcn_ctrl_1);
-			DBG_8192D("%s()-%d: reg_bcn_disable_cnt=%02x\n", __FUNCTION__, __LINE__, rtw_read8(Adapter, REG_FW_BCN_DIS_CNT));
-			DBG_8192D("%s()-%d: REG_BCN_CTRL=%02x\n", __FUNCTION__, __LINE__, rtw_read8(Adapter, REG_BCN_CTRL));
-			DBG_8192D("%s()-%d: FWISR=%08x\n", __FUNCTION__, __LINE__, rtw_read32(Adapter, REG_FWISR));
+			DBG_8192D("%s()-%d: BEACON_DISABLE_OFFLOAD not finished! REG_BCN_CTRL_1=%02x\n", __func__, __LINE__, reg_bcn_ctrl_1);
+			DBG_8192D("%s()-%d: reg_bcn_disable_cnt=%02x\n", __func__, __LINE__, rtw_read8(Adapter, REG_FW_BCN_DIS_CNT));
+			DBG_8192D("%s()-%d: REG_BCN_CTRL=%02x\n", __func__, __LINE__, rtw_read8(Adapter, REG_BCN_CTRL));
+			DBG_8192D("%s()-%d: FWISR=%08x\n", __func__, __LINE__, rtw_read32(Adapter, REG_FWISR));
 			rtw_msleep_os(100);
 		}
-		DBG_8192D("%s()-%d: reg_bcn_disable_cnt=%02x\n", __FUNCTION__, __LINE__, rtw_read8(Adapter, REG_FW_BCN_DIS_CNT));
-		DBG_8192D("%s()-%d: reg_bcn_ctrl_1=%02x\n", __FUNCTION__, __LINE__, reg_bcn_ctrl_1);
+		DBG_8192D("%s()-%d: reg_bcn_disable_cnt=%02x\n", __func__, __LINE__, rtw_read8(Adapter, REG_FW_BCN_DIS_CNT));
+		DBG_8192D("%s()-%d: reg_bcn_ctrl_1=%02x\n", __func__, __LINE__, reg_bcn_ctrl_1);
 
 #else   // CONFIG_BEACON_DISABLE_OFFLOAD
 
@@ -4280,7 +4280,7 @@ static void hw_var_set_mlme_join(struct rtw_adapter * Adapter, u8 variable, u8* 
 			RetryLimit = 0x7;
 		}
 
-		DBG_8192D("%s(): pHalData->bNeedIQK = true\n",__FUNCTION__);
+		DBG_8192D("%s(): pHalData->bNeedIQK = true\n",__func__);
 		pHalData->bNeedIQK = true; //for 92D IQK
 	}
 	else if(type == 1) //joinbss_event call back when join res < 0
@@ -4507,7 +4507,7 @@ _func_enter_;
 #endif
 				if(check_fwstate(&Adapter->mlmepriv, WIFI_AP_STATE) == true)
 				{
-					DBG_8192D("%s(): pHalData->bNeedIQK = true\n",__FUNCTION__);
+					DBG_8192D("%s(): pHalData->bNeedIQK = true\n",__func__);
 					pHalData->bNeedIQK = true; //for 92D IQK
 				}
 #ifdef CONFIG_DUALMAC_CONCURRENT
@@ -4714,7 +4714,7 @@ _func_enter_;
 						RetryLimit = 0x7;
 					}
 
-					DBG_8192D("%s(): pHalData->bNeedIQK = true\n",__FUNCTION__);
+					DBG_8192D("%s(): pHalData->bNeedIQK = true\n",__func__);
 					pHalData->bNeedIQK = true; //for 92D IQK
 #ifdef CONFIG_DUALMAC_CONCURRENT
 					if((BuddyAdapter !=NULL) && (pHalData->bSlaveOfDMSP))
@@ -4755,11 +4755,11 @@ _func_enter_;
 
 		case HW_VAR_ON_RCR_AM:
 			rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)|RCR_AM);
-			DBG_8192D("%s, %d, RCR= %x \n", __FUNCTION__,__LINE__, rtw_read32(Adapter, REG_RCR));
+			DBG_8192D("%s, %d, RCR= %x \n", __func__,__LINE__, rtw_read32(Adapter, REG_RCR));
 			break;
 		case HW_VAR_OFF_RCR_AM:
 			rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)& (~RCR_AM));
-			DBG_8192D("%s, %d, RCR= %x \n", __FUNCTION__,__LINE__, rtw_read32(Adapter, REG_RCR));
+			DBG_8192D("%s, %d, RCR= %x \n", __func__,__LINE__, rtw_read32(Adapter, REG_RCR));
 			break;
 
 		case HW_VAR_BEACON_INTERVAL:
@@ -5133,7 +5133,7 @@ _func_enter_;
 						if(poidparam->subcode_value==1){
 							//rtw_write8(Adapter, REG_WOW_CTRL, (rtw_read8(Adapter, REG_WOW_CTRL)|BIT(1)));
 							Adapter->pwrctrlpriv.wowlan_pattern=true;
-							DBG_8192D("%s Adapter->pwrctrlpriv.wowlan_pattern=%x\n",__FUNCTION__,Adapter->pwrctrlpriv.wowlan_pattern);
+							DBG_8192D("%s Adapter->pwrctrlpriv.wowlan_pattern=%x\n",__func__,Adapter->pwrctrlpriv.wowlan_pattern);
 						}
 						else{
 							//rtw_write8(Adapter, REG_WOW_CTRL, (rtw_read8(Adapter, REG_WOW_CTRL)&~BIT(1)));
@@ -5146,7 +5146,7 @@ _func_enter_;
 						if(poidparam->subcode_value==1){
 							//rtw_write8(Adapter, REG_WOW_CTRL, (rtw_read8(Adapter, REG_WOW_CTRL)|BIT(2)));
 							Adapter->pwrctrlpriv.wowlan_magic=true;
-							DBG_8192D("%s Adapter->pwrctrlpriv.wowlan_magic=%x\n",__FUNCTION__,Adapter->pwrctrlpriv.wowlan_magic);
+							DBG_8192D("%s Adapter->pwrctrlpriv.wowlan_magic=%x\n",__func__,Adapter->pwrctrlpriv.wowlan_magic);
 						}
 						else{
 							//rtw_write8(Adapter, REG_WOW_CTRL, (rtw_read8(Adapter, REG_WOW_CTRL)&~BIT(2)));
@@ -5162,7 +5162,7 @@ _func_enter_;
 						else{
 							//rtw_write8(Adapter, REG_WOW_CTRL, (rtw_read8(Adapter, REG_WOW_CTRL)&~BIT(3)));
 							Adapter->pwrctrlpriv.wowlan_unicast=false;
-							DBG_8192D("%s Adapter->pwrctrlpriv.wowlan_unicast=%x\n",__FUNCTION__,Adapter->pwrctrlpriv.wowlan_unicast);
+							DBG_8192D("%s Adapter->pwrctrlpriv.wowlan_unicast=%x\n",__func__,Adapter->pwrctrlpriv.wowlan_unicast);
 						}
 						break;
 					case WOWLAN_SET_PATTERN:

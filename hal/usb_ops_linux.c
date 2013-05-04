@@ -57,7 +57,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 #endif
 
 
-	//DBG_8192D("%s %s:%d\n",__FUNCTION__, current->comm, current->pid);
+	//DBG_8192D("%s %s:%d\n",__func__, current->comm, current->pid);
 
 	if((padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx)){
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usbctrl_vendorreq:(padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
@@ -66,7 +66,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	}
 
 	if(len>MAX_VENDOR_REQ_CMD_SIZE){
-		DBG_8192D( "[%s] Buffer len error ,vendor request failed\n", __FUNCTION__ );
+		DBG_8192D( "[%s] Buffer len error ,vendor request failed\n", __func__ );
 		status = -EINVAL;
 		goto exit;
 	}
@@ -94,7 +94,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 #endif
 
 	if ( pIo_buf== NULL) {
-		DBG_8192D( "[%s] pIo_buf == NULL \n", __FUNCTION__ );
+		DBG_8192D( "[%s] pIo_buf == NULL \n", __func__ );
 		status = -ENOMEM;
 		goto release_mutex;
 	}
@@ -647,7 +647,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 		if(precvframe==NULL)
 		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: precvframe==NULL\n"));
-			DBG_8192D("%s()-%d: rtw_alloc_recvframe() failed! RX Drop!\n", __FUNCTION__, __LINE__);
+			DBG_8192D("%s()-%d: rtw_alloc_recvframe() failed! RX Drop!\n", __func__, __LINE__);
 			goto _exit_recvbuf2recvframe;
 		}
 
@@ -668,7 +668,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 		if((pattrib->pkt_len<=0) || (pkt_offset>transfer_len))
 		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("recvbuf2recvframe: pkt_len<=0\n"));
-			DBG_8192D("%s()-%d: RX Warning!\n", __FUNCTION__, __LINE__);
+			DBG_8192D("%s()-%d: RX Warning!\n", __func__, __LINE__);
 			rtw_free_recvframe(precvframe, pfree_recv_queue);
 			goto _exit_recvbuf2recvframe;
 		}
@@ -981,7 +981,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 		if(precvframe==NULL)
 		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: precvframe==NULL\n"));
-			DBG_8192D("%s()-%d: rtw_alloc_recvframe() failed! RX Drop!\n", __FUNCTION__, __LINE__);
+			DBG_8192D("%s()-%d: rtw_alloc_recvframe() failed! RX Drop!\n", __func__, __LINE__);
 			goto _exit_recvbuf2recvframe;
 		}
 
@@ -1002,7 +1002,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 		if((pattrib->pkt_len<=0) || (pkt_offset>transfer_len))
 		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("recvbuf2recvframe: pkt_len<=0\n"));
-			DBG_8192D("%s()-%d: RX Warning!\n", __FUNCTION__, __LINE__);
+			DBG_8192D("%s()-%d: RX Warning!\n", __func__, __LINE__);
 			rtw_free_recvframe(precvframe, pfree_recv_queue);
 			goto _exit_recvbuf2recvframe;
 		}

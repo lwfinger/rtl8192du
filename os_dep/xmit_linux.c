@@ -111,12 +111,12 @@ void rtw_set_tx_chksum_offload(struct sk_buff *pkt, struct pkt_attrib *pattrib)
                                 udp->check = 0;
 #endif
                         } else {
-				DBG_8192D("%s-%d TCP CSUM offload Error!!\n", __FUNCTION__, __LINE__);
+				DBG_8192D("%s-%d TCP CSUM offload Error!!\n", __func__, __LINE__);
                                 WARN_ON(1);     /* we need a WARN() */
 			    }
 		}
 		else { // IP fragmentation case
-			DBG_8192D("%s-%d nr_frags != 0, using skb_checksum_help(skb);!!\n", __FUNCTION__, __LINE__);
+			DBG_8192D("%s-%d nr_frags != 0, using skb_checksum_help(skb);!!\n", __func__, __LINE__);
 			skb_checksum_help(skb);
 		}
 	}
@@ -271,13 +271,13 @@ int rtw_mlcst2unicst(struct rtw_adapter *padapter, struct sk_buff *skb)
 			memcpy(newskb->data, psta->hwaddr, 6);
 			res = rtw_xmit(padapter, &newskb);
 			if (res < 0) {
-				DBG_8192D("%s()-%d: rtw_xmit() return error!\n", __FUNCTION__, __LINE__);
+				DBG_8192D("%s()-%d: rtw_xmit() return error!\n", __func__, __LINE__);
 				pxmitpriv->tx_drop++;
 				dev_kfree_skb_any(newskb);
 			} else
 				pxmitpriv->tx_pkts++;
 		} else {
-			DBG_8192D("%s-%d: skb_copy() failed!\n", __FUNCTION__, __LINE__);
+			DBG_8192D("%s-%d: skb_copy() failed!\n", __func__, __LINE__);
 			pxmitpriv->tx_drop++;
 
 			spin_unlock_bh(&pstapriv->asoc_list_lock);
@@ -309,7 +309,7 @@ _func_enter_;
 	if (rtw_if_up(padapter) == false) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("rtw_xmit_entry: rtw_if_up fail\n"));
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_8192D("DBG_TX_DROP_FRAME %s if_up fail\n", __FUNCTION__);
+		DBG_8192D("DBG_TX_DROP_FRAME %s if_up fail\n", __func__);
 		#endif
 		goto drop_packet;
 	}
@@ -318,7 +318,7 @@ _func_enter_;
 	queue = skb_get_queue_mapping(pkt);
 	/* No free space for Tx, tx_worker is too slow */
 	if (pxmitpriv->hwxmits[queue].accnt > NR_XMITFRAME/2) {
-		//DBG_8192D("%s(): stop netif_subqueue[%d]\n", __FUNCTION__, queue);
+		//DBG_8192D("%s(): stop netif_subqueue[%d]\n", __func__, queue);
 		netif_stop_subqueue(padapter->pnetdev, queue);
 		return NETDEV_TX_BUSY;
 	}
@@ -345,7 +345,7 @@ _func_enter_;
 	res = rtw_xmit(padapter, &pkt);
 	if (res < 0) {
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_8192D("DBG_TX_DROP_FRAME %s rtw_xmit fail\n", __FUNCTION__);
+		DBG_8192D("DBG_TX_DROP_FRAME %s rtw_xmit fail\n", __func__);
 		#endif
 		goto drop_packet;
 	}

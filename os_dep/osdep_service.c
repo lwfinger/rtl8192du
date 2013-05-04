@@ -294,13 +294,13 @@ void rtw_usleep_os(int us)
 #ifdef DBG_DELAY_OS
 void _rtw_mdelay_os(int ms, const char *func, const int line)
 {
-	DBG_8192D("%s:%d %s(%d)\n", func, line, __FUNCTION__, ms);
+	DBG_8192D("%s:%d %s(%d)\n", func, line, __func__, ms);
 	mdelay((unsigned long)ms);
 }
 
 void _rtw_udelay_os(int us, const char *func, const int line)
 {
-	DBG_8192D("%s:%d %s(%d)\n", func, line, __FUNCTION__, us);
+	DBG_8192D("%s:%d %s(%d)\n", func, line, __func__, us);
       udelay((unsigned long)us);
 }
 #else
@@ -536,20 +536,20 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 
 	if(path && buf) {
 		if( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
-			DBG_8192D("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
+			DBG_8192D("%s openFile path:%s fp=%p\n",__func__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
 			ret=readFile(fp, buf, sz);
 			set_fs(oldfs);
 			closeFile(fp);
 
-			DBG_8192D("%s readFile, ret:%d\n",__FUNCTION__, ret);
+			DBG_8192D("%s readFile, ret:%d\n",__func__, ret);
 
 		} else {
-			DBG_8192D("%s openFile path:%s Fail, ret:%d\n",__FUNCTION__, path, ret);
+			DBG_8192D("%s openFile path:%s Fail, ret:%d\n",__func__, path, ret);
 		}
 	} else {
-		DBG_8192D("%s NULL pointer\n",__FUNCTION__);
+		DBG_8192D("%s NULL pointer\n",__func__);
 		ret =  -EINVAL;
 	}
 	return ret;
@@ -570,20 +570,20 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 
 	if(path && buf) {
 		if( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
-			DBG_8192D("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
+			DBG_8192D("%s openFile path:%s fp=%p\n",__func__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
 			ret=writeFile(fp, buf, sz);
 			set_fs(oldfs);
 			closeFile(fp);
 
-			DBG_8192D("%s writeFile, ret:%d\n",__FUNCTION__, ret);
+			DBG_8192D("%s writeFile, ret:%d\n",__func__, ret);
 
 		} else {
-			DBG_8192D("%s openFile path:%s Fail, ret:%d\n",__FUNCTION__, path, ret);
+			DBG_8192D("%s openFile path:%s Fail, ret:%d\n",__func__, path, ret);
 		}
 	} else {
-		DBG_8192D("%s NULL pointer\n",__FUNCTION__);
+		DBG_8192D("%s NULL pointer\n",__func__);
 		ret =  -EINVAL;
 	}
 	return ret;

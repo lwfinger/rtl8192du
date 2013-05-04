@@ -270,7 +270,7 @@ struct pwrctrl_priv
 
 #define _rtw_set_pwr_state_check_timer(pwrctrlpriv, ms) \
 	do { \
-		/*DBG_871X("%s _rtw_set_pwr_state_check_timer(%p, %d)\n", __FUNCTION__, (pwrctrlpriv), (ms));*/ \
+		/*DBG_871X("%s _rtw_set_pwr_state_check_timer(%p, %d)\n", __func__, (pwrctrlpriv), (ms));*/ \
 		_set_timer(&(pwrctrlpriv)->pwr_state_check_timer, (ms)); \
 	} while(0)
 
@@ -336,8 +336,8 @@ void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv);
 u8 rtw_interface_ps_func(struct rtw_adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id,u8* val);
 void rtw_set_ips_deny(struct rtw_adapter *padapter, u32 ms);
 int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms, const char *caller);
-#define rtw_pwr_wakeup(adapter) _rtw_pwr_wakeup(adapter, RTW_PWR_STATE_CHK_INTERVAL, __FUNCTION__)
-#define rtw_pwr_wakeup_ex(adapter, ips_deffer_ms) _rtw_pwr_wakeup(adapter, ips_deffer_ms, __FUNCTION__)
+#define rtw_pwr_wakeup(adapter) _rtw_pwr_wakeup(adapter, RTW_PWR_STATE_CHK_INTERVAL, __func__)
+#define rtw_pwr_wakeup_ex(adapter, ips_deffer_ms) _rtw_pwr_wakeup(adapter, ips_deffer_ms, __func__)
 int rtw_pm_set_ips(struct rtw_adapter *padapter, u8 mode);
 int rtw_pm_set_lps(struct rtw_adapter *padapter, u8 mode);
 

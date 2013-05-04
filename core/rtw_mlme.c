@@ -659,7 +659,7 @@ _func_enter_;
 	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
 	if(strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
 		DBG_8192D("%s %s(%pM, ch%u) ss_ori:%3u, sq_ori:%3u, rssi_ori:%3ld, ss_smp:%3u, sq_smp:%3u, rssi_smp:%3ld\n"
-			, __FUNCTION__
+			, __func__
 			, src->Ssid.Ssid, src->MacAddress, src->Configuration.DSConfig
 			,ss_ori, sq_ori, rssi_ori
 			,ss_smp, sq_smp, rssi_smp
@@ -702,7 +702,7 @@ _func_enter_;
 	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
 	if(strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
 		DBG_8192D("%s %s(%pM), SignalStrength:%u, SignalQuality:%u, RawRSSI:%ld\n"
-			, __FUNCTION__
+			, __func__
 			, dst->Ssid.Ssid, dst->MacAddress, dst->PhyInfo.SignalStrength, dst->PhyInfo.SignalQuality, dst->Rssi);
 	}
 	#endif
@@ -1443,7 +1443,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct rtw_adapter *padapter,
 
 	if(psta) //update ptarget_sta
 	{
-		DBG_8192D("%s\n", __FUNCTION__);
+		DBG_8192D("%s\n", __func__);
 
 		psta->aid  = pnetwork->join_res;
 #ifdef CONFIG_CONCURRENT_MODE
@@ -1497,7 +1497,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct rtw_adapter *padapter,
 			preorder_ctrl->enable = false;
 			preorder_ctrl->indicate_seq = 0xffff;
 			#ifdef DBG_RX_SEQ
-			DBG_8192D("DBG_RX_SEQ %s:%d indicate_seq:%u \n", __FUNCTION__, __LINE__,
+			DBG_8192D("DBG_RX_SEQ %s:%d indicate_seq:%u \n", __func__, __LINE__,
 				preorder_ctrl->indicate_seq);
 			#endif
 			preorder_ctrl->wend_b= 0xffff;
@@ -1515,7 +1515,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct rtw_adapter *padapter,
 				preorder_ctrl->enable = false;
 				preorder_ctrl->indicate_seq = 0xffff;
 				#ifdef DBG_RX_SEQ
-				DBG_8192D("DBG_RX_SEQ %s:%d indicate_seq:%u \n", __FUNCTION__, __LINE__,
+				DBG_8192D("DBG_RX_SEQ %s:%d indicate_seq:%u \n", __func__, __LINE__,
 					preorder_ctrl->indicate_seq);
 				#endif
 				preorder_ctrl->wend_b= 0xffff;
@@ -1540,7 +1540,7 @@ static void rtw_joinbss_update_network(struct rtw_adapter *padapter, struct wlan
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct wlan_network  *cur_network = &(pmlmepriv->cur_network);
 
-	DBG_8192D("%s\n", __FUNCTION__);
+	DBG_8192D("%s\n", __func__);
 
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("\nfw_state:%x, BSSID:%pM\n"
 		,get_fwstate(pmlmepriv), pnetwork->network.MacAddress));
@@ -1562,7 +1562,7 @@ static void rtw_joinbss_update_network(struct rtw_adapter *padapter, struct wlan
 	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
 		DBG_8192D("%s signal_strength:%3u, rssi:%3d, signal_qual:%3u"
 			"\n"
-			, __FUNCTION__
+			, __func__
 			, adapter->recvpriv.signal_strength
 			, adapter->recvpriv.rssi
 			, adapter->recvpriv.signal_qual
@@ -2085,7 +2085,7 @@ void _rtw_join_timeout_handler (struct rtw_adapter *adapter)
 #endif //CONFIG_LAYER2_ROAMING
 
 _func_enter_;
-	DBG_8192D("%s, fw_state=%x\n", __FUNCTION__, get_fwstate(pmlmepriv));
+	DBG_8192D("%s, fw_state=%x\n", __func__, get_fwstate(pmlmepriv));
 
 	if(adapter->bDriverStopped ||adapter->bSurpriseRemoved)
 		return;
@@ -2098,9 +2098,9 @@ _func_enter_;
 		while(1) {
 			pmlmepriv->to_roaming--;
 			if (rtw_to_roaming(adapter) != 0) { /* try another */
-				DBG_8192D("%s try another roaming\n", __FUNCTION__);
+				DBG_8192D("%s try another roaming\n", __func__);
 				if( _SUCCESS!=(do_join_r=rtw_do_join(adapter)) ) {
-					DBG_8192D("%s roaming do_join return %d\n", __FUNCTION__ ,do_join_r);
+					DBG_8192D("%s roaming do_join return %d\n", __func__ ,do_join_r);
 					continue;
 				}
 				break;
@@ -2113,7 +2113,7 @@ _func_enter_;
 					DBG_8192D("change to widi listen\n");
 				}
 #endif // CONFIG_INTEL_WIDI
-				DBG_8192D("%s We've try roaming but fail\n", __FUNCTION__);
+				DBG_8192D("%s We've try roaming but fail\n", __func__);
 				rtw_indicate_disconnect(adapter);
 				break;
 			}
@@ -2171,13 +2171,13 @@ static void rtw_auto_scan_handler(struct rtw_adapter *padapter)
 /*
 			if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
 			{
-				DBG_8192D("exit %s when _FW_UNDER_SURVEY|_FW_UNDER_LINKING -> \n", __FUNCTION__);
+				DBG_8192D("exit %s when _FW_UNDER_SURVEY|_FW_UNDER_LINKING -> \n", __func__);
 				return;
 			}
 
 			if(pmlmepriv->sitesurveyctrl.traffic_busy == true)
 			{
-				DBG_8192D("%s exit cause traffic_busy(%x)\n",__FUNCTION__, pmlmepriv->sitesurveyctrl.traffic_busy);
+				DBG_8192D("%s exit cause traffic_busy(%x)\n",__func__, pmlmepriv->sitesurveyctrl.traffic_busy);
 				return;
 			}
 */
@@ -2188,13 +2188,13 @@ static void rtw_auto_scan_handler(struct rtw_adapter *padapter)
 				if ((check_buddy_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true) ||
 					(padapter->pbuddy_adapter->mlmepriv.LinkDetectInfo.bBusyTraffic == true))
 				{
-					DBG_8192D("%s, but buddy_intf is under scanning or linking or BusyTraffic\n", __FUNCTION__);
+					DBG_8192D("%s, but buddy_intf is under scanning or linking or BusyTraffic\n", __func__);
 					return;
 				}
 			}
 #endif
 
-			DBG_8192D("%s\n", __FUNCTION__);
+			DBG_8192D("%s\n", __func__);
 
 			rtw_set_802_11_bssid_list_scan(padapter, NULL, 0);
 
@@ -2450,7 +2450,7 @@ _func_enter_;
 
 		pnetwork = LIST_CONTAINOR(pmlmepriv->pscanned, struct wlan_network, list);
 		if(pnetwork==NULL){
-			RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s return _FAIL:(pnetwork==NULL)\n", __FUNCTION__));
+			RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s return _FAIL:(pnetwork==NULL)\n", __func__));
 			ret = _FAIL;
 			goto exit;
 		}
@@ -2461,11 +2461,11 @@ _func_enter_;
 	}
 
 	if(candidate == NULL) {
-		DBG_8192D("%s: return _FAIL(candidate == NULL)\n", __FUNCTION__);
+		DBG_8192D("%s: return _FAIL(candidate == NULL)\n", __func__);
 		ret = _FAIL;
 		goto exit;
 	} else {
-		DBG_8192D("%s: candidate: %s(%pM, ch:%u)\n", __FUNCTION__,
+		DBG_8192D("%s: candidate: %s(%pM, ch:%u)\n", __func__,
 			candidate->network.Ssid.Ssid, candidate->network.MacAddress,
 			candidate->network.Configuration.DSConfig);
 	}
@@ -2474,7 +2474,7 @@ _func_enter_;
 	// check for situation of  _FW_LINKED
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		DBG_8192D("%s: _FW_LINKED while ask_for_joinbss!!!\n", __FUNCTION__);
+		DBG_8192D("%s: _FW_LINKED while ask_for_joinbss!!!\n", __func__);
 
 		rtw_disassoc_cmd(adapter, 0, true);
 		rtw_indicate_disconnect(adapter);
@@ -3020,7 +3020,7 @@ unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie, u8 *
 			rtw_hal_get_def_var(padapter, HAL_DEF_RX_PACKET_OFFSET, &rx_packet_offset);
 			rtw_hal_get_def_var(padapter, HAL_DEF_MAX_RECVBUF_SZ, &max_recvbuf_sz);
 			//if(max_recvbuf_sz-rx_packet_offset>(8191-256)) {
-			//	DBG_8192D("%s IEEE80211_HT_CAP_MAX_AMSDU is set\n", __FUNCTION__);
+			//	DBG_8192D("%s IEEE80211_HT_CAP_MAX_AMSDU is set\n", __func__);
 			//	ht_capie.cap_info = ht_capie.cap_info |IEEE80211_HT_CAP_MAX_AMSDU;
 			//}
 		}
@@ -3203,7 +3203,7 @@ void rtw_update_ht_cap(struct rtw_adapter *padapter, u8 *pie, uint ie_len, u8 ch
 		{
 			pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
 		}*/
-		DBG_8192D("%s(): WLAN_HT_CAP_SM_PS_STATIC\n",__FUNCTION__);
+		DBG_8192D("%s(): WLAN_HT_CAP_SM_PS_STATIC\n",__func__);
 	}
 
 	//
@@ -3304,7 +3304,7 @@ void _rtw_roaming(struct rtw_adapter *padapter, struct wlan_network *tgt_network
 				if(0< rtw_to_roaming(padapter)) {
 					continue;
 				} else {
-					DBG_8192D("%s(%d) -to roaming fail, indicate_disconnect\n", __FUNCTION__,__LINE__);
+					DBG_8192D("%s(%d) -to roaming fail, indicate_disconnect\n", __func__,__LINE__);
 					rtw_indicate_disconnect(padapter);
 					break;
 				}

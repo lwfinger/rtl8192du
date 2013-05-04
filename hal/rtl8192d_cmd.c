@@ -376,7 +376,7 @@ void rtl8192d_set_FwPwrMode_cmd(struct rtw_adapter*padapter, u8 Mode)
 
 _func_enter_;
 
-	DBG_8192D("%s(): Mode = %d, SmartPS = %d\n", __FUNCTION__,Mode,pwrpriv->smart_ps);
+	DBG_8192D("%s(): Mode = %d, SmartPS = %d\n", __func__,Mode,pwrpriv->smart_ps);
 
 	SET_H2CCMD_PWRMODE_PARM_MODE(u1H2CSetPwrMode, Mode);
 	SET_H2CCMD_PWRMODE_PARM_SMART_PS(u1H2CSetPwrMode, pwrpriv->smart_ps);
@@ -399,7 +399,7 @@ void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 
-	//DBG_8192D("%s\n", __FUNCTION__);
+	//DBG_8192D("%s\n", __func__);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -487,7 +487,7 @@ _ConstructBeacon:
 
 	*pLength = pktlen;
 
-	//DBG_8192D("%s bcn_sz=%u\n", __FUNCTION__, pktlen);
+	//DBG_8192D("%s bcn_sz=%u\n", __func__, pktlen);
 
 }
 
@@ -499,7 +499,7 @@ void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	//DBG_8192D("%s\n", __FUNCTION__);
+	//DBG_8192D("%s\n", __func__);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -532,7 +532,7 @@ void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pL
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	//DBG_8192D("%s:%d\n", __FUNCTION__, bForcePowerSave);
+	//DBG_8192D("%s:%d\n", __func__, bForcePowerSave);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -587,7 +587,7 @@ void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u
 	struct wlan_bssid_ex	*cur_network = &(pmlmeinfo->network);
 
 
-	//DBG_8192D("%s\n", __FUNCTION__);
+	//DBG_8192D("%s\n", __func__);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -697,11 +697,11 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 	u8	u1RsvdPageLoc[3]={0};
 	bool	dlok = false;
 
-	DBG_8192D("%s\n", __FUNCTION__);
+	DBG_8192D("%s\n", __func__);
 
 	reservedpagepacket = (u8*)rtw_malloc(1000);
 	if(reservedpagepacket == NULL){
-		DBG_8192D("%s(): alloc reservedpagepacket fail !!!\n", __FUNCTION__);
+		DBG_8192D("%s(): alloc reservedpagepacket fail !!!\n", __func__);
 		return;
 	}
 
@@ -830,7 +830,7 @@ void rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus)
 
 _func_enter_;
 
-	DBG_8192D("%s\n", __FUNCTION__);
+	DBG_8192D("%s\n", __func__);
 
 	if(mstatus == 1)
 	{
@@ -955,7 +955,7 @@ _func_enter_;
 							pwdinfo->noa_count[i]--;
 					}
 				}
-				//DBG_8192D("%s(): start_time = %x\n",__FUNCTION__,start_time);
+				//DBG_8192D("%s(): start_time = %x\n",__func__,start_time);
 				rtw_write32(padapter, 0x5E8, start_time);
 
 				rtw_write8(padapter, 0x5EC, pwdinfo->noa_count[i]);
@@ -1090,18 +1090,18 @@ _func_enter_;
 		rtw_write8(padapter, 0xf8, test);
 
 		pwowlan_parm.mode |=FW_WOWLAN_FUN_EN;
-		//printk("\n %s 1.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
+		//printk("\n %s 1.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
 		if(pwrpriv->wowlan_pattern ==true){
 			pwowlan_parm.mode |= FW_WOWLAN_PATTERN_MATCH;
-		//printk("\n %s 2.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
+		//printk("\n %s 2.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
 		}
 		if(pwrpriv->wowlan_magic ==true){
 			//pwowlan_parm.mode |=FW_WOWLAN_MAGIC_PKT;
-		//printk("\n %s 3.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
+		//printk("\n %s 3.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
 		}
 		if(pwrpriv->wowlan_unicast ==true){
 			pwowlan_parm.mode |=FW_WOWLAN_UNICAST;
-		//printk("\n %s 4.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
+		//printk("\n %s 4.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
 		}
 
 		rtl8192d_set_FwJoinBssReport_cmd(padapter, 1);
@@ -1119,9 +1119,9 @@ _func_enter_;
 
 		pwowlan_parm.second_mode|=FW_WOWLAN_GPIO_WAKEUP_EN;
 		pwowlan_parm.second_mode|=FW_FW_PARSE_MAGIC_PKT;
-		//printk("\n %s 5.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
+		//printk("\n %s 5.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
 		{	u8 *ptr=(u8 *)&pwowlan_parm;
-			printk("\n %s H2C_WO_WLAN=%x %02x:%02x:%02x:%02x:%02x \n",__FUNCTION__,H2C_WO_WLAN_CMD,ptr[0],ptr[1],ptr[2],ptr[3],ptr[4] );
+			printk("\n %s H2C_WO_WLAN=%x %02x:%02x:%02x:%02x:%02x \n",__func__,H2C_WO_WLAN_CMD,ptr[0],ptr[1],ptr[2],ptr[3],ptr[4] );
 		}
 		FillH2CCmd92D(padapter, H2C_WO_WLAN_CMD, 4, (u8 *)&pwowlan_parm);
 
@@ -1130,20 +1130,20 @@ _func_enter_;
 		pwowlan_parm.mode =3;
 		pwowlan_parm.gpio_index=3;
 		FillH2CCmd92D(padapter, KEEP_ALIVE_CONTROL_CMD, 2, (u8 *)&pwowlan_parm);
-		printk("%s after KEEP_ALIVE_CONTROL_CMD register 0x81=%x \n",__FUNCTION__,rtw_read8(padapter, 0x85));
+		printk("%s after KEEP_ALIVE_CONTROL_CMD register 0x81=%x \n",__func__,rtw_read8(padapter, 0x85));
 
 		pwowlan_parm.mode =1;
 		pwowlan_parm.gpio_index=0;
 		pwowlan_parm.gpio_duration=0;
 		FillH2CCmd92D(padapter, DISCONNECT_DECISION_CTRL_CMD, 3, (u8 *)&pwowlan_parm);
-		printk("%s after DISCONNECT_DECISION_CTRL_CMD register 0x81=%x \n",__FUNCTION__,rtw_read8(padapter, 0x85));
+		printk("%s after DISCONNECT_DECISION_CTRL_CMD register 0x81=%x \n",__func__,rtw_read8(padapter, 0x85));
 
 		//enable GPIO wakeup
 		pwowlan_parm.mode =1;
 		pwowlan_parm.gpio_index=0;
 		pwowlan_parm.gpio_duration=0;
 		FillH2CCmd92D(padapter, REMOTE_WAKE_CTRL_CMD, 1, (u8 *)&pwowlan_parm);
-		printk("%s after DISCONNECT_DECISION_CTRL_CMD register \n",__FUNCTION__);
+		printk("%s after DISCONNECT_DECISION_CTRL_CMD register \n",__func__);
 
 	}
 	else

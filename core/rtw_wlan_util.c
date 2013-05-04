@@ -514,7 +514,7 @@ void set_channel_bwmode(struct rtw_adapter *padapter, unsigned char channel, uns
 
 	if ( padapter->bNotifyChannelChange )
 	{
-		DBG_8192D( "[%s] ch = %d, offset = %d, bwmode = %d\n", __FUNCTION__, channel, channel_offset, bwmode );
+		DBG_8192D( "[%s] ch = %d, offset = %d, bwmode = %d\n", __func__, channel, channel_offset, bwmode );
 	}
 
 	if((bwmode == HT_CHANNEL_WIDTH_20)||(channel_offset == HAL_PRIME_CHNL_OFFSET_DONT_CARE))
@@ -718,7 +718,7 @@ void write_cam(struct rtw_adapter *padapter, u8 entry, u16 ctrl, u8 *mac, u8 *ke
 		//cmd = CAM_POLLINIG | CAM_WRITE | (addr + j);
 		//rtw_write32(padapter, RWCAM, cmd);
 
-		//DBG_8192D("%s=> cam write: %x, %x\n",__FUNCTION__, cmd, val);
+		//DBG_8192D("%s=> cam write: %x, %x\n",__func__, cmd, val);
 
 	}
 
@@ -820,18 +820,18 @@ int WFD_info_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_i
 		u8	attr_content[ 10 ] = { 0x00 };
 		u32	attr_contentlen = 0;
 
-		printk( "[%s] Found WFD IE\n", __FUNCTION__ );
+		printk( "[%s] Found WFD IE\n", __func__ );
 		rtw_get_wfd_attr_content( wfd_ie, wfd_ielen, WFD_ATTR_DEVICE_INFO, attr_content, &attr_contentlen);
 		if ( attr_contentlen )
 		{
 			pwdinfo->wfd_info->peer_rtsp_ctrlport = RTW_GET_BE16( attr_content + 2 );
-			DBG_8192D( "[%s] Peer PORT NUM = %d\n", __FUNCTION__, pwdinfo->wfd_info->peer_rtsp_ctrlport );
+			DBG_8192D( "[%s] Peer PORT NUM = %d\n", __func__, pwdinfo->wfd_info->peer_rtsp_ctrlport );
 			return( true );
 		}
 	}
 	else
 	{
-		printk( "[%s] NO WFD IE\n", __FUNCTION__ );
+		printk( "[%s] NO WFD IE\n", __func__ );
 
 	}
 	return( _FAIL );
@@ -1173,7 +1173,7 @@ void HTOnAssocRsp(struct rtw_adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	DBG_8192D("%s\n", __FUNCTION__);
+	DBG_8192D("%s\n", __func__);
 
 	if ((pmlmeinfo->HT_info_enable) && (pmlmeinfo->HT_caps_enable))
 	{
@@ -1929,7 +1929,7 @@ void process_addba_req(struct rtw_adapter *padapter, u8 *paddba_req, u8 *addr)
 		#ifdef CONFIG_UPDATE_INDICATE_SEQ_WHILE_PROCESS_ADDBA_REQ
 		preorder_ctrl->indicate_seq = start_seq;
 		#ifdef DBG_RX_SEQ
-		DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, start_seq: %d\n", __FUNCTION__, __LINE__,
+		DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, start_seq: %d\n", __func__, __LINE__,
 			preorder_ctrl->indicate_seq, start_seq);
 		#endif
 		#else
@@ -1982,20 +1982,20 @@ int rtw_handle_dualmac(struct rtw_adapter *adapter, bool init)
 
 		/* For SMSP on 92DU-VC, driver do not probe another Interface. */
 		if ((dvobj->DualMacMode != true) && (dvobj->InterfaceNumber != 0)) {
-			DBG_8192D("%s(): Do not init another USB Interface because SMSP\n",__FUNCTION__);
+			DBG_8192D("%s(): Do not init another USB Interface because SMSP\n",__func__);
 			status = _FAIL;
 			goto exit;
 		}
 #ifdef CONFIG_DUALMAC_CONCURRENT
 		if (pbuddy_padapter == NULL) {
 			pbuddy_padapter = adapter;
-			DBG_8192D("%s(): pbuddy_padapter == NULL, Set pbuddy_padapter\n",__FUNCTION__);
+			DBG_8192D("%s(): pbuddy_padapter == NULL, Set pbuddy_padapter\n",__func__);
 		} else {
 			adapter->pbuddy_adapter = pbuddy_padapter;
 			pbuddy_padapter->pbuddy_adapter = adapter;
 			// clear global value
 			pbuddy_padapter = NULL;
-			DBG_8192D("%s(): pbuddy_padapter exist, Exchange Information\n",__FUNCTION__);
+			DBG_8192D("%s(): pbuddy_padapter exist, Exchange Information\n",__func__);
 		}
 
 		if (dvobj->InterfaceNumber == 0) {
@@ -2003,13 +2003,13 @@ int rtw_handle_dualmac(struct rtw_adapter *adapter, bool init)
 			adapter->isprimary = true;
 			adapter->adapter_type = PRIMARY_ADAPTER;
 			adapter->iface_type = IFACE_PORT0;
-			DBG_8192D("%s(): PRIMARY_ADAPTER\n",__FUNCTION__);
+			DBG_8192D("%s(): PRIMARY_ADAPTER\n",__func__);
 		} else {
 			//set adapter_type/iface type
 			adapter->isprimary = false;
 			adapter->adapter_type = SECONDARY_ADAPTER;
 			adapter->iface_type = IFACE_PORT1;
-			DBG_8192D("%s(): SECONDARY_ADAPTER\n",__FUNCTION__);
+			DBG_8192D("%s(): SECONDARY_ADAPTER\n",__func__);
 		}
 #endif
 	}else {

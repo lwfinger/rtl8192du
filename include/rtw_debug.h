@@ -191,7 +191,7 @@
 		do {	\
 			if (GlobalDebugLevel >= _drv_debug_) \
 			{																	\
-				_dbgdump("\n %s : %s enters at %d\n", RTL871X_MODULE_NAME, __FUNCTION__, __LINE__);\
+				_dbgdump("\n %s : %s enters at %d\n", RTL871X_MODULE_NAME, __func__, __LINE__);\
 			}		\
 		} while(0)
 
@@ -200,7 +200,7 @@
 		do {	\
 			if (GlobalDebugLevel >= _drv_debug_) \
 			{																	\
-				_dbgdump("\n %s : %s exits at %d\n", RTL871X_MODULE_NAME, __FUNCTION__, __LINE__); \
+				_dbgdump("\n %s : %s exits at %d\n", RTL871X_MODULE_NAME, __func__, __LINE__); \
 			}	\
 		} while(0)
 

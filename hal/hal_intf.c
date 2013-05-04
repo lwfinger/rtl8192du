@@ -228,7 +228,7 @@ void rtw_hal_enable_interrupt(struct rtw_adapter *padapter)
 	if (padapter->HalFunc.enable_interrupt)
 		padapter->HalFunc.enable_interrupt(padapter);
 	else
-		DBG_8192D("%s: HalFunc.enable_interrupt is NULL!\n", __FUNCTION__);
+		DBG_8192D("%s: HalFunc.enable_interrupt is NULL!\n", __func__);
 
 }
 void rtw_hal_disable_interrupt(struct rtw_adapter *padapter)
@@ -236,7 +236,7 @@ void rtw_hal_disable_interrupt(struct rtw_adapter *padapter)
 	if (padapter->HalFunc.disable_interrupt)
 		padapter->HalFunc.disable_interrupt(padapter);
 	else
-		DBG_8192D("%s: HalFunc.disable_interrupt is NULL!\n", __FUNCTION__);
+		DBG_8192D("%s: HalFunc.disable_interrupt is NULL!\n", __func__);
 
 }
 
@@ -246,7 +246,7 @@ u32	rtw_hal_inirp_init(struct rtw_adapter *padapter)
 	if(padapter->HalFunc.inirp_init)
 		rst = padapter->HalFunc.inirp_init(padapter);
 	else
-		DBG_8192D(" %s HalFunc.inirp_init is NULL!!!\n",__FUNCTION__);
+		DBG_8192D(" %s HalFunc.inirp_init is NULL!!!\n",__func__);
 	return rst;
 }
 

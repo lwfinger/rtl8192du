@@ -1049,7 +1049,7 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
 	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
 
 
-	//DBG_8192D("%s\n", __FUNCTION__);
+	//DBG_8192D("%s\n", __func__);
 
 	skb = pkt;
 

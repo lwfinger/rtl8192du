@@ -570,7 +570,7 @@ static void rtw_dev_unload(struct rtw_adapter *padapter)
 			//DBG_8192D("r871x_dev_unload()->rtl871x_hal_deinit()\n");
 #ifdef CONFIG_WOWLAN
 			if((padapter->pwrctrlpriv.bSupportRemoteWakeup==true)&&(padapter->pwrctrlpriv.wowlan_mode==true)){
-				DBG_8192D("%s bSupportWakeOnWlan==true  do not run rtw_hal_deinit()\n",__FUNCTION__);
+				DBG_8192D("%s bSupportWakeOnWlan==true  do not run rtw_hal_deinit()\n",__func__);
 			}
 			else
 #endif //CONFIG_WOWLAN
@@ -695,7 +695,7 @@ int rtw_hw_suspend(struct rtw_adapter *padapter )
 	return 0;
 
 error_exit:
-	DBG_8192D("%s, failed \n",__FUNCTION__);
+	DBG_8192D("%s, failed \n",__func__);
 	return (-1);
 
 }
@@ -746,7 +746,7 @@ int rtw_hw_resume(struct rtw_adapter *padapter)
 
 	return 0;
 error_exit:
-	DBG_8192D("%s, Open net dev failed \n",__FUNCTION__);
+	DBG_8192D("%s, Open net dev failed \n",__func__);
 	return (-1);
 }
 #endif
@@ -766,7 +766,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	u32 start_time = rtw_get_current_time();
 	_func_enter_;
 
-	DBG_8192D("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
+	DBG_8192D("==> %s (%s:%d)\n",__func__, current->comm, current->pid);
 
 	if((!padapter->bup) || (padapter->bDriverStopped)||(padapter->bSurpriseRemoved))
 	{
@@ -820,8 +820,8 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 #ifdef CONFIG_LAYER2_ROAMING_RESUME
 	if(check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED) )
 	{
-		//DBG_8192D("%s:%d assoc_ssid:%s\n", __FUNCTION__, __LINE__, pmlmepriv->assoc_ssid.Ssid);
-		DBG_8192D("%s:%d %s(%pM), length:%d assoc_ssid.length:%d\n",__FUNCTION__, __LINE__,
+		//DBG_8192D("%s:%d assoc_ssid:%s\n", __func__, __LINE__, pmlmepriv->assoc_ssid.Ssid);
+		DBG_8192D("%s:%d %s(%pM), length:%d assoc_ssid.length:%d\n",__func__, __LINE__,
 				pmlmepriv->cur_network.network.Ssid.Ssid,
 				pmlmepriv->cur_network.network.MacAddress,
 				pmlmepriv->cur_network.network.Ssid.SsidLength,
@@ -853,7 +853,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 		rtw_indicate_disconnect(padapter);
 
 exit:
-	DBG_8192D("<===  %s return %d.............. in %dms\n", __FUNCTION__
+	DBG_8192D("<===  %s return %d.............. in %dms\n", __func__
 		, ret, rtw_get_passing_time_ms(start_time));
 
 	_func_exit_;
@@ -899,7 +899,7 @@ int rtw_resume_process(struct rtw_adapter *padapter)
 	u32 start_time = rtw_get_current_time();
 	_func_enter_;
 
-	DBG_8192D("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
+	DBG_8192D("==> %s (%s:%d)\n",__func__, current->comm, current->pid);
 
 	if(padapter) {
 		pnetdev= padapter->pnetdev;
@@ -974,7 +974,7 @@ exit:
 	#endif //CONFIG_RESUME_IN_WORKQUEUE
 
 	pwrpriv->bInSuspend = false;
-	DBG_8192D("<===  %s return %d.............. in %dms\n", __FUNCTION__
+	DBG_8192D("<===  %s return %d.............. in %dms\n", __func__
 		, ret, rtw_get_passing_time_ms(start_time));
 
 	_func_exit_;
@@ -1171,9 +1171,9 @@ struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 			usb_autopm_get_interface(dvobj->pusbintf );//init pm_usage_cnt ,let it start from 1
 
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
-			DBG_8192D("%s...pm_usage_cnt(%d).....\n",__FUNCTION__, atomic_read(&(dvobj->pusbintf ->pm_usage_cnt)));
+			DBG_8192D("%s...pm_usage_cnt(%d).....\n",__func__, atomic_read(&(dvobj->pusbintf ->pm_usage_cnt)));
 			#else
-			DBG_8192D("%s...pm_usage_cnt(%d).....\n",__FUNCTION__, dvobj->pusbintf ->pm_usage_cnt);
+			DBG_8192D("%s...pm_usage_cnt(%d).....\n",__func__, dvobj->pusbintf ->pm_usage_cnt);
 			#endif
 		}
 	}

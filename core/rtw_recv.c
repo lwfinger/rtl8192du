@@ -1267,7 +1267,7 @@ _func_enter_;
 		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)){
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" SA==myself \n"));
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D("DBG_RX_DROP_FRAME %s SA=%x:%x:%x:%x:%x:%x, myhwaddr= %x:%x:%x:%x:%x:%x\n", __FUNCTION__,
+			DBG_8192D("DBG_RX_DROP_FRAME %s SA=%x:%x:%x:%x:%x:%x, myhwaddr= %x:%x:%x:%x:%x:%x\n", __func__,
 				pattrib->src[0], pattrib->src[1], pattrib->src[2],
 				pattrib->src[3], pattrib->src[4], pattrib->src[5],
 				*(myhwaddr), *(myhwaddr+1), *(myhwaddr+2),
@@ -1300,7 +1300,7 @@ _func_enter_;
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("mybssid=%pM\n", mybssid));
 			#ifdef DBG_RX_DROP_FRAME
 			DBG_8192D("DBG_RX_DROP_FRAME %s BSSID=%pM, mybssid=%pM\n",
-				__FUNCTION__, pattrib->bssid, mybssid);
+				__func__, pattrib->bssid, mybssid);
 			DBG_8192D( "this adapter = %d, buddy adapter = %d\n", adapter->adapter_type, adapter->pbuddy_adapter->adapter_type );
 			#endif
 
@@ -1321,7 +1321,7 @@ _func_enter_;
 		if (*psta == NULL) {
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("ap2sta: can't get psta under STATION_MODE ; drop pkt\n"));
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D("DBG_RX_DROP_FRAME %s can't get psta under STATION_MODE ; drop pkt\n", __FUNCTION__);
+			DBG_8192D("DBG_RX_DROP_FRAME %s can't get psta under STATION_MODE ; drop pkt\n", __func__);
 			#endif
 			ret= _FAIL;
 			goto exit;
@@ -1355,7 +1355,7 @@ _func_enter_;
 		if (*psta == NULL) {
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("can't get psta under MP_MODE ; drop pkt\n"));
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D("DBG_RX_DROP_FRAME %s can't get psta under WIFI_MP_STATE ; drop pkt\n", __FUNCTION__);
+			DBG_8192D("DBG_RX_DROP_FRAME %s can't get psta under WIFI_MP_STATE ; drop pkt\n", __func__);
 			#endif
 			ret= _FAIL;
 			goto exit;
@@ -1384,7 +1384,7 @@ _func_enter_;
 
 		ret = _FAIL;
 		#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s fw_state:0x%x\n", __FUNCTION__, get_fwstate(pmlmepriv));
+		DBG_8192D("DBG_RX_DROP_FRAME %s fw_state:0x%x\n", __func__, get_fwstate(pmlmepriv));
 		#endif
 	}
 
@@ -1634,7 +1634,7 @@ int validate_recv_mgnt_frame(struct rtw_adapter * padapter, union recv_frame *pr
 
 	precv_frame = recvframe_chk_defrag(padapter, precv_frame);
 	if (precv_frame == NULL) {
-		RT_TRACE(_module_rtl871x_recv_c_, _drv_notice_,("%s: fragment packet\n",__FUNCTION__));
+		RT_TRACE(_module_rtl871x_recv_c_, _drv_notice_,("%s: fragment packet\n",__func__));
 		return _SUCCESS;
 	}
 
@@ -1730,7 +1730,7 @@ _func_enter_;
 
 	if(ret ==_FAIL){
 		#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s case:%d, res:%d\n", __FUNCTION__, pattrib->to_fr_ds, ret);
+		DBG_8192D("DBG_RX_DROP_FRAME %s case:%d, res:%d\n", __func__, pattrib->to_fr_ds, ret);
 		#endif
 		goto exit;
 	} else if (ret == RTW_RX_HANDLED) {
@@ -2406,7 +2406,7 @@ int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
 	{
 		preorder_ctrl->indicate_seq = seq_num;
 		#ifdef DBG_RX_SEQ
-		DBG_8192D("DBG_RX_SEQ %s:%d init IndicateSeq: %d, NewSeq: %d\n", __FUNCTION__, __LINE__,
+		DBG_8192D("DBG_RX_SEQ %s:%d init IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
 			preorder_ctrl->indicate_seq, seq_num);
 		#endif
 
@@ -2422,7 +2422,7 @@ int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
 		//DbgPrint("CheckRxTsIndicateSeq(): Packet Drop! IndicateSeq: %d, NewSeq: %d\n", precvpriv->indicate_seq, seq_num);
 
 		#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("%s IndicateSeq: %d > NewSeq: %d\n", __FUNCTION__,
+		DBG_8192D("%s IndicateSeq: %d > NewSeq: %d\n", __func__,
 			preorder_ctrl->indicate_seq, seq_num);
 		#endif
 
@@ -2439,7 +2439,7 @@ int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
 	{
 		preorder_ctrl->indicate_seq = (preorder_ctrl->indicate_seq + 1) & 0xFFF;
 		#ifdef DBG_RX_SEQ
-		DBG_8192D("DBG_RX_SEQ %s:%d SN_EQUAL IndicateSeq: %d, NewSeq: %d\n", __FUNCTION__, __LINE__,
+		DBG_8192D("DBG_RX_SEQ %s:%d SN_EQUAL IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
 			preorder_ctrl->indicate_seq, seq_num);
 		#endif
 	}
@@ -2455,7 +2455,7 @@ int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
 			preorder_ctrl->indicate_seq = 0xFFF - (wsize - (seq_num + 1)) + 1;
 
 		#ifdef DBG_RX_SEQ
-		DBG_8192D("DBG_RX_SEQ %s:%d SN_LESS(wend, seq_num) IndicateSeq: %d, NewSeq: %d\n", __FUNCTION__, __LINE__,
+		DBG_8192D("DBG_RX_SEQ %s:%d SN_LESS(wend, seq_num) IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
 			preorder_ctrl->indicate_seq, seq_num);
 		#endif
 	}
@@ -2548,7 +2548,7 @@ int recv_indicatepkts_in_order(struct rtw_adapter *padapter, struct recv_reorder
 	        pattrib = &prframe->u.hdr.attrib;
 		preorder_ctrl->indicate_seq = pattrib->seq_num;
 		#ifdef DBG_RX_SEQ
-		DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __FUNCTION__, __LINE__,
+		DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
 			preorder_ctrl->indicate_seq, pattrib->seq_num);
 		#endif
 	}
@@ -2574,7 +2574,7 @@ int recv_indicatepkts_in_order(struct rtw_adapter *padapter, struct recv_reorder
 			{
 				preorder_ctrl->indicate_seq = (preorder_ctrl->indicate_seq + 1) & 0xFFF;
 				#ifdef DBG_RX_SEQ
-				DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __FUNCTION__, __LINE__,
+				DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
 					preorder_ctrl->indicate_seq, pattrib->seq_num);
 				#endif
 			}
@@ -2665,7 +2665,7 @@ int recv_indicatepkt_reorder(struct rtw_adapter *padapter, union recv_frame *prf
 			}
 
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D("DBG_RX_DROP_FRAME %s pattrib->qos !=1\n", __FUNCTION__);
+			DBG_8192D("DBG_RX_DROP_FRAME %s pattrib->qos !=1\n", __func__);
 			#endif
 
 			return _FAIL;
@@ -2677,7 +2677,7 @@ int recv_indicatepkt_reorder(struct rtw_adapter *padapter, union recv_frame *prf
 			//indicate this recv_frame
 			preorder_ctrl->indicate_seq = pattrib->seq_num;
 			#ifdef DBG_RX_SEQ
-			DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __FUNCTION__, __LINE__,
+			DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
 				preorder_ctrl->indicate_seq, pattrib->seq_num);
 			#endif
 
@@ -2685,7 +2685,7 @@ int recv_indicatepkt_reorder(struct rtw_adapter *padapter, union recv_frame *prf
 
 			preorder_ctrl->indicate_seq = (preorder_ctrl->indicate_seq + 1)%4096;
 			#ifdef DBG_RX_SEQ
-			DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __FUNCTION__, __LINE__,
+			DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
 				preorder_ctrl->indicate_seq, pattrib->seq_num);
 			#endif
 
@@ -2705,7 +2705,7 @@ int recv_indicatepkt_reorder(struct rtw_adapter *padapter, union recv_frame *prf
 		{
 			preorder_ctrl->indicate_seq = pattrib->seq_num;
 			#ifdef DBG_RX_SEQ
-			DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __FUNCTION__, __LINE__,
+			DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
 				preorder_ctrl->indicate_seq, pattrib->seq_num);
 			#endif
 
@@ -2713,13 +2713,13 @@ int recv_indicatepkt_reorder(struct rtw_adapter *padapter, union recv_frame *prf
 
 			preorder_ctrl->indicate_seq = (preorder_ctrl->indicate_seq + 1)%4096;
 			#ifdef DBG_RX_SEQ
-			DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __FUNCTION__, __LINE__,
+			DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
 				preorder_ctrl->indicate_seq, pattrib->seq_num);
 			#endif
 
 			if(retval != _SUCCESS){
 				#ifdef DBG_RX_DROP_FRAME
-				DBG_8192D("DBG_RX_DROP_FRAME %s amsdu_to_msdu fail\n", __FUNCTION__);
+				DBG_8192D("DBG_RX_DROP_FRAME %s amsdu_to_msdu fail\n", __func__);
 				#endif
 			}
 
@@ -2747,7 +2747,7 @@ int recv_indicatepkt_reorder(struct rtw_adapter *padapter, union recv_frame *prf
 		//return _FAIL;
 
 		#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s check_indicate_seq fail\n", __FUNCTION__);
+		DBG_8192D("DBG_RX_DROP_FRAME %s check_indicate_seq fail\n", __func__);
 		#endif
 		goto _err_exit;
 	}
@@ -2760,7 +2760,7 @@ int recv_indicatepkt_reorder(struct rtw_adapter *padapter, union recv_frame *prf
 		//spin_unlock_irqrestore(&ppending_recvframe_queue->lock, &irql);
 		//return _FAIL;
 		#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s enqueue_reorder_recvframe fail\n", __FUNCTION__);
+		DBG_8192D("DBG_RX_DROP_FRAME %s enqueue_reorder_recvframe fail\n", __func__);
 		#endif
 		goto _err_exit;
 	}
@@ -2853,7 +2853,7 @@ int process_recv_indicatepkts(struct rtw_adapter *padapter, union recv_frame *pr
 		if(recv_indicatepkt_reorder(padapter, prframe)!=_SUCCESS)// including perform A-MPDU Rx Ordering Buffer Control
 		{
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D("DBG_RX_DROP_FRAME %s recv_indicatepkt_reorder error!\n", __FUNCTION__);
+			DBG_8192D("DBG_RX_DROP_FRAME %s recv_indicatepkt_reorder error!\n", __func__);
 			#endif
 
 			if ((padapter->bDriverStopped == false) &&
@@ -2872,7 +2872,7 @@ int process_recv_indicatepkts(struct rtw_adapter *padapter, union recv_frame *pr
 		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("wlanhdr_to_ethhdr: drop pkt \n"));
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D("DBG_RX_DROP_FRAME %s wlanhdr_to_ethhdr error!\n", __FUNCTION__);
+			DBG_8192D("DBG_RX_DROP_FRAME %s wlanhdr_to_ethhdr error!\n", __func__);
 			#endif
 			return retval;
 		}
@@ -2966,7 +2966,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 	if (prframe == NULL) {
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("decryptor: drop pkt\n"));
 		#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s decryptor: drop pkt\n", __FUNCTION__);
+		DBG_8192D("DBG_RX_DROP_FRAME %s decryptor: drop pkt\n", __func__);
 		#endif
 		ret = _FAIL;
 		goto _recv_data_drop;
@@ -2989,7 +2989,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 	if(prframe==NULL)	{
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvframe_chk_defrag: drop pkt\n"));
 		#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s recvframe_chk_defrag: drop pkt\n", __FUNCTION__);
+		DBG_8192D("DBG_RX_DROP_FRAME %s recvframe_chk_defrag: drop pkt\n", __func__);
 		#endif
 		goto _recv_data_drop;
 	}
@@ -2998,7 +2998,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 	if (prframe == NULL) {
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("portctrl: drop pkt \n"));
 		#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s portctrl: drop pkt\n", __FUNCTION__);
+		DBG_8192D("DBG_RX_DROP_FRAME %s portctrl: drop pkt\n", __func__);
 		#endif
 		ret = _FAIL;
 		goto _recv_data_drop;
@@ -3019,7 +3019,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 	{
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recv_func: process_recv_indicatepkts fail! \n"));
 		#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s recv_func: process_recv_indicatepkts fail!\n", __FUNCTION__);
+		DBG_8192D("DBG_RX_DROP_FRAME %s recv_func: process_recv_indicatepkts fail!\n", __func__);
 		#endif
 		rtw_free_recvframe(orig_prframe, pfree_recv_queue);//free this recv_frame
 		goto _recv_data_drop;
@@ -3034,7 +3034,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("wlanhdr_to_ethhdr: drop pkt \n"));
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D("DBG_RX_DROP_FRAME %s wlanhdr_to_ethhdr: drop pkt\n", __FUNCTION__);
+			DBG_8192D("DBG_RX_DROP_FRAME %s wlanhdr_to_ethhdr: drop pkt\n", __func__);
 			#endif
 			rtw_free_recvframe(orig_prframe, pfree_recv_queue);//free this recv_frame
 			goto _recv_data_drop;
@@ -3048,7 +3048,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 			if (ret != _SUCCESS)
 			{
 				#ifdef DBG_RX_DROP_FRAME
-				DBG_8192D("DBG_RX_DROP_FRAME %s rtw_recv_indicatepkt fail!\n", __FUNCTION__);
+				DBG_8192D("DBG_RX_DROP_FRAME %s rtw_recv_indicatepkt fail!\n", __func__);
 				#endif
 				goto _recv_data_drop;
 			}
@@ -3058,7 +3058,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_alert_, ("@@@@  recv_func: rtw_free_recvframe\n" ));
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_debug_, ("recv_func:bDriverStopped(%d) OR bSurpriseRemoved(%d)", padapter->bDriverStopped, padapter->bSurpriseRemoved));
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D("DBG_RX_DROP_FRAME %s ecv_func:bDriverStopped(%d) OR bSurpriseRemoved(%d)\n", __FUNCTION__,
+			DBG_8192D("DBG_RX_DROP_FRAME %s ecv_func:bDriverStopped(%d) OR bSurpriseRemoved(%d)\n", __func__,
 				padapter->bDriverStopped, padapter->bSurpriseRemoved);
 			#endif
 			ret = _FAIL;
@@ -3073,7 +3073,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 		if(ret != _SUCCESS)
 		{
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D("DBG_RX_DROP_FRAME %s amsdu_to_msdu fail\n", __FUNCTION__);
+			DBG_8192D("DBG_RX_DROP_FRAME %s amsdu_to_msdu fail\n", __func__);
 			#endif
 			rtw_free_recvframe(orig_prframe, pfree_recv_queue);
 			goto _recv_data_drop;
@@ -3082,7 +3082,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 	else
 	{
 		#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s what is this condition??\n", __FUNCTION__);
+		DBG_8192D("DBG_RX_DROP_FRAME %s what is this condition??\n", __func__);
 		#endif
 		goto _recv_data_drop;
 	}
@@ -3239,7 +3239,7 @@ void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS){
 			DBG_8192D("%s signal_strength:%3u, rssi:%3d, signal_qual:%3u"
 				", num_signal_strength:%u, num_signal_qual:%u"
 				"\n"
-				, __FUNCTION__
+				, __func__
 				, recvpriv->signal_strength
 				, recvpriv->rssi
 				, recvpriv->signal_qual

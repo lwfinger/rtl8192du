@@ -74,7 +74,7 @@ _FWDownloadEnable(
 		{
 			u8 val;
 			if( (val=rtw_read8(Adapter, REG_MCUFWDL)))
-				DBG_8192D("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __FUNCTION__, __LINE__, val);
+				DBG_8192D("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __func__, __LINE__, val);
 		}
 		#endif
 		// 8051 enable
@@ -402,13 +402,13 @@ int FirmwareDownload92D(
 	#ifdef CONFIG_FILE_FWIMG
 	if(rtw_is_file_readable(rtw_fw_file_path) == true)
 	{
-		DBG_8192D("%s accquire FW from file:%s\n", __FUNCTION__, rtw_fw_file_path);
+		DBG_8192D("%s accquire FW from file:%s\n", __func__, rtw_fw_file_path);
 		pFirmware->eFWSource = FW_SOURCE_IMG_FILE; // We should decided by Reg.
 	}
 	else
 	#endif //CONFIG_FILE_FWIMG
 	{
-		DBG_8192D("%s accquire FW from embedded image\n", __FUNCTION__);
+		DBG_8192D("%s accquire FW from embedded image\n", __func__);
 		pFirmware->eFWSource = FW_SOURCE_HEADER_FILE;
 	}
 
@@ -568,7 +568,7 @@ int FirmwareDownload92D(
 		)
 			break;
 
-		DBG_8192D("%s writeFW_retry:%u, time after fwdl_start_time:%ums\n", __FUNCTION__
+		DBG_8192D("%s writeFW_retry:%u, time after fwdl_start_time:%ums\n", __func__
 			, writeFW_retry
 			, rtw_get_passing_time_ms(fwdl_start_time)
 		);
@@ -2351,7 +2351,7 @@ static s32 c2h_handler_8192d(struct rtw_adapter *padapter, struct c2h_evt_hdr *c
 	u8 i = 0;
 
 	if (c2h_evt == NULL) {
-		DBG_8192D("%s c2h_evt is NULL\n", __FUNCTION__);
+		DBG_8192D("%s c2h_evt is NULL\n", __func__);
 		ret = _FAIL;
 		goto exit;
 	}

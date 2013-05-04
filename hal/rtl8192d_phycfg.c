@@ -3253,7 +3253,7 @@ static void _PHY_SwChnl8192D(struct rtw_adapter * Adapter, u8 channel)
 
 	if ( Adapter->bNotifyChannelChange )
 	{
-		DBG_8192D( "[%s] ch = %d\n", __FUNCTION__, channel );
+		DBG_8192D( "[%s] ch = %d\n", __func__, channel );
 	}
 
 	if(pHalData->BandSet92D == BAND_ON_BOTH){
@@ -7002,7 +7002,7 @@ void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *Adapter)
 			Adapter->registrypriv.wireless_mode = WIRELESS_11ABGN;
 			break;
 	}
-	DBG_8192D("%s(): wireless_mode = %x\n",__FUNCTION__,Adapter->registrypriv.wireless_mode);
+	DBG_8192D("%s(): wireless_mode = %x\n",__func__,Adapter->registrypriv.wireless_mode);
 }
 
 //

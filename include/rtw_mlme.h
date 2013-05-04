@@ -755,9 +755,9 @@ void rtw_roaming(struct rtw_adapter *adapter, struct wlan_network *tgt_network);
 void rtw_set_roaming(struct rtw_adapter *adapter, u8 to_roaming);
 u8 rtw_to_roaming(struct rtw_adapter *adapter);
 #else
-#define _rtw_roaming(adapter, tgt_network) do {} while(0)
-#define rtw_roaming(adapter, tgt_network) do {} while(0)
-#define rtw_set_roaming(adapter, to_roaming) do {} while(0)
+#define _rtw_roaming(adapter, tgt_network) do {} while (0)
+#define rtw_roaming(adapter, tgt_network) do {} while (0)
+#define rtw_set_roaming(adapter, to_roaming) do {} while (0)
 #define rtw_to_roaming(adapter) 0
 #endif
 

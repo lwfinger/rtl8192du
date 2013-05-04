@@ -458,7 +458,7 @@ static int readFile(struct file *fp,char *buf,int len)
 	if (!fp->f_op || !fp->f_op->read)
 		return -EPERM;
 
-	while(sum<len) {
+	while (sum<len) {
 		rlen=fp->f_op->read(fp,buf+sum,len-sum, &fp->f_pos);
 		if (rlen>0)
 			sum+=rlen;
@@ -479,7 +479,7 @@ static int writeFile(struct file *fp,char *buf,int len)
 	if (!fp->f_op || !fp->f_op->write)
 		return -EPERM;
 
-	while(sum<len) {
+	while (sum<len) {
 		wlen=fp->f_op->write(fp,buf+sum,len-sum, &fp->f_pos);
 		if (wlen>0)
 			sum+=wlen;

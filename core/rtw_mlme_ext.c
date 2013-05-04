@@ -5153,7 +5153,7 @@ int issue_probereq_p2p_ex(struct rtw_adapter *adapter, u8 *da, int try_cnt, int 
 		if (i < try_cnt && wait_ms > 0 && ret==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
+	}while ((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -6681,7 +6681,7 @@ int issue_probereq_ex(struct rtw_adapter *padapter, struct ndis_802_11_ssid *pss
 		if (i < try_cnt && wait_ms > 0 && ret==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
+	}while ((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7214,7 +7214,7 @@ void issue_assocreq(struct rtw_adapter *padapter)
 			}
 			sup_ch_idx++;
 		}
-		while( pmlmeext->channel_set[sup_ch_idx].ChannelNum != 0 );
+		while ( pmlmeext->channel_set[sup_ch_idx].ChannelNum != 0 );
 		pframe = rtw_set_ie(pframe, _SUPPORTED_CH_IE_, idx_5g, sup_ch, &(pattrib->pktlen));
 	}
 #endif //CONFIG_DFS
@@ -7650,7 +7650,7 @@ int issue_nulldata(struct rtw_adapter *padapter, unsigned char *da, unsigned int
 		if (i < try_cnt && wait_ms > 0 && ret==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
+	}while ((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7784,7 +7784,7 @@ int issue_qos_nulldata(struct rtw_adapter *padapter, unsigned char *da, u16 tid,
 		if (i < try_cnt && wait_ms > 0 && ret==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
+	}while ((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7904,7 +7904,7 @@ int issue_deauth_ex(struct rtw_adapter *padapter, u8 *da, unsigned short reason,
 		if (i < try_cnt && wait_ms > 0 && ret==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
+	}while ((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -8206,7 +8206,7 @@ static void issue_action_BSSCoexistPacket(struct rtw_adapter *padapter)
 		phead = get_list_head(queue);
 		plist = get_next(phead);
 
-		while(1)
+		while (1)
 		{
 			int len;
 			u8 *p;
@@ -8349,9 +8349,9 @@ unsigned int send_beacon(struct rtw_adapter *padapter)
 			rtw_yield_os();
 			rtw_hal_get_hwreg(padapter, HW_VAR_BCN_VALID, (u8 *)(&bxmitok));
 			poll++;
-		}while((poll%10)!=0 && false == bxmitok && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
+		}while ((poll%10)!=0 && false == bxmitok && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
 
-	}while(false == bxmitok && issue<100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
+	}while (false == bxmitok && issue<100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
 
 	if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
 		return _FAIL;

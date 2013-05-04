@@ -364,7 +364,7 @@ void rtw_secmicappend(struct mic_data *pmicdata, u8 * src, u32 nbytes )
 {
 _func_enter_;
 	// This is simple
-	while( nbytes > 0 )
+	while ( nbytes > 0 )
 	{
 		rtw_secmicappendbyte(pmicdata, *src++ );
 		nbytes--;
@@ -382,7 +382,7 @@ _func_enter_;
 	rtw_secmicappendbyte(pmicdata, 0 );
 	rtw_secmicappendbyte(pmicdata, 0 );
 	// and then zeroes until the length is a multiple of 4
-	while( pmicdata->nBytesInM != 0 )
+	while ( pmicdata->nBytesInM != 0 )
 	{
 		rtw_secmicappendbyte(pmicdata, 0 );
 	}

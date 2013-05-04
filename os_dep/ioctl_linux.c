@@ -238,7 +238,7 @@ uint	rtw_is_cckrates_included(u8 *rate)
 {
 		u32	i = 0;
 
-		while(rate[i]!=0)
+		while (rate[i]!=0)
 		{
 			if  ( (((rate[i]) & 0x7f) == 2)	|| (((rate[i]) & 0x7f) == 4) ||
 			(((rate[i]) & 0x7f) == 11)  || (((rate[i]) & 0x7f) == 22))
@@ -253,7 +253,7 @@ uint	rtw_is_cckratesonly_included(u8 *rate)
 {
 	u32 i = 0;
 
-	while(rate[i]!=0)
+	while (rate[i]!=0)
 	{
 			if  ( (((rate[i]) & 0x7f) != 2) && (((rate[i]) & 0x7f) != 4) &&
 				(((rate[i]) & 0x7f) != 11)  && (((rate[i]) & 0x7f) != 22))
@@ -468,7 +468,7 @@ static char *translate_scan(struct rtw_adapter *padapter,
 	max_rate = 0;
 	p = custom;
 	p += snprintf(p, MAX_CUSTOM_LEN - (p - custom), " Rates (Mb/s): ");
-	while(pnetwork->network.SupportedRates[i]!=0)
+	while (pnetwork->network.SupportedRates[i]!=0)
 	{
 		rate = pnetwork->network.SupportedRates[i]&0x7F;
 		if (rate > max_rate)
@@ -561,7 +561,7 @@ static char *translate_scan(struct rtw_adapter *padapter,
 		u8 *ie_ptr = pnetwork->network.IEs +_FIXED_IE_LENGTH_;
 		total_ielen= pnetwork->network.IELength - _FIXED_IE_LENGTH_;
 
-		while(cnt < total_ielen)
+		while (cnt < total_ielen)
 		{
 			if (rtw_is_wps_ie(&ie_ptr[cnt], &wps_ielen) && (wps_ielen>2))
 			{
@@ -985,7 +985,7 @@ static int rtw_set_wpa_ie(struct rtw_adapter *padapter, char *pie, unsigned shor
 			u16 cnt = 0;
 			u8 eid, wps_oui[4]={0x0,0x50,0xf2,0x04};
 
-			while(cnt < ielen)
+			while (cnt < ielen)
 			{
 				eid = buf[cnt];
 
@@ -1850,7 +1850,7 @@ _func_enter_;
 
 		//DBG_8192D("%s COMBO_SCAN header is recognized\n", __func__);
 
-		while(len >= 1) {
+		while (len >= 1) {
 			section = *(pos++); len-=1;
 
 			switch (section) {
@@ -2006,7 +2006,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	while(dc_check_fwstate(padapter, wait_status)== true)
+	while (dc_check_fwstate(padapter, wait_status)== true)
 	{
 		rtw_msleep_os(30);
 		cnt++;
@@ -2015,7 +2015,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	}
 #endif // CONFIG_DUALMAC_CONCURRENT
 
-	while(check_fwstate(pmlmepriv, wait_status) == true)
+	while (check_fwstate(pmlmepriv, wait_status) == true)
 	{
 		rtw_msleep_os(30);
 		cnt++;
@@ -2028,7 +2028,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -3516,7 +3516,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 		goto exit;
 	}
 
-	while((check_fwstate(pmlmepriv, (_FW_UNDER_SURVEY|_FW_UNDER_LINKING))) == true)
+	while ((check_fwstate(pmlmepriv, (_FW_UNDER_SURVEY|_FW_UNDER_LINKING))) == true)
 	{
 		rtw_msleep_os(30);
 		cnt++;
@@ -3546,7 +3546,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -4688,7 +4688,7 @@ static int rtw_p2p_connect(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -4840,7 +4840,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -5103,7 +5103,7 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -5396,7 +5396,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -8545,7 +8545,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
 				pch = tmp;
 				DBG_8192D("pch=%s",pch);
 
-				while(*pch != '\0')
+				while (*pch != '\0')
 				{
 					pnext = strpbrk(pch, " ");
 					pnext++;
@@ -8579,7 +8579,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
 				pch = tmp;
 				DBG_8192D("pch=%s",pch);
 
-				while(*pch != '\0')
+				while (*pch != '\0')
 				{
 					pnext = strpbrk(pch, " ");
 					pnext++;
@@ -8689,7 +8689,7 @@ static int rtw_mp_read_rf(struct net_device *dev,
 				pch = tmp;
 				DBG_8192D("pch=%s",pch);
 
-				while(*pch != '\0')
+				while (*pch != '\0')
 				{
 					pnext = strpbrk(pch, " ");
 					pnext++;
@@ -9833,7 +9833,7 @@ static int rtw_tdls_setip(struct net_device *dev,
 	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length - 1 );
 
 
-	while(i < 4)
+	while (i < 4)
 	{
 		for (j=0; j < 4; j++)
 		{

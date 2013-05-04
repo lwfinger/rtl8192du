@@ -355,7 +355,7 @@ static u8 _InitPowerOn(struct rtw_adapter *padapter)
 			return _FAIL;
 		}
 
-	}while(true);
+	}while (true);
 
 
 	//For hardware power on sequence.
@@ -394,7 +394,7 @@ static u8 _InitPowerOn(struct rtw_adapter *padapter)
 			return _FAIL;
 		}
 
-	}while(true);
+	}while (true);
 
 	// release RF digital isolation
 	value16 = rtw_read16(padapter, REG_SYS_ISO_CTRL);
@@ -686,7 +686,7 @@ static u8 _LLTWrite(
 			status = _FAIL;
 			break;
 		}
-	}while(count++);
+	}while (count++);
 
 	return status;
 
@@ -714,7 +714,7 @@ static u8 _LLTRead(
 			//RT_TRACE(COMP_INIT,DBG_SERIOUS,("Failed to polling read LLT done at address %d!\n", address));
 			break;
 		}
-	}while(count++);
+	}while (count++);
 
 	return 0xFF;
 
@@ -1823,7 +1823,7 @@ u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 
 	#define HAL_INIT_PROFILE_TAG(stage) hal_init_stages_timestamp[(stage)]=rtw_get_current_time();
 #else
-	#define HAL_INIT_PROFILE_TAG(stage) do {} while(0)
+	#define HAL_INIT_PROFILE_TAG(stage) do {} while (0)
 #endif //DBG_HAL_INIT_PROFILING
 _func_enter_;
 
@@ -2457,7 +2457,7 @@ _DisableRF_AFE(
 			return _FAIL;
 		}
 
-	}while(true);
+	}while (true);
 
 #endif
 
@@ -2631,7 +2631,7 @@ _ResetDigitalProcedure1(
 			rtw_write8(Adapter, REG_MCUFWDL, 0);
 			rtw_write8(Adapter, REG_HMETFR+3, 0x20);//8051 reset by self
 
-			while( (retry_cnts++ <100) && (FEN_CPUEN &rtw_read16(Adapter, REG_SYS_FUNC_EN)))
+			while ( (retry_cnts++ <100) && (FEN_CPUEN &rtw_read16(Adapter, REG_SYS_FUNC_EN)))
 				rtw_udelay_os(50);//us
 
 			if (retry_cnts>= 100) {
@@ -3604,7 +3604,7 @@ SelectRTSInitialRate(
 	{
 		// Use CCK rate
 		BasicRateCfg &= 0xf; //CCK rate
-		while(BasicRateCfg > 0x1)
+		while (BasicRateCfg > 0x1)
 		{
 			BasicRateCfg = (BasicRateCfg>> 1);
 			RTSRateIndex++;
@@ -3657,7 +3657,7 @@ SelectRTSInitialRate(
 			if (BasicRateCfg != 0)
 			{
 				// Select RTS Init rate
-				while(BasicRateCfg > 0x1)
+				while (BasicRateCfg > 0x1)
 				{
 					BasicRateCfg = (BasicRateCfg>> 1);
 					RTSRateIndex++;
@@ -4582,7 +4582,7 @@ _func_enter_;
 				//else
 				//{
 					// Set RTS initial rate
-					while(BrateCfg > 0x1)
+					while (BrateCfg > 0x1)
 					{
 						BrateCfg = (BrateCfg>> 1);
 						RateIndex++;
@@ -5106,7 +5106,7 @@ _func_enter_;
 					do{
 						if (!(rtw_read32(Adapter,REG_RXPKT_NUM)&RXDMA_IDLE))
 							break;
-					}while(trycnt--);
+					}while (trycnt--);
 					if (trycnt ==0)
 						DBG_8192D("Stop RX DMA failed...... \n");
 
@@ -5528,7 +5528,7 @@ void _update_response_rate(struct rtw_adapter *padapter,unsigned int mask)
 
 
 	// Set RTS initial rate
-	while(mask > 0x1)
+	while (mask > 0x1)
 	{
 		mask = (mask>> 1);
 		RateIndex++;

@@ -628,7 +628,7 @@ _func_enter_;
 			if (pwrpriv->pwr_mode == PS_MODE_ACTIVE)
 			{
 				start_time = rtw_get_current_time();
-				while(1)
+				while (1)
 				{
 					rtw_hal_get_hwreg(padapter, HW_VAR_FWLPS_RF_ON, (u8 *)(&bAwake));
 

@@ -2314,7 +2314,7 @@ static void	dm_CheckPbcGPIO(struct rtw_adapter * padapter)
 		if (i<=3)
 			rtw_msleep_os(50);
 	}
-	}while(i<=3 && bPbcPressed == true);
+	}while (i<=3 && bPbcPressed == true);
 
 	if ( true == bPbcPressed)
 	{

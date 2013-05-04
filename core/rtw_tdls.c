@@ -405,7 +405,7 @@ u8 *rtw_tdls_set_sup_ch(struct mlme_ext_priv *pmlmeext, u8 *pframe, struct pkt_a
 
 		sup_ch_idx++;
 	}
-	while( pmlmeext->channel_set[sup_ch_idx].ChannelNum != 0 );
+	while ( pmlmeext->channel_set[sup_ch_idx].ChannelNum != 0 );
 	return(rtw_set_ie(pframe, _SUPPORTED_CH_IE_, idx_5g, sup_ch, &(pattrib->pktlen)));
 }
 
@@ -420,7 +420,7 @@ void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 
 	wfd_offset = 0;
 	wfd_offset = rtw_get_wfd_ie( ptr + wfd_offset, length - wfd_offset, wfd_ie, &wfd_ielen );
-	while( wfd_offset )
+	while ( wfd_offset )
 	{
 		u8	attr_content[ 10 ] = { 0x00 };
 		u32	attr_contentlen = 0;

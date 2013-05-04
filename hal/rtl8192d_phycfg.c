@@ -3322,7 +3322,7 @@ static void _PHY_SwChnl8192D(struct rtw_adapter * Adapter, u8 channel)
 		//do IQK when all parameters are ready
 		phy_ReloadIQKSetting(Adapter, channel);
 		break;
-	}while(true);
+	}while (true);
 
 	//s3. post common command - CmdID_End, None
 
@@ -3392,7 +3392,7 @@ PHY_SwChnl8192D(	// Call after initialization
 		(pHalData->interfaceIndex == 1 && pHalData->CurrentBandType92D == BAND_ON_5G)))
 	{
 		pHalDataBuddyAdapter=GET_HAL_DATA(BuddyAdapter);
-		while(pHalDataBuddyAdapter->bLCKInProgress && timecount < timeout)
+		while (pHalDataBuddyAdapter->bLCKInProgress && timecount < timeout)
 		{
 			#ifdef CONFIG_LONG_DELAY_ISSUE
 			rtw_msleep_os(50);
@@ -3404,7 +3404,7 @@ PHY_SwChnl8192D(	// Call after initialization
 	}
 #endif
 
-	while(pHalData->bLCKInProgress && timecount < timeout)
+	while (pHalData->bLCKInProgress && timecount < timeout)
 	{
 		#ifdef CONFIG_LONG_DELAY_ISSUE
 		rtw_msleep_os(50);
@@ -3802,14 +3802,14 @@ phy_PathA_IQK_5G_Normal(
 		// delay x ms
 		rtw_mdelay_os(IQK_DELAY_TIME*10);
 
-		while(timecount < timeout && PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, BIT26) == 0x00)
+		while (timecount < timeout && PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, BIT26) == 0x00)
 		{
 			rtw_udelay_os(IQK_DELAY_TIME*1000*2);
 			timecount++;
 		}
 
 		timecount = 0;
-		while(timecount < timeout && PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_A_2, 0x3FF0000) == 0x00)
+		while (timecount < timeout && PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_A_2, 0x3FF0000) == 0x00)
 		{
 			rtw_udelay_os(IQK_DELAY_TIME*1000*2);
 			timecount++;
@@ -3972,13 +3972,13 @@ phy_PathB_IQK_5G_Normal(
 		// delay x ms
 		rtw_mdelay_os(IQK_DELAY_TIME*10);
 
-		while(timecount < timeout && PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, BIT29) == 0x00) {
+		while (timecount < timeout && PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, BIT29) == 0x00) {
 			rtw_udelay_os(IQK_DELAY_TIME*1000*2);
 			timecount++;
 		}
 
 		timecount = 0;
-		while(timecount < timeout && PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_B_2, 0x3FF0000) == 0x00) {
+		while (timecount < timeout && PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_B_2, 0x3FF0000) == 0x00) {
 			rtw_udelay_os(IQK_DELAY_TIME*1000*2);
 			timecount++;
 			//RTPRINT(FINIT, INIT_IQK, ("Delay %d ms for polling 0xec4[25:16]\n", timecount*2));
@@ -5396,7 +5396,7 @@ phy_LCCalibrate92D(
 #if SWLCK == 1
 	for (index = 0; index <path; index ++)
 	{
-		while(!(PHY_QueryRFReg(pAdapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G6, BIT11)) &&
+		while (!(PHY_QueryRFReg(pAdapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G6, BIT11)) &&
 			timecount <= timeout)
 		{
 
@@ -5613,7 +5613,7 @@ phy_LCCalibrate92DSW(
 	{
 		u4tmp = PHY_QueryRFReg(pAdapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G6, bRFRegOffsetMask);
 
-		while((!(u4tmp & BIT11)) &&
+		while ((!(u4tmp & BIT11)) &&
 			timecount <= timeout)
 		{
 				#ifdef CONFIG_LONG_DELAY_ISSUE
@@ -6087,7 +6087,7 @@ phy_APCalibrate(
 
 				i++;
 			}
-			while(tmpReg > apkbound && i < 4);
+			while (tmpReg > apkbound && i < 4);
 
 			APK_result[path][index] = tmpReg;
 		}
@@ -6393,7 +6393,7 @@ rtl8192d_PHY_LCCalibrate(
 		(pHalData->interfaceIndex == 1 && pHalData->CurrentBandType92D == BAND_ON_5G)))
 	{
 		pmlmeprivBuddyAdapter = &BuddyAdapter->mlmepriv;
-		while((check_fwstate(pmlmeprivBuddyAdapter, _FW_UNDER_LINKING|_FW_UNDER_SURVEY)==true) && timecount < timeout)
+		while ((check_fwstate(pmlmeprivBuddyAdapter, _FW_UNDER_LINKING|_FW_UNDER_SURVEY)==true) && timecount < timeout)
 		{
 			rtw_msleep_os(50);
 			timecount += 50;

@@ -502,7 +502,7 @@ _func_enter_;
 		phead =		get_list_head(ppending_recvframe_queue);
 		plist = get_next(phead);
 
-		while(!rtw_is_list_empty(phead))
+		while (!rtw_is_list_empty(phead))
 		{
 			prframe = LIST_CONTAINOR(plist, union recv_frame, u);
 

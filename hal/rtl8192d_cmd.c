@@ -109,7 +109,7 @@ _func_enter_;
 
 	//DBG_8192D("FillH2CCmd : ElementID=%d \n",ElementID);
 
-	while(!bWriteSucess)
+	while (!bWriteSucess)
 	{
 		WaitWriteH2cLimmit--;
 		if (WaitWriteH2cLimmit == 0)
@@ -144,7 +144,7 @@ _func_enter_;
 
 		// 3. Check if the box content is empty.
 		IsFwRead = CheckFwReadLastH2C(padapter, BoxNum);
-		while(!IsFwRead)
+		while (!IsFwRead)
 		{
 			//wait until Fw read
 			WaitH2cLimmit--;
@@ -948,7 +948,7 @@ _func_enter_;
 				start_time = pwdinfo->noa_start_time[i];
 				if (pwdinfo->noa_count[i] != 1)
 				{
-					while( start_time <= (tsf_low+(50*1024) ) )
+					while ( start_time <= (tsf_low+(50*1024) ) )
 					{
 						start_time += pwdinfo->noa_interval[i];
 						if (pwdinfo->noa_count[i] != 255)
@@ -1077,7 +1077,7 @@ _func_enter_;
 		test = rtw_read8(padapter, REG_RXPKT_NUM+2) & BIT(1);
 		//printk("line(%d) 0x286=%d\n", __LINE__, rtw_read8(padapter, REG_RXPKT_NUM+2));
 		//check DMA idle?
-		while(test != BIT(1))
+		while (test != BIT(1))
 		{
 			tasklet_schedule(&precvpriv->recv_tasklet);
 			test = rtw_read8(padapter, REG_RXPKT_NUM+2) & BIT(1);

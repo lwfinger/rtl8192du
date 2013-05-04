@@ -236,7 +236,7 @@ int _FWFreeToGo_92D(
 	// polling CheckSum report
 	do{
 		value32 = rtw_read32(Adapter, REG_MCUFWDL);
-	}while((counter ++ < POLLING_READY_TIMEOUT_COUNT) && (!(value32 & FWDL_ChkSum_rpt  )));
+	}while ((counter ++ < POLLING_READY_TIMEOUT_COUNT) && (!(value32 & FWDL_ChkSum_rpt  )));
 
 	if (counter >= POLLING_READY_TIMEOUT_COUNT){
 		DBG_8192D("chksum report faill ! REG_MCUFWDL:0x%08x .\n",value32);
@@ -275,7 +275,7 @@ rtl8192d_FirmwareSelfReset(
 		rtw_write8(Adapter, REG_HMETFR+3, 0x20);
 
 		u1bTmp = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-		while(u1bTmp&BIT2)
+		while (u1bTmp&BIT2)
 		{
 			Delay--;
 			//RT_TRACE(COMP_INIT, DBG_LOUD, ("PowerOffAdapter8192CE(): polling 0x03[2] Delay = %d \n", Delay));
@@ -332,7 +332,7 @@ int _FWInit(
 			rtw_udelay_os(5);
 		}
 
-	}while(counter++ < POLLING_READY_TIMEOUT_COUNT);
+	}while (counter++ < POLLING_READY_TIMEOUT_COUNT);
 
 	if (pHalData->interfaceIndex==0){
 		DBG_8192D("Polling FW ready fail!! MAC0 FW init not ready:0x%x .\n",rtw_read8(Adapter, FW_MAC0_ready) );
@@ -557,7 +557,7 @@ int FirmwareDownload92D(
 
 	_FWDownloadEnable(Adapter, true);
 	fwdl_start_time = rtw_get_current_time();
-	while(1) {
+	while (1) {
 		//reset the FWDL chksum
 		rtw_write8(Adapter, REG_MCUFWDL, rtw_read8(Adapter, REG_MCUFWDL)|FWDL_ChkSum_rpt);
 
@@ -1389,7 +1389,7 @@ ReadEFuse_RTL8192D(
 	//
 	// 2. Read real efuse content. Filter PG header and every section data.
 	//
-	while((*rtemp8 != 0xFF) && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN))
+	while ((*rtemp8 != 0xFF) && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN))
 	{
 		// Check PG header for section num.
 		if ((*rtemp8 & 0x1F ) == 0x0F)		//extended header
@@ -1749,7 +1749,7 @@ rtl8192d_Efuse_PgPacketRead(	struct rtw_adapter *	pAdapter,
 	// Skip dummy parts to prevent unexpected data read from Efuse.
 	// By pass right now. 2009.02.19.
 	//
-	while(bContinual && (efuse_addr  < EFUSE_REAL_CONTENT_LEN) )
+	while (bContinual && (efuse_addr  < EFUSE_REAL_CONTENT_LEN) )
 	{
 		//-------  Header Read -------------
 		if (ReadState & PG_STATE_HEADER)
@@ -1896,7 +1896,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 	// incorrect data auto-load from HW. Dummy 1bytes is additional.
 	// 2009.02.19.
 	//
-	while( bContinual && (efuse_addr  < (EFUSE_REAL_CONTENT_LEN-EFUSE_OOB_PROTECT_BYTES)) )
+	while ( bContinual && (efuse_addr  < (EFUSE_REAL_CONTENT_LEN-EFUSE_OOB_PROTECT_BYTES)) )
 	{
 
 		if (WriteState==PG_STATE_HEADER)
@@ -2068,7 +2068,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 					efuse_OneByteWrite(pAdapter,efuse_addr, pg_header, bPseudoTest);
 					efuse_OneByteRead(pAdapter,efuse_addr, &tmp_header, bPseudoTest);
 
-					while(tmp_header == 0xFF)
+					while (tmp_header == 0xFF)
 					{
 						//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite extended pg_header[2:0] wirte fail \n"));
 
@@ -2098,7 +2098,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 						efuse_OneByteWrite(pAdapter,efuse_addr, pg_header, bPseudoTest);
 						efuse_OneByteRead(pAdapter,efuse_addr, &tmp_header, bPseudoTest);
 
-						while(tmp_header == 0xFF)
+						while (tmp_header == 0xFF)
 						{
 							repeat_times++;
 

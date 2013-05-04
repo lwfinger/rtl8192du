@@ -614,7 +614,7 @@ _func_enter_;
 
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 
 		if (rtw_end_of_queue_search(phead,plist)== true)
@@ -753,7 +753,7 @@ _func_enter_;
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -2095,7 +2095,7 @@ _func_enter_;
 
 	#ifdef CONFIG_LAYER2_ROAMING
 	if (rtw_to_roaming(adapter) > 0) { /* join timeout caused by roaming */
-		while(1) {
+		while (1) {
 			pmlmepriv->to_roaming--;
 			if (rtw_to_roaming(adapter) != 0) { /* try another */
 				DBG_8192D("%s try another roaming\n", __func__);
@@ -2652,7 +2652,7 @@ int rtw_restruct_wmm_ie(struct rtw_adapter *adapter, u8 *in_ie, u8 *out_ie, uint
 	unsigned int i, j;
 
 	i = 12; //after the fixed IE
-	while(i<in_len)
+	while (i<in_len)
 	{
 		ielength = initial_out_len;
 
@@ -2718,7 +2718,7 @@ static int SecIsInPMKIDList(struct rtw_adapter *Adapter, u8 *bssid)
 			//continue;
 		}
 
-	}while(i<NUM_PMKID_CACHE);
+	}while (i<NUM_PMKID_CACHE);
 
 	if ( i == NUM_PMKID_CACHE )
 	{
@@ -3294,7 +3294,7 @@ void _rtw_roaming(struct rtw_adapter *padapter, struct wlan_network *tgt_network
 
 		pmlmepriv->assoc_by_bssid = false;
 
-		while(1) {
+		while (1) {
 			if ( _SUCCESS==(do_join_r=rtw_do_join(padapter)) ) {
 				break;
 			} else {

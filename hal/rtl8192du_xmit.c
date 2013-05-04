@@ -922,7 +922,7 @@ s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv 
 
 		break;
 
-	}while(0/*xcnt < (NR_XMITFRAME >> 3)*/);
+	}while (0/*xcnt < (NR_XMITFRAME >> 3)*/);
 
 	return true;
 

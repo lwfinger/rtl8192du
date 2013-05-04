@@ -151,10 +151,10 @@
 	#define	_MODULE_DEFINE_	_module_efuse_
 #endif
 
-#define RT_TRACE(_Comp, _Level, Fmt) do{}while(0)
-#define _func_enter_ do{}while(0)
-#define _func_exit_ do{}while(0)
-#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen) do{}while(0)
+#define RT_TRACE(_Comp, _Level, Fmt) do{}while (0)
+#define _func_enter_ do{}while (0)
+#define _func_exit_ do{}while (0)
+#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen) do{}while (0)
 
 #undef	_dbgdump
 
@@ -179,7 +179,7 @@
 				_dbgdump("%s [0x%08x,%d]", RTL871X_MODULE_NAME, (unsigned int)_Comp, _Level);\
 				_dbgdump Fmt;\
 			}\
-		}while(0)
+		}while (0)
 
 #endif
 
@@ -193,7 +193,7 @@
 			{																	\
 				_dbgdump("\n %s : %s enters at %d\n", RTL871X_MODULE_NAME, __func__, __LINE__);\
 			}		\
-		} while(0)
+		} while (0)
 
 		#undef  _func_exit_
 		#define _func_exit_ \
@@ -202,7 +202,7 @@
 			{																	\
 				_dbgdump("\n %s : %s exits at %d\n", RTL871X_MODULE_NAME, __func__, __LINE__); \
 			}	\
-		} while(0)
+		} while (0)
 
 		#undef RT_PRINT_DATA
 		#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen)			\

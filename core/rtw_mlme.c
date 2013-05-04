@@ -83,7 +83,7 @@ _func_enter_;
 
 	for(i = 0; i < MAX_BSS_CNT; i++)
 	{
-		_rtw_init_listhead(&(pnetwork->list));
+		INIT_LIST_HEAD(&(pnetwork->list));
 
 		rtw_list_insert_tail(&(pnetwork->list), &(pmlmepriv->free_bss_pool.queue));
 
@@ -2542,7 +2542,7 @@ _func_enter_;
 	pcmd->rspsz = 0;
 
 
-	_rtw_init_listhead(&pcmd->list);
+	INIT_LIST_HEAD(&pcmd->list);
 
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("after enqueue set_auth_cmd, auth_mode=%x\n", psecuritypriv->dot11AuthAlgrthm));
 
@@ -2638,7 +2638,7 @@ _func_enter_;
 	pcmd->rspsz = 0;
 
 
-	_rtw_init_listhead(&pcmd->list);
+	INIT_LIST_HEAD(&pcmd->list);
 
 	//_rtw_init_sema(&(pcmd->cmd_sem), 0);
 

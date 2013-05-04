@@ -1384,7 +1384,7 @@ int rtw_acl_add_sta(struct rtw_adapter *padapter, u8 *addr)
 		paclnode = &pacl_list->aclnode[i];
 
 		if (paclnode->valid == false) {
-			_rtw_init_listhead(&paclnode->list);
+			INIT_LIST_HEAD(&paclnode->list);
 
 			memcpy(paclnode->addr, addr, ETH_ALEN);
 
@@ -2159,11 +2159,11 @@ void start_ap_mode(struct rtw_adapter *padapter)
 
 
 	/* for ACL */
-	_rtw_init_listhead(&(pacl_list->acl_node_q.queue));
+	INIT_LIST_HEAD(&(pacl_list->acl_node_q.queue));
 	pacl_list->num = 0;
 	pacl_list->mode = 0;
 	for (i = 0; i < NUM_ACL; i++) {
-		_rtw_init_listhead(&pacl_list->aclnode[i].list);
+		INIT_LIST_HEAD(&pacl_list->aclnode[i].list);
 		pacl_list->aclnode[i].valid = false;
 	}
 }

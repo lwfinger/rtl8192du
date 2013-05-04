@@ -862,7 +862,7 @@ _func_enter_;
 		return _FAIL;
 	}
 
-	_rtw_init_listhead(&ph2c->list);
+	INIT_LIST_HEAD(&ph2c->list);
 	ph2c->cmdcode = GEN_CMD_CODE(_GETBBREG);
 	ph2c->parmbuf = (unsigned char *)prdbbparm;
 	ph2c->cmdsz =  sizeof(struct readBB_parm);
@@ -930,7 +930,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	_rtw_init_listhead(&ph2c->list);
+	INIT_LIST_HEAD(&ph2c->list);
 	ph2c->cmdcode = GEN_CMD_CODE(_GETRFREG);
 	ph2c->parmbuf = (unsigned char *)prdrfparm;
 	ph2c->cmdsz =  sizeof(struct readRF_parm);
@@ -999,7 +999,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	_rtw_init_listhead(&pcmd->list);
+	INIT_LIST_HEAD(&pcmd->list);
 	pcmd->cmdcode = _CREATEBSS_CMD_;
 	pcmd->parmbuf = (unsigned char *)pdev_network;
 	pcmd->cmdsz = get_wlan_bssid_ex_sz((struct wlan_bssid_ex *)pdev_network);
@@ -1028,7 +1028,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	_rtw_init_listhead(&pcmd->list);
+	INIT_LIST_HEAD(&pcmd->list);
 	pcmd->cmdcode = GEN_CMD_CODE(_CREATEBSS);
 	pcmd->parmbuf = pbss;
 	pcmd->cmdsz =  sz;
@@ -1172,7 +1172,7 @@ _func_enter_;
 
 	pcmd->cmdsz = get_wlan_bssid_ex_sz(psecnetwork);/* get cmdsz before endian conversion */
 
-	_rtw_init_listhead(&pcmd->list);
+	INIT_LIST_HEAD(&pcmd->list);
 	pcmd->cmdcode = _JOINBSS_CMD_;/* GEN_CMD_CODE(_JoinBss) */
 	pcmd->parmbuf = (unsigned char *)psecnetwork;
 	pcmd->rsp = NULL;
@@ -1446,7 +1446,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	_rtw_init_listhead(&ph2c->list);
+	INIT_LIST_HEAD(&ph2c->list);
 	ph2c->cmdcode = GEN_CMD_CODE(_GETRATABLE);
 	ph2c->parmbuf = (unsigned char *)pgetrttblparm;
 	ph2c->cmdsz =  sizeof(struct getratable_parm);

@@ -9473,7 +9473,7 @@ void report_survey_event(struct rtw_adapter *padapter, union recv_frame *precv_f
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_SET_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
@@ -9530,7 +9530,7 @@ void report_surveydone_event(struct rtw_adapter *padapter)
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_SET_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
@@ -9578,7 +9578,7 @@ void report_join_res(struct rtw_adapter *padapter, int res)
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_SET_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
@@ -9632,7 +9632,7 @@ void report_del_sta_event(struct rtw_adapter *padapter, unsigned char* MacAddr, 
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_SET_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
@@ -9688,7 +9688,7 @@ void report_add_sta_event(struct rtw_adapter *padapter, unsigned char* MacAddr, 
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_SET_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;

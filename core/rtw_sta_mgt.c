@@ -35,8 +35,8 @@ _func_enter_;
 	memset((u8 *)psta, 0, sizeof (struct sta_info));
 
 	 _rtw_spinlock_init(&psta->lock);
-	_rtw_init_listhead(&psta->list);
-	_rtw_init_listhead(&psta->hash_list);
+	INIT_LIST_HEAD(&psta->list);
+	INIT_LIST_HEAD(&psta->hash_list);
 
 	_rtw_init_queue(&psta->sleep_q);
 	psta->sleepq_len = 0;
@@ -46,9 +46,9 @@ _func_enter_;
 
 #ifdef CONFIG_AP_MODE
 
-	_rtw_init_listhead(&psta->asoc_list);
+	INIT_LIST_HEAD(&psta->asoc_list);
 
-	_rtw_init_listhead(&psta->auth_list);
+	INIT_LIST_HEAD(&psta->auth_list);
 
 	psta->expire_to = 0;
 
@@ -105,7 +105,7 @@ _func_enter_;
 	for(i = 0; i < NUM_STA; i++) {
 		_rtw_init_stainfo(psta);
 
-		_rtw_init_listhead(&(pstapriv->sta_hash[i]));
+		INIT_LIST_HEAD(&(pstapriv->sta_hash[i]));
 
 		rtw_list_insert_tail(&psta->list, get_list_head(&pstapriv->free_sta_queue));
 
@@ -119,8 +119,8 @@ _func_enter_;
 	pstapriv->sta_dz_bitmap = 0;
 	pstapriv->tim_bitmap = 0;
 
-	_rtw_init_listhead(&pstapriv->asoc_list);
-	_rtw_init_listhead(&pstapriv->auth_list);
+	INIT_LIST_HEAD(&pstapriv->asoc_list);
+	INIT_LIST_HEAD(&pstapriv->auth_list);
 	_rtw_spinlock_init(&pstapriv->asoc_list_lock);
 	_rtw_spinlock_init(&pstapriv->auth_list_lock);
 	pstapriv->asoc_list_cnt = 0;

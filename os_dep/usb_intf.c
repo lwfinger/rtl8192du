@@ -1400,15 +1400,10 @@ _func_exit_;
 
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-dev_remove()\n"));
 	DBG_8192D("-r871xu_dev_remove, done\n");
-
-	#ifdef DBG_MEM_ALLOC
-	rtw_dump_mem_stat ();
-	#endif
 _func_exit_;
-
 	return;
-
 }
+
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24))
 extern int console_suspend_enabled;
 #endif

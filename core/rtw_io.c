@@ -208,7 +208,7 @@ void _rtw_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 	_func_enter_;
 
-	if( (adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
+	if ( (adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
 	{
 	     RT_TRACE(_module_rtl871x_io_c_, _drv_info_, ("rtw_read_mem:bDriverStopped(%d) OR bSurpriseRemoved(%d)", adapter->bDriverStopped, adapter->bSurpriseRemoved));
 	     return;
@@ -248,7 +248,7 @@ void _rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 	_func_enter_;
 
-	if( (adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
+	if ( (adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
 	{
 	     RT_TRACE(_module_rtl871x_io_c_, _drv_info_, ("rtw_read_port:bDriverStopped(%d) OR bSurpriseRemoved(%d)", adapter->bDriverStopped, adapter->bSurpriseRemoved));
 	     return;
@@ -270,7 +270,7 @@ void _rtw_read_port_cancel(struct rtw_adapter *adapter)
 
 	_read_port_cancel = pintfhdl->io_ops._read_port_cancel;
 
-	if(_read_port_cancel)
+	if (_read_port_cancel)
 		_read_port_cancel(pintfhdl);
 
 }
@@ -319,7 +319,7 @@ void _rtw_write_port_cancel(struct rtw_adapter *adapter)
 
 	_write_port_cancel = pintfhdl->io_ops._write_port_cancel;
 
-	if(_write_port_cancel)
+	if (_write_port_cancel)
 		_write_port_cancel(pintfhdl);
 
 }

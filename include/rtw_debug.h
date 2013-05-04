@@ -175,7 +175,7 @@
 		#undef RT_TRACE
 		#define RT_TRACE(_Comp, _Level, Fmt)\
 		do {\
-			if((_Comp & GlobalDebugComponents) && (_Level <= GlobalDebugLevel)) {\
+			if ((_Comp & GlobalDebugComponents) && (_Level <= GlobalDebugLevel)) {\
 				_dbgdump("%s [0x%08x,%d]", RTL871X_MODULE_NAME, (unsigned int)_Comp, _Level);\
 				_dbgdump Fmt;\
 			}\
@@ -206,7 +206,7 @@
 
 		#undef RT_PRINT_DATA
 		#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen)			\
-			if(((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
+			if (((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
 			{									\
 				int __i;								\
 				u8	*ptr = (u8 *)_HexData;				\

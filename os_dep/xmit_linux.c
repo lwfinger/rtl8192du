@@ -60,7 +60,7 @@ _func_enter_;
        len =  rtw_remainder_len(pfile);
 	len = (rlen > len)? len: rlen;
 
-       if(rmem)
+       if (rmem)
 	  skb_copy_bits(pfile->pkt, pfile->buf_len-pfile->pkt_len, rmem, len);
 
        pfile->cur_addr += len;
@@ -133,7 +133,7 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 #ifdef CONFIG_USE_USB_BUFFER_ALLOC_TX
 	pxmitbuf->pallocated_buf = rtw_usb_buffer_alloc(pusbd, (size_t)alloc_sz, GFP_ATOMIC, &pxmitbuf->dma_transfer_addr);
 	pxmitbuf->pbuf = pxmitbuf->pallocated_buf;
-	if(pxmitbuf->pallocated_buf == NULL)
+	if (pxmitbuf->pallocated_buf == NULL)
 		return _FAIL;
 #else // CONFIG_USE_USB_BUFFER_ALLOC_TX
 
@@ -151,7 +151,7 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 	for(i=0; i<8; i++)
 	{
 		pxmitbuf->pxmit_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
-		if(pxmitbuf->pxmit_urb[i] == NULL)
+		if (pxmitbuf->pxmit_urb[i] == NULL)
 		{
 			DBG_8192D("pxmitbuf->pxmit_urb[i]==NULL");
 			return _FAIL;
@@ -170,7 +170,7 @@ void rtw_os_xmit_resource_free(struct rtw_adapter *padapter, struct xmit_buf *px
 
 	for(i=0; i<8; i++)
 	{
-		if(pxmitbuf->pxmit_urb[i])
+		if (pxmitbuf->pxmit_urb[i])
 		{
 			//usb_kill_urb(pxmitbuf->pxmit_urb[i]);
 			usb_free_urb(pxmitbuf->pxmit_urb[i]);
@@ -193,7 +193,7 @@ void rtw_os_pkt_complete(struct rtw_adapter *padapter, struct sk_buff *pkt)
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 
 	queue = skb_get_queue_mapping(pkt);
-	if(__netif_subqueue_stopped(padapter->pnetdev, queue) &&
+	if (__netif_subqueue_stopped(padapter->pnetdev, queue) &&
 		(pxmitpriv->hwxmits[queue].accnt < NR_XMITFRAME/2))
 	{
 		netif_wake_subqueue(padapter->pnetdev, queue);
@@ -208,7 +208,7 @@ void rtw_os_pkt_complete(struct rtw_adapter *padapter, struct sk_buff *pkt)
 
 void rtw_os_xmit_complete(struct rtw_adapter *padapter, struct xmit_frame *pxframe)
 {
-	if(pxframe->pkt)
+	if (pxframe->pkt)
 	{
 		//RT_TRACE(_module_xmit_osdep_c_,_drv_err_,("linux : rtw_os_xmit_complete, dev_kfree_skb()\n"));
 
@@ -224,14 +224,14 @@ void rtw_os_xmit_schedule(struct rtw_adapter *padapter)
 {
 	struct xmit_priv *pxmitpriv;
 
-	if(!padapter)
+	if (!padapter)
 		return;
 
 	pxmitpriv = &padapter->xmitpriv;
 
 	spin_lock_bh(&pxmitpriv->lock);
 
-	if(rtw_txframes_pending(padapter))
+	if (rtw_txframes_pending(padapter))
 	{
 		tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
 	}

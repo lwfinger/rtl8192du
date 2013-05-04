@@ -40,7 +40,7 @@ void rtl8192du_init_recvbuf(struct rtw_adapter *padapter, struct recv_buf *precv
 
 	precvbuf->ref_cnt = 0;
 
-	if(precvbuf->pbuf)
+	if (precvbuf->pbuf)
 	{
 		precvbuf->pdata = precvbuf->phead = precvbuf->ptail = precvbuf->pbuf;
 		precvbuf->pend = precvbuf->pdata + MAX_RECVBUF_SZ;
@@ -70,11 +70,11 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
 
 	precvpriv->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-	if(precvpriv->int_in_urb == NULL){
+	if (precvpriv->int_in_urb == NULL){
 		DBG_8192D("alloc_urb for interrupt in endpoint fail !!!!\n");
 	}
 	precvpriv->int_in_buf = rtw_malloc(sizeof(INTERRUPT_MSG_FORMAT_EX));
-	if(precvpriv->int_in_buf == NULL){
+	if (precvpriv->int_in_buf == NULL){
 		DBG_8192D("alloc_mem for interrupt in endpoint fail !!!!\n");
 	}
 #endif //CONFIG_USB_INTERRUPT_IN_PIPE
@@ -83,7 +83,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 	_rtw_init_queue(&precvpriv->free_recv_buf_queue);
 
 	precvpriv->pallocated_recv_buf = rtw_zmalloc(NR_RECVBUFF *sizeof(struct recv_buf) + 4);
-	if(precvpriv->pallocated_recv_buf==NULL){
+	if (precvpriv->pallocated_recv_buf==NULL){
 		res= _FAIL;
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("alloc recv_buf fail!\n"));
 		goto exit;
@@ -102,7 +102,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 		precvbuf->alloc_sz = MAX_RECVBUF_SZ;
 
 		res = rtw_os_recvbuf_resource_alloc(padapter, precvbuf);
-		if(res==_FAIL)
+		if (res==_FAIL)
 			break;
 
 		precvbuf->ref_cnt = 0;
@@ -140,7 +140,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 			pskb = netdev_alloc_skb(padapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 	#endif //(LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18))
 
-			if(pskb)
+			if (pskb)
 			{
 				pskb->dev = padapter->pnetdev;
 
@@ -179,7 +179,7 @@ void rtl8192du_free_recv_priv (struct rtw_adapter *padapter)
 	kfree(precvpriv->pallocated_recv_buf);
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	if(precvpriv->int_in_urb)
+	if (precvpriv->int_in_urb)
 		usb_free_urb(precvpriv->int_in_urb);
 	kfree(precvpriv->int_in_buf);
 #endif

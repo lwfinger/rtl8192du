@@ -118,11 +118,11 @@ static u8 GetRightChnlPlace(u8 chnl)
 	u8	channel_5G[TARGET_CHNL_NUM_2G_5G] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,100,102,104,106,108,110,112,114,116,118,120,122,124,126,128,130,132,134,136,138,140,149,151,153,155,157,159,161,163,165};
 	u8	place = chnl;
 
-	if(chnl > 14)
+	if (chnl > 14)
 	{
 		for(place = 14; place<sizeof(channel_5G); place++)
 		{
-			if(channel_5G[place] == chnl)
+			if (channel_5G[place] == chnl)
 			{
 				place++;
 				break;
@@ -146,11 +146,11 @@ u8 rtl8192d_GetRightChnlPlaceforIQK(u8 chnl)
 	u8	place = chnl;
 
 
-	if(chnl > 14)
+	if (chnl > 14)
 	{
 		for(place = 14; place<sizeof(channel_all); place++)
 		{
-			if(channel_all[place] == chnl)
+			if (channel_all[place] == chnl)
 			{
 				return place-13;
 			}
@@ -287,7 +287,7 @@ rtl8192d_PHY_SetBBReg(
 	return;
 #endif
 
-	if(BitMask!= bMaskDWord)
+	if (BitMask!= bMaskDWord)
 	{//if not "double word" write
 		OriginalValue = rtw_read32(Adapter, RegAddr);
 		BitShift = phy_CalculateBitShift(BitMask);
@@ -393,9 +393,9 @@ phy_RFSerialRead(
 	//
 	// Make sure RF register offset is correct
 	//
-	if(Offset & MAC1_ACCESS_PHY0)
+	if (Offset & MAC1_ACCESS_PHY0)
 		MaskforPhySet = MAC1_ACCESS_PHY0;
-	else if(Offset & MAC0_ACCESS_PHY1)
+	else if (Offset & MAC0_ACCESS_PHY1)
 		MaskforPhySet = MAC0_ACCESS_PHY1;
 
 	Offset &=0x7F;
@@ -406,7 +406,7 @@ phy_RFSerialRead(
 	NewOffset = Offset;
 
 	// 2009/06/17 MH We can not execute IO for power save or other accident mode.
-	//if(RT_CANNOT_IO(Adapter))
+	//if (RT_CANNOT_IO(Adapter))
 	//{
 	//	RTPRINT(FPHY, PHY_RFR, ("phy_RFSerialRead return all one\n"));
 	//	return	0xFFFFFFFF;
@@ -416,7 +416,7 @@ phy_RFSerialRead(
 	// For RF A/B write 0x824/82c(does not work in the future)
 	// We must use 0x824 for RF A and B to execute read trigger
 	tmplong = PHY_QueryBBReg(Adapter, rFPGA0_XA_HSSIParameter2|MaskforPhySet, bMaskDWord);
-	if(eRFPath == RF_PATH_A)
+	if (eRFPath == RF_PATH_A)
 		tmplong2 = tmplong;
 	else
 		tmplong2 = PHY_QueryBBReg(Adapter, pPhyReg->rfHSSIPara2|MaskforPhySet, bMaskDWord);
@@ -433,12 +433,12 @@ phy_RFSerialRead(
 	PHY_SetBBReg(Adapter, rFPGA0_XA_HSSIParameter2|MaskforPhySet, bMaskDWord, tmplong|bLSSIReadEdge);
 	rtw_udelay_os(10);
 
-	if(eRFPath == RF_PATH_A)
+	if (eRFPath == RF_PATH_A)
 		RfPiEnable = (u8)PHY_QueryBBReg(Adapter, rFPGA0_XA_HSSIParameter1|MaskforPhySet, BIT8);
-	else if(eRFPath == RF_PATH_B)
+	else if (eRFPath == RF_PATH_B)
 		RfPiEnable = (u8)PHY_QueryBBReg(Adapter, rFPGA0_XB_HSSIParameter1|MaskforPhySet, BIT8);
 
-	if(RfPiEnable)
+	if (RfPiEnable)
 	{	// Read from BBreg8b8, 12 bits for 8190, 20bits for T65 RF
 		retValue = PHY_QueryBBReg(Adapter, pPhyReg->rfLSSIReadBackPi|MaskforPhySet, bLSSIReadBackData);
 		//RTPRINT(FINIT, INIT_RF, ("Readback from RF-PI : 0x%x\n", retValue));
@@ -514,15 +514,15 @@ phy_RFSerialWrite(
 
 
 	// 2009/06/17 MH We can not execute IO for power save or other accident mode.
-	//if(RT_CANNOT_IO(Adapter))
+	//if (RT_CANNOT_IO(Adapter))
 	//{
 	//	RTPRINT(FPHY, PHY_RFW, ("phy_RFSerialWrite stop\n"));
 	//	return;
 	//}
 
-	if(Offset & MAC1_ACCESS_PHY0)
+	if (Offset & MAC1_ACCESS_PHY0)
 		MaskforPhySet = MAC1_ACCESS_PHY0;
-	else if(Offset & MAC0_ACCESS_PHY1)
+	else if (Offset & MAC0_ACCESS_PHY1)
 		MaskforPhySet = MAC0_ACCESS_PHY1;
 
 	Offset &=0x7F;
@@ -587,10 +587,10 @@ rtl8192d_PHY_QueryRFReg(
 	return 0;
 #endif
 
-	if(!pHalData->bPhyValueInitReady)
+	if (!pHalData->bPhyValueInitReady)
 		return 0;
 
-	if(pHalData->bReadRFbyFW)
+	if (pHalData->bReadRFbyFW)
 		Original_Value = rtw_read32(Adapter,(0x66<<24|eRFPath<<16)|RegAddr ); //0x66 Just a identifier.by wl
 	else
 		Original_Value = phy_RFSerialRead(Adapter, eRFPath, RegAddr);
@@ -636,10 +636,10 @@ rtl8192d_PHY_SetRFReg(
 	return;
 #endif
 
-	if(!pHalData->bPhyValueInitReady)
+	if (!pHalData->bPhyValueInitReady)
 		return;
 
-	if(BitMask == 0)
+	if (BitMask == 0)
 		return;
 
 	// RF data is 12 bits only
@@ -754,7 +754,7 @@ PHY_MACConfig8192D(
 	char		sz92DMACRegFile[] = RTL8192D_PHY_MACREG;
 	int		rtStatus = _SUCCESS;
 
-	if(Adapter->bSurpriseRemoved){
+	if (Adapter->bSurpriseRemoved){
 		rtStatus = _FAIL;
 		return rtStatus;
 	}
@@ -773,7 +773,7 @@ PHY_MACConfig8192D(
 	rtStatus = phy_ConfigMACWithParaFile(Adapter, pszMACRegFile);
 #endif
 
-	if(pHalData->MacPhyMode92D == SINGLEMAC_SINGLEPHY)
+	if (pHalData->MacPhyMode92D == SINGLEMAC_SINGLEPHY)
 	{
 		//improve 2-stream TX EVM by Jenyu
 		//rtw_write8(Adapter, 0x14,0x71);
@@ -939,7 +939,7 @@ phy_ConfigBBWithHeaderFile(
 
 
 	//Normal chip,Mac0 use AGC_TAB.txt for 2G and 5G band.
-	if(pHalData->interfaceIndex == 0)
+	if (pHalData->interfaceIndex == 0)
 	{
 		AGCTAB_ArrayLen = Rtl8192D_AGCTAB_ArrayLength;
 		Rtl819XAGCTAB_Array_Table = (u32 *)Rtl8192D_AGCTAB_Array;
@@ -947,7 +947,7 @@ phy_ConfigBBWithHeaderFile(
 	}
 	else
 	{
-		if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+		if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 		{
 			AGCTAB_ArrayLen = Rtl8192D_AGCTAB_2GArrayLength;
 			Rtl819XAGCTAB_Array_Table = (u32 *)Rtl8192D_AGCTAB_2GArray;
@@ -965,7 +965,7 @@ phy_ConfigBBWithHeaderFile(
 	Rtl819XPHY_REGArray_Table = (u32 *)Rtl8192D_PHY_REG_2TArray;
 	//RT_TRACE(COMP_INIT, DBG_LOUD, (" ===> phy_ConfigBBWithHeaderFile() phy:Rtl819XPHY_REG_Array_PG\n"));
 
-	if(ConfigType == BaseBand_Config_PHY_REG)
+	if (ConfigType == BaseBand_Config_PHY_REG)
 	{
 		for(i=0;i<PHY_REGArrayLen;i=i+2)
 		{
@@ -996,10 +996,10 @@ phy_ConfigBBWithHeaderFile(
 			//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx \n",Rtl819XPHY_REGArray_Table[i], Rtl819XPHY_REGArray_Table[i+1]));
 		}
 	}
-	else if(ConfigType == BaseBand_Config_AGC_TAB)
+	else if (ConfigType == BaseBand_Config_AGC_TAB)
 	{
 		//especial for 5G, vivi, 20100528
-		if(pHalData->interfaceIndex == 0)
+		if (pHalData->interfaceIndex == 0)
 		{
 			for(i=0;i<AGCTAB_ArrayLen;i=i+2)
 			{
@@ -1014,7 +1014,7 @@ phy_ConfigBBWithHeaderFile(
 		}
 		else
 		{
-			if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+			if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 			{
 				for(i=0;i<AGCTAB_ArrayLen;i=i+2)
 				{
@@ -1088,97 +1088,97 @@ storePwrIndexDiffRateOffset(
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 
-	if(RegAddr == rTxAGC_A_Rate18_06)
+	if (RegAddr == rTxAGC_A_Rate18_06)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][0] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][0] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][0]));
 	}
-	if(RegAddr == rTxAGC_A_Rate54_24)
+	if (RegAddr == rTxAGC_A_Rate54_24)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][1] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][1] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][1]));
 	}
-	if(RegAddr == rTxAGC_A_CCK1_Mcs32)
+	if (RegAddr == rTxAGC_A_CCK1_Mcs32)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][6] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][6] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][6]));
 	}
-	if(RegAddr == rTxAGC_B_CCK11_A_CCK2_11 && BitMask == 0xffffff00)
+	if (RegAddr == rTxAGC_B_CCK11_A_CCK2_11 && BitMask == 0xffffff00)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][7] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][7] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][7]));
 	}
-	if(RegAddr == rTxAGC_A_Mcs03_Mcs00)
+	if (RegAddr == rTxAGC_A_Mcs03_Mcs00)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][2] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][2] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][2]));
 	}
-	if(RegAddr == rTxAGC_A_Mcs07_Mcs04)
+	if (RegAddr == rTxAGC_A_Mcs07_Mcs04)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][3] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][3] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][3]));
 	}
-	if(RegAddr == rTxAGC_A_Mcs11_Mcs08)
+	if (RegAddr == rTxAGC_A_Mcs11_Mcs08)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][4] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][4] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][4]));
 	}
-	if(RegAddr == rTxAGC_A_Mcs15_Mcs12)
+	if (RegAddr == rTxAGC_A_Mcs15_Mcs12)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][5] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][5] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][5]));
 	}
-	if(RegAddr == rTxAGC_B_Rate18_06)
+	if (RegAddr == rTxAGC_B_Rate18_06)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][8] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][8] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][8]));
 	}
-	if(RegAddr == rTxAGC_B_Rate54_24)
+	if (RegAddr == rTxAGC_B_Rate54_24)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][9] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][9] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][9]));
 	}
-	if(RegAddr == rTxAGC_B_CCK1_55_Mcs32)
+	if (RegAddr == rTxAGC_B_CCK1_55_Mcs32)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][14] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][14] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][14]));
 	}
-	if(RegAddr == rTxAGC_B_CCK11_A_CCK2_11 && BitMask == 0x000000ff)
+	if (RegAddr == rTxAGC_B_CCK11_A_CCK2_11 && BitMask == 0x000000ff)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][15] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][15] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][15]));
 	}
-	if(RegAddr == rTxAGC_B_Mcs03_Mcs00)
+	if (RegAddr == rTxAGC_B_Mcs03_Mcs00)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][10] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][10] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][10]));
 	}
-	if(RegAddr == rTxAGC_B_Mcs07_Mcs04)
+	if (RegAddr == rTxAGC_B_Mcs07_Mcs04)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][11] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][11] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][11]));
 	}
-	if(RegAddr == rTxAGC_B_Mcs11_Mcs08)
+	if (RegAddr == rTxAGC_B_Mcs11_Mcs08)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][12] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][12] = 0x%lx\n", pHalData->pwrGroupCnt,
 		//	pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][12]));
 	}
-	if(RegAddr == rTxAGC_B_Mcs15_Mcs12)
+	if (RegAddr == rTxAGC_B_Mcs15_Mcs12)
 	{
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][13] = Data;
 		//RT_TRACE(COMP_INIT, DBG_TRACE, ("MCSTxPowerLevelOriginalOffset[%d][13] = 0x%lx\n", pHalData->pwrGroupCnt,
@@ -1216,7 +1216,7 @@ phy_ConfigBBWithPgHeaderFile(
 	PHY_REGArrayPGLen = Rtl8192D_PHY_REG_Array_PGLength;
 	Rtl819XPHY_REGArray_Table_PG = (u32 *)Rtl8192D_PHY_REG_Array_PG;
 
-	if(ConfigType == BaseBand_Config_PHY_REG)
+	if (ConfigType == BaseBand_Config_PHY_REG)
 	{
 		for(i=0;i<PHY_REGArrayPGLen;i=i+3)
 		{
@@ -1344,7 +1344,7 @@ phy_ConfigBBWithMpHeaderFile(
 	PHY_REGArrayMPLen = Rtl8192D_PHY_REG_Array_MPLength;
 	Rtl8192CPHY_REGArray_Table_MP = (u32 *)Rtl8192D_PHY_REG_Array_MP;
 
-	if(ConfigType == BaseBand_Config_PHY_REG)
+	if (ConfigType == BaseBand_Config_PHY_REG)
 	{
 		for(i=0;i<PHY_REGArrayMPLen;i=i+2)
 		{
@@ -1409,11 +1409,11 @@ phy_BB8192D_Config_ParaFile(
 	pszBBRegPgFile = sz92DBBRegPgFile;
 
 	//Normal chip,Mac0 use AGC_TAB.txt for 2G and 5G band.
-	if(pHalData->interfaceIndex == 0)
+	if (pHalData->interfaceIndex == 0)
 		pszAGCTableFile = sz92DAGCTableFile;
 	else
 	{
-		if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+		if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 			pszAGCTableFile = sz92D2GAGCTableFile;
 		else
 			pszAGCTableFile = sz92D5GAGCTableFile;
@@ -1436,7 +1436,7 @@ phy_BB8192D_Config_ParaFile(
 	rtStatus = phy_ConfigBBWithParaFile(Adapter,pszBBRegFile);
 #endif
 
-	if(rtStatus != _SUCCESS){
+	if (rtStatus != _SUCCESS){
 		//RT_TRACE(COMP_INIT, DBG_SERIOUS, ("phy_BB8192S_Config_ParaFile():Write BB Reg Fail!!"));
 		goto phy_BB8190_Config_ParaFile_Fail;
 	}
@@ -1454,7 +1454,7 @@ phy_BB8192D_Config_ParaFile(
 	rtStatus = phy_ConfigBBWithMpParaFile(Adapter,pszBBRegMpFile);
 #endif
 
-	if(rtStatus != _SUCCESS){
+	if (rtStatus != _SUCCESS){
 		//RT_TRACE(COMP_INIT, DBG_SERIOUS, ("phy_BB8192S_Config_ParaFile():Write BB Reg MP Fail!!"));
 		goto phy_BB8190_Config_ParaFile_Fail;
 	}
@@ -1475,7 +1475,7 @@ phy_BB8192D_Config_ParaFile(
 #endif
 	}
 
-	if(rtStatus != _SUCCESS){
+	if (rtStatus != _SUCCESS){
 		//RT_TRACE(COMP_INIT, DBG_SERIOUS, ("phy_BB8192S_Config_ParaFile():BB_PG Reg Fail!!"));
 		goto phy_BB8190_Config_ParaFile_Fail;
 	}
@@ -1486,7 +1486,7 @@ phy_BB8192D_Config_ParaFile(
 	//
 #ifdef CONFIG_EMBEDDED_FWIMG
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(pHalData->bSlaveOfDMSP)
+	if (pHalData->bSlaveOfDMSP)
 	{
 		DBG_8192D("BB config slave skip  2222 \n");
 	}
@@ -1500,7 +1500,7 @@ phy_BB8192D_Config_ParaFile(
 	rtStatus = phy_ConfigBBWithParaFile(Adapter, pszAGCTableFile);
 #endif
 
-	if(rtStatus != _SUCCESS){
+	if (rtStatus != _SUCCESS){
 		//RT_TRACE(COMP_FPGA, DBG_SERIOUS, ("phy_BB8192S_Config_ParaFile():AGC Table Fail\n"));
 		goto phy_BB8190_Config_ParaFile_Fail;
 	}
@@ -1526,7 +1526,7 @@ PHY_BBConfig8192D(
 	u8	value;
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
 
-	if(Adapter->bSurpriseRemoved){
+	if (Adapter->bSurpriseRemoved){
 		rtStatus = _FAIL;
 		return rtStatus;
 	}
@@ -1562,7 +1562,7 @@ PHY_BBConfig8192D(
 	PHY_SetBBReg(Adapter, 0x28, 0xF0000000, ((pHalData->CrystalCap & 0xF0) >> 4));
 
 	//to save power for special 1T1R
-	if(pregistrypriv->special_rf_path == 1)
+	if (pregistrypriv->special_rf_path == 1)
 	{
 		PHY_SetBBReg(Adapter, rFPGA0_XCD_SwitchControl, BIT24|BIT25|BIT27|BIT30, 0);
 		PHY_SetBBReg(Adapter, rBlue_Tooth, BIT24|BIT25|BIT27|BIT30, 0);
@@ -1581,7 +1581,7 @@ PHY_BBConfig8192D(
 		PHY_SetBBReg(Adapter, rSleep, BIT24|BIT25|BIT27|BIT30, 0);
 		PHY_SetBBReg(Adapter, rPMPD_ANAEN, BIT24|BIT25|BIT27|BIT30, 0);
 	}
-	else if(pregistrypriv->special_rf_path == 2)
+	else if (pregistrypriv->special_rf_path == 2)
 	{
 		PHY_SetBBReg(Adapter, rFPGA0_XCD_SwitchControl, BIT22|BIT23|BIT26|BIT29, 0);
 		PHY_SetBBReg(Adapter, rBlue_Tooth, BIT22|BIT23|BIT26|BIT29, 0);
@@ -1613,7 +1613,7 @@ PHY_RFConfig8192D(
 	//struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	int		rtStatus = _SUCCESS;
 
-	if(Adapter->bSurpriseRemoved){
+	if (Adapter->bSurpriseRemoved){
 		rtStatus = _FAIL;
 		return rtStatus;
 	}
@@ -1695,13 +1695,13 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 	RadioB_ArrayLen = Rtl8192D_RadioB_2TArrayLength;
 	Rtl819XRadioB_Array_Table = (u32 *)Rtl8192D_RadioB_2TArray;
 
-	if(pHalData->InternalPA5G[0])
+	if (pHalData->InternalPA5G[0])
 	{
 		RadioA_ArrayLen = Rtl8192D_RadioA_2T_intPAArrayLength;
 		Rtl819XRadioA_Array_Table = (u32 *)Rtl8192D_RadioA_2T_intPAArray;
 	}
 
-	if(pHalData->InternalPA5G[1])
+	if (pHalData->InternalPA5G[1])
 	{
 		RadioB_ArrayLen = Rtl8192D_RadioB_2T_intPAArrayLength;
 		Rtl819XRadioB_Array_Table = (u32 *)Rtl8192D_RadioB_2T_intPAArray;
@@ -1716,7 +1716,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 	//vivi added this for read parameter from header, 20100908
 	//1this only happens when DMDP, mac0 start on 2.4G, mac1 start on 5G,
 	//1mac 0 has to set phy0&phy1 pathA or mac1 has to set phy0&phy1 pathA
-	if((Content == radiob_txt)&&(eRFPath == RF_PATH_A))
+	if ((Content == radiob_txt)&&(eRFPath == RF_PATH_A))
 	{
 		//RT_TRACE(COMP_INIT, DBG_LOUD, (" ===> PHY_ConfigRFWithHeaderFile(), althougth Path A, we load radiob.txt\n"));
 		RadioA_ArrayLen = RadioB_ArrayLen;
@@ -1727,7 +1727,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 		case RF_PATH_A:
 			for(i = 0;i<RadioA_ArrayLen; i=i+2)
 			{
-				if(Rtl819XRadioA_Array_Table[i] == 0xfe)
+				if (Rtl819XRadioA_Array_Table[i] == 0xfe)
 				{
 					#ifdef CONFIG_LONG_DELAY_ISSUE
 					rtw_msleep_os(50);
@@ -1770,7 +1770,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 		case RF_PATH_B:
 			for(i = 0;i<RadioB_ArrayLen; i=i+2)
 			{
-				if(Rtl819XRadioB_Array_Table[i] == 0xfe)
+				if (Rtl819XRadioB_Array_Table[i] == 0xfe)
 				{ // Deay specific ms. Only RF configuration require delay.
 					#ifdef CONFIG_LONG_DELAY_ISSUE
 					rtw_msleep_os(50);
@@ -1900,7 +1900,7 @@ rtl8192d_PHY_CheckBBAndRFOK(
 		//
 		// Check whether readback data is correct
 		//
-		if(ulRegRead != WriteData[i])
+		if (ulRegRead != WriteData[i])
 		{
 			//RT_TRACE(COMP_FPGA, DBG_LOUD, ("ulRegRead: %lx, WriteData: %lx \n", ulRegRead, WriteData[i]));
 			rtStatus = _FAIL;
@@ -1977,7 +1977,7 @@ phy_DbmToTxPwrIdx(
 		break;
 	}
 
-	if((PowerInDbm - Offset) > 0)
+	if ((PowerInDbm - Offset) > 0)
 	{
 		TxPwrIdx = (u8)((PowerInDbm - Offset) * 2);
 	}
@@ -1987,7 +1987,7 @@ phy_DbmToTxPwrIdx(
 	}
 
 	// Tx Power Index is too large.
-	if(TxPwrIdx > MAX_TXPWR_IDX_NMODE_92S)
+	if (TxPwrIdx > MAX_TXPWR_IDX_NMODE_92S)
 		TxPwrIdx = MAX_TXPWR_IDX_NMODE_92S;
 
 	return TxPwrIdx;
@@ -2074,14 +2074,14 @@ PHY_GetTxPowerLevel8192D(
 	TxPwrLevel = pHalData->CurrentOfdm24GTxPwrIdx + pHalData->LegacyHTTxPowerDiff;
 
 	// Compare with Legacy OFDM Tx power.
-	if(phy_TxPwrIdxToDbm(Adapter, WIRELESS_MODE_G, TxPwrLevel) > TxPwrDbm)
+	if (phy_TxPwrIdxToDbm(Adapter, WIRELESS_MODE_G, TxPwrLevel) > TxPwrDbm)
 		TxPwrDbm = phy_TxPwrIdxToDbm(Adapter, WIRELESS_MODE_G, TxPwrLevel);
 
 	// HT OFDM
 	TxPwrLevel = pHalData->CurrentOfdm24GTxPwrIdx;
 
 	// Compare with HT OFDM Tx power.
-	if(phy_TxPwrIdxToDbm(Adapter, WIRELESS_MODE_N_24G, TxPwrLevel) > TxPwrDbm)
+	if (phy_TxPwrIdxToDbm(Adapter, WIRELESS_MODE_N_24G, TxPwrLevel) > TxPwrDbm)
 		TxPwrDbm = phy_TxPwrIdxToDbm(Adapter, WIRELESS_MODE_N_24G, TxPwrLevel);
 
 	*powerlevel = TxPwrDbm;
@@ -2099,7 +2099,7 @@ static void getTxPowerIndex(
 	u8	index = (channel -1);
 
 	// 1. CCK
-	if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+	if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 	{
 		cckPowerLevel[RF_PATH_A] = pHalData->TxPwrLevelCck[RF_PATH_A][index];	//RF-A
 		cckPowerLevel[RF_PATH_B] = pHalData->TxPwrLevelCck[RF_PATH_B][index];	//RF-B
@@ -2157,24 +2157,24 @@ PHY_SetTxPowerLevel8192D(
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8	cckPowerLevel[2], ofdmPowerLevel[2];	// [0]:RF-A, [1]:RF-B
 
-#if(MP_DRIVER == 1)
+#if (MP_DRIVER == 1)
 	return;
 #endif
 
-	if((Adapter->mlmeextpriv.sitesurvey_res.state == SCAN_PROCESS)&&(adapter_to_dvobj(Adapter)->ishighspeed == false))
+	if ((Adapter->mlmeextpriv.sitesurvey_res.state == SCAN_PROCESS)&&(adapter_to_dvobj(Adapter)->ishighspeed == false))
 		return;
 
-	if(pHalData->bTXPowerDataReadFromEEPORM == false)
+	if (pHalData->bTXPowerDataReadFromEEPORM == false)
 		return;
 
 	channel = GetRightChnlPlace(channel);
 
 	getTxPowerIndex(Adapter, channel, &cckPowerLevel[0], &ofdmPowerLevel[0]);
 
-	if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+	if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 		ccxPowerIndexCheck(Adapter, channel, &cckPowerLevel[0], &ofdmPowerLevel[0]);
 
-	if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+	if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 		rtl8192d_PHY_RF6052SetCckTxPower(Adapter, &cckPowerLevel[0]);
 	rtl8192d_PHY_RF6052SetOFDMTxPower(Adapter, &ofdmPowerLevel[0], channel);
 }
@@ -2201,7 +2201,7 @@ PHY_UpdateTxPowerDbm8192D(
 	u8	CckTxPwrIdx = phy_DbmToTxPwrIdx(Adapter, WIRELESS_MODE_B, powerInDbm);
 	u8	OfdmTxPwrIdx = phy_DbmToTxPwrIdx(Adapter, WIRELESS_MODE_N_24G, powerInDbm);
 
-	if(OfdmTxPwrIdx - pHalData->LegacyHTTxPowerDiff > 0)
+	if (OfdmTxPwrIdx - pHalData->LegacyHTTxPowerDiff > 0)
 		OfdmTxPwrIdx -= pHalData->LegacyHTTxPowerDiff;
 	else
 		OfdmTxPwrIdx = 0;
@@ -2212,7 +2212,7 @@ PHY_UpdateTxPowerDbm8192D(
 	{
 		for (rf_path = 0; rf_path < 2; rf_path++)
 		{
-			if(idx < CHANNEL_MAX_NUMBER_2G)
+			if (idx < CHANNEL_MAX_NUMBER_2G)
 				pHalData->TxPwrLevelCck[rf_path][idx] = CckTxPwrIdx;
 			pHalData->TxPwrLevelHT40_1S[rf_path][idx] =
 			pHalData->TxPwrLevelHT40_2S[rf_path][idx] = OfdmTxPwrIdx;
@@ -2284,17 +2284,17 @@ _PHY_SetBWMode92D(
 
 	//DBG_8192D("==>[%d]: _PHY_SetBWMode92D()  Switch to %s bandwidth\n", pHalData->interfaceIndex, pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20?"20MHz":"40MHz");
 
-	if(pHalData->rf_chip == RF_PSEUDO_11N)
+	if (pHalData->rf_chip == RF_PSEUDO_11N)
 	{
 		//pHalData->SetBWModeInProgress= false;
 		return;
 	}
 
 	// There is no 40MHz mode in RF_8225.
-	if(pHalData->rf_chip==RF_8225)
+	if (pHalData->rf_chip==RF_8225)
 		return;
 
-	if(Adapter->bDriverStopped)
+	if (Adapter->bDriverStopped)
 		return;
 
 
@@ -2352,7 +2352,7 @@ _PHY_SetBWMode92D(
 			PHY_SetBBReg(Adapter, rFPGA1_RFMOD, bRFMOD, 0x1);
 
 			// Set Control channel to upper or lower. These settings are required only for 40MHz
-			if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+			if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 			{
 				//AcquireCCKAndRWPageAControl(Adapter);
 				PHY_SetBBReg(Adapter, rCCK0_System, bCCKSideBand, (pHalData->nCur40MhzPrimeSC>>1));
@@ -2406,9 +2406,9 @@ _PHY_SetBWMode92D(
 	//pHalData->SetBWModeInProgress= FALSE;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(Adapter->DualMacConcurrent == true && BuddyAdapter != NULL)
+	if (Adapter->DualMacConcurrent == true && BuddyAdapter != NULL)
 	{
-		if(pHalData->bMasterOfDMSP)
+		if (pHalData->bMasterOfDMSP)
 		{
 			pHalDataBuddyAdapter = GET_HAL_DATA(BuddyAdapter);
 			pHalDataBuddyAdapter->CurrentChannelBW=pHalData->CurrentChannelBW;
@@ -2447,11 +2447,11 @@ PHY_SetBWMode8192D(
 	struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
 #endif
 
-	//if(pHalData->SetBWModeInProgress)
+	//if (pHalData->SetBWModeInProgress)
 	//	return;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(pHalData->bInModeSwitchProcess)
+	if (pHalData->bInModeSwitchProcess)
 	{
 		DBG_8192D("PHY_SwChnl8192D(): During mode switch \n");
 		//pHalData->SetBWModeInProgress=false;
@@ -2466,9 +2466,9 @@ PHY_SetBWMode8192D(
 	pHalData->nCur40MhzPrimeSC = Offset;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if((BuddyAdapter !=NULL) && (pHalData->bSlaveOfDMSP))
+	if ((BuddyAdapter !=NULL) && (pHalData->bSlaveOfDMSP))
 	{
-		//if((BuddyAdapter->MgntInfo.bJoinInProgress) ||(BuddyAdapter->MgntInfo.bScanInProgress))
+		//if ((BuddyAdapter->MgntInfo.bJoinInProgress) ||(BuddyAdapter->MgntInfo.bScanInProgress))
 		{
 			DBG_8192D("PHY_SetBWMode92D():slave return when slave \n");
 			//pHalData->SetBWModeInProgress=false;
@@ -2477,7 +2477,7 @@ PHY_SetBWMode8192D(
 	}
 #endif
 
-	if((!Adapter->bDriverStopped) && (!Adapter->bSurpriseRemoved))
+	if ((!Adapter->bDriverStopped) && (!Adapter->bSurpriseRemoved))
 	{
 #ifdef USE_WORKITEM
 		//PlatformScheduleWorkItem(&(pHalData->SetBWModeWorkItem));
@@ -2536,7 +2536,7 @@ PHY_SwitchWirelessBand(
 	u8	i, value8;//, RegValue
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(pHalData->bInModeSwitchProcess || pHalData->bSlaveOfDMSP)
+	if (pHalData->bInModeSwitchProcess || pHalData->bSlaveOfDMSP)
 	{
 		DBG_8192D("PHY_SwitchWirelessBand(): skip for mode switch or slave \n");
 		return;
@@ -2545,10 +2545,10 @@ PHY_SwitchWirelessBand(
 	//DBG_8192D("PHY_SwitchWirelessBand():Before Switch Band \n");
 
 	pHalData->BandSet92D = pHalData->CurrentBandType92D = (enum BAND_TYPE)Band;
-	if(IS_92D_SINGLEPHY(pHalData->VersionID))
+	if (IS_92D_SINGLEPHY(pHalData->VersionID))
 		pHalData->BandSet92D = BAND_ON_BOTH;
 
-	if(pHalData->CurrentBandType92D == BAND_ON_5G)
+	if (pHalData->CurrentBandType92D == BAND_ON_5G)
 	{
 		pHalData->CurrentWirelessMode = WIRELESS_MODE_N_5G;
 	}
@@ -2558,12 +2558,12 @@ PHY_SwitchWirelessBand(
 	}
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(pHalData->bMasterOfDMSP)
+	if (pHalData->bMasterOfDMSP)
 	{
 		struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
-		if(BuddyAdapter!=NULL)
+		if (BuddyAdapter!=NULL)
 		{
-			if(BuddyAdapter->hw_init_completed)
+			if (BuddyAdapter->hw_init_completed)
 			{
 				GET_HAL_DATA(BuddyAdapter)->BandSet92D = pHalData->BandSet92D;
 				GET_HAL_DATA(BuddyAdapter)->CurrentBandType92D = pHalData->CurrentBandType92D;
@@ -2577,10 +2577,10 @@ PHY_SwitchWirelessBand(
 	PHY_StopTRXBeforeChangeBand8192D(Adapter);
 
 	//reconfig BB/RF according to wireless mode
-	if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+	if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 	{
 		//BB & RF Config
-		if(pHalData->interfaceIndex == 1)
+		if (pHalData->interfaceIndex == 1)
 		{
 #ifdef CONFIG_EMBEDDED_FWIMG
 			phy_ConfigBBWithHeaderFile(Adapter, BaseBand_Config_AGC_TAB);
@@ -2591,7 +2591,7 @@ PHY_SwitchWirelessBand(
 	}
 	else	//5G band
 	{
-		if(pHalData->interfaceIndex == 1)
+		if (pHalData->interfaceIndex == 1)
 		{
 #ifdef CONFIG_EMBEDDED_FWIMG
 			phy_ConfigBBWithHeaderFile(Adapter, BaseBand_Config_AGC_TAB);
@@ -2603,7 +2603,7 @@ PHY_SwitchWirelessBand(
 
 	PHY_UpdateBBRFConfiguration8192D(Adapter, true);
 
-	if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+	if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 	{
 		update_tx_basic_rate(Adapter, WIRELESS_11BG_24N);
 
@@ -2619,12 +2619,12 @@ PHY_SwitchWirelessBand(
 	}
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(pHalData->bMasterOfDMSP)
+	if (pHalData->bMasterOfDMSP)
 	{
 		struct rtw_adapter *	BuddyAdapter = Adapter->pbuddy_adapter;
-		if(BuddyAdapter!=NULL)
+		if (BuddyAdapter!=NULL)
 		{
-			if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+			if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 				rtw_write16(BuddyAdapter, REG_RRSR, 0x15d);
 			else
 				rtw_write16(BuddyAdapter, REG_RRSR, 0x150);
@@ -2636,7 +2636,7 @@ PHY_SwitchWirelessBand(
 	pdmpriv->bReloadtxpowerindex = true;
 
 	// notice fw know band status  0x81[1]/0x53[1] = 0: 5G, 1: 2G
-	if(pHalData->CurrentBandType92D==BAND_ON_2_4G)
+	if (pHalData->CurrentBandType92D==BAND_ON_2_4G)
 	{
 		value8 = rtw_read8(Adapter, (pHalData->interfaceIndex==0?REG_MAC0:REG_MAC1));
 		value8 |= BIT1;
@@ -2767,58 +2767,58 @@ PHY_RestoreRFENV(
 
 	//only for 92D C-cut SMSP
 
-	if(adapter_to_dvobj(Adapter)->ishighspeed == false)
+	if (adapter_to_dvobj(Adapter)->ishighspeed == false)
 		return;
 
 	//config path A for 5G
-	if(pHalData->CurrentBandType92D==BAND_ON_5G)
+	if (pHalData->CurrentBandType92D==BAND_ON_5G)
 	{
 		u4tmp = CurveIndex[GetRightChnlPlace(channel)-1];
 
 		for(i = 0; i < RF_CHNL_NUM_5G; i++)
 		{
-			if(channel == RF_CHNL_5G[i] && channel <= 140)
+			if (channel == RF_CHNL_5G[i] && channel <= 140)
 				index = 0;
 		}
 
 		for(i = 0; i < RF_CHNL_NUM_5G_40M; i++)
 		{
-			if(channel == RF_CHNL_5G_40M[i] && channel <= 140)
+			if (channel == RF_CHNL_5G_40M[i] && channel <= 140)
 				index = 1;
 		}
 
-		if(channel ==149 || channel == 155 || channel ==161)
+		if (channel ==149 || channel == 155 || channel ==161)
 			index = 2;
-		else if(channel == 151 || channel == 153 || channel == 163 || channel == 165)
+		else if (channel == 151 || channel == 153 || channel == 163 || channel == 165)
 			index = 3;
-		else if(channel == 157 || channel == 159 )
+		else if (channel == 157 || channel == 159 )
 			index = 4;
 
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
 		{
 			bNeedPowerDownRadio = rtl8192d_PHY_EnableAnotherPHY(Adapter, false);
 			MaskforPhySet = MAC1_ACCESS_PHY0;
 			//asume no this case
-			if(bNeedPowerDownRadio)
+			if (bNeedPowerDownRadio)
 				PHY_EnableRFENV(Adapter, path, MaskforPhySet, &u4RegValue);
 		}
 
 		//DMDP, if band = 5G,Mac0 need to set PHY1 when regB30[27]=1
-		if(Regb30 && pHalData->interfaceIndex == 0)
+		if (Regb30 && pHalData->interfaceIndex == 0)
 		{
 			DBG_8192D("===============phy_SwitchRfSetting8192D interface %d,B30&BIT27=1!!!!\n", pHalData->interfaceIndex);
 
 			bNeedPowerDownRadio = rtl8192d_PHY_EnableAnotherPHY(Adapter, true);
 			MaskforPhySet= MAC0_ACCESS_PHY1;
 			//asume no this case
-			if(bNeedPowerDownRadio)
+			if (bNeedPowerDownRadio)
 				PHY_EnableRFENV(Adapter, path, MaskforPhySet, &u4RegValue);
 		}
 
 		for(i = 0; i < RF_REG_NUM_for_C_CUT_5G; i++)
 		{
 #if 1
-			if(i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
+			if (i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
 			{
 				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask, 0xE439D);
 			}
@@ -2827,7 +2827,7 @@ PHY_RestoreRFENV(
 #if SWLCK == 1
 				u4tmp2= (RF_REG_Param_for_C_CUT_5G[index][i]&0x7FF)|(u4tmp << 11);
 
-				if(channel == 36)
+				if (channel == 36)
 					u4tmp2 &= ~(BIT7|BIT6);
 
 				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask, u4tmp2);
@@ -2841,7 +2841,7 @@ PHY_RestoreRFENV(
 				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask, RF_REG_Param_for_C_CUT_5G[index][i]);
 			}
 #else
-			if(i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
+			if (i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
 				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)path, RF_REG_for_C_CUT_5G[i], RF_REG_MASK_for_C_CUT_5G[i], 0xE439D);
 			else
 				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)path, RF_REG_for_C_CUT_5G[i], RF_REG_MASK_for_C_CUT_5G[i], RF_REG_Param_for_C_CUT_5G[index][i]);
@@ -2850,49 +2850,49 @@ PHY_RestoreRFENV(
 			//	RF_REG_for_C_CUT_5G[i], RF_REG_Param_for_C_CUT_5G[index][i], path,  index,
 			//	PHY_QueryRFReg(Adapter, (enum RF_RADIO_PATH_E) path, RF_REG_for_C_CUT_5G[i]|MaskforPhyAccess, bRFRegOffsetMask)));
 		}
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
 		{
-			if(bNeedPowerDownRadio)
+			if (bNeedPowerDownRadio)
 			{
 				PHY_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
 			rtl8192d_PHY_PowerDownAnotherPHY(Adapter, false);
 		}
 
-		if(Regb30 && pHalData->interfaceIndex == 0)
+		if (Regb30 && pHalData->interfaceIndex == 0)
 		{
-			if(bNeedPowerDownRadio)
+			if (bNeedPowerDownRadio)
 			{
 				PHY_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
 			rtl8192d_PHY_PowerDownAnotherPHY(Adapter, true);
 		}
 
-		if(channel < 149)
+		if (channel < 149)
 			value = 0x07;
-		else if(channel >= 149)
+		else if (channel >= 149)
 			value = 0x02;
 
-		if(channel >= 36 && channel <= 64)
+		if (channel >= 36 && channel <= 64)
 			index = 0;
-		else if(channel >=100 && channel <= 140)
+		else if (channel >=100 && channel <= 140)
 			index = 1;
 		else
 			index = 2;
 
 		for(eRFPath = RF_PATH_A; eRFPath < pHalData->NumTotalRFPath; eRFPath++)
 		{
-			if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
+			if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
 				pHalData->interfaceIndex == 1)		//MAC 1 5G
 				bInteralPA = pHalData->InternalPA5G[1];
 			else
 				bInteralPA = pHalData->InternalPA5G[eRFPath];
 
-			if(bInteralPA)
+			if (bInteralPA)
 			{
 				for(i = 0; i < RF_REG_NUM_for_C_CUT_5G_internalPA; i++)
 				{
-					if(RF_REG_for_C_CUT_5G_internalPA[i] == 0x03 &&
+					if (RF_REG_for_C_CUT_5G_internalPA[i] == 0x03 &&
 						channel >=36 && channel <=64)
 						PHY_SetRFReg(Adapter, eRFPath, RF_REG_for_C_CUT_5G_internalPA[i], bRFRegOffsetMask, 0x7bdef);
 					else
@@ -2905,40 +2905,40 @@ PHY_RestoreRFENV(
 				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_TXPA_AG, mask, value);
 		}
 	}
-	else if(pHalData->CurrentBandType92D==BAND_ON_2_4G)
+	else if (pHalData->CurrentBandType92D==BAND_ON_2_4G)
 	{
 		//DBG_8192D("====>phy_SwitchRfSetting interface %d 2.4G\n", pHalData->interfaceIndex);
 		u4tmp = CurveIndex[channel-1];
 		//RTPRINT(FINIT, INIT_IQK, ("cosa ver 3 set RF-B, 2G, 0x28 = 0x%x !!\n", u4tmp));
 
-		if(channel == 1 || channel == 2 || channel ==4 || channel == 9 || channel == 10 ||
+		if (channel == 1 || channel == 2 || channel ==4 || channel == 9 || channel == 10 ||
 			channel == 11 || channel ==12)
 			index = 0;
-		else if(channel ==3 || channel == 13 || channel == 14)
+		else if (channel ==3 || channel == 13 || channel == 14)
 			index = 1;
-		else if(channel >= 5 && channel <= 8)
+		else if (channel >= 5 && channel <= 8)
 			index = 2;
 
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
 		{
 			path = RF_PATH_A;
-			if(pHalData->interfaceIndex == 0)
+			if (pHalData->interfaceIndex == 0)
 			{
 				bNeedPowerDownRadio = rtl8192d_PHY_EnableAnotherPHY(Adapter, true);
 				MaskforPhySet = MAC0_ACCESS_PHY1;
-				if(bNeedPowerDownRadio)
+				if (bNeedPowerDownRadio)
 					PHY_EnableRFENV(Adapter, path,MaskforPhySet,&u4RegValue);
 			}
 
 			//DMDP, if band = 2G,MAC1 need to set PHY0 when regB30[27]=1
-			if(Regb30 && pHalData->interfaceIndex == 1)
+			if (Regb30 && pHalData->interfaceIndex == 1)
 			{
 				//RT_TRACE(COMP_MLME, DBG_LOUD, ("===============phy_SwitchRfSetting interface %ld,B30&BIT27=1!!!!\n", Adapter->interfaceIndex));
 
 				bNeedPowerDownRadio = rtl8192d_PHY_EnableAnotherPHY(Adapter, false);
 				MaskforPhySet= MAC1_ACCESS_PHY0;
 				//asume no this case
-				if(bNeedPowerDownRadio)
+				if (bNeedPowerDownRadio)
 					PHY_EnableRFENV(Adapter, path,MaskforPhySet,&u4RegValue);
 			}
 		}
@@ -2967,17 +2967,17 @@ PHY_RestoreRFENV(
 
 		PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)path, RF_SYN_G4|MaskforPhySet, bRFRegOffsetMask, RF_REG_SYN_G4_for_C_CUT_2G | (u4tmp << 11));
 #endif
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 0)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 0)
 		{
-			if(bNeedPowerDownRadio){
+			if (bNeedPowerDownRadio){
 				PHY_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
 			rtl8192d_PHY_PowerDownAnotherPHY(Adapter, true);
 		}
 
-		if(Regb30 && pHalData->interfaceIndex == 1)
+		if (Regb30 && pHalData->interfaceIndex == 1)
 		{
-			if(bNeedPowerDownRadio)
+			if (bNeedPowerDownRadio)
 			{
 				PHY_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
@@ -3025,48 +3025,48 @@ static  void
 
 	//RTPRINT(FINIT, INIT_IQK, ("cosa pHalData->CurrentBandType92D = %d\n", pHalData->CurrentBandType92D));
 	//RTPRINT(FINIT, INIT_IQK, ("cosa channel = %d\n", channel));
-	if(pHalData->CurrentBandType92D == BAND_ON_5G)
+	if (pHalData->CurrentBandType92D == BAND_ON_5G)
 	{
 		//Path-A for 5G
 		{
 			u4tmp = CurveIndex[GetRightChnlPlace(channel)-1];
 			//RTPRINT(FINIT, INIT_IQK, ("cosa ver 1 set RF-A, 5G,	0x28 = 0x%x !!\n", u4tmp));
 
-			if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
+			if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
 			{
 				bNeedPowerDownRadio = rtl8192d_PHY_EnableAnotherPHY(Adapter, false);
 				MaskforPhySet = MAC1_ACCESS_PHY0;
 				//asume no this case
-				if(bNeedPowerDownRadio)
+				if (bNeedPowerDownRadio)
 					PHY_EnableRFENV(Adapter, eRFPath, MaskforPhySet,&u4RegValue);
 			}
 
 			PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_SYN_G4|MaskforPhySet, 0x3f800, u4tmp);
 
-			if(bNeedPowerDownRadio){
+			if (bNeedPowerDownRadio){
 				PHY_RestoreRFENV(Adapter, eRFPath,MaskforPhySet, &u4RegValue);
 				rtl8192d_PHY_PowerDownAnotherPHY(Adapter, false);
 			}
 		}
 	}
-	else if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+	else if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 	{
 		{
 			u32 u4tmp=0;
 			u4tmp = CurveIndex[channel-1];
 			//RTPRINT(FINIT, INIT_IQK, ("cosa ver 3 set RF-B, 2G, 0x28 = 0x%x !!\n", u4tmp));
 
-			if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 0)
+			if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 0)
 			{
 				bNeedPowerDownRadio = rtl8192d_PHY_EnableAnotherPHY(Adapter, true);
 				MaskforPhySet = MAC0_ACCESS_PHY1;
-				if(bNeedPowerDownRadio)
+				if (bNeedPowerDownRadio)
 					PHY_EnableRFENV(Adapter, eRFPath,MaskforPhySet, &u4RegValue);
 			}
 			PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_SYN_G4|MaskforPhySet, 0x3f800, u4tmp);
 			//RTPRINT(FINIT, INIT_IQK, ("cosa ver 3 set RF-B, 2G, 0x28 = 0x%lx !!\n", PHY_QueryRFReg(Adapter, (enum RF_RADIO_PATH_E) eRFPath, RF_SYN_G4|MaskforPhyAccess, 0x3f800)));
 
-			if(bNeedPowerDownRadio){
+			if (bNeedPowerDownRadio){
 				PHY_RestoreRFENV(Adapter, eRFPath,MaskforPhySet, &u4RegValue);
 				rtl8192d_PHY_PowerDownAnotherPHY(Adapter, true);
 			}
@@ -3109,18 +3109,18 @@ static  void
 	u32		RFMask=bRFRegOffsetMask;
 	u8		group=0, i;
 
-	if(adapter_to_dvobj(Adapter)->ishighspeed == false)
+	if (adapter_to_dvobj(Adapter)->ishighspeed == false)
 		return;
 
 	//only for 92D C-cut SMSP
 
-	if(pHalData->CurrentBandType92D == BAND_ON_5G)
+	if (pHalData->CurrentBandType92D == BAND_ON_5G)
 	{
 		PHY_SetBBReg1Byte(Adapter, rFPGA0_RFMOD, BIT25|BIT24, 0);
 		PHY_SetBBReg(Adapter, rFPGA0_AnalogParameter4, 0x00f00000,	0xf);
 
 		// fc area 0xd2c
-		if(channel>=149)
+		if (channel>=149)
 			PHY_SetBBReg(Adapter, rOFDM1_CFOTracking, BIT13|BIT14,2);
 		else
 			PHY_SetBBReg(Adapter, rOFDM1_CFOTracking, BIT13|BIT14,1);
@@ -3137,7 +3137,7 @@ static  void
 	else{ //G band.
 		//RT_TRACE(COMP_SCAN,DBG_LOUD,("Load RF IMR parameters for G band. IMR already setting %d \n",pMgntInfo->bLoadIMRandIQKSettingFor2G));
 
-		if(!pHalData->bLoadIMRandIQKSettingFor2G){
+		if (!pHalData->bLoadIMRandIQKSettingFor2G){
 			//RT_TRACE(COMP_SCAN,DBG_LOUD,("Load RF IMR parameters for G band. %d \n",eRFPath));
 			//AcquireCCKAndRWPageAControl(Adapter);
 			PHY_SetBBReg1Byte(Adapter, rFPGA0_RFMOD, BIT25|BIT24, 0);
@@ -3186,7 +3186,7 @@ static  void
 
 	//only for 92D C-cut SMSP
 
-	if(adapter_to_dvobj(Adapter)->ishighspeed == false)
+	if (adapter_to_dvobj(Adapter)->ishighspeed == false)
 		return;
 
 	//---------Do IQK for normal chip and test chip 5G band----------------
@@ -3197,7 +3197,7 @@ static  void
 	pHalData->bLoadIMRandIQKSettingFor2G = false;
 #endif
 
-	if(pHalData->bNeedIQK && !pHalData->IQKMatrixRegSetting[Indexforchannel].bIQKDone)
+	if (pHalData->bNeedIQK && !pHalData->IQKMatrixRegSetting[Indexforchannel].bIQKDone)
 	{ //Re Do IQK.
 		DBG_8192D("Do IQK Matrix reg for channel:%d....\n", channel);
 		rtl8192d_PHY_IQCalibrate(Adapter);
@@ -3205,13 +3205,13 @@ static  void
 	else //Just load the value.
 	{
 		// 2G band just load once.
-		if(((!pHalData->bLoadIMRandIQKSettingFor2G) && Indexforchannel==0) ||Indexforchannel>0)
+		if (((!pHalData->bLoadIMRandIQKSettingFor2G) && Indexforchannel==0) ||Indexforchannel>0)
 		{
 			//DBG_8192D("Just Read IQK Matrix reg for channel:%d....\n", channel);
 
-			if((pHalData->IQKMatrixRegSetting[Indexforchannel].Value[0][0] != 0)/*&&(RegEA4 != 0)*/)
+			if ((pHalData->IQKMatrixRegSetting[Indexforchannel].Value[0][0] != 0)/*&&(RegEA4 != 0)*/)
 			{
-				if(pHalData->CurrentBandType92D == BAND_ON_5G)
+				if (pHalData->CurrentBandType92D == BAND_ON_5G)
 					phy_PathAFillIQKMatrix_5G_Normal(Adapter, true, pHalData->IQKMatrixRegSetting[Indexforchannel].Value, 0, (pHalData->IQKMatrixRegSetting[Indexforchannel].Value[0][2] == 0));
 				else
 					phy_PathAFillIQKMatrix(Adapter, true, pHalData->IQKMatrixRegSetting[Indexforchannel].Value, 0, (pHalData->IQKMatrixRegSetting[Indexforchannel].Value[0][2] == 0));
@@ -3219,16 +3219,16 @@ static  void
 
 			if (IS_92D_SINGLEPHY(pHalData->VersionID))
 			{
-				if((pHalData->IQKMatrixRegSetting[Indexforchannel].Value[0][4] != 0)/*&&(RegEC4 != 0)*/)
+				if ((pHalData->IQKMatrixRegSetting[Indexforchannel].Value[0][4] != 0)/*&&(RegEC4 != 0)*/)
 				{
-					if(pHalData->CurrentBandType92D == BAND_ON_5G)
+					if (pHalData->CurrentBandType92D == BAND_ON_5G)
 						phy_PathBFillIQKMatrix_5G_Normal(Adapter, true, pHalData->IQKMatrixRegSetting[Indexforchannel].Value, 0, (pHalData->IQKMatrixRegSetting[Indexforchannel].Value[0][6] == 0));
 					else
 						phy_PathBFillIQKMatrix(Adapter, true, pHalData->IQKMatrixRegSetting[Indexforchannel].Value, 0, (pHalData->IQKMatrixRegSetting[Indexforchannel].Value[0][6] == 0));
 				}
 			}
 
-			if((Adapter->mlmeextpriv.sitesurvey_res.state == SCAN_PROCESS)&&(Indexforchannel==0))
+			if ((Adapter->mlmeextpriv.sitesurvey_res.state == SCAN_PROCESS)&&(Indexforchannel==0))
 				pHalData->bLoadIMRandIQKSettingFor2G=true;
 		}
 	}
@@ -3256,18 +3256,18 @@ static void _PHY_SwChnl8192D(struct rtw_adapter * Adapter, u8 channel)
 		DBG_8192D( "[%s] ch = %d\n", __func__, channel );
 	}
 
-	if(pHalData->BandSet92D == BAND_ON_BOTH){
+	if (pHalData->BandSet92D == BAND_ON_BOTH){
 		// Need change band?
 		// BB {Reg878[0],[16]} bit0= 1 is 5G, bit0=0 is 2G.
 		ret_value = PHY_QueryBBReg(Adapter, rFPGA0_XAB_RFParameter, bMaskDWord);
 
-		if(ret_value & BIT0)
+		if (ret_value & BIT0)
 			bandtype = BAND_ON_5G;
 		else
 			bandtype = BAND_ON_2_4G;
 
 		// Use current channel to judge Band Type and switch Band if need.
-		if(channel > 14)
+		if (channel > 14)
 		{
 			target_bandtype = BAND_ON_5G;
 		}
@@ -3276,7 +3276,7 @@ static void _PHY_SwChnl8192D(struct rtw_adapter * Adapter, u8 channel)
 			target_bandtype = BAND_ON_2_4G;
 		}
 
-		if(target_bandtype != bandtype)
+		if (target_bandtype != bandtype)
 			PHY_SwitchWirelessBand(Adapter,target_bandtype);
 	}
 
@@ -3293,9 +3293,9 @@ static void _PHY_SwChnl8192D(struct rtw_adapter * Adapter, u8 channel)
 			//pHalData->RfRegChnlVal[eRFPath] = PHY_QueryRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, bRFRegOffsetMask);
 			// & 0xFFFFFC00 just for 2.4G. So for 5G band,bit[9:8]= 1. we change this setting for 5G. by wl
 			pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xffffff00) | param2);
-			if(pHalData->CurrentBandType92D == BAND_ON_5G)
+			if (pHalData->CurrentBandType92D == BAND_ON_5G)
 			{
-				if(param2>99)
+				if (param2>99)
 				{
 					pHalData->RfRegChnlVal[eRFPath]=pHalData->RfRegChnlVal[eRFPath]|(BIT18);
 				}
@@ -3336,9 +3336,9 @@ static void _PHY_SwChnl8192D(struct rtw_adapter * Adapter, u8 channel)
 #endif
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(Adapter->DualMacConcurrent == true && BuddyAdapter != NULL)
+	if (Adapter->DualMacConcurrent == true && BuddyAdapter != NULL)
 	{
-		if(pHalData->bMasterOfDMSP)
+		if (pHalData->bMasterOfDMSP)
 		{
 			GET_HAL_DATA(BuddyAdapter)->CurrentChannel=channel;
 		}
@@ -3364,30 +3364,30 @@ PHY_SwChnl8192D(	// Call after initialization
 	struct hal_data_8192du *pHalDataBuddyAdapter;
 #endif
 
-	if(pHalData->rf_chip == RF_PSEUDO_11N)
+	if (pHalData->rf_chip == RF_PSEUDO_11N)
 	{
 		//pHalData->SwChnlInProgress=FALSE;
 		return;									//return immediately if it is peudo-phy
 	}
 
-	if(Adapter->mlmeextpriv.sitesurvey_res.state == SCAN_COMPLETE)
+	if (Adapter->mlmeextpriv.sitesurvey_res.state == SCAN_COMPLETE)
 		pHalData->bLoadIMRandIQKSettingFor2G = false;
 
-	//if(pHalData->SwChnlInProgress)
+	//if (pHalData->SwChnlInProgress)
 	//	return;
 
-	//if(pHalData->SetBWModeInProgress)
+	//if (pHalData->SetBWModeInProgress)
 	//	return;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(pHalData->bInModeSwitchProcess)
+	if (pHalData->bInModeSwitchProcess)
 	{
 		DBG_8192D("PHY_SwChnl8192D(): During mode switch \n");
 		//pHalData->SwChnlInProgress=false;
 		return;
 	}
 
-	if(BuddyAdapter != NULL &&
+	if (BuddyAdapter != NULL &&
 		((pHalData->interfaceIndex == 0 && pHalData->CurrentBandType92D == BAND_ON_2_4G) ||
 		(pHalData->interfaceIndex == 1 && pHalData->CurrentBandType92D == BAND_ON_5G)))
 	{
@@ -3421,13 +3421,13 @@ PHY_SwChnl8192D(	// Call after initialization
 		case WIRELESS_MODE_N_5G:
 			//Get first channel error when change between 5G and 2.4G band.
 			//FIX ME!!!
-			//if(channel <=14)
+			//if (channel <=14)
 			//	return;
 			//RT_ASSERT((channel>14), ("WIRELESS_MODE_A but channel<=14"));
 			break;
 
 		case WIRELESS_MODE_B:
-			//if(channel>14)
+			//if (channel>14)
 			//	return;
 			//RT_ASSERT((channel<=14), ("WIRELESS_MODE_B but channel>14"));
 			break;
@@ -3436,7 +3436,7 @@ PHY_SwChnl8192D(	// Call after initialization
 		case WIRELESS_MODE_N_24G:
 			//Get first channel error when change between 5G and 2.4G band.
 			//FIX ME!!!
-			//if(channel > 14)
+			//if (channel > 14)
 			//	return;
 			//RT_ASSERT((channel<=14), ("WIRELESS_MODE_G but channel>14"));
 			break;
@@ -3448,7 +3448,7 @@ PHY_SwChnl8192D(	// Call after initialization
 	//--------------------------------------------
 
 	//pHalData->SwChnlInProgress = TRUE;
-	if( channel == 0){//FIXME!!!A band?
+	if ( channel == 0){//FIXME!!!A band?
 		channel = 1;
 	}
 
@@ -3458,7 +3458,7 @@ PHY_SwChnl8192D(	// Call after initialization
 	//pHalData->SwChnlStep=0;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if((BuddyAdapter !=NULL) && (pHalData->bSlaveOfDMSP))
+	if ((BuddyAdapter !=NULL) && (pHalData->bSlaveOfDMSP))
 	{
 		DBG_8192D("PHY_SwChnl8192D():slave return when slave  \n");
 		//pHalData->SwChnlInProgress=false;
@@ -3466,21 +3466,21 @@ PHY_SwChnl8192D(	// Call after initialization
 	}
 #endif
 
-	if((!Adapter->bDriverStopped) && (!Adapter->bSurpriseRemoved))
+	if ((!Adapter->bDriverStopped) && (!Adapter->bSurpriseRemoved))
 	{
 #ifdef USE_WORKITEM
 		//bResult = PlatformScheduleWorkItem(&(pHalData->SwChnlWorkItem));
 #else
 		_PHY_SwChnl8192D(Adapter, channel);
 #endif
-		if(bResult)
+		if (bResult)
 		{
 			//RT_TRACE(COMP_SCAN, DBG_LOUD, ("PHY_SwChnl8192C SwChnlInProgress TRUE schdule workitem done\n"));
 		}
 		else
 		{
 			//RT_TRACE(COMP_SCAN, DBG_LOUD, ("PHY_SwChnl8192C SwChnlInProgress FALSE schdule workitem error\n"));
-			//if(IS_HARDWARE_TYPE_8192SU(Adapter))
+			//if (IS_HARDWARE_TYPE_8192SU(Adapter))
 			//{
 			//	pHalData->SwChnlInProgress = FALSE;
 				pHalData->CurrentChannel = tmpchannel;
@@ -3491,7 +3491,7 @@ PHY_SwChnl8192D(	// Call after initialization
 	else
 	{
 		//RT_TRACE(COMP_SCAN, DBG_LOUD, ("PHY_SwChnl8192C SwChnlInProgress FALSE driver sleep or unload\n"));
-		//if(IS_HARDWARE_TYPE_8192SU(Adapter))
+		//if (IS_HARDWARE_TYPE_8192SU(Adapter))
 		//{
 		//	pHalData->SwChnlInProgress = FALSE;
 			pHalData->CurrentChannel = tmpchannel;
@@ -3525,9 +3525,9 @@ phy_SetSwChnlCmdArray(
 {
 	struct sw_chnl_cmd *cmd;
 
-	if(cmdtable == NULL)
+	if (cmdtable == NULL)
 		return false;
-	if(cmdtableidx >= cmdtablesz)
+	if (cmdtableidx >= cmdtablesz)
 		return false;
 
 	cmd = cmdtable + cmdtableidx;
@@ -3568,22 +3568,22 @@ PHY_SwChnlPhy8192D(	// Only called during initialize
 	//RT_TRACE(COMP_SCAN | COMP_RM, DBG_LOUD, ("==>PHY_SwChnlPhy8192S(), switch from channel %d to channel %d.\n", pHalData->CurrentChannel, channel));
 
 	// Cannot IO.
-	//if(RT_CANNOT_IO(Adapter))
+	//if (RT_CANNOT_IO(Adapter))
 	//	return;
 
 	// Channel Switching is in progress.
-	//if(pHalData->SwChnlInProgress)
+	//if (pHalData->SwChnlInProgress)
 	//	return;
 
 	//return immediately if it is peudo-phy
-	if(pHalData->rf_chip == RF_PSEUDO_11N)
+	if (pHalData->rf_chip == RF_PSEUDO_11N)
 	{
 		//pHalData->SwChnlInProgress=FALSE;
 		return;
 	}
 
 	//pHalData->SwChnlInProgress = TRUE;
-	if( channel == 0)
+	if ( channel == 0)
 		channel = 1;
 
 	pHalData->CurrentChannel=channel;
@@ -3665,7 +3665,7 @@ phy_PathA_IQK(
 
 	//path-A IQK setting
 	//RTPRINT(FINIT, INIT_IQK, ("Path-A IQK setting!\n"));
-	if(pHalData->interfaceIndex == 0)
+	if (pHalData->interfaceIndex == 0)
 	{
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_A, bMaskDWord, 0x10008c1f);
 		PHY_SetBBReg(pAdapter, rRx_IQK_Tone_A, bMaskDWord, 0x10008c1f);
@@ -3682,12 +3682,12 @@ phy_PathA_IQK(
 		IS_81xxC_VENDOR_UMC_B_CUT(pHalData->VersionID)?0x28160202:0x28160502);
 
 	//path-B IQK setting
-	if(configPathB)
+	if (configPathB)
 	{
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_B, bMaskDWord, 0x10008c22);
 		PHY_SetBBReg(pAdapter, rRx_IQK_Tone_B, bMaskDWord, 0x10008c22);
 		PHY_SetBBReg(pAdapter, rTx_IQK_PI_B, bMaskDWord, 0x82140102);
-		if(IS_HARDWARE_TYPE_8192D(pAdapter))
+		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 			PHY_SetBBReg(pAdapter, rRx_IQK_PI_B, bMaskDWord, 0x28160206);
 		else
 			PHY_SetBBReg(pAdapter, rRx_IQK_PI_B, bMaskDWord, 0x28160202);
@@ -3695,7 +3695,7 @@ phy_PathA_IQK(
 
 	//LO calibration setting
 	//RTPRINT(FINIT, INIT_IQK, ("LO calibration setting!\n"));
-	if(IS_HARDWARE_TYPE_8192D(pAdapter))
+	if (IS_HARDWARE_TYPE_8192D(pAdapter))
 		PHY_SetBBReg(pAdapter, rIQK_AGC_Rsp, bMaskDWord, 0x00462911);
 	else
 		PHY_SetBBReg(pAdapter, rIQK_AGC_Rsp, bMaskDWord, 0x001028d1);
@@ -3719,14 +3719,14 @@ phy_PathA_IQK(
 	regEA4= PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_A_2, bMaskDWord);
 	//RTPRINT(FINIT, INIT_IQK, ("0xea4 = 0x%x\n", regEA4));
 
-	if(!(regEAC & BIT28) &&
+	if (!(regEAC & BIT28) &&
 		(((regE94 & 0x03FF0000)>>16) != 0x142) &&
 		(((regE9C & 0x03FF0000)>>16) != 0x42) )
 		result |= 0x01;
 	else							//if Tx not OK, ignore Rx
 		return result;
 
-	if(!(regEAC & BIT27) &&		//if Tx is OK, check whether Rx is OK
+	if (!(regEAC & BIT27) &&		//if Tx is OK, check whether Rx is OK
 		(((regEA4 & 0x03FF0000)>>16) != 0x132) &&
 		(((regEAC & 0x03FF0000)>>16) != 0x36))
 		result |= 0x02;
@@ -3758,7 +3758,7 @@ phy_PathA_IQK_5G_Normal(
 
 	u32	TxOKBit = BIT28, RxOKBit = BIT27;
 
-	if(pHalData->interfaceIndex == 1)	//PHY1
+	if (pHalData->interfaceIndex == 1)	//PHY1
 	{
 		TxOKBit = BIT31;
 		RxOKBit = BIT30;
@@ -3775,7 +3775,7 @@ phy_PathA_IQK_5G_Normal(
 	PHY_SetBBReg(pAdapter, rRx_IQK_PI_A, bMaskDWord, 0x68160960);
 
 	//path-B IQK setting
-	if(configPathB)
+	if (configPathB)
 	{
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_B, bMaskDWord, 0x18008c2f );
 		PHY_SetBBReg(pAdapter, rRx_IQK_Tone_B, bMaskDWord, 0x18008c2f );
@@ -3829,7 +3829,7 @@ phy_PathA_IQK_5G_Normal(
 		regEA4= PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_A_2, bMaskDWord);
 		//RTPRINT(FINIT, INIT_IQK, ("0xea4 = 0x%lx\n", regEA4));
 
-		if(!(regEAC & TxOKBit) &&
+		if (!(regEAC & TxOKBit) &&
 			(((regE94 & 0x03FF0000)>>16) != 0x142)  )
 		{
 			result |= 0x01;
@@ -3840,7 +3840,7 @@ phy_PathA_IQK_5G_Normal(
 			continue;
 		}
 
-		if(!(regEAC & RxOKBit) &&			//if Tx is OK, check whether Rx is OK
+		if (!(regEAC & RxOKBit) &&			//if Tx is OK, check whether Rx is OK
 			(((regEA4 & 0x03FF0000)>>16) != 0x132))
 		{
 			result |= 0x02;
@@ -3856,12 +3856,12 @@ phy_PathA_IQK_5G_Normal(
 	PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFInterfaceSW, bMaskDWord, pdmpriv->IQK_BB_backup[0]);
 	PHY_SetBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, bMaskDWord, pdmpriv->IQK_BB_backup[1]);
 
-	if(!(result & 0x01))	//Tx IQK fail
+	if (!(result & 0x01))	//Tx IQK fail
 	{
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_A, bMaskDWord, 0x19008c00);
 	}
 
-	if(!(result & 0x02))	//Rx IQK fail
+	if (!(result & 0x02))	//Rx IQK fail
 	{
 		PHY_SetBBReg(pAdapter, rOFDM0_XARxIQImbalance , bMaskDWord, 0x40000100);
 		PHY_SetBBReg(pAdapter, rRx_IQK_Tone_A , bMaskDWord, 0x19008c00);
@@ -3902,14 +3902,14 @@ phy_PathB_IQK(
 	regECC= PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_B_2, bMaskDWord);
 	//RTPRINT(FINIT, INIT_IQK, ("0xecc = 0x%x\n", regECC));
 
-	if(!(regEAC & BIT31) &&
+	if (!(regEAC & BIT31) &&
 		(((regEB4 & 0x03FF0000)>>16) != 0x142) &&
 		(((regEBC & 0x03FF0000)>>16) != 0x42))
 		result |= 0x01;
 	else
 		return result;
 
-	if(!(regEAC & BIT30) &&
+	if (!(regEAC & BIT30) &&
 		(((regEC4 & 0x03FF0000)>>16) != 0x132) &&
 		(((regECC & 0x03FF0000)>>16) != 0x36))
 		result |= 0x02;
@@ -3999,13 +3999,13 @@ phy_PathB_IQK_5G_Normal(
 		regECC= PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_B_2, bMaskDWord);
 		//RTPRINT(FINIT, INIT_IQK, ("0xecc = 0x%lx\n", regECC));
 
-		if(!(regEAC & BIT31) &&
+		if (!(regEAC & BIT31) &&
 			(((regEB4 & 0x03FF0000)>>16) != 0x142))
 			result |= 0x01;
 		else
 			continue;
 
-		if(!(regEAC & BIT30) &&
+		if (!(regEAC & BIT30) &&
 			(((regEC4 & 0x03FF0000)>>16) != 0x132))
 		{
 			result |= 0x02;
@@ -4021,12 +4021,12 @@ phy_PathB_IQK_5G_Normal(
 	PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFInterfaceSW, bMaskDWord, pdmpriv->IQK_BB_backup[0]);
 	PHY_SetBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, bMaskDWord, pdmpriv->IQK_BB_backup[2]);
 
-	if(!(result & 0x01))	//Tx IQK fail
+	if (!(result & 0x01))	//Tx IQK fail
 	{
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_B, bMaskDWord, 0x19008c00);
 	}
 
-	if(!(result & 0x02))	//Rx IQK fail
+	if (!(result & 0x02))	//Rx IQK fail
 	{
 		PHY_SetBBReg(pAdapter, rOFDM0_XBRxIQImbalance , bMaskDWord, 0x40000100);
 		PHY_SetBBReg(pAdapter, rRx_IQK_Tone_B , bMaskDWord, 0x19008c00);
@@ -4051,10 +4051,10 @@ phy_PathAFillIQKMatrix(
 
 	//DBG_8192D("Path A IQ Calibration %s !\n",(bIQKOK)?"Success":"Failed");
 
-	if(final_candidate == 0xFF)
+	if (final_candidate == 0xFF)
 		return;
 
-	else if(bIQKOK)
+	else if (bIQKOK)
 	{
 		Oldval_0 = (PHY_QueryBBReg(pAdapter, rOFDM0_XATxIQImbalance, bMaskDWord) >> 22) & 0x3FF;//OFDM0_D
 
@@ -4064,7 +4064,7 @@ phy_PathAFillIQKMatrix(
 		TX0_A = (X * Oldval_0) >> 8;
 		//RTPRINT(FINIT, INIT_IQK, ("X = 0x%lx, TX0_A = 0x%lx, Oldval_0 0x%lx\n", X, TX0_A, Oldval_0));
 		PHY_SetBBReg(pAdapter, rOFDM0_XATxIQImbalance, 0x3FF, TX0_A);
-		if(IS_HARDWARE_TYPE_8192D(pAdapter))
+		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 			PHY_SetBBReg(pAdapter, rOFDM0_ECCAThreshold, BIT24, ((X* Oldval_0>>7) & 0x1));
 		else
 			PHY_SetBBReg(pAdapter, rOFDM0_ECCAThreshold, BIT(31), ((X* Oldval_0>>7) & 0x1));
@@ -4074,19 +4074,19 @@ phy_PathAFillIQKMatrix(
 			Y = Y | 0xFFFFFC00;
 
 		//path B IQK result + 3
-		if(pHalData->interfaceIndex == 1 && pHalData->CurrentBandType92D == BAND_ON_5G)
+		if (pHalData->interfaceIndex == 1 && pHalData->CurrentBandType92D == BAND_ON_5G)
 			Y += 3;
 
 		TX0_C = (Y * Oldval_0) >> 8;
 		//RTPRINT(FINIT, INIT_IQK, ("Y = 0x%lx, TX0_C = 0x%lx\n", Y, TX0_C));
 		PHY_SetBBReg(pAdapter, rOFDM0_XCTxAFE, 0xF0000000, ((TX0_C&0x3C0)>>6));
 		PHY_SetBBReg(pAdapter, rOFDM0_XATxIQImbalance, 0x003F0000, (TX0_C&0x3F));
-		if(IS_HARDWARE_TYPE_8192D(pAdapter)/*&&is2T*/)
+		if (IS_HARDWARE_TYPE_8192D(pAdapter)/*&&is2T*/)
 			PHY_SetBBReg(pAdapter, rOFDM0_ECCAThreshold, BIT26, ((Y* Oldval_0>>7) & 0x1));
 		else
 			PHY_SetBBReg(pAdapter, rOFDM0_ECCAThreshold, BIT(29), ((Y* Oldval_0>>7) & 0x1));
 
-	        if(bTxOnly)
+	        if (bTxOnly)
 		{
 			//DBG_8192D("_PHY_PathAFillIQKMatrix only Tx OK\n");
 			return;
@@ -4120,7 +4120,7 @@ phy_PathAFillIQKMatrix_5G_Normal(
 
 	//DBG_8192D("Path A IQ Calibration %s !\n",(bIQKOK)?"Success":"Failed");
 
-	if(bIQKOK && final_candidate != 0xFF)
+	if (bIQKOK && final_candidate != 0xFF)
 	{
 		X = result[final_candidate][0];
 		if ((X & 0x00000200) != 0)
@@ -4137,17 +4137,17 @@ phy_PathAFillIQKMatrix_5G_Normal(
 			Y = Y | 0xFFFFFC00;
 
 		//path A/B IQK result + 3, suggest by Jenyu
-		if(pHalData->CurrentBandType92D == BAND_ON_5G)
+		if (pHalData->CurrentBandType92D == BAND_ON_5G)
 			Y += 3;
 
 		//RTPRINT(FINIT, INIT_IQK, ("Y = 0x%lx\n", Y));
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_A, 0x003FF, Y);
-		//if(is2T)
+		//if (is2T)
 			PHY_SetBBReg(pAdapter, rOFDM0_ECCAThreshold, BIT26, 0);
 
 		//RTPRINT(FINIT, INIT_IQK, ("0xe30 = 0x%lx\n", PHY_QueryBBReg(pAdapter, 0xe30, bMaskDWord)));
 
-		if(bTxOnly)
+		if (bTxOnly)
 		{
 			//DBG_8192D("_PHY_PathAFillIQKMatrix only Tx OK\n");
 			return;
@@ -4186,10 +4186,10 @@ phy_PathBFillIQKMatrix(
 
 	//DBG_8192D("Path B IQ Calibration %s !\n",(bIQKOK)?"Success":"Failed");
 
-        if(final_candidate == 0xFF)
+        if (final_candidate == 0xFF)
 		return;
 
-	else if(bIQKOK)
+	else if (bIQKOK)
 	{
 		Oldval_1 = (PHY_QueryBBReg(pAdapter, rOFDM0_XBTxIQImbalance, bMaskDWord) >> 22) & 0x3FF;
 
@@ -4199,7 +4199,7 @@ phy_PathBFillIQKMatrix(
 		TX1_A = (X * Oldval_1) >> 8;
 		//RTPRINT(FINIT, INIT_IQK, ("X = 0x%lx, TX1_A = 0x%lx\n", X, TX1_A));
 		PHY_SetBBReg(pAdapter, rOFDM0_XBTxIQImbalance, 0x3FF, TX1_A);
-		if(IS_HARDWARE_TYPE_8192D(pAdapter))
+		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 			PHY_SetBBReg(pAdapter, rOFDM0_ECCAThreshold, BIT28, ((X* Oldval_1>>7) & 0x1));
 		else
 			PHY_SetBBReg(pAdapter, rOFDM0_ECCAThreshold, BIT(27), ((X* Oldval_1>>7) & 0x1));
@@ -4207,18 +4207,18 @@ phy_PathBFillIQKMatrix(
 		Y = result[final_candidate][5];
 		if ((Y & 0x00000200) != 0)
 			Y = Y | 0xFFFFFC00;
-		if(pHalData->CurrentBandType92D == BAND_ON_5G)
+		if (pHalData->CurrentBandType92D == BAND_ON_5G)
 			Y += 3;		//temp modify for preformance
 		TX1_C = (Y * Oldval_1) >> 8;
 		//RTPRINT(FINIT, INIT_IQK, ("Y = 0x%lx, TX1_C = 0x%lx\n", Y, TX1_C));
 		PHY_SetBBReg(pAdapter, rOFDM0_XDTxAFE, 0xF0000000, ((TX1_C&0x3C0)>>6));
 		PHY_SetBBReg(pAdapter, rOFDM0_XBTxIQImbalance, 0x003F0000, (TX1_C&0x3F));
-		if(IS_HARDWARE_TYPE_8192D(pAdapter))
+		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 			PHY_SetBBReg(pAdapter, rOFDM0_ECCAThreshold, BIT30, ((Y* Oldval_1>>7) & 0x1));
 		else
 			PHY_SetBBReg(pAdapter, rOFDM0_ECCAThreshold, BIT(25), ((Y* Oldval_1>>7) & 0x1));
 
-		if(bTxOnly)
+		if (bTxOnly)
 			return;
 
 		reg = result[final_candidate][6];
@@ -4247,7 +4247,7 @@ phy_PathBFillIQKMatrix_5G_Normal(
 
 	//DBG_8192D("Path B IQ Calibration %s !\n",(bIQKOK)?"Success":"Failed");
 
-	if(bIQKOK && final_candidate != 0xFF)
+	if (bIQKOK && final_candidate != 0xFF)
 	{
 		X = result[final_candidate][4];
 		if ((X & 0x00000200) != 0)
@@ -4260,14 +4260,14 @@ phy_PathBFillIQKMatrix_5G_Normal(
 		Y = result[final_candidate][5];
 		if ((Y & 0x00000200) != 0)
 			Y = Y | 0xFFFFFC00;
-		if(pHalData->CurrentBandType92D == BAND_ON_5G)
+		if (pHalData->CurrentBandType92D == BAND_ON_5G)
 			Y += 3;		//temp modify for preformance, suggest by Jenyu
 
 		//RTPRINT(FINIT, INIT_IQK, ("Y = 0x%lx\n", Y));
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_B, 0x003FF, Y);
 		PHY_SetBBReg(pAdapter, rOFDM0_ECCAThreshold, BIT30, 0);
 
-		if(bTxOnly)
+		if (bTxOnly)
 			return;
 
 		reg = result[final_candidate][6];
@@ -4337,7 +4337,7 @@ phy_ReloadADDARegisters(
 	//RTPRINT(FINIT, INIT_IQK, ("Reload ADDA power saving parameters !\n"));
 	for(i = 0 ; i < RegiesterNum ; i++){
 		//path-A/B BB to initial gain
-		if(ADDAReg[i] == rOFDM0_XAAGCCore1 || ADDAReg[i] == rOFDM0_XBAGCCore1)
+		if (ADDAReg[i] == rOFDM0_XAAGCCore1 || ADDAReg[i] == rOFDM0_XBAGCCore1)
 			PHY_SetBBReg(pAdapter, ADDAReg[i], bMaskDWord, 0x50);
 		PHY_SetBBReg(pAdapter, ADDAReg[i], bMaskDWord, ADDABackup[i]);
 	}
@@ -4376,7 +4376,7 @@ phy_PathADDAOn(
 	pathOn = isPathAOn ? 0x04db25a4 : 0x0b1b25a4;
 	// Modified by Neil Chen
 	// for Path diversity and original IQK
-	if(isPathAOn)     // Neil Chen
+	if (isPathAOn)     // Neil Chen
 		pathOn = pHalData->interfaceIndex == 0? 0x04db25a4 : 0x0b1b25a4;
 
 	for( i = 0 ; i < IQK_ADDA_REG_NUM ; i++){
@@ -4445,7 +4445,7 @@ phy_SimularityCompare_92D(
 	bool		bResult = true;
 	bool		is2T = IS_92D_SINGLEPHY(pHalData->VersionID);
 
-	if(is2T)
+	if (is2T)
 		bound = 8;
 	else
 		bound = 4;
@@ -4458,9 +4458,9 @@ phy_SimularityCompare_92D(
 		diff = (result[c1][i] > result[c2][i]) ? (result[c1][i] - result[c2][i]) : (result[c2][i] - result[c1][i]);
 		if (diff > MAX_TOLERANCE_92D)
 		{
-			if((i == 2 || i == 6) && !SimularityBitMap)
+			if ((i == 2 || i == 6) && !SimularityBitMap)
 			{
-				if(result[c1][i]+result[c1][i+1] == 0)
+				if (result[c1][i]+result[c1][i+1] == 0)
 					final_candidate[(i/4)] = c2;
 				else if (result[c2][i]+result[c2][i+1] == 0)
 					final_candidate[(i/4)] = c1;
@@ -4476,7 +4476,7 @@ phy_SimularityCompare_92D(
 	{
 		for( i = 0; i < (bound/4); i++ )
 		{
-			if(final_candidate[i] != 0xFF)
+			if (final_candidate[i] != 0xFF)
 			{
 				for( j = i*4; j < (i+1)*4-2; j++)
 					result[3][j] = result[final_candidate[i]][j];
@@ -4488,7 +4488,7 @@ phy_SimularityCompare_92D(
 		{
 			u4temp += (result[c1][i]+	result[c2][i]);
 		}
-		if(u4temp == 0)	//IQK fail for c1 & c2
+		if (u4temp == 0)	//IQK fail for c1 & c2
 			bResult = false;
 
 		return bResult;
@@ -4586,7 +4586,7 @@ phy_IQCalibrate(
 
 	u32 bbvalue;
 
-	if(t==0)
+	if (t==0)
 	{
 		bbvalue = PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bMaskDWord);
 		//RTPRINT(FINIT, INIT_IQK, ("PHY_IQCalibrate()==>0x%08lx\n",bbvalue));
@@ -4595,7 +4595,7 @@ phy_IQCalibrate(
 		// Save ADDA parameters, turn Path A ADDA on
 		phy_SaveADDARegisters(pAdapter, ADDA_REG, pdmpriv->ADDA_backup, IQK_ADDA_REG_NUM);
 		phy_SaveMACRegisters(pAdapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
-		if(IS_HARDWARE_TYPE_8192D(pAdapter))
+		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 			phy_SaveADDARegisters(pAdapter, IQK_BB_REG_92D, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_92D);
 		else
 			phy_SaveADDARegisters(pAdapter, IQK_BB_REG_92C, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_92C);
@@ -4603,15 +4603,15 @@ phy_IQCalibrate(
 
 	phy_PathADDAOn(pAdapter, ADDA_REG, true, is2T);
 
-	if(IS_HARDWARE_TYPE_8192D(pAdapter))
+	if (IS_HARDWARE_TYPE_8192D(pAdapter))
 		PHY_SetBBReg(pAdapter, rPdp_AntA, bMaskDWord, 0x01017038);
 
-	if(t==0)
+	if (t==0)
 	{
 		pdmpriv->bRfPiEnable = (u8)PHY_QueryBBReg(pAdapter, rFPGA0_XA_HSSIParameter1, BIT(8));
 	}
 
-	if(!pdmpriv->bRfPiEnable){
+	if (!pdmpriv->bRfPiEnable){
 		// Switch BB to PI mode to do IQ Calibration.
 		phy_PIModeSwitch(pAdapter, true);
 	}
@@ -4620,7 +4620,7 @@ phy_IQCalibrate(
 	PHY_SetBBReg(pAdapter, rOFDM0_TRxPathEnable, bMaskDWord, 0x03a05600);
 	PHY_SetBBReg(pAdapter, rOFDM0_TRMuxPar, bMaskDWord, 0x000800e4);
 	PHY_SetBBReg(pAdapter, rFPGA0_XCD_RFInterfaceSW, bMaskDWord, 0x22204000);
-	if(IS_HARDWARE_TYPE_8192D(pAdapter))
+	if (IS_HARDWARE_TYPE_8192D(pAdapter))
 		PHY_SetBBReg(pAdapter, rFPGA0_AnalogParameter4, 0xf00000, 0x0f);
 	else
 	{
@@ -4630,7 +4630,7 @@ phy_IQCalibrate(
 		PHY_SetBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT10, 0x00);
 	}
 
-	if(is2T)
+	if (is2T)
 	{
 		PHY_SetBBReg(pAdapter, rFPGA0_XA_LSSIParameter, bMaskDWord, 0x00010000);
 		PHY_SetBBReg(pAdapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x00010000);
@@ -4639,11 +4639,11 @@ phy_IQCalibrate(
 	//MAC settings
 	phy_MACSettingCalibration(pAdapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
 
-	if(IS_HARDWARE_TYPE_8192D(pAdapter))
+	if (IS_HARDWARE_TYPE_8192D(pAdapter))
 	{
 		PHY_SetBBReg(pAdapter, rConfig_AntA, bMaskDWord, 0x0f600000);
 
-		if(is2T)
+		if (is2T)
 		{
 			PHY_SetBBReg(pAdapter, rConfig_AntB, bMaskDWord, 0x0f600000);
 		}
@@ -4653,7 +4653,7 @@ phy_IQCalibrate(
 		//Page B init
 		PHY_SetBBReg(pAdapter, rConfig_AntA, bMaskDWord, 0x00080000);
 
-		if(is2T)
+		if (is2T)
 		{
 			PHY_SetBBReg(pAdapter, rConfig_AntB, bMaskDWord, 0x00080000);
 		}
@@ -4667,7 +4667,7 @@ phy_IQCalibrate(
 
 	for(i = 0 ; i < retryCount ; i++){
 		PathAOK = phy_PathA_IQK(pAdapter, is2T);
-		if(PathAOK == 0x03){
+		if (PathAOK == 0x03){
 			//RTPRINT(FINIT, INIT_IQK, ("Path A IQK Success!!\n"));
 			result[t][0] = (PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_A, bMaskDWord)&0x3FF0000)>>16;
 			result[t][1] = (PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_A, bMaskDWord)&0x3FF0000)>>16;
@@ -4684,11 +4684,11 @@ phy_IQCalibrate(
 		}
 	}
 
-	if(0x00 == PathAOK){
+	if (0x00 == PathAOK){
 		DBG_8192D("Path A IQK failed!!\n");
 	}
 
-	if(is2T){
+	if (is2T){
 		phy_PathAStandBy(pAdapter);
 
 		// Turn Path B ADDA on
@@ -4696,7 +4696,7 @@ phy_IQCalibrate(
 
 		for(i = 0 ; i < retryCount ; i++){
 			PathBOK = phy_PathB_IQK(pAdapter);
-			if(PathBOK == 0x03){
+			if (PathBOK == 0x03){
 				//RTPRINT(FINIT, INIT_IQK, ("Path B IQK Success!!\n"));
 				result[t][4] = (PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_B, bMaskDWord)&0x3FF0000)>>16;
 				result[t][5] = (PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_B, bMaskDWord)&0x3FF0000)>>16;
@@ -4712,7 +4712,7 @@ phy_IQCalibrate(
 			}
 		}
 
-		if(0x00 == PathBOK){
+		if (0x00 == PathBOK){
 			DBG_8192D("Path B IQK failed!!\n");
 		}
 	}
@@ -4721,9 +4721,9 @@ phy_IQCalibrate(
 	//RTPRINT(FINIT, INIT_IQK, ("IQK:Back to BB mode, load original value!\n"));
 	PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0);
 
-	if(t!=0)
+	if (t!=0)
 	{
-		if(!pdmpriv->bRfPiEnable){
+		if (!pdmpriv->bRfPiEnable){
 			// Switch back BB to SI mode after finish IQ Calibration.
 			phy_PIModeSwitch(pAdapter, false);
 		}
@@ -4735,9 +4735,9 @@ phy_IQCalibrate(
 		phy_ReloadMACRegisters(pAdapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
 
 		// Reload BB parameters
-		if(IS_HARDWARE_TYPE_8192D(pAdapter))
+		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 		{
-			if(is2T)
+			if (is2T)
 				phy_ReloadADDARegisters(pAdapter, IQK_BB_REG_92D, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_92D);
 			else
 				phy_ReloadADDARegisters(pAdapter, IQK_BB_REG_92D, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_92D -1);
@@ -4745,11 +4745,11 @@ phy_IQCalibrate(
 		else
 			phy_ReloadADDARegisters(pAdapter, IQK_BB_REG_92C, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_92C);
 
-		if(!IS_HARDWARE_TYPE_8192D(pAdapter))
+		if (!IS_HARDWARE_TYPE_8192D(pAdapter))
 		{
 			// Restore RX initial gain
 			PHY_SetBBReg(pAdapter, rFPGA0_XA_LSSIParameter, bMaskDWord, 0x00032ed3);
-			if(is2T){
+			if (is2T){
 				PHY_SetBBReg(pAdapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x00032ed3);
 			}
 		}
@@ -4820,7 +4820,7 @@ phy_IQCalibrate_5G(
 
 	//IQK must be done in PI mode
 	pdmpriv->bRfPiEnable = (u8)PHY_QueryBBReg(pAdapter, rFPGA0_XA_HSSIParameter1, BIT(8));
-	if(!pdmpriv->bRfPiEnable)
+	if (!pdmpriv->bRfPiEnable)
 		phy_PIModeSwitch(pAdapter, true);
 
 	//TXIQK RF setting
@@ -4845,7 +4845,7 @@ phy_IQCalibrate_5G(
 	PHY_SetBBReg(pAdapter, rRx_IQK, bMaskDWord, 0x01004800);
 
 	//path-A IQK setting
-	if(pHalData->interfaceIndex == 0)
+	if (pHalData->interfaceIndex == 0)
 	{
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_A, bMaskDWord, 0x14008c1f);
 		PHY_SetBBReg(pAdapter, rRx_IQK_Tone_A, bMaskDWord, 0x30008c1f);
@@ -4856,14 +4856,14 @@ phy_IQCalibrate_5G(
 		PHY_SetBBReg(pAdapter, rRx_IQK_Tone_A, bMaskDWord, 0x30008c22);
 	}
 
-	if(is2T)
+	if (is2T)
 		PHY_SetBBReg(pAdapter, rTx_IQK_PI_A, bMaskDWord, 0x821402e2);
 	else
 		PHY_SetBBReg(pAdapter, rTx_IQK_PI_A, bMaskDWord, 0x821402e6);
 	PHY_SetBBReg(pAdapter, rRx_IQK_PI_A, bMaskDWord, 0x68110000);
 
 	//path-B IQK setting
-	if(is2T)
+	if (is2T)
 	{
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_B, bMaskDWord, 0x14008c22);
 		PHY_SetBBReg(pAdapter, rRx_IQK_Tone_B, bMaskDWord, 0x30008c22);
@@ -4891,7 +4891,7 @@ phy_IQCalibrate_5G(
 	REG0xeac = PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord);
 	REG0xe94 = PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_A, bMaskDWord);
 
-	if(((REG0xeac&BIT(28)) == 0) && (((REG0xe94&0x3FF0000)>>16)!=0x142))
+	if (((REG0xeac&BIT(28)) == 0) && (((REG0xe94&0x3FF0000)>>16)!=0x142))
 	{
 		REG0xe9c = PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_A, bMaskDWord);
 		TX_X0 = (PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_A, bMaskDWord)&0x3FF0000)>>16;
@@ -4908,7 +4908,7 @@ phy_IQCalibrate_5G(
 	}
 
 	//1 path A RX IQK
-	if(TX0IQKOK == true)
+	if (TX0IQKOK == true)
 	{
 
 		DBG_8192D("IQK for 5G: Path A Rx  START interface %u\n", pHalData->interfaceIndex);
@@ -4918,14 +4918,14 @@ phy_IQCalibrate_5G(
 		PHY_SetBBReg(pAdapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x01900000);
 
 		//turn on external PA
-		if(pHalData->interfaceIndex == 1)
+		if (pHalData->interfaceIndex == 1)
 			PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT(30), 0x01);
 
 		//IQK global setting
 		PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0x80800000);
 
 		//path-A IQK setting
-		if(pHalData->interfaceIndex == 0)
+		if (pHalData->interfaceIndex == 0)
 		{
 			PHY_SetBBReg(pAdapter, rTx_IQK_Tone_A, bMaskDWord, 0x14008c1f);
 			PHY_SetBBReg(pAdapter, rRx_IQK_Tone_A, bMaskDWord, 0x14008c1f);
@@ -4936,13 +4936,13 @@ phy_IQCalibrate_5G(
 			PHY_SetBBReg(pAdapter, rRx_IQK_Tone_A, bMaskDWord, 0x14008c22);
 		}
 		PHY_SetBBReg(pAdapter, rTx_IQK_PI_A, bMaskDWord, 0x82110000);
-		if(pHalData->interfaceIndex == 0)
+		if (pHalData->interfaceIndex == 0)
 			PHY_SetBBReg(pAdapter, rRx_IQK_PI_A, bMaskDWord, (pHalData->CurrentChannel<=140)?0x68160c62:0x68160c66);
 		else
 			PHY_SetBBReg(pAdapter, rRx_IQK_PI_A, bMaskDWord, 0x68160962);
 
 		//path-B IQK setting
-		if(is2T)
+		if (is2T)
 		{
 			PHY_SetBBReg(pAdapter, rTx_IQK_Tone_B, bMaskDWord, 0x14008c22);
 			PHY_SetBBReg(pAdapter, rRx_IQK_Tone_B, bMaskDWord, 0x14008c22);
@@ -4971,9 +4971,9 @@ phy_IQCalibrate_5G(
 		//Check_RX_IQK_A_result()
 		REG0xeac = PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord);
 		REG0xea4 = PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_A_2, bMaskDWord);
-		if(pHalData->interfaceIndex == 0)
+		if (pHalData->interfaceIndex == 0)
 		{
-			if(((REG0xeac&BIT(27)) == 0) && (((REG0xea4&0x3FF0000)>>16)!=0x132))
+			if (((REG0xeac&BIT(27)) == 0) && (((REG0xea4&0x3FF0000)>>16)!=0x132))
 			{
 				RX_X0 =  (PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
 				RX_Y0 =  (PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
@@ -4983,7 +4983,7 @@ phy_IQCalibrate_5G(
 		}
 		else
 		{
-			if(((REG0xeac&BIT(30)) == 0) && (((REG0xea4&0x3FF0000)>>16)!=0x132))
+			if (((REG0xeac&BIT(30)) == 0) && (((REG0xea4&0x3FF0000)>>16)!=0x132))
 			{
 				RX_X0 =  (PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
 				RX_Y0 =  (PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
@@ -4993,7 +4993,7 @@ phy_IQCalibrate_5G(
 		}
 	}
 
-	if(!is2T)
+	if (!is2T)
 		goto Exit_IQK;
 
 	//1 path B TX IQK
@@ -5040,7 +5040,7 @@ phy_IQCalibrate_5G(
 	REG0xe40 = PHY_QueryBBReg(pAdapter, rTx_IQK, bMaskDWord);
 	REG0xeac = PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord);
 	REG0xeb4 = PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_B, bMaskDWord);
-	if(((REG0xeac&BIT(31)) == 0) && ((REG0xeb4&0x3FF0000)!=0x142))
+	if (((REG0xeac&BIT(31)) == 0) && ((REG0xeb4&0x3FF0000)!=0x142))
 	{
 		TX_X1 = (PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_B, bMaskDWord)&0x3FF0000)>>16;
 		TX_Y1 = (PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_B, bMaskDWord)&0x3FF0000)>>16;
@@ -5051,12 +5051,12 @@ phy_IQCalibrate_5G(
 	}
 
 	//1 path B RX IQK
-	if(TX1IQKOK == true)
+	if (TX1IQKOK == true)
 	{
 
 		DBG_8192D("IQK for 5G: Path B Rx  START interface %u\n", pHalData->interfaceIndex);
 
-		if(pHalData->CurrentChannel<=140)
+		if (pHalData->CurrentChannel<=140)
 		{
 			REG0xe5c = 0x68160960;
 			extPAon = 0x1;
@@ -5111,7 +5111,7 @@ phy_IQCalibrate_5G(
 		//Check_RX_IQK_B_result()
 		REG0xeac = PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord);
 		REG0xec4 = PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_B_2, bMaskDWord);
-		if(((REG0xeac&BIT(30)) == 0) && (((REG0xec4&0x3FF0000)>>16)!=0x132))
+		if (((REG0xeac&BIT(30)) == 0) && (((REG0xec4&0x3FF0000)>>16)!=0x132))
 		{
 			RX_X1 =  (PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_B_2, bMaskDWord)&0x3FF0000)>>16;
 			RX_Y1 =  (PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_B_2, bMaskDWord)&0x3FF0000)>>16;
@@ -5122,7 +5122,7 @@ phy_IQCalibrate_5G(
 
 Exit_IQK:
 	//turn off external PA
-	if(pHalData->interfaceIndex == 1 || is2T)
+	if (pHalData->interfaceIndex == 1 || is2T)
 		PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT(30), 0);
 
 	//Exit IQK mode
@@ -5138,7 +5138,7 @@ Exit_IQK:
 	//reload MAC default value
 	phy_ReloadMACRegisters(pAdapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
 
-	if(!pdmpriv->bRfPiEnable)
+	if (!pdmpriv->bRfPiEnable)
 		phy_PIModeSwitch(pAdapter, false);
 	//Reload ADDA power saving parameters
 	phy_ReloadADDARegisters(pAdapter, ADDA_REG, pdmpriv->ADDA_backup, IQK_ADDA_REG_NUM);
@@ -5193,7 +5193,7 @@ phy_IQCalibrate_5G_Normal(
 	//rtw_udelay_os(IQK_DELAY_TIME*1000*20);
 	rtw_mdelay_os(IQK_DELAY_TIME*20);
 
-	if(t==0)
+	if (t==0)
 	{
 		bbvalue = PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bMaskDWord);
 		//RTPRINT(FINIT, INIT_IQK, ("PHY_IQCalibrate()==>0x%08lx\n",bbvalue));
@@ -5202,7 +5202,7 @@ phy_IQCalibrate_5G_Normal(
 		// Save ADDA parameters, turn Path A ADDA on
 		phy_SaveADDARegisters(pAdapter, ADDA_REG, pdmpriv->ADDA_backup, IQK_ADDA_REG_NUM);
 		phy_SaveMACRegisters(pAdapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
-		if(is2T)
+		if (is2T)
 			phy_SaveADDARegisters(pAdapter, IQK_BB_REG, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_92D);
 		else
 			phy_SaveADDARegisters(pAdapter, IQK_BB_REG, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_92D-1);
@@ -5214,7 +5214,7 @@ phy_IQCalibrate_5G_Normal(
 	//Neil Chen--2011--05--19
 	rfPathDiv =(u8) (PHY_QueryBBReg(pAdapter, 0xB30, bMaskDWord)>>27);
 
-	if((rfPathDiv&0x01)==1)   // Div on
+	if ((rfPathDiv&0x01)==1)   // Div on
 	{
 		phy_PathADDAOn(pAdapter, ADDA_REG, false, is2T);
 		//DbgPrint("=STEP= change ADDA Path to B Path\n");
@@ -5230,12 +5230,12 @@ phy_IQCalibrate_5G_Normal(
 	//MAC settings
 	phy_MACSettingCalibration(pAdapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
 
-	if(t==0)
+	if (t==0)
 	{
 		pdmpriv->bRfPiEnable = (u8)PHY_QueryBBReg(pAdapter, rFPGA0_XA_HSSIParameter1, BIT(8));
 	}
 
-	if(!pdmpriv->bRfPiEnable){
+	if (!pdmpriv->bRfPiEnable){
 		// Switch BB to PI mode to do IQ Calibration.
 		phy_PIModeSwitch(pAdapter, true);
 	}
@@ -5251,7 +5251,7 @@ phy_IQCalibrate_5G_Normal(
 	PHY_SetBBReg(pAdapter, rConfig_AntA, bMaskDWord, 0x20000000);
 
 	//Page B AP setting for IQK
-	if(is2T) {
+	if (is2T) {
 		PHY_SetBBReg(pAdapter, rPdp_AntB, bMaskDWord, 0x00000000);
 		PHY_SetBBReg(pAdapter, rConfig_AntB, bMaskDWord, 0x20000000);
 	}
@@ -5262,7 +5262,7 @@ phy_IQCalibrate_5G_Normal(
 
 	{
 		PathAOK = phy_PathA_IQK_5G_Normal(pAdapter, is2T);
-		if(PathAOK == 0x03){
+		if (PathAOK == 0x03){
 			DBG_8192D("Path A IQK Success!!\n");
 			result[t][0] = (PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_A, bMaskDWord)&0x3FF0000)>>16;
 			result[t][1] = (PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_A, bMaskDWord)&0x3FF0000)>>16;
@@ -5286,7 +5286,7 @@ phy_IQCalibrate_5G_Normal(
 		}
 	}
 
-	if(is2T){
+	if (is2T){
 		//_PHY_PathAStandBy(pAdapter);
 
 		// Turn Path B ADDA on
@@ -5294,7 +5294,7 @@ phy_IQCalibrate_5G_Normal(
 
 		{
 			PathBOK = phy_PathB_IQK_5G_Normal(pAdapter);
-			if(PathBOK == 0x03){
+			if (PathBOK == 0x03){
 				DBG_8192D("Path B IQK Success!!\n");
 				result[t][4] = (PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_B, bMaskDWord)&0x3FF0000)>>16;
 				result[t][5] = (PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_B, bMaskDWord)&0x3FF0000)>>16;
@@ -5317,9 +5317,9 @@ phy_IQCalibrate_5G_Normal(
 	//RTPRINT(FINIT, INIT_IQK, ("IQK:Back to BB mode, load original value!\n"));
 	PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0);
 
-	if(t!=0)
+	if (t!=0)
 	{
-		if(is2T)
+		if (is2T)
 			phy_ReloadADDARegisters(pAdapter, IQK_BB_REG, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_92D);
 		else
 			phy_ReloadADDARegisters(pAdapter, IQK_BB_REG, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_92D-1);
@@ -5329,14 +5329,14 @@ phy_IQCalibrate_5G_Normal(
 		PHY_SetBBReg(pAdapter, rPdp_AntA, bMaskDWord, 0x010170b8);
 
 		//path B IQ path to DP block
-		if(is2T)
+		if (is2T)
 			PHY_SetBBReg(pAdapter, rPdp_AntB, bMaskDWord, 0x010170b8);
 #endif
 
 		// Reload MAC parameters
 		phy_ReloadMACRegisters(pAdapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
 
-		if(!pdmpriv->bRfPiEnable){
+		if (!pdmpriv->bRfPiEnable){
 			// Switch back BB to SI mode after finish IQ Calibration.
 			phy_PIModeSwitch(pAdapter, false);
 		}
@@ -5370,7 +5370,7 @@ phy_LCCalibrate92D(
 	//Check continuous TX and Packet TX
 	tmpReg = rtw_read8(pAdapter, 0xd03);
 
-	if((tmpReg&0x70) != 0)			//Deal with contisuous TX case
+	if ((tmpReg&0x70) != 0)			//Deal with contisuous TX case
 		rtw_write8(pAdapter, 0xd03, tmpReg&0x8F);	//disable all continuous TX
 	else							// Deal with Packet TX case
 		rtw_write8(pAdapter, REG_TXPAUSE, 0xFF);			// block all queues
@@ -5424,7 +5424,7 @@ phy_LCCalibrate92D(
 		PHY_SetRFReg(pAdapter, (enum RF_RADIO_PATH_E)index, RF_AC, bRFRegOffsetMask, RF_mode[index]);
 	}
 
-	if((tmpReg&0x70) != 0)
+	if ((tmpReg&0x70) != 0)
 	{
 		//Path-A
 		rtw_write8(pAdapter, 0xd03, tmpReg);
@@ -5447,7 +5447,7 @@ get_abs(
 {
 	u32 ret=0;
 
-	if(val1 >= val2)
+	if (val1 >= val2)
 	{
 		ret = val1 - val2;
 	}
@@ -5482,22 +5482,22 @@ phy_CalcCurvIndex(
 
 	for(i=start; i<chnl_num; i++)
 	{
-		if(is5G)
+		if (is5G)
 		{
-			if(i != start)
+			if (i != start)
 				pre_channel = channel;
 			channel = GetChnlFromPlace(i);	//actual channel number
 
-			if(i == start)
+			if (i == start)
 				pre_channel = channel;
 		}
 		else
 		{
-			if(i != start)
+			if (i != start)
 				pre_channel = channel;
 			channel = i+1;
 
-			if(i == start)
+			if (i == start)
 				pre_channel = channel;
 		}
 
@@ -5506,25 +5506,25 @@ phy_CalcCurvIndex(
 
 		for(j = start_base; j < end_base; j++)
 		{
-			if(channel == Base_chnl[j])
+			if (channel == Base_chnl[j])
 			{
 				bBase = true;
 				base_index = 0;
 				search_bound = (CV_CURVE_CNT*2);	//search every 128
 				break;
 			}
-			else if(channel < Base_chnl[j] || j == end_base-1)
+			else if (channel < Base_chnl[j] || j == end_base-1)
 			{
 #if 1
 				base_index = CurveIndex[GetRightChnlPlace(pre_channel)-1];
 #else
-				if(j > start_base && channel < Base_chnl[j])
+				if (j > start_base && channel < Base_chnl[j])
 					base_index = CurveIndex[GetRightChnlPlace(Base_chnl[j-1])-1];
 				else
 					base_index = CurveIndex[GetRightChnlPlace(Base_chnl[j])-1];
 #endif
 
-				if(base_index > 5)
+				if (base_index > 5)
 					base_index -= 5;	//search -5~5, not every 128
 				else
 					base_index = 0;
@@ -5540,7 +5540,7 @@ phy_CalcCurvIndex(
 		{
 			u4tmp = get_abs(TargetChnl[channel-1], CurveCountVal[j]);
 
-			if(u4tmp < smallestABSVal)
+			if (u4tmp < smallestABSVal)
 			{
 				CurveIndex[i] = j;
 				smallestABSVal = u4tmp;
@@ -5549,7 +5549,7 @@ phy_CalcCurvIndex(
 #endif
 
 		smallestABSVal = 0xffffffff;
-		//if(i == 0)
+		//if (i == 0)
 		//	RTPRINT(FINIT, INIT_IQK,("cosa, CurveIndex[%d] = %d channel %d\n", i, CurveIndex[i], index));
 		//RTPRINT(FINIT, INIT_IQK,("CurveIndex[%d] = 0x%x channel %d base_index 0x%x\n", i, CurveIndex[i], channel, base_index));
 	}
@@ -5574,7 +5574,7 @@ phy_LCCalibrate92DSW(
 	//Check continuous TX and Packet TX
 	tmpReg = rtw_read8(pAdapter, 0xd03);
 
-	if((tmpReg&0x70) != 0)			//Deal with contisuous TX case
+	if ((tmpReg&0x70) != 0)			//Deal with contisuous TX case
 		rtw_write8(pAdapter, 0xd03, tmpReg&0x8F);	//disable all continuous TX
 	else							// Deal with Packet TX case
 		rtw_write8(pAdapter, REG_TXPAUSE, 0xFF);			// block all queues
@@ -5597,7 +5597,7 @@ phy_LCCalibrate92DSW(
 		PHY_SetRFReg(pAdapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G4, 0x700, 0x07);
 #endif
 
-		if(pAdapter->hw_init_completed)
+		if (pAdapter->hw_init_completed)
 		{
 			// switch CV-curve control by LC-calibration
 			PHY_SetRFReg(pAdapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G7, BIT17, 0x0);
@@ -5629,7 +5629,7 @@ phy_LCCalibrate92DSW(
 	//Disable TX only need during phy lck, To reduce LCK affect on chariot,
 	// move enable tx here after PHY LCK finish, it will not affect sw lck result.
 	// zhiyuan 2011/06/03
-	if((tmpReg&0x70) != 0)
+	if ((tmpReg&0x70) != 0)
 	{
 		//Path-A
 		rtw_write8(pAdapter, 0xd03, tmpReg);
@@ -5646,7 +5646,7 @@ phy_LCCalibrate92DSW(
 
 		{
 
-			//if(index == 0 && pHalData->interfaceIndex == 0)
+			//if (index == 0 && pHalData->interfaceIndex == 0)
 			//{
 			//	RTPRINT(FINIT, INIT_IQK,("cosa, path-A / 5G LCK\n"));
 			//}
@@ -5677,7 +5677,7 @@ phy_LCCalibrate92DSW(
 
 			}
 
-			if(index == 0 && pHalData->interfaceIndex == 0)
+			if (index == 0 && pHalData->interfaceIndex == 0)
 				phy_CalcCurvIndex(pAdapter, TargetChnl_5G, curveCountVal, true, CurveIndex);
 			else
 				phy_CalcCurvIndex(pAdapter, TargetChnl_2G, curveCountVal, false, CurveIndex);
@@ -5836,7 +5836,7 @@ phy_APCalibrate(
 	//RTPRINT(FINIT, INIT_IQK, ("==>PHY_APCalibrate() delta %d\n", delta));
 	//RTPRINT(FINIT, INIT_IQK, ("AP Calibration for %s\n", (is2T ? "2T2R" : "1T1R")));
 
-	if(!is2T)
+	if (!is2T)
 		pathbound = 1;
 
 	//2 FOR NORMAL CHIP SETTINGS
@@ -5872,7 +5872,7 @@ phy_APCalibrate(
 	//save BB default value
 	for(index = 0; index < APK_BB_REG_NUM ; index++)
 	{
-		if(index == 0)		//skip
+		if (index == 0)		//skip
 			continue;
 		BB_backup[index] = PHY_QueryBBReg(pAdapter, BB_REG[index], bMaskDWord);
 	}
@@ -5887,7 +5887,7 @@ phy_APCalibrate(
 	{
 
 
-		if(path == RF_PATH_A)
+		if (path == RF_PATH_A)
 		{
 			//path A APK
 			//load APK setting
@@ -5926,7 +5926,7 @@ phy_APCalibrate(
 			}
 			PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0x00000000);
 		}
-		else if(path == RF_PATH_B)
+		else if (path == RF_PATH_B)
 		{
 			//path B APK
 			//load APK setting
@@ -5977,12 +5977,12 @@ phy_APCalibrate(
 		//RTPRINT(FINIT, INIT_IQK, ("PHY_APCalibrate() offset 0xe70 %x\n", PHY_QueryBBReg(pAdapter, rRx_Wait_CCA, bMaskDWord)));
 
 		//BB to AP mode
-		if(path == 0)
+		if (path == 0)
 		{
 			for(index = 0; index < APK_BB_REG_NUM ; index++)
 			{
 
-				if(index == 0)		//skip
+				if (index == 0)		//skip
 					continue;
 				else if (index < 5)
 				PHY_SetBBReg(pAdapter, BB_REG[index], bMaskDWord, BB_AP_MODE[index]);
@@ -6007,7 +6007,7 @@ phy_APCalibrate(
 		//MAC settings
 		phy_MACSettingCalibration(pAdapter, MAC_REG, MAC_backup);
 
-		if(path == RF_PATH_A)	//Path B to standby mode
+		if (path == RF_PATH_A)	//Path B to standby mode
 		{
 			PHY_SetRFReg(pAdapter, RF_PATH_B, RF_AC, bRFRegOffsetMask, 0x10000);
 		}
@@ -6019,7 +6019,7 @@ phy_APCalibrate(
 		}
 
 		delta_offset = ((delta+14)/2);
-		if(delta_offset < 0)
+		if (delta_offset < 0)
 			delta_offset = 0;
 		else if (delta_offset > 12)
 			delta_offset = 12;
@@ -6027,16 +6027,16 @@ phy_APCalibrate(
 		//AP calibration
 		for(index = 0; index < APK_BB_REG_NUM; index++)
 		{
-			if(index != 1)	//only DO PA11+PAD01001, AP RF setting
+			if (index != 1)	//only DO PA11+PAD01001, AP RF setting
 				continue;
 
 			tmpReg = APK_RF_init_value[path][index];
 #if 1
-			if(!pdmpriv->bAPKThermalMeterIgnore)
+			if (!pdmpriv->bAPKThermalMeterIgnore)
 			{
 				BB_offset = (tmpReg & 0xF0000) >> 16;
 
-				if(!(tmpReg & BIT15)) //sign bit 0
+				if (!(tmpReg & BIT15)) //sign bit 0
 				{
 					BB_offset = -BB_offset;
 				}
@@ -6047,7 +6047,7 @@ phy_APCalibrate(
 
 				//RTPRINT(FINIT, INIT_IQK, ("PHY_APCalibrate() APK index %d tmpReg 0x%x delta_V %d delta_offset %d\n", index, tmpReg, delta_V, delta_offset));
 
-				if(BB_offset < 0)
+				if (BB_offset < 0)
 				{
 					tmpReg = tmpReg & (~BIT15);
 					BB_offset = -BB_offset;
@@ -6078,7 +6078,7 @@ phy_APCalibrate(
 				}
 				PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0x00000000);
 
-				if(path == RF_PATH_A)
+				if (path == RF_PATH_A)
 					tmpReg = PHY_QueryBBReg(pAdapter, rAPK, 0x03E00000);
 				else
 					tmpReg = PHY_QueryBBReg(pAdapter, rAPK, 0xF8000000);
@@ -6100,7 +6100,7 @@ phy_APCalibrate(
 	for(index = 0; index < APK_BB_REG_NUM ; index++)
 	{
 
-		if(index == 0)		//skip
+		if (index == 0)		//skip
 			continue;
 		PHY_SetBBReg(pAdapter, BB_REG[index], bMaskDWord, BB_backup[index]);
 	}
@@ -6112,7 +6112,7 @@ phy_APCalibrate(
 	for(path = 0; path < pathbound; path++)
 	{
 		PHY_SetRFReg(pAdapter, (enum RF_RADIO_PATH_E)path, RF_TXBIAS_A, bRFRegOffsetMask, regD[path]);
-		if(path == RF_PATH_B)
+		if (path == RF_PATH_B)
 		{
 			PHY_SetRFReg(pAdapter, RF_PATH_A, RF_MODE1, bRFRegOffsetMask, 0x1000f);
 			PHY_SetRFReg(pAdapter, RF_PATH_A, RF_MODE2, bRFRegOffsetMask, 0x20101);
@@ -6130,14 +6130,14 @@ phy_APCalibrate(
 	{
 		PHY_SetRFReg(pAdapter, (enum RF_RADIO_PATH_E)path, RF_BS_PA_APSET_G1_G4, bRFRegOffsetMask,
 		((APK_result[path][1] << 15) | (APK_result[path][1] << 10) | (APK_result[path][1] << 5) | APK_result[path][1]));
-		if(path == RF_PATH_A)
+		if (path == RF_PATH_A)
 			PHY_SetRFReg(pAdapter, (enum RF_RADIO_PATH_E)path, RF_BS_PA_APSET_G5_G8, bRFRegOffsetMask,
 			((APK_result[path][1] << 15) | (APK_result[path][1] << 10) | (0x00 << 5) | 0x05));
 		else
 		PHY_SetRFReg(pAdapter, (enum RF_RADIO_PATH_E)path, RF_BS_PA_APSET_G5_G8, bRFRegOffsetMask,
 			((APK_result[path][1] << 15) | (APK_result[path][1] << 10) | (0x02 << 5) | 0x05));
 
-		//if(!IS_HARDWARE_TYPE_8723A(pAdapter))
+		//if (!IS_HARDWARE_TYPE_8723A(pAdapter))
 		//	PHY_SetRFReg(pAdapter, (enum RF_RADIO_PATH_E)path, RF_BS_PA_APSET_G9_G11, bRFRegOffsetMask,
 		//	((0x08 << 15) | (0x08 << 10) | (0x08 << 5) | 0x08));
 	}
@@ -6154,13 +6154,13 @@ static void phy_SetRFPathSwitch(
 	)
 {
 
-	if(!pAdapter->hw_init_completed)
+	if (!pAdapter->hw_init_completed)
 	{
 		PHY_SetBBReg(pAdapter, 0x4C, BIT23, 0x01);
 		PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT13, 0x01);
 	}
 
-	if(main)
+	if (main)
 		PHY_SetBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300, 0x2);
 	else
 		PHY_SetBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300, 0x1);
@@ -6193,7 +6193,7 @@ rtl8192d_PHY_IQCalibrate(
 #endif
 
 	//ignore IQK when continuous Tx
-	if(bStartContTx || bSingleTone || bCarrierSuppression)
+	if (bStartContTx || bSingleTone || bCarrierSuppression)
 		return;
 
 #if DISABLE_BB_RF
@@ -6201,7 +6201,7 @@ rtl8192d_PHY_IQCalibrate(
 #endif
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(pHalData->bSlaveOfDMSP)
+	if (pHalData->bSlaveOfDMSP)
 		return;
 #endif
 
@@ -6226,46 +6226,46 @@ rtl8192d_PHY_IQCalibrate(
 	//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate \n"));
 	for (i=0; i<3; i++)
 	{
-		if(pHalData->CurrentBandType92D == BAND_ON_5G)
+		if (pHalData->CurrentBandType92D == BAND_ON_5G)
 		{
 			phy_IQCalibrate_5G_Normal(pAdapter, result, i);
 		}
-		else if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+		else if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 		{
-			if(IS_92D_SINGLEPHY(pHalData->VersionID))
+			if (IS_92D_SINGLEPHY(pHalData->VersionID))
 				phy_IQCalibrate(pAdapter, result, i, true);
 			else
 				phy_IQCalibrate(pAdapter, result, i, false);
 		}
 
-		if(i == 1)
+		if (i == 1)
 		{
 			is12simular = phy_SimularityCompare(pAdapter, result, 0, 1);
-			if(is12simular)
+			if (is12simular)
 			{
 				final_candidate = 0;
 				break;
 			}
 		}
 
-		if(i == 2)
+		if (i == 2)
 		{
 			is13simular = phy_SimularityCompare(pAdapter, result, 0, 2);
-			if(is13simular)
+			if (is13simular)
 			{
 				final_candidate = 0;
 				break;
 			}
 
 			is23simular = phy_SimularityCompare(pAdapter, result, 1, 2);
-			if(is23simular)
+			if (is23simular)
 				final_candidate = 1;
 			else
 			{
 				for(i = 0; i < 8; i++)
 					RegTmp += result[3][i];
 
-				if(RegTmp != 0)
+				if (RegTmp != 0)
 					final_candidate = 3;
 				else
 					final_candidate = 0xFF;
@@ -6288,7 +6288,7 @@ rtl8192d_PHY_IQCalibrate(
 		//RTPRINT(FINIT, INIT_IQK, ("IQK: RegE94=%lx RegE9C=%lx RegEA4=%lx RegEAC=%lx RegEB4=%lx RegEBC=%lx RegEC4=%lx RegECC=%lx\n ", RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC));
 	}
 
-	if(final_candidate != 0xff)
+	if (final_candidate != 0xff)
 	{
 		pdmpriv->RegE94 = RegE94 = result[final_candidate][0];
 		pdmpriv->RegE9C = RegE9C = result[final_candidate][1];
@@ -6308,9 +6308,9 @@ rtl8192d_PHY_IQCalibrate(
 		pdmpriv->RegE9C = pdmpriv->RegEBC = 0x0;		//Y default value
 	}
 
-	if((RegE94 != 0)/*&&(RegEA4 != 0)*/)
+	if ((RegE94 != 0)/*&&(RegEA4 != 0)*/)
 	{
-		if(pHalData->CurrentBandType92D == BAND_ON_5G)
+		if (pHalData->CurrentBandType92D == BAND_ON_5G)
 			phy_PathAFillIQKMatrix_5G_Normal(pAdapter, bPathAOK, result, final_candidate, (RegEA4 == 0));
 		else
 			phy_PathAFillIQKMatrix(pAdapter, bPathAOK, result, final_candidate, (RegEA4 == 0));
@@ -6318,16 +6318,16 @@ rtl8192d_PHY_IQCalibrate(
 
 	if (IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
 	{
-		if((RegEB4 != 0)/*&&(RegEC4 != 0)*/)
+		if ((RegEB4 != 0)/*&&(RegEC4 != 0)*/)
 		{
-			if(pHalData->CurrentBandType92D == BAND_ON_5G)
+			if (pHalData->CurrentBandType92D == BAND_ON_5G)
 				phy_PathBFillIQKMatrix_5G_Normal(pAdapter, bPathBOK, result, final_candidate, (RegEC4 == 0));
 			else
 				phy_PathBFillIQKMatrix(pAdapter, bPathBOK, result, final_candidate, (RegEC4 == 0));
 		}
 	}
 
-	if(IS_HARDWARE_TYPE_8192D(pAdapter) && final_candidate != 0xFF)
+	if (IS_HARDWARE_TYPE_8192D(pAdapter) && final_candidate != 0xFF)
 	{
 		Indexforchannel = rtl8192d_GetRightChnlPlaceforIQK(pHalData->CurrentChannel);
 
@@ -6384,11 +6384,11 @@ rtl8192d_PHY_LCCalibrate(
 #endif
 
 	//ignore IQK when continuous Tx
-	if(bStartContTx || bSingleTone || bCarrierSuppression)
+	if (bStartContTx || bSingleTone || bCarrierSuppression)
 		return;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(BuddyAdapter != NULL &&
+	if (BuddyAdapter != NULL &&
 		((pHalData->interfaceIndex == 0 && pHalData->CurrentBandType92D == BAND_ON_2_4G) ||
 		(pHalData->interfaceIndex == 1 && pHalData->CurrentBandType92D == BAND_ON_5G)))
 	{
@@ -6401,14 +6401,14 @@ rtl8192d_PHY_LCCalibrate(
 	}
 #endif
 
-	if(pmlmeext->sitesurvey_res.state == SCAN_PROCESS)
+	if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS)
 		return;
 
 	pHalData->bLCKInProgress = true;
 
 	//DBG_8192D("LCK:Start!!!interface %d currentband %x delay %d ms\n", pHalData->interfaceIndex, pHalData->CurrentBandType92D, timecount);
 
-	if(IS_92D_SINGLEPHY(pHalData->VersionID))
+	if (IS_92D_SINGLEPHY(pHalData->VersionID))
 	{
 		phy_LCCalibrate(pAdapter, true);
 	}
@@ -6435,13 +6435,13 @@ rtl8192d_PHY_APCalibrate(
 	return;
 #endif
 
-	//if(IS_HARDWARE_TYPE_8192D(pAdapter))
+	//if (IS_HARDWARE_TYPE_8192D(pAdapter))
 		return;
 
-	if(pdmpriv->bAPKdone)
+	if (pdmpriv->bAPKdone)
 		return;
 
-	if(IS_92D_SINGLEPHY(pHalData->VersionID)){
+	if (IS_92D_SINGLEPHY(pHalData->VersionID)){
 		phy_APCalibrate(pAdapter, delta, true);
 	}
 	else{
@@ -6464,13 +6464,13 @@ PHY_UpdateBBRFConfiguration8192D(
 
 	//Update BB
 	//r_select_5G for path_A/B.0 for 2.4G,1 for 5G
-	if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+	if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 	{// 2.4G band
 		//r_select_5G for path_A/B,0x878
 
 		PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT0, 0x0);
 		PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT15, 0x0);
-		if(pHalData->MacPhyMode92D != DUALMAC_DUALPHY)
+		if (pHalData->MacPhyMode92D != DUALMAC_DUALPHY)
 		{
 			PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT16, 0x0);
 			PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT31, 0x0);
@@ -6488,13 +6488,13 @@ PHY_UpdateBBRFConfiguration8192D(
 		PHY_SetBBReg(Adapter, rOFDM0_XATxIQImbalance, bMaskDWord, 0x40000100);
 		PHY_SetBBReg(Adapter, rOFDM0_XBTxIQImbalance, bMaskDWord, 0x40000100);
 
-		if(pregistrypriv->special_rf_path == 1)
+		if (pregistrypriv->special_rf_path == 1)
 			PHY_SetBBReg(Adapter, rCCK0_AFESetting, bMaskByte3, 0x80);
-		else if(pregistrypriv->special_rf_path == 2)
+		else if (pregistrypriv->special_rf_path == 2)
 			PHY_SetBBReg(Adapter, rCCK0_AFESetting, bMaskByte3, 0x45);
 
 
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
 		{
 			PHY_SetBBReg(Adapter, rOFDM0_XATxIQImbalance, bMaskDWord, 0x40000100);
 			pdmpriv->OFDM_index[RF_PATH_A] = 0x0c;
@@ -6536,7 +6536,7 @@ PHY_UpdateBBRFConfiguration8192D(
 		//r_select_5G for path_A/B
 		PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT0, 0x1);
 		PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT15, 0x1);
-		if(pHalData->MacPhyMode92D != DUALMAC_DUALPHY)
+		if (pHalData->MacPhyMode92D != DUALMAC_DUALPHY)
 		{
 			PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT16, 0x1);
 			PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT31, 0x1);
@@ -6551,14 +6551,14 @@ PHY_UpdateBBRFConfiguration8192D(
 		PHY_SetBBReg(Adapter, 0xB30, 0x00F00000, 0x0);
 
 		//TX BB gain shift,Just for testchip,0xc80,0xc88
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
 		{
-			if(pHalData->interfaceIndex == 0)
+			if (pHalData->interfaceIndex == 0)
 				bInternalPA = pHalData->InternalPA5G[0];
 			else
 				bInternalPA = pHalData->InternalPA5G[1];
 
-			if(bInternalPA)
+			if (bInternalPA)
 			{
 				PHY_SetBBReg(Adapter, rOFDM0_XATxIQImbalance, bMaskDWord, 0x2d4000b5);
 				pdmpriv->OFDM_index[RF_PATH_A] = 0x12;
@@ -6571,7 +6571,7 @@ PHY_UpdateBBRFConfiguration8192D(
 		}
 		else
 		{
-			if(pHalData->InternalPA5G[0])
+			if (pHalData->InternalPA5G[0])
 			{
 				PHY_SetBBReg(Adapter, rOFDM0_XATxIQImbalance, bMaskDWord, 0x2d4000b5);
 				pdmpriv->OFDM_index[RF_PATH_A] = 0x12;
@@ -6582,7 +6582,7 @@ PHY_UpdateBBRFConfiguration8192D(
 				pdmpriv->OFDM_index[RF_PATH_A] = 0x18;
 			}
 
-			if(pHalData->InternalPA5G[1])
+			if (pHalData->InternalPA5G[1])
 			{
 				PHY_SetBBReg(Adapter, rOFDM0_XBTxIQImbalance, bMaskDWord, 0x2d4000b5);
 				pdmpriv->OFDM_index[RF_PATH_B] = 0x12;
@@ -6596,7 +6596,7 @@ PHY_UpdateBBRFConfiguration8192D(
 
 		//DBG_8192D("==>PHY_UpdateBBRFConfiguration8192D() interface %d BAND_ON_5G settings OFDM index 0x%x\n", pHalData->interfaceIndex, pdmpriv->OFDM_index[RF_PATH_A]);
 		PHY_SetBBReg(Adapter, 0xB30, BIT27, 0x0);
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
 		{
 			PHY_SetBBReg(Adapter, rFPGA0_XAB_RFInterfaceSW, BIT10|BIT6|BIT5,
 				(pHalData->EEPROMCC&BIT5));
@@ -6605,7 +6605,7 @@ PHY_UpdateBBRFConfiguration8192D(
 			PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT15,
 				(pHalData->EEPROMCC&BIT4) >> 4);
 			PHY_SetBBReg(Adapter, rPdp_AntA, bMaskDWord, 0x01017098);
-			if(pdmpriv->bDPKdone[RF_PATH_A])
+			if (pdmpriv->bDPKdone[RF_PATH_A])
 				PHY_SetBBReg(Adapter, 0xb68, bMaskDWord, 0x08080000);
 			else
 				PHY_SetBBReg(Adapter, 0xb68, bMaskDWord, 0x20000000);
@@ -6622,11 +6622,11 @@ PHY_UpdateBBRFConfiguration8192D(
 				((pHalData->EEPROMCC&BIT4) >> 4)|((pHalData->EEPROMCC&BIT6) << 10));
 			PHY_SetBBReg(Adapter, rPdp_AntA, bMaskDWord, 0x01017098);
 			PHY_SetBBReg(Adapter, rPdp_AntB, bMaskDWord, 0x01017098);
-			if(pdmpriv->bDPKdone[RF_PATH_A])
+			if (pdmpriv->bDPKdone[RF_PATH_A])
 				PHY_SetBBReg(Adapter, 0xb68, bMaskDWord, 0x08080000);
 			else
 				PHY_SetBBReg(Adapter, 0xb68, bMaskDWord, 0x20000000);
-			if(pdmpriv->bDPKdone[RF_PATH_B])
+			if (pdmpriv->bDPKdone[RF_PATH_B])
 				PHY_SetBBReg(Adapter, 0xb6c, bMaskDWord, 0x08080000);
 			else
 				PHY_SetBBReg(Adapter, 0xb6c, bMaskDWord, 0x20000000);
@@ -6648,7 +6648,7 @@ PHY_UpdateBBRFConfiguration8192D(
 	//Update RF
 	for(eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
 	{
-		if(pHalData->CurrentBandType92D == BAND_ON_2_4G){
+		if (pHalData->CurrentBandType92D == BAND_ON_2_4G){
 			//MOD_AG for RF paht_A 0x18 BIT8,BIT16
 			PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT8|BIT16|BIT18|0xFF, 1);
 
@@ -6662,13 +6662,13 @@ PHY_UpdateBBRFConfiguration8192D(
 		}
 
 #if 1
-		if((pHalData->interfaceIndex == 0 && pHalData->BandSet92D == BAND_ON_2_4G)
+		if ((pHalData->interfaceIndex == 0 && pHalData->BandSet92D == BAND_ON_2_4G)
 			|| (pHalData->interfaceIndex == 1 && pHalData->BandSet92D == BAND_ON_5G))
 		{
 			//Set right channel on RF reg0x18 for another mac.
-			if(pHalData->interfaceIndex == 0) //set MAC1 default channel if MAC1 not up.
+			if (pHalData->interfaceIndex == 0) //set MAC1 default channel if MAC1 not up.
 			{
-				if(!(rtw_read8(Adapter, REG_MAC1)&MAC1_ON))
+				if (!(rtw_read8(Adapter, REG_MAC1)&MAC1_ON))
 				{
 					rtl8192d_PHY_EnableAnotherPHY(Adapter, true);
 					PHY_SetRFReg(Adapter, RF_PATH_A, RF_CHNLBW|MAC0_ACCESS_PHY1, bRFRegOffsetMask, 0x97524); //set channel 36
@@ -6677,9 +6677,9 @@ PHY_UpdateBBRFConfiguration8192D(
 				}
 			}
 			else
-			if(pHalData->interfaceIndex == 1)//set MAC0 default channel
+			if (pHalData->interfaceIndex == 1)//set MAC0 default channel
 			{
-				if(!(rtw_read8(Adapter, REG_MAC0)&MAC0_ON))
+				if (!(rtw_read8(Adapter, REG_MAC0)&MAC0_ON))
 				{
 					rtl8192d_PHY_EnableAnotherPHY(Adapter, false);
 					PHY_SetRFReg(Adapter, RF_PATH_A, RF_CHNLBW|MAC1_ACCESS_PHY0, bRFRegOffsetMask, 0x87401); // set channel 1
@@ -6693,11 +6693,11 @@ PHY_UpdateBBRFConfiguration8192D(
 	}
 
 	//Update for all band.
-	if(pHalData->rf_type == RF_1T1R)
+	if (pHalData->rf_type == RF_1T1R)
 	{ //DMDP
 		//Use antenna 0,0xc04,0xd04
 #if MP_DRIVER == 1
-		if(!bisBandSwitch)
+		if (!bisBandSwitch)
 #endif
 		{
 		PHY_SetBBReg(Adapter, rOFDM0_TRxPathEnable, bMaskByte0, 0x11);
@@ -6705,7 +6705,7 @@ PHY_UpdateBBRFConfiguration8192D(
 		}
 
 		//enable ad/da clock1 for dual-phy reg0x888
-		if(pHalData->interfaceIndex == 0)
+		if (pHalData->interfaceIndex == 0)
 			PHY_SetBBReg(Adapter, rFPGA0_AdDaClockEn, BIT12|BIT13, 0x3);
 		else
 		{
@@ -6717,7 +6717,7 @@ PHY_UpdateBBRFConfiguration8192D(
 			//--------------------------------------end
 
 			bMAC0NotUp = rtl8192d_PHY_EnableAnotherPHY(Adapter, false);
-			if(bMAC0NotUp)
+			if (bMAC0NotUp)
 			{
 				PHY_SetBBReg(Adapter, rFPGA0_AdDaClockEn|MAC1_ACCESS_PHY0, BIT12|BIT13, 0x3);
 				rtl8192d_PHY_PowerDownAnotherPHY(Adapter, false);
@@ -6729,13 +6729,13 @@ PHY_UpdateBBRFConfiguration8192D(
 	}
 	else // 2T2R //Single PHY
 	{
-		if(pregistrypriv->special_rf_path == 2)
+		if (pregistrypriv->special_rf_path == 2)
 		{
 			PHY_SetBBReg(Adapter, rOFDM0_TRxPathEnable, bMaskByte0, 0x22);
 			PHY_SetBBReg(Adapter, rOFDM1_TRxPathEnable, bDWord, 0x2);
 			PHY_SetBBReg(Adapter, rFPGA1_TxInfo, bMaskDWord, 0x82221322);	//OFDM Tx
 		}
-		else if(pregistrypriv->special_rf_path == 1)
+		else if (pregistrypriv->special_rf_path == 1)
 		{
 			PHY_SetBBReg(Adapter, rOFDM0_TRxPathEnable, bMaskByte0, 0x11);
 			PHY_SetBBReg(Adapter, rOFDM1_TRxPathEnable, bDWord, 0x1);
@@ -6756,7 +6756,7 @@ PHY_UpdateBBRFConfiguration8192D(
 	}
 
 #if MP_DRIVER == 1
-	if(bisBandSwitch)
+	if (bisBandSwitch)
 	{
 		PHY_SetBBReg(Adapter, rOFDM0_TRxPathEnable, bMaskByte0, pdmpriv->RegC04_MP);
 		PHY_SetBBReg(Adapter, rOFDM1_TRxPathEnable, bDWord, pdmpriv->RegD04_MP);
@@ -6795,7 +6795,7 @@ void PHY_ReadMacPhyMode92D(
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8	MacPhyCrValue = 0;
 
-	if(AutoloadFail)
+	if (AutoloadFail)
 	{
 		pHalData->MacPhyMode92D = SINGLEMAC_SINGLEPHY;
 		return;
@@ -6805,11 +6805,11 @@ void PHY_ReadMacPhyMode92D(
 
 	DBG_8192D("PHY_ReadMacPhyMode92D():   MAC_PHY_CTRL Value %x \n",MacPhyCrValue);
 
-	if((MacPhyCrValue&0x03) == 0x03)
+	if ((MacPhyCrValue&0x03) == 0x03)
 	{
 		pHalData->MacPhyMode92D = DUALMAC_DUALPHY;
 	}
-	else if((MacPhyCrValue&0x03) == 0x01)
+	else if ((MacPhyCrValue&0x03) == 0x01)
 	{
 		pHalData->MacPhyMode92D = DUALMAC_SINGLEPHY;
 	}
@@ -6886,7 +6886,7 @@ void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *Adapter)
 #ifdef CONFIG_DUALMAC_CONCURRENT
 //get bMasetOfDMSP and bSlaveOfDMSP sync with buddy adapter
 			ACQUIRE_GLOBAL_MUTEX(GlobalCounterForMutex);
-			if(BuddyAdapter != NULL)
+			if (BuddyAdapter != NULL)
 			{
 				pHalDataBuddyAdapter = GET_HAL_DATA(BuddyAdapter);
 				pHalData->bMasterOfDMSP = !pHalDataBuddyAdapter->bMasterOfDMSP;
@@ -6895,12 +6895,12 @@ void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *Adapter)
 			}
 			else
 			{
-				if(pHalData->interfaceIndex == 0)
+				if (pHalData->interfaceIndex == 0)
 				{
 					pHalData->bMasterOfDMSP = true;
 					pHalData->bSlaveOfDMSP = false;
 				}
-				else if(pHalData->interfaceIndex == 1)
+				else if (pHalData->interfaceIndex == 1)
 				{
 					pHalData->bMasterOfDMSP = false;
 					pHalData->bSlaveOfDMSP = true;
@@ -6922,7 +6922,7 @@ void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *Adapter)
 		case DUALMAC_DUALPHY:
 			pHalData->rf_type = RF_1T1R;
 			pHalData->VersionID = (enum VERSION_8192D)(pHalData->VersionID & RF_TYPE_1T1R);
-			if(pHalData->interfaceIndex == 1){
+			if (pHalData->interfaceIndex == 1){
 				pHalData->BandSet92D = BAND_ON_5G;
 				pHalData->CurrentBandType92D = BAND_ON_5G;//Now we let MAC1 run on 5G band.
 			}
@@ -6938,13 +6938,13 @@ void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *Adapter)
 			break;
 	}
 
-	/*if(Adapter->bInHctTest&&(pHalData->MacPhyMode92D == SINGLEMAC_SINGLEPHY))
+	/*if (Adapter->bInHctTest&&(pHalData->MacPhyMode92D == SINGLEMAC_SINGLEPHY))
 	{
 		pHalData->CurrentBandType92D=BAND_ON_2_4G;
 		pHalData->BandSet92D = BAND_ON_2_4G;
 	}*/
 
-	if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+	if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 		pHalData->CurrentChannel = 1;
 	else
 		pHalData->CurrentChannel = 36;
@@ -7052,7 +7052,7 @@ rtl8192d_PHY_InitRxSetting(
 	return;
 #endif
 
-	if(pHalData->interfaceIndex == 0)
+	if (pHalData->interfaceIndex == 0)
 	{
 		rtw_write32(Adapter, REG_MACID, 0x87654321);
 		rtw_write32(Adapter, 0x0700, 0x87654321);
@@ -7114,20 +7114,20 @@ HalChangeCCKStatus8192D(
 
 	//DBG_8192D("MAC %d: =====> ChangeCCKStatus8192D \n",pHalData->interfaceIndex);
 
-	if(pHalData->BandSet92D != BAND_ON_BOTH)
+	if (pHalData->BandSet92D != BAND_ON_BOTH)
 	{
 		//DBG_8192D("ChangeCCKStatus8192D():  Skip \n");
 		return;
 	}
 
-	if(bCCKDisable)
+	if (bCCKDisable)
 	{
-		//if(ACTING_AS_AP(Adapter) ||ACTING_AS_AP(ADJUST_TO_ADAPTIVE_ADAPTER(Adapter, FALSE)) || (Adapter->MgntInfo.mIbss))
+		//if (ACTING_AS_AP(Adapter) ||ACTING_AS_AP(ADJUST_TO_ADAPTIVE_ADAPTER(Adapter, FALSE)) || (Adapter->MgntInfo.mIbss))
 		//	StopTxBeacon(Adapter);
 		rtw_write16(Adapter, REG_RL,0x0101);
 		for(i=0;i<30;i++)
 		{
-			if(rtw_read32(Adapter, 0x200) != rtw_read32(Adapter, 0x204))
+			if (rtw_read32(Adapter, 0x200) != rtw_read32(Adapter, 0x204))
 			{
 				DBG_8192D("packet in tx packet buffer aaaaaaaaa 0x204 %x  \n", rtw_read32(Adapter, 0x204));
 				DBG_8192D("packet in tx packet buffer aaaaaaa 0x200 %x  \n", rtw_read32(Adapter, 0x200));
@@ -7140,14 +7140,14 @@ HalChangeCCKStatus8192D(
 			}
 		}
 
-		/*if((BuddyAdapter != NULL) && BuddyAdapter->bHWInitReady && (pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY))
+		/*if ((BuddyAdapter != NULL) && BuddyAdapter->bHWInitReady && (pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY))
 		{
-			if(ACTING_AS_AP(BuddyAdapter) ||ACTING_AS_AP(ADJUST_TO_ADAPTIVE_ADAPTER(BuddyAdapter, FALSE)) || BuddyAdapter->MgntInfo.mIbss)
+			if (ACTING_AS_AP(BuddyAdapter) ||ACTING_AS_AP(ADJUST_TO_ADAPTIVE_ADAPTER(BuddyAdapter, FALSE)) || BuddyAdapter->MgntInfo.mIbss)
 				StopTxBeacon(BuddyAdapter);
 			PlatformEFIOWrite2Byte(BuddyAdapter, REG_RL,0x0101);
 			for(i=0;i<30;i++)
 			{
-				if(PlatformEFIORead4Byte(BuddyAdapter, 0x200) != PlatformEFIORead4Byte(BuddyAdapter, 0x204))
+				if (PlatformEFIORead4Byte(BuddyAdapter, 0x200) != PlatformEFIORead4Byte(BuddyAdapter, 0x204))
 				{
 					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("packet in tx packet buffer aaaaaaaaa 0x204 %x  \n", PlatformEFIORead4Byte(BuddyAdapter, 0x204)));
 					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("packet in tx packet buffer aaaaaaa 0x200 %x  \n", PlatformEFIORead4Byte(BuddyAdapter, 0x200)));
@@ -7167,14 +7167,14 @@ HalChangeCCKStatus8192D(
 	else
 	{
 		u8	RetryLimit = 0x30;
-		//if(ACTING_AS_AP(Adapter) ||ACTING_AS_AP(ADJUST_TO_ADAPTIVE_ADAPTER(Adapter, FALSE)) || Adapter->MgntInfo.mIbss)
+		//if (ACTING_AS_AP(Adapter) ||ACTING_AS_AP(ADJUST_TO_ADAPTIVE_ADAPTER(Adapter, FALSE)) || Adapter->MgntInfo.mIbss)
 		//	ResumeTxBeacon(Adapter);
 
 		rtw_write16(Adapter, REG_RL, RetryLimit << RETRY_LIMIT_SHORT_SHIFT | RetryLimit << RETRY_LIMIT_LONG_SHIFT);
 
-		/*if((BuddyAdapter != NULL) && (pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY))
+		/*if ((BuddyAdapter != NULL) && (pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY))
 		{
-			if(ACTING_AS_AP(BuddyAdapter) ||ACTING_AS_AP(ADJUST_TO_ADAPTIVE_ADAPTER(BuddyAdapter, FALSE)) || BuddyAdapter->MgntInfo.mIbss)
+			if (ACTING_AS_AP(BuddyAdapter) ||ACTING_AS_AP(ADJUST_TO_ADAPTIVE_ADAPTER(BuddyAdapter, FALSE)) || BuddyAdapter->MgntInfo.mIbss)
 				ResumeTxBeacon(BuddyAdapter);
 
 			PlatformEFIOWrite2Byte(BuddyAdapter, REG_RL,
@@ -7196,7 +7196,7 @@ PHY_InitPABias92D(struct rtw_adapter * Adapter)
 
 	DBG_8192D("PHY_InitPABias92D 0x3FA 0x%x \n",tmpU1b);
 
-	if(!(tmpU1b & BIT0) && (is92 || pHalData->interfaceIndex == 0))
+	if (!(tmpU1b & BIT0) && (is92 || pHalData->interfaceIndex == 0))
 	{
 		PHY_SetRFReg(Adapter, RF_PATH_A, RF_CHNLBW, bRFRegOffsetMask, 0x07401);
 		PHY_SetRFReg(Adapter, RF_PATH_A, RF_AC, bRFRegOffsetMask, 0x70000);
@@ -7209,7 +7209,7 @@ PHY_InitPABias92D(struct rtw_adapter * Adapter)
 		DBG_8192D("2G PA BIAS path A\n");
 	}
 
-	if(!(tmpU1b & BIT1) && (is92 || pHalData->interfaceIndex == 1))
+	if (!(tmpU1b & BIT1) && (is92 || pHalData->interfaceIndex == 1))
 	{
 		eRFPath = pHalData->interfaceIndex == 1?RF_PATH_A:RF_PATH_B;
 		PHY_SetRFReg(Adapter, eRFPath, RF_CHNLBW, bRFRegOffsetMask, 0x07401);
@@ -7223,7 +7223,7 @@ PHY_InitPABias92D(struct rtw_adapter * Adapter)
 		DBG_8192D("2G PA BIAS path B\n");
 	}
 
-	if(!(tmpU1b & BIT2) && (is92 || pHalData->interfaceIndex == 0))
+	if (!(tmpU1b & BIT2) && (is92 || pHalData->interfaceIndex == 0))
 	{
 		//5GL_channel
 		PHY_SetRFReg(Adapter, RF_PATH_A, RF_CHNLBW, bRFRegOffsetMask, 0x17524);
@@ -7252,7 +7252,7 @@ PHY_InitPABias92D(struct rtw_adapter * Adapter)
 		DBG_8192D("5G PA BIAS path A\n");
 	}
 
-	if(!(tmpU1b & BIT3) && (is92 || pHalData->interfaceIndex == 1))
+	if (!(tmpU1b & BIT3) && (is92 || pHalData->interfaceIndex == 1))
 	{
 		eRFPath = (pHalData->interfaceIndex == 1)?RF_PATH_A:RF_PATH_B;
 		//5GL_channel

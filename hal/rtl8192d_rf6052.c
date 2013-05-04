@@ -181,17 +181,17 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 	u8			idx1, idx2;
 	u8*			ptr;
 
-	if(pHalData->EEPROMRegulatory != 0)
+	if (pHalData->EEPROMRegulatory != 0)
 		TurboScanOff = true;
 
-	if(pmlmeext->sitesurvey_res.state == SCAN_PROCESS)
+	if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS)
 	{
 		TxAGC[RF_PATH_A] = 0x3f3f3f3f;
 		TxAGC[RF_PATH_B] = 0x3f3f3f3f;
 
 		TurboScanOff =  true;//disable Turbo scan
 
-		if(TurboScanOff)
+		if (TurboScanOff)
 		{
 			for(idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
 			{
@@ -215,7 +215,7 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 					(pPowerlevel[idx1]<<16) | (pPowerlevel[idx1]<<24);
 			}
 
-			if(pHalData->EEPROMRegulatory==0)
+			if (pHalData->EEPROMRegulatory==0)
 			{
 				tmpval = (pHalData->MCSTxPowerLevelOriginalOffset[0][6]) +
 						(pHalData->MCSTxPowerLevelOriginalOffset[0][7]<<8);
@@ -233,7 +233,7 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 		ptr = (u8 *)(&(TxAGC[idx1]));
 		for(idx2=0; idx2<4; idx2++)
 		{
-			if(*ptr > RF6052_MAX_TX_PWR)
+			if (*ptr > RF6052_MAX_TX_PWR)
 				*ptr = RF6052_MAX_TX_PWR;
 			ptr++;
 		}
@@ -290,7 +290,7 @@ static void getPowerBase(
 	for(i=0; i<2; i++)
 	{
 		//Check HT20 to HT40 diff
-		if(pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
+		if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
 		{
 			HT20_pwrdiff = pHalData->TxPwrHt20Diff[i][Channel-1];
 			powerlevel[i] += HT20_pwrdiff;
@@ -314,11 +314,11 @@ static u8 getChnlGroupByPG(u8 chnlindex)
 		group = 0;
 	else if (channel_info[chnlindex] <= 9)		// Channel 4-9
 		group = 1;
-	else if(channel_info[chnlindex] <=14)				// Channel 10-14
+	else if (channel_info[chnlindex] <=14)				// Channel 10-14
 		group = 2;
-	else if(channel_info[chnlindex] <= 64)
+	else if (channel_info[chnlindex] <= 64)
 		group = 6;
-	else if(channel_info[chnlindex] <= 140)
+	else if (channel_info[chnlindex] <= 140)
 		group = 7;
 	else
 		group = 8;
@@ -360,13 +360,13 @@ static void getTxPowerWriteValByRegulatory(
 				break;
 			case 1:	// Realtek regulatory
 					// increase power diff defined by Realtek for regulatory
-					if(pHalData->pwrGroupCnt == 1)
+					if (pHalData->pwrGroupCnt == 1)
 						chnlGroup = 0;
-					if(pHalData->pwrGroupCnt >= MAX_PG_GROUP)
+					if (pHalData->pwrGroupCnt >= MAX_PG_GROUP)
 					{
 						chnlGroup = getChnlGroupByPG(Channel-1);
 
-						if(pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
+						if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
 							chnlGroup++;
 						else	   // 40M BW
 							chnlGroup += 4;
@@ -400,7 +400,7 @@ static void getTxPowerWriteValByRegulatory(
 					//	((rf==0)?'A':'B'), pHalData->PwrGroupHT20[rf][Channel-1]));
 				//}
 
-				if(index < 2)
+				if (index < 2)
 					pwr_diff = pHalData->TxPwrLegacyHtDiff[rf][Channel-1];
 				else if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
 					pwr_diff = pHalData->TxPwrHt20Diff[rf][Channel-1];
@@ -414,7 +414,7 @@ static void getTxPowerWriteValByRegulatory(
 
 				//RTPRINT(FPHY, PHY_TXPWR, ("customer pwr limit  rf(%c) = 0x%x\n", ((rf==0)?'A':'B'), customer_pwr_limit));
 
-				if(pwr_diff >= customer_pwr_limit)
+				if (pwr_diff >= customer_pwr_limit)
 					pwr_diff = 0;
 				else
 					pwr_diff = customer_pwr_limit - pwr_diff;
@@ -423,7 +423,7 @@ static void getTxPowerWriteValByRegulatory(
 				{
 					pwr_diff_limit[i] = (u8)((pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)]&(0x7f<<(i*8)))>>(i*8));
 
-					if(pwr_diff_limit[i] > pwr_diff)
+					if (pwr_diff_limit[i] > pwr_diff)
 						pwr_diff_limit[i] = pwr_diff;
 				}
 
@@ -444,18 +444,18 @@ static void getTxPowerWriteValByRegulatory(
 
 		// 20100628 Joseph: High power mode for BT-Coexist mechanism.
 		// This mechanism is only applied when Driver-Highpower-Mechanism is OFF.
-		if(pdmpriv->DynamicTxHighPowerLvl == TxHighPwrLevel_BT1)
+		if (pdmpriv->DynamicTxHighPowerLvl == TxHighPwrLevel_BT1)
 		{
 			//RTPRINT(FBT, BT_TRACE, ("Tx Power (-6)\n"));
 			writeVal = writeVal - 0x06060606;
 		}
-		else if(pdmpriv->DynamicTxHighPowerLvl == TxHighPwrLevel_BT2)
+		else if (pdmpriv->DynamicTxHighPowerLvl == TxHighPwrLevel_BT2)
 		{
 			//RTPRINT(FBT, BT_TRACE, ("Tx Power (-0)\n"));
 			writeVal = writeVal ;
 		}
 
-		//if(pMgntInfo->bDisableTXPowerByRate)
+		//if (pMgntInfo->bDisableTXPowerByRate)
 		//{
 			// add for  OID_RT_11N_TX_POWER_BY_RATE ,disable tx powre change by rate
 		//	writeVal = 0x2c2c2c2c;
@@ -492,7 +492,7 @@ static void writeOFDMPowerReg(
 		}
 		writeVal = (pwr_val[3]<<24) | (pwr_val[2]<<16) |(pwr_val[1]<<8) |pwr_val[0];
 
-		if(rf == 0)
+		if (rf == 0)
 			RegOffset = RegOffset_A[index];
 		else
 			RegOffset = RegOffset_B[index];
@@ -500,19 +500,19 @@ static void writeOFDMPowerReg(
 		//RTPRINT(FPHY, PHY_TXPWR, ("Set 0x%x = %08x\n", RegOffset, writeVal));
 
 		// 201005115 Joseph: Set Tx Power diff for Tx power training mechanism.
-		if(((pHalData->rf_type == RF_2T2R) &&
+		if (((pHalData->rf_type == RF_2T2R) &&
 				(RegOffset == rTxAGC_A_Mcs15_Mcs12 || RegOffset == rTxAGC_B_Mcs15_Mcs12))||
 		     ((pHalData->rf_type != RF_2T2R) &&
 				(RegOffset == rTxAGC_A_Mcs07_Mcs04 || RegOffset == rTxAGC_B_Mcs07_Mcs04))	)
 		{
 			writeVal = pwr_val[3];
-			if(RegOffset == rTxAGC_A_Mcs15_Mcs12 || RegOffset == rTxAGC_A_Mcs07_Mcs04)
+			if (RegOffset == rTxAGC_A_Mcs15_Mcs12 || RegOffset == rTxAGC_A_Mcs07_Mcs04)
 				RegOffset = 0xc90;
-			if(RegOffset == rTxAGC_B_Mcs15_Mcs12 || RegOffset == rTxAGC_B_Mcs07_Mcs04)
+			if (RegOffset == rTxAGC_B_Mcs15_Mcs12 || RegOffset == rTxAGC_B_Mcs07_Mcs04)
 				RegOffset = 0xc98;
 			for(i=0; i<3; i++)
 			{
-				if(i!=2)
+				if (i!=2)
 					writeVal = (writeVal>8)?(writeVal-8):0;
 				else
 					writeVal = (writeVal>6)?(writeVal-6):0;
@@ -583,7 +583,7 @@ rtl8192d_PHY_EnableAnotherPHY(
 	if (!(u1bTmp&MAC_ON_BIT))
 	{
 		// Enable BB and RF power
-		if(bMac0)
+		if (bMac0)
 			MaskForPHYSet = MAC0_ACCESS_PHY1;
 		else
 			MaskForPHYSet = MAC1_ACCESS_PHY0;
@@ -612,7 +612,7 @@ rtl8192d_PHY_PowerDownAnotherPHY(
 
 	if (!(u1bTmp&MAC_ON_BIT)) {
 		// power down RF radio A according to YuNan's advice.
-		if(bMac0)
+		if (bMac0)
 			MaskforPhySet = MAC0_ACCESS_PHY1;
 		else
 			MaskforPhySet = MAC1_ACCESS_PHY0;
@@ -647,18 +647,18 @@ phy_RF6052_Config_ParaFile(
 	pszRadioAFile = sz92DRadioAFile;
 	pszRadioBFile = sz92DRadioBFile;
 
-	if(pHalData->InternalPA5G[0])
+	if (pHalData->InternalPA5G[0])
 		pszRadioAFile = sz92DRadioAintPAFile;
-	if(pHalData->InternalPA5G[1])
+	if (pHalData->InternalPA5G[1])
 		pszRadioBFile = sz92DRadioBintPAFile;
 
 	//DMDP,MAC0 on G band,MAC1 on A band.
-	if(pHalData->MacPhyMode92D==DUALMAC_DUALPHY)
+	if (pHalData->MacPhyMode92D==DUALMAC_DUALPHY)
 	{
-		if(pHalData->CurrentBandType92D == BAND_ON_2_4G && pHalData->interfaceIndex == 0)
+		if (pHalData->CurrentBandType92D == BAND_ON_2_4G && pHalData->interfaceIndex == 0)
 		{
 			//MAC0 Need PHY1 load radio_b.txt . Driver use DBI to write.
-			if(rtl8192d_PHY_EnableAnotherPHY(Adapter, true))
+			if (rtl8192d_PHY_EnableAnotherPHY(Adapter, true))
 			{
 				pHalData->NumTotalRFPath = 2;
 				bMac0NeedInitRadioBFirst = true;
@@ -669,10 +669,10 @@ phy_RF6052_Config_ParaFile(
 				return rtStatus;
 			}
 		}
-		else if(pHalData->CurrentBandType92D == BAND_ON_5G && pHalData->interfaceIndex == 1)
+		else if (pHalData->CurrentBandType92D == BAND_ON_5G && pHalData->interfaceIndex == 1)
 		{
 			//MAC1 Need PHY0 load radio_a.txt . Driver use DBI to write.
-			if(rtl8192d_PHY_EnableAnotherPHY(Adapter, false))
+			if (rtl8192d_PHY_EnableAnotherPHY(Adapter, false))
 			{
 				pHalData->NumTotalRFPath = 2;
 				bMac1NeedInitRadioAFirst = true;
@@ -683,7 +683,7 @@ phy_RF6052_Config_ParaFile(
 				return rtStatus;
 			}
 		}
-		else if(pHalData->interfaceIndex == 1)
+		else if (pHalData->interfaceIndex == 1)
 		{
 			// MAC0 enabled, only init radia B.
 			pszRadioAFile = pszRadioBFile;
@@ -771,7 +771,7 @@ phy_RF6052_Config_ParaFile(
 			case RF_PATH_A:
 #ifdef CONFIG_EMBEDDED_FWIMG
 				//vivi added this for read parameter from header, 20100908
-				if(bTrueBPath == true)
+				if (bTrueBPath == true)
 					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radiob_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
 				else
 					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radioa_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
@@ -805,7 +805,7 @@ phy_RF6052_Config_ParaFile(
 				break;
 		}
 
-		if(rtStatus != _SUCCESS){
+		if (rtStatus != _SUCCESS){
 			//RT_TRACE(COMP_FPGA, DBG_LOUD, ("phy_RF6052_Config_ParaFile():Radio[%d] Fail!!", eRFPath));
 			goto phy_RF6052_Config_ParaFile_Fail;
 		}
@@ -849,13 +849,13 @@ PHY_RF6052_Config8192D(
 	// Initialize general global value
 	//
 	// TODO: Extend RF_PATH_C and RF_PATH_D in the future
-	if(pHalData->rf_type == RF_1T1R)
+	if (pHalData->rf_type == RF_1T1R)
 		pHalData->NumTotalRFPath = 1;
 	else
 		pHalData->NumTotalRFPath = 2;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(pHalData->bSlaveOfDMSP)
+	if (pHalData->bSlaveOfDMSP)
 	{
 		DBG_871X(("PHY_RF6052_Config() skip configuration RF \n"));
 		return rtStatus;

@@ -396,7 +396,7 @@ void rtw_reordering_ctrl_timeout_handler(void *pcontext);
 static inline u8 *get_rxmem(union recv_frame *precvframe)
 {
 	//always return rx_head...
-	if(precvframe==NULL)
+	if (precvframe==NULL)
 		return NULL;
 
 	return precvframe->u.hdr.rx_head;
@@ -413,7 +413,7 @@ static inline u8 *get_recvframe_data(union recv_frame *precvframe)
 {
 
 	//alwasy return rx_data
-	if(precvframe==NULL)
+	if (precvframe==NULL)
 		return NULL;
 
 	return precvframe->u.hdr.rx_data;
@@ -430,12 +430,12 @@ static inline u8 *recvframe_push(union recv_frame *precvframe, int sz)
  *      start. rx_data must be still larger than rx_head, after pushing.
  */
 
-	if(precvframe==NULL)
+	if (precvframe==NULL)
 		return NULL;
 
 
 	precvframe->u.hdr.rx_data -= sz ;
-	if( precvframe->u.hdr.rx_data < precvframe->u.hdr.rx_head )
+	if ( precvframe->u.hdr.rx_data < precvframe->u.hdr.rx_head )
 	{
 		precvframe->u.hdr.rx_data += sz ;
 		return NULL;
@@ -455,13 +455,13 @@ static inline u8 *recvframe_pull(union recv_frame *precvframe, int sz)
 	//used for extract sz bytes from rx_data, update rx_data and return the updated rx_data to the caller
 
 
-	if(precvframe==NULL)
+	if (precvframe==NULL)
 		return NULL;
 
 
 	precvframe->u.hdr.rx_data += sz;
 
-	if(precvframe->u.hdr.rx_data > precvframe->u.hdr.rx_tail)
+	if (precvframe->u.hdr.rx_data > precvframe->u.hdr.rx_tail)
 	{
 		precvframe->u.hdr.rx_data -= sz;
 		return NULL;
@@ -481,14 +481,14 @@ static inline u8 *recvframe_put(union recv_frame *precvframe, int sz)
 	//after putting, rx_tail must be still larger than rx_end.
 	unsigned char * prev_rx_tail;
 
-	if(precvframe==NULL)
+	if (precvframe==NULL)
 		return NULL;
 
 	prev_rx_tail = precvframe->u.hdr.rx_tail;
 
 	precvframe->u.hdr.rx_tail += sz;
 
-	if(precvframe->u.hdr.rx_tail > precvframe->u.hdr.rx_end)
+	if (precvframe->u.hdr.rx_tail > precvframe->u.hdr.rx_end)
 	{
 		precvframe->u.hdr.rx_tail -= sz;
 		return NULL;
@@ -509,12 +509,12 @@ static inline u8 *recvframe_pull_tail(union recv_frame *precvframe, int sz)
 	//used for extract sz bytes from rx_end, update rx_end and return the updated rx_end to the caller
 	//after pulling, rx_end must be still larger than rx_data.
 
-	if(precvframe==NULL)
+	if (precvframe==NULL)
 		return NULL;
 
 	precvframe->u.hdr.rx_tail -= sz;
 
-	if(precvframe->u.hdr.rx_tail < precvframe->u.hdr.rx_data)
+	if (precvframe->u.hdr.rx_tail < precvframe->u.hdr.rx_data)
 	{
 		precvframe->u.hdr.rx_tail += sz;
 		return NULL;
@@ -532,7 +532,7 @@ static inline unsigned char *get_rxbuf_desc(union recv_frame *precvframe)
 {
 	unsigned char *buf_desc;
 
-	if(precvframe==NULL)
+	if (precvframe==NULL)
 		return NULL;
 	return buf_desc;
 }

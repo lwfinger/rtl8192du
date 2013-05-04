@@ -42,7 +42,7 @@ CheckWriteH2C(
 
 	valHMETFR = rtw_read8(Adapter, REG_HMETFR);
 
-	if(((valHMETFR>>BoxNum)&BIT0) == 1)
+	if (((valHMETFR>>BoxNum)&BIT0) == 1)
 		Result = true;
 
 	return Result;
@@ -62,7 +62,7 @@ CheckFwReadLastH2C(
 	//RT_TRACE(COMP_INIT,DBG_LOUD,("REG[%x] = %x\n",	REG_HMETFR, valHMETFR));
 
 	// Do not seperate to 91C and 88C, we use the same setting. Suggested by SD4 Filen. 2009.12.03.
-	if(((valHMETFR>>BoxNum)&BIT0) == 0)
+	if (((valHMETFR>>BoxNum)&BIT0) == 0)
 		Result = true;
 
 	return Result;
@@ -112,7 +112,7 @@ _func_enter_;
 	while(!bWriteSucess)
 	{
 		WaitWriteH2cLimmit--;
-		if(WaitWriteH2cLimmit == 0)
+		if (WaitWriteH2cLimmit == 0)
 		{
 			DBG_8192D("FillH2CCmd92C():Write H2C fail because no trigger for FW INT!!!!!!!!\n");
 			break;
@@ -148,7 +148,7 @@ _func_enter_;
 		{
 			//wait until Fw read
 			WaitH2cLimmit--;
-			if(WaitH2cLimmit == 0)
+			if (WaitH2cLimmit == 0)
 			{
 				DBG_8192D("FillH2CCmd92C(): Wating too long for FW read clear HMEBox(%d)!!!\n", BoxNum);
 				break;
@@ -160,7 +160,7 @@ _func_enter_;
 		}
 
 		// If Fw has not read the last H2C cmd, break and give up this H2C.
-		if(!IsFwRead)
+		if (!IsFwRead)
 		{
 			DBG_8192D("FillH2CCmd92C():  Write H2C register BOX[%d] fail!!!!! Fw do not read. \n", BoxNum);
 			break;
@@ -257,7 +257,7 @@ _func_enter_;
 
 		// Record the next BoxNum
 		pHalData->LastHMEBoxNum = BoxNum+1;
-		if(pHalData->LastHMEBoxNum == 4) // loop to 0
+		if (pHalData->LastHMEBoxNum == 4) // loop to 0
 			pHalData->LastHMEBoxNum = 0;
 
 		//DBG_8192D("FillH2CCmd92C():pHalData->LastHMEBoxNum  = %d\n", pHalData->LastHMEBoxNum);
@@ -281,7 +281,7 @@ FillH2CCmd92D(
 
 	//Adapter = ADJUST_TO_ADAPTIVE_ADAPTER(Adapter, TRUE);
 
-	if(Adapter->bFWReady == false)
+	if (Adapter->bFWReady == false)
 	{
 		DBG_8192D("FillH2CCmd92D(): return H2C cmd because of Fw download fail!!!\n");
 		return;
@@ -302,7 +302,7 @@ u8 rtl8192d_h2c_msg_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 	u8 *pCmdBuffer;
 	struct cmd_msg_parm  *pcmdmsg;
 
-	if(!pbuf)
+	if (!pbuf)
 		return H2C_PARAMETERS_ERROR;
 
 	pcmdmsg = (struct cmd_msg_parm*)pbuf;
@@ -345,7 +345,7 @@ void rtl8192d_Add_RateATid(struct rtw_adapter * pAdapter, u32 bitmap, u8 arg)
 
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 
-	if(pHalData->fw_ractrl == true)
+	if (pHalData->fw_ractrl == true)
 	{
 		rtl8192d_set_raid_cmd(pAdapter, bitmap, arg);
 	}
@@ -434,7 +434,7 @@ void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	pktlen += 2;
 
 
-	if( (pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
+	if ( (pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
 	{
 		DBG_8192D("ie len=%u\n", cur_network->IELength);
 		pktlen += cur_network->IELength - sizeof(struct ndis_802_11_fixed_ies);
@@ -455,7 +455,7 @@ void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	// DS parameter set
 	pframe = rtw_set_ie(pframe, _DSSET_IE_, 1, (unsigned char *)&(cur_network->Configuration.DSConfig), &pktlen);
 
-	if( (pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE)
+	if ( (pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE)
 	{
 		u32 ATIMWindow;
 		// IBSS Parameter Set...
@@ -606,7 +606,7 @@ void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u
 	pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
 	pframe += pktlen;
 
-	if(cur_network->IELength>MAX_IE_SZ)
+	if (cur_network->IELength>MAX_IE_SZ)
 		return;
 
 	memcpy(pframe, cur_network->IEs, cur_network->IELength);
@@ -647,7 +647,7 @@ FillFakeTxDescriptor92D(
 	ptxdesc->txdw1 |= cpu_to_le32((QSLT_MGNT<<QSEL_SHT)&0x00001f00); // Fixed queue of Mgnt queue
 
 	//Set NAVUSEHDR to prevent Ps-poll AId filed to be changed to error vlaue by Hw.
-	if(IsPsPoll)
+	if (IsPsPoll)
 	{
 		ptxdesc->txdw1 |= cpu_to_le32(NAVUSEHDR);
 	}
@@ -660,7 +660,7 @@ FillFakeTxDescriptor92D(
 	//offset 16
 	ptxdesc->txdw4 |= cpu_to_le32(BIT(8));//driver uses rate
 
-	if(pHalData->CurrentBandType92D == BAND_ON_5G)
+	if (pHalData->CurrentBandType92D == BAND_ON_5G)
 		ptxdesc->txdw5 |= cpu_to_le32(BIT(2));// use OFDM 6Mbps
 
 	// USB interface drop packet if the checksum of descriptor isn't correct.
@@ -700,7 +700,7 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 	DBG_8192D("%s\n", __func__);
 
 	reservedpagepacket = (u8*)rtw_malloc(1000);
-	if(reservedpagepacket == NULL){
+	if (reservedpagepacket == NULL){
 		DBG_8192D("%s(): alloc reservedpagepacket fail !!!\n", __func__);
 		return;
 	}
@@ -726,7 +726,7 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 	U1bTmp = (u8)PageNum_128(BeaconLength+TxDescLen);
 	PageNum += U1bTmp;
 	// To reserved 2 pages for beacon buffer. 2010.06.24.
-	if(PageNum == 1)
+	if (PageNum == 1)
 		PageNum+=1;
 	pHalData->FwRsvdPageStartOffset = PageNum;
 
@@ -812,7 +812,7 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 
 	dlok = true;
 
-	if(dlok) {
+	if (dlok) {
 		DBG_8192D("Set RSVD page location to Fw.\n");
 		FillH2CCmd92D(Adapter, H2C_RSVDPAGE, sizeof(u1RsvdPageLoc), u1RsvdPageLoc);
 	}
@@ -832,7 +832,7 @@ _func_enter_;
 
 	DBG_8192D("%s\n", __func__);
 
-	if(mstatus == 1)
+	if (mstatus == 1)
 	{
 		// We should set AID, correct TSF, HW seq enable before set JoinBssReport to Fw in 88/92C.
 		// Suggested by filen. Added by tynli.
@@ -854,7 +854,7 @@ _func_enter_;
 		rtw_write8(padapter, REG_BCN_CTRL, rtw_read8(padapter, REG_BCN_CTRL)|BIT(4));
 
 		// Set FWHW_TXQ_CTRL 0x422[6]=0 to tell Hw the packet is not a real beacon frame.
-		if(pHalData->RegFwHwTxQCtrl&BIT6)
+		if (pHalData->RegFwHwTxQCtrl&BIT6)
 			bRecover = true;
 		rtw_write8(padapter, REG_FWHW_TXQ_CTRL+2, (pHalData->RegFwHwTxQCtrl&(~BIT6)));
 		pHalData->RegFwHwTxQCtrl &= (~BIT6);
@@ -871,7 +871,7 @@ _func_enter_;
 		// prevent from setting 0x422[6] to 0 after download reserved page, or it will cause
 		// the beacon cannot be sent by HW.
 		// 2010.06.23. Added by tynli.
-		if(bRecover)
+		if (bRecover)
 		{
 			rtw_write8(padapter, REG_FWHW_TXQ_CTRL+2, (pHalData->RegFwHwTxQCtrl|BIT6));
 			pHalData->RegFwHwTxQCtrl |= BIT6;
@@ -919,7 +919,7 @@ _func_enter_;
 		case P2P_PS_ENABLE:
 			DBG_8192D("P2P_PS_ENABLE \n");
 			// update CTWindow value.
-			if( pwdinfo->ctwindow > 0 )
+			if ( pwdinfo->ctwindow > 0 )
 			{
 				p2p_ps_offload->CTWindow_En = 1;
 				ctwindow = pwdinfo->ctwindow;
@@ -932,7 +932,7 @@ _func_enter_;
 			{
 				// To control the register setting for which NOA
 				rtw_write8(padapter, 0x5CF, (i << 4));
-				if(i == 0)
+				if (i == 0)
 					p2p_ps_offload->NoA0_En = 1;
 				else
 					p2p_ps_offload->NoA1_En = 1;
@@ -946,12 +946,12 @@ _func_enter_;
 				tsf_low = rtw_read32(padapter, REG_TSFTR);
 
 				start_time = pwdinfo->noa_start_time[i];
-				if(pwdinfo->noa_count[i] != 1)
+				if (pwdinfo->noa_count[i] != 1)
 				{
 					while( start_time <= (tsf_low+(50*1024) ) )
 					{
 						start_time += pwdinfo->noa_interval[i];
-						if(pwdinfo->noa_count[i] != 255)
+						if (pwdinfo->noa_count[i] != 255)
 							pwdinfo->noa_count[i]--;
 					}
 				}
@@ -961,14 +961,14 @@ _func_enter_;
 				rtw_write8(padapter, 0x5EC, pwdinfo->noa_count[i]);
 			}
 
-			if( (pwdinfo->opp_ps == 1) || (pwdinfo->noa_num > 0) )
+			if ( (pwdinfo->opp_ps == 1) || (pwdinfo->noa_num > 0) )
 			{
 				// rst p2p circuit
 				rtw_write8(padapter, REG_DUAL_TSF_RST, BIT(4));
 
 				p2p_ps_offload->Offload_En = 1;
 
-				if(rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO))
+				if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO))
 				{
 					p2p_ps_offload->role= 1;
 					p2p_ps_offload->AllStaSleep = 0;
@@ -1068,7 +1068,7 @@ _func_enter_;
 
 
 
-	if(pwrpriv->wowlan_mode ==true){
+	if (pwrpriv->wowlan_mode ==true){
 		//pause RX DMA
 		test = rtw_read8(padapter, REG_RXPKT_NUM+2);
 		test |= BIT(2);
@@ -1091,15 +1091,15 @@ _func_enter_;
 
 		pwowlan_parm.mode |=FW_WOWLAN_FUN_EN;
 		//printk("\n %s 1.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
-		if(pwrpriv->wowlan_pattern ==true){
+		if (pwrpriv->wowlan_pattern ==true){
 			pwowlan_parm.mode |= FW_WOWLAN_PATTERN_MATCH;
 		//printk("\n %s 2.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
 		}
-		if(pwrpriv->wowlan_magic ==true){
+		if (pwrpriv->wowlan_magic ==true){
 			//pwowlan_parm.mode |=FW_WOWLAN_MAGIC_PKT;
 		//printk("\n %s 3.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
 		}
-		if(pwrpriv->wowlan_unicast ==true){
+		if (pwrpriv->wowlan_unicast ==true){
 			pwowlan_parm.mode |=FW_WOWLAN_UNICAST;
 		//printk("\n %s 4.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
 		}

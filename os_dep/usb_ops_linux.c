@@ -193,10 +193,10 @@ static void usb_bulkout_zero_complete(struct urb *purb, struct pt_regs *regs)
 
 	//DBG_8192D("+usb_bulkout_zero_complete\n");
 
-	if(pcontext) {
+	if (pcontext) {
 		kfree(pcontext->pbuf);
 
-		if(pcontext->purb && (pcontext->purb==purb))
+		if (pcontext->purb && (pcontext->purb==purb))
 			usb_free_urb(pcontext->purb);
 
 		kfree(pcontext);
@@ -217,7 +217,7 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	//DBG_8192D("%s\n", __func__);
 
 
-	if((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx))
+	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx))
 	{
 		return _FAIL;
 	}
@@ -368,7 +368,7 @@ _func_enter_;
 	spin_unlock_irqrestore(&pxmitpriv->lock, irqL);
 
 
-	if(pxmitpriv->txirp_cnt==0)
+	if (pxmitpriv->txirp_cnt==0)
 	{
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete: txirp_cnt== 0, set allrxreturnevt!\n"));
 		_rtw_up_sema(&(pxmitpriv->tx_retevt));
@@ -376,7 +376,7 @@ _func_enter_;
 */
         //rtw_free_xmitframe(pxmitpriv, pxmitframe);
 
-	if(padapter->bSurpriseRemoved || padapter->bDriverStopped ||padapter->bWritePortCancel)
+	if (padapter->bSurpriseRemoved || padapter->bDriverStopped ||padapter->bWritePortCancel)
 	{
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete:bDriverStopped(%d) OR bSurpriseRemoved(%d)", padapter->bDriverStopped, padapter->bSurpriseRemoved));
 		DBG_8192D("%s(): TX Warning! bDriverStopped(%d) OR bSurpriseRemoved(%d) bWritePortCancel(%d) pxmitbuf->ext_tag(%x) \n",
@@ -391,7 +391,7 @@ _func_enter_;
 	} else {
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete : purb->status(%d) != 0 \n", purb->status));
 		DBG_8192D("###=> urb_write_port_complete status(%d)\n",purb->status);
-		if((purb->status==-EPIPE)||(purb->status==-EPROTO))
+		if ((purb->status==-EPIPE)||(purb->status==-EPROTO))
 		{
 			//usb_clear_halt(pusbdev, purb->pipe);
 			//msleep(10);
@@ -439,7 +439,7 @@ check_completion:
 
 	rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
 
-	//if(rtw_txframes_pending(padapter))
+	//if (rtw_txframes_pending(padapter))
 	{
 		tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
 	}
@@ -510,9 +510,9 @@ _func_enter_;
 	purb	= pxmitbuf->pxmit_urb[0];
 
 #if 0
-	if(pdvobj->ishighspeed)
+	if (pdvobj->ishighspeed)
 	{
-		if(cnt> 0 && cnt%512 == 0)
+		if (cnt> 0 && cnt%512 == 0)
 		{
 			//DBG_8192D("ishighspeed, cnt=%d\n", cnt);
 			bwritezero = true;
@@ -520,7 +520,7 @@ _func_enter_;
 	}
 	else
 	{
-		if(cnt > 0 && cnt%64 == 0)
+		if (cnt > 0 && cnt%64 == 0)
 		{
 			//DBG_8192D("cnt=%d\n", cnt);
 			bwritezero = true;
@@ -590,7 +590,7 @@ _func_enter_;
 //   Commented by Albert 2009/10/13
 //   We add the URB_ZERO_PACKET flag to urb so that the host will send the zero packet automatically.
 /*
-	if(bwritezero == true)
+	if (bwritezero == true)
 	{
 		usb_bulkout_zero(pintfhdl, addr);
 	}
@@ -628,7 +628,7 @@ void usb_write_port_cancel(struct intf_hdl *pintfhdl)
 	pxmitbuf = (struct xmit_buf*)padapter->xmitpriv.pxmit_extbuf;
 	for (i = 0; i < NR_XMIT_EXTBUFF; i++) {
 		for (j=0; j<8; j++) {
-			if(pxmitbuf->pxmit_urb[j]) {
+			if (pxmitbuf->pxmit_urb[j]) {
 				usb_kill_urb(pxmitbuf->pxmit_urb[j]);
 			}
 		}

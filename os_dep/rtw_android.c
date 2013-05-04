@@ -228,7 +228,7 @@ int rtw_android_cmdstr_to_num(char *cmdstr)
 {
 	int cmd_num;
 	for(cmd_num=0 ; cmd_num<ANDROID_WIFI_CMD_MAX; cmd_num++)
-		if(0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
+		if (0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
 			break;
 
 	return cmd_num;
@@ -241,7 +241,7 @@ static int rtw_android_get_rssi(struct net_device *net, char *command, int total
 	struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
 	int bytes_written = 0;
 
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == true) {
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
 		bytes_written += snprintf(&command[bytes_written], total_len, "%s rssi %d",
 			pcur_network->network.Ssid.Ssid, padapter->recvpriv.rssi);
 	}

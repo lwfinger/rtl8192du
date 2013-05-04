@@ -82,7 +82,7 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 	ori_len = buf_offset+pattrib->pktlen;
 
 	//check if the io_buf can accommodate new cmds
-	if(ori_len + cmd_len + 8 > MAX_XMITBUF_SZ) {
+	if (ori_len + cmd_len + 8 > MAX_XMITBUF_SZ) {
 		DBG_871X("%s %u is large than MAX_XMITBUF_SZ:%u, can't accommodate new cmds\n", __func__
 			, ori_len + cmd_len + 8, MAX_XMITBUF_SZ);
 		return _FAIL;
@@ -194,7 +194,7 @@ int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame)
 	ori_len = buf_offset+pattrib->pktlen;
 
 	//check if the io_buf can accommodate new cmds
-	if(ori_len + 8 > MAX_XMITBUF_SZ) {
+	if (ori_len + 8 > MAX_XMITBUF_SZ) {
 		DBG_871X("%s %u is large than MAX_XMITBUF_SZ:%u, can't accommodate end cmd\n", __func__
 			, ori_len + 8, MAX_XMITBUF_SZ);
 		return _FAIL;
@@ -216,10 +216,10 @@ int rtw_IOL_exec_cmd_array_sync(PADAPTER adapter, u8 *IOL_cmds, u32 cmd_num, u32
 {
 	struct xmit_frame	*xmit_frame;
 
-	if((xmit_frame=rtw_IOL_accquire_xmit_frame(adapter)) == NULL)
+	if ((xmit_frame=rtw_IOL_accquire_xmit_frame(adapter)) == NULL)
 		return _FAIL;
 
-	if(rtw_IOL_append_cmds(xmit_frame, IOL_cmds, cmd_num<<3) == _FAIL)
+	if (rtw_IOL_append_cmds(xmit_frame, IOL_cmds, cmd_num<<3) == _FAIL)
 		return _FAIL;
 
 	return rtw_IOL_exec_cmds_sync(adapter, xmit_frame, max_wating_ms);
@@ -233,9 +233,9 @@ int rtw_IOL_exec_empty_cmds_sync(ADAPTER *adapter, u32 max_wating_ms)
 
 bool rtw_IOL_applied(ADAPTER *adapter)
 {
-	if(adapter->registrypriv.force_iol)
+	if (adapter->registrypriv.force_iol)
 		return true;
-	if(!adapter_to_dvobj(adapter)->ishighspeed)
+	if (!adapter_to_dvobj(adapter)->ishighspeed)
 		return true;
 	return false;
 }

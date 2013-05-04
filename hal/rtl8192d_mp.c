@@ -257,7 +257,7 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 			PHY_SetBBReg(pAdapter, rOFDM0_TRxPathEnable, 0x0000000f, r_rx_antenna_ofdm);	//OFDM Rx
 			PHY_SetBBReg(pAdapter, rOFDM1_TRxPathEnable, 0x0000000f, r_rx_antenna_ofdm);	//OFDM Rx
 			PHY_SetBBReg(pAdapter, rCCK0_AFESetting, bMaskByte3, r_ant_select_cck_val);//r_ant_sel_cck_val);		//CCK TxRx
-			if(pHalData->CurrentBandType92D == BAND_ON_2_4G || IS_92D_SINGLEPHY(pHalData->VersionID))
+			if (pHalData->CurrentBandType92D == BAND_ON_2_4G || IS_92D_SINGLEPHY(pHalData->VersionID))
 					rtw_write8(pAdapter, rCCK0_AFESetting+3, r_ant_select_cck_val);
 			break;
 		default:
@@ -309,14 +309,14 @@ void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
     PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
 
 
-    if(bStart)
+    if (bStart)
     { // Start Carrier Suppression.
-        //if(pMgntInfo->dot11CurrentWirelessMode == WIRELESS_MODE_B)
-        if( pMptCtx->MptRateIndex >= MPT_RATE_1M &&
+        //if (pMgntInfo->dot11CurrentWirelessMode == WIRELESS_MODE_B)
+        if ( pMptCtx->MptRateIndex >= MPT_RATE_1M &&
             pMptCtx->MptRateIndex <= MPT_RATE_11M )
         { // Start CCK Carrier Suppression
             // 1. if CCK block on?
-            if(!PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bCCKEn))
+            if (!PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bCCKEn))
                 PHY_SetBBReg(pAdapter, rFPGA0_RFMOD, bCCKEn, bEnable);//set CCK block on
 
             //Turn Off All Test Mode
@@ -333,8 +333,8 @@ void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
     }
     else
     { // Stop Carrier Suppression.
-        //if(pMgntInfo->dot11CurrentWirelessMode == WIRELESS_MODE_B)
-        if( pMptCtx->MptRateIndex >= MPT_RATE_1M &&
+        //if (pMgntInfo->dot11CurrentWirelessMode == WIRELESS_MODE_B)
+        if ( pMptCtx->MptRateIndex >= MPT_RATE_1M &&
             pMptCtx->MptRateIndex <= MPT_RATE_11M )
         { // Stop Carrier Suppression
             PHY_SetBBReg(pAdapter, rCCK0_System, bCCKBBMode, 0x0);    //normal mode
@@ -368,13 +368,13 @@ void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart )
             rfPath = RF_PATH_A;
             break;
     }
-    if(bStart)
+    if (bStart)
     {   // Start Single Tone.
 
 	RT_TRACE(_module_mp_,_drv_alert_, ("SetSingleToneTx: test start\n"));
 		write_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn, 0x0);
 		write_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn, 0x0);
-		if(is92C)
+		if (is92C)
 	{
 			_write_rfreg(pAdapter, RF_PATH_A, 0x21, BIT19, 0x01);
 			rtw_usleep_os(100);
@@ -401,7 +401,7 @@ void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart )
 		write_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn, 0x1);
 		write_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
 
-		if(is92C)
+		if (is92C)
 		{
 			_write_rfreg(pAdapter, RF_PATH_A, 0x21, BIT19, 0x00);
 			rtw_usleep_os(100);
@@ -498,7 +498,7 @@ void Hal_SetTxPower (PADAPTER pAdapter)
 
 	for(rf=0; rf<2; rf++)
 	{
-		if(IS_HARDWARE_TYPE_8192D(pAdapter))
+		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 		{
 			//RT_TRACE(COMP_MP, DBG_LOUD, ("antenna settings txpath 0x%x\n", pHalData->AntennaTxPath));
 			switch(pHalData->AntennaTxPath)
@@ -542,10 +542,10 @@ void Hal_SetSingleCarrierTx (PADAPTER pAdapter, u8 bStart)
     if ( bStart )
     {// Start Single Carrier.
         // 1. if OFDM block on?
-        if(!PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
+        if (!PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
             PHY_SetBBReg(pAdapter, rFPGA0_RFMOD, bOFDMEn, bEnable);//set OFDM block on
 
-        if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+        if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
         {
             // 2. set CCK test mode off, set to CCK normal mode
             PHY_SetBBReg(pAdapter, rCCK0_System, bCCKBBMode, bDisable);
@@ -584,7 +584,7 @@ static  void Hal_mpt_StartCckContTx(PADAPTER pAdapter,bool bScrambleOn)
     u32          cckrate;
 
     // 1. if CCK block on?
-    if(!PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bCCKEn))
+    if (!PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bCCKEn))
         PHY_SetBBReg(pAdapter, rFPGA0_RFMOD, bCCKEn, bEnable);//set CCK block on
 
     //Turn Off All Test Mode
@@ -651,10 +651,10 @@ static  void Hal_mpt_StartOfdmContTx( PADAPTER pAdapter )
     //u1Byte            OfdmTxAGC;
 
     // 1. if OFDM block on?
-    if(!PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
+    if (!PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
         PHY_SetBBReg(pAdapter, rFPGA0_RFMOD, bOFDMEn, bEnable);//set OFDM block on
 
-    if(pHalData->CurrentBandType92D == BAND_ON_2_4G)
+    if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
     {
         // 2. set CCK test mode off, set to CCK normal mode
         PHY_SetBBReg(pAdapter, rCCK0_System, bCCKBBMode, bDisable);
@@ -702,12 +702,12 @@ void Hal_SetContinuousTx (PADAPTER pAdapter, u8 bStart)
     HAL_DATA_TYPE       *pHalData   = GET_HAL_DATA(pAdapter);
     PMPT_CONTEXT        pMptCtx = &(pAdapter->mppriv.MptCtx);
 
-    if(bStart)
+    if (bStart)
     { // Start Continuous Tx.
-        if( pAdapter->mppriv.rateidx >= MPT_RATE_1M &&
+        if ( pAdapter->mppriv.rateidx >= MPT_RATE_1M &&
             pAdapter->mppriv.rateidx <= MPT_RATE_11M )
             Hal_mpt_StartCckContTx(pAdapter, true);
-        else if(pAdapter->mppriv.rateidx >= MPT_RATE_6M &&
+        else if (pAdapter->mppriv.rateidx >= MPT_RATE_6M &&
                 pAdapter->mppriv.rateidx <= MPT_RATE_MCS15 )
             Hal_mpt_StartOfdmContTx(pAdapter);
         else
@@ -724,15 +724,15 @@ void Hal_SetContinuousTx (PADAPTER pAdapter, u8 bStart)
         bool bCckContTx = pMptCtx->bCckContTx;
         bool bOfdmContTx = pMptCtx->bOfdmContTx;
 
-        if(bCckContTx == true && bOfdmContTx == false)
+        if (bCckContTx == true && bOfdmContTx == false)
         { // Stop CCK Continuous Tx.
             Hal_mpt_StopCckCoNtTx(pAdapter);
         }
-        else if(bCckContTx == false && bOfdmContTx == true)
+        else if (bCckContTx == false && bOfdmContTx == true)
         { // Stop OFDM Continuous Tx.
             Hal_mpt_StopOfdmContTx(pAdapter);
         }
-        else if(bCckContTx == false && bOfdmContTx == false)
+        else if (bCckContTx == false && bOfdmContTx == false)
         { // We've already stopped Continuous Tx.
         }
         else
@@ -764,9 +764,9 @@ u4Byte RT8192DU_Reg_Offset_Conver(PADAPTER Adapter, u4Byte offset)
 {
 	//if (Adapter->interfaceIndex!=0)
 	//{
-		if(offset < 0x1000)
+		if (offset < 0x1000)
 			offset|=0x4000;
-		else if( (offset&MAC1_ACCESS_PHY0) && !(offset&0x8000))// MAC1 need to access PHY0
+		else if ( (offset&MAC1_ACCESS_PHY0) && !(offset&0x8000))// MAC1 need to access PHY0
 			offset &= 0xFFF;
 	//}
 
@@ -842,7 +842,7 @@ PHY_PowerDownAnotherPHY(
 	{
 
 		// power down RF radio A according to YuNan's advice.
-		if(bMac0)
+		if (bMac0)
 			MaskforPhySet = MAC0_ACCESS_PHY1;
 		else
 			MaskforPhySet = MAC1_ACCESS_PHY0;
@@ -869,7 +869,7 @@ PHY_EnableAnotherPHY(
 
 	  if (!(u1bTmp&MAC_ON_BIT)) {
 	   // Enable BB and RF power
-		if(bMac0)
+		if (bMac0)
 			MaskForPHYSet = MAC0_ACCESS_PHY1;
 		else
 			MaskForPHYSet = MAC1_ACCESS_PHY0;
@@ -983,11 +983,11 @@ static u8 GetRightChnlPlace(u8 chnl)
 	u8	channel_5G[TARGET_CHNL_NUM_2G_5G] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,100,102,104,106,108,110,112,114,116,118,120,122,124,126,128,130,132,134,136,138,140,149,151,153,155,157,159,161,163,165};
 	u8	place = chnl;
 
-	if(chnl > 14)
+	if (chnl > 14)
 	{
 		for(place = 14; place<sizeof(channel_5G); place++)
 		{
-			if(channel_5G[place] == chnl)
+			if (channel_5G[place] == chnl)
 			{
 				place++;
 				break;
@@ -1014,56 +1014,56 @@ void
 	u32		Regb30 = PHY_QueryBBReg(Adapter, 0xb30, BIT27);
 
 	//only for 92D SMSP >= C-cut
-	if(!IS_HARDWARE_TYPE_8192D(Adapter))
+	if (!IS_HARDWARE_TYPE_8192D(Adapter))
 		return;
 
 	//config path A for 5G
-	if(pHalData->CurrentBandType92D == BAND_ON_5G)
+	if (pHalData->CurrentBandType92D == BAND_ON_5G)
 	{
 		u4tmp = CurveIndex[GetRightChnlPlace(channel)-1];
 
 		for(i = 0; i < RF_CHNL_NUM_5G; i++) {
-			if(channel == RF_CHNL_5G[i] && channel <= 140)
+			if (channel == RF_CHNL_5G[i] && channel <= 140)
 				index = 0;
 		}
 
 		for(i = 0; i < RF_CHNL_NUM_5G_40M; i++) {
-			if(channel == RF_CHNL_5G_40M[i] && channel <= 140)
+			if (channel == RF_CHNL_5G_40M[i] && channel <= 140)
 				index = 1;
 		}
 
-		if(channel ==149 || channel == 155 || channel ==161)
+		if (channel ==149 || channel == 155 || channel ==161)
 			index = 2;
-		else if(channel == 151 || channel == 153 || channel == 163 || channel == 165)
+		else if (channel == 151 || channel == 153 || channel == 163 || channel == 165)
 			index = 3;
-		else if(channel == 157 || channel == 159 )
+		else if (channel == 157 || channel == 159 )
 			index = 4;
 
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
 		{
 			bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, false);
 			MaskforPhySet = MAC1_ACCESS_PHY0;
 			//asume no this case
-			if(bNeedPowerDownRadio)
+			if (bNeedPowerDownRadio)
 				phy_EnableRFENV(Adapter, path, MaskforPhySet, &u4RegValue);
 		}
 
 		//DMDP, if band = 5G,Mac0 need to set PHY1 when regB30[27]=1
-		if(Regb30 && pHalData->interfaceIndex == 0)
+		if (Regb30 && pHalData->interfaceIndex == 0)
 		{
 			//RT_TRACE(COMP_MLME, DBG_LOUD, ("===============phy_SwitchRfSetting8192D interface %ld,B30&BIT27=1!!!!\n", Adapter->interfaceIndex));
 
 			bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, true);
 			MaskforPhySet= MAC0_ACCESS_PHY1;
 			//asume no this case
-			if(bNeedPowerDownRadio)
+			if (bNeedPowerDownRadio)
 				phy_EnableRFENV(Adapter, path, MaskforPhySet, &u4RegValue);
 		}
 
 		for(i = 0; i < RF_REG_NUM_for_C_CUT_5G; i++)
 		{
 #if 1
-			if(i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
+			if (i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
 			{
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask, 0xE439D);
 			}
@@ -1072,7 +1072,7 @@ void
 #if SWLCK == 1
 				u4tmp2= (RF_REG_Param_for_C_CUT_5G[index][i]&0x7FF)|(u4tmp << 11);
 
-				if(channel == 36)
+				if (channel == 36)
 					u4tmp2 &= ~(BIT7|BIT6);
 
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask, u4tmp2);
@@ -1086,7 +1086,7 @@ void
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask, RF_REG_Param_for_C_CUT_5G[index][i]);
 			}
 #else
-			if(i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
+			if (i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i], RF_REG_MASK_for_C_CUT_5G[i], 0xE439D);
 			else
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i], RF_REG_MASK_for_C_CUT_5G[i], RF_REG_Param_for_C_CUT_5G[index][i]);
@@ -1097,49 +1097,49 @@ void
 
 		}
 
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
 		{
-			if(bNeedPowerDownRadio)
+			if (bNeedPowerDownRadio)
 			{
 				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
 			PHY_PowerDownAnotherPHY(Adapter, false);
 		}
 
-		if(Regb30 && pHalData->interfaceIndex == 0)
+		if (Regb30 && pHalData->interfaceIndex == 0)
 		{
-			if(bNeedPowerDownRadio)
+			if (bNeedPowerDownRadio)
 			{
 				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
 			PHY_PowerDownAnotherPHY(Adapter, true);
 		}
 
-		if(channel < 149)
+		if (channel < 149)
 			value = 0x07;
-		else if(channel >= 149)
+		else if (channel >= 149)
 			value = 0x02;
 
-		if(channel >= 36 && channel <= 64)
+		if (channel >= 36 && channel <= 64)
 			index = 0;
-		else if(channel >=100 && channel <= 140)
+		else if (channel >=100 && channel <= 140)
 			index = 1;
 		else
 			index = 2;
 
 		for(eRFPath = RF_PATH_A; eRFPath < pHalData->NumTotalRFPath; eRFPath++)
 		{
-			if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
+			if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
 				pHalData->interfaceIndex == 1)		//MAC 1 5G
 				bInteralPA = pHalData->InternalPA5G[1];
 			else
 				bInteralPA = pHalData->InternalPA5G[eRFPath];
 
-			if(bInteralPA)
+			if (bInteralPA)
 			{
 				for(i = 0; i < RF_REG_NUM_for_C_CUT_5G_internalPA; i++)
 				{
-					if(RF_REG_for_C_CUT_5G_internalPA[i] == 0x03 &&
+					if (RF_REG_for_C_CUT_5G_internalPA[i] == 0x03 &&
 						channel >=36 && channel <=64)
 						PHY_SetRFReg(Adapter, eRFPath, RF_REG_for_C_CUT_5G_internalPA[i], bRFRegOffsetMask, 0x7bdef);
 					else
@@ -1153,40 +1153,40 @@ void
 		}
 
 	}
-	else if(pHalData->CurrentBandType92D==BAND_ON_2_4G)
+	else if (pHalData->CurrentBandType92D==BAND_ON_2_4G)
 	{
 		//RT_TRACE(COMP_CMD, DBG_LOUD, ("====>phy_SwitchRfSetting8192D interface %d 2.4G\n", Adapter->interfaceIndex));
 		//u4tmp = CurveIndex[channel-1];
 		//RT_DISP(FINIT, INIT_IQK, ("ver 3 set RF-B, 2G, 0x28 = 0x%x !!\n", u4tmp));
 
-		if(channel == 1 || channel == 2 || channel ==4 || channel == 9 || channel == 10 ||
+		if (channel == 1 || channel == 2 || channel ==4 || channel == 9 || channel == 10 ||
 			channel == 11 || channel ==12)
 			index = 0;
-		else if(channel ==3 || channel == 13 || channel == 14)
+		else if (channel ==3 || channel == 13 || channel == 14)
 			index = 1;
-		else if(channel >= 5 && channel <= 8)
+		else if (channel >= 5 && channel <= 8)
 			index = 2;
 
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
 		{
 			path = RF_PATH_A;
-			if(pHalData->interfaceIndex == 0)
+			if (pHalData->interfaceIndex == 0)
 			{
 				bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, true);
 				MaskforPhySet = MAC0_ACCESS_PHY1;
-				if(bNeedPowerDownRadio)
+				if (bNeedPowerDownRadio)
 					phy_EnableRFENV(Adapter, path,MaskforPhySet,&u4RegValue);
 			}
 
 			//DMDP, if band = 2G,MAC1 need to set PHY0 when regB30[27]=1
-			if(Regb30 && pHalData->interfaceIndex == 1)
+			if (Regb30 && pHalData->interfaceIndex == 1)
 			{
 				//RT_TRACE(COMP_MLME, DBG_LOUD, ("===============phy_SwitchRfSetting8192D interface %ld,B30&BIT27=1!!!!\n", Adapter->interfaceIndex));
 
 				bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, false);
 				MaskforPhySet= MAC1_ACCESS_PHY0;
 				//asume no this case
-				if(bNeedPowerDownRadio)
+				if (bNeedPowerDownRadio)
 					phy_EnableRFENV(Adapter, path,MaskforPhySet,&u4RegValue);
 			}
 		}
@@ -1216,17 +1216,17 @@ void
 		PHY_SetRFReg(Adapter, path, RF_SYN_G4|MaskforPhySet, bRFRegOffsetMask, RF_REG_SYN_G4_for_C_CUT_2G | (u4tmp << 11));
 #endif
 
-		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 0)
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 0)
 		{
-			if(bNeedPowerDownRadio){
+			if (bNeedPowerDownRadio){
 				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
 			PHY_PowerDownAnotherPHY(Adapter, true);
 		}
 
-		if(Regb30 && pHalData->interfaceIndex == 1)
+		if (Regb30 && pHalData->interfaceIndex == 1)
 		{
-			if(bNeedPowerDownRadio)
+			if (bNeedPowerDownRadio)
 			{
 				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
@@ -1269,13 +1269,13 @@ void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
 
     for(eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
     {
-        if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
+        if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
             pHalData->interfaceIndex == 1)      //MAC 1 5G
             bInteralPA = pHalData->InternalPA5G[1];
         else
             bInteralPA = pHalData->InternalPA5G[eRFPath];
 
-        if(!bInteralPA ||  pHalData->CurrentBandType92D==BAND_ON_2_4G)
+        if (!bInteralPA ||  pHalData->CurrentBandType92D==BAND_ON_2_4G)
 		_write_rfreg(pAdapter, (RF_RADIO_PATH_E)eRFPath, 0x03, bRFRegOffsetMask, value);
     }
  #endif
@@ -1302,13 +1302,13 @@ void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 
 	CurrCCKSwingVal = PHY_QueryBBReg(Adapter, rCCK0_TxFilter1, bMaskHWord);
 
-	if(!bInCH14)
+	if (!bInCH14)
 	{
 		// Readback the current bb cck swing value and compare with the table to
 		// get the current swing index
 		for(i=0 ; i<CCK_TABLE_SIZE ; i++)
 		{
-			if( ((CurrCCKSwingVal&0xff) == (u4Byte)CCKSwingTable_Ch1_Ch13[i][0]) &&
+			if ( ((CurrCCKSwingVal&0xff) == (u4Byte)CCKSwingTable_Ch1_Ch13[i][0]) &&
 				( ((CurrCCKSwingVal&0xff00)>>8) == (u4Byte)CCKSwingTable_Ch1_Ch13[i][1]) )
 			{
 				CCKSwingIndex = i;
@@ -1340,7 +1340,7 @@ void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 	{
 		for(i=0 ; i<CCK_TABLE_SIZE ; i++)
 		{
-			if( ((CurrCCKSwingVal&0xff) == (u4Byte)CCKSwingTable_Ch14[i][0]) &&
+			if ( ((CurrCCKSwingVal&0xff) == (u4Byte)CCKSwingTable_Ch14[i][0]) &&
 				( ((CurrCCKSwingVal&0xff00)>>8) == (u4Byte)CCKSwingTable_Ch14[i][1]) )
 			{
 				CCKSwingIndex = i;
@@ -1396,7 +1396,7 @@ void Hal_SetChannel(PADAPTER pAdapter)
 	// set RF channel register
 	for (eRFPath = 0; eRFPath < pHalData->NumTotalRFPath; eRFPath++)
 	{
-	  if(IS_HARDWARE_TYPE_8192D(pAdapter))
+	  if (IS_HARDWARE_TYPE_8192D(pAdapter))
 			_write_rfreg(pAdapter, (RF_RADIO_PATH_E)eRFPath, rRfChannel, 0xFF, channel);
 		else
 			_write_rfreg(pAdapter, eRFPath, rRfChannel, 0x3FF, channel);
@@ -1525,7 +1525,7 @@ void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
 	if (bStart) {
 		RT_TRACE(_module_mp_, _drv_info_, ("SetOFDMContinuousTx: test start\n"));
 		// 1. if OFDM block on?
-		if(!read_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
+		if (!read_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
 			write_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn, bEnable);//set OFDM block on
 		{
 
@@ -1566,7 +1566,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 			 ("SetCCKContinuousTx: test start\n"));
 
 		// 1. if CCK block on?
-		if(!read_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn))
+		if (!read_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn))
 			write_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn, bEnable);//set CCK block on
 
 		//Turn Off All Test Mode
@@ -1621,7 +1621,7 @@ void Hal_ProSetCrystalCap (PADAPTER pAdapter , u32 CrystalCapVal)
 {
 	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(pAdapter);
 
-	if(!IS_HARDWARE_TYPE_8192D(pAdapter))
+	if (!IS_HARDWARE_TYPE_8192D(pAdapter))
 		return;
 
 	//CrystalCap = pHalData->CrystalCap;

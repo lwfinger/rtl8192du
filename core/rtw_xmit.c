@@ -53,7 +53,7 @@ _func_enter_;
 
 	_rtw_spinlock_init(&psta_xmitpriv->lock);
 
-	//for(i = 0 ; i < MAX_NUMBLKS; i++)
+	//for (i = 0 ; i < MAX_NUMBLKS; i++)
 	//	_init_txservq(&(psta_xmitpriv->blk_q[i]));
 
 	_init_txservq(&psta_xmitpriv->be_q);
@@ -89,7 +89,7 @@ _func_enter_;
 
 	pxmitpriv->adapter = padapter;
 
-	//for(i = 0 ; i < MAX_NUMBLKS; i++)
+	//for (i = 0 ; i < MAX_NUMBLKS; i++)
 	//	_rtw_init_queue(&pxmitpriv->blk_strms[i]);
 
 	_rtw_init_queue(&pxmitpriv->be_pending);
@@ -317,14 +317,14 @@ void _rtw_free_xmit_priv (struct xmit_priv *pxmitpriv)
 	if (pxmitpriv->pxmit_frame_buf==NULL)
 		goto out;
 
-	for(i=0; i<NR_XMITFRAME; i++)
+	for (i=0; i<NR_XMITFRAME; i++)
 	{
 		rtw_os_xmit_complete(padapter, pxmitframe);
 
 		pxmitframe++;
 	}
 
-	for(i=0; i<NR_XMITBUFF; i++)
+	for (i=0; i<NR_XMITBUFF; i++)
 	{
 		rtw_os_xmit_resource_free(padapter, pxmitbuf,(MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
 		pxmitbuf++;
@@ -343,7 +343,7 @@ void _rtw_free_xmit_priv (struct xmit_priv *pxmitpriv)
 	_rtw_spinlock_free(&pxmitpriv->free_xmit_extbuf_queue.lock);
 
 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
-	for(i=0; i<NR_XMIT_EXTBUFF; i++)
+	for (i=0; i<NR_XMIT_EXTBUFF; i++)
 	{
 		rtw_os_xmit_resource_free(padapter, pxmitbuf,(MAX_XMIT_EXTBUF_SZ + XMITBUF_ALIGN_SZ));
 
@@ -913,7 +913,7 @@ _func_enter_;
 
 			payload=pframe;
 
-			for(curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
+			for (curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
 				payload=(u8 *)RND4((SIZE_PTR)(payload));
 				RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("===curfragnum=%d, pframe= 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x,!!!\n",
 					curfragnum,*payload, *(payload+1),*(payload+2),*(payload+3),*(payload+4),*(payload+5),*(payload+6),*(payload+7)));
@@ -945,7 +945,7 @@ _func_enter_;
 
 			RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("\n ========last pkt========\n"));
 			payload=payload-pattrib->last_txcmdsz+8;
-			for(curfragnum=0;curfragnum<pattrib->last_txcmdsz;curfragnum=curfragnum+8)
+			for (curfragnum=0;curfragnum<pattrib->last_txcmdsz;curfragnum=curfragnum+8)
 					RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,(" %.2x,  %.2x,  %.2x,  %.2x,  %.2x,  %.2x,  %.2x,  %.2x ",
 					*(payload+curfragnum), *(payload+curfragnum+1), *(payload+curfragnum+2),*(payload+curfragnum+3),
 					*(payload+curfragnum+4),*(payload+curfragnum+5),*(payload+curfragnum+6),*(payload+curfragnum+7)));
@@ -2231,9 +2231,9 @@ _func_enter_;
 		acirp_cnt[2] = pxmitpriv->beq_cnt;
 		acirp_cnt[3] = pxmitpriv->bkq_cnt;
 
-		for(i=0; i<4; i++)
+		for (i=0; i<4; i++)
 		{
-			for(j=i+1; j<4; j++)
+			for (j=i+1; j<4; j++)
 			{
 				if (acirp_cnt[j]<acirp_cnt[i])
 				{
@@ -2251,7 +2251,7 @@ _func_enter_;
 
 	spin_lock_bh(&pxmitpriv->lock);
 
-	for(i = 0; i < entry; i++)
+	for (i = 0; i < entry; i++)
 	{
 		phwxmit = phwxmit_i + inx[i];
 
@@ -2450,7 +2450,7 @@ void rtw_init_hwxmits(struct hw_xmit *phwxmit, int entry)
 {
 	int i;
 _func_enter_;
-	for(i = 0; i < entry; i++, phwxmit++)
+	for (i = 0; i < entry; i++, phwxmit++)
 	{
 		//_rtw_spinlock_init(&phwxmit->xmit_lock);
 		//INIT_LIST_HEAD(&phwxmit->pending);

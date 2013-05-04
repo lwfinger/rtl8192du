@@ -81,7 +81,7 @@ _func_enter_;
 
 	pnetwork = (struct wlan_network *)pbuf;
 
-	for(i = 0; i < MAX_BSS_CNT; i++)
+	for (i = 0; i < MAX_BSS_CNT; i++)
 	{
 		INIT_LIST_HEAD(&(pnetwork->list));
 
@@ -1490,7 +1490,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct rtw_adapter *padapter,
 		//for A-MPDU Rx reordering buffer control for bmc_sta & sta_info
 		//if A-MPDU Rx is enabled, reseting  rx_ordering_ctrl wstart_b(indicate_seq) to default value=0xffff
 		//todo: check if AP can send A-MPDU packets
-		for(i=0; i < 16 ; i++)
+		for (i=0; i < 16 ; i++)
 		{
 			//preorder_ctrl = &precvpriv->recvreorder_ctrl[i];
 			preorder_ctrl = &psta->recvreorder_ctrl[i];
@@ -1508,7 +1508,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct rtw_adapter *padapter,
 		bmc_sta = rtw_get_bcmc_stainfo(padapter);
 		if (bmc_sta)
 		{
-			for(i=0; i < 16 ; i++)
+			for (i=0; i < 16 ; i++)
 			{
 				//preorder_ctrl = &precvpriv->recvreorder_ctrl[i];
 				preorder_ctrl = &bmc_sta->recvreorder_ctrl[i];
@@ -2661,7 +2661,7 @@ int rtw_restruct_wmm_ie(struct rtw_adapter *adapter, u8 *in_ie, u8 *out_ie, uint
 
 			//Append WMM IE to the last index of out_ie
 			/*
-			for(j=i; j< i+(in_ie[i+1]+2); j++)
+			for (j=i; j< i+(in_ie[i+1]+2); j++)
 			{
 				out_ie[ielength] = in_ie[j];
 				ielength++;

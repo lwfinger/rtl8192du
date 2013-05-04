@@ -119,7 +119,7 @@ _BlockWrite_92d(
 
 	blockCount = size / blockSize;
 	remain8 = size % blockSize;
-	for(i = 0 ; i < blockCount ; i++){
+	for (i = 0 ; i < blockCount ; i++){
 		offset = i * blockSize;
 		ret = rtw_writeN(Adapter, (FW_8192D_START_ADDRESS + offset), 64,(bufferPtr + offset));
 
@@ -134,7 +134,7 @@ _BlockWrite_92d(
 		blockCount8=remain8/blockSize8;
 		remain4=remain8%blockSize8;
 		//RT_TRACE(COMP_INIT,DBG_LOUD,("remain4 size %x blockcount %x blockCount8 %x\n",remain4,blockCount,blockCount8));
-		for(i = 0 ; i < blockCount8 ; i++){
+		for (i = 0 ; i < blockCount8 ; i++){
 			ret = rtw_writeN(Adapter, (FW_8192D_START_ADDRESS + offset+i*blockSize8), 8,(bufferPtr + offset+i*blockSize8));
 
 			if (ret == _FAIL)
@@ -146,7 +146,7 @@ _BlockWrite_92d(
 			blockCount4=remain4/blocksize4;
 			remainSize=remain8%blocksize4;
 
-			for(i = 0 ; i < blockCount4 ; i++){
+			for (i = 0 ; i < blockCount4 ; i++){
 				ret = rtw_write32(Adapter, (FW_8192D_START_ADDRESS + offset+i*blocksize4), cpu_to_le32(*(pu4BytePtr+ offset/4+i)));
 
 				if (ret == _FAIL)
@@ -155,7 +155,7 @@ _BlockWrite_92d(
 
 			if (remainSize){
 				offset=blockCount * blockSize+blockCount8*blockSize8+blockCount4*blocksize4;
-				for(i = 0 ; i < remainSize ; i++){
+				for (i = 0 ; i < remainSize ; i++){
 					ret = rtw_write8(Adapter, (FW_8192D_START_ADDRESS + offset + i), *(bufferPtr +offset+ i));
 
 					if (ret == _FAIL)
@@ -204,7 +204,7 @@ _WriteFW(
 	pageNums = size / MAX_PAGE_SIZE ;
 	remainSize = size % MAX_PAGE_SIZE;
 
-	for(page = 0; page < pageNums;  page++){
+	for (page = 0; page < pageNums;  page++){
 		offset = page *MAX_PAGE_SIZE;
 		ret = _PageWrite(Adapter,page, (bufferPtr+offset),MAX_PAGE_SIZE);
 
@@ -515,7 +515,7 @@ int FirmwareDownload92D(
 	else if (bFwDownloadInProcess)
 	{
 		RELEASE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
-		for(count=0;count<5000;count++)
+		for (count=0;count<5000;count++)
 		{
 			rtw_udelay_os(500);
 			ACQUIRE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
@@ -782,8 +782,8 @@ hal_ReadPowerValueFromPROM92D(
 	memset(pwrInfo, 0, sizeof(struct tx_power_info));
 
 	if (AutoLoadFail){
-		for(group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
-			for(rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
+		for (group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
+			for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
 				if (group< CHANNEL_GROUP_MAX_2G)
 				{
 					pwrInfo->CCKIndex[rfPath][group]		= EEPROM_Default_TxPowerLevel_2G;
@@ -801,7 +801,7 @@ hal_ReadPowerValueFromPROM92D(
 			}
 		}
 
-		for(i = 0; i < 3; i++)
+		for (i = 0; i < 3; i++)
 		{
 			pwrInfo->TSSI_A_5G[i] = EEPROM_Default_TSSI;
 			pwrInfo->TSSI_B_5G[i] = EEPROM_Default_TSSI;
@@ -812,8 +812,8 @@ hal_ReadPowerValueFromPROM92D(
 
 	//Maybe autoload OK,buf the tx power index vlaue is not filled.
 	//If we find it,we set it default value.
-	for(rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
-		for(group = 0 ; group < CHANNEL_GROUP_MAX_2G; group++){
+	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
+		for (group = 0 ; group < CHANNEL_GROUP_MAX_2G; group++){
 			eeAddr = EEPROM_CCK_TX_PWR_INX_2G + (rfPath * 3) + group;
 			pwrInfo->CCKIndex[rfPath][group] =
 				(PROMContent[eeAddr] == 0xFF)?(eeAddr>0x7B?EEPROM_Default_TxPowerLevel_5G:EEPROM_Default_TxPowerLevel_2G):PROMContent[eeAddr];
@@ -821,8 +821,8 @@ hal_ReadPowerValueFromPROM92D(
 				pHalData->bNOPG = true;
 		}
 	}
-	for(rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
-		for(group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
+	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
+		for (group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
 			offset1 = group / 3;
 			offset2 = group % 3;
 			eeAddr = EEPROM_HT40_1S_TX_PWR_INX_2G+ (rfPath * 3) + offset2 + offset1*21;
@@ -832,8 +832,8 @@ hal_ReadPowerValueFromPROM92D(
 	}
 
 	//These just for 92D efuse offset.
-	for(group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
-		for(rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
+	for (group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
+		for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
 			offset1 = group / 3;
 			offset2 = group % 3;
 
@@ -895,7 +895,7 @@ hal_ReadPowerValueFromPROM92D(
 	}
 	else
 	{
-		for(i = 0; i < 3; i++)
+		for (i = 0; i < 3; i++)
 		{
 			pwrInfo->TSSI_A_5G[i] = EEPROM_Default_TSSI;
 			pwrInfo->TSSI_B_5G[i] = EEPROM_Default_TSSI;
@@ -994,7 +994,7 @@ rtl8192d_ReadTxPowerInfo(
 	if (pHalData->EEPROMRegulatory >3)
 		pHalData->EEPROMRegulatory = 0;
 
-	for(i = 0; i < 2; i++)
+	for (i = 0; i < 2; i++)
 	{
 		switch(tempval[i])
 		{
@@ -1035,8 +1035,8 @@ rtl8192d_ReadTxPowerInfo(
 	//RTPRINT(FINIT, INIT_TxPower, ("CrystalCap = 0x%x\n", pHalData->CrystalCap));
 	//RTPRINT(FINIT, INIT_TxPower, ("Delta_IQK = 0x%x Delta_LCK = 0x%x\n", pHalData->Delta_IQK, pHalData->Delta_LCK));
 
-	for(rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
-		for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
+		for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
 			group = Hal_GetChnlGroupfromArray((u8)ch);
 
 			if (ch < CHANNEL_MAX_NUMBER_2G)
@@ -1057,8 +1057,8 @@ rtl8192d_ReadTxPowerInfo(
 
 #if DBG
 
-	for(rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
-		for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
+		for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
 			if (ch < CHANNEL_MAX_NUMBER_2G)
 			{
 				DBG_8192D("RF(%d)-Ch(%d) [CCK / HT40_1S / HT40_2S] = [0x%x / 0x%x / 0x%x]\n",
@@ -1077,19 +1077,19 @@ rtl8192d_ReadTxPowerInfo(
 		}
 	}
 
-	for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
 		DBG_8192D("RF-A Ht20 to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrHt20Diff[RF_PATH_A][ch]);
 	}
 
-	for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
 		DBG_8192D("RF-A Legacy to Ht40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrLegacyHtDiff[RF_PATH_A][ch]);
 	}
 
-	for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
 		DBG_8192D("RF-B Ht20 to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrHt20Diff[RF_PATH_B][ch]);
 	}
 
-	for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
 		DBG_8192D("RF-B Legacy to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrLegacyHtDiff[RF_PATH_B][ch]);
 	}
 
@@ -1244,7 +1244,7 @@ PHY_SetPowerOnFor8192D(
 		value8 = rtw_read8(Adapter, REG_POWER_OFF_IN_PROCESS);
 		RELEASE_GLOBAL_MUTEX(GlobalMutexForPowerOnAndPowerOff);
 
-		for(i=0;i<200;i++)
+		for (i=0;i<200;i++)
 		{
 			if ((value8&BIT7) == 0)
 			{
@@ -1434,7 +1434,7 @@ ReadEFuse_RTL8192D(
 			// Get word enable value from PG header
 			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Offset-%d Worden=%x\n", offset, wren));
 
-			for(i=0; i<EFUSE_MAX_WORD_UNIT; i++)
+			for (i=0; i<EFUSE_MAX_WORD_UNIT; i++)
 			{
 				// Check word enable condition in the section
 				if (!(wren & 0x01))
@@ -1481,9 +1481,9 @@ ReadEFuse_RTL8192D(
 	//
 	// 3. Collect 16 sections and 4 word unit into Efuse map.
 	//
-	for(i=0; i<EFUSE_MAX_SECTION; i++)
+	for (i=0; i<EFUSE_MAX_SECTION; i++)
 	{
-		for(j=0; j<EFUSE_MAX_WORD_UNIT; j++)
+		for (j=0; j<EFUSE_MAX_WORD_UNIT; j++)
 		{
 			efuseTbl[(i*8)+(j*2)]=(eFuseWord[i][j] & 0xff);
 			efuseTbl[(i*8)+((j*2)+1)]=((eFuseWord[i][j] >> 8) & 0xff);
@@ -1493,7 +1493,7 @@ ReadEFuse_RTL8192D(
 	//
 	// 4. Copy from Efuse map to output pointer memory!!!
 	//
-	for(i=0; i<_size_byte; i++)
+	for (i=0; i<_size_byte; i++)
 	{
 		pbuf[i] = efuseTbl[_offset+i];
 	}
@@ -1782,7 +1782,7 @@ rtl8192d_Efuse_PgPacketRead(	struct rtw_adapter *	pAdapter,
 				bDataEmpty = true ;
 
 				if (hoffset==offset){
-					for(tmpidx = 0;tmpidx< word_cnts*2 ;tmpidx++){
+					for (tmpidx = 0;tmpidx< word_cnts*2 ;tmpidx++){
 						if (efuse_OneByteRead(pAdapter, efuse_addr+1+tmpidx ,&efuse_data, bPseudoTest) ){
 							tmpdata[tmpidx] = efuse_data;
 							if (efuse_data!=0xff){
@@ -1947,7 +1947,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 					//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite section offset the same\n"));
 
 					//************  so-2 *******************
-					for(tmpindex=0 ; tmpindex<(tmp_word_cnts*2) ; tmpindex++)
+					for (tmpindex=0 ; tmpindex<(tmp_word_cnts*2) ; tmpindex++)
 					{
 						if (efuse_OneByteRead(pAdapter, (efuse_addr+1+tmpindex) ,&efuse_data, bPseudoTest)&&(efuse_data != 0xFF)){
 							bDataEmpty = false;

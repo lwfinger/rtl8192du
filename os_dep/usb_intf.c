@@ -603,7 +603,7 @@ static void process_spec_devid(const struct usb_device_id *pdid)
 	int i;
 	int num = sizeof(specific_device_id_tbl)/sizeof(struct specific_device_id);
 
-	for(i=0; i<num; i++)
+	for (i=0; i<num; i++)
 	{
 		vid = specific_device_id_tbl[i].idVendor;
 		pid = specific_device_id_tbl[i].idProduct;
@@ -944,7 +944,7 @@ int rtw_resume_process(struct rtw_adapter *padapter)
 			{
 				int keyid;
 
-				for(keyid=0;keyid<4;keyid++){
+				for (keyid=0;keyid<4;keyid++){
 					if (pwrpriv->wepkeymask & BIT(keyid)) {
 						if (keyid == padapter->securitypriv.dot11PrivacyKeyIndex)
 							rtw_set_key(padapter,&padapter->securitypriv, keyid, 1);
@@ -1319,7 +1319,7 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 		goto free_if1;
 	}
 #ifdef CONFIG_MULTI_VIR_IFACES
-	for(i=0; i<if1->registrypriv.ext_iface_num;i++)
+	for (i=0; i<if1->registrypriv.ext_iface_num;i++)
 	{
 		if (rtw_drv_add_vir_if (if1, "wlan%d", usb_set_intf_ops) == NULL)
 		{

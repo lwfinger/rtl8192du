@@ -1791,7 +1791,7 @@ void rtw_drv_stop_vir_ifaces(struct dvobj_priv *dvobj)
 	int i;
 	/* struct dvobj_priv *dvobj = primary_padapter->dvobj; */
 
-	for(i = 2;i<dvobj->iface_nums;i++)
+	for (i = 2;i<dvobj->iface_nums;i++)
 	{
 		rtw_drv_stop_vir_if (dvobj->padapters[i]);
 	}
@@ -1802,7 +1802,7 @@ void rtw_drv_free_vir_ifaces(struct dvobj_priv *dvobj)
 	int i;
 	/* struct dvobj_priv *dvobj = primary_padapter->dvobj; */
 
-	for(i = 2;i<dvobj->iface_nums;i++)
+	for (i = 2;i<dvobj->iface_nums;i++)
 	{
 		rtw_drv_free_vir_if (dvobj->padapters[i]);
 	}
@@ -1819,7 +1819,7 @@ void rtw_drv_del_vir_ifaces(struct rtw_adapter *primary_padapter)
 	int i;
 	struct dvobj_priv *dvobj = primary_padapter->dvobj;
 
-	for(i = 2;i<dvobj->iface_nums;i++)
+	for (i = 2;i<dvobj->iface_nums;i++)
 	{
 		rtw_drv_del_vir_if (dvobj->padapters[i]);
 	}

@@ -182,7 +182,7 @@ _func_enter_;
 				memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex, 1);
 				//PlatformEFIOWrite4Byte(Adapter, BOXReg, *((pu4Byte)BoxContent));
 				//For Endian Free.
-				for(idx= 0; idx < 4; idx++)
+				for (idx= 0; idx < 4; idx++)
 				{
 					rtw_write8(padapter, BOXReg+idx, BoxContent[idx]);
 				}
@@ -193,7 +193,7 @@ _func_enter_;
 				BoxContent[0] &= ~(BIT7);
 				memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex, 2);
 				//PlatformEFIOWrite4Byte(Adapter, BOXReg, *((pu4Byte)BoxContent));
-				for(idx=0; idx < 4; idx++)
+				for (idx=0; idx < 4; idx++)
 				{
 					rtw_write8(padapter, BOXReg+idx, BoxContent[idx]);
 				}
@@ -204,7 +204,7 @@ _func_enter_;
 				BoxContent[0] &= ~(BIT7);
 				memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex, 3);
 				//PlatformEFIOWrite4Byte(Adapter, BOXReg, *((pu4Byte)BoxContent));
-				for(idx = 0; idx < 4 ; idx++)
+				for (idx = 0; idx < 4 ; idx++)
 				{
 					rtw_write8(padapter, BOXReg+idx, BoxContent[idx]);
 				}
@@ -217,11 +217,11 @@ _func_enter_;
 				memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex+2, 2);
 				//PlatformEFIOWrite2Byte(Adapter, BOXExtReg, *((pu2Byte)BoxExtContent));
 				//PlatformEFIOWrite4Byte(Adapter, BOXReg, *((pu4Byte)BoxContent));
-				for(idx = 0 ; idx < 2 ; idx ++)
+				for (idx = 0 ; idx < 2 ; idx ++)
 				{
 					rtw_write8(padapter, BOXExtReg+idx, BoxExtContent[idx]);
 				}
-				for(idx = 0 ; idx < 4 ; idx ++)
+				for (idx = 0 ; idx < 4 ; idx ++)
 				{
 					rtw_write8(padapter, BOXReg+idx, BoxContent[idx]);
 				}
@@ -234,11 +234,11 @@ _func_enter_;
 				memcpy((u8 *)(BoxContent)+1, pCmdBuffer+BufIndex+2, 3);
 				//PlatformEFIOWrite2Byte(Adapter, BOXExtReg, *((pu2Byte)BoxExtContent));
 				//PlatformEFIOWrite4Byte(Adapter, BOXReg, *((pu4Byte)BoxContent));
-				for(idx = 0 ; idx < 2 ; idx ++)
+				for (idx = 0 ; idx < 2 ; idx ++)
 				{
 					rtw_write8(padapter, BOXExtReg+idx, BoxExtContent[idx]);
 				}
-				for(idx = 0 ; idx < 4 ; idx ++)
+				for (idx = 0 ; idx < 4 ; idx ++)
 				{
 					rtw_write8(padapter, BOXReg+idx, BoxContent[idx]);
 				}
@@ -928,7 +928,7 @@ _func_enter_;
 			}
 
 			// hw only support 2 set of NoA
-			for( i=0 ; i<pwdinfo->noa_num ; i++)
+			for ( i=0 ; i<pwdinfo->noa_num ; i++)
 			{
 				// To control the register setting for which NOA
 				rtw_write8(padapter, 0x5CF, (i << 4));

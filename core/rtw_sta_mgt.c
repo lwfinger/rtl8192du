@@ -102,7 +102,7 @@ _func_enter_;
 	psta = (struct sta_info *)(pstapriv->pstainfo_buf);
 
 
-	for(i = 0; i < NUM_STA; i++) {
+	for (i = 0; i < NUM_STA; i++) {
 		_rtw_init_stainfo(psta);
 
 		INIT_LIST_HEAD(&(pstapriv->sta_hash[i]));
@@ -264,7 +264,7 @@ _func_enter_;
 
 		/*	delete all reordering_ctrl_timer		*/
 		spin_lock_bh(&pstapriv->sta_hash_lock);
-		for(index = 0; index < NUM_STA; index++)
+		for (index = 0; index < NUM_STA; index++)
 		{
 			phead = &(pstapriv->sta_hash[index]);
 			plist = get_next(phead);
@@ -275,7 +275,7 @@ _func_enter_;
 				psta = LIST_CONTAINOR(plist, struct sta_info ,hash_list);
 				plist = get_next(plist);
 
-				for(i=0; i < 16 ; i++)
+				for (i=0; i < 16 ; i++)
 				{
 					preorder_ctrl = &psta->recvreorder_ctrl[i];
 					_cancel_timer_ex(&preorder_ctrl->reordering_ctrl_timer);
@@ -358,7 +358,7 @@ _func_enter_;
 // In this case, this packet will be dropped by recv_decache function if we use the 0x00 as the default value for tid_rxseq variable.
 // So, we initialize the tid_rxseq variable as the 0xffff.
 
-		for( i = 0; i < 16; i++ )
+		for ( i = 0; i < 16; i++ )
                      memcpy( &psta->sta_recvpriv.rxcache.tid_rxseq[ i ], &wRxSeqInitialValue, 2 );
 
 		RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_info_,("alloc number_%d stainfo  with hwaddr = %x %x %x %x %x %x  \n",
@@ -377,7 +377,7 @@ _func_enter_;
 #endif //CONFIG_TDLS
 
 		//for A-MPDU Rx reordering buffer control
-		for(i=0; i < 16 ; i++)
+		for (i=0; i < 16 ; i++)
 		{
 			preorder_ctrl = &psta->recvreorder_ctrl[i];
 
@@ -483,7 +483,7 @@ _func_enter_;
 #endif //CONFIG_TDLS
 
 	//for A-MPDU Rx reordering buffer control, cancel reordering_ctrl_timer
-	for(i=0; i < 16 ; i++)
+	for (i=0; i < 16 ; i++)
 	{
 		struct list_head *phead, *plist;
 		union recv_frame *prframe;
@@ -587,7 +587,7 @@ _func_enter_;
 
 	spin_lock_bh(&pstapriv->sta_hash_lock);
 
-	for(index=0; index< NUM_STA; index++)
+	for (index=0; index< NUM_STA; index++)
 	{
 		phead = &(pstapriv->sta_hash[index]);
 		plist = get_next(phead);

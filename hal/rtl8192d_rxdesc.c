@@ -249,7 +249,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 		//
 		// (1)Get RSSI for HT rate
 		//
-		for(i=0; i<pHalData->NumTotalRFPath; i++)
+		for (i=0; i<pHalData->NumTotalRFPath; i++)
 		{
 			// 2008/01/30 MH we will judge RF RX path now.
 			if (pHalData->bRFPathRxEnable[i])
@@ -333,7 +333,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 			else
 				max_spatial_stream = 1; //only spatial stream 1 makes sense
 
-			for(i=0; i<max_spatial_stream; i++)
+			for (i=0; i<max_spatial_stream; i++)
 			{
 				// Do not use shift operation like "rx_evmX >>= 1" because the compilor of free build environment
 				// fill most significant bit to "zero" when doing shifting operation which may change a negative

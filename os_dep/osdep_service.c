@@ -50,7 +50,7 @@ u32 rtw_atoi(u8* s)
 
 	int num=0,flag=0;
 	int i;
-	for(i=0;i<=strlen(s);i++)
+	for (i=0;i<=strlen(s);i++)
 	{
 	  if (s[i] >= '0' && s[i] <= '9')
 		 num = num * 10 + s[i] -'0';

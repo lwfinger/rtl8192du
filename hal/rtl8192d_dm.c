@@ -1354,7 +1354,7 @@ static void PWDB_Monitor(
 
 		spin_lock_bh(&pstapriv->sta_hash_lock);
 
-		for(i=0; i< NUM_STA; i++)
+		for (i=0; i< NUM_STA; i++)
 		{
 			phead = &(pstapriv->sta_hash[i]);
 			plist = get_next(phead);
@@ -1388,7 +1388,7 @@ static void PWDB_Monitor(
 		if (pHalData->fw_ractrl == true)
 		{
 			// Report every sta's RSSI to FW
-			for(i=0; i< sta_cnt; i++)
+			for (i=0; i< sta_cnt; i++)
 			{
 				FillH2CCmd92D(Adapter, H2C_RSSI_REPORT, 3, (u8 *)(&PWDB_rssi[i]));
 			}
@@ -1630,7 +1630,7 @@ dm_RXGainTrackingCallback_ThermalMeter_92D(
 
 	//DBG_8192D("===>dm_RXGainTrackingCallback_ThermalMeter_92D interface %d  Rx Gain %x\n", pHalData->interfaceIndex, u4tmp);
 
-	for(eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++){
+	for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++){
 		PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_RXRF_A3, bRFRegOffsetMask, (pdmpriv->RegRF3C[eRFPath]&(~(0xF000)))|u4tmp);
 	}
 
@@ -1721,7 +1721,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 		{
 			//Query OFDM path A default setting
 			ele_D = PHY_QueryBBReg(Adapter, rOFDM0_XATxIQImbalance, bMaskDWord)&bMaskOFDM_D;
-			for(i=0; i<OFDM_TABLE_SIZE_92D; i++)	//find the index
+			for (i=0; i<OFDM_TABLE_SIZE_92D; i++)	//find the index
 			{
 				if (ele_D == (OFDMSwingTable[i]&bMaskOFDM_D))
 				{
@@ -1736,7 +1736,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 			if (is2T)
 			{
 				ele_D = PHY_QueryBBReg(Adapter, rOFDM0_XBTxIQImbalance, bMaskDWord)&bMaskOFDM_D;
-				for(i=0; i<OFDM_TABLE_SIZE_92D; i++)	//find the index
+				for (i=0; i<OFDM_TABLE_SIZE_92D; i++)	//find the index
 				{
 					if (ele_D == (OFDMSwingTable[i]&bMaskOFDM_D))
 					{
@@ -1753,7 +1753,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 				//Query CCK default setting From 0xa24
 				TempCCk = pdmpriv->RegA24;
 
-				for(i=0 ; i<CCK_TABLE_SIZE ; i++)
+				for (i=0 ; i<CCK_TABLE_SIZE ; i++)
 				{
 					if (pdmpriv->bCCKinCH14)
 					{
@@ -1790,7 +1790,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 				pdmpriv->ThermalValue_IQK = ThermalValue;
 				pdmpriv->ThermalValue_RxGain = pHalData->EEPROMThermalMeter;
 
-				for(i = 0; i < rf; i++)
+				for (i = 0; i < rf; i++)
 					pdmpriv->OFDM_index[i] = OFDM_index_old[i];
 				pdmpriv->CCK_index = CCK_index_old;
 			}
@@ -1807,7 +1807,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 				if (pdmpriv->ThermalValue_AVG_index == AVG_THERMAL_NUM)
 					pdmpriv->ThermalValue_AVG_index = 0;
 
-				for(i = 0; i < AVG_THERMAL_NUM; i++)
+				for (i = 0; i < AVG_THERMAL_NUM; i++)
 				{
 					if (pdmpriv->ThermalValue_AVG[i])
 					{
@@ -1865,20 +1865,20 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 
 					if (ThermalValue > pHalData->EEPROMThermalMeter)
 					{
-						for(i = 0; i < rf; i++)
+						for (i = 0; i < rf; i++)
 							OFDM_index[i] = pdmpriv->OFDM_index[i] -delta;
 						CCK_index = pdmpriv->CCK_index -delta;
 					}
 					else
 					{
-						for(i = 0; i < rf; i++)
+						for (i = 0; i < rf; i++)
 							OFDM_index[i] = pdmpriv->OFDM_index[i] + index;
 						CCK_index = pdmpriv->CCK_index + index;
 					}
 				}
 				else if (pHalData->CurrentBandType92D == BAND_ON_5G)
 				{
-					for(i = 0; i < rf; i++)
+					for (i = 0; i < rf; i++)
 					{
 						if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
 							pHalData->interfaceIndex == 1)		//MAC 1 5G
@@ -1951,7 +1951,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 						pdmpriv->OFDM_index[0], pdmpriv->CCK_index);
 				}*/
 
-				for(i = 0; i < rf; i++)
+				for (i = 0; i < rf; i++)
 				{
 					if (OFDM_index[i] > OFDM_TABLE_SIZE_92D-1)
 					{
@@ -2457,7 +2457,7 @@ rtl8192d_InitHalDm(
 	pdmpriv->DMFlag_tmp = pdmpriv->DMFlag;
 
 	// Save REG_INIDATA_RATE_SEL value for TXDESC.
-	for(i = 0 ; i<32 ; i++)
+	for (i = 0 ; i<32 ; i++)
 	{
 		pdmpriv->INIDATA_RATE[i] = rtw_read8(Adapter, REG_INIDATA_RATE_SEL+i) & 0x3f;
 	}
@@ -2691,7 +2691,7 @@ _record_initrate:
 			if (Adapter->tdlsinfo.setup_state == TDLS_LINKED_STATE)
 			{
 				u8 i=1;
-				for(; i < (Adapter->tdlsinfo.macid_index) ; i++)
+				for (; i < (Adapter->tdlsinfo.macid_index) ; i++)
 				{
 					pdmpriv->INIDATA_RATE[i] = rtw_read8(Adapter, (REG_INIDATA_RATE_SEL+i)) & 0x3f;
 				}
@@ -2702,7 +2702,7 @@ _record_initrate:
 		else
 		{
 			u8	i;
-			for(i=1 ; i < (Adapter->stapriv.asoc_sta_count + 1); i++)
+			for (i=1 ; i < (Adapter->stapriv.asoc_sta_count + 1); i++)
 			{
 				pdmpriv->INIDATA_RATE[i] = rtw_read8(Adapter, (REG_INIDATA_RATE_SEL+i)) & 0x3f;
 			}

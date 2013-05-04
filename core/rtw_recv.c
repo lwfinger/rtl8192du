@@ -45,7 +45,7 @@ _func_enter_;
 
 	_rtw_spinlock_init(&psta_recvpriv->lock);
 
-	//for(i=0; i<MAX_RX_NUMBLKS; i++)
+	//for (i=0; i<MAX_RX_NUMBLKS; i++)
 	//	_rtw_init_queue(&psta_recvpriv->blk_strms[i]);
 
 	_rtw_init_queue(&psta_recvpriv->defrag_q);
@@ -94,7 +94,7 @@ _func_enter_;
 	precvframe = (union recv_frame*) precvpriv->precv_frame_buf;
 
 
-	for(i=0; i < NR_RECVFRAME ; i++)
+	for (i=0; i < NR_RECVFRAME ; i++)
 	{
 		INIT_LIST_HEAD(&(precvframe->u.list));
 
@@ -489,7 +489,7 @@ _func_enter_;
 
 			bmic_err=false;
 
-			for(i=0;i<8;i++){
+			for (i=0;i<8;i++){
 				if (miccode[i] != *(pframemic+i)){
 					RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvframe_chkmic:miccode[%d](%02x) != *(pframemic+%d)(%02x) ",i,miccode[i],i,*(pframemic+i)));
 					bmic_err=true;
@@ -507,7 +507,7 @@ _func_enter_;
 				{
 					uint i;
 					RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("\n ======demp packet (len=%d)======\n",precvframe->u.hdr.len));
-					for(i=0;i<precvframe->u.hdr.len;i=i+8){
+					for (i=0;i<precvframe->u.hdr.len;i=i+8){
 						RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x",
 							*(precvframe->u.hdr.rx_data+i),*(precvframe->u.hdr.rx_data+i+1),
 							*(precvframe->u.hdr.rx_data+i+2),*(precvframe->u.hdr.rx_data+i+3),
@@ -2308,7 +2308,7 @@ int amsdu_to_msdu(struct rtw_adapter *padapter, union recv_frame *prframe)
 		}
 	}
 
-	for(i=0; i<nr_subframes; i++){
+	for (i=0; i<nr_subframes; i++){
 		sub_skb = subframes[i];
 		/* convert hdr + possible LLC headers into Ethernet header */
 #ifdef ENDIAN_FREE

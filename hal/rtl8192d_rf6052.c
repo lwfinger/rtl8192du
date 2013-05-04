@@ -126,7 +126,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 	switch(Bandwidth)
 	{
 		case HT_CHANNEL_WIDTH_20:
-			for(eRFPath=0;eRFPath<pHalData->NumTotalRFPath;eRFPath++)
+			for (eRFPath=0;eRFPath<pHalData->NumTotalRFPath;eRFPath++)
 			{
 				pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffff3ff) | 0x0400);
 				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT10|BIT11, 0x01);
@@ -135,7 +135,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 			break;
 
 		case HT_CHANNEL_WIDTH_40:
-			for(eRFPath=0;eRFPath<pHalData->NumTotalRFPath;eRFPath++)
+			for (eRFPath=0;eRFPath<pHalData->NumTotalRFPath;eRFPath++)
 			{
 				pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffff3ff));
 				//PHY_SetRFReg(Adapter, eRFPath, RF_CHNLBW, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
@@ -193,7 +193,7 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 
 		if (TurboScanOff)
 		{
-			for(idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
+			for (idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
 			{
 				TxAGC[idx1] =
 					pPowerlevel[idx1] | (pPowerlevel[idx1]<<8) |
@@ -208,7 +208,7 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 // Currently, we cannot fully disable driver dynamic tx power mechanism because it is referenced by BT coexist mechanism.
 // In the future, two mechanism shall be separated from each other and maintained independantly. Thanks for Lanhsin's reminder.
 		{
-			for(idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
+			for (idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
 			{
 				TxAGC[idx1] =
 					pPowerlevel[idx1] | (pPowerlevel[idx1]<<8) |
@@ -228,10 +228,10 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 		}
 	}
 
-	for(idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
+	for (idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
 	{
 		ptr = (u8 *)(&(TxAGC[idx1]));
-		for(idx2=0; idx2<4; idx2++)
+		for (idx2=0; idx2<4; idx2++)
 		{
 			if (*ptr > RF6052_MAX_TX_PWR)
 				*ptr = RF6052_MAX_TX_PWR;
@@ -276,7 +276,7 @@ static void getPowerBase(
 	s8	HT20_pwrdiff=0;
 	u8	i, powerlevel[2];
 
-	for(i=0; i<2; i++)
+	for (i=0; i<2; i++)
 	{
 		powerlevel[i] = pPowerLevel[i];
 		Legacy_pwrdiff = pHalData->TxPwrLegacyHtDiff[i][Channel-1];
@@ -287,7 +287,7 @@ static void getPowerBase(
 		//RTPRINT(FPHY, PHY_TXPWR, (" [OFDM power base index rf(%c) = 0x%x]\n", ((i==0)?'A':'B'), *(OfdmBase+i)));
 	}
 
-	for(i=0; i<2; i++)
+	for (i=0; i<2; i++)
 	{
 		//Check HT20 to HT40 diff
 		if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
@@ -345,7 +345,7 @@ static void getTxPowerWriteValByRegulatory(
 	//
 	// Index 0 & 1= legacy OFDM, 2-5=HT_MCS rate
 	//
-	for(rf=0; rf<2; rf++)
+	for (rf=0; rf<2; rf++)
 	{
 		switch(pHalData->EEPROMRegulatory)
 		{
@@ -481,10 +481,10 @@ static void writeOFDMPowerReg(
 	u32	writeVal;
 	u16	RegOffset;
 
-	for(rf=0; rf<2; rf++)
+	for (rf=0; rf<2; rf++)
 	{
 		writeVal = pValue[rf];
-		for(i=0; i<4; i++)
+		for (i=0; i<4; i++)
 		{
 			pwr_val[i] = (u8)((writeVal & (0x7f<<(i*8)))>>(i*8));
 			if (pwr_val[i]  > RF6052_MAX_TX_PWR)
@@ -510,7 +510,7 @@ static void writeOFDMPowerReg(
 				RegOffset = 0xc90;
 			if (RegOffset == rTxAGC_B_Mcs15_Mcs12 || RegOffset == rTxAGC_B_Mcs07_Mcs04)
 				RegOffset = 0xc98;
-			for(i=0; i<3; i++)
+			for (i=0; i<3; i++)
 			{
 				if (i!=2)
 					writeVal = (writeVal>8)?(writeVal-8):0;
@@ -556,7 +556,7 @@ rtl8192d_PHY_RF6052SetOFDMTxPower(
 
 	getPowerBase(Adapter, pPowerLevel, Channel, &powerBase0[0], &powerBase1[0]);
 
-	for(index=0; index<6; index++)
+	for (index=0; index<6; index++)
 	{
 		getTxPowerWriteValByRegulatory(Adapter, pPowerLevel, Channel, index,
 			&powerBase0[0], &powerBase1[0], &writeVal[0]);
@@ -697,7 +697,7 @@ phy_RF6052_Config_ParaFile(
 	//3//-----------------------------------------------------------------
 	//3// <2> Initialize RF
 	//3//-----------------------------------------------------------------
-	for(eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
+	for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
 	{
 		if (bMac1NeedInitRadioAFirst) //Mac1 use PHY0 write
 		{
@@ -823,7 +823,7 @@ phy_RF6052_Config_ParaFile(
 		rtl8192d_PHY_PowerDownAnotherPHY(Adapter, true);
 	}
 
-	for(eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
+	for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
 	{
 #if MP_DRIVER == 1
 		PHY_SetRFReg(Adapter, eRFPath, RF_RXRF_A3, bRFRegOffsetMask, 0xff456);

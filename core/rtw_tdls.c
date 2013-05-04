@@ -1149,7 +1149,7 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 		ptdls_sta->stat_code = 0;
 
 		//parsing information element
-		for(j=FIXED_IE; j<parsing_length;){
+		for (j=FIXED_IE; j<parsing_length;){
 
 			pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
@@ -1177,7 +1177,7 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 						//check whether initiator STA has CCMP pairwise_cipher.
 						ppairwise_cipher=prsnie+10;
 						memcpy(&pairwise_count, (u16*)(ppairwise_cipher-2), 1);
-						for(k=0;k<pairwise_count;k++){
+						for (k=0;k<pairwise_count;k++){
 							if (_rtw_memcmp( ppairwise_cipher+4*k, RSN_CIPHER_SUITE_CCMP, 4)==true)
 								ccmp_have=1;
 						}
@@ -1338,7 +1338,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 	stat_code = 0;
 
 	//parsing information element
-	for(j=FIXED_IE; j<parsing_length;)
+	for (j=FIXED_IE; j<parsing_length;)
 	{
 		pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
@@ -1364,7 +1364,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 				//check whether responder STA has CCMP pairwise_cipher.
 				ppairwise_cipher=prsnie+10;
 				memcpy(&pairwise_count, (u16*)(ppairwise_cipher-2), 2);
-				for(k=0;k<pairwise_count;k++){
+				for (k=0;k<pairwise_count;k++){
 					if (_rtw_memcmp( ppairwise_cipher+4*k, RSN_CIPHER_SUITE_CCMP, 4)==true)
 						verify_ccmp=1;
 				}
@@ -1501,7 +1501,7 @@ int On_TDLS_Setup_Cfm(_adapter *adapter, union recv_frame *precv_frame)
 
 	if (prx_pkt_attrib->encrypt){
 		//parsing information element
-		for(j=FIXED_IE; j<parsing_length;){
+		for (j=FIXED_IE; j<parsing_length;){
 
 			pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
@@ -1582,7 +1582,7 @@ int On_TDLS_Dis_Req(_adapter *adapter, union recv_frame *precv_frame)
 			-FIXED_IE;
 
 	//parsing information element
-	for(j=FIXED_IE; j<parsing_length;){
+	for (j=FIXED_IE; j<parsing_length;){
 
 		pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
@@ -1779,7 +1779,7 @@ int On_TDLS_Ch_Switch_Req(_adapter *adapter, union recv_frame *precv_frame)
 	ptdls_sta->off_ch = *(ptr+2);
 
 	//parsing information element
-	for(j=FIXED_IE; j<parsing_length;){
+	for (j=FIXED_IE; j<parsing_length;){
 
 		pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
@@ -1874,7 +1874,7 @@ int On_TDLS_Ch_Switch_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 	}
 
 	//parsing information element
-	for(j=FIXED_IE; j<parsing_length;){
+	for (j=FIXED_IE; j<parsing_length;){
 
 		pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
@@ -2024,7 +2024,7 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 
 	//SNonce
 	if (pattrib->encrypt){
-		for(i=0;i<8;i++){
+		for (i=0;i<8;i++){
 			time=rtw_get_current_time();
 			memcpy(&ptdls_sta->SNonce[4*i], (u8 *)&time, 4);
 		}
@@ -2152,7 +2152,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 	}
 
 	if (pattrib->encrypt){
-		for(k=0;k<8;k++){
+		for (k=0;k<8;k++){
 			time=rtw_get_current_time();
 			memcpy(&ptdls_sta->ANonce[4*k], (u8*)&time, 4);
 		}

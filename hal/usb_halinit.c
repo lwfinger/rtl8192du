@@ -417,7 +417,7 @@ u16 CRC16(u8 data,u16 CRC)
 	int index;
 	unsigned short CRC_Result;
 
-	for(index=0;index<8;index++)
+	for (index=0;index<8;index++)
 	{
 		CRC_BIT15=((CRC&BIT15) ? 1:0);
 		DataBit  =(data&(BIT0<<index) ? 1:0);
@@ -480,7 +480,7 @@ u16 calc_crc(u8 * pdata,int length)
 	u16 CRC=0xffff;
 	int i;
 
-	for(i=0;i<length;i++)
+	for (i=0;i<length;i++)
 	{
 		CRC=CRC16(pdata[i],CRC);
 	}
@@ -573,7 +573,7 @@ static int rtw_wowlan_set_pattern(struct rtw_adapter *padapter ,u8* pbuf){
 		DBG_8192D("+rtw_wowlan_set_pattern   crc=0[%x]  Should calculate the CRC\n", crc);
 		// calculate the CRC the write to the Wakeup CAM
 		crc_idx=0;
-		for(i=0;i<packet_len;i++){
+		for (i=0;i<packet_len;i++){
 			if (pbuf[4+(i/8)]&(0x01<<(i%8)))
 			{
 				packet[crc_idx++]=pbuf[20+i];
@@ -744,7 +744,7 @@ static u8 InitLLTTable(
 		//Last_Entry_Of_TxPktBuf=255;
 	}
 
-	for(i = 0 ; i < (txpktbuf_bndy - 1) ; i++){
+	for (i = 0 ; i < (txpktbuf_bndy - 1) ; i++){
 		status = _LLTWrite(Adapter, i , i + 1);
 		if (_SUCCESS != status){
 			return status;
@@ -760,7 +760,7 @@ static u8 InitLLTTable(
 	// Make the other pages as ring buffer
 	// This ring buffer is used as beacon buffer if we config this MAC as two MAC transfer.
 	// Otherwise used as local loopback buffer.
-	for(i = txpktbuf_bndy ; i < Last_Entry_Of_TxPktBuf ; i++){
+	for (i = txpktbuf_bndy ; i < Last_Entry_Of_TxPktBuf ; i++){
 		status = _LLTWrite(Adapter, i, (i + 1));
 		if (_SUCCESS != status){
 			return status;
@@ -788,7 +788,7 @@ _SetMacID(
 	)
 {
 	u32 i;
-	for(i=0 ; i< MAC_ADDR_LEN ; i++){
+	for (i=0 ; i< MAC_ADDR_LEN ; i++){
 #ifdef  CONFIG_CONCURRENT_MODE
 		if (Adapter->iface_type == IFACE_PORT1)
 			rtw_write32(Adapter, REG_MACID1+i, MacID[i]);
@@ -804,7 +804,7 @@ _SetBSSID(
 	)
 {
 	u32 i;
-	for(i=0 ; i< MAC_ADDR_LEN ; i++){
+	for (i=0 ; i< MAC_ADDR_LEN ; i++){
 #ifdef  CONFIG_CONCURRENT_MODE
 		if (Adapter->iface_type == IFACE_PORT1)
 			rtw_write32(Adapter, REG_BSSID1+i, BSSID[i]);
@@ -1686,7 +1686,7 @@ static void _RfPowerSave(
 		if (pHalData->bSlaveOfDMSP)
 			return;
 #endif
-		for(eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
+		for (eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
 			PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, 0x4, 0xC00, 0x0);
 	}
 	else if (pwrctrlpriv->rfoff_reason > RF_CHANGE_BY_PS){ // H/W or S/W RF OFF before sleep.
@@ -1818,7 +1818,7 @@ u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	int hal_init_profiling_i;
 	u32 hal_init_stages_timestamp[HAL_INIT_STAGES_NUM]; //used to record the time of each stage's starting point
 
-	for(hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM;hal_init_profiling_i++)
+	for (hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM;hal_init_profiling_i++)
 		hal_init_stages_timestamp[hal_init_profiling_i]=0;
 
 	#define HAL_INIT_PROFILE_TAG(stage) hal_init_stages_timestamp[(stage)]=rtw_get_current_time();
@@ -1835,7 +1835,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
 	{
 		if (BuddyAdapter->bHaltInProgress)
 		{
-			for(i=0;i<100;i++)
+			for (i=0;i<100;i++)
 			{
 				rtw_usleep_os(1000);
 				if (!BuddyAdapter->bHaltInProgress)
@@ -2047,7 +2047,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 	}
 
 	// Set Data Auto Rate Fallback Reg.
-	for(i = 0 ; i < 4 ; i++){
+	for (i = 0 ; i < 4 ; i++){
 		rtw_write32(padapter, REG_ARFR0+i*4, 0x1f8ffff0);
 	}
 
@@ -2246,7 +2246,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_LCK);
 #if SWLCK == 0
 		{
 			u32 tmpRega, tmpRegb;
-			for(j=0;j<10000;j++)
+			for (j=0;j<10000;j++)
 			{
 				rtw_udelay_os(MAX_STALL_TIME);
 				if (pHalData->rf_type == RF_1T1R)
@@ -2349,7 +2349,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 	#ifdef DBG_HAL_INIT_PROFILING
 	hal_init_stages_timestamp[HAL_INIT_STAGES_END]=rtw_get_current_time();
 
-	for(hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM-1;hal_init_profiling_i++) {
+	for (hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM-1;hal_init_profiling_i++) {
 		DBG_8192D("DBG_HAL_INIT_PROFILING: %35s, %u, %5u, %5u\n"
 			, hal_init_stages_str[hal_init_profiling_i]
 			, hal_init_stages_timestamp[hal_init_profiling_i]
@@ -2994,7 +2994,7 @@ _func_enter_;
 
 	//issue Rx irp to receive data
 	precvbuf = (struct recv_buf *)precvpriv->precv_buf;
-	for(i=0; i<NR_RECVBUFF; i++)
+	for (i=0; i<NR_RECVBUFF; i++)
 	{
 		if (_read_port(pintfhdl, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf) == false )
 		{
@@ -3404,7 +3404,7 @@ static void _ReadPROMContent(
 		if ( pEEPROM->EepromOrEfuse == true)
 		{
 			// Read all Content from EEPROM or EFUSE.
-			for(i = 0; i < HWSET_MAX_SIZE; i += 2)
+			for (i = 0; i < HWSET_MAX_SIZE; i += 2)
 			{
 				//todo:
 				//value16 = EF2Byte(ReadEEprom(Adapter, (u16) (i>>1)));
@@ -3619,7 +3619,7 @@ SelectRTSInitialRate(
 		}
 
 		//Todo: for AP mode and IBSS mode.
-		/*for(i = 0; i < ASSOCIATE_ENTRY_NUM; i++)
+		/*for (i = 0; i < ASSOCIATE_ENTRY_NUM; i++)
 		{
 			if (AsocEntry[i].bUsed && AsocEntry[i].bAssociated)
 			{
@@ -3885,7 +3885,7 @@ static void hw_var_set_macaddr(struct rtw_adapter * Adapter, u8 variable, u8* va
 		reg_macid = REG_MACID;
 	}
 
-	for(idx = 0 ; idx < 6; idx++)
+	for (idx = 0 ; idx < 6; idx++)
 	{
 		rtw_write8(Adapter, (reg_macid+idx), val[idx]);
 	}
@@ -3908,7 +3908,7 @@ static void hw_var_set_bssid(struct rtw_adapter * Adapter, u8 variable, u8* val)
 		reg_bssid = REG_BSSID;
 	}
 
-	for(idx = 0 ; idx < 6; idx++)
+	for (idx = 0 ; idx < 6; idx++)
 	{
 		rtw_write8(Adapter, (reg_bssid+idx), val[idx]);
 	}
@@ -4495,7 +4495,7 @@ _func_enter_;
 #else //CONFIG_CONCURRENT_MODE
 			{
 				u8	idx = 0;
-				for(idx = 0 ; idx < 6; idx++)
+				for (idx = 0 ; idx < 6; idx++)
 				{
 					rtw_write8(Adapter, (REG_BSSID+idx), val[idx]);
 				}
@@ -4841,7 +4841,7 @@ _func_enter_;
 				u32	ulContent=0;
 				u32	ulEncAlgo=CAM_AES;
 
-				for(i=0;i<CAM_CONTENT_COUNT;i++)
+				for (i=0;i<CAM_CONTENT_COUNT;i++)
 				{
 					// filled id in CAM config 2 byte
 					if ( i == 0)
@@ -4977,7 +4977,7 @@ _func_enter_;
 					if (FactorToSet>0xf)
 						FactorToSet = 0xf;
 
-					for(index=0; index<4; index++)
+					for (index=0; index<4; index++)
 					{
 						pTmpByte = (u8 *)(&RegToSet) + index;
 
@@ -5176,7 +5176,7 @@ _func_enter_;
 						/*DBG_8192D("\n\n\n\n rtw_wowlan_ctrl: WOW_CTRL=0x%x \n",rtw_read8(Adapter, REG_WOW_CTRL));
 						DBG_8192D("print WKFMCAM index =%d ",poidparam->data[0]);
 						{	int cmd=0,offset=0;
-							for(offset=0;offset<5;offset++){
+							for (offset=0;offset<5;offset++){
 								cmd=BIT(31)|(poidparam->data[0]+offset);
 								rtw_write32(Adapter, REG_WKFMCAM_CMD, cmd);
 								DBG_8192D("offset[%d]=0x%.8x  ",offset,rtw_read32(Adapter, REG_WKFMCAM_RWD));
@@ -5294,7 +5294,7 @@ _func_enter_;
 				//rtw_write16(Adapter, REG_RL,0x0101);
 				rtw_write16(Adapter, REG_RL, RetryLimit << RETRY_LIMIT_SHORT_SHIFT | RetryLimit << RETRY_LIMIT_LONG_SHIFT);
 
-				for(i=0;i<1000;i++)
+				for (i=0;i<1000;i++)
 				{
 					if (rtw_read32(Adapter, 0x200) != rtw_read32(Adapter, 0x204))
 					{

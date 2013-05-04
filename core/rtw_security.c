@@ -193,7 +193,7 @@ _func_enter_;
 	{
 		keylength=psecuritypriv->dot11DefKeylen[psecuritypriv->dot11PrivacyKeyIndex];
 
-		for(curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++)
+		for (curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++)
 		{
 			iv=pframe+pattrib->hdrlen;
 			memcpy(&wepkey[0], iv, 3);
@@ -292,7 +292,7 @@ static u32 secmicgetuint32( u8 * p )
 	s32 i;
 	u32 res = 0;
 _func_enter_;
-	for( i=0; i<4; i++ )
+	for ( i=0; i<4; i++ )
 	{
 		res |= ((u32)(*p++)) << (8*i);
 	}
@@ -305,7 +305,7 @@ static void secmicputuint32( u8 * p, u32 val )
 {
 	long i;
 _func_enter_;
-	for( i=0; i<4; i++ )
+	for ( i=0; i<4; i++ )
 	{
 		*p++ = (u8) (val & 0xff);
 		val >>= 8;
@@ -697,7 +697,7 @@ _func_enter_;
 
 			prwskeylen=16;
 
-			for(curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
+			for (curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
 				iv=pframe+pattrib->hdrlen;
 				payload=pframe+pattrib->iv_len+pattrib->hdrlen;
 
@@ -1094,7 +1094,7 @@ static void aes128k128d(u8 *key, u8 *data, u8 *ciphertext)
     u8 intermediateb[16];
     u8 round_key[16];
 _func_enter_;
-    for(i=0; i<16; i++) round_key[i] = key[i];
+    for (i=0; i<16; i++) round_key[i] = key[i];
 
     for (round = 0; round < 11; round++)
     {
@@ -1561,7 +1561,7 @@ _func_enter_;
 
 			prwskeylen=16;
 
-			for(curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
+			for (curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
 
 				if ((curfragnum+1)==pattrib->nr_frags){	//4 the last fragment
 					length=pattrib->last_txcmdsz-pattrib->hdrlen-pattrib->iv_len- pattrib->icv_len;
@@ -1846,7 +1846,7 @@ _func_enter_;
     for (j=0; j<8;j++) message[payload_index++] = chain_buffer[j];
 
 	//compare the mic
-	for(i=0;i<8;i++){
+	for (i=0;i<8;i++){
 		if (pframe[hdrlen+8+plen-8+i] != message[hdrlen+8+plen-8+i])
 		{
 			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x) \n",
@@ -1860,7 +1860,7 @@ _func_enter_;
 	if (res == _FAIL)
 	{
 		int gg=0;
-		for(gg=0; gg < 32; gg++)
+		for (gg=0; gg < 32; gg++)
 			DBG_8192D(" [%d]=%02x ", gg, pframe[gg]);
 		DBG_8192D("error packet header \n");
 	}

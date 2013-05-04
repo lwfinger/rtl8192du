@@ -93,7 +93,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 
 	precvbuf = (struct recv_buf*)precvpriv->precv_buf;
 
-	for(i=0; i < NR_RECVBUFF ; i++)
+	for (i=0; i < NR_RECVBUFF ; i++)
 	{
 		INIT_LIST_HEAD(&precvbuf->list);
 
@@ -132,7 +132,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 
 		skb_queue_head_init(&precvpriv->free_recv_skb_queue);
 
-		for(i=0; i<NR_PREALLOC_RECV_SKB; i++)
+		for (i=0; i<NR_PREALLOC_RECV_SKB; i++)
 		{
 	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) // http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html
 			pskb = dev_alloc_skb(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);

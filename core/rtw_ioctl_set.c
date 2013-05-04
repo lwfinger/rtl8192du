@@ -50,7 +50,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	for(i = 0; i < ssid->SsidLength; i++)
+	for (i = 0; i < ssid->SsidLength; i++)
 	{
 		//wifi, printable ascii code must be supported
 		if (!( (ssid->Ssid[i] >= 0x20) && (ssid->Ssid[i] <= 0x7e) )){

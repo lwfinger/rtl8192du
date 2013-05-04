@@ -148,7 +148,7 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 
 #endif // CONFIG_USE_USB_BUFFER_ALLOC_TX
 
-	for(i=0; i<8; i++)
+	for (i=0; i<8; i++)
 	{
 		pxmitbuf->pxmit_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
 		if (pxmitbuf->pxmit_urb[i] == NULL)
@@ -168,7 +168,7 @@ void rtw_os_xmit_resource_free(struct rtw_adapter *padapter, struct xmit_buf *px
 	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
 
 
-	for(i=0; i<8; i++)
+	for (i=0; i<8; i++)
 	{
 		if (pxmitbuf->pxmit_urb[i])
 		{

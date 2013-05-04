@@ -77,7 +77,7 @@ int ips_leave(struct rtw_adapter * padapter)
 		{
 			DBG_8192D("==>%s,channel(%d),processing(%x)\n",__func__,padapter->mlmeextpriv.cur_channel,pwrpriv->bips_processing);
 			set_channel_bwmode(padapter, padapter->mlmeextpriv.cur_channel, HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
-			for(keyid=0;keyid<4;keyid++){
+			for (keyid=0;keyid<4;keyid++){
 				if (pmlmepriv->key_mask & BIT(keyid)){
 					if (keyid == psecuritypriv->dot11PrivacyKeyIndex)
 						result=rtw_set_key(padapter,psecuritypriv, keyid, 1);
@@ -425,7 +425,7 @@ _func_enter_;
 #ifdef CONFIG_TDLS
 			spin_lock_bh(&pstapriv->sta_hash_lock);
 
-			for(i=0; i< NUM_STA; i++) {
+			for (i=0; i< NUM_STA; i++) {
 				phead = &(pstapriv->sta_hash[i]);
 				plist = get_next(phead);
 
@@ -478,7 +478,7 @@ _func_enter_;
 #ifdef CONFIG_TDLS
 			spin_lock_bh(&pstapriv->sta_hash_lock);
 
-			for(i=0; i< NUM_STA; i++)
+			for (i=0; i< NUM_STA; i++)
 			{
 				phead = &(pstapriv->sta_hash[i]);
 				plist = get_next(phead);

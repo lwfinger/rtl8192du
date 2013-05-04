@@ -36,7 +36,7 @@ void Hal_MptSet8256CCKTxPower( PADAPTER pAdapter,u8 *pTxPower)
 	u8				TxAGC[2]={0, 0};
 	u32			 tmpval=0;
 	u8				rf;
-	for(rf=0; rf<2; rf++)
+	for (rf=0; rf<2; rf++)
 		TxAGC[rf] = pTxPower[rf];
 
 	// rf-A cck tx power
@@ -496,7 +496,7 @@ void Hal_SetTxPower (PADAPTER pAdapter)
     TxPowerLevel_HTOFDM[RF_PATH_A] = pAdapter->mppriv.txpoweridx;
 	TxPowerLevel_HTOFDM[RF_PATH_B] = pAdapter->mppriv.txpoweridx_b;
 
-	for(rf=0; rf<2; rf++)
+	for (rf=0; rf<2; rf++)
 	{
 		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 		{
@@ -985,7 +985,7 @@ static u8 GetRightChnlPlace(u8 chnl)
 
 	if (chnl > 14)
 	{
-		for(place = 14; place<sizeof(channel_5G); place++)
+		for (place = 14; place<sizeof(channel_5G); place++)
 		{
 			if (channel_5G[place] == chnl)
 			{
@@ -1022,12 +1022,12 @@ void
 	{
 		u4tmp = CurveIndex[GetRightChnlPlace(channel)-1];
 
-		for(i = 0; i < RF_CHNL_NUM_5G; i++) {
+		for (i = 0; i < RF_CHNL_NUM_5G; i++) {
 			if (channel == RF_CHNL_5G[i] && channel <= 140)
 				index = 0;
 		}
 
-		for(i = 0; i < RF_CHNL_NUM_5G_40M; i++) {
+		for (i = 0; i < RF_CHNL_NUM_5G_40M; i++) {
 			if (channel == RF_CHNL_5G_40M[i] && channel <= 140)
 				index = 1;
 		}
@@ -1060,7 +1060,7 @@ void
 				phy_EnableRFENV(Adapter, path, MaskforPhySet, &u4RegValue);
 		}
 
-		for(i = 0; i < RF_REG_NUM_for_C_CUT_5G; i++)
+		for (i = 0; i < RF_REG_NUM_for_C_CUT_5G; i++)
 		{
 #if 1
 			if (i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
@@ -1127,7 +1127,7 @@ void
 		else
 			index = 2;
 
-		for(eRFPath = RF_PATH_A; eRFPath < pHalData->NumTotalRFPath; eRFPath++)
+		for (eRFPath = RF_PATH_A; eRFPath < pHalData->NumTotalRFPath; eRFPath++)
 		{
 			if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
 				pHalData->interfaceIndex == 1)		//MAC 1 5G
@@ -1137,7 +1137,7 @@ void
 
 			if (bInteralPA)
 			{
-				for(i = 0; i < RF_REG_NUM_for_C_CUT_5G_internalPA; i++)
+				for (i = 0; i < RF_REG_NUM_for_C_CUT_5G_internalPA; i++)
 				{
 					if (RF_REG_for_C_CUT_5G_internalPA[i] == 0x03 &&
 						channel >=36 && channel <=64)
@@ -1192,7 +1192,7 @@ void
 		}
 
 
-		for(i = 0; i < RF_REG_NUM_for_C_CUT_2G; i++)
+		for (i = 0; i < RF_REG_NUM_for_C_CUT_2G; i++)
 		{
 #if 1
 #if SWLCK == 1
@@ -1267,7 +1267,7 @@ void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
     }
 
 
-    for(eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
+    for (eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
     {
         if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
             pHalData->interfaceIndex == 1)      //MAC 1 5G
@@ -1306,7 +1306,7 @@ void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 	{
 		// Readback the current bb cck swing value and compare with the table to
 		// get the current swing index
-		for(i=0 ; i<CCK_TABLE_SIZE ; i++)
+		for (i=0 ; i<CCK_TABLE_SIZE ; i++)
 		{
 			if ( ((CurrCCKSwingVal&0xff) == (u4Byte)CCKSwingTable_Ch1_Ch13[i][0]) &&
 				( ((CurrCCKSwingVal&0xff00)>>8) == (u4Byte)CCKSwingTable_Ch1_Ch13[i][1]) )
@@ -1338,7 +1338,7 @@ void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 	}
 	else
 	{
-		for(i=0 ; i<CCK_TABLE_SIZE ; i++)
+		for (i=0 ; i<CCK_TABLE_SIZE ; i++)
 		{
 			if ( ((CurrCCKSwingVal&0xff) == (u4Byte)CCKSwingTable_Ch14[i][0]) &&
 				( ((CurrCCKSwingVal&0xff00)>>8) == (u4Byte)CCKSwingTable_Ch14[i][1]) )

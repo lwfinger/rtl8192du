@@ -181,7 +181,7 @@ _MappingOutEP(
 
 	bool result = true;
 
-	switch(NumOutPipe)
+	switch (NumOutPipe)
 	{
 		case 2:
 			_TwoOutEpMapping(pHalData, bWIFICfg);
@@ -241,7 +241,7 @@ _ConfigChipOutEP(
 	}
 
 	//add for 0xfe44 0xfe45 0xfe47 0xfe48 not validly
-	switch(NumOutPipe){
+	switch (NumOutPipe){
 		case 3:
 			pHalData->OutEpQueueSel=TX_SELE_HQ| TX_SELE_LQ|TX_SELE_NQ;
 			pHalData->OutEpNumber=3;
@@ -977,7 +977,7 @@ _InitNormalChipOneOutEpPriority(
 	struct hal_data_8192du *pHalData	= GET_HAL_DATA(Adapter);
 
 	u16	value = 0;
-	switch(pHalData->OutEpQueueSel)
+	switch (pHalData->OutEpQueueSel)
 	{
 		case TX_SELE_HQ:
 			value = QUEUE_HIGH;
@@ -1017,7 +1017,7 @@ _InitNormalChipTwoOutEpPriority(
 	u16	valueHi = 0;
 	u16	valueLow = 0;
 
-	switch(pHalData->OutEpQueueSel)
+	switch (pHalData->OutEpQueueSel)
 	{
 		case (TX_SELE_HQ | TX_SELE_LQ):
 			valueHi = QUEUE_HIGH;
@@ -1091,7 +1091,7 @@ _InitQueuePriority(
 {
 	struct hal_data_8192du *pHalData	= GET_HAL_DATA(Adapter);
 
-	switch(pHalData->OutEpNumber)
+	switch (pHalData->OutEpNumber)
 	{
 		case 1:
 			_InitNormalChipOneOutEpPriority(Adapter);
@@ -1401,7 +1401,7 @@ _InitUsbAggregationSetting(
 	valueDMA = rtw_read8(Adapter, REG_TRXDMA_CTRL);
 	valueUSB = rtw_read8(Adapter, REG_USB_SPECIAL_OPTION);
 
-	switch(pHalData->UsbRxAggMode)
+	switch (pHalData->UsbRxAggMode)
 	{
 		case USB_RX_AGG_DMA:
 			valueDMA |= RXDMA_AGG_EN;
@@ -1425,7 +1425,7 @@ _InitUsbAggregationSetting(
 	rtw_write8(Adapter, REG_TRXDMA_CTRL, valueDMA);
 	rtw_write8(Adapter, REG_USB_SPECIAL_OPTION, valueUSB);
 #if 1
-	switch(pHalData->UsbRxAggMode)
+	switch (pHalData->UsbRxAggMode)
 	{
 		case USB_RX_AGG_DMA:
 			rtw_write8(Adapter, REG_RXDMA_AGG_PG_TH, pHalData->UsbRxAggPageCount);
@@ -1447,7 +1447,7 @@ _InitUsbAggregationSetting(
 			break;
 	}
 #endif
-	switch(PBP_128)
+	switch (PBP_128)
 	{
 		case PBP_128:
 			pHalData->HwRxPageSize = 128;
@@ -1488,7 +1488,7 @@ _InitOperationMode(
 	//
 	// Set RRSR, RATR, and REG_BWOPMODE registers
 	//
-	switch(pHalData->CurrentWirelessMode)
+	switch (pHalData->CurrentWirelessMode)
 	{
 		case WIRELESS_MODE_B:
 			regBwOpMode = BW_OPMODE_20MHZ;
@@ -1546,7 +1546,7 @@ _InitOperationMode(
 	rtw_write8(Adapter, REG_BWOPMODE, regBwOpMode);
 
 	// For Min Spacing configuration.
-	switch(pHalData->rf_type)
+	switch (pHalData->rf_type)
 	{
 		case RF_1T2R:
 		case RF_1T1R:
@@ -1720,7 +1720,7 @@ static void _InitHWLed(struct rtw_adapter * Adapter)
 #ifdef CONFIG_WOWLAN
 static void dump_wakup_reason(struct rtw_adapter *padapter)
 {
-	switch(rtw_read8(padapter, REG_WOWLAN_REASON))
+	switch (rtw_read8(padapter, REG_WOWLAN_REASON))
 	{
 		case Rx_Pairwisekey:
 			DBG_8192D("Rx_Pairwisekey\n");
@@ -3114,7 +3114,7 @@ _ReadIDs(
 	}
 
 	//	Decide CustomerID according to VID/DID or EEPROM
-	switch(pHalData->EEPROMCustomerID)
+	switch (pHalData->EEPROMCustomerID)
 	{
 		case EEPROM_CID_WHQL:
 			//Adapter->bInHctTest = true;
@@ -3324,7 +3324,7 @@ _ReadLEDSetting(
 	struct led_priv		*pledpriv = &(Adapter->ledpriv);
 
 	// Led mode
-	switch(pHalData->CustomerID)
+	switch (pHalData->CustomerID)
 	{
 		case RT_CID_DEFAULT:
 			pledpriv->LedStrategy = SW_LED_MODE1;
@@ -4409,7 +4409,7 @@ void SetHwReg8192DU(struct rtw_adapter * Adapter, u8 variable, u8* val)
 
 _func_enter_;
 
-	switch(variable)
+	switch (variable)
 	{
 		case HW_VAR_MEDIA_STATUS:
 			{
@@ -4925,7 +4925,7 @@ _func_enter_;
 				MinSpacingToSet = *((u8 *)val);
 				if (MinSpacingToSet <= 7)
 				{
-					switch(Adapter->securitypriv.dot11PrivacyAlgrthm)
+					switch (Adapter->securitypriv.dot11PrivacyAlgrthm)
 					{
 						case _NO_PRIVACY_:
 						case _AES_:
@@ -5332,7 +5332,7 @@ void GetHwReg8192DU(struct rtw_adapter * Adapter, u8 variable, u8* val)
 
 _func_enter_;
 
-	switch(variable)
+	switch (variable)
 	{
 		case HW_VAR_BASIC_RATE:
 			*((u16 *)(val)) = pHalData->BasicRateSet;
@@ -5397,7 +5397,7 @@ u8 GetHalDefVar8192DUsb(struct rtw_adapter * Adapter, enum HAL_DEF_VARIABLE eVar
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8 bResult = true;
 
-	switch(eVariable) {
+	switch (eVariable) {
 	case HAL_DEF_UNDERCORATEDSMOOTHEDPWDB:
 		*((int *)pValue) = pHalData->dmpriv.UndecoratedSmoothedPWDB;
 		break;
@@ -5440,7 +5440,7 @@ SetHalDefVar8192DUsb(
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8 bResult = true;
 
-	switch(eVariable) {
+	switch (eVariable) {
 		case HAL_DEF_DBG_DM_FUNC:
 			{
 				u8 dm_func = *(( u8*)pValue);

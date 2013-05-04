@@ -1723,7 +1723,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 		Rtl819XRadioA_Array_Table = Rtl819XRadioB_Array_Table;
 	}
 
-	switch(eRFPath){
+	switch (eRFPath){
 		case RF_PATH_A:
 			for (i = 0;i<RadioA_ArrayLen; i=i+2)
 			{
@@ -1863,7 +1863,7 @@ rtl8192d_PHY_CheckBBAndRFOK(
 		//
 		// Write Data to register and readback
 		//
-		switch(CheckBlock)
+		switch (CheckBlock)
 		{
 		case HW90_BLOCK_MAC:
 			//RT_ASSERT(FALSE, ("PHY_CheckBBRFOK(): Never Write 0x100 here!"));
@@ -1962,7 +1962,7 @@ phy_DbmToTxPwrIdx(
 	//	The mapping may be different by different NICs. Do not use this formula for what needs accurate result.
 	// By Bruce, 2008-01-29.
 	//
-	switch(WirelessMode)
+	switch (WirelessMode)
 	{
 	case WIRELESS_MODE_B:
 		Offset = -7;
@@ -2017,7 +2017,7 @@ phy_TxPwrIdxToDbm(
 	//	The mapping may be different by different NICs. Do not use this formula for what needs accurate result.
 	// By Bruce, 2008-01-29.
 	//
-	switch(WirelessMode)
+	switch (WirelessMode)
 	{
 	case WIRELESS_MODE_B:
 		Offset = -7;
@@ -2307,7 +2307,7 @@ _PHY_SetBWMode92D(
 	regRRSR_RSC = rtw_read8(Adapter, REG_RRSR+2);
 	//regBwOpMode = rtw_hal_get_hwreg(Adapter,HW_VAR_BWMODE,(pu1Byte)&regBwOpMode);
 
-	switch(pHalData->CurrentChannelBW)
+	switch (pHalData->CurrentChannelBW)
 	{
 		case HT_CHANNEL_WIDTH_20:
 			regBwOpMode |= BW_OPMODE_20MHZ;
@@ -2333,7 +2333,7 @@ _PHY_SetBWMode92D(
 	//3//
 	//3//<2>Set PHY related register
 	//3//
-	switch(pHalData->CurrentChannelBW)
+	switch (pHalData->CurrentChannelBW)
 	{
 		/* 20 MHz channel*/
 		case HT_CHANNEL_WIDTH_20:
@@ -2374,7 +2374,7 @@ _PHY_SetBWMode92D(
 	}
 
 	//3<3>Set RF related register
-	switch(pHalData->rf_chip)
+	switch (pHalData->rf_chip)
 	{
 		case RF_8225:
 			//PHY_SetRF8225Bandwidth(Adapter, pHalData->CurrentChannelBW);
@@ -2671,7 +2671,7 @@ PHY_EnableRFENV(
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("====>PHY_EnableRFENV\n"));
 
 	/*----Store original RFENV control type----*/
-	switch(eRFPath)
+	switch (eRFPath)
 	{
 		case RF_PATH_A:
 		case RF_PATH_C:
@@ -2716,7 +2716,7 @@ PHY_RestoreRFENV(
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("=====>PHY_RestoreRFENV\n"));
 	//If another MAC is ON,need do this?
 	/*----Restore RFENV control type----*/;
-	switch(eRFPath)
+	switch (eRFPath)
 	{
 		case RF_PATH_A:
 		case RF_PATH_C:
@@ -3415,7 +3415,7 @@ PHY_SwChnl8192D(	// Call after initialization
 	}
 
 	//--------------------------------------------
-	switch(pHalData->CurrentWirelessMode)
+	switch (pHalData->CurrentWirelessMode)
 	{
 		case WIRELESS_MODE_A:
 		case WIRELESS_MODE_N_5G:
@@ -6839,7 +6839,7 @@ void PHY_ConfigMacPhyMode92D(
 
 	temp = rtw_read8(Adapter, offset);
 	temp &= ~(BIT(0)|BIT(1)|BIT(2));
-	switch(pHalData->MacPhyMode92D){
+	switch (pHalData->MacPhyMode92D){
 		case DUALMAC_DUALPHY:
 			MSG_8192D("MacPhyMode: DUALMAC_DUALPHY \n");
 			rtw_write8(Adapter, offset, temp | BIT(0)|BIT(1));
@@ -6877,7 +6877,7 @@ void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *Adapter)
 	struct hal_data_8192du *pHalDataBuddyAdapter;
 #endif
 
-	switch(pHalData->MacPhyMode92D){
+	switch (pHalData->MacPhyMode92D){
 		case DUALMAC_SINGLEPHY:
 			pHalData->rf_type = RF_2T2R;
 			pHalData->VersionID = (enum VERSION_8192D)(pHalData->VersionID | RF_TYPE_2T2R);
@@ -6952,7 +6952,7 @@ void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *Adapter)
 	Adapter->registrypriv.channel = pHalData->CurrentChannel;
 
 #if DBG
-	switch(pHalData->VersionID)
+	switch (pHalData->VersionID)
 	{
 		case VERSION_NORMAL_CHIP_92D_D_CUT_SINGLEPHY:
 			MSG_8192D("Chip Version ID: VERSION_NORMAL_CHIP_92D_D_CUT_SINGLEPHY.\n");
@@ -6984,7 +6984,7 @@ void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *Adapter)
 	}
 #endif
 
-	switch(pHalData->BandSet92D)
+	switch (pHalData->BandSet92D)
 	{
 		case BAND_ON_2_4G:
 			Adapter->registrypriv.wireless_mode = WIRELESS_11BG_24N;
@@ -7019,7 +7019,7 @@ void PHY_ConfigMacCoexist_RFPage92D(
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 
-	switch(pHalData->MacPhyMode92D)
+	switch (pHalData->MacPhyMode92D)
 	{
 		case DUALMAC_DUALPHY:
 			rtw_write8(Adapter,REG_DMC, 0x0);

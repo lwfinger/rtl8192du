@@ -247,7 +247,7 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 	}
 
 	if (chgTx && chgRx) {
-		switch(pHalData->rf_chip) {
+		switch (pHalData->rf_chip) {
 		case RF_8225:
 		case RF_8256:
 		case RF_6052:
@@ -359,7 +359,7 @@ void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart )
     bool				is92C = IS_92C_SERIAL(pHalData->VersionID);
     RF_RADIO_PATH_E   rfPath;
 
-    switch(ulAntennaTx)
+    switch (ulAntennaTx)
     {
         case ANTENNA_A:         rfPath = RF_PATH_A;       break;
         case ANTENNA_B:         rfPath = RF_PATH_B;       break;
@@ -501,7 +501,7 @@ void Hal_SetTxPower (PADAPTER pAdapter)
 		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 		{
 			//RT_TRACE(COMP_MP, DBG_LOUD, ("antenna settings txpath 0x%x\n", pHalData->AntennaTxPath));
-			switch(pHalData->AntennaTxPath)
+			switch (pHalData->AntennaTxPath)
 			{
 				case ANTENNA_B:
 					TxPowerLevel_CCK[rf] = pAdapter->mppriv.txpoweridx_b;
@@ -515,7 +515,7 @@ void Hal_SetTxPower (PADAPTER pAdapter)
 			}
 		}
 	}
-	switch(pHalData->rf_chip)
+	switch (pHalData->rf_chip)
 	{
 		// 2008/09/12 MH Test only !! We enable the TX power tracking for MP!!!!!
 		// We should call normal driver API later!!
@@ -592,7 +592,7 @@ static  void Hal_mpt_StartCckContTx(PADAPTER pAdapter,bool bScrambleOn)
     PHY_SetBBReg(pAdapter, rOFDM1_LSTF, bOFDMSingleCarrier, bDisable);
     PHY_SetBBReg(pAdapter, rOFDM1_LSTF, bOFDMSingleTone, bDisable);
     //Set CCK Tx Test Rate
-    switch(pAdapter->mppriv.rateidx)
+    switch (pAdapter->mppriv.rateidx)
     {
         case 2:
             cckrate = 0;
@@ -897,7 +897,7 @@ phy_RestoreRFENV(
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("=====>phy_RestoreRFENV\n"));
 
 	/*----Restore RFENV control type----*/;
-	switch(eRFPath)
+	switch (eRFPath)
 	{
 		case RF_PATH_A:
 		case RF_PATH_C:
@@ -926,7 +926,7 @@ phy_EnableRFENV(
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("====>phy_EnableRFENV\n"));
 
 	/*----Store original RFENV control type----*/
-	switch(eRFPath)
+	switch (eRFPath)
 	{
 		case RF_PATH_A:
 		case RF_PATH_C:
@@ -1575,7 +1575,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMSingleTone, bDisable);
 		//Set CCK Tx Test Rate
 		#if 0
-		switch(pAdapter->mppriv.rateidx)
+		switch (pAdapter->mppriv.rateidx)
 		{
 			case 2:
 				cckrate = 0;

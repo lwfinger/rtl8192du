@@ -492,7 +492,7 @@ _func_enter_;
 
 		_clr_fwstate_(pmlmepriv, ~WIFI_NULL_STATE);
 
-		switch(networktype)
+		switch (networktype)
 		{
 			case NDIS802_11IBSS:
 				set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
@@ -654,7 +654,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	switch(wep->KeyLength)
+	switch (wep->KeyLength)
 	{
 		case 5:
 			psecuritypriv->dot11PrivacyAlgrthm=_WEP40_;
@@ -854,7 +854,7 @@ _func_enter_;
 		{
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("keylen=%d( Adapter->securitypriv.dot11PrivacyAlgrthm=%x  )padapter->securitypriv.dot118021XGrpPrivacy(%x)\n", key->KeyLength,padapter->securitypriv.dot11PrivacyAlgrthm,padapter->securitypriv.dot118021XGrpPrivacy));
 
-			switch(key->KeyLength)
+			switch (key->KeyLength)
 			{
 				case 5:
 					padapter->securitypriv.dot11PrivacyAlgrthm=_WEP40_;

@@ -131,7 +131,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 		{
 			report = pCck_buf->cck_agc_rpt&0xc0;
 			report = report>>6;
-			switch(report)
+			switch (report)
 			{
 				// 03312009 modified by cosa
 				// Modify the RF RNA gain value to -40, -20, -2, 14 by Jenyu's suggestion
@@ -154,7 +154,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 		{
 			report = pCck_buf->cck_agc_rpt & 0x60;
 			report = report>>5;
-			switch(report)
+			switch (report)
 			{
 				case 0x3:
 					rx_pwr_all = (-46) - ((pCck_buf->cck_agc_rpt & 0x1f)<<1) ;

@@ -310,7 +310,7 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 
 _func_enter_;
 
-	switch(pxmitbuf->flags)
+	switch (pxmitbuf->flags)
 	{
 		case VO_QUEUE_INX:
 			pxmitpriv->voq_cnt--;
@@ -339,7 +339,7 @@ _func_enter_;
 
 	pxmitpriv->txirp_cnt--;
 
-	switch(pattrib->priority)
+	switch (pattrib->priority)
 	{
 		case 1:
 		case 2:
@@ -479,7 +479,7 @@ _func_enter_;
 
 	spin_lock_irqsave(&pxmitpriv->lock, irqL);
 
-	switch(addr)
+	switch (addr)
 	{
 		case VO_QUEUE_INX:
 			pxmitpriv->voq_cnt++;

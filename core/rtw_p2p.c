@@ -2562,7 +2562,7 @@ u8 process_p2p_provdisc_req(struct wifidirect_info *pwdinfo,  u8 *pframe, uint l
 		if ( rtw_get_wps_attr_content( wpsie, wps_ielen, WPS_ATTR_CONF_METHOD , ( u8* ) &uconfig_method, &attr_contentlen) )
 		{
 			uconfig_method = be16_to_cpu( uconfig_method );
-			switch( uconfig_method )
+			switch ( uconfig_method )
 			{
 				case WPS_CM_DISPLYA:
 				{
@@ -3640,7 +3640,7 @@ void rtw_append_wfd_ie(struct rtw_adapter *padapter, u8 *buf, u32* len)
 		{
 			OUI_Subtype = frame_body[6];
 			dialogToken = frame_body[7];
-			switch( OUI_Subtype )//OUI Subtype
+			switch ( OUI_Subtype )//OUI Subtype
 			{
 				case P2P_GO_NEGO_REQ:
 				{
@@ -3707,7 +3707,7 @@ void rtw_append_wfd_ie(struct rtw_adapter *padapter, u8 *buf, u32* len)
 					cpu_to_be32( *( ( u32* ) ( frame_body + 1 ) ) ), OUI_Subtype, dialogToken);
 #endif
 
-		switch(OUI_Subtype)
+		switch (OUI_Subtype)
 		{
 			case P2P_NOTICE_OF_ABSENCE:
 
@@ -3769,7 +3769,7 @@ int rtw_p2p_check_frames(struct rtw_adapter *padapter, const u8 *buf, u32 len, u
 				len-sizeof(struct rtw_ieee80211_hdr_3addr)-_PUBLIC_ACTION_IE_OFFSET_,
 				NULL, &p2p_ielen);
 
-			switch( OUI_Subtype )//OUI Subtype
+			switch ( OUI_Subtype )//OUI Subtype
 			{
 				u8 *cont;
 				uint cont_len;
@@ -3942,7 +3942,7 @@ int rtw_p2p_check_frames(struct rtw_adapter *padapter, const u8 *buf, u32 len, u
 
 		is_p2p_frame = OUI_Subtype;
 
-		switch(OUI_Subtype)
+		switch (OUI_Subtype)
 		{
 			case P2P_NOTICE_OF_ABSENCE:
 				DBG_8192D("RTW_%s:P2P_NOTICE_OF_ABSENCE, dialogToken=%d\n", (tx==true)?"TX":"RX", dialogToken);
@@ -3987,7 +3987,7 @@ void p2p_protocol_wk_hdl(struct rtw_adapter *padapter, int intCmdType)
 
 _func_enter_;
 
-	switch(intCmdType)
+	switch (intCmdType)
 	{
 		case P2P_FIND_PHASE_WK:
 		{
@@ -4189,7 +4189,7 @@ void p2p_ps_wk_hdl(struct rtw_adapter *padapter, u8 p2p_ps_state)
 
 _func_enter_;
 
-	switch(p2p_ps_state)
+	switch (p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
 			pwdinfo->p2p_ps_state = p2p_ps_state;

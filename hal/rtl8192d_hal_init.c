@@ -412,7 +412,7 @@ int FirmwareDownload92D(
 		pFirmware->eFWSource = FW_SOURCE_HEADER_FILE;
 	}
 
-	switch(pFirmware->eFWSource)
+	switch (pFirmware->eFWSource)
 	{
 		case FW_SOURCE_IMG_FILE:
 
@@ -947,7 +947,7 @@ rtl8192d_ReadTxPowerInfo(
 
 	if (pHalData->EEPROMC9 == 0xFF || AutoLoadFail)
 	{
-		switch(pHalData->PAMode)
+		switch (pHalData->PAMode)
 		{
 			//external pa
 			case 0:
@@ -996,7 +996,7 @@ rtl8192d_ReadTxPowerInfo(
 
 	for (i = 0; i < 2; i++)
 	{
-		switch(tempval[i])
+		switch (tempval[i])
 		{
 			case 0:
 				tempval[i] = 2;
@@ -1522,7 +1522,7 @@ hal_EfuseUpdateNormalChipVersion_92D(
 	ReadEFuseByte(Adapter,EEPROME_CHIP_VERSION_L,&CutValue[0], false);
 
 	ChipValue= (CutValue[1]<<8)|CutValue[0];
-	switch(ChipValue){
+	switch (ChipValue){
 		case 0xAA55:
 			//ChipVer |= CHIP_92D_C_CUT;
 			ChipVer = (enum VERSION_8192D)( ChipVer | C_CUT_VERSION);
@@ -1610,7 +1610,7 @@ rtl8192d_EFUSE_GetEfuseDefinition(
 		bool		bPseudoTest
 	)
 {
-	switch(type)
+	switch (type)
 	{
 		case TYPE_EFUSE_MAX_SECTION:
 			{

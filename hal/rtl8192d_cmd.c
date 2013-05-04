@@ -120,7 +120,7 @@ _func_enter_;
 
 		// 2. Find the last BOX number which has been writen.
 		BoxNum = pHalData->LastHMEBoxNum;
-		switch(BoxNum)
+		switch (BoxNum)
 		{
 			case 0:
 				BOXReg = REG_HMEBOX_0;
@@ -174,7 +174,7 @@ _func_enter_;
 
 		//DBG_8192D("FillH2CCmd92C():Write ElementID BOXReg(%4x) = %2x \n", BOXReg, ElementID);
 
-		switch(CmdLen)
+		switch (CmdLen)
 		{
 			case 1:
 			{
@@ -543,7 +543,7 @@ void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pL
 		SetPwrMgt(fctrl);
 	}
 
-	switch(cur_network->network.InfrastructureMode)
+	switch (cur_network->network.InfrastructureMode)
 	{
 		case NDIS802_11INFRA:
 			SetToDs(fctrl);
@@ -910,7 +910,7 @@ void rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_sta
 
 _func_enter_;
 
-	switch(p2p_ps_state)
+	switch (p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
 			DBG_8192D("P2P_PS_DISABLE \n");

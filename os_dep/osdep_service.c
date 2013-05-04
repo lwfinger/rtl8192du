@@ -37,7 +37,7 @@ inline int RTW_STATUS_CODE(int error_code){
 	if (error_code >=0)
 		return _SUCCESS;
 
-	switch(error_code) {
+	switch (error_code) {
 		//case -ETIMEDOUT:
 		//	return RTW_STATUS_TIMEDOUT;
 		default:

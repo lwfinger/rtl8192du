@@ -174,7 +174,7 @@ s32 update_tdls_attrib(_adapter *padapter, struct pkt_attrib *pattrib)
 	{
 		GET_ENCRY_ALGO(psecuritypriv, psta, pattrib->encrypt, bmcast);
 
-		switch(psecuritypriv->dot11AuthAlgrthm)
+		switch (psecuritypriv->dot11AuthAlgrthm)
 		{
 			case dot11AuthAlgrthm_Open:
 			case dot11AuthAlgrthm_Shared:
@@ -369,7 +369,7 @@ u8 *rtw_tdls_set_ht_cap(_adapter *padapter, u8 *pframe, struct pkt_attrib *pattr
 	ht_capie.ampdu_params_info = (IEEE80211_HT_CAP_AMPDU_FACTOR&0x03);
 
 	rtw_hal_get_hwreg(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
-	switch(rf_type)
+	switch (rf_type)
 	{
 		case RF_1T1R:
 			ht_capie.cap_info |= 0x0100;//RX STBC One spatial stream

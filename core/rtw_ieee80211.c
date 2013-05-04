@@ -154,7 +154,7 @@ _func_enter_;
 _func_exit_;
 }
 
-inline u8 *rtw_set_ie_ch_switch(u8 *buf, u32 *buf_len, u8 ch_switch_mode,
+inline u8 *rtw_set_ie_ch_switch (u8 *buf, u32 *buf_len, u8 ch_switch_mode,
 				u8 new_ch, u8 ch_switch_cnt)
 {
 	u8 ie_data[3];

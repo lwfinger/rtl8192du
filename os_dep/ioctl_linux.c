@@ -932,7 +932,7 @@ static int rtw_set_wpa_ie(struct rtw_adapter *padapter, char *pie, unsigned shor
 			pairwise_cipher = WPA_CIPHER_NONE;
 		}
 
-		switch(group_cipher)
+		switch (group_cipher)
 		{
 			case WPA_CIPHER_NONE:
 				padapter->securitypriv.dot118021XGrpPrivacy=_NO_PRIVACY_;
@@ -956,7 +956,7 @@ static int rtw_set_wpa_ie(struct rtw_adapter *padapter, char *pie, unsigned shor
 				break;
 		}
 
-		switch(pairwise_cipher)
+		switch (pairwise_cipher)
 		{
 			case WPA_CIPHER_NONE:
 				padapter->securitypriv.dot11PrivacyAlgrthm=_NO_PRIVACY_;
@@ -1164,7 +1164,7 @@ static int rtw_wx_set_mode(struct net_device *dev, struct iw_request_info *a,
 		goto exit;
 	}
 
-	switch(wrqu->mode)
+	switch (wrqu->mode)
 	{
 		case IW_MODE_AUTO:
 			networkType = NDIS802_11AUTOUNK;
@@ -1853,7 +1853,7 @@ _func_enter_;
 		while(len >= 1) {
 			section = *(pos++); len-=1;
 
-			switch(section) {
+			switch (section) {
 				case WEXT_CSCAN_SSID_SECTION:
 					//DBG_8192D("WEXT_CSCAN_SSID_SECTION\n");
 					if (len < 1) {
@@ -2315,7 +2315,7 @@ _func_enter_;
 	}
 	target_rate = target_rate/100000;
 
-	switch(target_rate){
+	switch (target_rate){
 		case 10:
 			ratevalue = 0;
 			break;
@@ -2603,7 +2603,7 @@ static int rtw_wx_set_enc(struct net_device *dev,
 
 			DBG_8192D("(keyindex_provided == 1), keyid=%d, key_len=%d\n", key, padapter->securitypriv.dot11DefKeylen[key]);
 
-			switch(padapter->securitypriv.dot11DefKeylen[key])
+			switch (padapter->securitypriv.dot11DefKeylen[key])
 			{
 				case 5:
 					padapter->securitypriv.dot11PrivacyAlgrthm=_WEP40_;
@@ -2680,7 +2680,7 @@ static int rtw_wx_get_enc(struct net_device *dev,
 	//      erq->flags |= IW_ENCODE_OPEN;
 	//}
 
-	switch(padapter->securitypriv.ndisencryptstatus)
+	switch (padapter->securitypriv.ndisencryptstatus)
 	{
 		case NDIS802_11ENCRYPTIONNOTSUPPORTED:
 		case NDIS802_11ENCRYPTION_DISABLED:
@@ -3286,7 +3286,7 @@ static void rtw_dbg_mode_hdl(struct rtw_adapter *padapter, u32 id, u8 *pdata, u3
 
 	DBG_8192D("%s\n", __func__);
 
-	switch(id)
+	switch (id)
 	{
 		case GEN_MP_IOCTL_SUBCODE(MP_START):
 			DBG_8192D("871x_driver is only for normal mode, can't enter mp mode\n");
@@ -3788,7 +3788,7 @@ static int rtw_p2p_set_intent(struct net_device *dev,
 	struct wifidirect_info			*pwdinfo= &(padapter->wdinfo);
 	u8							intent = pwdinfo->intent;
 
-	switch(wrqu->data.length)
+	switch (wrqu->data.length)
 	{
 		case 1:
 		{
@@ -3827,7 +3827,7 @@ static int rtw_p2p_set_listen_ch(struct net_device *dev,
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 	u8	listen_ch = pwdinfo->listen_channel;	//	Listen channel number
 
-	switch(wrqu->data.length)
+	switch (wrqu->data.length)
 	{
 		case 1:
 		{
@@ -3869,7 +3869,7 @@ static int rtw_p2p_set_op_ch(struct net_device *dev,
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 	u8	op_ch = pwdinfo->operating_channel;	//	Operating channel number
 
-	switch(wrqu->data.length)
+	switch (wrqu->data.length)
 	{
 		case 1:
 		{
@@ -5984,10 +5984,10 @@ static int rtw_dbg_port(struct net_device *dev,
 
 	extra_arg = *(pdata+1);
 
-	switch(major_cmd)
+	switch (major_cmd)
 	{
 		case 0x70://read_reg
-			switch(minor_cmd)
+			switch (minor_cmd)
 			{
 				case 1:
 					DBG_8192D("rtw_read8(0x%x)=0x%02x\n", arg, rtw_read8(padapter, arg));
@@ -6001,7 +6001,7 @@ static int rtw_dbg_port(struct net_device *dev,
 			}
 			break;
 		case 0x71://write_reg
-			switch(minor_cmd)
+			switch (minor_cmd)
 			{
 				case 1:
 					rtw_write8(padapter, arg, extra_arg);
@@ -6033,7 +6033,7 @@ static int rtw_dbg_port(struct net_device *dev,
 			break;
 
 		case 0x76:
-			switch(minor_cmd)
+			switch (minor_cmd)
 			{
 				case 0x00: //normal mode,
 					padapter->recvpriv.is_signal_dbg = 0;
@@ -6047,7 +6047,7 @@ static int rtw_dbg_port(struct net_device *dev,
 			}
 			break;
 		case 0x78: //IOL test
-			switch(minor_cmd)
+			switch (minor_cmd)
 			{
 				#ifdef CONFIG_IOL
 				case 0x04: //LLT table initialization test
@@ -6200,7 +6200,7 @@ static int rtw_dbg_port(struct net_device *dev,
 			break;
 
 		case 0x7F:
-			switch(minor_cmd)
+			switch (minor_cmd)
 			{
 				case 0x0:
 					DBG_8192D("fwstate=0x%x\n", get_fwstate(pmlmepriv));
@@ -6539,7 +6539,7 @@ static int wpa_set_param(struct net_device *dev, u8 name, u32 value)
 
 		//ret = ieee80211_wpa_enable(ieee, value);
 
-		switch((value)&0xff)
+		switch ((value)&0xff)
 		{
 			case 1 : //WPA
 			padapter->securitypriv.ndisauthtype = NDIS802_11AUTHMODEWPAPSK; //WPA_PSK
@@ -6786,7 +6786,7 @@ static int set_group_key(struct rtw_adapter *padapter, u8 *key, u8 alg, int keyi
 
 	psetkeyparm->set_tx = 1;
 
-	switch(alg)
+	switch (alg)
 	{
 		case _WEP40_:
 			keylen = 5;
@@ -6826,7 +6826,7 @@ static int set_wep_key(struct rtw_adapter *padapter, u8 *key, u8 keylen, int key
 {
 	u8 alg;
 
-	switch(keylen)
+	switch (keylen)
 	{
 		case 5:
 			alg =_WEP40_;
@@ -7946,7 +7946,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
 
 	i = rtw_android_cmdstr_to_num(ext);
 
-	switch(i) {
+	switch (i) {
 		case ANDROID_WIFI_CMD_START :
 			indicate_wx_custom_event(padapter, "START");
 			break;
@@ -8869,7 +8869,7 @@ static int rtw_mp_ant_tx(struct net_device *dev,
 
 	for (i=0; i < strlen(input); i++)
 	{
-		switch(input[i])
+		switch (input[i])
 			{
 				case 'a' :
 								antenna|=ANTENNA_A;
@@ -8908,7 +8908,7 @@ static int rtw_mp_ant_rx(struct net_device *dev,
 
 	for (i=0; i < strlen(input); i++) {
 
-	switch(input[i])
+	switch (input[i])
 			{
 				case 'a' :
 								antenna|=ANTENNA_A;
@@ -9359,7 +9359,7 @@ static int rtw_mp_set(struct net_device *dev,
 		return -EIO;
 	}
 
-	switch(subcmd)
+	switch (subcmd)
 	{
 	case WRITE_REG :
 			rtw_mp_write_reg (dev,info,wrqu,extra);
@@ -9421,7 +9421,7 @@ static int rtw_mp_get(struct net_device *dev,
 		return -EIO;
 	}
 
-	switch(subcmd)
+	switch (subcmd)
 	{
 	case MP_PHYPARA:
 			DBG_8192D("mp_get  MP_PHYPARA \n");
@@ -9727,7 +9727,7 @@ static int rtw_tdls_discovery(struct net_device *dev,
 	return ret;
 }
 
-static int rtw_tdls_ch_switch(struct net_device *dev,
+static int rtw_tdls_ch_switch (struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -10080,7 +10080,7 @@ static int rtw_tdls(struct net_device *dev,
 	else if (_rtw_memcmp(extra, "sw=", 3))
 	{
 		wrqu->data.length -= 3;
-		rtw_tdls_ch_switch(dev, info, wrqu, &extra[3]);
+		rtw_tdls_ch_switch (dev, info, wrqu, &extra[3]);
 	}
 	else if (_rtw_memcmp(extra, "swoff=", 6))
 	{

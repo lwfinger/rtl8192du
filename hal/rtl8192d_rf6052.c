@@ -123,7 +123,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 	u8			eRFPath;
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 
-	switch(Bandwidth)
+	switch (Bandwidth)
 	{
 		case HT_CHANNEL_WIDTH_20:
 			for (eRFPath=0;eRFPath<pHalData->NumTotalRFPath;eRFPath++)
@@ -347,7 +347,7 @@ static void getTxPowerWriteValByRegulatory(
 	//
 	for (rf=0; rf<2; rf++)
 	{
-		switch(pHalData->EEPROMRegulatory)
+		switch (pHalData->EEPROMRegulatory)
 		{
 			case 0:	// Realtek better performance
 					// increase power diff defined by Realtek for large power
@@ -738,7 +738,7 @@ phy_RF6052_Config_ParaFile(
 		pPhyReg = &pHalData->PHYRegDef[eRFPath];
 
 		/*----Store original RFENV control type----*/
-		switch(eRFPath)
+		switch (eRFPath)
 		{
 			case RF_PATH_A:
 			case RF_PATH_C:
@@ -766,7 +766,7 @@ phy_RF6052_Config_ParaFile(
 		rtw_udelay_os(1);//PlatformStallExecution(1);
 
 		/*----Initialize RF fom connfiguration file----*/
-		switch(eRFPath)
+		switch (eRFPath)
 		{
 			case RF_PATH_A:
 #ifdef CONFIG_EMBEDDED_FWIMG
@@ -793,7 +793,7 @@ phy_RF6052_Config_ParaFile(
 		}
 
 		/*----Restore RFENV control type----*/;
-		switch(eRFPath)
+		switch (eRFPath)
 		{
 			case RF_PATH_A:
 			case RF_PATH_C:

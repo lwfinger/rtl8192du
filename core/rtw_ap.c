@@ -2005,7 +2005,7 @@ u8 ap_free_sta(struct rtw_adapter *padapter, struct sta_info *psta, bool active,
 	return beacon_updated;
 }
 
-int rtw_ap_inform_ch_switch(struct rtw_adapter *padapter, u8 new_ch, u8 ch_offset)
+int rtw_ap_inform_ch_switch (struct rtw_adapter *padapter, u8 new_ch, u8 ch_offset)
 {
 	struct list_head *phead, *plist;
 	int ret = 0;
@@ -2030,12 +2030,12 @@ int rtw_ap_inform_ch_switch(struct rtw_adapter *padapter, u8 new_ch, u8 ch_offse
 		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 		plist = get_next(plist);
 
-		issue_action_spct_ch_switch(padapter, psta->hwaddr, new_ch, ch_offset);
+		issue_action_spct_ch_switch (padapter, psta->hwaddr, new_ch, ch_offset);
 		psta->expire_to = ((pstapriv->expire_to * 2) > 5) ? 5 : (pstapriv->expire_to * 2);
 	}
 	spin_unlock_bh(&pstapriv->asoc_list_lock);
 
-	issue_action_spct_ch_switch(padapter, bc_addr, new_ch, ch_offset);
+	issue_action_spct_ch_switch (padapter, bc_addr, new_ch, ch_offset);
 
 	return ret;
 }

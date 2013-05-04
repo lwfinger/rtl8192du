@@ -430,7 +430,7 @@ static void usb_read_interrupt_complete(struct urb *purb, struct pt_regs *regs)
 	{
 		DBG_8192D("###=> usb_read_interrupt_complete => urb status(%d)\n", purb->status);
 
-		switch(purb->status) {
+		switch (purb->status) {
 			case -EINVAL:
 			case -EPIPE:
 			case -ENODEV:
@@ -734,7 +734,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 		//recvframe_pull(precvframe, drvinfo_sz + RXDESC_SIZE);
 
 #ifdef CONFIG_USB_RX_AGGREGATION
-		switch(pHalData->UsbRxAggMode)
+		switch (pHalData->UsbRxAggMode)
 		{
 			case USB_RX_AGG_DMA:
 			case USB_RX_AGG_DMA_USB:
@@ -855,7 +855,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 
 		DBG_8192D("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
 
-		switch(purb->status) {
+		switch (purb->status) {
 			case -EINVAL:
 			case -EPIPE:
 			case -ENODEV:
@@ -1071,7 +1071,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 		//recvframe_pull(precvframe, drvinfo_sz + RXDESC_SIZE);
 
 #ifdef CONFIG_USB_RX_AGGREGATION
-		switch(pHalData->UsbRxAggMode)
+		switch (pHalData->UsbRxAggMode)
 		{
 			case USB_RX_AGG_DMA:
 			case USB_RX_AGG_DMA_USB:
@@ -1215,7 +1215,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 
 		DBG_8192D("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
 
-		switch(purb->status) {
+		switch (purb->status) {
 			case -EINVAL:
 			case -EPIPE:
 			case -ENODEV:

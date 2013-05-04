@@ -585,7 +585,7 @@ _func_enter_;
 		{
 			DBG_8192D("prxattrib->key_index(%d) > WEP_KEYS \n", prxattrib->key_index);
 
-			switch(prxattrib->encrypt){
+			switch (prxattrib->encrypt){
 				case _WEP40_:
 				case _WEP104_:
 					prxattrib->key_index = psecuritypriv->dot11PrivacyKeyIndex;
@@ -612,7 +612,7 @@ _func_enter_;
 			, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
 		#endif
 
-		switch(prxattrib->encrypt){
+		switch (prxattrib->encrypt){
 		case _WEP40_:
 		case _WEP104_:
 			rtw_wep_decrypt(padapter, (u8 *)precv_frame);
@@ -852,7 +852,7 @@ void process_wmmps_data(struct rtw_adapter *padapter, union recv_frame *precv_fr
 	{
 		u8 wmmps_ac=0;
 
-		switch(pattrib->priority)
+		switch (pattrib->priority)
 		{
 			case 1:
 			case 2:
@@ -922,7 +922,7 @@ int OnTDLS(struct rtw_adapter *adapter, union recv_frame *precv_frame)
 		return ret;
 	}
 
-	switch(*paction){
+	switch (*paction){
 		case TDLS_SETUP_REQUEST:
 			DBG_8192D("recv tdls setup request frame\n");
 			ret=On_TDLS_Setup_Req(adapter, precv_frame);
@@ -1508,7 +1508,7 @@ int validate_recv_ctrl_frame(struct rtw_adapter *padapter, union recv_frame *pre
 		//for rx pkt statistics
 		psta->sta_stats.rx_ctrl_pkts++;
 
-		switch(pattrib->priority)
+		switch (pattrib->priority)
 		{
 			case 1:
 			case 2:
@@ -1695,7 +1695,7 @@ _func_enter_;
 
 	memcpy(pattrib->bssid, pbssid, ETH_ALEN);
 
-	switch(pattrib->to_fr_ds)
+	switch (pattrib->to_fr_ds)
 	{
 		case 0:
 			memcpy(pattrib->ra, pda, ETH_ALEN);

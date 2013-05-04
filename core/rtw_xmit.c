@@ -740,7 +740,7 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 	{
 		GET_ENCRY_ALGO(psecuritypriv, psta, pattrib->encrypt, bmcast);
 
-		switch(psecuritypriv->dot11AuthAlgrthm)
+		switch (psecuritypriv->dot11AuthAlgrthm)
 		{
 			case dot11AuthAlgrthm_Open:
 			case dot11AuthAlgrthm_Shared:
@@ -972,7 +972,7 @@ _func_enter_;
 	{
 		//DBG_8192D("start xmitframe_swencrypt\n");
 		RT_TRACE(_module_rtl871x_xmit_c_,_drv_alert_,("### xmitframe_swencrypt\n"));
-		switch(pattrib->encrypt){
+		switch (pattrib->encrypt){
 		case _WEP40_:
 		case _WEP104_:
 			rtw_wep_encrypt(padapter, (u8 *)pxmitframe);
@@ -1225,7 +1225,7 @@ s32 rtw_txframes_sta_ac_pending(struct rtw_adapter *padapter, struct pkt_attrib 
 
 	psta = pattrib->psta;
 
-	switch(priority)
+	switch (priority)
 	{
 			case 1:
 			case 2:
@@ -1256,7 +1256,7 @@ int rtw_build_tdls_ies(struct rtw_adapter * padapter, struct xmit_frame * pxmitf
 {
 	int res=_SUCCESS;
 
-	switch(action){
+	switch (action){
 		case TDLS_SETUP_REQUEST:
 			rtw_build_tdls_setup_req_ies(padapter, pxmitframe, pframe);
 			break;
@@ -1316,7 +1316,7 @@ _func_enter_;
 
 	SetFrameSubType(fctrl, pattrib->subtype);
 
-	switch(action){
+	switch (action){
 		case TDLS_SETUP_REQUEST:
 		case TDLS_SETUP_RESPONSE:
 		case TDLS_SETUP_CONFIRM:
@@ -1452,7 +1452,7 @@ _func_enter_;
 	{
 		if (psta != NULL)
 		{
-			switch(pattrib->encrypt)
+			switch (pattrib->encrypt)
 			{
 				case _WEP40_:
 				case _WEP104_:
@@ -1621,7 +1621,7 @@ _func_enter_;
 
 			if (psta != NULL)
 			{
-				switch(pattrib->encrypt)
+				switch (pattrib->encrypt)
 				{
 					case _WEP40_:
 					case _WEP104_:
@@ -1767,7 +1767,7 @@ void rtw_update_protection(struct rtw_adapter *padapter, u8 *ie, uint ie_len)
 
 _func_enter_;
 
-	switch(pxmitpriv->vcs_setting)
+	switch (pxmitpriv->vcs_setting)
 	{
 		case DISABLE_VCS:
 			pxmitpriv->vcs = NONE_VCS;
@@ -2766,7 +2766,7 @@ int xmitframe_enqueue_for_tdls_sleeping_sta(struct rtw_adapter *padapter, struct
 			ptdls_sta->sleepq_ac_len++;
 
 			//indicate 4-AC queue bit in TDLS peer traffic indication
-			switch(pattrib->priority)
+			switch (pattrib->priority)
 			{
 				case 1:
 				case 2:
@@ -2895,7 +2895,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct rtw_adapter *padapter, struct xmit
 
 			psta->sleepq_len++;
 
-			switch(pattrib->priority)
+			switch (pattrib->priority)
 			{
 				case 1:
 				case 2:
@@ -3049,7 +3049,7 @@ void wakeup_sta_to_xmit(struct rtw_adapter *padapter, struct sta_info *psta)
 
 		rtw_list_delete(&pxmitframe->list);
 
-		switch(pxmitframe->attrib.priority)
+		switch (pxmitframe->attrib.priority)
 		{
 			case 1:
 			case 2:
@@ -3212,7 +3212,7 @@ void xmit_delivery_enabled_frames(struct rtw_adapter *padapter, struct sta_info 
 
 		xmitframe_plist = get_next(xmitframe_plist);
 
-		switch(pxmitframe->attrib.priority)
+		switch (pxmitframe->attrib.priority)
 		{
 			case 1:
 			case 2:
@@ -3316,7 +3316,7 @@ int rtw_sctx_wait(struct submit_ctx *sctx)
 
 bool rtw_sctx_chk_waring_status(int status)
 {
-	switch(status) {
+	switch (status) {
 	case RTW_SCTX_DONE_UNKNOWN:
 	case RTW_SCTX_DONE_BUF_ALLOC:
 	case RTW_SCTX_DONE_BUF_FREE:

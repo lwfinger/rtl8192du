@@ -667,7 +667,7 @@ static int set_group_key(_adapter *padapter, u8 *key, u8 alg, int keyid)
 
 	psetkeyparm->set_tx = 1;
 
-	switch(alg)
+	switch (alg)
 	{
 		case _WEP40_:
 			keylen = 5;
@@ -707,7 +707,7 @@ static int set_wep_key(_adapter *padapter, u8 *key, u8 keylen, int keyid)
 {
 	u8 alg;
 
-	switch(keylen)
+	switch (keylen)
 	{
 		case 5:
 			alg =_WEP40_;
@@ -2216,7 +2216,7 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 		pairwise_cipher = WPA_CIPHER_NONE;
 	}
 
-	switch(group_cipher)
+	switch (group_cipher)
 	{
 		case WPA_CIPHER_NONE:
 			padapter->securitypriv.dot118021XGrpPrivacy=_NO_PRIVACY_;
@@ -2240,7 +2240,7 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 			break;
 	}
 
-	switch(pairwise_cipher)
+	switch (pairwise_cipher)
 	{
 		case WPA_CIPHER_NONE:
 			padapter->securitypriv.dot11PrivacyAlgrthm=_NO_PRIVACY_;
@@ -3821,7 +3821,7 @@ void rtw_cfg80211_issue_p2p_provision_request(_adapter *padapter, const u8 *buf,
 	rtw_get_wps_attr_content( wpsie, wpsielen, WPS_ATTR_DEVICE_PWID, (u8*) &wps_devicepassword_id, &wps_devicepassword_id_len);
 	wps_devicepassword_id = be16_to_cpu( wps_devicepassword_id );
 
-	switch(wps_devicepassword_id)
+	switch (wps_devicepassword_id)
 	{
 		case WPS_DPID_PIN:
 			pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_LABEL;

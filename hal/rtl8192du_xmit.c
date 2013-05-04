@@ -48,7 +48,7 @@ u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe)
 	u32 addr;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 
-	switch(pattrib->qsel)
+	switch (pattrib->qsel)
 	{
 		case 0:
 		case 3:
@@ -164,7 +164,7 @@ static void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
 {
 	//DBG_8192D("cvs_mode=%d\n", pattrib->vcs_mode);
 
-	switch(pattrib->vcs_mode)
+	switch (pattrib->vcs_mode)
 	{
 		case RTS_CTS:
 			*pdw |= cpu_to_le32(BIT(12));

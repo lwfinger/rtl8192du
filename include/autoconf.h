@@ -234,6 +234,3 @@
 #define CONFIG_DEBUG_RTL819X
 
 #define CONFIG_PROC_DEBUG 1
-
-#define DBG_MEMORY_LEAK	1
-

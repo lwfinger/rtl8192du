@@ -167,7 +167,7 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 		NULL, GFP_ATOMIC);
 #endif
 
-	_rtw_memset( &ev, 0x00, sizeof( ev ) );
+	memset( &ev, 0x00, sizeof( ev ) );
 	if ( bgroup )
 	{
 	    ev.flags |= IW_MICFAILURE_GROUP;
@@ -180,7 +180,7 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 	ev.src_addr.sa_family = ARPHRD_ETHER;
 	memcpy( ev.src_addr.sa_data, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 
-	_rtw_memset( &wrqu, 0x00, sizeof( wrqu ) );
+	memset( &wrqu, 0x00, sizeof( wrqu ) );
 	wrqu.data.length = sizeof( ev );
 
 	wireless_send_event( padapter->pnetdev, IWEVMICHAELMICFAILURE, &wrqu, (char*) &ev );
@@ -219,7 +219,7 @@ void rtw_hostapd_mlme_rx(struct rtw_adapter *padapter, union recv_frame *precv_f
 	skb_reset_mac_header(skb);
 
        //skb_pull(skb, 24);
-       _rtw_memset(skb->cb, 0, sizeof(skb->cb));
+       memset(skb->cb, 0, sizeof(skb->cb));
 
 	netif_rx(skb);
 

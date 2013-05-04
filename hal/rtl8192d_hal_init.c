@@ -779,7 +779,7 @@ hal_ReadPowerValueFromPROM92D(
 	u8	i = 0;
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 
-	_rtw_memset(pwrInfo, 0, sizeof(struct tx_power_info));
+	memset(pwrInfo, 0, sizeof(struct tx_power_info));
 
 	if(AutoLoadFail){
 		for(group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
@@ -1740,8 +1740,8 @@ rtl8192d_Efuse_PgPacketRead(	struct rtw_adapter *	pAdapter,
 	if(offset>=EFUSE_MAX_SECTION)		return false;
 
 
-	_rtw_memset((void *)data, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
-	_rtw_memset((void *)tmpdata, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
+	memset((void *)data, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
+	memset((void *)tmpdata, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
 
 	//RT_PRINT_DATA(COMP_EFUSE, DBG_LOUD, ("efuse_PgPacketRead-1\n"), data, 8);
 
@@ -1883,7 +1883,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 	//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite target offset 0x%x word_en 0x%x \n", target_pkt.offset, target_pkt.word_en));
 
 
-	_rtw_memset((void *)target_pkt.data, 0xFF, sizeof(u8)*8);
+	memset((void *)target_pkt.data, 0xFF, sizeof(u8)*8);
 
 	efuse_WordEnableDataRead(word_en, data, target_pkt.data);
 	target_word_cnts = Efuse_CalculateWordCnts(target_pkt.word_en);
@@ -2177,7 +2177,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 
 					//************  s1-2-A :cover the exist data *******************
 					//memset(originaldata,0xff,sizeof(UINT8)*8);
-					_rtw_memset((void *)originaldata, 0xff, sizeof(u8)*8);
+					memset((void *)originaldata, 0xff, sizeof(u8)*8);
 
 					if(Efuse_PgPacketRead( pAdapter, tmp_pkt.offset,originaldata, bPseudoTest))
 					{	//check if data exist
@@ -2271,7 +2271,7 @@ rtl8192d_Efuse_WordEnableDataWrite(	struct rtw_adapter *	pAdapter,
 	u8	tmpdata[8];
 
 	//memset(tmpdata,0xff,PGPKT_DATA_SIZE);
-	_rtw_memset((void *)tmpdata, 0xff, PGPKT_DATA_SIZE);
+	memset((void *)tmpdata, 0xff, PGPKT_DATA_SIZE);
 	//RT_TRACE(COMP_EFUSE, DBG_LOUD, ("word_en = %x efuse_addr=%x\n", word_en, efuse_addr));
 
 	//RT_PRINT_DATA(COMP_EFUSE, DBG_LOUD, ("U-EFUSE\n"), data, 8);

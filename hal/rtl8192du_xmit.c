@@ -227,7 +227,7 @@ InsertEMContent(struct xmit_frame *pxmitframe, u8 *VirtualAddress);
 void
 InsertEMContent(struct xmit_frame *pxmitframe, u8 *VirtualAddress)
 {
-	_rtw_memset(VirtualAddress, 0, 8);
+	memset(VirtualAddress, 0, 8);
 	SET_EARLYMODE_PKTNUM(VirtualAddress, pxmitframe->EMPktNum);
 	SET_EARLYMODE_LEN0(VirtualAddress, pxmitframe->EMPktLen[0]);
 	SET_EARLYMODE_LEN1(VirtualAddress, pxmitframe->EMPktLen[1]);
@@ -272,7 +272,7 @@ if (padapter->registrypriv.mp_mode == 0)
 }
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_TX
 
-	_rtw_memset(ptxdesc, 0, sizeof(struct tx_desc));
+	memset(ptxdesc, 0, sizeof(struct tx_desc));
 
 	if((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG)
 	{
@@ -1078,7 +1078,7 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
 
 	// ----- fill tx desc -----
 	ptxdesc = (struct tx_desc *)pxmitbuf;
-	_rtw_memset(ptxdesc, 0, sizeof(*ptxdesc));
+	memset(ptxdesc, 0, sizeof(*ptxdesc));
 
 	//offset 0
 	ptxdesc->txdw0 |= cpu_to_le32(len&0x0000ffff);

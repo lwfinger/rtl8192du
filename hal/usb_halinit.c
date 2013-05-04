@@ -3430,7 +3430,7 @@ static void _ReadPROMContent(
 	}
 	else if ( pEEPROM->EepromOrEfuse == false)//auto load fail
 	{
-		_rtw_memset(pEEPROM->efuse_eeprom_data, 0xff, HWSET_MAX_SIZE);
+		memset(pEEPROM->efuse_eeprom_data, 0xff, HWSET_MAX_SIZE);
 		memcpy((void*)PROMContent, (void*)pEEPROM->efuse_eeprom_data, HWSET_MAX_SIZE);
 	}
 
@@ -5750,7 +5750,7 @@ _func_enter_;
 	if(padapter->HalData == NULL){
 		DBG_8192D("cant not alloc memory for HAL DATA \n");
 	}
-	//_rtw_memset(padapter->HalData, 0, sizeof(struct hal_data_8192du));
+	//memset(padapter->HalData, 0, sizeof(struct hal_data_8192du));
 	padapter->hal_data_sz = sizeof(struct hal_data_8192du);
 
 	pHalFunc->hal_init = &rtl8192du_hal_init;

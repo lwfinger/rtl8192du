@@ -2406,7 +2406,7 @@ void rtl8192d_init_dm_priv(struct rtw_adapter * Adapter)
 	//struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	//struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
-	//_rtw_memset(pdmpriv, 0, sizeof(struct dm_priv));
+	//memset(pdmpriv, 0, sizeof(struct dm_priv));
 
 }
 

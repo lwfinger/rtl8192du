@@ -5654,7 +5654,7 @@ phy_LCCalibrate92DSW(
 			//{
 			//	RTPRINT(FINIT, INIT_IQK,("cosa, path-B / 2.4G LCK\n"));
 			//}
-			_rtw_memset(&curveCountVal[0], 0, CV_CURVE_CNT*2);
+			memset(&curveCountVal[0], 0, CV_CURVE_CNT*2);
 
 			//Set LC calibration off
 			PHY_SetRFReg(pAdapter, (enum RF_RADIO_PATH_E)index, RF_CHNLBW, 0x08000, 0x0);

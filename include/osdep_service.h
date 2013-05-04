@@ -342,7 +342,6 @@ extern void	_rtw_mfree(u8 *pbuf, u32 sz);
 #endif
 
 extern int	_rtw_memcmp(void *dst, void *src, u32 sz);
-extern void	_rtw_memset(void *pbuf, int c, u32 sz);
 
 extern void	_rtw_init_listhead(struct list_head *list);
 extern u32	rtw_is_list_empty(struct list_head *phead);

@@ -304,7 +304,7 @@ void get_rate_set(struct rtw_adapter *padapter, unsigned char *pbssrate, int *bs
 {
 	unsigned char supportedrates[NUMRATES];
 
-	_rtw_memset(supportedrates, 0, NUMRATES);
+	memset(supportedrates, 0, NUMRATES);
 	*bssrate_len = ratetbl2rateset(padapter, supportedrates);
 	memcpy(pbssrate, supportedrates, *bssrate_len);
 }
@@ -798,7 +798,7 @@ void flush_all_cam_entry(struct rtw_adapter *padapter)
 
 #endif //CONFIG_CONCURRENT_MODE
 
-	_rtw_memset((u8 *)(pmlmeinfo->FW_sta_info), 0, sizeof(pmlmeinfo->FW_sta_info));
+	memset((u8 *)(pmlmeinfo->FW_sta_info), 0, sizeof(pmlmeinfo->FW_sta_info));
 
 }
 
@@ -1587,7 +1587,7 @@ void update_tx_basic_rate(struct rtw_adapter *padapter, u8 wirelessmode)
 		return;
 #endif //CONFIG_INTEL_WIDI
 
-	_rtw_memset(supported_rates, 0, NDIS_802_11_LENGTH_RATES_EX);
+	memset(supported_rates, 0, NDIS_802_11_LENGTH_RATES_EX);
 
 	//clear B mod if current channel is in 5G band, avoid tx cck rate in 5G band.
 	if(pmlmeext->cur_channel > 14)

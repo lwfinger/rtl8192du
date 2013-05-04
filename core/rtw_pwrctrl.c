@@ -1098,7 +1098,7 @@ void rtw_free_pwrctrl_priv(struct rtw_adapter * adapter)
 
 _func_enter_;
 
-	//_rtw_memset((unsigned char *)pwrctrlpriv, 0, sizeof(struct pwrctrl_priv));
+	//memset((unsigned char *)pwrctrlpriv, 0, sizeof(struct pwrctrl_priv));
 
 
 	#ifdef CONFIG_RESUME_IN_WORKQUEUE

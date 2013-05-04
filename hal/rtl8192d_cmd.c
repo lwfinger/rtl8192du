@@ -167,8 +167,8 @@ _func_enter_;
 		}
 
 		// 4. Fill the H2C cmd into box
-		_rtw_memset(BoxContent, 0, sizeof(BoxContent));
-		_rtw_memset(BoxExtContent, 0, sizeof(BoxExtContent));
+		memset(BoxContent, 0, sizeof(BoxContent));
+		memset(BoxExtContent, 0, sizeof(BoxExtContent));
 
 		BoxContent[0] = ElementID; // Fill element ID
 
@@ -287,7 +287,7 @@ FillH2CCmd92D(
 		return;
 	}
 
-	_rtw_memset(tmpCmdBuf, 0, 8);
+	memset(tmpCmdBuf, 0, 8);
 	memcpy(tmpCmdBuf, pCmdBuffer, CmdLen);
 
 	_FillH2CCmd92D(Adapter, ElementID, CmdLen, (u8 *)&tmpCmdBuf);
@@ -323,7 +323,7 @@ u8 rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg)
 
 _func_enter_;
 
-	_rtw_memset(buf, 0, 5);
+	memset(buf, 0, 5);
 	mask = cpu_to_le32( mask );
 	memcpy(buf, &mask, 4);
 	buf[4]  = arg;
@@ -634,7 +634,7 @@ FillFakeTxDescriptor92D(
 	struct tx_desc	*ptxdesc = (struct tx_desc *)pDesc;
 
 	// Clear all status
-	_rtw_memset(pDesc, 0, 32);
+	memset(pDesc, 0, 32);
 
 	//offset 0
 	ptxdesc->txdw0 |= cpu_to_le32( OWN | FSG | LSG); //own, bFirstSeg, bLastSeg;
@@ -706,7 +706,7 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 		return;
 	}
 
-	_rtw_memset(ReservedPagePacket, 0, 1000);
+	memset(ReservedPagePacket, 0, 1000);
 
 	TxDescLen = 32;//TX_DESC_SIZE;
 
@@ -917,7 +917,7 @@ _func_enter_;
 	{
 		case P2P_PS_DISABLE:
 			DBG_8192D("P2P_PS_DISABLE \n");
-			_rtw_memset(p2p_ps_offload, 0 ,1);
+			memset(p2p_ps_offload, 0 ,1);
 			break;
 		case P2P_PS_ENABLE:
 			DBG_8192D("P2P_PS_ENABLE \n");

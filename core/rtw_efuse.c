@@ -557,7 +557,7 @@ u8 rtw_efuse_map_write(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *dat
 
 	offset = (addr >> 3);
 	word_en = 0xF;
-	_rtw_memset(newdata, 0xFF, PGPKT_DATA_SIZE);
+	memset(newdata, 0xFF, PGPKT_DATA_SIZE);
 	i = addr & 0x7;	/*  index of one package */
 	j = 0;		/*  index of new package */
 	idx = 0;	/*  data index */
@@ -615,7 +615,7 @@ u8 rtw_efuse_map_write(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *dat
 		i = 0;
 		j = 0;
 		word_en = 0xF;
-		_rtw_memset(newdata, 0xFF, PGPKT_DATA_SIZE);
+		memset(newdata, 0xFF, PGPKT_DATA_SIZE);
 	} while (1);
 
 	Efuse_PowerSwitch(padapter, true, false);
@@ -775,7 +775,7 @@ void EFUSE_ShadowMapUpdate(struct rtw_adapter *pAdapter, u8 efusetype, bool test
 	EFUSE_GetEfuseDefinition(pAdapter, efusetype, TYPE_EFUSE_MAP_LEN, (void *)&maplen, test);
 
 	if (pEEPROM->bautoload_fail_flag == true) {
-		_rtw_memset(pEEPROM->efuse_eeprom_data, 0xFF, maplen);
+		memset(pEEPROM->efuse_eeprom_data, 0xFF, maplen);
 	} else {
 		#ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
 		if (_SUCCESS != retriveAdaptorInfoFile(pAdapter->registrypriv.adaptor_info_caching_file_path, pEEPROM)) {
@@ -852,19 +852,19 @@ void Efuse_InitSomeVar(struct rtw_adapter *pAdapter)
 {
 	u8 i;
 
-	_rtw_memset((void *)&fakeEfuseContent[0], 0xff, EFUSE_MAX_HW_SIZE);
-	_rtw_memset((void *)&fakeEfuseInitMap[0], 0xff, EFUSE_MAX_MAP_LEN);
-	_rtw_memset((void *)&fakeEfuseModifiedMap[0], 0xff, EFUSE_MAX_MAP_LEN);
+	memset((void *)&fakeEfuseContent[0], 0xff, EFUSE_MAX_HW_SIZE);
+	memset((void *)&fakeEfuseInitMap[0], 0xff, EFUSE_MAX_MAP_LEN);
+	memset((void *)&fakeEfuseModifiedMap[0], 0xff, EFUSE_MAX_MAP_LEN);
 
 	for (i = 0; i < EFUSE_MAX_BT_BANK; i++)
-		_rtw_memset((void *)&BTEfuseContent[i][0], EFUSE_MAX_HW_SIZE, 0xff);
-	_rtw_memset((void *)&BTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
-	_rtw_memset((void *)&BTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
+		memset((void *)&BTEfuseContent[i][0], EFUSE_MAX_HW_SIZE, 0xff);
+	memset((void *)&BTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
+	memset((void *)&BTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
 
 	for (i = 0; i < EFUSE_MAX_BT_BANK; i++)
-		_rtw_memset((void *)&fakeBTEfuseContent[i][0], 0xff, EFUSE_MAX_HW_SIZE);
-	_rtw_memset((void *)&fakeBTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
-	_rtw_memset((void *)&fakeBTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
+		memset((void *)&fakeBTEfuseContent[i][0], 0xff, EFUSE_MAX_HW_SIZE);
+	memset((void *)&fakeBTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
+	memset((void *)&fakeBTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
 }
 
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE

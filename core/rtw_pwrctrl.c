@@ -200,7 +200,7 @@ void rtw_ps_processor(struct rtw_adapter*padapter)
 					pwrpriv->ps_flag = true;
 
 				rfpwrstate = RfOnOffDetect(padapter);
-				DBG_8192D("@@@@- #1  %s==> rfstate:%s \n",__func__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
+				DBG_8192D("@@@@- #1  %s==> rfstate:%s\n",__func__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
 				if (rfpwrstate!= pwrpriv->rf_pwrstate)
 				{
 					if (rfpwrstate == rf_off)
@@ -219,7 +219,7 @@ void rtw_ps_processor(struct rtw_adapter*padapter)
 	#endif //CONFIG_AUTOSUSPEND
 		{
 			rfpwrstate = RfOnOffDetect(padapter);
-			DBG_8192D("@@@@- #2  %s==> rfstate:%s \n",__func__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
+			DBG_8192D("@@@@- #2  %s==> rfstate:%s\n",__func__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
 
 			if (rfpwrstate!= pwrpriv->rf_pwrstate)
 			{

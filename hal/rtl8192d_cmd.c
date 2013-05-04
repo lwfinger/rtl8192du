@@ -107,7 +107,7 @@ _func_enter_;
 
 	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex));
 
-	//DBG_8192D("FillH2CCmd : ElementID=%d \n",ElementID);
+	//DBG_8192D("FillH2CCmd : ElementID=%d\n",ElementID);
 
 	while (!bWriteSucess)
 	{
@@ -162,7 +162,7 @@ _func_enter_;
 		// If Fw has not read the last H2C cmd, break and give up this H2C.
 		if (!IsFwRead)
 		{
-			DBG_8192D("FillH2CCmd92C():  Write H2C register BOX[%d] fail!!!!! Fw do not read. \n", BoxNum);
+			DBG_8192D("FillH2CCmd92C():  Write H2C register BOX[%d] fail!!!!! Fw do not read.\n", BoxNum);
 			break;
 		}
 
@@ -172,7 +172,7 @@ _func_enter_;
 
 		BoxContent[0] = ElementID; // Fill element ID
 
-		//DBG_8192D("FillH2CCmd92C():Write ElementID BOXReg(%4x) = %2x \n", BOXReg, ElementID);
+		//DBG_8192D("FillH2CCmd92C():Write ElementID BOXReg(%4x) = %2x\n", BOXReg, ElementID);
 
 		switch (CmdLen)
 		{
@@ -763,7 +763,7 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 	SET_H2CCMD_RSVDPAGE_LOC_NULL_DATA(u1RsvdPageLoc, PageNum);
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_,
-		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: NULL DATA \n",
+		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: NULL DATA\n",
 		&reservedpagepacket[BufIndex-TxDescLen], (NullFunctionDataLength+TxDescLen));
 //------------------------------------------------------------------
 
@@ -785,7 +785,7 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 	SET_H2CCMD_RSVDPAGE_LOC_PROBE_RSP(u1RsvdPageLoc, PageNum);
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_,
-		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: PROBE RSP \n",
+		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: PROBE RSP\n",
 		&reservedpagepacket[BufIndex-TxDescLen], (ProbeRspLength-TxDescLen));
 
 //------------------------------------------------------------------
@@ -913,11 +913,11 @@ _func_enter_;
 	switch (p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
-			DBG_8192D("P2P_PS_DISABLE \n");
+			DBG_8192D("P2P_PS_DISABLE\n");
 			memset(p2p_ps_offload, 0 ,1);
 			break;
 		case P2P_PS_ENABLE:
-			DBG_8192D("P2P_PS_ENABLE \n");
+			DBG_8192D("P2P_PS_ENABLE\n");
 			// update CTWindow value.
 			if ( pwdinfo->ctwindow > 0 )
 			{
@@ -982,11 +982,11 @@ _func_enter_;
 			}
 			break;
 		case P2P_PS_SCAN:
-			DBG_8192D("P2P_PS_SCAN \n");
+			DBG_8192D("P2P_PS_SCAN\n");
 			p2p_ps_offload->discovery = 1;
 			break;
 		case P2P_PS_SCAN_DONE:
-			DBG_8192D("P2P_PS_SCAN_DONE \n");
+			DBG_8192D("P2P_PS_SCAN_DONE\n");
 			p2p_ps_offload->discovery = 0;
 			pwdinfo->p2p_ps_state = P2P_PS_ENABLE;
 			break;
@@ -1090,18 +1090,18 @@ _func_enter_;
 		rtw_write8(padapter, 0xf8, test);
 
 		pwowlan_parm.mode |=FW_WOWLAN_FUN_EN;
-		//printk("\n %s 1.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
+		//printk("\n %s 1.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
 		if (pwrpriv->wowlan_pattern ==true){
 			pwowlan_parm.mode |= FW_WOWLAN_PATTERN_MATCH;
-		//printk("\n %s 2.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
+		//printk("\n %s 2.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
 		}
 		if (pwrpriv->wowlan_magic ==true){
 			//pwowlan_parm.mode |=FW_WOWLAN_MAGIC_PKT;
-		//printk("\n %s 3.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
+		//printk("\n %s 3.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
 		}
 		if (pwrpriv->wowlan_unicast ==true){
 			pwowlan_parm.mode |=FW_WOWLAN_UNICAST;
-		//printk("\n %s 4.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
+		//printk("\n %s 4.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
 		}
 
 		rtl8192d_set_FwJoinBssReport_cmd(padapter, 1);
@@ -1119,9 +1119,9 @@ _func_enter_;
 
 		pwowlan_parm.second_mode|=FW_WOWLAN_GPIO_WAKEUP_EN;
 		pwowlan_parm.second_mode|=FW_FW_PARSE_MAGIC_PKT;
-		//printk("\n %s 5.pwowlan_parm.mode=0x%x \n",__func__,pwowlan_parm.mode );
+		//printk("\n %s 5.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
 		{	u8 *ptr=(u8 *)&pwowlan_parm;
-			printk("\n %s H2C_WO_WLAN=%x %02x:%02x:%02x:%02x:%02x \n",__func__,H2C_WO_WLAN_CMD,ptr[0],ptr[1],ptr[2],ptr[3],ptr[4] );
+			printk("\n %s H2C_WO_WLAN=%x %02x:%02x:%02x:%02x:%02x\n",__func__,H2C_WO_WLAN_CMD,ptr[0],ptr[1],ptr[2],ptr[3],ptr[4] );
 		}
 		FillH2CCmd92D(padapter, H2C_WO_WLAN_CMD, 4, (u8 *)&pwowlan_parm);
 
@@ -1130,20 +1130,20 @@ _func_enter_;
 		pwowlan_parm.mode =3;
 		pwowlan_parm.gpio_index=3;
 		FillH2CCmd92D(padapter, KEEP_ALIVE_CONTROL_CMD, 2, (u8 *)&pwowlan_parm);
-		printk("%s after KEEP_ALIVE_CONTROL_CMD register 0x81=%x \n",__func__,rtw_read8(padapter, 0x85));
+		printk("%s after KEEP_ALIVE_CONTROL_CMD register 0x81=%x\n",__func__,rtw_read8(padapter, 0x85));
 
 		pwowlan_parm.mode =1;
 		pwowlan_parm.gpio_index=0;
 		pwowlan_parm.gpio_duration=0;
 		FillH2CCmd92D(padapter, DISCONNECT_DECISION_CTRL_CMD, 3, (u8 *)&pwowlan_parm);
-		printk("%s after DISCONNECT_DECISION_CTRL_CMD register 0x81=%x \n",__func__,rtw_read8(padapter, 0x85));
+		printk("%s after DISCONNECT_DECISION_CTRL_CMD register 0x81=%x\n",__func__,rtw_read8(padapter, 0x85));
 
 		//enable GPIO wakeup
 		pwowlan_parm.mode =1;
 		pwowlan_parm.gpio_index=0;
 		pwowlan_parm.gpio_duration=0;
 		FillH2CCmd92D(padapter, REMOTE_WAKE_CTRL_CMD, 1, (u8 *)&pwowlan_parm);
-		printk("%s after DISCONNECT_DECISION_CTRL_CMD register \n",__func__);
+		printk("%s after DISCONNECT_DECISION_CTRL_CMD register\n",__func__);
 
 	}
 	else

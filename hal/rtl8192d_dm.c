@@ -380,7 +380,7 @@ struct rtw_adapter *	pAdapter
 		(pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0))
 	{
 		pdmpriv->MinUndecoratedPWDBForDM = 0;
-		//RT_TRACE(COMP_BB_POWERSAVING, DBG_LOUD, ("Not connected to any \n"));
+		//RT_TRACE(COMP_BB_POWERSAVING, DBG_LOUD, ("Not connected to any\n"));
 	}
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)	// Default port
 	{
@@ -389,18 +389,18 @@ struct rtw_adapter *	pAdapter
 			(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true))
 		{
 			pdmpriv->MinUndecoratedPWDBForDM = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-			//RT_TRACE(COMP_BB_POWERSAVING, DBG_LOUD, ("AP Client PWDB = 0x%x \n", pHalData->MinUndecoratedPWDBForDM));
+			//RT_TRACE(COMP_BB_POWERSAVING, DBG_LOUD, ("AP Client PWDB = 0x%x\n", pHalData->MinUndecoratedPWDBForDM));
 		}
 		else
 		{
 			pdmpriv->MinUndecoratedPWDBForDM = pdmpriv->UndecoratedSmoothedPWDB;
-			//RT_TRACE(COMP_BB_POWERSAVING, DBG_LOUD, ("STA Default Port PWDB = 0x%x \n", pHalData->MinUndecoratedPWDBForDM));
+			//RT_TRACE(COMP_BB_POWERSAVING, DBG_LOUD, ("STA Default Port PWDB = 0x%x\n", pHalData->MinUndecoratedPWDBForDM));
 		}
 	}
 	else // associated entry pwdb
 	{
 		pdmpriv->MinUndecoratedPWDBForDM = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-		//RT_TRACE(COMP_BB_POWERSAVING, DBG_LOUD, ("AP Ext Port or disconnet PWDB = 0x%x \n", pHalData->MinUndecoratedPWDBForDM));
+		//RT_TRACE(COMP_BB_POWERSAVING, DBG_LOUD, ("AP Ext Port or disconnet PWDB = 0x%x\n", pHalData->MinUndecoratedPWDBForDM));
 	}
 
 	odm_FindMinimumRSSI_Dmsp(pAdapter);
@@ -456,10 +456,10 @@ DM_Write_DIG_DMSP(
 		return;
 	}
 
-	//DBG_8192D("bGetValueFromOtherMac %d \n",bGetValueFromOtherMac);
+	//DBG_8192D("bGetValueFromOtherMac %d\n",bGetValueFromOtherMac);
 	if (bGetValueFromOtherMac)
 	{
-		//DBG_8192D("DM_Write_DIG_DMSP(): mac 0 set mac 1 value \n");
+		//DBG_8192D("DM_Write_DIG_DMSP(): mac 0 set mac 1 value\n");
 		if (pdmpriv->bWriteDigForAnotherMacOfDMSP)
 		{
 			pdmpriv->bWriteDigForAnotherMacOfDMSP = false;
@@ -479,16 +479,16 @@ DM_Write_DIG_DMSP(
 		//PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, bMaskByte0, dm_digtable->curigvalue);
 		 if (pHalData->bSlaveOfDMSP)
 		 {
-			//DBG_8192D("DM_Write_DIG_DMSP(): slave case \n");
+			//DBG_8192D("DM_Write_DIG_DMSP(): slave case\n");
 			Buddydmpriv->bWriteDigForAnotherMacOfDMSP = true;
 			Buddydmpriv->CurDigValueForAnotherMacOfDMSP =  dm_digtable->curigvalue;
 		 }
 		else
 		{
-			//DBG_8192D("DM_Write_DIG_DMSP(): master case \n");
+			//DBG_8192D("DM_Write_DIG_DMSP(): master case\n");
 			if (!bGetValueFromOtherMac)
 			{
-				//DBG_8192D("DM_Write_DIG_DMSP(): mac 0 set mac 0 value \n");
+				//DBG_8192D("DM_Write_DIG_DMSP(): mac 0 set mac 0 value\n");
 				PHY_SetBBReg(pAdapter, rOFDM0_XAAGCCore1, 0x7f, dm_digtable->curigvalue);
 				PHY_SetBBReg(pAdapter, rOFDM0_XBAGCCore1, 0x7f, dm_digtable->curigvalue);
 			}
@@ -611,7 +611,7 @@ static void odm_DIG(
 	//			falsealmcnt->Cnt_Ofdm_fail, falsealmcnt->Cnt_Cck_fail, falsealmcnt->Cnt_all);
 	//DBG_8192D("RSSI_A=%d, RSSI_B=%d, RSSI_Ave=%d, RSSI_CCK=%d\n",
 	//	pAdapter->RxStats.RxRSSIPercentage[0], pAdapter->RxStats.RxRSSIPercentage[1], pdmpriv->UndecoratedSmoothedPWDB,pdmpriv->UndecoratedSmoothedCCK);
-	//DBG_8192D("RX Rate =  0x%x, TX Rate = 0x%x \n", pHalData->RxRate, TxRate);
+	//DBG_8192D("RX Rate =  0x%x, TX Rate = 0x%x\n", pHalData->RxRate, TxRate);
 
 #ifndef CONFIG_CONCURRENT_MODE
 	if (pdmpriv->bDMInitialGainEnable == false)
@@ -662,7 +662,7 @@ static void odm_DIG(
 	//1 Modify DIG lower bound, deal with abnorally large false alarm
 	if (falsealmcnt->Cnt_all > 10000)
 	{
-		//DBG_8192D("dm_DIG(): Abnornally false alarm case. \n");
+		//DBG_8192D("dm_DIG(): Abnornally false alarm case.\n");
 
 		dm_digtable->largefahit++;
 		if (dm_digtable->forbiddenigi < dm_digtable->curigvalue)
@@ -942,16 +942,16 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 
 	if (bGetValueFromBuddyAdapter)
 	{
-		DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 1 connect,mac 0 disconnect case  \n");
+		DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 1 connect,mac 0 disconnect case \n");
 		if (pdmpriv->bChangeCCKPDStateForAnotherMacOfDMSP)
 		{
-			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac1 \n");
+			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac1\n");
 			if (pdmpriv->curcckpdstateForAnotherMacOfDMSP == CCK_PD_STAGE_LOWRSSI)
 			{
 				//AcquireCCKAndRWPageAControl(pAdapter);
-				//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection \n"));
+				//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection\n"));
 				PHY_SetBBReg(pAdapter, rCCK0_CCA, maskbyte2, 0x83);
-				//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection \n"));
+				//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection\n"));
 				//ReleaseCCKAndRWPageAControl(pAdapter);
 				//PHY_SetBBReg(pAdapter, rCCK0_System, bMaskByte1, 0x40);
 				//if (IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
@@ -960,10 +960,10 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 			else
 			{
 				//AcquireCCKAndRWPageAControl(pAdapter);
-				//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection \n"));
+				//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection\n"));
 				PHY_SetBBReg(pAdapter, rCCK0_CCA, maskbyte2, 0xcd);
 				//ReleaseCCKAndRWPageAControl(pAdapter);
-				//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection \n"));
+				//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection\n"));
 
 				//PHY_SetBBReg(pAdapter,rCCK0_System, bMaskByte1, 0x47);
 				//if (IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
@@ -977,7 +977,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 	{
 		if (BuddyAdapter == NULL)
 		{
-			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): BuddyAdapter == NULL case \n");
+			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): BuddyAdapter == NULL case\n");
 			if (pHalData->bSlaveOfDMSP)
 			{
 				dm_digtable->precckpdstate = dm_digtable->curcckpdstate;
@@ -987,9 +987,9 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 				if (dm_digtable->curcckpdstate == CCK_PD_STAGE_LOWRSSI)
 				{
 					//AcquireCCKAndRWPageAControl(pAdapter);
-					//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection \n"));
+					//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection\n"));
 					PHY_SetBBReg(pAdapter, rCCK0_CCA, maskbyte2, 0x83);
-					//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection \n"));
+					//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection\n"));
 					//ReleaseCCKAndRWPageAControl(pAdapter);
 					//PHY_SetBBReg(pAdapter, rCCK0_System, bMaskByte1, 0x40);
 					//if (IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
@@ -998,10 +998,10 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 				else
 				{
 					//AcquireCCKAndRWPageAControl(pAdapter);
-					//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection \n"));
+					//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection\n"));
 					PHY_SetBBReg(pAdapter, rCCK0_CCA, maskbyte2, 0xcd);
 					///ReleaseCCKAndRWPageAControl(pAdapter);
-					//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection \n"));
+					//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection\n"));
 
 					//PHY_SetBBReg(pAdapter,rCCK0_System, bMaskByte1, 0x47);
 					//if (IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
@@ -1015,7 +1015,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 		if (pHalData->bSlaveOfDMSP)
 		{
 			Buddydmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
-			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): bslave case \n");
+			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): bslave case\n");
 			Buddydmpriv->bChangeCCKPDStateForAnotherMacOfDMSP = true;
 			Buddydmpriv->curcckpdstateForAnotherMacOfDMSP = dm_digtable->curcckpdstate;
 		}
@@ -1023,13 +1023,13 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 		{
 			if (!bGetValueFromBuddyAdapter)
 			{
-				DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac0 \n");
+				DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac0\n");
 				if (dm_digtable->curcckpdstate == CCK_PD_STAGE_LOWRSSI)
 				{
 					//AcquireCCKAndRWPageAControl(pAdapter);
-					//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection \n"));
+					//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection\n"));
 					PHY_SetBBReg(pAdapter, rCCK0_CCA, maskbyte2, 0x83);
-					//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection \n"));
+					//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection\n"));
 					//ReleaseCCKAndRWPageAControl(pAdapter);
 					//PHY_SetBBReg(pAdapter, rCCK0_System, bMaskByte1, 0x40);
 					//if (IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
@@ -1038,10 +1038,10 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 				else
 				{
 					//AcquireCCKAndRWPageAControl(pAdapter);
-					//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection \n"));
+					//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquiere mutex in dm_cck_packetdetection\n"));
 					PHY_SetBBReg(pAdapter, rCCK0_CCA, maskbyte2, 0xcd);
 					//ReleaseCCKAndRWPageAControl(pAdapter);
-					//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection \n"));
+					//RT_TRACE(COMP_INIT,DBG_LOUD,("Release mutex in dm_cck_packetdetection\n"));
 
 					//PHY_SetBBReg(pAdapter,rCCK0_System, bMaskByte1, 0x47);
 					//if (IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
@@ -1194,7 +1194,7 @@ static void odm_DynamicTxPower_92D(struct rtw_adapter *	Adapter)
 	if ((check_fwstate(pmlmepriv, _FW_LINKED) != true) &&
 		(pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0))
 	{
-		//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("Not connected to any \n"));
+		//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("Not connected to any\n"));
 		pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
 
 		//the LastDTPlvl should reset when disconnect,
@@ -1211,18 +1211,18 @@ static void odm_DynamicTxPower_92D(struct rtw_adapter *	Adapter)
 		       (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true))
 		{
 			UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-			//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("AP Client PWDB = 0x%x \n", UndecoratedSmoothedPWDB));
+			//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("AP Client PWDB = 0x%x\n", UndecoratedSmoothedPWDB));
 		}
 		else
 		{
 			UndecoratedSmoothedPWDB = pdmpriv->UndecoratedSmoothedPWDB;
-			//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("STA Default Port PWDB = 0x%x \n", UndecoratedSmoothedPWDB));
+			//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("STA Default Port PWDB = 0x%x\n", UndecoratedSmoothedPWDB));
 		}
 	}
 	else // associated entry pwdb
 	{
 		UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-		//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("AP Ext Port PWDB = 0x%x \n", UndecoratedSmoothedPWDB));
+		//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("AP Ext Port PWDB = 0x%x\n", UndecoratedSmoothedPWDB));
 	}
 
 	if (pHalData->CurrentBandType92D == BAND_ON_5G){
@@ -1266,10 +1266,10 @@ static void odm_DynamicTxPower_92D(struct rtw_adapter *	Adapter)
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (bGetValueFromBuddyAdapter)
 	{
-		DBG_8192D("dm_DynamicTxPower() mac 0 for mac 1 \n");
+		DBG_8192D("dm_DynamicTxPower() mac 0 for mac 1\n");
 		if (pdmpriv->bChangeTxHighPowerLvlForAnotherMacOfDMSP)
 		{
-			DBG_8192D("dm_DynamicTxPower() change value \n");
+			DBG_8192D("dm_DynamicTxPower() change value\n");
 			HighPowerLvlBackForMac0 = pdmpriv->DynamicTxHighPowerLvl;
 			pdmpriv->DynamicTxHighPowerLvl = pdmpriv->CurTxHighLvlForAnotherMacOfDMSP;
 			PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
@@ -1281,13 +1281,13 @@ static void odm_DynamicTxPower_92D(struct rtw_adapter *	Adapter)
 
 	if ( (pdmpriv->DynamicTxHighPowerLvl != pdmpriv->LastDTPLvl) )
 	{
-		//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("PHY_SetTxPowerLevel8192D() Channel = %d \n" , pHalData->CurrentChannel));
+		//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("PHY_SetTxPowerLevel8192D() Channel = %d\n" , pHalData->CurrentChannel));
 #ifdef CONFIG_DUALMAC_CONCURRENT
 		if (Adapter->DualMacConcurrent == true)
 		{
 			if (BuddyAdapter == NULL)
 			{
-				DBG_8192D("dm_DynamicTxPower() BuddyAdapter == NULL case \n");
+				DBG_8192D("dm_DynamicTxPower() BuddyAdapter == NULL case\n");
 				if (!pHalData->bSlaveOfDMSP)
 				{
 					PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
@@ -1297,20 +1297,20 @@ static void odm_DynamicTxPower_92D(struct rtw_adapter *	Adapter)
 			{
 				if (pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY)
 				{
-					DBG_8192D("dm_DynamicTxPower() BuddyAdapter DMSP \n");
+					DBG_8192D("dm_DynamicTxPower() BuddyAdapter DMSP\n");
 					if (pHalData->bSlaveOfDMSP)
 					{
-						DBG_8192D("dm_DynamicTxPower() bslave case  \n");
+						DBG_8192D("dm_DynamicTxPower() bslave case \n");
 						pbuddy_dmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
 						pbuddy_dmpriv->bChangeTxHighPowerLvlForAnotherMacOfDMSP = true;
 						pbuddy_dmpriv->CurTxHighLvlForAnotherMacOfDMSP = pdmpriv->DynamicTxHighPowerLvl;
 					}
 					else
 					{
-						DBG_8192D("dm_DynamicTxPower() master case  \n");
+						DBG_8192D("dm_DynamicTxPower() master case \n");
 						if (!bGetValueFromBuddyAdapter)
 						{
-							DBG_8192D("dm_DynamicTxPower() mac 0 for mac 0 \n");
+							DBG_8192D("dm_DynamicTxPower() mac 0 for mac 0\n");
 							PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
 						}
 					}
@@ -2552,7 +2552,7 @@ rtl8192d_HalDmWatchDog(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if ((pHalData->bInModeSwitchProcess))
 	{
-		DBG_8192D("HalDmWatchDog(): During dual mac mode switch or slave mac \n");
+		DBG_8192D("HalDmWatchDog(): During dual mac mode switch or slave mac\n");
 		return;
 	}
 #endif
@@ -2716,7 +2716,7 @@ skip_dm:
 	// Check Hardware Radio ON/OFF or not
 	//if (Adapter->MgntInfo.PowerSaveControl.bGpioRfSw)
 	//{
-		//RTPRINT(FPWR, PWRHW, ("dm_CheckRfCtrlGPIO \n"));
+		//RTPRINT(FPWR, PWRHW, ("dm_CheckRfCtrlGPIO\n"));
 	//	dm_CheckRfCtrlGPIO(Adapter);
 	//}
 

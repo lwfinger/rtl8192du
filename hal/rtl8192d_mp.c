@@ -529,7 +529,7 @@ void Hal_SetTxPower (PADAPTER pAdapter)
 		default:
 			break;
 	}
-	//DbgPrint("\n MPT_ProSetTxPower() is finished \n");
+	//DbgPrint("\n MPT_ProSetTxPower() is finished\n");
 }
 
 
@@ -1144,7 +1144,7 @@ void
 						PHY_SetRFReg(Adapter, eRFPath, RF_REG_for_C_CUT_5G_internalPA[i], bRFRegOffsetMask, 0x7bdef);
 					else
 						PHY_SetRFReg(Adapter, eRFPath, RF_REG_for_C_CUT_5G_internalPA[i], bRFRegOffsetMask, RF_REG_Param_for_C_CUT_5G_internalPA[index][i]);
-					//RT_TRACE(COMP_RF, DBG_LOUD, ("phy_SwitchRfSetting8192D offset 0x%x value 0x%x path %d index %d \n",
+					//RT_TRACE(COMP_RF, DBG_LOUD, ("phy_SwitchRfSetting8192D offset 0x%x value 0x%x path %d index %d\n",
 					//	RF_REG_for_C_CUT_5G_internalPA[i], RF_REG_Param_for_C_CUT_5G_internalPA[index][i], eRFPath, index));
 				}
 			}

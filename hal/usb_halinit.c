@@ -422,7 +422,7 @@ u16 CRC16(u8 data,u16 CRC)
 		CRC_BIT15=((CRC&BIT15) ? 1:0);
 		DataBit  =(data&(BIT0<<index) ? 1:0);
 		shift_in=CRC_BIT15^DataBit;
-		//printf("CRC_BIT15=%d, DataBit=%d, shift_in=%d \n",CRC_BIT15,DataBit,shift_in);
+		//printf("CRC_BIT15=%d, DataBit=%d, shift_in=%d\n",CRC_BIT15,DataBit,shift_in);
 
 		CRC_Result=CRC<<1;
 		//set BIT0
@@ -565,9 +565,9 @@ static int rtw_wowlan_set_pattern(struct rtw_adapter *padapter ,u8* pbuf){
 	if (crc){
 		// Have the CRC value
 		crc_val=*(u16 *)(&pbuf[2]);
-		DBG_8192D("rtw_wowlan_set_pattern crc_val  0x%x  \n", crc_val);
+		DBG_8192D("rtw_wowlan_set_pattern crc_val  0x%x \n", crc_val);
 		crc_val=__cpu_to_le16(crc_val);
-		DBG_8192D("rtw_wowlan_set_pattern crc_val  after 0x%x  \n", crc_val);
+		DBG_8192D("rtw_wowlan_set_pattern crc_val  after 0x%x \n", crc_val);
 	}
 	else{
 		DBG_8192D("+rtw_wowlan_set_pattern   crc=0[%x]  Should calculate the CRC\n", crc);
@@ -577,17 +577,17 @@ static int rtw_wowlan_set_pattern(struct rtw_adapter *padapter ,u8* pbuf){
 			if (pbuf[4+(i/8)]&(0x01<<(i%8)))
 			{
 				packet[crc_idx++]=pbuf[20+i];
-		//		DBG_8192D("\n i=%d packet[i]=%x pbuf[20+i(%d)]=%x \n",i,packet[i],20+i,pbuf[20+i]);
+		//		DBG_8192D("\n i=%d packet[i]=%x pbuf[20+i(%d)]=%x\n",i,packet[i],20+i,pbuf[20+i]);
 			}
 		}
 		crc_val=calc_crc(packet, crc_idx);
-		DBG_8192D("+rtw_wowlan_set_pattern   crc_val=0x%.8x \n", crc_val);
+		DBG_8192D("+rtw_wowlan_set_pattern   crc_val=0x%.8x\n", crc_val);
 
 	}
 
 	//offset 16
 	content=(valid<<31)| (bc<<26)|(mc<<25)|(uc<<24) |crc_val;
-	printk("rtw_wowlan_set_pattern offset[16]  content  0x%x \n", content);
+	printk("rtw_wowlan_set_pattern offset[16]  content  0x%x\n", content);
 	rtw_write32(padapter, REG_WKFMCAM_RWD,content);
 	pwrpriv->wowlan_pattern_context[idx][4]= content;
 	//cmd=BIT(31)|BIT(16)|(idx+4);
@@ -1844,7 +1844,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
 
 			if (i==100)
 			{
-				DBG_8192D("fail to initialization due to another adapter is in halt \n");
+				DBG_8192D("fail to initialization due to another adapter is in halt\n");
 				return _FAIL;
 			}
 		}
@@ -2128,7 +2128,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BB);
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bSlaveOfDMSP)
 	{
-		DBG_8192D("slave of dmsp close phy1 \n");
+		DBG_8192D("slave of dmsp close phy1\n");
 		PHY_StopTRXBeforeChangeBand8192D(padapter);
 	}
 #endif
@@ -2752,7 +2752,7 @@ CanGotoPowerOff92D(
 	{
 		if (BuddyAdapter->init_adpt_in_progress)
 		{
-			DBG_8192D("do not power off during another adapter is initialization \n");
+			DBG_8192D("do not power off during another adapter is initialization\n");
 			return false;
 		}
 	}
@@ -2988,7 +2988,7 @@ _func_enter_;
 
 	status = _SUCCESS;
 
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("===> usb_inirp_init \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("===> usb_inirp_init\n"));
 
 	precvpriv->ff_hwaddr = RECV_BULK_IN_ADDR;
 
@@ -2998,7 +2998,7 @@ _func_enter_;
 	{
 		if (_read_port(pintfhdl, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf) == false )
 		{
-			RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_port error \n"));
+			RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_port error\n"));
 			status = _FAIL;
 			goto exit;
 		}
@@ -3011,14 +3011,14 @@ _func_enter_;
 	_read_interrupt = pintfhdl->io_ops._read_interrupt;
 	if (_read_interrupt(pintfhdl, RECV_INT_IN_ADDR) == false )
 	{
-		RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_interrupt error \n"));
+		RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_interrupt error\n"));
 		status = _FAIL;
 	}
 #endif
 
 exit:
 
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("<=== usb_inirp_init \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("<=== usb_inirp_init\n"));
 
 _func_exit_;
 
@@ -3029,12 +3029,12 @@ _func_exit_;
 unsigned int rtl8192du_inirp_deinit(struct rtw_adapter * padapter);
 unsigned int rtl8192du_inirp_deinit(struct rtw_adapter * padapter)
 {
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit\n"));
 
 	rtw_read_port_cancel(padapter);
 
 
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n <=== usb_rx_deinit \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n <=== usb_rx_deinit\n"));
 
 	return _SUCCESS;
 }
@@ -3221,7 +3221,7 @@ hal_ReadMacPhyModeFromPROM92DU(
 		}
 #else
 		pHalData->MacPhyMode92D = DUALMAC_DUALPHY;
-		DBG_8192D("hal_ReadMacPhyModeFromPROM92DU:: MacPhyMode DUALMAC_DUALPHY \n");
+		DBG_8192D("hal_ReadMacPhyModeFromPROM92DU:: MacPhyMode DUALMAC_DUALPHY\n");
 #endif
 
 		if (Adapter->registrypriv.mac_phy_mode == 1)
@@ -3234,7 +3234,7 @@ hal_ReadMacPhyModeFromPROM92DU(
 		pHalData->MacPhyMode92D = SINGLEMAC_SINGLEPHY;
 	}
 
-	DBG_8192D("_ReadMacPhyModeFromPROM92DU(): MacPhyCrValue %d \n", MacPhyCrValue);
+	DBG_8192D("_ReadMacPhyModeFromPROM92DU(): MacPhyCrValue %d\n", MacPhyCrValue);
 
 }
 
@@ -3256,7 +3256,7 @@ hal_ReadMacPhyMode_92D(
 		Mac1EnableValue = rtw_read8(Adapter,0xFE64);
 		PHY_ReadMacPhyMode92D(Adapter, AutoloadFail);
 
-		DBG_8192D("_ReadMacPhyMode(): AutoloadFail %d 0xFE64 = 0x%x \n",AutoloadFail, Mac1EnableValue);
+		DBG_8192D("_ReadMacPhyMode(): AutoloadFail %d 0xFE64 = 0x%x\n",AutoloadFail, Mac1EnableValue);
 	}
 	else{
 		hal_ReadMacPhyModeFromPROM92DU(Adapter, PROMContent);
@@ -3355,7 +3355,7 @@ _ReadWOWLAN(
 		// decide hw if support remote wakeup function
 		// if hw supported, 8051 (SIE) will generate WeakUP signal( D+/D- toggle) when autoresume
 		Adapter->pwrctrlpriv.bSupportRemoteWakeup = (PROMContent[EEPROM_Option_Setting] & BIT1)?true :false;
-		DBG_8192D("efuse remote wakeup =%d \n", Adapter->pwrctrlpriv.bSupportRemoteWakeup);
+		DBG_8192D("efuse remote wakeup =%d\n", Adapter->pwrctrlpriv.bSupportRemoteWakeup);
 	}
 }
 #endif //CONFIG_WOWLAN
@@ -4755,11 +4755,11 @@ _func_enter_;
 
 		case HW_VAR_ON_RCR_AM:
 			rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)|RCR_AM);
-			DBG_8192D("%s, %d, RCR= %x \n", __func__,__LINE__, rtw_read32(Adapter, REG_RCR));
+			DBG_8192D("%s, %d, RCR= %x\n", __func__,__LINE__, rtw_read32(Adapter, REG_RCR));
 			break;
 		case HW_VAR_OFF_RCR_AM:
 			rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)& (~RCR_AM));
-			DBG_8192D("%s, %d, RCR= %x \n", __func__,__LINE__, rtw_read32(Adapter, REG_RCR));
+			DBG_8192D("%s, %d, RCR= %x\n", __func__,__LINE__, rtw_read32(Adapter, REG_RCR));
 			break;
 
 		case HW_VAR_BEACON_INTERVAL:
@@ -4858,9 +4858,9 @@ _func_enter_;
 					ulCommand= ulCommand | CAM_POLLINIG|CAM_WRITE;
 					// write content 0 is equall to mark invalid
 					rtw_write32(Adapter, WCAMI, ulContent);  //delay_ms(40);
-					//RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A4: %lx \n",ulContent));
+					//RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A4: %lx\n",ulContent));
 					rtw_write32(Adapter, RWCAM, ulCommand);  //delay_ms(40);
-					//RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A0: %lx \n",ulCommand));
+					//RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A0: %lx\n",ulCommand));
 				}
 			}
 			break;
@@ -5108,7 +5108,7 @@ _func_enter_;
 							break;
 					}while (trycnt--);
 					if (trycnt ==0)
-						DBG_8192D("Stop RX DMA failed...... \n");
+						DBG_8192D("Stop RX DMA failed......\n");
 
 					//RQPN Load 0
 					rtw_write16(Adapter,REG_RQPN_NPQ,0x0);
@@ -5173,7 +5173,7 @@ _func_enter_;
 						break;
 					case WOWLAN_DUMP_REG:
 						//dump the WKFMCAM and WOW_CTRL register
-						/*DBG_8192D("\n\n\n\n rtw_wowlan_ctrl: WOW_CTRL=0x%x \n",rtw_read8(Adapter, REG_WOW_CTRL));
+						/*DBG_8192D("\n\n\n\n rtw_wowlan_ctrl: WOW_CTRL=0x%x\n",rtw_read8(Adapter, REG_WOW_CTRL));
 						DBG_8192D("print WKFMCAM index =%d ",poidparam->data[0]);
 						{	int cmd=0,offset=0;
 							for (offset=0;offset<5;offset++){
@@ -5193,10 +5193,10 @@ _func_enter_;
 						rtl8192d_set_wowlan_cmd(Adapter);
 						//rtw_write8(Adapter, 0x6, rtw_read8(Adapter, 0x6)|BIT(3));
 						rtw_msleep_os(10);
-						//DBG_8192D(" \n REG_WOW_CTRL=0x%x \n",rtw_read8(Adapter, REG_WOW_CTRL));
+						//DBG_8192D("\n REG_WOW_CTRL=0x%x\n",rtw_read8(Adapter, REG_WOW_CTRL));
 //						if (rtw_read8(Adapter, REG_WOW_CTRL)==0)
 //							rtw_write8(Adapter, REG_WOW_CTRL, (rtw_read8(Adapter, REG_WOW_CTRL)|BIT(1)|BIT(2)|BIT(3)));
-						//DBG_8192D(" \n REG_WOW_CTRL=0x%x \n",rtw_read8(Adapter, REG_WOW_CTRL));
+						//DBG_8192D("\n REG_WOW_CTRL=0x%x\n",rtw_read8(Adapter, REG_WOW_CTRL));
 						break;
 
 					case WOWLAN_DISABLE:
@@ -5748,7 +5748,7 @@ _func_enter_;
 
 	padapter->HalData = rtw_zmalloc(sizeof(struct hal_data_8192du));
 	if (padapter->HalData == NULL){
-		DBG_8192D("cant not alloc memory for HAL DATA \n");
+		DBG_8192D("cant not alloc memory for HAL DATA\n");
 	}
 	//memset(padapter->HalData, 0, sizeof(struct hal_data_8192du));
 	padapter->hal_data_sz = sizeof(struct hal_data_8192du);

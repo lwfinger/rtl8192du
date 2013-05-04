@@ -218,7 +218,7 @@ rtl8192d_PHY_SetBBReg1Byte(
 	value =(u8)(Data>>(8*offset));
 
 	rtw_write8(Adapter, RegAddr+offset, value);
-	//RT_TRACE(COMP_INIT,DBG_TRACE,("Write Reg0x800 originalvalue %x  to set 1byte value %x Data %x offset %x \n",OriginalValue,value,Data,offset));
+	//RT_TRACE(COMP_INIT,DBG_TRACE,("Write Reg0x800 originalvalue %x  to set 1byte value %x Data %x offset %x\n",OriginalValue,value,Data,offset));
 
 }
 
@@ -993,7 +993,7 @@ phy_ConfigBBWithHeaderFile(
 			// Add 1us delay between BB/RF register setting.
 			rtw_udelay_os(1);
 
-			//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx \n",Rtl819XPHY_REGArray_Table[i], Rtl819XPHY_REGArray_Table[i+1]));
+			//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx\n",Rtl819XPHY_REGArray_Table[i], Rtl819XPHY_REGArray_Table[i+1]));
 		}
 	}
 	else if (ConfigType == BaseBand_Config_AGC_TAB)
@@ -1008,7 +1008,7 @@ phy_ConfigBBWithHeaderFile(
 				// Add 1us delay between BB/RF register setting.
 				rtw_udelay_os(1);
 
-				//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XAGCTAB_Array_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx \n",Rtl819XAGCTAB_Array_Table[i], Rtl819XAGCTAB_Array_Table[i+1]));
+				//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XAGCTAB_Array_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx\n",Rtl819XAGCTAB_Array_Table[i], Rtl819XAGCTAB_Array_Table[i+1]));
 			}
 			//RT_TRACE(COMP_INIT, DBG_LOUD, ("Normal Chip, MAC0, load Rtl819XAGCTAB_Array\n"));
 		}
@@ -1023,7 +1023,7 @@ phy_ConfigBBWithHeaderFile(
 					// Add 1us delay between BB/RF register setting.
 					rtw_udelay_os(1);
 
-					//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XAGCTAB_Array_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx \n",Rtl819XAGCTAB_Array_Table[i], Rtl819XAGCTAB_Array_Table[i+1]));
+					//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XAGCTAB_Array_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx\n",Rtl819XAGCTAB_Array_Table[i], Rtl819XAGCTAB_Array_Table[i+1]));
 				}
 				//RT_TRACE(COMP_INIT, DBG_LOUD, ("Load Rtl819XAGCTAB_2GArray\n"));
 			}
@@ -1036,7 +1036,7 @@ phy_ConfigBBWithHeaderFile(
 					// Add 1us delay between BB/RF register setting.
 					rtw_udelay_os(1);
 
-					//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XAGCTAB_5GArray_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx \n",Rtl819XAGCTAB_5GArray_Table[i], Rtl819XAGCTAB_5GArray_Table[i+1]));
+					//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XAGCTAB_5GArray_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx\n",Rtl819XAGCTAB_5GArray_Table[i], Rtl819XAGCTAB_5GArray_Table[i+1]));
 				}
 				//RT_TRACE(COMP_INIT, DBG_LOUD, ("Load Rtl819XAGCTAB_5GArray\n"));
 			}
@@ -1241,7 +1241,7 @@ phy_ConfigBBWithPgHeaderFile(
 				Rtl819XPHY_REGArray_Table_PG[i+1],
 				Rtl819XPHY_REGArray_Table_PG[i+2]);
 			//PHY_SetBBReg(Adapter, Rtl819XPHY_REGArray_Table_PG[i], Rtl819XPHY_REGArray_Table_PG[i+1], Rtl819XPHY_REGArray_Table_PG[i+2]);
-			//RT_TRACE(COMP_SEND, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table_PG[0] is %lx Rtl819XPHY_REGArray_Table_PG[1] is %lx \n",Rtl819XPHY_REGArray_Table_PG[i], Rtl819XPHY_REGArray_Table_PG[i+1]));
+			//RT_TRACE(COMP_SEND, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table_PG[0] is %lx Rtl819XPHY_REGArray_Table_PG[1] is %lx\n",Rtl819XPHY_REGArray_Table_PG[i], Rtl819XPHY_REGArray_Table_PG[i+1]));
 		}
 	}
 	else
@@ -1371,7 +1371,7 @@ phy_ConfigBBWithMpHeaderFile(
 
 			rtw_udelay_os(1);
 
-			//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl8192CPHY_REGArray_Table_MP[%d] is %lx Rtl8192CPHY_REGArray_Table_MP[%d] is %lx \n", i, i+1, Rtl8192CPHY_REGArray_Table_MP[i], Rtl8192CPHY_REGArray_Table_MP[i+1]));
+			//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl8192CPHY_REGArray_Table_MP[%d] is %lx Rtl8192CPHY_REGArray_Table_MP[%d] is %lx\n", i, i+1, Rtl8192CPHY_REGArray_Table_MP[i], Rtl8192CPHY_REGArray_Table_MP[i+1]));
 		}
 	}
 	else
@@ -1488,7 +1488,7 @@ phy_BB8192D_Config_ParaFile(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bSlaveOfDMSP)
 	{
-		DBG_8192D("BB config slave skip  2222 \n");
+		DBG_8192D("BB config slave skip  2222\n");
 	}
 	else
 #endif
@@ -1902,7 +1902,7 @@ rtl8192d_PHY_CheckBBAndRFOK(
 		//
 		if (ulRegRead != WriteData[i])
 		{
-			//RT_TRACE(COMP_FPGA, DBG_LOUD, ("ulRegRead: %lx, WriteData: %lx \n", ulRegRead, WriteData[i]));
+			//RT_TRACE(COMP_FPGA, DBG_LOUD, ("ulRegRead: %lx, WriteData: %lx\n", ulRegRead, WriteData[i]));
 			rtStatus = _FAIL;
 			break;
 		}
@@ -1925,14 +1925,14 @@ rtl8192d_PHY_GetHWRegOriginalValue(
 	pHalData->DefaultInitialGain[2] = (u8)PHY_QueryBBReg(Adapter, rOFDM0_XCAGCCore1, bMaskByte0);
 	pHalData->DefaultInitialGain[3] = (u8)PHY_QueryBBReg(Adapter, rOFDM0_XDAGCCore1, bMaskByte0);
 	//RT_TRACE(COMP_INIT, DBG_LOUD,
-	//("Default initial gain (c50=0x%x, c58=0x%x, c60=0x%x, c68=0x%x) \n",
+	//("Default initial gain (c50=0x%x, c58=0x%x, c60=0x%x, c68=0x%x)\n",
 	//pHalData->DefaultInitialGain[0], pHalData->DefaultInitialGain[1],
 	//pHalData->DefaultInitialGain[2], pHalData->DefaultInitialGain[3]));
 
 	// read framesync
 	pHalData->framesync = (u8)PHY_QueryBBReg(Adapter, rOFDM0_RxDetector3, bMaskByte0);
 	pHalData->framesyncC34 = PHY_QueryBBReg(Adapter, rOFDM0_RxDetector2, bMaskDWord);
-	//RT_TRACE(COMP_INIT, DBG_LOUD, ("Default framesync (0x%x) = 0x%x \n",
+	//RT_TRACE(COMP_INIT, DBG_LOUD, ("Default framesync (0x%x) = 0x%x\n",
 	//	rOFDM0_RxDetector3, pHalData->framesync));
 }
 
@@ -2417,7 +2417,7 @@ _PHY_SetBWMode92D(
 	}
 #endif
 
-	//RT_TRACE(COMP_SCAN, DBG_LOUD, ("<==PHY_SetBWModeCallback8192C() \n" ));
+	//RT_TRACE(COMP_SCAN, DBG_LOUD, ("<==PHY_SetBWModeCallback8192C()\n" ));
 }
 
  /*-----------------------------------------------------------------------------
@@ -2453,7 +2453,7 @@ PHY_SetBWMode8192D(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bInModeSwitchProcess)
 	{
-		DBG_8192D("PHY_SwChnl8192D(): During mode switch \n");
+		DBG_8192D("PHY_SwChnl8192D(): During mode switch\n");
 		//pHalData->SetBWModeInProgress=false;
 		return;
 	}
@@ -2470,7 +2470,7 @@ PHY_SetBWMode8192D(
 	{
 		//if ((BuddyAdapter->MgntInfo.bJoinInProgress) ||(BuddyAdapter->MgntInfo.bScanInProgress))
 		{
-			DBG_8192D("PHY_SetBWMode92D():slave return when slave \n");
+			DBG_8192D("PHY_SetBWMode92D():slave return when slave\n");
 			//pHalData->SetBWModeInProgress=false;
 			return;
 		}
@@ -2538,11 +2538,11 @@ PHY_SwitchWirelessBand(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bInModeSwitchProcess || pHalData->bSlaveOfDMSP)
 	{
-		DBG_8192D("PHY_SwitchWirelessBand(): skip for mode switch or slave \n");
+		DBG_8192D("PHY_SwitchWirelessBand(): skip for mode switch or slave\n");
 		return;
 	}
 #endif
-	//DBG_8192D("PHY_SwitchWirelessBand():Before Switch Band \n");
+	//DBG_8192D("PHY_SwitchWirelessBand():Before Switch Band\n");
 
 	pHalData->BandSet92D = pHalData->CurrentBandType92D = (enum BAND_TYPE)Band;
 	if (IS_92D_SINGLEPHY(pHalData->VersionID))
@@ -2897,7 +2897,7 @@ PHY_RestoreRFENV(
 						PHY_SetRFReg(Adapter, eRFPath, RF_REG_for_C_CUT_5G_internalPA[i], bRFRegOffsetMask, 0x7bdef);
 					else
 						PHY_SetRFReg(Adapter, eRFPath, RF_REG_for_C_CUT_5G_internalPA[i], bRFRegOffsetMask, RF_REG_Param_for_C_CUT_5G_internalPA[index][i]);
-					//RT_TRACE(COMP_RF, DBG_LOUD, ("phy_SwitchRfSetting offset 0x%x value 0x%x path %d index %d \n",
+					//RT_TRACE(COMP_RF, DBG_LOUD, ("phy_SwitchRfSetting offset 0x%x value 0x%x path %d index %d\n",
 					//	RF_REG_for_C_CUT_5G_internalPA[i], RF_REG_Param_for_C_CUT_5G_internalPA[index][i], eRFPath,	index));
 				}
 			}
@@ -3135,10 +3135,10 @@ static  void
 		PHY_SetBBReg1Byte(Adapter, rFPGA0_RFMOD, bOFDMEn|bCCKEn, 2);
 	}
 	else{ //G band.
-		//RT_TRACE(COMP_SCAN,DBG_LOUD,("Load RF IMR parameters for G band. IMR already setting %d \n",pMgntInfo->bLoadIMRandIQKSettingFor2G));
+		//RT_TRACE(COMP_SCAN,DBG_LOUD,("Load RF IMR parameters for G band. IMR already setting %d\n",pMgntInfo->bLoadIMRandIQKSettingFor2G));
 
 		if (!pHalData->bLoadIMRandIQKSettingFor2G){
-			//RT_TRACE(COMP_SCAN,DBG_LOUD,("Load RF IMR parameters for G band. %d \n",eRFPath));
+			//RT_TRACE(COMP_SCAN,DBG_LOUD,("Load RF IMR parameters for G band. %d\n",eRFPath));
 			//AcquireCCKAndRWPageAControl(Adapter);
 			PHY_SetBBReg1Byte(Adapter, rFPGA0_RFMOD, BIT25|BIT24, 0);
 			PHY_SetBBReg(Adapter, rFPGA0_AnalogParameter4, 0x00f00000,	0xf);
@@ -3382,7 +3382,7 @@ PHY_SwChnl8192D(	// Call after initialization
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bInModeSwitchProcess)
 	{
-		DBG_8192D("PHY_SwChnl8192D(): During mode switch \n");
+		DBG_8192D("PHY_SwChnl8192D(): During mode switch\n");
 		//pHalData->SwChnlInProgress=false;
 		return;
 	}
@@ -3460,7 +3460,7 @@ PHY_SwChnl8192D(	// Call after initialization
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if ((BuddyAdapter !=NULL) && (pHalData->bSlaveOfDMSP))
 	{
-		DBG_8192D("PHY_SwChnl8192D():slave return when slave  \n");
+		DBG_8192D("PHY_SwChnl8192D():slave return when slave \n");
 		//pHalData->SwChnlInProgress=false;
 		return;
 	}
@@ -5583,7 +5583,7 @@ phy_LCCalibrate92DSW(
 
 	for (index = 0; index <path; index ++)
 	{
-		//RTPRINT(FINIT, INIT_IQK,("PHY_LCK enter for loop for index %d \n", index));
+		//RTPRINT(FINIT, INIT_IQK,("PHY_LCK enter for loop for index %d\n", index));
 
 		//1. Read original RF mode
 		offset = index == 0?rOFDM0_XAAGCCore1:rOFDM0_XBAGCCore1;
@@ -5605,7 +5605,7 @@ phy_LCCalibrate92DSW(
 			//4. Set LC calibration begin
 			PHY_SetRFReg(pAdapter, (enum RF_RADIO_PATH_E)index, RF_CHNLBW, 0x08000, 0x01);
 
-			//RTPRINT(FINIT, INIT_IQK,("PHY_LCK finish HWLCK \n"));
+			//RTPRINT(FINIT, INIT_IQK,("PHY_LCK finish HWLCK\n"));
 		}
 	}
 
@@ -6165,7 +6165,7 @@ static void phy_SetRFPathSwitch(
 	else
 		PHY_SetBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300, 0x1);
 
-	//RT_TRACE(COMP_OID_SET, DBG_LOUD, ("_PHY_SetRFPathSwitch 0x4C %lx, 0x878 %lx, 0x860 %lx \n", PHY_QueryBBReg(pAdapter, 0x4C, BIT23), PHY_QueryBBReg(pAdapter, 0x878, BIT13), PHY_QueryBBReg(pAdapter, 0x860, 0x300)));
+	//RT_TRACE(COMP_OID_SET, DBG_LOUD, ("_PHY_SetRFPathSwitch 0x4C %lx, 0x878 %lx, 0x860 %lx\n", PHY_QueryBBReg(pAdapter, 0x4C, BIT23), PHY_QueryBBReg(pAdapter, 0x878, BIT13), PHY_QueryBBReg(pAdapter, 0x860, 0x300)));
 
 }
 
@@ -6221,9 +6221,9 @@ rtl8192d_PHY_IQCalibrate(
 	is23simular = false;
 	is13simular = false;
 
-	//RTPRINT(FINIT, INIT_IQK, ("IQK !!!interface %d currentband %d ishardwareD %d \n", pAdapter->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter)));
+	//RTPRINT(FINIT, INIT_IQK, ("IQK !!!interface %d currentband %d ishardwareD %d\n", pAdapter->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter)));
 	//AcquireCCKAndRWPageAControl(pAdapter);
-	//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate \n"));
+	//RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate\n"));
 	for (i=0; i<3; i++)
 	{
 		if (pHalData->CurrentBandType92D == BAND_ON_5G)
@@ -6272,7 +6272,7 @@ rtl8192d_PHY_IQCalibrate(
 			}
 		}
 	}
-	//RT_TRACE(COMP_INIT,DBG_LOUD,("Release Mutex in IQCalibrate \n"));
+	//RT_TRACE(COMP_INIT,DBG_LOUD,("Release Mutex in IQCalibrate\n"));
 	//ReleaseCCKAndRWPageAControl(pAdapter);
 
         for (i=0; i<4; i++)
@@ -6803,7 +6803,7 @@ void PHY_ReadMacPhyMode92D(
 
 	MacPhyCrValue = rtw_read8(Adapter, REG_MAC_PHY_CTRL_NORMAL);
 
-	DBG_8192D("PHY_ReadMacPhyMode92D():   MAC_PHY_CTRL Value %x \n",MacPhyCrValue);
+	DBG_8192D("PHY_ReadMacPhyMode92D():   MAC_PHY_CTRL Value %x\n",MacPhyCrValue);
 
 	if ((MacPhyCrValue&0x03) == 0x03)
 	{
@@ -6841,17 +6841,17 @@ void PHY_ConfigMacPhyMode92D(
 	temp &= ~(BIT(0)|BIT(1)|BIT(2));
 	switch (pHalData->MacPhyMode92D){
 		case DUALMAC_DUALPHY:
-			MSG_8192D("MacPhyMode: DUALMAC_DUALPHY \n");
+			MSG_8192D("MacPhyMode: DUALMAC_DUALPHY\n");
 			rtw_write8(Adapter, offset, temp | BIT(0)|BIT(1));
 			//rtw_write8(Adapter, offset, 0xF3);
 			break;
 		case SINGLEMAC_SINGLEPHY:
-			MSG_8192D("MacPhyMode: SINGLEMAC_SINGLEPHY \n");
+			MSG_8192D("MacPhyMode: SINGLEMAC_SINGLEPHY\n");
 			rtw_write8(Adapter, offset, temp | BIT(2));
 			//rtw_write8(Adapter, offset, 0xF4);
 			break;
 		case DUALMAC_SINGLEPHY:
-			MSG_8192D("MacPhyMode: DUALMAC_SINGLEPHY \n");
+			MSG_8192D("MacPhyMode: DUALMAC_SINGLEPHY\n");
 			rtw_write8(Adapter, offset, temp | BIT(0));
 			//rtw_write8(Adapter, offset, 0xF1);
 			break;
@@ -7112,11 +7112,11 @@ HalChangeCCKStatus8192D(
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8	i;
 
-	//DBG_8192D("MAC %d: =====> ChangeCCKStatus8192D \n",pHalData->interfaceIndex);
+	//DBG_8192D("MAC %d: =====> ChangeCCKStatus8192D\n",pHalData->interfaceIndex);
 
 	if (pHalData->BandSet92D != BAND_ON_BOTH)
 	{
-		//DBG_8192D("ChangeCCKStatus8192D():  Skip \n");
+		//DBG_8192D("ChangeCCKStatus8192D():  Skip\n");
 		return;
 	}
 
@@ -7129,13 +7129,13 @@ HalChangeCCKStatus8192D(
 		{
 			if (rtw_read32(Adapter, 0x200) != rtw_read32(Adapter, 0x204))
 			{
-				DBG_8192D("packet in tx packet buffer aaaaaaaaa 0x204 %x  \n", rtw_read32(Adapter, 0x204));
-				DBG_8192D("packet in tx packet buffer aaaaaaa 0x200 %x  \n", rtw_read32(Adapter, 0x200));
+				DBG_8192D("packet in tx packet buffer aaaaaaaaa 0x204 %x \n", rtw_read32(Adapter, 0x204));
+				DBG_8192D("packet in tx packet buffer aaaaaaa 0x200 %x \n", rtw_read32(Adapter, 0x200));
 				rtw_udelay_os(1000);
 			}
 			else
 			{
-				//DBG_8192D("no packet in tx packet buffer \n");
+				//DBG_8192D("no packet in tx packet buffer\n");
 				break;
 			}
 		}
@@ -7149,13 +7149,13 @@ HalChangeCCKStatus8192D(
 			{
 				if (PlatformEFIORead4Byte(BuddyAdapter, 0x200) != PlatformEFIORead4Byte(BuddyAdapter, 0x204))
 				{
-					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("packet in tx packet buffer aaaaaaaaa 0x204 %x  \n", PlatformEFIORead4Byte(BuddyAdapter, 0x204)));
-					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("packet in tx packet buffer aaaaaaa 0x200 %x  \n", PlatformEFIORead4Byte(BuddyAdapter, 0x200)));
+					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("packet in tx packet buffer aaaaaaaaa 0x204 %x \n", PlatformEFIORead4Byte(BuddyAdapter, 0x204)));
+					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("packet in tx packet buffer aaaaaaa 0x200 %x \n", PlatformEFIORead4Byte(BuddyAdapter, 0x200)));
 					PlatformStallExecution(1000);
 				}
 				else
 				{
-					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("no packet in tx packet buffer \n"));
+					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("no packet in tx packet buffer\n"));
 					break;
 				}
 			}
@@ -7194,7 +7194,7 @@ PHY_InitPABias92D(struct rtw_adapter * Adapter)
 
 	tmpU1b = EFUSE_Read1Byte(Adapter, 0x3FA);
 
-	DBG_8192D("PHY_InitPABias92D 0x3FA 0x%x \n",tmpU1b);
+	DBG_8192D("PHY_InitPABias92D 0x3FA 0x%x\n",tmpU1b);
 
 	if (!(tmpU1b & BIT0) && (is92 || pHalData->interfaceIndex == 0))
 	{

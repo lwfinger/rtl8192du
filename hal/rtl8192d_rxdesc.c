@@ -33,7 +33,7 @@ static u8 evm_db2percentage(s8 value)
 	ret_val = value;
 	//ret_val /= 2;
 
-	RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("EVMdbToPercentage92S Value=%d / %x \n", ret_val, ret_val));
+	RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("EVMdbToPercentage92S Value=%d / %x\n", ret_val, ret_val));
 
 	if (ret_val >= 0)
 		ret_val = 0;

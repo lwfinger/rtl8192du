@@ -695,7 +695,7 @@ int rtw_hw_suspend(struct rtw_adapter *padapter )
 	return 0;
 
 error_exit:
-	DBG_8192D("%s, failed \n",__func__);
+	DBG_8192D("%s, failed\n",__func__);
 	return (-1);
 
 }
@@ -746,7 +746,7 @@ int rtw_hw_resume(struct rtw_adapter *padapter)
 
 	return 0;
 error_exit:
-	DBG_8192D("%s, Open net dev failed \n",__func__);
+	DBG_8192D("%s, Open net dev failed\n",__func__);
 	return (-1);
 }
 #endif
@@ -1026,7 +1026,7 @@ int autoresume_enter(struct rtw_adapter* padapter)
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 
 
-	DBG_8192D("====> autoresume_enter \n");
+	DBG_8192D("====> autoresume_enter\n");
 
 	if (rf_off == pwrpriv->rf_pwrstate )
 	{
@@ -1050,7 +1050,7 @@ int autoresume_enter(struct rtw_adapter* padapter)
 		DBG_8192D("...pm_usage_cnt(%d).....\n", dvobj->pusbintf->pm_usage_cnt);
 		#endif
 	}
-	DBG_8192D("<==== autoresume_enter \n");
+	DBG_8192D("<==== autoresume_enter\n");
 error_exit:
 
 	return result;
@@ -1120,7 +1120,7 @@ struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 
 	//.2
 	if ((rtw_init_io_priv(padapter, usb_set_intf_ops)) == _FAIL) {
-		RT_TRACE(_module_hci_intfs_c_,_drv_err_,(" \n Can't init io_reqs\n"));
+		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("\n Can't init io_reqs\n"));
 		goto free_hal_data;
 	}
 

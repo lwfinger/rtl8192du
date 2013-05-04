@@ -278,7 +278,7 @@ rtl8192d_FirmwareSelfReset(
 		while (u1bTmp&BIT2)
 		{
 			Delay--;
-			//RT_TRACE(COMP_INIT, DBG_LOUD, ("PowerOffAdapter8192CE(): polling 0x03[2] Delay = %d \n", Delay));
+			//RT_TRACE(COMP_INIT, DBG_LOUD, ("PowerOffAdapter8192CE(): polling 0x03[2] Delay = %d\n", Delay));
 			if (Delay == 0)
 				break;
 			rtw_udelay_os(50);
@@ -290,7 +290,7 @@ rtl8192d_FirmwareSelfReset(
 			//DbgPrint("FirmwareDownload92C(): Fail!!!!!! 0x03 = %x\n", u1bTmp);
 			rtw_write8(Adapter, REG_FWIMR, 0x00);
 			//debug reset fail
-			printk("FirmwareDownload92C(): Fail!!!!!! 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x  \n", rtw_read32(Adapter, 0x1c)
+			printk("FirmwareDownload92C(): Fail!!!!!! 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x \n", rtw_read32(Adapter, 0x1c)
 			, rtw_read32(Adapter, 0x130), rtw_read32(Adapter, 0x134), rtw_read32(Adapter, 0x138), rtw_read32(Adapter, 0x1c4),
 			rtw_read32(Adapter, 0x1cc), rtw_read32(Adapter, 0x80), rtw_read32(Adapter, 0x1c0));
 		}
@@ -311,7 +311,7 @@ int _FWInit(
 	u32			counter = 0;
 
 
-	DBG_8192D("FW already have download ; \n");
+	DBG_8192D("FW already have download ;\n");
 
 	// polling for FW ready
 	counter = 0;
@@ -530,7 +530,7 @@ int FirmwareDownload92D(
 			else if (!bFwDownloadInProcess)
 				break;
 			else
-				DBG_8192D("Wait for another mac download fw \n");
+				DBG_8192D("Wait for another mac download fw\n");
 		}
 		ACQUIRE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 		value=rtw_read8(Adapter, 0x1f);
@@ -716,7 +716,7 @@ rtl8192d_ReadChipVersion(
 	enum VERSION_8192D	ChipVersion = VERSION_TEST_CHIP_88C;
 
 	value32 = rtw_read32(Adapter, REG_SYS_CFG);
-	DBG_8192D("ReadChipVersion8192D 0xF0 = 0x%x \n", value32);
+	DBG_8192D("ReadChipVersion8192D 0xF0 = 0x%x\n", value32);
 
 	ChipVersion = (enum VERSION_8192D)(VERSION_NORMAL_CHIP_92D_SINGLEPHY | CHIP_92D);
 
@@ -1260,7 +1260,7 @@ PHY_SetPowerOnFor8192D(
 		}
 
 		if (i==200)
-			DBG_8192D("Another mac power off over time \n");
+			DBG_8192D("Another mac power off over time\n");
 	}
 }
 
@@ -1399,7 +1399,7 @@ ReadEFuse_RTL8192D(
 
 			u1temp =( (*rtemp8 & 0xE0) >> 5);
 
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x \n", u1temp));
+			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x\n", u1temp));
 
 			ReadEFuseByte(Adapter, eFuse_Addr, rtemp8, bPseudoTest);
 
@@ -1559,7 +1559,7 @@ hal_EfuseMacMode_ISVS_92D(
 	if (IS_NORMAL_CHIP92D(pHalData->VersionID))
 	{
 		ReadEFuseByte(Adapter,EEPROM_DEF_PART_NO,&PartNo, false);
-		//RT_TRACE(COMP_INIT, DBG_LOUD, ("92D efuse byte 1021 content :%d \n",PartNo));
+		//RT_TRACE(COMP_INIT, DBG_LOUD, ("92D efuse byte 1021 content :%d\n",PartNo));
 
 		if ((((PartNo & 0xc0) ==  PARTNO_92D_NIC)&&((PartNo & 0x0c) == PARTNO_SINGLE_BAND_VS))||
 			(((PartNo & 0xF0) == PARTNO_92D_NIC_REMARK) &&((PartNo & 0x0F) == PARTNO_SINGLE_BAND_VS_REMARK)))
@@ -1570,7 +1570,7 @@ hal_EfuseMacMode_ISVS_92D(
 		else if (PartNo == 0x00)
 		{
 			ReadEFuseByte(Adapter,EEPROM_DEF_PART_NO+1,&PartNo, false);
-			//RT_TRACE(COMP_INIT, DBG_LOUD, ("92D efuse byte 1022 content :%d \n",PartNo));
+			//RT_TRACE(COMP_INIT, DBG_LOUD, ("92D efuse byte 1022 content :%d\n",PartNo));
 			if ((((PartNo & 0xc0) ==  PARTNO_92D_NIC)&&((PartNo & 0x0c) == PARTNO_SINGLE_BAND_VS))||
 				(((PartNo & 0xF0) == PARTNO_92D_NIC_REMARK) &&((PartNo & 0x0F) == PARTNO_SINGLE_BAND_VS_REMARK)))
 			{
@@ -1871,7 +1871,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 	//
 	if ( Efuse_GetCurrentSize(pAdapter, efuseType, bPseudoTest) >= (EFUSE_REAL_CONTENT_LEN-EFUSE_OOB_PROTECT_BYTES))
 	{
-		//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite error \n"));
+		//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite error\n"));
 		return false;
 	}
 
@@ -1879,7 +1879,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 	target_pkt.offset = offset;
 	target_pkt.word_en= word_en;
 
-	//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite target offset 0x%x word_en 0x%x \n", target_pkt.offset, target_pkt.word_en));
+	//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite target offset 0x%x word_en 0x%x\n", target_pkt.offset, target_pkt.word_en));
 
 
 	memset((void *)target_pkt.data, 0xFF, sizeof(u8)*8);
@@ -2063,14 +2063,14 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 				{
 					pg_header = ((target_pkt.offset &0x07) << 5) | 0x0F;
 
-					//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite extended pg_header[2:0] |0x0F 0x%x \n", pg_header));
+					//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite extended pg_header[2:0] |0x0F 0x%x\n", pg_header));
 
 					efuse_OneByteWrite(pAdapter,efuse_addr, pg_header, bPseudoTest);
 					efuse_OneByteRead(pAdapter,efuse_addr, &tmp_header, bPseudoTest);
 
 					while (tmp_header == 0xFF)
 					{
-						//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite extended pg_header[2:0] wirte fail \n"));
+						//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite extended pg_header[2:0] wirte fail\n"));
 
 						repeat_times++;
 
@@ -2093,7 +2093,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 						pg_header_temp = pg_header;
 						pg_header = ((target_pkt.offset & 0x78) << 1 ) | target_pkt.word_en;
 
-						//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite extended pg_header[6:3] | worden 0x%x word_en 0x%x \n", pg_header));
+						//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite extended pg_header[6:3] | worden 0x%x word_en 0x%x\n", pg_header));
 
 						efuse_OneByteWrite(pAdapter,efuse_addr, pg_header, bPseudoTest);
 						efuse_OneByteRead(pAdapter,efuse_addr, &tmp_header, bPseudoTest);

@@ -94,7 +94,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 #endif
 
 	if ( pIo_buf== NULL) {
-		DBG_8192D( "[%s] pIo_buf == NULL \n", __func__ );
+		DBG_8192D( "[%s] pIo_buf == NULL\n", __func__ );
 		status = -ENOMEM;
 		goto release_mutex;
 	}
@@ -417,7 +417,7 @@ static void usb_read_interrupt_complete(struct urb *purb, struct pt_regs *regs)
 	{
 		if (purb->actual_length > sizeof(INTERRUPT_MSG_FORMAT_EX))
 		{
-			DBG_8192D("usb_read_interrupt_complete: purb->actual_length > sizeof(INTERRUPT_MSG_FORMAT_EX) \n");
+			DBG_8192D("usb_read_interrupt_complete: purb->actual_length > sizeof(INTERRUPT_MSG_FORMAT_EX)\n");
 		}
 
 		err = usb_submit_urb(purb, GFP_ATOMIC);
@@ -801,7 +801,7 @@ void rtl8192du_recv_tasklet(void *priv)
 	{
 		if ((padapter->bDriverStopped == true)||(padapter->bSurpriseRemoved== true))
 		{
-			DBG_8192D("recv_tasklet => bDriverStopped or bSurpriseRemoved \n");
+			DBG_8192D("recv_tasklet => bDriverStopped or bSurpriseRemoved\n");
 
 			break;
 		}
@@ -851,7 +851,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 	}
 	else
 	{
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0 \n", purb->status));
+		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0\n", purb->status));
 
 		DBG_8192D("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
 
@@ -1136,7 +1136,7 @@ void rtl8192du_recv_tasklet(void *priv)
 	{
 		if ((padapter->bDriverStopped == true)||(padapter->bSurpriseRemoved== true))
 		{
-			DBG_8192D("recv_tasklet => bDriverStopped or bSurpriseRemoved \n");
+			DBG_8192D("recv_tasklet => bDriverStopped or bSurpriseRemoved\n");
 			dev_kfree_skb_any(pskb);
 			break;
 		}
@@ -1211,7 +1211,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 	}
 	else
 	{
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0 \n", purb->status));
+		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0\n", purb->status));
 
 		DBG_8192D("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
 
@@ -1368,7 +1368,7 @@ void rtl8192du_xmit_tasklet(void *priv)
 	{
 		if ((padapter->bDriverStopped == true)||(padapter->bSurpriseRemoved== true))
 		{
-			DBG_8192D("xmit_tasklet => bDriverStopped or bSurpriseRemoved \n");
+			DBG_8192D("xmit_tasklet => bDriverStopped or bSurpriseRemoved\n");
 			break;
 		}
 

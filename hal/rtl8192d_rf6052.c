@@ -148,7 +148,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 			//RT_TRACE(COMP_DBG, DBG_LOUD, ("PHY_SetRF8225Bandwidth(): unknown Bandwidth: %#X\n",Bandwidth ));
 			break;
 	}
-	//RT_TRACE(COMP_MLME,DBG_LOUD,("<==== PHY_RF6052SetBandwidth()Bandwidth:%d \n",Bandwidth));
+	//RT_TRACE(COMP_MLME,DBG_LOUD,("<==== PHY_RF6052SetBandwidth()Bandwidth:%d\n",Bandwidth));
 }
 
 
@@ -552,7 +552,7 @@ rtl8192d_PHY_RF6052SetOFDMTxPower(
 	u32	writeVal[2], powerBase0[2], powerBase1[2];
 	u8	index = 0;
 
-	//DBG_871X("PHY_RF6052SetOFDMTxPower, channel(%d) \n", Channel);
+	//DBG_871X("PHY_RF6052SetOFDMTxPower, channel(%d)\n", Channel);
 
 	getPowerBase(Adapter, pPowerLevel, Channel, &powerBase0[0], &powerBase1[0]);
 
@@ -857,7 +857,7 @@ PHY_RF6052_Config8192D(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bSlaveOfDMSP)
 	{
-		DBG_871X(("PHY_RF6052_Config() skip configuration RF \n"));
+		DBG_871X(("PHY_RF6052_Config() skip configuration RF\n"));
 		return rtStatus;
 	}
 #endif

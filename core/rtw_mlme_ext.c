@@ -2475,7 +2475,7 @@ unsigned int OnAction_back(struct rtw_adapter *padapter, union recv_frame *precv
 					preorder_ctrl->enable = false;
 					preorder_ctrl->indicate_seq = 0xffff;
 					#ifdef DBG_RX_SEQ
-					DBG_8192D("DBG_RX_SEQ %s:%d indicate_seq:%u \n", __func__, __LINE__,
+					DBG_8192D("DBG_RX_SEQ %s:%d indicate_seq:%u\n", __func__, __LINE__,
 						preorder_ctrl->indicate_seq);
 					#endif
 				}
@@ -8307,7 +8307,7 @@ unsigned int send_delba(struct rtw_adapter *padapter, u8 initiator, u8 *addr)
 				psta->recvreorder_ctrl[tid].enable = false;
 				psta->recvreorder_ctrl[tid].indicate_seq = 0xffff;
 				#ifdef DBG_RX_SEQ
-				DBG_8192D("DBG_RX_SEQ %s:%d indicate_seq:%u \n", __func__, __LINE__,
+				DBG_8192D("DBG_RX_SEQ %s:%d indicate_seq:%u\n", __func__, __LINE__,
 					psta->recvreorder_ctrl[tid].indicate_seq);
 				#endif
 			}
@@ -9980,7 +9980,7 @@ void _linked_rx_signal_strehgth_display(struct rtw_adapter *padapter)
 	DBG_8192D("pbuddy_adapter UndecoratedSmoothedPWDB:%d\n",UndecoratedSmoothedPWDB);
 	DBG_8192D("Rx RSSI:%d\n",pbuddy_adapter->recvpriv.rssi);
 	DBG_8192D("Rx Signal_strength:%d\n",pbuddy_adapter->recvpriv.signal_strength);
-	DBG_8192D("Rx Signal_qual:%d \n",pbuddy_adapter->recvpriv.signal_qual);
+	DBG_8192D("Rx Signal_qual:%d\n",pbuddy_adapter->recvpriv.signal_qual);
 	DBG_8192D("============ linked status check ===================\n");
 	DBG_8192D("adapter_type=%d\n", padapter->adapter_type);
 #else //CONFIG_CONCURRENT_MODE
@@ -9993,7 +9993,7 @@ void _linked_rx_signal_strehgth_display(struct rtw_adapter *padapter)
 	DBG_8192D("UndecoratedSmoothedPWDB:%d\n",UndecoratedSmoothedPWDB);
 	DBG_8192D("Rx RSSI:%d\n",padapter->recvpriv.rssi);
 	DBG_8192D("Rx Signal_strength:%d\n",padapter->recvpriv.signal_strength);
-	DBG_8192D("Rx Signal_qual:%d \n",padapter->recvpriv.signal_qual);
+	DBG_8192D("Rx Signal_qual:%d\n",padapter->recvpriv.signal_qual);
 	if ( check_fwstate( &padapter->mlmepriv,  _FW_LINKED ))
 	{
 		DBG_8192D("bw mode: %d, channel: %d\n", padapter->mlmeextpriv.cur_bwmode, padapter->mlmeextpriv.cur_channel );

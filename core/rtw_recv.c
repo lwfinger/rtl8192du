@@ -458,7 +458,7 @@ _func_enter_;
 				//rxdata_key_idx =( ((iv[3])>>6)&0x3) ;
 				mickey=&psecuritypriv->dot118021XGrprxmickey[prxattrib->key_index].skey[0];
 
-				RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("\n recvframe_chkmic: bcmc key \n"));
+				RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("\n recvframe_chkmic: bcmc key\n"));
 				//DBG_8192D("\n recvframe_chkmic: bcmc key psecuritypriv->dot118021XGrpKeyid(%d),pmlmeinfo->key_index(%d) ,recv key_id(%d)\n",
 				//								psecuritypriv->dot118021XGrpKeyid,pmlmeinfo->key_index,rxdata_key_idx);
 
@@ -472,7 +472,7 @@ _func_enter_;
 			}
 			else{
 				mickey=&stainfo->dot11tkiprxmickey.skey[0];
-				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("\n recvframe_chkmic: unicast key \n"));
+				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("\n recvframe_chkmic: unicast key\n"));
 			}
 
 			datalen=precvframe->u.hdr.len-prxattrib->hdrlen-prxattrib->iv_len-prxattrib->icv_len-8;//icv_len included the mic code
@@ -515,7 +515,7 @@ _func_enter_;
 							*(precvframe->u.hdr.rx_data+i+6),*(precvframe->u.hdr.rx_data+i+7)));
 					}
 					RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("\n ======demp packet end [len=%d]======\n",precvframe->u.hdr.len));
-					RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("\n hrdlen=%d, \n",prxattrib->hdrlen));
+					RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("\n hrdlen=%d,\n",prxattrib->hdrlen));
 				}
 
 				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("ra=0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x psecuritypriv->binstallGrpkey=%d ",
@@ -530,7 +530,7 @@ _func_enter_;
 				if (brpt_micerror == true)
 				{
 					rtw_handle_tkip_mic_err(adapter,(u8)IS_MCAST(prxattrib->ra));
-					RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" mic error :prxattrib->bdecrypted=%d \n", brpt_micerror));
+					RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" mic error :prxattrib->bdecrypted=%d\n", brpt_micerror));
 					DBG_8192D(" mic error :brpt_micerror=%d\n", brpt_micerror);
 				}
 
@@ -583,7 +583,7 @@ _func_enter_;
 
 		if (prxattrib->key_index > WEP_KEYS)
 		{
-			DBG_8192D("prxattrib->key_index(%d) > WEP_KEYS \n", prxattrib->key_index);
+			DBG_8192D("prxattrib->key_index(%d) > WEP_KEYS\n", prxattrib->key_index);
 
 			switch (prxattrib->encrypt){
 				case _WEP40_:
@@ -1056,7 +1056,7 @@ _func_enter_;
 
 		// filter packets that SA is myself or multicast or broadcast
 		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)){
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" SA==myself \n"));
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" SA==myself\n"));
 			ret= _FAIL;
 			goto exit;
 		}
@@ -1265,7 +1265,7 @@ _func_enter_;
 
 		// filter packets that SA is myself or multicast or broadcast
 		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)){
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" SA==myself \n"));
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" SA==myself\n"));
 			#ifdef DBG_RX_DROP_FRAME
 			DBG_8192D("DBG_RX_DROP_FRAME %s SA=%x:%x:%x:%x:%x:%x, myhwaddr= %x:%x:%x:%x:%x:%x\n", __func__,
 				pattrib->src[0], pattrib->src[1], pattrib->src[2],
@@ -1739,7 +1739,7 @@ _func_enter_;
 
 
 	if (psta==NULL){
-		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" after to_fr_ds_chk; psta==NULL \n"));
+		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" after to_fr_ds_chk; psta==NULL\n"));
 		ret= _FAIL;
 		goto exit;
 	}
@@ -2870,7 +2870,7 @@ int process_recv_indicatepkts(struct rtw_adapter *padapter, union recv_frame *pr
 		retval=wlanhdr_to_ethhdr (prframe);
 		if (retval != _SUCCESS)
 		{
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("wlanhdr_to_ethhdr: drop pkt \n"));
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("wlanhdr_to_ethhdr: drop pkt\n"));
 			#ifdef DBG_RX_DROP_FRAME
 			DBG_8192D("DBG_RX_DROP_FRAME %s wlanhdr_to_ethhdr error!\n", __func__);
 			#endif
@@ -2920,7 +2920,7 @@ int recv_func_prehandle(struct rtw_adapter *padapter, union recv_frame *rframe)
 			padapter->mppriv.rx_pktcount++;
 
 		if (check_fwstate(pmlmepriv, WIFI_MP_LPBK_STATE) == false) {
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_alert_, ("MP - Not in loopback mode , drop pkt \n"));
+			RT_TRACE(_module_rtl871x_recv_c_, _drv_alert_, ("MP - Not in loopback mode , drop pkt\n"));
 			ret = _FAIL;
 			rtw_free_recvframe(rframe, pfree_recv_queue);//free this recv_frame
 			goto exit;
@@ -2996,7 +2996,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 
 	prframe=portctrl(padapter, prframe);
 	if (prframe == NULL) {
-		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("portctrl: drop pkt \n"));
+		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("portctrl: drop pkt\n"));
 		#ifdef DBG_RX_DROP_FRAME
 		DBG_8192D("DBG_RX_DROP_FRAME %s portctrl: drop pkt\n", __func__);
 		#endif
@@ -3017,7 +3017,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 	ret = process_recv_indicatepkts(padapter, prframe);
 	if (ret != _SUCCESS)
 	{
-		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recv_func: process_recv_indicatepkts fail! \n"));
+		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recv_func: process_recv_indicatepkts fail!\n"));
 		#ifdef DBG_RX_DROP_FRAME
 		DBG_8192D("DBG_RX_DROP_FRAME %s recv_func: process_recv_indicatepkts fail!\n", __func__);
 		#endif
@@ -3032,7 +3032,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 		ret = wlanhdr_to_ethhdr (prframe);
 		if (ret != _SUCCESS)
 		{
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("wlanhdr_to_ethhdr: drop pkt \n"));
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("wlanhdr_to_ethhdr: drop pkt\n"));
 			#ifdef DBG_RX_DROP_FRAME
 			DBG_8192D("DBG_RX_DROP_FRAME %s wlanhdr_to_ethhdr: drop pkt\n", __func__);
 			#endif

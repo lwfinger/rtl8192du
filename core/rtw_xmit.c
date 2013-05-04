@@ -625,7 +625,7 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 					((tmp[21] == 67) && (tmp[23] == 68))) {
 					// 68 : UDP BOOTP client
 					// 67 : UDP BOOTP server
-					RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("======================update_attrib: get DHCP Packet \n"));
+					RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("======================update_attrib: get DHCP Packet\n"));
 					// Use low rate to send DHCP packet.
 					//if (pMgntInfo->IOTAction & HT_IOT_ACT_WA_IOT_Broadcom)
 					//{
@@ -722,7 +722,7 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 
 	if (psta->ieee8021x_blocked == true)
 	{
-		RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("\n psta->ieee8021x_blocked == true \n"));
+		RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("\n psta->ieee8021x_blocked == true\n"));
 
 		pattrib->encrypt = 0;
 
@@ -935,7 +935,7 @@ _func_enter_;
 			rtw_secgetmic(&micdata,&(mic[0]));
 			RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("xmitframe_addmic: before add mic code!!!\n"));
 			RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("xmitframe_addmic: pattrib->last_txcmdsz=%d!!!\n",pattrib->last_txcmdsz));
-			RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("xmitframe_addmic: mic[0]=0x%.2x ,mic[1]=0x%.2x ,mic[2]=0x%.2x ,mic[3]=0x%.2x \n\
+			RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("xmitframe_addmic: mic[0]=0x%.2x ,mic[1]=0x%.2x ,mic[2]=0x%.2x ,mic[3]=0x%.2x\n\
   mic[4]=0x%.2x ,mic[5]=0x%.2x ,mic[6]=0x%.2x ,mic[7]=0x%.2x !!!!\n",
 				mic[0],mic[1],mic[2],mic[3],mic[4],mic[5],mic[6],mic[7]));
 			//add mic code  and add the mic code length in last_txcmdsz
@@ -2304,7 +2304,7 @@ _func_enter_;
 	case 2:
 		ptxservq = &(psta->sta_xmitpriv.bk_q);
 		*(ac) = 3;
-		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_get_sta_pending : BK \n"));
+		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_get_sta_pending : BK\n"));
 		break;
 	case 4:
 	case 5:
@@ -2316,14 +2316,14 @@ _func_enter_;
 	case 7:
 		ptxservq = &(psta->sta_xmitpriv.vo_q);
 		*(ac) = 0;
-		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_get_sta_pending : VO \n"));
+		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_get_sta_pending : VO\n"));
 		break;
 	case 0:
 	case 3:
 	default:
 		ptxservq = &(psta->sta_xmitpriv.be_q);
 		*(ac) = 2;
-		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_get_sta_pending : BE \n"));
+		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_get_sta_pending : BE\n"));
 	break;
 	}
 _func_exit_;

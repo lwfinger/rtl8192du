@@ -167,8 +167,7 @@ static void update_BCNTIM(struct rtw_adapter *padapter)
 		/* copy remainder IE */
 		if (pbackup_remainder_ie) {
 			memcpy(dst_ie, pbackup_remainder_ie, remainder_ielen);
-
-			rtw_mfree(pbackup_remainder_ie, remainder_ielen);
+			kfree(pbackup_remainder_ie);
 		}
 
 		offset =  (uint)(dst_ie - pie);
@@ -235,8 +234,7 @@ void rtw_add_bcn_ie(struct rtw_adapter *padapter, struct wlan_bssid_ex *pnetwork
 	/* copy remainder IE */
 	if (pbackup_remainder_ie) {
 		memcpy(dst_ie, pbackup_remainder_ie, remainder_ielen);
-
-		rtw_mfree(pbackup_remainder_ie, remainder_ielen);
+		kfree(pbackup_remainder_ie);
 	}
 
 	offset =  (uint)(dst_ie - pie);
@@ -271,8 +269,7 @@ void rtw_remove_bcn_ie(struct rtw_adapter *padapter, struct wlan_bssid_ex *pnetw
 	/* copy remainder IE */
 	if (pbackup_remainder_ie) {
 		memcpy(dst_ie, pbackup_remainder_ie, remainder_ielen);
-
-		rtw_mfree(pbackup_remainder_ie, remainder_ielen);
+		kfree(pbackup_remainder_ie);
 	}
 
 	offset =  (uint)(dst_ie - pie);
@@ -1557,8 +1554,7 @@ static void update_bcn_wps_ie(struct rtw_adapter *padapter)
 		pnetwork->IELength = wps_offset + (wps_ielen+2) + remainder_ielen;
 	}
 
-	if (pbackup_remainder_ie)
-		rtw_mfree(pbackup_remainder_ie, remainder_ielen);
+	kfree(pbackup_remainder_ie);
 }
 
 static void update_bcn_p2p_ie(struct rtw_adapter *padapter)

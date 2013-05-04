@@ -2495,8 +2495,7 @@ void rtw_ndev_destructor(struct net_device *ndev)
 	DBG_8192D(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 
 #ifdef CONFIG_IOCTL_CFG80211
-	if (ndev->ieee80211_ptr)
-		rtw_mfree((u8 *)ndev->ieee80211_ptr, sizeof(struct wireless_dev));
+	kfree(ndev->ieee80211_ptr);
 #endif
 	free_netdev(ndev);
 }

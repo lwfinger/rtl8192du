@@ -2546,7 +2546,7 @@ static void gf_mulx(u8 *pad)
 static void aes_encrypt_deinit(void *ctx)
 {
 	memset(ctx, 0, AES_PRIV_SIZE);
-	rtw_mfree(ctx, AES_PRIV_SIZE);
+	kfree(ctx);
 }
 
 
@@ -2743,7 +2743,7 @@ int wpa_tdls_ftie_mic(u8 *kck, u8 trans_seq,
 	pos += 2 + ftie[1];
 
 	ret = omac1_aes_128(kck, buf, pos - buf, mic);
-	rtw_mfree(buf, len);
+	kfree(buf);
 	return ret;
 
 }
@@ -2794,7 +2794,7 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 	pos += *(ftie+1);
 
 	ret = omac1_aes_128(kck, buf, pos - buf, mic);
-	rtw_mfree(buf, len);
+	kfree(buf);
 	if (ret)
 		return 0;
 	rx_ftie = ftie+4;

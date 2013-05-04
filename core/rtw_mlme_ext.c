@@ -1948,16 +1948,12 @@ unsigned int OnAssocReq(struct rtw_adapter *padapter, union recv_frame *precv_fr
 			rtw_cfg80211_indicate_sta_assoc(padapter, pframe, pkt_len);
 			#else //(LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
 			spin_lock_bh(&pstat->lock);
-			if(pstat->passoc_req)
-			{
-				rtw_mfree(pstat->passoc_req, pstat->assoc_req_len);
-				pstat->passoc_req = NULL;
-				pstat->assoc_req_len = 0;
-			}
+			kfree(pstat->passoc_req);
+			pstat->passoc_req = NULL;
+			pstat->assoc_req_len = 0;
 
 			pstat->passoc_req =  rtw_zmalloc(pkt_len);
-			if(pstat->passoc_req)
-			{
+			if(pstat->passoc_req) {
 				memcpy(pstat->passoc_req, pframe, pkt_len);
 				pstat->assoc_req_len = pkt_len;
 			}
@@ -9462,14 +9458,12 @@ void report_survey_event(struct rtw_adapter *padapter, union recv_frame *precv_f
 
 
 	if ((pcmd_obj = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj))) == NULL)
-	{
 		return;
-	}
 
 	cmdsz = (sizeof(struct survey_event) + sizeof(struct C2HEvent_Header));
-	if ((pevtcmd = (u8*)rtw_zmalloc(cmdsz)) == NULL)
-	{
-		rtw_mfree((u8 *)pcmd_obj, sizeof(struct cmd_obj));
+	pevtcmd = (u8*)rtw_zmalloc(cmdsz);
+	if (pevtcmd == NULL) {
+		kfree(pcmd_obj);
 		return;
 	}
 
@@ -9491,8 +9485,8 @@ void report_survey_event(struct rtw_adapter *padapter, union recv_frame *precv_f
 
 	if (collect_bss_info(padapter, precv_frame, (struct wlan_bssid_ex *)&psurvey_evt->bss) == _FAIL)
 	{
-		rtw_mfree((u8 *)pcmd_obj, sizeof(struct cmd_obj));
-		rtw_mfree((u8 *)pevtcmd, cmdsz);
+		kfree(pcmd_obj);
+		kfree(pevtcmd);
 		return;
 	}
 
@@ -9518,15 +9512,14 @@ void report_surveydone_event(struct rtw_adapter *padapter)
 	struct mlme_ext_priv		*pmlmeext = &padapter->mlmeextpriv;
 	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
 
-	if ((pcmd_obj = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj))) == NULL)
-	{
+	pcmd_obj = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
+	if (pcmd_obj == NULL)
 		return;
-	}
 
 	cmdsz = (sizeof(struct surveydone_event) + sizeof(struct C2HEvent_Header));
-	if ((pevtcmd = (u8*)rtw_zmalloc(cmdsz)) == NULL)
-	{
-		rtw_mfree((u8 *)pcmd_obj, sizeof(struct cmd_obj));
+	pevtcmd = (u8*)rtw_zmalloc(cmdsz);
+	if (pevtcmd == NULL) {
+		kfree(pcmd_obj);
 		return;
 	}
 
@@ -9566,15 +9559,14 @@ void report_join_res(struct rtw_adapter *padapter, int res)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
 
-	if ((pcmd_obj = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj))) == NULL)
-	{
+	pcmd_obj = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	if (pcmd_obj == NULL)
 		return;
-	}
 
 	cmdsz = (sizeof(struct joinbss_event) + sizeof(struct C2HEvent_Header));
-	if ((pevtcmd = (u8*)rtw_zmalloc(cmdsz)) == NULL)
-	{
-		rtw_mfree((u8 *)pcmd_obj, sizeof(struct cmd_obj));
+	pevtcmd = (u8 *)rtw_zmalloc(cmdsz);
+	if (pevtcmd == NULL) {
+		kfree(pcmd_obj);
 		return;
 	}
 
@@ -9628,7 +9620,7 @@ void report_del_sta_event(struct rtw_adapter *padapter, unsigned char* MacAddr, 
 	cmdsz = (sizeof(struct stadel_event) + sizeof(struct C2HEvent_Header));
 	if ((pevtcmd = (u8*)rtw_zmalloc(cmdsz)) == NULL)
 	{
-		rtw_mfree((u8 *)pcmd_obj, sizeof(struct cmd_obj));
+		kfree(pcmd_obj);
 		return;
 	}
 
@@ -9684,7 +9676,7 @@ void report_add_sta_event(struct rtw_adapter *padapter, unsigned char* MacAddr, 
 	cmdsz = (sizeof(struct stassoc_event) + sizeof(struct C2HEvent_Header));
 	if ((pevtcmd = (u8*)rtw_zmalloc(cmdsz)) == NULL)
 	{
-		rtw_mfree((u8 *)pcmd_obj, sizeof(struct cmd_obj));
+		kfree(pcmd_obj);
 		return;
 	}
 
@@ -10273,7 +10265,7 @@ void survey_timer_hdl(struct rtw_adapter *padapter)
 
 		if ((psurveyPara = (struct sitesurvey_parm*)rtw_zmalloc(sizeof(struct sitesurvey_parm))) == NULL)
 		{
-			rtw_mfree((unsigned char *)ph2c, sizeof(struct cmd_obj));
+			kfree(ph2c);
 			goto exit_survey_timer_hdl;
 		}
 
@@ -11088,7 +11080,7 @@ _func_enter_;
 
 	if ((ptxBeacon_parm = (struct Tx_Beacon_param *)rtw_zmalloc(sizeof(struct Tx_Beacon_param))) == NULL)
 	{
-		rtw_mfree((unsigned char *)ph2c, sizeof(struct	cmd_obj));
+		kfree(ph2c);
 		res= _FAIL;
 		goto exit;
 	}

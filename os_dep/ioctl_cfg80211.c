@@ -238,7 +238,7 @@ void rtw_spt_band_free(struct ieee80211_supported_band *spt_band)
 	{
 
 	}
-	rtw_mfree((u8*)spt_band, size);
+	kfree(spt_band);
 }
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
@@ -614,7 +614,7 @@ static u8 set_pairwise_key(_adapter *padapter, struct sta_info *psta)
 
 	psetstakey_para = (struct set_stakey_parm*)rtw_zmalloc(sizeof(struct set_stakey_parm));
 	if(psetstakey_para==NULL){
-		rtw_mfree((u8 *) ph2c, sizeof(struct cmd_obj));
+		kfree(ph2c);
 		res=_FAIL;
 		goto exit;
 	}
@@ -654,7 +654,7 @@ static int set_group_key(_adapter *padapter, u8 *key, u8 alg, int keyid)
 	}
 	psetkeyparm=(struct setkey_parm*)rtw_zmalloc(sizeof(struct setkey_parm));
 	if(psetkeyparm==NULL){
-		rtw_mfree((unsigned char *)pcmd, sizeof(struct cmd_obj));
+		kfree(pcmd);
 		res= _FAIL;
 		goto exit;
 	}
@@ -1287,17 +1287,12 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, struct net_device *ndev,
 
 		ret = rtw_cfg80211_ap_set_encryption(ndev, param, param_len);
 #endif
-	}
-	else
-	{
+	} else {
 		DBG_8192C("error! fw_state=0x%x, iftype=%d\n", pmlmepriv->fw_state, rtw_wdev->iftype);
-
 	}
 
 	if(param)
-	{
-		rtw_mfree((u8*)param, param_len);
-	}
+		kfree(param);
 
 	return ret;
 
@@ -1700,7 +1695,7 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(_adapter *padapter, char *buf, in
 			{
 				u32 free_len = pmlmepriv->wps_probe_req_ie_len;
 				pmlmepriv->wps_probe_req_ie_len = 0;
-				rtw_mfree(pmlmepriv->wps_probe_req_ie, free_len);
+				kfree(pmlmepriv->wps_probe_req_ie);
 				pmlmepriv->wps_probe_req_ie = NULL;
 			}
 
@@ -1728,7 +1723,7 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(_adapter *padapter, char *buf, in
 			{
 				u32 free_len = pmlmepriv->p2p_probe_req_ie_len;
 				pmlmepriv->p2p_probe_req_ie_len = 0;
-				rtw_mfree(pmlmepriv->p2p_probe_req_ie, free_len);
+				kfree(pmlmepriv->p2p_probe_req_ie);
 				pmlmepriv->p2p_probe_req_ie = NULL;
 			}
 
@@ -1757,7 +1752,7 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(_adapter *padapter, char *buf, in
 			{
 				u32 free_len = pmlmepriv->wfd_probe_req_ie_len;
 				pmlmepriv->wfd_probe_req_ie_len = 0;
-				rtw_mfree(pmlmepriv->wfd_probe_req_ie, free_len);
+				kfree(pmlmepriv->wfd_probe_req_ie);
 				pmlmepriv->wfd_probe_req_ie = NULL;
 			}
 
@@ -2300,7 +2295,7 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 			{
 				u32 free_len = pmlmepriv->p2p_assoc_req_ie_len;
 				pmlmepriv->p2p_assoc_req_ie_len = 0;
-				rtw_mfree(pmlmepriv->p2p_assoc_req_ie, free_len);
+				kfree(pmlmepriv->p2p_assoc_req_ie);
 				pmlmepriv->p2p_assoc_req_ie = NULL;
 			}
 
@@ -2331,7 +2326,7 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 			{
 				u32 free_len = pmlmepriv->wfd_assoc_req_ie_len;
 				pmlmepriv->wfd_assoc_req_ie_len = 0;
-				rtw_mfree(pmlmepriv->wfd_assoc_req_ie, free_len);
+				kfree(pmlmepriv->wfd_assoc_req_ie);
 				pmlmepriv->wfd_assoc_req_ie = NULL;
 			}
 
@@ -2359,7 +2354,7 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 
 exit:
 	if (buf)
-		rtw_mfree(buf, ielen);
+		kfree(buf);
 	if (ret)
 		_clr_fwstate_(&padapter->mlmepriv, WIFI_UNDER_WPS);
 	return ret;
@@ -2609,13 +2604,10 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		memcpy(pwep->KeyMaterial,  (void *)sme->key, pwep->KeyLength);
 
 		if(rtw_set_802_11_add_wep(padapter, pwep) == (u8)_FAIL)
-		{
 			ret = -EOPNOTSUPP ;
-		}
 
-		if (pwep) {
-			rtw_mfree((u8 *)pwep,wep_total_len);
-		}
+		if (pwep)
+			kfree((u8 *)pwep);
 
 		if(ret < 0)
 			goto exit;
@@ -3210,7 +3202,7 @@ static int rtw_cfg80211_add_monitor_if(_adapter *padapter, char *name, struct ne
 
 out:
 	if (ret && mon_wdev) {
-		rtw_mfree((u8*)mon_wdev, sizeof(struct wireless_dev));
+		kfree(mon_wdev);
 		mon_wdev = NULL;
 	}
 
@@ -3412,7 +3404,7 @@ static int rtw_add_beacon(_adapter *adapter, const u8 *head, size_t head_len, co
 	}
 
 
-	rtw_mfree(pbuf, head_len+tail_len);
+	kfree(pbuf);
 
 	return ret;
 }
@@ -4517,7 +4509,7 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 			{
 				u32 free_len = pmlmepriv->wps_beacon_ie_len;
 				pmlmepriv->wps_beacon_ie_len = 0;
-				rtw_mfree(pmlmepriv->wps_beacon_ie, free_len);
+				kfree(pmlmepriv->wps_beacon_ie);
 				pmlmepriv->wps_beacon_ie = NULL;
 			}
 
@@ -4549,7 +4541,7 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 			{
 				u32 free_len = pmlmepriv->p2p_beacon_ie_len;
 				pmlmepriv->p2p_beacon_ie_len = 0;
-				rtw_mfree(pmlmepriv->p2p_beacon_ie, free_len);
+				kfree(pmlmepriv->p2p_beacon_ie);
 				pmlmepriv->p2p_beacon_ie = NULL;
 			}
 
@@ -4580,7 +4572,7 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 			{
 				u32 free_len = pmlmepriv->wfd_beacon_ie_len;
 				pmlmepriv->wfd_beacon_ie_len = 0;
-				rtw_mfree(pmlmepriv->wfd_beacon_ie, free_len);
+				kfree(pmlmepriv->wfd_beacon_ie);
 				pmlmepriv->wfd_beacon_ie = NULL;
 			}
 
@@ -4633,7 +4625,7 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 			{
 				u32 free_len = pmlmepriv->wps_probe_resp_ie_len;
 				pmlmepriv->wps_probe_resp_ie_len = 0;
-				rtw_mfree(pmlmepriv->wps_probe_resp_ie, free_len);
+				kfree(pmlmepriv->wps_probe_resp_ie);
 				pmlmepriv->wps_probe_resp_ie = NULL;
 			}
 
@@ -4697,7 +4689,7 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 				{
 					u32 free_len = pmlmepriv->p2p_probe_resp_ie_len;
 					pmlmepriv->p2p_probe_resp_ie_len = 0;
-					rtw_mfree(pmlmepriv->p2p_probe_resp_ie, free_len);
+					kfree(pmlmepriv->p2p_probe_resp_ie);
 					pmlmepriv->p2p_probe_resp_ie = NULL;
 				}
 
@@ -4716,7 +4708,7 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 				{
 					u32 free_len = pmlmepriv->p2p_go_probe_resp_ie_len;
 					pmlmepriv->p2p_go_probe_resp_ie_len = 0;
-					rtw_mfree(pmlmepriv->p2p_go_probe_resp_ie, free_len);
+					kfree(pmlmepriv->p2p_go_probe_resp_ie);
 					pmlmepriv->p2p_go_probe_resp_ie = NULL;
 				}
 
@@ -4747,7 +4739,7 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 			{
 				u32 free_len = pmlmepriv->wfd_probe_resp_ie_len;
 				pmlmepriv->wfd_probe_resp_ie_len = 0;
-				rtw_mfree(pmlmepriv->wfd_probe_resp_ie, free_len);
+				kfree(pmlmepriv->wfd_probe_resp_ie);
 				pmlmepriv->wfd_probe_resp_ie = NULL;
 			}
 
@@ -4781,7 +4773,7 @@ static int rtw_cfg80211_set_assoc_resp_wpsp2pie(struct net_device *net, char *bu
 		{
 			u32 free_len = pmlmepriv->wps_assoc_resp_ie_len;
 			pmlmepriv->wps_assoc_resp_ie_len = 0;
-			rtw_mfree(pmlmepriv->wps_assoc_resp_ie, free_len);
+			kfree(pmlmepriv->wps_assoc_resp_ie);
 			pmlmepriv->wps_assoc_resp_ie = NULL;
 		}
 
@@ -5129,14 +5121,13 @@ int rtw_wdev_alloc(_adapter *padapter, struct device *dev)
 
 	return ret;
 
-	rtw_mfree((u8*)wdev, sizeof(struct wireless_dev));
+	kfree(wdev);
 unregister_wiphy:
 	wiphy_unregister(wiphy);
  free_wiphy:
 	wiphy_free(wiphy);
 exit:
 	return ret;
-
 }
 
 void rtw_wdev_free(struct wireless_dev *wdev)
@@ -5155,7 +5146,7 @@ void rtw_wdev_free(struct wireless_dev *wdev)
 
 	wiphy_free(wdev->wiphy);
 
-	rtw_mfree((u8*)wdev, sizeof(struct wireless_dev));
+	kfree(wdev);
 }
 
 void rtw_wdev_unregister(struct wireless_dev *wdev)

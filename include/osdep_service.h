@@ -302,14 +302,12 @@ extern u8*	_rtw_zvmalloc(u32 sz);
 extern void	_rtw_vmfree(u8 *pbuf, u32 sz);
 extern u8*	_rtw_zmalloc(u32 sz);
 extern u8*	_rtw_malloc(u32 sz);
-extern void	_rtw_mfree(u8 *pbuf, u32 sz);
 
 #define rtw_vmalloc(sz)			_rtw_vmalloc((sz))
 #define rtw_zvmalloc(sz)			_rtw_zvmalloc((sz))
 #define rtw_vmfree(pbuf, sz)		_rtw_vmfree((pbuf), (sz))
 #define rtw_malloc(sz)			_rtw_malloc((sz))
 #define rtw_zmalloc(sz)			_rtw_zmalloc((sz))
-#define rtw_mfree(pbuf, sz)		_rtw_mfree((pbuf), (sz))
 
 extern int	_rtw_memcmp(void *dst, void *src, u32 sz);
 

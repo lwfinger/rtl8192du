@@ -327,10 +327,6 @@ void _rtw_free_xmit_priv (struct xmit_priv *pxmitpriv)
 	for(i=0; i<NR_XMITBUFF; i++)
 	{
 		rtw_os_xmit_resource_free(padapter, pxmitbuf,(MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
-
-		//if(pxmitbuf->pallocated_buf)
-		//	rtw_mfree(pxmitbuf->pallocated_buf, MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ);
-
 		pxmitbuf++;
 	}
 
@@ -350,9 +346,6 @@ void _rtw_free_xmit_priv (struct xmit_priv *pxmitpriv)
 	for(i=0; i<NR_XMIT_EXTBUFF; i++)
 	{
 		rtw_os_xmit_resource_free(padapter, pxmitbuf,(MAX_XMIT_EXTBUF_SZ + XMITBUF_ALIGN_SZ));
-
-		//if(pxmitbuf->pallocated_buf)
-		//	rtw_mfree(pxmitbuf->pallocated_buf, MAX_XMIT_EXTBUF_SZ);
 
 		pxmitbuf++;
 	}
@@ -2450,8 +2443,7 @@ void rtw_free_hwxmits(struct rtw_adapter *padapter)
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 
 	hwxmits = pxmitpriv->hwxmits;
-	if(hwxmits)
-		rtw_mfree((u8 *)hwxmits, (sizeof (struct hw_xmit) * pxmitpriv->hwxmit_entry));
+	kfree(hwxmits);
 }
 
 void rtw_init_hwxmits(struct hw_xmit *phwxmit, int entry)

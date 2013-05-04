@@ -103,7 +103,6 @@ _func_exit_;
 	return res;
 }
 
-void rtw_mfree_mlme_priv_lock (struct mlme_priv *pmlmepriv);
 void rtw_mfree_mlme_priv_lock (struct mlme_priv *pmlmepriv)
 {
 	_rtw_spinlock_free(&pmlmepriv->lock);
@@ -113,9 +112,8 @@ void rtw_mfree_mlme_priv_lock (struct mlme_priv *pmlmepriv)
 
 static void rtw_free_mlme_ie_data(u8 **ppie, u32 *plen)
 {
-	if(*ppie)
-	{
-		_rtw_mfree(*ppie, *plen);
+	if (*ppie) {
+		kfree(*ppie);
 		*plen = 0;
 		*ppie=NULL;
 	}
@@ -1021,7 +1019,7 @@ _func_enter_;
 	{
 		u32 free_len = pmlmepriv->wps_probe_req_ie_len;
 		pmlmepriv->wps_probe_req_ie_len = 0;
-		rtw_mfree(pmlmepriv->wps_probe_req_ie, free_len);
+		kfree(pmlmepriv->wps_probe_req_ie);
 		pmlmepriv->wps_probe_req_ie = NULL;
 	}
 
@@ -1858,27 +1856,23 @@ _func_enter_;
 					assoc_req_len = psta->assoc_req_len;
 					memcpy(passoc_req, psta->passoc_req, assoc_req_len);
 
-					_rtw_mfree(psta->passoc_req , psta->assoc_req_len);
+					kfree(psta->passoc_req);
 					psta->passoc_req = NULL;
 					psta->assoc_req_len = 0;
 				}
 			}
 			spin_unlock_bh(&psta->lock);
 
-			if(passoc_req && assoc_req_len>0)
-			{
+			if (passoc_req && assoc_req_len > 0) {
 				rtw_cfg80211_indicate_sta_assoc(adapter, passoc_req, assoc_req_len);
 
-				_rtw_mfree(passoc_req, assoc_req_len);
+				kfree(passoc_req);
 			}
 #endif //(LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
 #endif //CONFIG_IOCTL_CFG80211
 
-			//bss_cap_update_on_sta_join(adapter, psta);
-			//sta_info_update(adapter, psta);
 			ap_sta_info_defer_update(adapter, psta);
 		}
-
 		goto exit;
 	}
 #endif
@@ -2527,7 +2521,7 @@ _func_enter_;
 
 	psetauthparm=(struct setauth_parm*)rtw_zmalloc(sizeof(struct setauth_parm));
 	if(psetauthparm==NULL){
-		rtw_mfree((unsigned char *)pcmd, sizeof(struct	cmd_obj));
+		kfree(pcmd);
 		res= _FAIL;
 		goto exit;
 	}
@@ -2575,7 +2569,7 @@ _func_enter_;
 	}
 	psetkeyparm=(struct setkey_parm*)rtw_zmalloc(sizeof(struct setkey_parm));
 	if(psetkeyparm==NULL){
-		rtw_mfree((unsigned char *)pcmd, sizeof(struct	cmd_obj));
+		kfree(pcmd);
 		res= _FAIL;
 		goto exit;
 	}

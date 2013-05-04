@@ -676,13 +676,12 @@ FillFakeTxDescriptor92D(
 //			Now we just send 4 types packet to rsvd page.
 //			(1)Beacon, (2)Ps-poll, (3)Null data, (4)ProbeRsp.
 //	Input:
-//	    bDLFinished - FALSE: At the first time we will send all the packets as a large packet to Hw,
+//	    dl_finish - FALSE: At the first time we will send all the packets as a large packet to Hw,
 //						so we need to set the packet length to total lengh.
 //			      TRUE: At the second time, we should send the first packet (default:beacon)
 //						to Hw again and set the lengh in descriptor to the real beacon lengh.
 // 2009.10.15 by tynli.
-void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished);
-void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
+void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct xmit_frame	*pmgntframe;
@@ -691,22 +690,22 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 	struct mlme_ext_priv	*pmlmeext = &(Adapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	u32	BeaconLength, ProbeRspLength, PSPollLength, NullFunctionDataLength;
-	u8	*ReservedPagePacket;
+	u8	*reservedpagepacket;
 	u8	PageNum=0, U1bTmp, TxDescLen=0, TxDescOffset=0;
 	u16	BufIndex=0;
 	u32	TotalPacketLen;
 	u8	u1RsvdPageLoc[3]={0};
-	bool	bDLOK = false;
+	bool	dlok = false;
 
 	DBG_8192D("%s\n", __FUNCTION__);
 
-	ReservedPagePacket = (u8*)rtw_malloc(1000);
-	if(ReservedPagePacket == NULL){
-		DBG_8192D("%s(): alloc ReservedPagePacket fail !!!\n", __FUNCTION__);
+	reservedpagepacket = (u8*)rtw_malloc(1000);
+	if(reservedpagepacket == NULL){
+		DBG_8192D("%s(): alloc reservedpagepacket fail !!!\n", __FUNCTION__);
 		return;
 	}
 
-	memset(ReservedPagePacket, 0, 1000);
+	memset(reservedpagepacket, 0, 1000);
 
 	TxDescLen = 32;//TX_DESC_SIZE;
 
@@ -714,11 +713,11 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 	TxDescOffset = TxDescLen+8; //Shift index for 8 bytes because the dummy bytes in the first descipstor.
 
 	//(1) beacon
-	ConstructBeacon(Adapter,&ReservedPagePacket[BufIndex],&BeaconLength);
+	ConstructBeacon(Adapter,&reservedpagepacket[BufIndex],&BeaconLength);
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_,
 		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: BCN\n",
-		&ReservedPagePacket[BufIndex], (BeaconLength+BufIndex));
+		&reservedpagepacket[BufIndex], (BeaconLength+BufIndex));
 
 //--------------------------------------------------------------------
 
@@ -734,13 +733,13 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 	BufIndex = (PageNum*128) + TxDescOffset;
 
 	//(2) ps-poll
-	ConstructPSPoll(Adapter, &ReservedPagePacket[BufIndex],&PSPollLength);
+	ConstructPSPoll(Adapter, &reservedpagepacket[BufIndex],&PSPollLength);
 
-	FillFakeTxDescriptor92D(Adapter, &ReservedPagePacket[BufIndex-TxDescLen], PSPollLength, true);
+	FillFakeTxDescriptor92D(Adapter, &reservedpagepacket[BufIndex-TxDescLen], PSPollLength, true);
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_,
 		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: PS-POLL\n",
-		&ReservedPagePacket[BufIndex-TxDescLen], (PSPollLength+TxDescLen));
+		&reservedpagepacket[BufIndex-TxDescLen], (PSPollLength+TxDescLen));
 
 	SET_H2CCMD_RSVDPAGE_LOC_PSPOLL(u1RsvdPageLoc, PageNum );
 
@@ -754,18 +753,18 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 	//(3) null data
 	ConstructNullFunctionData(
 		Adapter,
-		&ReservedPagePacket[BufIndex],
+		&reservedpagepacket[BufIndex],
 		&NullFunctionDataLength,
 		get_my_bssid(&(pmlmeinfo->network)),
 		false);
 
-	FillFakeTxDescriptor92D(Adapter, &ReservedPagePacket[BufIndex-TxDescLen], NullFunctionDataLength, false);
+	FillFakeTxDescriptor92D(Adapter, &reservedpagepacket[BufIndex-TxDescLen], NullFunctionDataLength, false);
 
 	SET_H2CCMD_RSVDPAGE_LOC_NULL_DATA(u1RsvdPageLoc, PageNum);
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_,
 		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: NULL DATA \n",
-		&ReservedPagePacket[BufIndex-TxDescLen], (NullFunctionDataLength+TxDescLen));
+		&reservedpagepacket[BufIndex-TxDescLen], (NullFunctionDataLength+TxDescLen));
 //------------------------------------------------------------------
 
 	U1bTmp = (u8)PageNum_128(NullFunctionDataLength+TxDescLen);
@@ -776,18 +775,18 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 	//(4) probe response
 	ConstructProbeRsp(
 		Adapter,
-		&ReservedPagePacket[BufIndex],
+		&reservedpagepacket[BufIndex],
 		&ProbeRspLength,
 		get_my_bssid(&(pmlmeinfo->network)),
 		false);
 
-	FillFakeTxDescriptor92D(Adapter, &ReservedPagePacket[BufIndex-TxDescLen], ProbeRspLength, false);
+	FillFakeTxDescriptor92D(Adapter, &reservedpagepacket[BufIndex-TxDescLen], ProbeRspLength, false);
 
 	SET_H2CCMD_RSVDPAGE_LOC_PROBE_RSP(u1RsvdPageLoc, PageNum);
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_,
 		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: PROBE RSP \n",
-		&ReservedPagePacket[BufIndex-TxDescLen], (ProbeRspLength-TxDescLen));
+		&reservedpagepacket[BufIndex-TxDescLen], (ProbeRspLength-TxDescLen));
 
 //------------------------------------------------------------------
 
@@ -807,20 +806,18 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool bDLFinished)
 	update_mgntframe_attrib(Adapter, pattrib);
 	pattrib->qsel = 0x10;
 	pattrib->pktlen = pattrib->last_txcmdsz = TotalPacketLen - TxDescLen;
-	memcpy(pmgntframe->buf_addr, ReservedPagePacket, TotalPacketLen);
+	memcpy(pmgntframe->buf_addr, reservedpagepacket, TotalPacketLen);
 
 	rtw_hal_mgnt_xmit(Adapter, pmgntframe);
 
-	bDLOK = true;
+	dlok = true;
 
-	if(bDLOK)
-	{
+	if(dlok) {
 		DBG_8192D("Set RSVD page location to Fw.\n");
 		FillH2CCmd92D(Adapter, H2C_RSVDPAGE, sizeof(u1RsvdPageLoc), u1RsvdPageLoc);
-		//FillH2CCmd92D(Adapter, H2C_RSVDPAGE, sizeof(RsvdPageLoc), (u8 *)&RsvdPageLoc);
 	}
 
-	rtw_mfree(ReservedPagePacket,1000);
+	kfree(reservedpagepacket);
 }
 
 void rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus)

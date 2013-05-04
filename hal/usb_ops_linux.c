@@ -167,7 +167,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 
 	// release IO memory used by vendorreq
 	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
-	rtw_mfree(tmp_buf, tmp_buflen);
+	kfree(tmp_buf);
 	#endif
 
 release_mutex:

@@ -622,7 +622,7 @@ u8 rtw_efuse_map_write(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *dat
 
 exit:
 
-	rtw_mfree(map, maplen);
+	kfree(map);
 
 	return ret;
 }

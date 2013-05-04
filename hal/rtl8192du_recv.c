@@ -171,22 +171,17 @@ void rtl8192du_free_recv_priv (struct rtw_adapter *padapter)
 
 	precvbuf = (struct recv_buf *)precvpriv->precv_buf;
 
-	for(i=0; i < NR_RECVBUFF ; i++)
-	{
+	for (i = 0; i < NR_RECVBUFF; i++) {
 		rtw_os_recvbuf_resource_free(padapter, precvbuf);
 		precvbuf++;
 	}
 
-	if(precvpriv->pallocated_recv_buf)
-		rtw_mfree(precvpriv->pallocated_recv_buf, NR_RECVBUFF *sizeof(struct recv_buf) + 4);
+	kfree(precvpriv->pallocated_recv_buf);
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
 	if(precvpriv->int_in_urb)
-	{
 		usb_free_urb(precvpriv->int_in_urb);
-	}
-	if(precvpriv->int_in_buf)
-		rtw_mfree(precvpriv->int_in_buf, sizeof(INTERRUPT_MSG_FORMAT_EX));
+	kfree(precvpriv->int_in_buf);
 #endif
 
 	if (skb_queue_len(&precvpriv->rx_skb_queue)) {

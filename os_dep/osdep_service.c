@@ -108,11 +108,6 @@ u8* _rtw_zmalloc(u32 sz)
 	return pbuf;
 }
 
-void	_rtw_mfree(u8 *pbuf, u32 sz)
-{
-	kfree(pbuf);
-}
-
 int	_rtw_memcmp(void *dst, void *src, u32 sz)
 {
 //under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0
@@ -789,7 +784,7 @@ void rtw_buf_free(u8 **buf, u32 *buf_len)
 
 	if (*buf) {
 		*buf_len = 0;
-		_rtw_mfree(*buf, *buf_len);
+		kfree(*buf);
 		*buf = NULL;
 	}
 }
@@ -824,7 +819,7 @@ keep_ori:
 
 	/* free ori */
 	if (ori && ori_len > 0)
-		_rtw_mfree(ori, ori_len);
+		kfree(ori);
 }
 
 
@@ -918,5 +913,5 @@ struct rtw_cbuf *rtw_cbuf_alloc(u32 size)
  */
 void rtw_cbuf_free(struct rtw_cbuf *cbuf)
 {
-	rtw_mfree((u8*)cbuf, sizeof(*cbuf) + sizeof(void*)*cbuf->size);
+	kfree(cbuf);
 }

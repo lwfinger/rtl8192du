@@ -189,7 +189,6 @@ _func_exit_;
 
 }
 
-void rtw_mfree_stainfo(struct sta_info *psta);
 void rtw_mfree_stainfo(struct sta_info *psta)
 {
 _func_enter_;
@@ -205,7 +204,6 @@ _func_exit_;
 
 
 // this function is used to free the memory of lock || sema for all stainfos
-void rtw_mfree_all_stainfo(struct sta_priv *pstapriv );
 void rtw_mfree_all_stainfo(struct sta_priv *pstapriv )
 {
 	struct list_head *plist, *phead;
@@ -232,7 +230,6 @@ _func_exit_;
 
 }
 
-void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv);
 void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
 {
 #ifdef CONFIG_AP_MODE

@@ -1270,8 +1270,7 @@ _func_enter_;
 
 	DBG_8192D("===== rtl8192du_free_hal_data =====\n");
 
-	if(padapter->HalData)
-		rtw_mfree(padapter->HalData, sizeof(struct hal_data_8192du));
+	kfree(padapter->HalData);
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	GlobalFirstConfigurationForNormalChip = true;
 #endif

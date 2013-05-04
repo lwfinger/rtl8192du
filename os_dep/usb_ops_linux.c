@@ -64,7 +64,7 @@ static int _usbctrl_vendorreq_async_write(struct usb_device *udev, u8 request,
 
 	urb = usb_alloc_urb(0, GFP_ATOMIC);
 	if (!urb) {
-		rtw_mfree((u8*)buf, sizeof(*buf));
+		kfree(buf);
 		rc = -ENOMEM;
 		goto exit;
 	}
@@ -84,7 +84,7 @@ static int _usbctrl_vendorreq_async_write(struct usb_device *udev, u8 request,
 
 	rc = usb_submit_urb(urb, GFP_ATOMIC);
 	if (rc < 0) {
-		rtw_mfree((u8*)buf, sizeof(*buf));
+		kfree(buf);
 		usb_free_urb(urb);
 	}
 
@@ -193,23 +193,14 @@ static void usb_bulkout_zero_complete(struct urb *purb, struct pt_regs *regs)
 
 	//DBG_8192D("+usb_bulkout_zero_complete\n");
 
-	if(pcontext)
-	{
-		if(pcontext->pbuf)
-		{
-			rtw_mfree(pcontext->pbuf, sizeof(int));
-		}
+	if(pcontext) {
+		kfree(pcontext->pbuf);
 
 		if(pcontext->purb && (pcontext->purb==purb))
-		{
 			usb_free_urb(pcontext->purb);
-		}
 
-
-		rtw_mfree((u8*)pcontext, sizeof(struct zero_bulkout_context));
+		kfree(pcontext);
 	}
-
-
 }
 
 static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)

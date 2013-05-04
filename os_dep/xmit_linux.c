@@ -182,8 +182,7 @@ void rtw_os_xmit_resource_free(struct rtw_adapter *padapter, struct xmit_buf *px
 	pxmitbuf->pallocated_buf =  NULL;
 	pxmitbuf->dma_transfer_addr = 0;
 #else	// CONFIG_USE_USB_BUFFER_ALLOC_TX
-	if(pxmitbuf->pallocated_buf)
-		rtw_mfree(pxmitbuf->pallocated_buf, free_sz);
+	kfree(pxmitbuf->pallocated_buf);
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_TX
 }
 

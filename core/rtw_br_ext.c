@@ -578,7 +578,7 @@ void nat25_db_cleanup(struct rtw_adapter *priv)
 				priv->scdb_entry = NULL;
 			}
 			__network_hash_unlink(f);
-			rtw_mfree((u8 *)f, sizeof(struct nat25_network_db_entry));
+			kfree(f);
 
 			f = g;
 		}
@@ -660,10 +660,9 @@ void nat25_db_expire(struct rtw_adapter *priv)
 						priv->scdb_entry = NULL;
 					}
 					__network_hash_unlink(f);
-					rtw_mfree((u8 *)f, sizeof(struct nat25_network_db_entry));
+					kfree(f);
 				}
 			}
-
 			f = g;
 		}
 	}

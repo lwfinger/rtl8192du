@@ -218,8 +218,7 @@ _func_enter_;
 
 		wireless_send_event(adapter->pnetdev,IWEVCUSTOM,&wrqu,buff);
 
-		if(buff)
-		    rtw_mfree(buff, IW_CUSTOM_MAX);
+		kfree(buff);
 
 	}
 

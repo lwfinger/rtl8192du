@@ -1671,15 +1671,11 @@ _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,
 		mac[3] = 0x87;
 		mac[4] = 0x11;
 		mac[5] = 0x22;
-	}
-	else
-	{
+	} else {
 		/* If the BIT1 is 0, the address is universally administered. */
 		/* If it is 1, the address is locally administered */
-#if 1 /* needs enable MBSSID CAM */
 		mac[0] |= BIT(1); /*  locally administered */
 		mac[0] |= (padapter->iface_id-1)<<4;
-#endif
 	}
 
 	memcpy(padapter->eeprompriv.mac_addr, mac, ETH_ALEN);

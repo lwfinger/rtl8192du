@@ -655,7 +655,6 @@ void mgt_dispatcher(struct rtw_adapter *padapter, union recv_frame *precv_frame)
 	}
 	ptable += index;
 
-#if 1
 	if (psta != NULL)
 	{
 		if (GetRetry(pframe))
@@ -669,14 +668,6 @@ void mgt_dispatcher(struct rtw_adapter *padapter, union recv_frame *precv_frame)
 		}
 		psta->RxMgmtFrameSeqNum = precv_frame->u.hdr.attrib.seq_num;
 	}
-#else
-
-	if (GetRetry(pframe))
-	{
-		//RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("drop due to decache!\n"));
-		//return;
-	}
-#endif
 
 #ifdef CONFIG_AP_MODE
 	switch (GetFrameSubType(pframe))
@@ -7075,9 +7066,7 @@ void issue_assocreq(struct rtw_adapter *padapter)
 
 	//supported rate & extended supported rate
 
-#if 1	// Check if the AP's supported rates are also supported by STA.
 	get_rate_set(padapter, sta_bssrate, &sta_bssrate_len);
-	//DBG_8192D("sta_bssrate_len=%d\n", sta_bssrate_len);
 
 	if (pmlmeext->cur_channel == 14)// for JAPAN, channel 14 can only uses B Mode(CCK)
 	{
@@ -7122,17 +7111,6 @@ void issue_assocreq(struct rtw_adapter *padapter)
 
 	bssrate_len = index;
 	DBG_8192D("bssrate_len = %d\n", bssrate_len);
-
-#else	// Check if the AP's supported rates are also supported by STA.
-	for (bssrate_len = 0; bssrate_len < NUMRATES; bssrate_len++) {
-		if (pmlmeinfo->network.SupportedRates[bssrate_len] == 0) break;
-
-		if (pmlmeinfo->network.SupportedRates[bssrate_len] == 0x2C) // Avoid the proprietary data rate (22Mbps) of Handlink WSG-4000 AP
-			break;
-
-		bssrate[bssrate_len] = pmlmeinfo->network.SupportedRates[bssrate_len];
-	}
-#endif	// Check if the AP's supported rates are also supported by STA.
 
 	if (bssrate_len == 0) {
 		rtw_free_xmitbuf(pxmitpriv, pmgntframe->pxmitbuf);
@@ -7216,55 +7194,47 @@ void issue_assocreq(struct rtw_adapter *padapter)
 			pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= 0x000c;
 
 			rtw_hal_get_hwreg(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
-			//switch (pregpriv->rf_config)
-			switch (rf_type)
-			{
-				case RF_1T1R:
+			switch (rf_type) {
+			case RF_1T1R:
 
-					if (pregpriv->rx_stbc)
-						pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0100);//RX STBC One spatial stream
-
-					memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_1R, 16);
-					break;
-
-				case RF_2T2R:
-				case RF_1T2R:
-				default:
-
-
-					if (pregpriv->special_rf_path)
-					{
-						if (pregpriv->rx_stbc)
-							pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0100);//RX STBC One spatial stream
-						memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_1R, 16);
-						break;
-					}
-
-					if ((pregpriv->rx_stbc == 0x3) ||//enable for 2.4/5 GHz
-						((pmlmeext->cur_wireless_mode & WIRELESS_11_24N) && (pregpriv->rx_stbc == 0x1)) || //enable for 2.4GHz
-						((pmlmeext->cur_wireless_mode & WIRELESS_11_5N) && (pregpriv->rx_stbc == 0x2)) || //enable for 5GHz
-						(pregpriv->wifi_spec==1))
-					{
-						DBG_8192D("declare supporting RX STBC\n");
-						pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0200);//RX STBC two spatial stream
-					}
-					#ifdef CONFIG_DISABLE_MCS13TO15
-					if (pmlmeext->cur_bwmode == HT_CHANNEL_WIDTH_40 && (pregpriv->wifi_spec!=1))
-						memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_2R_MCS13TO15_OFF, 16);
-					else
-					memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_2R, 16);
-					#else //CONFIG_DISABLE_MCS13TO15
-					memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_2R, 16);
-					#endif //CONFIG_DISABLE_MCS13TO15
-					break;
-			}
-#ifdef RTL8192C_RECONFIG_TO_1T1R
-			{
 				if (pregpriv->rx_stbc)
-					pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0100);//RX STBC One spatial stream
+					pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0100);/* RX STBC One spatial stream */
 
 				memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_1R, 16);
+				break;
+
+			case RF_2T2R:
+			case RF_1T2R:
+			default:
+				if (pregpriv->special_rf_path) {
+					if (pregpriv->rx_stbc)
+						pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0100);//RX STBC One spatial stream
+					memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_1R, 16);
+					break;
+				}
+
+				if ((pregpriv->rx_stbc == 0x3) ||//enable for 2.4/5 GHz
+				    ((pmlmeext->cur_wireless_mode & WIRELESS_11_24N) && (pregpriv->rx_stbc == 0x1)) || //enable for 2.4GHz
+				    ((pmlmeext->cur_wireless_mode & WIRELESS_11_5N) && (pregpriv->rx_stbc == 0x2)) || //enable for 5GHz
+				    (pregpriv->wifi_spec==1)) {
+					DBG_8192D("declare supporting RX STBC\n");
+					pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0200);//RX STBC two spatial stream
+				}
+				#ifdef CONFIG_DISABLE_MCS13TO15
+				if (pmlmeext->cur_bwmode == HT_CHANNEL_WIDTH_40 && (pregpriv->wifi_spec!=1))
+					memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_2R_MCS13TO15_OFF, 16);
+				else
+					memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_2R, 16);
+				#else //CONFIG_DISABLE_MCS13TO15
+				memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_2R, 16);
+				#endif //CONFIG_DISABLE_MCS13TO15
+				break;
 			}
+#ifdef RTL8192C_RECONFIG_TO_1T1R
+			if (pregpriv->rx_stbc)
+				pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0100);//RX STBC One spatial stream
+
+			memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_1R, 16);
 #endif
 			pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info = cpu_to_le16(pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info);
 			pframe = rtw_set_ie(pframe, _HT_CAPABILITY_IE_, ie_len , (u8 *)(&(pmlmeinfo->HT_caps)), &(pattrib->pktlen));
@@ -8404,22 +8374,8 @@ void site_survey(struct rtw_adapter *padapter)
 		}
 	}
 
-	if (0)
-	DBG_8192D(FUNC_ADPT_FMT" ch:%u(cnt:%u,idx:%d) at %dms, %c%c%c\n"
-		, FUNC_ADPT_ARG(padapter)
-		, survey_channel
-		, pwdinfo->find_phase_state_exchange_cnt, pmlmeext->sitesurvey_res.channel_idx
-		, rtw_get_passing_time_ms(padapter->mlmepriv.scan_start_time)
-		, ScanType?'A':'P', pmlmeext->sitesurvey_res.scan_mode?'A':'P'
-		, pmlmeext->sitesurvey_res.ssid[0].SsidLength?'S':' '
-	);
-
-	if (survey_channel != 0)
-	{
+	if (survey_channel != 0) {
 		//PAUSE 4-AC Queue when site_survey
-		//rtw_hal_get_hwreg(padapter, HW_VAR_TXPAUSE, (u8 *)(&val8));
-		//val8 |= 0x0f;
-		//rtw_hal_set_hwreg(padapter, HW_VAR_TXPAUSE, (u8 *)(&val8));
 #ifdef CONFIG_CONCURRENT_MODE
 #ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
 		if ((padapter->pbuddy_adapter->mlmeextpriv.mlmext_info.state&0x03) == WIFI_FW_AP_STATE)
@@ -10607,8 +10563,6 @@ int rtw_scan_ch_decision(struct rtw_adapter *padapter, struct rtw_ieee80211_chan
 	/* acquire channels from in */
 	j = 0;
 	for (i=0;i<in_num;i++) {
-		if (0)
-		DBG_8192D(FUNC_ADPT_FMT" "CHAN_FMT"\n", FUNC_ADPT_ARG(padapter), CHAN_ARG(&in[i]));
 		if (in[i].hw_value && !(in[i].flags & RTW_IEEE80211_CHAN_DISABLED)
 			&& (set_idx=rtw_ch_set_search_ch(pmlmeext->channel_set, in[i].hw_value)) >=0
 		)

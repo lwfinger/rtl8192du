@@ -324,16 +324,6 @@ if (padapter->registrypriv.mp_mode == 0)
 			//use REG_INIDATA_RATE_SEL value
 			ptxdesc->txdw5 |= cpu_to_le32(pdmpriv->INIDATA_RATE[pattrib->mac_id]);
 
-		if (0)//for driver dbg
-			{
-				ptxdesc->txdw4 |= cpu_to_le32(BIT(8));//driver uses rate
-
-				if (pattrib->ht_en)
-					ptxdesc->txdw5 |= cpu_to_le32(BIT(6));//SGI
-
-				ptxdesc->txdw5 |= cpu_to_le32(0x00000013);//init rate - mcs7
-			}
-
 		}
 		else
 		{

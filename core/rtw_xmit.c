@@ -385,14 +385,10 @@ static void update_attrib_vcs_info(struct rtw_adapter *padapter, struct xmit_fra
 	// (2) If there are more than one frag in  this MSDU, only the first frag uses protection frame.
 	//		Other fragments are protected by previous fragment.
 	//		So we only need to check the length of first fragment.
-	if (pmlmeext->cur_wireless_mode < WIRELESS_11_24N  || padapter->registrypriv.wifi_spec)
-	{
-		if (sz > padapter->registrypriv.rts_thresh)
-		{
+	if (pmlmeext->cur_wireless_mode < WIRELESS_11_24N  || padapter->registrypriv.wifi_spec) {
+		if (sz > padapter->registrypriv.rts_thresh) {
 			pattrib->vcs_mode = RTS_CTS;
-		}
-		else
-		{
+		} else {
 			if (psta->rtsen)
 				pattrib->vcs_mode = RTS_CTS;
 			else if (psta->cts2self)
@@ -400,27 +396,8 @@ static void update_attrib_vcs_info(struct rtw_adapter *padapter, struct xmit_fra
 			else
 				pattrib->vcs_mode = NONE_VCS;
 		}
-	}
-	else
-	{
-		while (true)
-		{
-#if 0 //Todo
-			//check IOT action
-			if (pHTInfo->IOTAction & HT_IOT_ACT_FORCED_CTS2SELF)
-			{
-				pattrib->vcs_mode = CTS_TO_SELF;
-				pattrib->rts_rate = MGN_24M;
-				break;
-			}
-			else if (pHTInfo->IOTAction & (HT_IOT_ACT_FORCED_RTS|HT_IOT_ACT_PURE_N_MODE))
-			{
-				pattrib->vcs_mode = RTS_CTS;
-				pattrib->rts_rate = MGN_24M;
-				break;
-			}
-#endif
-
+	} else {
+		while (true) {
 			//IOT action
 			if ((pmlmeinfo->assoc_AP_vendor == atherosAP) && (pattrib->ampdu_en==true) &&
 				(padapter->securitypriv.dot11PrivacyAlgrthm == _AES_))
@@ -431,8 +408,7 @@ static void update_attrib_vcs_info(struct rtw_adapter *padapter, struct xmit_fra
 
 
 			//check ERP protection
-			if (psta->rtsen || psta->cts2self)
-			{
+			if (psta->rtsen || psta->cts2self) {
 				if (psta->rtsen)
 					pattrib->vcs_mode = RTS_CTS;
 				else if (psta->cts2self)
@@ -442,12 +418,10 @@ static void update_attrib_vcs_info(struct rtw_adapter *padapter, struct xmit_fra
 			}
 
 			//check HT op mode
-			if (pattrib->ht_en)
-			{
+			if (pattrib->ht_en) {
 				u8 HTOpMode = pmlmeinfo->HT_protection;
 				if ((pmlmeext->cur_bwmode && (HTOpMode == 2 || HTOpMode == 3)) ||
-					(!pmlmeext->cur_bwmode && HTOpMode == 3))
-				{
+				    (!pmlmeext->cur_bwmode && HTOpMode == 3)) {
 					pattrib->vcs_mode = RTS_CTS;
 					break;
 				}
@@ -2586,31 +2560,10 @@ int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 				*((unsigned short *)(skb->data+MACADDRLEN*2+2)) = vlan_hdr;
 			}
 		}
-#if 0
-		else {
-			if (*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_8021Q)) {
-				is_vlan_tag = 1;
-			}
-
-			if (is_vlan_tag) {
-				if (ICMPV6_MCAST_MAC(skb->data) && ICMPV6_PROTO1A_VALN(skb->data)) {
-                                        memcpy(skb->data+MACADDRLEN, GET_MY_HWADDR(padapter), MACADDRLEN);
-				}
-			} else
-			{
-				if (ICMPV6_MCAST_MAC(skb->data) && ICMPV6_PROTO1A(skb->data)) {
-                                        memcpy(skb->data+MACADDRLEN, GET_MY_HWADDR(padapter), MACADDRLEN);
-				}
-			}
-		}
-#endif	// 0
-
 		// check if SA is equal to our MAC
 		if (memcmp(skb->data+MACADDRLEN, GET_MY_HWADDR(padapter), MACADDRLEN)) {
-			//priv->ext_stats.tx_drops++;
 			ERR_8192D("TX DROP: untransformed frame SA:%02X%02X%02X%02X%02X%02X!\n",
 				skb->data[6],skb->data[7],skb->data[8],skb->data[9],skb->data[10],skb->data[11]);
-			//goto free_and_stop;
 			return -1;
 		}
 	}
@@ -2624,11 +2577,6 @@ static void do_queue_select(struct rtw_adapter	*padapter, struct pkt_attrib *pat
 
 	qsel = pattrib->priority;
 	RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("### do_queue_select priority=%d ,qsel = %d\n",pattrib->priority ,qsel));
-
-#ifdef CONFIG_CONCURRENT_MODE
-//	if (check_fwstate(&padapter->mlmepriv, WIFI_AP_STATE) == true)
-//		qsel = 7;//
-#endif
 
 	pattrib->qsel = qsel;
 }

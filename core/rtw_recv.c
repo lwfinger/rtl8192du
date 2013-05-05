@@ -2326,12 +2326,7 @@ int amsdu_to_msdu(struct rtw_adapter *padapter, union recv_frame *prframe)
 					//DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n");
 					//return FAIL;
 
-#if 1
 					// bypass this frame to upper layer!!
-#else
-					dev_kfree_skb_any(sub_skb);
-					continue;
-#endif
 				}
 			}
 #endif	// CONFIG_BR_EXT

@@ -2275,8 +2275,6 @@ inline void rtw_clear_scan_deny(struct rtw_adapter *adapter)
 {
 	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
 	ATOMIC_SET(&mlmepriv->set_scan_deny, 0);
-	if (0)
-	DBG_8192D(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
 }
 
 void rtw_set_scan_deny_timer_hdl(struct rtw_adapter *adapter)
@@ -2290,9 +2288,6 @@ void rtw_set_scan_deny(struct rtw_adapter *adapter, u32 ms)
 #ifdef CONFIG_CONCURRENT_MODE
 	struct mlme_priv *b_mlmepriv;
 #endif
-
-	if (0)
-	DBG_8192D(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
 	ATOMIC_SET(&mlmepriv->set_scan_deny, 1);
 	_set_timer(&mlmepriv->set_scan_deny_timer, ms);
 
@@ -2300,8 +2295,6 @@ void rtw_set_scan_deny(struct rtw_adapter *adapter, u32 ms)
 	if (!adapter->pbuddy_adapter)
 		return;
 
-	if (0)
-	DBG_8192D(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter->pbuddy_adapter));
 	b_mlmepriv = &adapter->pbuddy_adapter->mlmepriv;
 	ATOMIC_SET(&b_mlmepriv->set_scan_deny, 1);
 	_set_timer(&b_mlmepriv->set_scan_deny_timer, ms);

@@ -103,19 +103,12 @@ void rtw_set_tx_chksum_offload(struct sk_buff *pkt, struct pkt_attrib *pattrib)
                                 //skb_checksum_help(skb);
                         } else if (ip->protocol == IPPROTO_UDP) {
                                 //DBG_8192D("CHECKSUM_PARTIAL UDP\n");
-#if 1
                                 skb_checksum_help(skb);
-#else
-                                // Set UDP checksum = 0 to skip checksum check
-                                struct udphdr *udp = skb_transport_header(skb);
-                                udp->check = 0;
-#endif
                         } else {
 				DBG_8192D("%s-%d TCP CSUM offload Error!!\n", __func__, __LINE__);
                                 WARN_ON(1);     /* we need a WARN() */
 			    }
-		}
-		else { // IP fragmentation case
+		} else { // IP fragmentation case
 			DBG_8192D("%s-%d nr_frags != 0, using skb_checksum_help(skb);!!\n", __func__, __LINE__);
 			skb_checksum_help(skb);
 		}

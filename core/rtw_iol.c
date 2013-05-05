@@ -28,15 +28,12 @@ struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter)
 	struct pkt_attrib	*pattrib;
 	struct xmit_priv	*pxmitpriv = &(adapter->xmitpriv);
 
-#if 1
-	if ((xmit_frame = rtw_alloc_xmitframe(pxmitpriv)) == NULL)
-	{
+	if ((xmit_frame = rtw_alloc_xmitframe(pxmitpriv)) == NULL) {
 		DBG_871X("%s rtw_alloc_xmitframe return null\n", __func__);
 		goto exit;
 	}
 
-	if ((xmitbuf = rtw_alloc_xmitbuf(pxmitpriv)) == NULL)
-	{
+	if ((xmitbuf = rtw_alloc_xmitbuf(pxmitpriv)) == NULL) {
 		DBG_871X("%s rtw_alloc_xmitbuf return null\n", __func__);
 		rtw_free_xmitframe(pxmitpriv, xmit_frame);
 		xmit_frame=NULL;
@@ -52,20 +49,6 @@ struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter)
 	update_mgntframe_attrib(adapter, pattrib);
 	pattrib->qsel = 0x10;
 	pattrib->pktlen = pattrib->last_txcmdsz = 0;
-
-#else
-	if ((xmit_frame = alloc_mgtxmitframe(pxmitpriv)) == NULL)
-	{
-		DBG_871X("%s alloc_mgtxmitframe return null\n", __func__);
-	}
-	else {
-		pattrib = &xmit_frame->attrib;
-		update_mgntframe_attrib(adapter, pattrib);
-		pattrib->qsel = 0x10;
-		pattrib->pktlen = pattrib->last_txcmdsz = 0;
-	}
-#endif
-
 exit:
 	return xmit_frame;
 }

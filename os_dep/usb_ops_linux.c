@@ -505,37 +505,15 @@ _func_enter_;
 
 	purb	= pxmitbuf->pxmit_urb[0];
 
-#if 0
-	if (pdvobj->ishighspeed)
-	{
-		if (cnt> 0 && cnt%512 == 0)
-		{
-			//DBG_8192D("ishighspeed, cnt=%d\n", cnt);
-			bwritezero = true;
-		}
-	}
-	else
-	{
-		if (cnt > 0 && cnt%64 == 0)
-		{
-			//DBG_8192D("cnt=%d\n", cnt);
-			bwritezero = true;
-		}
-	}
-#endif
-
 	//translate DMA FIFO addr to pipehandle
 	pipe = ffaddr2pipehdl(pdvobj, addr);
 
 #ifdef CONFIG_REDUCE_USB_TX_INT
-	if ((pxmitpriv->free_xmitbuf_cnt%NR_XMITBUFF == 0)
-		|| (pxmitbuf->ext_tag == true))
-	{
+	if ((pxmitpriv->free_xmitbuf_cnt%NR_XMITBUFF == 0) ||
+	    (pxmitbuf->ext_tag == true))
 		purb->transfer_flags  &=  (~URB_NO_INTERRUPT);
-	} else {
+	else
 		purb->transfer_flags  |=  URB_NO_INTERRUPT;
-		//DBG_8192D("URB_NO_INTERRUPT ");
-	}
 #endif
 
 
@@ -550,13 +528,6 @@ _func_enter_;
 	purb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
 	purb->transfer_flags |= URB_ZERO_PACKET;
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_TX
-
-#if 0
-	if (bwritezero)
-        {
-            purb->transfer_flags |= URB_ZERO_PACKET;
-        }
-#endif
 
 	status = usb_submit_urb(purb, GFP_ATOMIC);
 	if (!status) {

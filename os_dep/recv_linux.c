@@ -330,31 +330,13 @@ _func_enter_;
 	rcu_read_unlock();
 #endif  // (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
 
-	if (br_port	&& (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true))
-	{
-		int nat25_handle_frame(struct rtw_adapter *priv, struct sk_buff *skb);
-		if (nat25_handle_frame(padapter, skb) == -1) {
-			//priv->ext_stats.rx_data_drops++;
-			//DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n");
-			//return FAIL;
-#if 1
-			// bypass this frame to upper layer!!
-#else
-			goto _recv_indicatepkt_drop;
-#endif
-		}
-	}
-
 #endif	// CONFIG_BR_EXT
-
 
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
 	if ((pattrib->tcpchk_valid == 1) && (pattrib->tcp_chkrpt == 1)) {
 		skb->ip_summed = CHECKSUM_UNNECESSARY;
-		//DBG_871X("CHECKSUM_UNNECESSARY\n");
 	} else {
 		skb->ip_summed = CHECKSUM_NONE;
-		//DBG_871X("CHECKSUM_NONE(%d, %d)\n", pattrib->tcpchk_valid, pattrib->tcp_chkrpt);
 	}
 #else /* !CONFIG_TCP_CSUM_OFFLOAD_RX */
 

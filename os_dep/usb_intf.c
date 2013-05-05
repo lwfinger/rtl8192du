@@ -329,93 +329,35 @@ _func_enter_;
 
 
 	pdev_desc = &pusbd->descriptor;
-#if 0
-	DBG_8192D("\n8712_usb_device_descriptor:\n");
-	DBG_8192D("bLength=%x\n", pdev_desc->bLength);
-	DBG_8192D("bDescriptorType=%x\n", pdev_desc->bDescriptorType);
-	DBG_8192D("bcdUSB=%x\n", pdev_desc->bcdUSB);
-	DBG_8192D("bDeviceClass=%x\n", pdev_desc->bDeviceClass);
-	DBG_8192D("bDeviceSubClass=%x\n", pdev_desc->bDeviceSubClass);
-	DBG_8192D("bDeviceProtocol=%x\n", pdev_desc->bDeviceProtocol);
-	DBG_8192D("bMaxPacketSize0=%x\n", pdev_desc->bMaxPacketSize0);
-	DBG_8192D("idVendor=%x\n", pdev_desc->idVendor);
-	DBG_8192D("idProduct=%x\n", pdev_desc->idProduct);
-	DBG_8192D("bcdDevice=%x\n", pdev_desc->bcdDevice);
-	DBG_8192D("iManufacturer=%x\n", pdev_desc->iManufacturer);
-	DBG_8192D("iProduct=%x\n", pdev_desc->iProduct);
-	DBG_8192D("iSerialNumber=%x\n", pdev_desc->iSerialNumber);
-	DBG_8192D("bNumConfigurations=%x\n", pdev_desc->bNumConfigurations);
-#endif
-
 	phost_conf = pusbd->actconfig;
 	pconf_desc = &phost_conf->desc;
 
-#if 0
-	DBG_8192D("\n8712_usb_configuration_descriptor:\n");
-	DBG_8192D("bLength=%x\n", pconf_desc->bLength);
-	DBG_8192D("bDescriptorType=%x\n", pconf_desc->bDescriptorType);
-	DBG_8192D("wTotalLength=%x\n", pconf_desc->wTotalLength);
-	DBG_8192D("bNumInterfaces=%x\n", pconf_desc->bNumInterfaces);
-	DBG_8192D("bConfigurationValue=%x\n", pconf_desc->bConfigurationValue);
-	DBG_8192D("iConfiguration=%x\n", pconf_desc->iConfiguration);
-	DBG_8192D("bmAttributes=%x\n", pconf_desc->bmAttributes);
-	DBG_8192D("bMaxPower=%x\n", pconf_desc->bMaxPower);
-#endif
-
-	//DBG_8192D("\n/****** num of altsetting = (%d) ******/\n", usb_intf->num_altsetting);
-
 	phost_iface = &usb_intf->altsetting[0];
 	piface_desc = &phost_iface->desc;
-
-#if 0
-	DBG_8192D("\n8712_usb_interface_descriptor:\n");
-	DBG_8192D("bLength=%x\n", piface_desc->bLength);
-	DBG_8192D("bDescriptorType=%x\n", piface_desc->bDescriptorType);
-	DBG_8192D("bInterfaceNumber=%x\n", piface_desc->bInterfaceNumber);
-	DBG_8192D("bAlternateSetting=%x\n", piface_desc->bAlternateSetting);
-	DBG_8192D("bNumEndpoints=%x\n", piface_desc->bNumEndpoints);
-	DBG_8192D("bInterfaceClass=%x\n", piface_desc->bInterfaceClass);
-	DBG_8192D("bInterfaceSubClass=%x\n", piface_desc->bInterfaceSubClass);
-	DBG_8192D("bInterfaceProtocol=%x\n", piface_desc->bInterfaceProtocol);
-	DBG_8192D("iInterface=%x\n", piface_desc->iInterface);
-#endif
 
 	pdvobjpriv->NumInterfaces = pconf_desc->bNumInterfaces;
 	pdvobjpriv->InterfaceNumber = piface_desc->bInterfaceNumber;
 	pdvobjpriv->nr_endpoint = piface_desc->bNumEndpoints;
 
-	//DBG_8192D("\ndump usb_endpoint_descriptor:\n");
-
-	for (i = 0; i < pdvobjpriv->nr_endpoint; i++)
-	{
+	for (i = 0; i < pdvobjpriv->nr_endpoint; i++) {
 		phost_endp = phost_iface->endpoint + i;
-		if (phost_endp)
-		{
+		if (phost_endp) {
 			pendp_desc = &phost_endp->desc;
 
 			DBG_8192D("\nusb_endpoint_descriptor(%d):\n", i);
 			DBG_8192D("bLength=%x\n",pendp_desc->bLength);
 			DBG_8192D("bDescriptorType=%x\n",pendp_desc->bDescriptorType);
 			DBG_8192D("bEndpointAddress=%x\n",pendp_desc->bEndpointAddress);
-			//DBG_8192D("bmAttributes=%x\n",pendp_desc->bmAttributes);
-			//DBG_8192D("wMaxPacketSize=%x\n",pendp_desc->wMaxPacketSize);
 			DBG_8192D("wMaxPacketSize=%x\n",le16_to_cpu(pendp_desc->wMaxPacketSize));
 			DBG_8192D("bInterval=%x\n",pendp_desc->bInterval);
-			//DBG_8192D("bRefresh=%x\n",pendp_desc->bRefresh);
-			//DBG_8192D("bSynchAddress=%x\n",pendp_desc->bSynchAddress);
 
-			if (RT_usb_endpoint_is_bulk_in(pendp_desc))
-			{
+			if (RT_usb_endpoint_is_bulk_in(pendp_desc)) {
 				DBG_8192D("RT_usb_endpoint_is_bulk_in = %x\n", RT_usb_endpoint_num(pendp_desc));
 				pdvobjpriv->RtNumInPipes++;
-			}
-			else if (RT_usb_endpoint_is_int_in(pendp_desc))
-			{
+			} else if (RT_usb_endpoint_is_int_in(pendp_desc)) {
 				DBG_8192D("RT_usb_endpoint_is_int_in = %x, Interval = %x\n", RT_usb_endpoint_num(pendp_desc),pendp_desc->bInterval);
 				pdvobjpriv->RtNumInPipes++;
-			}
-			else if (RT_usb_endpoint_is_bulk_out(pendp_desc))
-			{
+			} else if (RT_usb_endpoint_is_bulk_out(pendp_desc)) {
 				DBG_8192D("RT_usb_endpoint_is_bulk_out = %x\n", RT_usb_endpoint_num(pendp_desc));
 				pdvobjpriv->RtNumOutPipes++;
 			}
@@ -444,8 +386,6 @@ _func_enter_;
 	rtw_reset_continual_urb_error(pdvobjpriv);
 
 	usb_get_dev(pusbd);
-
-	//DBG_8192D("%s %d\n", __func__, ATOMIC_READ(&usb_intf->dev.kobj.kref.refcount));
 
 	status = _SUCCESS;
 

@@ -182,29 +182,17 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 			chgTx = 1;
 
 			// From SD3 Willis suggestion !!! Set RF B as standby
-			//if (IS_HARDWARE_TYPE_8192S(pAdapter))
-			{
 			PHY_SetBBReg(pAdapter, rFPGA0_XA_HSSIParameter2, 0xe, 2);
 			PHY_SetBBReg(pAdapter, rFPGA0_XB_HSSIParameter2, 0xe, 2);
 
 			// Disable Power save
 			//cosa r_ant_select_ofdm_val = 0x3321333;
-#if 0
-			// 2008/10/31 MH From SD3 Willi's suggestion. We must read RFA 2T table.
-			if ((pHalData->VersionID == VERSION_8192S_ACUT)) // For RTL8192SU A-Cut only, by Roger, 2008.11.07.
-			{
-				mpt_RFConfigFromPreParaArrary(pAdapter, 1, RF_PATH_A);
-			}
-#endif
 			// 2009/01/08 MH From Sd3 Willis. We need to enable RFA/B by SW control
-			if (pHalData->rf_type == RF_2T2R)
-			{
+			if (pHalData->rf_type == RF_2T2R) {
 				PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFInterfaceSW, BIT10, 0);
 				PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFInterfaceSW, BIT26, 0);
-//				PHY_SetBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT10, 0);
 				PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT1, 1);
 				PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT17, 1);
-			}
 			}
 			break;
 
@@ -464,17 +452,9 @@ u8 Hal_ReadRFThermalMeter(PADAPTER pAdapter)
 
 void Hal_GetThermalMeter(PADAPTER pAdapter, u8 *value)
 {
-#if 0
-	fw_cmd(pAdapter, IOCMD_GET_THERMAL_METER);
-	rtw_msleep_os(1000);
-	fw_cmd_data(pAdapter, value, 1);
-	*value &= 0xFF;
-#else
-
 	Hal_TriggerRFThermalMeter(pAdapter);
 	rtw_msleep_os(1000);
 	*value = Hal_ReadRFThermalMeter(pAdapter);
-#endif
 }
 
 void Hal_SetTxPower (PADAPTER pAdapter)
@@ -1051,7 +1031,6 @@ void
 
 		for (i = 0; i < RF_REG_NUM_for_C_CUT_5G; i++)
 		{
-#if 1
 			if (i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
 			{
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask, 0xE439D);
@@ -1074,16 +1053,6 @@ void
 			{
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask, RF_REG_Param_for_C_CUT_5G[index][i]);
 			}
-#else
-			if (i == 0 && (pHalData->MacPhyMode92D == DUALMAC_DUALPHY))
-				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i], RF_REG_MASK_for_C_CUT_5G[i], 0xE439D);
-			else
-				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i], RF_REG_MASK_for_C_CUT_5G[i], RF_REG_Param_for_C_CUT_5G[index][i]);
-#endif
-			//RT_TRACE(COMP_RF, DBG_TRACE, ("phy_SwitchRfSetting8192D offset 0x%x value 0x%x path %d index %d readback 0x%x\n",
-			//	RF_REG_for_C_CUT_5G[i], RF_REG_Param_for_C_CUT_5G[index][i], path,	index,
-			//	PHY_QueryRFReg(Adapter,  path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask)));
-
 		}
 
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
@@ -1183,25 +1152,16 @@ void
 
 		for (i = 0; i < RF_REG_NUM_for_C_CUT_2G; i++)
 		{
-#if 1
 #if SWLCK == 1
 			if (RF_REG_for_C_CUT_2G[i] == RF_SYN_G7)
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_2G[i]|MaskforPhySet, bRFRegOffsetMask, (RF_REG_Param_for_C_CUT_2G[index][i] | BIT17));
 			else
 #endif
 			PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_2G[i]|MaskforPhySet, bRFRegOffsetMask, RF_REG_Param_for_C_CUT_2G[index][i]);
-#else
-			PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_2G[i], RF_REG_MASK_for_C_CUT_2G[i], RF_REG_Param_for_C_CUT_2G[index][i]);
-#endif
-			//RT_TRACE(COMP_RF, DBG_TRACE, ("phy_SwitchRfSetting8192D offset 0x%x value 0x%x mak 0x%x path %d index %d readback 0x%x\n",
-			//	RF_REG_for_C_CUT_2G[i], RF_REG_Param_for_C_CUT_2G[index][i], RF_REG_MASK_for_C_CUT_2G[i], path,  index,
-			//	PHY_QueryRFReg(Adapter,  path, RF_REG_for_C_CUT_2G[i]|MaskforPhySet, bRFRegOffsetMask)));
 		}
 
 #if SWLCK == 1
 		//for SWLCK
-		//RT_DISP(FINIT, INIT_IQK, ("ver 3 set RF-B, 2G, 0x28 = 0x%x !!\n", RF_REG_SYN_G4_for_C_CUT_2G | (u4tmp << 11)));
-
 		PHY_SetRFReg(Adapter, path, RF_SYN_G4|MaskforPhySet, bRFRegOffsetMask, RF_REG_SYN_G4_for_C_CUT_2G | (u4tmp << 11));
 #endif
 
@@ -1238,35 +1198,6 @@ void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
     bool             bInteralPA = false;
     u32				value = 0;
     phy_SwitchRfSetting8192D(pAdapter,ChannelToSw);
-#if 0
-	if (((ulRateIdx == MPT_RATE_1M || ulRateIdx == MPT_RATE_6M || ulRateIdx == MPT_RATE_MCS0 ||
-        ulRateIdx == MPT_RATE_MCS8) && ulbandwidth == HT_CHANNEL_WIDTH_20 &&
-        (ChannelToSw == 1 || ChannelToSw == 11)) ||
-        ((ulRateIdx == MPT_RATE_MCS0 ||ulRateIdx == MPT_RATE_MCS8) &&
-        ulbandwidth == HT_CHANNEL_WIDTH_40 &&
-        (ChannelToSw == 3 || ChannelToSw == 9)))
-
-    {
-        value = 0x294a5;
-    }
-    else
-    {
-        value = 0x18c63;
-    }
-
-
-    for (eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
-    {
-        if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
-            pHalData->interfaceIndex == 1)      //MAC 1 5G
-            bInteralPA = pHalData->InternalPA5G[1];
-        else
-            bInteralPA = pHalData->InternalPA5G[eRFPath];
-
-        if (!bInteralPA ||  pHalData->CurrentBandType92D==BAND_ON_2_4G)
-		_write_rfreg(pAdapter, (RF_RADIO_PATH_E)eRFPath, 0x03, bRFRegOffsetMask, value);
-    }
- #endif
 }
 
 void Hal_SetBandwidth(PADAPTER pAdapter)
@@ -1365,12 +1296,6 @@ void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 
 void Hal_SetChannel(PADAPTER pAdapter)
 {
-#if 0
-	struct mp_priv *pmp = &pAdapter->mppriv;
-
-//	SelectChannel(pAdapter, pmp->channel);
-	set_channel_bwmode(pAdapter, pmp->channel, pmp->channel_offset, pmp->bandwidth);
-#else
 	u8		eRFPath;
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1401,8 +1326,6 @@ void Hal_SetChannel(PADAPTER pAdapter)
 		pHalData->dmpriv.bCCKinCH14 = false;
 		MPT_CCKTxPowerAdjust(pAdapter, pHalData->dmpriv.bCCKinCH14);
 	}
-
-#endif
 }
 
 
@@ -1561,28 +1484,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMSingleCarrier, bDisable);
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMSingleTone, bDisable);
 		//Set CCK Tx Test Rate
-		#if 0
-		switch (pAdapter->mppriv.rateidx)
-		{
-			case 2:
-				cckrate = 0;
-				break;
-			case 4:
-				cckrate = 1;
-				break;
-			case 11:
-				cckrate = 2;
-				break;
-			case 22:
-				cckrate = 3;
-				break;
-			default:
-				cckrate = 0;
-				break;
-		}
-		#else
 		cckrate  = pAdapter->mppriv.rateidx;
-		#endif
 		write_bbreg(pAdapter, rCCK0_System, bCCKTxRate, cckrate);
 		write_bbreg(pAdapter, rCCK0_System, bCCKBBMode, 0x2);	//transmit mode
 		write_bbreg(pAdapter, rCCK0_System, bCCKScramble, bEnable); //turn on scramble setting

@@ -5232,26 +5232,12 @@ static int rtw_p2p_set_sa(struct net_device *dev,
 
 	DBG_8192D("[%s] data = %s\n", __func__, extra);
 
-	if (0)
-	{
-		DBG_8192D("[%s] WiFi Direct is disable!\n", __func__);
-		return ret;
-	}
+	if (extra[ 0 ] == '0')	//	Disable the session available.
+		pwdinfo->session_available = false;
+	else if (extra[ 0 ] == '1')	//	Enable the session available.
+		pwdinfo->session_available = true;
 	else
-	{
-		if (extra[ 0 ] == '0')	//	Disable the session available.
-		{
-			pwdinfo->session_available = false;
-		}
-		else if (extra[ 0 ] == '1')	//	Enable the session available.
-		{
-			pwdinfo->session_available = true;
-		}
-		else
-		{
-			pwdinfo->session_available = false;
-		}
-	}
+		pwdinfo->session_available = false;
 	DBG_8192D("[%s] session available = %d\n", __func__, pwdinfo->session_available);
 
 exit:
@@ -6375,22 +6361,18 @@ static int rtw_dbg_port(struct net_device *dev,
 #endif // CONFIG_P2P
 						break;
 					}
-#if 1
 				case 0xdd://registers dump , 0 for mac reg,1 for bb reg, 2 for rf reg
-					{
-						if (extra_arg==0) {
-							mac_reg_dump(padapter);
-						}
-						else if (extra_arg==1) {
-							bb_reg_dump(padapter);
-						}
-						else if (extra_arg==2) {
-							rf_reg_dump(padapter);
-						}
-
+					if (extra_arg==0) {
+						mac_reg_dump(padapter);
 					}
+					else if (extra_arg==1) {
+						bb_reg_dump(padapter);
+					}
+					else if (extra_arg==2) {
+						rf_reg_dump(padapter);
+					}
+
 					break;
-#endif
 				case 0xee://turn on/off dynamic funcs
 					{
 						u8 dm_flag;
@@ -7543,21 +7525,11 @@ static int rtw_set_hidden_ssid(struct net_device *dev, struct ieee_param *param,
 		memcpy(ssid, ssid_ie+2, ssid_len);
 		ssid[ssid_len>NDIS_802_11_LENGTH_SSID?NDIS_802_11_LENGTH_SSID:ssid_len] = 0x0;
 
-		if (0)
-		DBG_8192D(FUNC_ADPT_FMT" ssid:(%s,%d), from ie:(%s,%d), (%s,%d)\n", FUNC_ADPT_ARG(adapter),
-			ssid, ssid_len,
-			pbss_network->Ssid.Ssid, pbss_network->Ssid.SsidLength,
-			pbss_network_ext->Ssid.Ssid, pbss_network_ext->Ssid.SsidLength);
-
 		memcpy(pbss_network->Ssid.Ssid, (void *)ssid, ssid_len);
 		pbss_network->Ssid.SsidLength = ssid_len;
 		memcpy(pbss_network_ext->Ssid.Ssid, (void *)ssid, ssid_len);
 		pbss_network_ext->Ssid.SsidLength = ssid_len;
 
-		if (0)
-		DBG_8192D(FUNC_ADPT_FMT" after ssid:(%s,%d), (%s,%d)\n", FUNC_ADPT_ARG(adapter),
-			pbss_network->Ssid.Ssid, pbss_network->Ssid.SsidLength,
-			pbss_network_ext->Ssid.Ssid, pbss_network_ext->Ssid.SsidLength);
 	}
 
 	DBG_8192D(FUNC_ADPT_FMT" ignore_broadcast_ssid:%d, %s,%d\n", FUNC_ADPT_ARG(adapter),

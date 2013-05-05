@@ -1377,8 +1377,7 @@ _InitUsbAggregationSetting(
 	u8		valueDMA;
 	u8		valueUSB;
 
-	if (pHalData->MacPhyMode92D!=SINGLEMAC_SINGLEPHY)
-	{
+	if (pHalData->MacPhyMode92D!=SINGLEMAC_SINGLEPHY) {
 		pHalData->UsbRxAggPageCount	= 24;
 		pHalData->UsbRxAggPageTimeout = 0x6;
 	}
@@ -1386,32 +1385,29 @@ _InitUsbAggregationSetting(
 	valueDMA = rtw_read8(Adapter, REG_TRXDMA_CTRL);
 	valueUSB = rtw_read8(Adapter, REG_USB_SPECIAL_OPTION);
 
-	switch (pHalData->UsbRxAggMode)
-	{
-		case USB_RX_AGG_DMA:
-			valueDMA |= RXDMA_AGG_EN;
-			valueUSB &= ~USB_AGG_EN;
-			break;
-		case USB_RX_AGG_USB:
-			valueDMA &= ~RXDMA_AGG_EN;
-			valueUSB |= USB_AGG_EN;
-			break;
-		case USB_RX_AGG_DMA_USB:
-			valueDMA |= RXDMA_AGG_EN;
-			valueUSB |= USB_AGG_EN;
-			break;
-		case USB_RX_AGG_DISABLE:
-		default:
-			valueDMA &= ~RXDMA_AGG_EN;
-			valueUSB &= ~USB_AGG_EN;
-			break;
+	switch (pHalData->UsbRxAggMode) {
+	case USB_RX_AGG_DMA:
+		valueDMA |= RXDMA_AGG_EN;
+		valueUSB &= ~USB_AGG_EN;
+		break;
+	case USB_RX_AGG_USB:
+		valueDMA &= ~RXDMA_AGG_EN;
+		valueUSB |= USB_AGG_EN;
+		break;
+	case USB_RX_AGG_DMA_USB:
+		valueDMA |= RXDMA_AGG_EN;
+		valueUSB |= USB_AGG_EN;
+		break;
+	case USB_RX_AGG_DISABLE:
+	default:
+		valueDMA &= ~RXDMA_AGG_EN;
+		valueUSB &= ~USB_AGG_EN;
+		break;
 	}
 
 	rtw_write8(Adapter, REG_TRXDMA_CTRL, valueDMA);
 	rtw_write8(Adapter, REG_USB_SPECIAL_OPTION, valueUSB);
-#if 1
-	switch (pHalData->UsbRxAggMode)
-	{
+	switch (pHalData->UsbRxAggMode) {
 		case USB_RX_AGG_DMA:
 			rtw_write8(Adapter, REG_RXDMA_AGG_PG_TH, pHalData->UsbRxAggPageCount);
 			rtw_write8(Adapter, REG_USB_DMA_AGG_TO, pHalData->UsbRxAggPageTimeout);
@@ -1431,7 +1427,6 @@ _InitUsbAggregationSetting(
 			// TODO:
 			break;
 	}
-#endif
 	switch (PBP_128)
 	{
 		case PBP_128:
@@ -1471,81 +1466,60 @@ _InitOperationMode(
 	//
 	// Set RRSR, RATR, and REG_BWOPMODE registers
 	//
-	switch (pHalData->CurrentWirelessMode)
-	{
-		case WIRELESS_MODE_B:
-			regBwOpMode = BW_OPMODE_20MHZ;
-			regRATR = RATE_ALL_CCK;
-			regRRSR = RATE_ALL_CCK;
-			break;
-		case WIRELESS_MODE_A:
-			//RT_ASSERT(FALSE,("Error wireless a mode\n"));
-#if 1
-			regBwOpMode = BW_OPMODE_5G |BW_OPMODE_20MHZ;
-			regRATR = RATE_ALL_OFDM_AG;
-			regRRSR = RATE_ALL_OFDM_AG;
-#endif
-			break;
-		case WIRELESS_MODE_G:
-			regBwOpMode = BW_OPMODE_20MHZ;
-			regRATR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
+	switch (pHalData->CurrentWirelessMode) {
+	case WIRELESS_MODE_B:
+		regBwOpMode = BW_OPMODE_20MHZ;
+		regRATR = RATE_ALL_CCK;
+		regRRSR = RATE_ALL_CCK;
+		break;
+	case WIRELESS_MODE_A:
+		//RT_ASSERT(FALSE,("Error wireless a mode\n"));
+		regBwOpMode = BW_OPMODE_5G |BW_OPMODE_20MHZ;
+		regRATR = RATE_ALL_OFDM_AG;
+		regRRSR = RATE_ALL_OFDM_AG;
+		break;
+	case WIRELESS_MODE_G:
+		regBwOpMode = BW_OPMODE_20MHZ;
+		regRATR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
+		regRRSR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
+		break;
+	case WIRELESS_MODE_UNKNOWN:
+	case WIRELESS_MODE_AUTO:
+		regBwOpMode = BW_OPMODE_20MHZ;
+		regRATR = RATE_ALL_CCK | RATE_ALL_OFDM_AG | RATE_ALL_OFDM_1SS | RATE_ALL_OFDM_2SS;
+		regRRSR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
+		break;
+	case WIRELESS_MODE_N_24G:
+		// It support CCK rate by default.
+		// CCK rate will be filtered out only when associated AP does not support it.
+		regBwOpMode = BW_OPMODE_20MHZ;
+			regRATR = RATE_ALL_CCK | RATE_ALL_OFDM_AG | RATE_ALL_OFDM_1SS | RATE_ALL_OFDM_2SS;
 			regRRSR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
-			break;
-		case WIRELESS_MODE_UNKNOWN:
-		case WIRELESS_MODE_AUTO:
-			//if (pHalData->bInHctTest)
-			if (0)
-			{
-			    regBwOpMode = BW_OPMODE_20MHZ;
-			    regRATR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
-			    regRRSR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
-			}
-			else
-			{
-			    regBwOpMode = BW_OPMODE_20MHZ;
-			    regRATR = RATE_ALL_CCK | RATE_ALL_OFDM_AG | RATE_ALL_OFDM_1SS | RATE_ALL_OFDM_2SS;
-			    regRRSR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
-			}
-			break;
-		case WIRELESS_MODE_N_24G:
-			// It support CCK rate by default.
-			// CCK rate will be filtered out only when associated AP does not support it.
-			regBwOpMode = BW_OPMODE_20MHZ;
-				regRATR = RATE_ALL_CCK | RATE_ALL_OFDM_AG | RATE_ALL_OFDM_1SS | RATE_ALL_OFDM_2SS;
-				regRRSR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
-			break;
-		case WIRELESS_MODE_N_5G:
-			//RT_ASSERT(FALSE,("Error wireless mode"));
-#if 1
-			regBwOpMode = BW_OPMODE_5G;
-			regRATR = RATE_ALL_OFDM_AG | RATE_ALL_OFDM_1SS | RATE_ALL_OFDM_2SS;
-			regRRSR = RATE_ALL_OFDM_AG;
-#endif
-			break;
+		break;
+	case WIRELESS_MODE_N_5G:
+		regBwOpMode = BW_OPMODE_5G;
+		regRATR = RATE_ALL_OFDM_AG | RATE_ALL_OFDM_1SS | RATE_ALL_OFDM_2SS;
+		regRRSR = RATE_ALL_OFDM_AG;
+		break;
 	}
 
 	// Ziv ????????
-	//rtw_write32(Adapter, REG_INIRTS_RATE_SEL, regRRSR);
 	rtw_write8(Adapter, REG_BWOPMODE, regBwOpMode);
 
 	// For Min Spacing configuration.
-	switch (pHalData->rf_type)
-	{
-		case RF_1T2R:
-		case RF_1T1R:
-			//RT_TRACE(COMP_INIT, DBG_LOUD, ("Initializeadapter: RF_Type%s\n", (pHalData->RF_Type==RF_1T1R? "(1T1R)":"(1T2R)")));
-			MinSpaceCfg = (MAX_MSS_DENSITY_1T<<3);
-			break;
-		case RF_2T2R:
-		case RF_2T2R_GREEN:
-			//RT_TRACE(COMP_INIT, DBG_LOUD, ("Initializeadapter:RF_Type(2T2R)\n"));
-			MinSpaceCfg = (MAX_MSS_DENSITY_2T<<3);
-			break;
+	switch (pHalData->rf_type) {
+	case RF_1T2R:
+	case RF_1T1R:
+		MinSpaceCfg = (MAX_MSS_DENSITY_1T<<3);
+		break;
+	case RF_2T2R:
+	case RF_2T2R_GREEN:
+		MinSpaceCfg = (MAX_MSS_DENSITY_2T<<3);
+		break;
 	}
 
 	rtw_write8(Adapter, REG_AMPDU_MIN_SPACE, MinSpaceCfg);
 }
-
 
 static void
 _InitSecuritySetting(
@@ -4561,18 +4535,7 @@ _func_enter_;
 			rtw_write8(Adapter, REG_TXPAUSE, *((u8 *)val));
 			break;
 		case HW_VAR_BCN_FUNC:
-#if 1
 			hw_var_set_bcn_func(Adapter, variable, val);
-#else
-			if (*((u8 *)val))
-			{
-				rtw_write8(Adapter, REG_BCN_CTRL, (EN_BCN_FUNCTION | EN_TXBCN_RPT));
-			}
-			else
-			{
-				rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL)&(~(EN_BCN_FUNCTION | EN_TXBCN_RPT)));
-			}
-#endif
 			break;
 		case HW_VAR_CORRECT_TSF:
 #ifdef CONFIG_CONCURRENT_MODE

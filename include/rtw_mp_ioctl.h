@@ -386,16 +386,6 @@ struct rfintfs_parm {
 	u32 rfintfs;
 };
 
-#if 0
-struct mp_xmit_parm {
-	u8 enable;
-	u32 count;
-	u16 length;
-	u8 payload_type;
-	u8 da[ETH_ALEN];
-};
-#endif
-
 struct mp_xmit_packet {
 	u32 len;
 	u32 mem[MAX_MP_XMITBUF_SZ >> 2];

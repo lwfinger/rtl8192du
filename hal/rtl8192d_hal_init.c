@@ -47,29 +47,11 @@ _IsFWDownloaded(
 	return ((rtw_read32(Adapter, REG_MCUFWDL) & MCUFWDL_RDY) ? true : false);
 }
 
-static void
-_FWDownloadEnable(
-	struct rtw_adapter *		Adapter,
-	bool			enable
-	)
+static void _FWDownloadEnable(struct rtw_adapter *Adapter, bool enable)
 {
-#if 0
-	u32	value32 = rtw_read32(Adapter, REG_MCUFWDL);
-
-	if (enable) {
-		value32 |= MCUFWDL_EN;
-	}
-	else {
-		value32 &= ~MCUFWDL_EN;
-	}
-
-	rtw_write32(Adapter, REG_MCUFWDL, value32);
-
-#else
 	u8	tmp;
 
-	if (enable)
-	{
+	if (enable) {
 		#ifdef DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE
 		{
 			u8 val;
@@ -88,28 +70,16 @@ _FWDownloadEnable(
 		// 8051 reset
 		tmp = rtw_read8(Adapter, REG_MCUFWDL+2);
 		rtw_write8(Adapter, REG_MCUFWDL+2, tmp&0xf7);
-	}
-	else
-	{
+	} else {
 		// MCU firmware download enable.
 		tmp = rtw_read8(Adapter, REG_MCUFWDL);
 		rtw_write8(Adapter, REG_MCUFWDL, tmp&0xfe);
-
-		// Reserved for fw extension.   0x81[7] is used for mac0 status ,so don't write this reg here
-		//rtw_write8(Adapter, REG_MCUFWDL+1, 0x00);
 	}
-#endif
 }
 
-static int
-_BlockWrite_92d(
-		struct rtw_adapter *		Adapter,
-		void *			buffer,
-		u32				size
-	)
+static int _BlockWrite_92d(struct rtw_adapter *Adapter, void *buffer, u32 size)
 {
 	int ret = _SUCCESS;
-
 	u32			blockSize8 = sizeof(u64);
 	u32			blocksize4 = sizeof(u32);
 	u32			blockSize = 64;
@@ -127,13 +97,11 @@ _BlockWrite_92d(
 			goto exit;
 	}
 
-
 	if (remain8) {
 		offset = blockCount * blockSize;
 
 		blockCount8=remain8/blockSize8;
 		remain4=remain8%blockSize8;
-		//RT_TRACE(COMP_INIT,DBG_LOUD,("remain4 size %x blockcount %x blockCount8 %x\n",remain4,blockCount,blockCount8));
 		for (i = 0 ; i < blockCount8 ; i++) {
 			ret = rtw_writeN(Adapter, (FW_8192D_START_ADDRESS + offset+i*blockSize8), 8,(bufferPtr + offset+i*blockSize8));
 
@@ -428,13 +396,6 @@ int FirmwareDownload92D(
 			}
 			break;
 		case FW_SOURCE_HEADER_FILE:
-#if 0
-			if (ImgArrayLength > FW_8192C_SIZE) {
-				rtStatus = _FAIL;
-				//RT_TRACE(COMP_INIT, DBG_SERIOUS, ("Firmware size exceed 0x%X. Check it.\n", FW_8192C_SIZE));
-				goto Exit;
-			}
-#endif
 			pFirmware->szFwBuffer = FwImage;
 			pFirmware->ulFwLength = FwImageLen;
 #ifdef CONFIG_WOWLAN
@@ -1013,23 +974,11 @@ rtl8192d_ReadTxPowerInfo(
 		}
 	}
 
-#if 1
 	//this is suggested by Mimic, every 4 steps to redo IQK, every 7 steps to redo LCK
 	pdmpriv->Delta_IQK = 4;
 	pdmpriv->Delta_LCK = 7;
-#else
-	//temporarily close 92D re-IQK&LCK by thermal meter,advised by allen.2010-11-03
-	pHalData->Delta_IQK = 0;
-	pHalData->Delta_LCK = 0;
-#endif
-
 	if (pHalData->EEPROMC9 == 0xFF)
 		pHalData->EEPROMC9 = 0x00;
-
-	//RTPRINT(FINIT, INIT_TxPower, ("EEPROMRegulatory = 0x%x\n", pHalData->EEPROMRegulatory));
-	//RTPRINT(FINIT, INIT_TxPower, ("ThermalMeter = 0x%x\n", pHalData->EEPROMThermalMeter));
-	//RTPRINT(FINIT, INIT_TxPower, ("CrystalCap = 0x%x\n", pHalData->CrystalCap));
-	//RTPRINT(FINIT, INIT_TxPower, ("Delta_IQK = 0x%x Delta_LCK = 0x%x\n", pHalData->Delta_IQK, pHalData->Delta_LCK));
 
 	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++) {
 		for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++) {

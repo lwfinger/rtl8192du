@@ -696,7 +696,7 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 	DBG_8192D("%s\n", __func__);
 
 	reservedpagepacket = (u8*)rtw_malloc(1000);
-	if (reservedpagepacket == NULL){
+	if (reservedpagepacket == NULL) {
 		DBG_8192D("%s(): alloc reservedpagepacket fail !!!\n", __func__);
 		return;
 	}
@@ -1010,7 +1010,7 @@ _func_enter_;
 	if (IFACE_PORT0==reset_port) {
 		buf[0] = 0x1; buf[1] = 0;
 
-	} else{
+	} else {
 		buf[0] = 0x0; buf[1] = 0x1;
 	}
 	FillH2CCmd92D(padapter, H2C_92D_RESET_TSF, 2, buf);
@@ -1062,7 +1062,7 @@ _func_enter_;
 
 
 
-	if (pwrpriv->wowlan_mode ==true){
+	if (pwrpriv->wowlan_mode ==true) {
 		//pause RX DMA
 		test = rtw_read8(padapter, REG_RXPKT_NUM+2);
 		test |= BIT(2);
@@ -1085,15 +1085,15 @@ _func_enter_;
 
 		pwowlan_parm.mode |=FW_WOWLAN_FUN_EN;
 		//printk("\n %s 1.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
-		if (pwrpriv->wowlan_pattern ==true){
+		if (pwrpriv->wowlan_pattern ==true) {
 			pwowlan_parm.mode |= FW_WOWLAN_PATTERN_MATCH;
 		//printk("\n %s 2.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
 		}
-		if (pwrpriv->wowlan_magic ==true){
+		if (pwrpriv->wowlan_magic ==true) {
 			//pwowlan_parm.mode |=FW_WOWLAN_MAGIC_PKT;
 		//printk("\n %s 3.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
 		}
-		if (pwrpriv->wowlan_unicast ==true){
+		if (pwrpriv->wowlan_unicast ==true) {
 			pwowlan_parm.mode |=FW_WOWLAN_UNICAST;
 		//printk("\n %s 4.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
 		}

@@ -53,7 +53,7 @@ _func_enter_;
 	for (i = 0; i < ssid->SsidLength; i++)
 	{
 		//wifi, printable ascii code must be supported
-		if (!((ssid->Ssid[i] >= 0x20) && (ssid->Ssid[i] <= 0x7e))){
+		if (!((ssid->Ssid[i] >= 0x20) && (ssid->Ssid[i] <= 0x7e))) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("ssid has nonprintabl ascii\n"));
 			ret= false;
 			break;
@@ -187,7 +187,7 @@ _func_enter_;
 				)
 				{
 					//DBG_8192D("rtw_do_join() when   no desired bss in scanning queue\n");
-					if (_SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0))){
+					if (_SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0))) {
 						RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("do_join(): site survey return error\n."));
 					}
 				}
@@ -317,7 +317,7 @@ _func_enter_;
 		 ("+rtw_set_802_11_ssid: ssid=[%s] fw_state=0x%08x\n",
 		  ssid->Ssid, get_fwstate(pmlmepriv)));
 
-	if (padapter->hw_init_completed==false){
+	if (padapter->hw_init_completed==false) {
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
 			 ("set_ssid: hw_init_completed==false=>exit!!!\n"));
 		status = _FAIL;
@@ -564,7 +564,7 @@ _func_enter_;
 		res=false;
 		goto exit;
 	}
-	if (padapter->hw_init_completed==false){
+	if (padapter->hw_init_completed==false) {
 		res = false;
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n===rtw_set_802_11_bssid_list_scan:hw_init_completed==false===\n"));
 		goto exit;
@@ -577,7 +577,7 @@ _func_enter_;
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_bssid_list_scan fail since fw_state = %x\n", get_fwstate(pmlmepriv)));
 		res = true;
 
-		if (check_fwstate(pmlmepriv, (_FW_UNDER_SURVEY|_FW_UNDER_LINKING))== true){
+		if (check_fwstate(pmlmepriv, (_FW_UNDER_SURVEY|_FW_UNDER_LINKING))== true) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n###_FW_UNDER_SURVEY|_FW_UNDER_LINKING\n\n"));
 		} else {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n###pmlmepriv->sitesurveyctrl.traffic_busy==true\n\n"));
@@ -631,7 +631,7 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtw_set_802_11_add_wep(struct rtw_adapter* padapter, struct ndis_802_11_wep *wep){
+u8 rtw_set_802_11_add_wep(struct rtw_adapter* padapter, struct ndis_802_11_wep *wep) {
 	u8		bdefaultkey;
 	u8		btransmitkey;
 	int		keyid,res;
@@ -693,12 +693,12 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtw_set_802_11_remove_wep(struct rtw_adapter* padapter, u32 keyindex){
+u8 rtw_set_802_11_remove_wep(struct rtw_adapter* padapter, u32 keyindex) {
 	u8 ret=_SUCCESS;
 
 _func_enter_;
 
-	if (keyindex >= 0x80000000 || padapter == NULL){
+	if (keyindex >= 0x80000000 || padapter == NULL) {
 		ret=false;
 		goto exit;
 
@@ -707,7 +707,7 @@ _func_enter_;
 	{
 		int res;
 		struct security_priv* psecuritypriv=&(padapter->securitypriv);
-		if (keyindex < 4){
+		if (keyindex < 4) {
 			memset(&psecuritypriv->dot11DefKey[keyindex], 0, 16);
 
 			res=rtw_set_key(padapter,psecuritypriv,keyindex, 0);
@@ -732,7 +732,7 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtw_set_802_11_add_key(struct rtw_adapter* padapter, struct ndis_802_11_key *key){
+u8 rtw_set_802_11_add_key(struct rtw_adapter* padapter, struct ndis_802_11_key *key) {
 	uint	encryptionalgo;
 	u8 * pbssid;
 	struct sta_info *stainfo;
@@ -742,7 +742,7 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter* padapter, struct ndis_802_11_key *
 
 _func_enter_;
 
-	if (((key->KeyIndex & 0x80000000) == 0) && ((key->KeyIndex & 0x40000000) > 0)){
+	if (((key->KeyIndex & 0x80000000) == 0) && ((key->KeyIndex & 0x40000000) > 0)) {
 		// It is invalid to clear bit 31 and set bit 30. If the miniport driver encounters this combination,
 		// it must fail the request and return NDIS_STATUS_INVALID_DATA.
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_add_key: ((key->KeyIndex & 0x80000000) == 0)[=%d] ",(int)(key->KeyIndex & 0x80000000) == 0));
@@ -761,11 +761,11 @@ _func_enter_;
 		pbssid=get_bssid(&padapter->mlmepriv);
 		stainfo=rtw_get_stainfo(&padapter->stapriv, pbssid);
 
-		if ((stainfo!=NULL)&&(padapter->securitypriv.dot11AuthAlgrthm==dot11AuthAlgrthm_8021X)){
+		if ((stainfo!=NULL)&&(padapter->securitypriv.dot11AuthAlgrthm==dot11AuthAlgrthm_8021X)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY:(stainfo!=NULL)&&(Adapter->securitypriv.dot11AuthAlgrthm==dot11AuthAlgrthm_8021X)\n"));
 			encryptionalgo=stainfo->dot118021XPrivacy;
 		}
-		else{
+		else {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY: stainfo==NULL)||(Adapter->securitypriv.dot11AuthAlgrthm!=dot11AuthAlgrthm_8021X)\n"));
 			encryptionalgo=padapter->securitypriv.dot11PrivacyAlgrthm;
 		}
@@ -774,11 +774,11 @@ _func_enter_;
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_add_key: (Adapter->securitypriv.dot11PrivacyAlgrthm ==%d)!\n",padapter->securitypriv.dot11PrivacyAlgrthm));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_add_key: (Adapter->securitypriv.dot11AuthAlgrthm ==%d)!\n",padapter->securitypriv.dot11AuthAlgrthm));
 
-		if ((stainfo!=NULL)){
+		if ((stainfo!=NULL)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_add_key: (stainfo->dot118021XPrivacy ==%d)!\n", stainfo->dot118021XPrivacy));
 		}
 
-		if (key->KeyIndex & 0x000000FF){
+		if (key->KeyIndex & 0x000000FF) {
 			// The key index is specified in the lower 8 bits by values of zero to 255.
 			// The key index should be set to zero for a Pairwise key, and the driver should fail with
 			// NDIS_STATUS_INVALID_DATA if the lower 8 bits is not zero
@@ -788,7 +788,7 @@ _func_enter_;
 		}
 
 		// check BSSID
-		if (IS_MAC_ADDRESS_BROADCAST(key->BSSID) == true){
+		if (IS_MAC_ADDRESS_BROADCAST(key->BSSID) == true) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("MacAddr_isBcst(key->BSSID)\n"));
 			ret= false;
 			goto exit;
@@ -796,7 +796,7 @@ _func_enter_;
 
 		// Check key length for TKIP.
 		//if (encryptionAlgorithm == RT_ENC_TKIP_ENCRYPTION && key->KeyLength != 32)
-		if ((encryptionalgo== _TKIP_)&& (key->KeyLength != 32)){
+		if ((encryptionalgo== _TKIP_)&& (key->KeyLength != 32)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("TKIP KeyLength:0x%x != 32\n", key->KeyLength));
 			ret=_FAIL;
 			goto exit;
@@ -946,7 +946,7 @@ _func_enter_;
 
 	}
 
-	if (key->KeyIndex & 0x20000000){
+	if (key->KeyIndex & 0x20000000) {
 		// SetRSC
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY: +++++ SetRSC+++++\n"));
 		if (bgroup == true)
@@ -973,7 +973,7 @@ _func_enter_;
 			padapter->securitypriv.dot118021XGrpKeyid=(u8)key->KeyIndex;
 		}
 
-		if ((key->KeyIndex&0x3) == 0){
+		if ((key->KeyIndex&0x3) == 0) {
 			ret = _FAIL;
 			goto exit;
 		}
@@ -1050,7 +1050,7 @@ _func_enter_;
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n ==========_set_timer\n"));
 
 				// if TKIP, save the Receive/Transmit MIC key in KeyMaterial[128-255]
-				if ((key->KeyIndex & 0x10000000)){
+				if ((key->KeyIndex & 0x10000000)) {
 					memcpy(&stainfo->dot11tkiptxmickey, key->KeyMaterial + 16, 8);
 					memcpy(&stainfo->dot11tkiprxmickey, key->KeyMaterial + 24, 8);
 
@@ -1072,7 +1072,7 @@ _func_enter_;
 				res=rtw_setstakey_cmd(padapter, (unsigned char *)stainfo, false);
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n rtw_set_802_11_add_key:rtw_setstakey_cmd(group)\n"));
 			}
-			else{
+			else {
 				res=rtw_setstakey_cmd(padapter, (unsigned char *)stainfo, true);
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n rtw_set_802_11_add_key:rtw_setstakey_cmd(unicast)\n"));
 			}
@@ -1091,7 +1091,7 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtw_set_802_11_remove_key(struct rtw_adapter*	padapter, struct ndis_802_11_remove_key *key){
+u8 rtw_set_802_11_remove_key(struct rtw_adapter*	padapter, struct ndis_802_11_remove_key *key) {
 	uint				encryptionalgo;
 	u8 * pbssid;
 	struct sta_info *stainfo;
@@ -1118,7 +1118,7 @@ _func_enter_;
 	} else {
 		pbssid=get_bssid(&padapter->mlmepriv);
 		stainfo=rtw_get_stainfo(&padapter->stapriv , pbssid);
-		if (stainfo !=NULL){
+		if (stainfo !=NULL) {
 			encryptionalgo=stainfo->dot118021XPrivacy;
 
 		// clear key by BSSID
@@ -1127,7 +1127,7 @@ _func_enter_;
 		//! \todo Send a H2C Command to Firmware for disable this Key in CAM Entry.
 
 		}
-		else{
+		else {
 			ret= _FAIL;
 			goto exit;
 		}

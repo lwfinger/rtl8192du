@@ -929,7 +929,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 			else
 				dm_digtable->curcckpdstate = CCK_PD_STAGE_HIGHRSSI;
 		}
-		else{
+		else {
 			if (dm_digtable->rssi_val_min <= 20)
 				dm_digtable->curcckpdstate = CCK_PD_STAGE_LOWRSSI;
 			else
@@ -1106,7 +1106,7 @@ static void dm_1R_CCA(struct rtw_adapter *pAdapter)
 					dm_pstable->curccastate = CCA_2R;
 
 			}
-			else{
+			else {
 				if (pdmpriv->MinUndecoratedPWDBForDM <= 30)
 					dm_pstable->curccastate = CCA_2R;
 				else
@@ -1223,7 +1223,7 @@ static void odm_DynamicTxPower_92D(struct rtw_adapter *	Adapter)
 		//RT_TRACE(COMP_HIPWR, DBG_LOUD, ("AP Ext Port PWDB = 0x%x\n", UndecoratedSmoothedPWDB));
 	}
 
-	if (pHalData->CurrentBandType92D == BAND_ON_5G){
+	if (pHalData->CurrentBandType92D == BAND_ON_5G) {
 		if (UndecoratedSmoothedPWDB >= 0x33)
 		{
 			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Level2;
@@ -1626,7 +1626,7 @@ dm_RXGainTrackingCallback_ThermalMeter_92D(
 
 	//DBG_8192D("===>dm_RXGainTrackingCallback_ThermalMeter_92D interface %d  Rx Gain %x\n", pHalData->interfaceIndex, u4tmp);
 
-	for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++){
+	for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++) {
 		PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_RXRF_A3, bRFRegOffsetMask, (pdmpriv->RegRF3C[eRFPath]&(~(0xF000)))|u4tmp);
 	}
 };
@@ -2029,7 +2029,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 				if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 				{
 					//Adjust CCK according to IQK result
-					if (!pdmpriv->bCCKinCH14){
+					if (!pdmpriv->bCCKinCH14) {
 						rtw_write8(Adapter, 0xa22, CCKSwingTable_Ch1_Ch13[(u8)CCK_index][0]);
 						rtw_write8(Adapter, 0xa23, CCKSwingTable_Ch1_Ch13[(u8)CCK_index][1]);
 						rtw_write8(Adapter, 0xa24, CCKSwingTable_Ch1_Ch13[(u8)CCK_index][2]);
@@ -2039,7 +2039,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 						rtw_write8(Adapter, 0xa28, CCKSwingTable_Ch1_Ch13[(u8)CCK_index][6]);
 						rtw_write8(Adapter, 0xa29, CCKSwingTable_Ch1_Ch13[(u8)CCK_index][7]);
 					}
-					else{
+					else {
 						rtw_write8(Adapter, 0xa22, CCKSwingTable_Ch14[(u8)CCK_index][0]);
 						rtw_write8(Adapter, 0xa23, CCKSwingTable_Ch14[(u8)CCK_index][1]);
 						rtw_write8(Adapter, 0xa24, CCKSwingTable_Ch14[(u8)CCK_index][2]);

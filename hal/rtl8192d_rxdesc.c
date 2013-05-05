@@ -486,7 +486,7 @@ static void process_link_qual(struct rtw_adapter *padapter,union recv_frame *prf
 	struct signal_stat * signal_stat;
 #endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
 
-	if (prframe == NULL || padapter==NULL){
+	if (prframe == NULL || padapter==NULL) {
 		return;
 	}
 
@@ -638,7 +638,7 @@ void rtl8192d_query_rx_desc_status(union recv_frame *precvframe, struct recv_sta
 
 	//Offset 12
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-	if (le32_to_cpu(pdesc->rxdw3) & BIT(13)){
+	if (le32_to_cpu(pdesc->rxdw3) & BIT(13)) {
 		pattrib->tcpchk_valid = 1; // valid
 		if (le32_to_cpu(pdesc->rxdw3) & BIT(11)) {
 			pattrib->tcp_chkrpt = 1; // correct

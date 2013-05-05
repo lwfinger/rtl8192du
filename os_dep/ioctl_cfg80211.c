@@ -341,7 +341,7 @@ static int rtw_cfg80211_inform_bss(_adapter *padapter, struct wlan_network *pnet
 	//DBG_8192C("%s\n", __func__);
 
 	bssinf_len = pnetwork->network.IELength+sizeof (struct rtw_ieee80211_hdr_3addr);
-	if (bssinf_len > MAX_BSSINFO_LEN){
+	if (bssinf_len > MAX_BSSINFO_LEN) {
 		DBG_871X("%s IE Length too long > %d byte\n",__func__,MAX_BSSINFO_LEN);
 		goto exit;
 	}
@@ -606,13 +606,13 @@ static u8 set_pairwise_key(_adapter *padapter, struct sta_info *psta)
 	u8	res=_SUCCESS;
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if (ph2c == NULL){
+	if (ph2c == NULL) {
 		res= _FAIL;
 		goto exit;
 	}
 
 	psetstakey_para = (struct set_stakey_parm*)rtw_zmalloc(sizeof(struct set_stakey_parm));
-	if (psetstakey_para==NULL){
+	if (psetstakey_para==NULL) {
 		kfree(ph2c);
 		res=_FAIL;
 		goto exit;
@@ -646,12 +646,12 @@ static int set_group_key(_adapter *padapter, u8 *key, u8 alg, int keyid)
 	DBG_8192C("%s\n", __func__);
 
 	pcmd = (struct cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-	if (pcmd==NULL){
+	if (pcmd==NULL) {
 		res= _FAIL;
 		goto exit;
 	}
 	psetkeyparm=(struct setkey_parm*)rtw_zmalloc(sizeof(struct setkey_parm));
-	if (psetkeyparm==NULL){
+	if (psetkeyparm==NULL) {
 		kfree(pcmd);
 		res= _FAIL;
 		goto exit;
@@ -1874,7 +1874,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 		need_indicate_scan_done = true;
 		goto check_need_indicate_scan_done;
 	}
-	if (rtw_is_scan_deny(padapter)){
+	if (rtw_is_scan_deny(padapter)) {
 		DBG_871X(FUNC_ADPT_FMT  ": scan deny\n", FUNC_ADPT_ARG(padapter));
 		need_indicate_scan_done = true;
 		goto check_need_indicate_scan_done;
@@ -2148,7 +2148,7 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 	}
 
 	buf = rtw_zmalloc(ielen);
-	if (buf == NULL){
+	if (buf == NULL) {
 		ret =  -ENOMEM;
 		goto exit;
 	}
@@ -2164,7 +2164,7 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 	}
 
 	pos = buf;
-	if (ielen < RSN_HEADER_LEN){
+	if (ielen < RSN_HEADER_LEN) {
 		RT_TRACE(_module_rtl871x_ioctl_os_c,_drv_err_,("Ie len too short %d\n", ielen));
 		ret  = -1;
 		goto exit;
@@ -2406,7 +2406,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		goto exit;
 	}
 
-	if (sme->ssid_len > IW_ESSID_MAX_SIZE){
+	if (sme->ssid_len > IW_ESSID_MAX_SIZE) {
 
 		ret= -E2BIG;
 		goto exit;
@@ -2565,7 +2565,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
 			wep_total_len = wep_key_len + FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial);
 			pwep =(NDIS_802_11_WEP	 *) rtw_malloc(wep_total_len);
-			if (pwep == NULL){
+			if (pwep == NULL) {
 				DBG_871X(" wpa_set_encryption: pwep allocate fail !!!\n");
 				ret = -ENOMEM;
 				goto exit;
@@ -4093,7 +4093,7 @@ static s32 cfg80211_rtw_remain_on_channel(struct wiphy *wiphy,
 			ready_on_channel = true;
 			//pmlmeext->cur_channel = remain_ch;
 			//set_channel_bwmode(padapter, remain_ch, HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
-		}else
+		} else
 #endif //CONFIG_CONCURRENT_MODE
 		if (remain_ch != pmlmeext->cur_channel)
 		{
@@ -4249,7 +4249,7 @@ static int _cfg80211_rtw_mgmt_tx(_adapter *padapter, u8 tx_ch, const u8 *buf, si
 
 		if (tx_ch != co_channel)
 			set_channel_bwmode(padapter, tx_ch, HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
-	}else
+	} else
 #endif //CONFIG_CONCURRENT_MODE
 	//if (tx_ch != pmlmeext->cur_channel) {
 	if (tx_ch != rtw_get_oper_ch(padapter)) {

@@ -257,12 +257,12 @@ void free_tdls_sta(_adapter *padapter, struct sta_info *ptdls_sta)
 		memset(&ptdlsinfo->ss_record, 0x00, sizeof(struct tdls_ss_record));
 	}
 	//ready to clear cam
-	if (ptdls_sta->mac_id!=0){
+	if (ptdls_sta->mac_id!=0) {
 		ptdlsinfo->clear_cam=ptdls_sta->mac_id;
 		rtw_setstakey_cmd(padapter, (u8 *)ptdls_sta, true);
 	}
 
-	if (ptdlsinfo->sta_cnt==0){
+	if (ptdlsinfo->sta_cnt==0) {
 		rtw_tdls_cmd(padapter, myid(&(padapter->eeprompriv)), TDLS_RS_RCR);
 		ptdlsinfo->setup_state=TDLS_STATE_NONE;
 	}
@@ -591,7 +591,7 @@ void issue_tdls_setup_req(_adapter *padapter, u8 *mac_addr)
 		}
 	}
 
-	if (ptdls_sta){
+	if (ptdls_sta) {
 		ptdls_sta->tdls_sta_state |= TDLS_RESPONDER_STATE;
 		//for tdls; ptdls_sta->aid is used to fill dialogtoken
 		ptdls_sta->dialog = dialogtoken;
@@ -601,7 +601,7 @@ void issue_tdls_setup_req(_adapter *padapter, u8 *mac_addr)
 	}
 
 	pattrib->qsel=pattrib->priority;
-	if (rtw_xmit_tdls_coalesce(padapter, pmgntframe, TDLS_SETUP_REQUEST) !=_SUCCESS){
+	if (rtw_xmit_tdls_coalesce(padapter, pmgntframe, TDLS_SETUP_REQUEST) !=_SUCCESS) {
 		rtw_free_xmitbuf(pxmitpriv,pmgntframe->pxmitbuf);
 		rtw_free_xmitframe(pxmitpriv, pmgntframe);
 		goto exit;
@@ -623,10 +623,10 @@ void issue_tdls_teardown(_adapter *padapter, u8 *mac_addr)
 	struct sta_info	*ptdls_sta=NULL;
 
 	ptdls_sta = rtw_get_stainfo(pstapriv, mac_addr);
-	if (ptdls_sta==NULL){
+	if (ptdls_sta==NULL) {
 		DBG_871X("issue tdls teardown unsuccessful\n");
 		return;
-	}else{
+	} else {
 		ptdls_sta->tdls_sta_state=TDLS_STATE_NONE;
 	}
 
@@ -657,7 +657,7 @@ void issue_tdls_teardown(_adapter *padapter, u8 *mac_addr)
 	}
 	rtw_dump_xframe(padapter, pmgntframe);
 
-	if (ptdls_sta->tdls_sta_state & TDLS_CH_SWITCH_ON_STATE){
+	if (ptdls_sta->tdls_sta_state & TDLS_CH_SWITCH_ON_STATE) {
 		rtw_tdls_cmd(padapter, ptdls_sta->hwaddr, TDLS_CS_OFF);
 	}
 
@@ -937,7 +937,7 @@ void issue_tdls_ch_switch_req(_adapter *padapter, u8 *mac_addr)
 	update_tdls_attrib(padapter, pattrib);
 
 	pattrib->qsel=pattrib->priority;
-	if (rtw_xmit_tdls_coalesce(padapter, pmgntframe, TDLS_CHANNEL_SWITCH_REQUEST) !=_SUCCESS){
+	if (rtw_xmit_tdls_coalesce(padapter, pmgntframe, TDLS_CHANNEL_SWITCH_REQUEST) !=_SUCCESS) {
 		rtw_free_xmitbuf(pxmitpriv,pmgntframe->pxmitbuf);
 		rtw_free_xmitframe(pxmitpriv, pmgntframe);
 		goto exit;
@@ -978,7 +978,7 @@ void issue_tdls_ch_switch_rsp(_adapter *padapter, u8 *mac_addr)
 	update_tdls_attrib(padapter, pattrib);
 
 	pattrib->qsel=pattrib->priority;
-	if (rtw_xmit_tdls_coalesce(padapter, pmgntframe, TDLS_CHANNEL_SWITCH_RESPONSE) !=_SUCCESS){
+	if (rtw_xmit_tdls_coalesce(padapter, pmgntframe, TDLS_CHANNEL_SWITCH_RESPONSE) !=_SUCCESS) {
 		rtw_free_xmitbuf(pxmitpriv,pmgntframe->pxmitbuf);
 		rtw_free_xmitframe(pxmitpriv, pmgntframe);
 		goto exit;
@@ -1107,29 +1107,29 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 		goto exit;
 	}
 
-	if (ptdls_sta==NULL){
+	if (ptdls_sta==NULL) {
 		ptdls_sta = rtw_alloc_stainfo(pstapriv, psa);
-	}else{
-		if (ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE){
+	} else {
+		if (ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE) {
 			//If the direct link is already set up
 			//Process as re-setup after tear down
 			DBG_871X("re-setup a direct link\n");
 		}
 		//already receiving TDLS setup request
-		else if (ptdls_sta->tdls_sta_state & TDLS_INITIATOR_STATE){
+		else if (ptdls_sta->tdls_sta_state & TDLS_INITIATOR_STATE) {
 			DBG_871X("receive duplicated TDLS setup request frame in handshaking\n");
 			goto exit;
 		}
 		//When receiving and sending setup_req to the same link at the same time, STA with higher MAC_addr would be initiator
 		//following is to check out MAC_addr
-		else if (ptdls_sta->tdls_sta_state & TDLS_RESPONDER_STATE){
+		else if (ptdls_sta->tdls_sta_state & TDLS_RESPONDER_STATE) {
 			DBG_871X("receive setup_req after sending setup_req\n");
-			for (i=0;i<6;i++){
-				if (*(pmyid+i)==*(psa+i)){
+			for (i=0;i<6;i++) {
+				if (*(pmyid+i)==*(psa+i)) {
 				}
-				else if (*(pmyid+i)>*(psa+i)){
+				else if (*(pmyid+i)>*(psa+i)) {
 					goto exit;
-				}else if (*(pmyid+i)<*(psa+i)){
+				} else if (*(pmyid+i)<*(psa+i)) {
 					ptdls_sta->tdls_sta_state=TDLS_INITIATOR_STATE;
 					break;
 				}
@@ -1143,7 +1143,7 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 		ptdls_sta->stat_code = 0;
 
 		//parsing information element
-		for (j=FIXED_IE; j<parsing_length;){
+		for (j=FIXED_IE; j<parsing_length;) {
 			pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
 			switch (pIE->ElementID)
@@ -1165,16 +1165,16 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 					break;
 				case _RSN_IE_2_:
 					rsnie_have=1;
-					if (prx_pkt_attrib->encrypt){
+					if (prx_pkt_attrib->encrypt) {
 						prsnie=(u8*)pIE;
 						//check whether initiator STA has CCMP pairwise_cipher.
 						ppairwise_cipher=prsnie+10;
 						memcpy(&pairwise_count, (u16*)(ppairwise_cipher-2), 1);
-						for (k=0;k<pairwise_count;k++){
+						for (k=0;k<pairwise_count;k++) {
 							if (_rtw_memcmp(ppairwise_cipher+4*k, RSN_CIPHER_SUITE_CCMP, 4)==true)
 								ccmp_have=1;
 						}
-						if (ccmp_have==0){
+						if (ccmp_have==0) {
 							//invalid contents of RSNIE
 							ptdls_sta->stat_code=72;
 						}
@@ -1222,10 +1222,10 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 		//if responder STA has/hasn't security on AP, but request hasn't/has RSNIE, it should reject
 		if (ptdls_sta->stat_code == 0)
 		{
-			if (rsnie_have && (prx_pkt_attrib->encrypt==0)){
+			if (rsnie_have && (prx_pkt_attrib->encrypt==0)) {
 				//security disabled
 				ptdls_sta->stat_code = 5;
-			}else if (rsnie_have==0 && (prx_pkt_attrib->encrypt)){
+			} else if (rsnie_have==0 && (prx_pkt_attrib->encrypt)) {
 				//request haven't RSNIE
 				ptdls_sta->stat_code = 38;
 			}
@@ -1244,7 +1244,7 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 		}
 
 		ptdls_sta->tdls_sta_state|= TDLS_INITIATOR_STATE;
-		if (prx_pkt_attrib->encrypt){
+		if (prx_pkt_attrib->encrypt) {
 			memcpy(ptdls_sta->SNonce, SNonce, 32);
 			memcpy(&(ptdls_sta->TDLS_PeerKey_Lifetime), timeout_interval, 4);
 		}
@@ -1357,7 +1357,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 				//check whether responder STA has CCMP pairwise_cipher.
 				ppairwise_cipher=prsnie+10;
 				memcpy(&pairwise_count, (u16*)(ppairwise_cipher-2), 2);
-				for (k=0;k<pairwise_count;k++){
+				for (k=0;k<pairwise_count;k++) {
 					if (_rtw_memcmp(ppairwise_cipher+4*k, RSN_CIPHER_SUITE_CCMP, 4)==true)
 						verify_ccmp=1;
 				}
@@ -1421,7 +1421,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 				ptdls_sta->stat_code=72;	//invalide contents of RSNIE
 			}
 
-		}else{
+		} else {
 			ptdls_sta->stat_code=0;
 		}
 	}
@@ -1485,15 +1485,15 @@ int On_TDLS_Setup_Cfm(_adapter *adapter, union recv_frame *precv_frame)
 			-FIXED_IE;
 	memcpy(&stat_code, ptr+2, 2);
 
-	if (stat_code!=0){
+	if (stat_code!=0) {
 		DBG_871X("[%s] stat_code = %d\n, free_tdls_sta", __func__, stat_code);
 		free_tdls_sta(adapter, ptdls_sta);
 		return _FAIL;
 	}
 
-	if (prx_pkt_attrib->encrypt){
+	if (prx_pkt_attrib->encrypt) {
 		//parsing information element
-		for (j=FIXED_IE; j<parsing_length;){
+		for (j=FIXED_IE; j<parsing_length;) {
 			pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
 			switch (pIE->ElementID)
@@ -1523,7 +1523,7 @@ int On_TDLS_Setup_Cfm(_adapter *adapter, union recv_frame *precv_frame)
 		}
 
 		//verify mic in FTIE MIC field
-		if (tdls_verify_mic(ptdls_sta->tpk.kck, 3, plinkid_ie, prsnie, ptimeout_ie, pftie)==0){	//0: Invalid, 1: Valid
+		if (tdls_verify_mic(ptdls_sta->tpk.kck, 3, plinkid_ie, prsnie, ptimeout_ie, pftie)==0) {	//0: Invalid, 1: Valid
 			free_tdls_sta(adapter, ptdls_sta);
 			return _FAIL;
 		}
@@ -1572,7 +1572,7 @@ int On_TDLS_Dis_Req(_adapter *adapter, union recv_frame *precv_frame)
 			-FIXED_IE;
 
 	//parsing information element
-	for (j=FIXED_IE; j<parsing_length;){
+	for (j=FIXED_IE; j<parsing_length;) {
 		pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
 		switch (pIE->ElementID)
@@ -1619,8 +1619,8 @@ int On_TDLS_Teardown(_adapter *adapter, union recv_frame *precv_frame)
 	psa = get_sa(ptr);
 
 	ptdls_sta = rtw_get_stainfo(pstapriv, psa);
-	if (ptdls_sta!=NULL){
-		if (ptdls_sta->tdls_sta_state & TDLS_CH_SWITCH_ON_STATE){
+	if (ptdls_sta!=NULL) {
+		if (ptdls_sta->tdls_sta_state & TDLS_CH_SWITCH_ON_STATE) {
 			rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_CS_OFF);
 		}
 		free_tdls_sta(adapter, ptdls_sta);
@@ -1629,15 +1629,15 @@ int On_TDLS_Teardown(_adapter *adapter, union recv_frame *precv_frame)
 	return _FAIL;
 }
 
-u8 TDLS_check_ch_state(uint state){
+u8 TDLS_check_ch_state(uint state) {
 	if (	(state & TDLS_CH_SWITCH_ON_STATE) &&
 		(state & TDLS_AT_OFF_CH_STATE) &&
-		(state & TDLS_PEER_AT_OFF_STATE)){
+		(state & TDLS_PEER_AT_OFF_STATE)) {
 		if (state & TDLS_PEER_SLEEP_STATE)
 			return 2;	//U-APSD + ch. switch
 		else
 			return 1;	//ch. switch
-	}else
+	} else
 		return 0;
 }
 
@@ -1661,7 +1661,7 @@ int On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 
 	// if noticed peer STA wakes up by receiving peer traffic response
 	// and we want to do channel swtiching, then we will transmit channel switch request first
-	if (ptdls_sta->tdls_sta_state & TDLS_APSD_CHSW_STATE){
+	if (ptdls_sta->tdls_sta_state & TDLS_APSD_CHSW_STATE) {
 		issue_tdls_ch_switch_req(adapter, pattrib->src);
 		ptdls_sta->tdls_sta_state &= ~(TDLS_APSD_CHSW_STATE);
 		return  _FAIL;
@@ -1672,7 +1672,7 @@ int On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 		wmmps_ac=1;
 
 	//if it's a direct link and have buffered frame
-	if (ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE){
+	if (ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE) {
 		if (wmmps_ac && state)
 		{
 			_list	*xmitframe_plist, *xmitframe_phead;
@@ -1691,10 +1691,10 @@ int On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 				rtw_list_delete(&pxmitframe->list);
 
 				ptdls_sta->sleepq_len--;
-				if (ptdls_sta->sleepq_len>0){
+				if (ptdls_sta->sleepq_len>0) {
 					pxmitframe->attrib.mdata = 1;
 					pxmitframe->attrib.eosp = 0;
-				}else{
+				} else {
 					pxmitframe->attrib.mdata = 0;
 					pxmitframe->attrib.eosp = 1;
 				}
@@ -1711,9 +1711,9 @@ int On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 				DBG_871X("no buffered packets for tdls to xmit\n");
 				//on U-APSD + CH. switch state, when there is no buffered date to xmit,
 				// we should go back to base channel
-				if (state==2){
+				if (state==2) {
 					rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_CS_OFF);
-				}else if (ptdls_sta->tdls_sta_state&TDLS_SW_OFF_STATE){
+				} else if (ptdls_sta->tdls_sta_state&TDLS_SW_OFF_STATE) {
 						ptdls_sta->tdls_sta_state &= ~(TDLS_SW_OFF_STATE);
 						ptdlsinfo->candidate_ch= pmlmeext->cur_channel;
 						issue_tdls_ch_switch_req(adapter, pattrib->src);
@@ -1765,7 +1765,7 @@ int On_TDLS_Ch_Switch_Req(_adapter *adapter, union recv_frame *precv_frame)
 	ptdls_sta->off_ch = *(ptr+2);
 
 	//parsing information element
-	for (j=FIXED_IE; j<parsing_length;){
+	for (j=FIXED_IE; j<parsing_length;) {
 		pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
 		switch (pIE->ElementID)
@@ -1797,11 +1797,11 @@ int On_TDLS_Ch_Switch_Req(_adapter *adapter, union recv_frame *precv_frame)
 
 	DBG_871X("issue tdls channel switch response\n");
 
-	if ((ptdls_sta->tdls_sta_state & TDLS_CH_SWITCH_ON_STATE) && ptdls_sta->off_ch==pmlmeext->cur_channel){
+	if ((ptdls_sta->tdls_sta_state & TDLS_CH_SWITCH_ON_STATE) && ptdls_sta->off_ch==pmlmeext->cur_channel) {
 		DBG_871X("back to base channel %x\n", pmlmeext->cur_channel);
 		ptdls_sta->option=7;
 		rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_BASE_CH);
-	}else{
+	} else {
 		ptdls_sta->option=6;
 		rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_OFF_CH);
 	}
@@ -1826,12 +1826,12 @@ int On_TDLS_Ch_Switch_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 
 	//if channel switch is running and receiving Unsolicited TDLS Channel Switch Response,
 	//it will go back to base channel and terminate this channel switch procedure
-	if (ptdls_sta->tdls_sta_state & TDLS_CH_SWITCH_ON_STATE){
-		if (pmlmeext->cur_channel==ptdls_sta->off_ch){
+	if (ptdls_sta->tdls_sta_state & TDLS_CH_SWITCH_ON_STATE) {
+		if (pmlmeext->cur_channel==ptdls_sta->off_ch) {
 			DBG_871X("back to base channel %x\n", pmlmeext->cur_channel);
 			ptdls_sta->option=7;
 			rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_OFF_CH);
-		}else{
+		} else {
 			DBG_871X("receive unsolicited channel switch response\n");
 			rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_CS_OFF);
 		}
@@ -1854,12 +1854,12 @@ int On_TDLS_Ch_Switch_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 
 	memcpy(&stat_code, ptr+2, 2);
 
-	if (stat_code!=0){
+	if (stat_code!=0) {
 		return _FAIL;
 	}
 
 	//parsing information element
-	for (j=FIXED_IE; j<parsing_length;){
+	for (j=FIXED_IE; j<parsing_length;) {
 		pIE = (PNDIS_802_11_VARIABLE_IEs)(ptr+ j);
 
 		switch (pIE->ElementID)
@@ -2006,8 +2006,8 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 	u32 time;
 
 	//SNonce
-	if (pattrib->encrypt){
-		for (i=0;i<8;i++){
+	if (pattrib->encrypt) {
+		for (i=0;i<8;i++) {
 			time=rtw_get_current_time();
 			memcpy(&ptdls_sta->SNonce[4*i], (u8 *)&time, 4);
 		}
@@ -2044,7 +2044,7 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 
 	//country(optional)
 	//extended supported rates
-	if (more_supportedrates==1){
+	if (more_supportedrates==1) {
 		pframe = rtw_set_ie(pframe, _EXT_SUPPORTEDRATES_IE_ , (bssrate_len - 8), (bssrate + 8), &(pattrib->pktlen));
 	}
 
@@ -2065,7 +2065,7 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 	pframe = rtw_set_ie(pframe, _VENDOR_SPECIFIC_IE_, 7, TDLS_WMMIE,  &(pattrib->pktlen));
 
 
-	if (pattrib->encrypt){
+	if (pattrib->encrypt) {
 		//FTIE
 		memset(pframe, 0, 84);	//All fields except SNonce shall be set to 0
 		memset(pframe, _FTIE_, 1);	//version
@@ -2133,8 +2133,8 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 		return;
 	}
 
-	if (pattrib->encrypt){
-		for (k=0;k<8;k++){
+	if (pattrib->encrypt) {
+		for (k=0;k<8;k++) {
 			time=rtw_get_current_time();
 			memcpy(&ptdls_sta->ANonce[4*k], (u8*)&time, 4);
 		}
@@ -2180,7 +2180,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 
 	//country(optional)
 	//extended supported rates
-	if (more_supportedrates==1){
+	if (more_supportedrates==1) {
 		pframe = rtw_set_ie(pframe, _EXT_SUPPORTEDRATES_IE_ , (bssrate_len - 8), (bssrate + 8), &(pattrib->pktlen));
 	}
 
@@ -2191,7 +2191,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 	pframe = rtw_set_ie(pframe, _SRC_IE_ , 16, TDLS_SRC, &(pattrib->pktlen));
 
 	//RSNIE
-	if (pattrib->encrypt){
+	if (pattrib->encrypt) {
 		prsnie = pframe;
 		pframe = rtw_set_ie(pframe, _RSN_IE_2_, 20, TDLS_RSNIE, &(pattrib->pktlen));
 	}
@@ -2202,7 +2202,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 	//QoS capability(WMM_IE)
 	pframe = rtw_set_ie(pframe, _VENDOR_SPECIFIC_IE_, 7, TDLS_WMMIE,  &(pattrib->pktlen));
 
-	if (pattrib->encrypt){
+	if (pattrib->encrypt) {
 		wpa_tdls_generate_tpk(padapter, ptdls_sta);
 
 		//FTIE
@@ -2278,13 +2278,13 @@ void rtw_build_tdls_setup_cfm_ies(_adapter * padapter, struct xmit_frame * pxmit
 		return;
 
 	//RSNIE
-	if (pattrib->encrypt){
+	if (pattrib->encrypt) {
 		prsnie = pframe;
 		pframe = rtw_set_ie(pframe, _RSN_IE_2_, 20, TDLS_RSNIE, &(pattrib->pktlen));
 	}
 
 	//EDCA param set; WMM param ele.
-	if (pattrib->encrypt){
+	if (pattrib->encrypt) {
 		//FTIE
 		pftie = pframe;
 		pftie_mic = pframe+4;
@@ -2337,11 +2337,11 @@ void rtw_build_tdls_teardown_ies(_adapter * padapter, struct xmit_frame * pxmitf
 	pframe = rtw_set_fixed_ie(pframe, 1, (u8 *)&ptdls_sta->stat_code, &(pattrib->pktlen));
 
 	//Link identifier
-	if (ptdls_sta->tdls_sta_state & TDLS_INITIATOR_STATE){
+	if (ptdls_sta->tdls_sta_state & TDLS_INITIATOR_STATE) {
 		memcpy(link_id_addr, pattrib->ra, 6);
 		memcpy((link_id_addr+6), pattrib->src, 6);
 		memcpy((link_id_addr+12), pattrib->dst, 6);
-	}else  if (ptdls_sta->tdls_sta_state & TDLS_RESPONDER_STATE){
+	} else  if (ptdls_sta->tdls_sta_state & TDLS_RESPONDER_STATE) {
 		memcpy(link_id_addr, pattrib->ra, 6);
 		memcpy((link_id_addr+6), pattrib->dst, 6);
 		memcpy((link_id_addr+12), pattrib->src, 6);
@@ -2420,7 +2420,7 @@ void rtw_build_tdls_dis_rsp_ies(_adapter * padapter, struct xmit_frame * pxmitfr
 	}
 
 	//extended supported rates
-	if (more_supportedrates==1){
+	if (more_supportedrates==1) {
 		pframe = rtw_set_ie(pframe, _EXT_SUPPORTEDRATES_IE_ , (bssrate_len - 8), (bssrate + 8), &(pattrib->pktlen));
 	}
 
@@ -2434,7 +2434,7 @@ void rtw_build_tdls_dis_rsp_ies(_adapter * padapter, struct xmit_frame * pxmitfr
 	//extended capability
 	pframe = rtw_set_ie(pframe, _EXT_CAP_IE_ , 5, TDLS_EXT_CAPIE, &(pattrib->pktlen));
 
-	if (pattrib->encrypt){
+	if (pattrib->encrypt) {
 		//FTIE
 		memset(pframe, 0, 84);	//All fields shall be set to 0
 		memset(pframe, _FTIE_, 1);	//version
@@ -2644,7 +2644,7 @@ void _TPK_timer_hdl(void *FunctionContext)
 	ptdls_sta->TPK_count++;
 	//TPK_timer set 1000 as default
 	//retry timer should set at least 301 sec.
-	if (ptdls_sta->TPK_count==TPK_RESEND_COUNT){
+	if (ptdls_sta->TPK_count==TPK_RESEND_COUNT) {
 		ptdls_sta->TPK_count=0;
 		issue_tdls_setup_req(ptdls_sta->padapter, ptdls_sta->hwaddr);
 	}
@@ -2667,12 +2667,12 @@ void _ch_switch_timer_hdl(void *FunctionContext)
 	struct sta_info *ptdls_sta = (struct sta_info *)FunctionContext;
 	_adapter *padapter = ptdls_sta->padapter;
 
-	if (ptdls_sta->option == TDLS_DONE_CH_SEN){
+	if (ptdls_sta->option == TDLS_DONE_CH_SEN) {
 		rtw_tdls_cmd(padapter, ptdls_sta->hwaddr, TDLS_DONE_CH_SEN);
-	}else if (ptdls_sta->option == TDLS_OFF_CH){
+	} else if (ptdls_sta->option == TDLS_OFF_CH) {
 		issue_nulldata_to_TDLS_peer_STA(ptdls_sta->padapter, ptdls_sta, 0);
 		_set_timer(&ptdls_sta->base_ch_timer, 500);
-	}else if (ptdls_sta->option == TDLS_BASE_CH){
+	} else if (ptdls_sta->option == TDLS_BASE_CH) {
 		issue_nulldata_to_TDLS_peer_STA(ptdls_sta->padapter, ptdls_sta, 0);
 	}
 }

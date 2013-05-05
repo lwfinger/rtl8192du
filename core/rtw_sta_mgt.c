@@ -254,7 +254,7 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 	int	index;
 
 _func_enter_;
-	if (pstapriv){
+	if (pstapriv) {
 		/*	delete all reordering_ctrl_timer		*/
 		spin_lock_bh(&pstapriv->sta_hash_lock);
 		for (index = 0; index < NUM_STA; index++)
@@ -331,7 +331,7 @@ _func_enter_;
 
 		RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_info_,("rtw_alloc_stainfo: index  = %x", index));
 
-		if (index >= NUM_STA){
+		if (index >= NUM_STA) {
 			RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_err_,("ERROR=> rtw_alloc_stainfo: index >= NUM_STA"));
 			psta= NULL;
 			goto exit;
@@ -659,7 +659,7 @@ _func_enter_;
 
 	psta = rtw_alloc_stainfo(pstapriv, bcast_addr);
 
-	if (psta==NULL){
+	if (psta==NULL) {
 		res=_FAIL;
 		RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_err_,("rtw_alloc_stainfo fail"));
 		goto exit;

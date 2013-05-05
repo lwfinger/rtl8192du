@@ -1991,7 +1991,7 @@ int rtw_handle_dualmac(struct rtw_adapter *adapter, bool init)
 			DBG_8192D("%s(): SECONDARY_ADAPTER\n",__func__);
 		}
 #endif
-	}else {
+	} else {
 		pbuddy_padapter = NULL;
 	}
 exit:

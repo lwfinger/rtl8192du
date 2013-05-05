@@ -59,13 +59,13 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 
 	//DBG_8192D("%s %s:%d\n",__func__, current->comm, current->pid);
 
-	if ((padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx)){
+	if ((padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx)) {
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usbctrl_vendorreq:(padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
 		status = -EPERM;
 		goto exit;
 	}
 
-	if (len>MAX_VENDOR_REQ_CMD_SIZE){
+	if (len>MAX_VENDOR_REQ_CMD_SIZE) {
 		DBG_8192D("[%s] Buffer len error ,vendor request failed\n", __func__);
 		status = -EINVAL;
 		goto exit;
@@ -152,7 +152,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 				}
 			}
 
-			if (rtw_inc_and_chk_continual_urb_error(pdvobjpriv) == true){
+			if (rtw_inc_and_chk_continual_urb_error(pdvobjpriv) == true) {
 				padapter->bSurpriseRemoved = true;
 				break;
 			}
@@ -302,7 +302,7 @@ static u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 4;
 
-	if ((addr&0xff000000)>>24 == 0x66){
+	if ((addr&0xff000000)>>24 == 0x66) {
 		usb_read_reg_rf_byfw(pintfhdl, len, addr, &data);
 	}
 	else {
@@ -549,7 +549,7 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 
 				// for first fragment packet, driver need allocate 1536+drvinfo_sz+RXDESC_SIZE to defrag packet.
 				// modify alloc_sz for recvive crc error packet by thomas 2011-06-02
-				if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0)){
+				if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0)) {
 					//alloc_sz = 1664;	//1664 is 128 alignment.
 					if (skb_len <= 1650)
 						alloc_sz = 1664;
@@ -678,7 +678,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 
 		// for first fragment packet, driver need allocate 1536+drvinfo_sz+RXDESC_SIZE to defrag packet.
 		// modify alloc_sz for recvive crc error packet by thomas 2011-06-02
-		if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0)){
+		if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0)) {
 			//alloc_sz = 1664;	//1664 is 128 alignment.
 			if (skb_len <= 1650)
 				alloc_sz = 1664;
@@ -1010,7 +1010,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 
 		// for first fragment packet, driver need allocate 1536+drvinfo_sz+RXDESC_SIZE to defrag packet.
 		// modify alloc_sz for recvive crc error packet by thomas 2011-06-02
-		if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0)){
+		if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0)) {
 			//alloc_sz = 1664;	//1664 is 128 alignment.
 			if (skb_len <= 1650)
 				alloc_sz = 1664;
@@ -1164,7 +1164,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 	#ifdef CONFIG_PREALLOC_RECV_SKB
 		precvbuf->reuse = true;
 	#else
-		if (precvbuf->pskb){
+		if (precvbuf->pskb) {
 			DBG_8192D("==> free skb(%p)\n",precvbuf->pskb);
 			dev_kfree_skb_any(precvbuf->pskb);
 		}

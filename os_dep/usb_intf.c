@@ -567,7 +567,7 @@ static void rtw_dev_unload(struct rtw_adapter *padapter)
 		{
 			//DBG_8192D("r871x_dev_unload()->rtl871x_hal_deinit()\n");
 #ifdef CONFIG_WOWLAN
-			if ((padapter->pwrctrlpriv.bSupportRemoteWakeup==true)&&(padapter->pwrctrlpriv.wowlan_mode==true)){
+			if ((padapter->pwrctrlpriv.bSupportRemoteWakeup==true)&&(padapter->pwrctrlpriv.wowlan_mode==true)) {
 				DBG_8192D("%s bSupportWakeOnWlan==true  do not run rtw_hal_deinit()\n",__func__);
 			}
 			else
@@ -798,7 +798,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 		rtw_netif_stop_queue(pnetdev);
 	}
 #ifdef CONFIG_WOWLAN
-	if (padapter->pwrctrlpriv.bSupportRemoteWakeup==true&&padapter->pwrctrlpriv.wowlan_mode==true){
+	if (padapter->pwrctrlpriv.bSupportRemoteWakeup==true&&padapter->pwrctrlpriv.wowlan_mode==true) {
 		u8 ps_mode=PS_MODE_MIN;
 		//set H2C command
 		poidparam.subcode=WOWLAN_ENABLE;
@@ -864,7 +864,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	 int ret = 0;
 
-	if (pwrpriv->bInternalAutoSuspend){
+	if (pwrpriv->bInternalAutoSuspend) {
 		ret = rtw_resume_process(padapter);
 	} else {
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
@@ -939,7 +939,7 @@ int rtw_resume_process(struct rtw_adapter *padapter)
 			{
 				int keyid;
 
-				for (keyid=0;keyid<4;keyid++){
+				for (keyid=0;keyid<4;keyid++) {
 					if (pwrpriv->wepkeymask & BIT(keyid)) {
 						if (keyid == padapter->securitypriv.dot11PrivacyKeyIndex)
 							rtw_set_key(padapter,&padapter->securitypriv, keyid, 1);
@@ -1149,7 +1149,7 @@ struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 #ifdef CONFIG_AUTOSUSPEND
 	if (padapter->registrypriv.power_mgnt != PS_MODE_ACTIVE)
 	{
-		if (padapter->registrypriv.usbss_enable){	/* autosuspend (2s delay) */
+		if (padapter->registrypriv.usbss_enable) {	/* autosuspend (2s delay) */
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,38))
 			dvobj->pusbdev->dev.power.autosuspend_delay = 0 * HZ;//15 * HZ; idle-delay time
 			#else

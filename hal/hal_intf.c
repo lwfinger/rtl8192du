@@ -92,7 +92,7 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 	}
 #ifdef CONFIG_DEINIT_BEFORE_INIT
 	status = padapter->HalFunc.hal_deinit(padapter);
-	if (status != _SUCCESS){
+	if (status != _SUCCESS) {
 		DBG_8192D("rtw_hal_init: hal_deinit before hal_init FAIL !!\n");
 		return status;
 	}
@@ -111,16 +111,16 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 		{
 #ifdef CONFIG_DEINIT_BEFORE_INIT
 			status = padapter->HalFunc.hal_deinit(padapter->pbuddy_adapter);
-			if (status != _SUCCESS){
+			if (status != _SUCCESS) {
 				DBG_8192D("rtw_hal_init: hal_deinit before hal_init FAIL !!(pbuddy_adapter)\n");
 				return status;
 			}
 #endif
 			status =	padapter->HalFunc.hal_init(padapter->pbuddy_adapter);
-			if (status == _SUCCESS){
+			if (status == _SUCCESS) {
 				padapter->pbuddy_adapter->hw_init_completed = true;
 			}
-			else{
+			else {
 				padapter->pbuddy_adapter->hw_init_completed = false;
 				RT_TRACE(_module_hal_init_c_,_drv_err_,("rtw_hal_init: hal__init fail(pbuddy_adapter)\n"));
 				return status;
@@ -136,16 +136,16 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 		{
 #ifdef CONFIG_DEINIT_BEFORE_INIT
 			status = padapter->HalFunc.hal_deinit(padapter->pbuddy_adapter);
-			if (status != _SUCCESS){
+			if (status != _SUCCESS) {
 				DBG_8192D("rtw_hal_init: hal_deinit before hal_init FAIL !!(pbuddy_adapter)\n");
 				return status;
 			}
 #endif
 			status = padapter->HalFunc.hal_init(padapter->pbuddy_adapter);
-			if (status == _SUCCESS){
+			if (status == _SUCCESS) {
 				padapter->pbuddy_adapter->hw_init_completed = true;
 			}
-			else{
+			else {
 				padapter->pbuddy_adapter->hw_init_completed = false;
 				RT_TRACE(_module_hal_init_c_,_drv_err_,("rtw_hal_init: hal__init fail for another interface\n"));
 			}
@@ -157,7 +157,7 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 
 	status = padapter->HalFunc.hal_init(padapter);
 
-	if (status == _SUCCESS){
+	if (status == _SUCCESS) {
 		padapter->hw_init_completed = true;
 
 		if (padapter->registrypriv.notch_filter == 1)
@@ -165,7 +165,7 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 
 		rtw_hal_reset_security_engine(padapter);
 	}
-	else{
+	else {
 		padapter->hw_init_completed = false;
 		RT_TRACE(_module_hal_init_c_,_drv_err_,("rtw_hal_init: hal__init fail\n"));
 	}
@@ -183,7 +183,7 @@ _func_enter_;
 
 	status = padapter->HalFunc.hal_deinit(padapter);
 
-	if (status == _SUCCESS){
+	if (status == _SUCCESS) {
 		padapter->hw_init_completed = false;
 	}
 	else

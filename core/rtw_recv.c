@@ -79,7 +79,7 @@ _func_enter_;
 
 	precvpriv->pallocated_frame_buf = rtw_zvmalloc(NR_RECVFRAME * sizeof(union recv_frame) + RXFRAME_ALIGN_SZ);
 
-	if (precvpriv->pallocated_frame_buf==NULL){
+	if (precvpriv->pallocated_frame_buf==NULL) {
 		res= _FAIL;
 		goto exit;
 	}
@@ -191,7 +191,7 @@ _func_enter_;
 
 		rtw_list_delete(&precvframe->u.hdr.list);
 		padapter=precvframe->u.hdr.adapter;
-		if (padapter !=NULL){
+		if (padapter !=NULL) {
 			precvpriv=&padapter->recvpriv;
 			if (pfree_recv_queue == &precvpriv->free_recv_queue)
 				precvpriv->free_recvframe_cnt--;
@@ -255,7 +255,7 @@ _func_enter_;
 
 	rtw_list_insert_tail(&(precvframe->u.hdr.list), get_list_head(pfree_recv_queue));
 
-	if (padapter !=NULL){
+	if (padapter !=NULL) {
 		if (pfree_recv_queue == &precvpriv->free_recv_queue)
 				precvpriv->free_recvframe_cnt++;
 	}
@@ -412,7 +412,7 @@ struct recv_buf *rtw_dequeue_recvbuf(struct __queue *queue)
 }
 
 int recvframe_chkmic(struct rtw_adapter *adapter,  union recv_frame *precvframe);
-int recvframe_chkmic(struct rtw_adapter *adapter,  union recv_frame *precvframe){
+int recvframe_chkmic(struct rtw_adapter *adapter,  union recv_frame *precvframe) {
 	int	i,res=_SUCCESS;
 	u32	datalen;
 	u8	miccode[8];
@@ -458,7 +458,7 @@ _func_enter_;
 					goto exit;
 				}
 			}
-			else{
+			else {
 				mickey=&stainfo->dot11tkiprxmickey.skey[0];
 				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("\n recvframe_chkmic: unicast key\n"));
 			}
@@ -477,15 +477,15 @@ _func_enter_;
 
 			bmic_err=false;
 
-			for (i=0;i<8;i++){
-				if (miccode[i] != *(pframemic+i)){
+			for (i=0;i<8;i++) {
+				if (miccode[i] != *(pframemic+i)) {
 					RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvframe_chkmic:miccode[%d](%02x) != *(pframemic+%d)(%02x) ",i,miccode[i],i,*(pframemic+i)));
 					bmic_err=true;
 				}
 			}
 
 
-			if (bmic_err==true){
+			if (bmic_err==true) {
 				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("\n *(pframemic-8)-*(pframemic-1)=0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n",
 					*(pframemic-8),*(pframemic-7),*(pframemic-6),*(pframemic-5),*(pframemic-4),*(pframemic-3),*(pframemic-2),*(pframemic-1)));
 				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("\n *(pframemic-16)-*(pframemic-9)=0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n",
@@ -494,7 +494,7 @@ _func_enter_;
 				{
 					uint i;
 					RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("\n ======demp packet (len=%d)======\n",precvframe->u.hdr.len));
-					for (i=0;i<precvframe->u.hdr.len;i=i+8){
+					for (i=0;i<precvframe->u.hdr.len;i=i+8) {
 						RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x",
 							*(precvframe->u.hdr.rx_data+i),*(precvframe->u.hdr.rx_data+i+1),
 							*(precvframe->u.hdr.rx_data+i+2),*(precvframe->u.hdr.rx_data+i+3),
@@ -524,9 +524,9 @@ _func_enter_;
 				res=_FAIL;
 
 			}
-			else{
+			else {
 				//mic checked ok
-				if ((psecuritypriv->bcheck_grpkey ==false)&&(IS_MCAST(prxattrib->ra)==true)){
+				if ((psecuritypriv->bcheck_grpkey ==false)&&(IS_MCAST(prxattrib->ra)==true)) {
 					psecuritypriv->bcheck_grpkey =true;
 					RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("psecuritypriv->bcheck_grpkey =true"));
 				}
@@ -570,7 +570,7 @@ _func_enter_;
 		{
 			DBG_8192D("prxattrib->key_index(%d) > WEP_KEYS\n", prxattrib->key_index);
 
-			switch (prxattrib->encrypt){
+			switch (prxattrib->encrypt) {
 				case _WEP40_:
 				case _WEP104_:
 					prxattrib->key_index = psecuritypriv->dot11PrivacyKeyIndex;
@@ -596,7 +596,7 @@ _func_enter_;
 			, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
 		#endif
 
-		switch (prxattrib->encrypt){
+		switch (prxattrib->encrypt) {
 		case _WEP40_:
 		case _WEP104_:
 			rtw_wep_decrypt(padapter, (u8 *)precv_frame);
@@ -700,13 +700,13 @@ _func_enter_;
 
 			prtnframe=precv_frame;
 			//check is the EAPOL frame or not (Rekey)
-			if (ether_type == eapol_type){
+			if (ether_type == eapol_type) {
 				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("########portctrl:ether_type == 0x888e\n"));
 				//check Rekey
 
 				prtnframe=precv_frame;
 			}
-			else{
+			else {
 				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("########portctrl:ether_type = 0x%.4x\n",ether_type));
 			}
 		}
@@ -901,7 +901,7 @@ int OnTDLS(struct rtw_adapter *adapter, union recv_frame *precv_frame)
 		return ret;
 	}
 
-	switch (*paction){
+	switch (*paction) {
 		case TDLS_SETUP_REQUEST:
 			DBG_8192D("recv tdls setup request frame\n");
 			ret=On_TDLS_Setup_Req(adapter, precv_frame);
@@ -979,7 +979,7 @@ void count_rx_stats(struct rtw_adapter *padapter, union recv_frame *prframe, str
 
 	padapter->mlmepriv.LinkDetectInfo.NumRxOkInPeriod++;
 
-	if ((!MacAddr_isBcst(pattrib->dst)) && (!IS_MCAST(pattrib->dst))){
+	if ((!MacAddr_isBcst(pattrib->dst)) && (!IS_MCAST(pattrib->dst))) {
 		padapter->mlmepriv.LinkDetectInfo.NumRxUnicastOkInPeriod++;
 	}
 
@@ -1031,13 +1031,13 @@ _func_enter_;
 		(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true))
 	{
 		// filter packets that SA is myself or multicast or broadcast
-		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)){
+		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)) {
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" SA==myself\n"));
 			ret= _FAIL;
 			goto exit;
 		}
 
-		if ((!_rtw_memcmp(myhwaddr, pattrib->dst, ETH_ALEN))	&& (!bmcast)){
+		if ((!_rtw_memcmp(myhwaddr, pattrib->dst, ETH_ALEN))	&& (!bmcast)) {
 			ret= _FAIL;
 			goto exit;
 		}
@@ -1056,7 +1056,7 @@ _func_enter_;
 	{
 #ifdef CONFIG_TDLS
 		//direct link data transfer
-		if (ptdlsinfo->setup_state == TDLS_LINKED_STATE){
+		if (ptdlsinfo->setup_state == TDLS_LINKED_STATE) {
 			ptdls_sta = rtw_get_stainfo(pstapriv, pattrib->src);
 			if (ptdls_sta==NULL)
 			{
@@ -1076,7 +1076,7 @@ _func_enter_;
 					}
 				}
 				// filter packets that SA is myself or multicast or broadcast
-				if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)){
+				if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)) {
 					ret= _FAIL;
 					goto exit;
 				}
@@ -1123,7 +1123,7 @@ _func_enter_;
 					goto exit;
 				}
 				//receive some of all TDLS management frames, process it at ON_TDLS
-				if ((_rtw_memcmp(psnap_type, SNAP_ETH_TYPE_TDLS, 2))){
+				if ((_rtw_memcmp(psnap_type, SNAP_ETH_TYPE_TDLS, 2))) {
 					ret= OnTDLS(adapter, precv_frame);
 					goto exit;
 				}
@@ -1152,7 +1152,7 @@ _func_enter_;
 		if (bmcast)
 		{
 			// For AP mode, if DA == MCAST, then BSSID should be also MCAST
-			if (!IS_MCAST(pattrib->bssid)){
+			if (!IS_MCAST(pattrib->bssid)) {
 					ret= _FAIL;
 					goto exit;
 			}
@@ -1238,7 +1238,7 @@ _func_enter_;
 		)
 	{
 		// filter packets that SA is myself or multicast or broadcast
-		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)){
+		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)) {
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" SA==myself\n"));
 			#ifdef DBG_RX_DROP_FRAME
 			DBG_8192D("DBG_RX_DROP_FRAME %s SA=%x:%x:%x:%x:%x:%x, myhwaddr= %x:%x:%x:%x:%x:%x\n", __func__,
@@ -1655,7 +1655,7 @@ _func_enter_;
 	psa = get_sa(ptr);
 	pbssid = get_hdr_bssid(ptr);
 
-	if (pbssid == NULL){
+	if (pbssid == NULL) {
 		ret= _FAIL;
 		goto exit;
 	}
@@ -1698,7 +1698,7 @@ _func_enter_;
 
 	}
 
-	if (ret ==_FAIL){
+	if (ret ==_FAIL) {
 		#ifdef DBG_RX_DROP_FRAME
 		DBG_8192D("DBG_RX_DROP_FRAME %s case:%d, res:%d\n", __func__, pattrib->to_fr_ds, ret);
 		#endif
@@ -1708,7 +1708,7 @@ _func_enter_;
 	}
 
 
-	if (psta==NULL){
+	if (psta==NULL) {
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" after to_fr_ds_chk; psta==NULL\n"));
 		ret= _FAIL;
 		goto exit;
@@ -1756,7 +1756,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	if (pattrib->privacy){
+	if (pattrib->privacy) {
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("validate_recv_data_frame:pattrib->privacy=%x\n", pattrib->privacy));
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("\n ^^^^^^^^^^^IS_MCAST(pattrib->ra(0x%02x))=%d^^^^^^^^^^^^^^^6\n", pattrib->ra[0],IS_MCAST(pattrib->ra)));
 
@@ -1821,13 +1821,13 @@ _func_enter_;
 #endif
 
 #ifdef CONFIG_TDLS
-	if (ptdlsinfo->ch_sensing==1 && ptdlsinfo->cur_channel !=0){
+	if (ptdlsinfo->ch_sensing==1 && ptdlsinfo->cur_channel !=0) {
 		ptdlsinfo->collect_pkt_num[ptdlsinfo->cur_channel-1]++;
 	}
 #endif //CONFIG_TDLS
 
 	//add version chk
-	if (ver!=0){
+	if (ver!=0) {
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_data_frame fail! (ver!=0)\n"));
 		retval= _FAIL;
 		goto exit;
@@ -1904,7 +1904,7 @@ int wlanhdr_to_ethhdr (union recv_frame *precvframe)
 
 _func_enter_;
 
-	if (pattrib->encrypt){
+	if (pattrib->encrypt) {
 		recvframe_pull_tail(precvframe, pattrib->icv_len);
 	}
 
@@ -1916,7 +1916,7 @@ _func_enter_;
 		(_rtw_memcmp(psnap_type, SNAP_ETH_TYPE_IPX, 2) == false) &&
 		(_rtw_memcmp(psnap_type, SNAP_ETH_TYPE_APPLETALK_AARP, 2)==false))||
 		//eth_type != ETH_P_AARP && eth_type != ETH_P_IPX) ||
-		 _rtw_memcmp(psnap, rtw_bridge_tunnel_header, SNAP_SIZE)){
+		 _rtw_memcmp(psnap, rtw_bridge_tunnel_header, SNAP_SIZE)) {
 		/* remove RFC1042 or Bridge-Tunnel encapsulation and replace EtherType */
 		bsnaphdr = true;
 	}
@@ -2274,7 +2274,7 @@ int amsdu_to_msdu(struct rtw_adapter *padapter, union recv_frame *prframe)
 		}
 	}
 
-	for (i=0; i<nr_subframes; i++){
+	for (i=0; i<nr_subframes; i++) {
 		sub_skb = subframes[i];
 		/* convert hdr + possible LLC headers into Ethernet header */
 #ifdef ENDIAN_FREE
@@ -2680,7 +2680,7 @@ int recv_indicatepkt_reorder(struct rtw_adapter *padapter, union recv_frame *prf
 				preorder_ctrl->indicate_seq, pattrib->seq_num);
 			#endif
 
-			if (retval != _SUCCESS){
+			if (retval != _SUCCESS) {
 				#ifdef DBG_RX_DROP_FRAME
 				DBG_8192D("DBG_RX_DROP_FRAME %s amsdu_to_msdu fail\n", __func__);
 				#endif
@@ -2940,7 +2940,7 @@ int recv_func_posthandle(struct rtw_adapter *padapter, union recv_frame *prframe
 	pcategory = psnap_type + ETH_TYPE_LEN + PAYLOAD_TYPE_LEN;
 
 	if ((_rtw_memcmp(psnap_type, SNAP_ETH_TYPE_TDLS, ETH_TYPE_LEN)) &&
-		((*pcategory==RTW_WLAN_CATEGORY_TDLS) || (*pcategory==RTW_WLAN_CATEGORY_P2P))){
+		((*pcategory==RTW_WLAN_CATEGORY_TDLS) || (*pcategory==RTW_WLAN_CATEGORY_P2P))) {
 		ret = OnTDLS(padapter, prframe);	//all of functions will return _FAIL
 		goto _exit_recv_func;
 	}
@@ -3141,7 +3141,7 @@ _func_exit_;
 }
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
-void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS){
+void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS) {
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
 	struct recv_priv *recvpriv = &adapter->recvpriv;
 

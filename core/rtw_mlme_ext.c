@@ -260,7 +260,7 @@ static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03,0x
 int rtw_ch_set_search_ch(struct rt_channel_info *ch_set, const u32 ch)
 {
 	int i;
-	for (i=0;ch_set[i].ChannelNum!=0;i++){
+	for (i=0;ch_set[i].ChannelNum!=0;i++) {
 		if (ch == ch_set[i].ChannelNum)
 			break;
 	}
@@ -637,7 +637,7 @@ void mgt_dispatcher(struct rtw_adapter *padapter, union recv_frame *precv_frame)
 	index = GetFrameSubType(pframe) >> 4;
 
 #ifdef CONFIG_TDLS
-	if ((index << 4)==WIFI_ACTION){
+	if ((index << 4)==WIFI_ACTION) {
 		//category==RTW_WLAN_CATEGORY_PUBLIC, action==TDLS_DISCOVERY_RESPONSE
 		if (*(pframe + IEEE80211_MGMT_HDR_LEN) == RTW_WLAN_CATEGORY_PUBLIC
 			&& *(pframe + IEEE80211_MGMT_HDR_LEN + 1) == TDLS_DISCOVERY_RESPONSE)
@@ -7290,7 +7290,7 @@ void issue_assocreq(struct rtw_adapter *padapter)
 						//Commented by Kurt 20110629
 						//In some older APs, WPS handshake
 						//would be fail if we append vender extensions informations to AP
-						if (_rtw_memcmp(pIE->data, WPS_OUI, 4)){
+						if (_rtw_memcmp(pIE->data, WPS_OUI, 4)) {
 							pIE->Length=14;
 						}
 					}
@@ -8483,7 +8483,7 @@ void site_survey(struct rtw_adapter *padapter)
 			#endif //CONFIG_P2P
 			{
 				int i;
-				for (i=0;i<RTW_SSID_SCAN_AMOUNT;i++){
+				for (i=0;i<RTW_SSID_SCAN_AMOUNT;i++) {
 					if (pmlmeext->sitesurvey_res.ssid[i].SsidLength) {
 						//todo: to issue two probe req???
 						issue_probereq(padapter, &(pmlmeext->sitesurvey_res.ssid[i]), NULL);
@@ -10679,7 +10679,7 @@ u8 sitesurvey_cmd_hdl(struct rtw_adapter *padapter, u8 *pbuf)
 		pmlmeext->sitesurvey_res.bss_cnt = 0;
 		pmlmeext->sitesurvey_res.channel_idx = 0;
 
-		for (i=0;i<RTW_SSID_SCAN_AMOUNT;i++){
+		for (i=0;i<RTW_SSID_SCAN_AMOUNT;i++) {
 			if (pparm->ssid[i].SsidLength) {
 				memcpy(pmlmeext->sitesurvey_res.ssid[i].Ssid, pparm->ssid[i].Ssid, IW_ESSID_MAX_SIZE);
 				pmlmeext->sitesurvey_res.ssid[i].SsidLength= pparm->ssid[i].SsidLength;
@@ -10932,7 +10932,7 @@ u8 set_stakey_hdl(struct rtw_adapter *padapter, u8 *pbuf)
 	ctrl = BIT(15) | ((pparm->algorithm) << 2);
 
 #ifdef CONFIG_TDLS
-	if (ptdlsinfo->clear_cam!=0){
+	if (ptdlsinfo->clear_cam!=0) {
 		clear_cam_entry(padapter, ptdlsinfo->clear_cam);
 		ptdlsinfo->clear_cam=0;
 
@@ -10940,7 +10940,7 @@ u8 set_stakey_hdl(struct rtw_adapter *padapter, u8 *pbuf)
 	}
 
 	psta = rtw_get_stainfo(pstapriv, pparm->addr);//Get TDLS Peer STA
-	if (psta->tdls_sta_state&TDLS_LINKED_STATE){
+	if (psta->tdls_sta_state&TDLS_LINKED_STATE) {
 		write_cam(padapter, psta->mac_id, ctrl, pparm->addr, pparm->key);
 	}
 	else
@@ -12219,7 +12219,7 @@ u8 tdls_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 	//spin_lock_bh(&(ptdlsinfo->hdl_lock));
 	DBG_8192D("[%s] option:%d\n", __func__, option);
 
-	switch (option){
+	switch (option) {
 		case TDLS_WRCR:
 			//As long as TDLS handshake success, we should set RCR_CBSSID_DATA bit to 0
 			//such we can receive all kinds of data frames.
@@ -12251,22 +12251,22 @@ u8 tdls_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 			break;
 		case TDLS_DONE_CH_SEN:
 			survey_channel = pmlmeext->channel_set[pmlmeext->sitesurvey_res.channel_idx].ChannelNum;
-			if (survey_channel){
+			if (survey_channel) {
 				SelectChannel(padapter, survey_channel);
 				ptdlsinfo->cur_channel = survey_channel;
 				pmlmeext->sitesurvey_res.channel_idx++;
 				_set_timer(&ptdls_sta->option_timer, SURVEY_TO);
-			}else{
+			} else {
 				SelectChannel(padapter, pmlmeext->cur_channel);
 
 				rtw_hal_set_hwreg(padapter, HW_VAR_TDLS_DONE_CH_SEN, 0);
 
-				if (ptdlsinfo->ch_sensing==1){
+				if (ptdlsinfo->ch_sensing==1) {
 					ptdlsinfo->ch_sensing=0;
 					ptdlsinfo->cur_channel=1;
 					min=ptdlsinfo->collect_pkt_num[0];
-					for (i=1; i<MAX_CHANNEL_NUM-1; i++){
-						if (min > ptdlsinfo->collect_pkt_num[i]){
+					for (i=1; i<MAX_CHANNEL_NUM-1; i++) {
+						if (min > ptdlsinfo->collect_pkt_num[i]) {
 							ptdlsinfo->cur_channel=i+1;
 							min=ptdlsinfo->collect_pkt_num[i];
 						}
@@ -12279,9 +12279,9 @@ u8 tdls_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 
 				}
 
-				if (ptdls_sta->tdls_sta_state & TDLS_PEER_SLEEP_STATE){
+				if (ptdls_sta->tdls_sta_state & TDLS_PEER_SLEEP_STATE) {
 					ptdls_sta->tdls_sta_state |= TDLS_APSD_CHSW_STATE;
-				}else{
+				} else {
 					//send null data with pwrbit==1 before send ch_switching_req to peer STA.
 					issue_nulldata(padapter, NULL, 1, 0, 0);
 
@@ -12324,7 +12324,7 @@ u8 tdls_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 			SelectChannel(padapter, ptdls_sta->off_ch);
 			DBG_8192D("change channel to off ch:%02x\n", ptdls_sta->off_ch);
 			ptdls_sta->tdls_sta_state |= TDLS_AT_OFF_CH_STATE;
-			if ((ptdls_sta->tdls_sta_state & TDLS_PEER_AT_OFF_STATE) != TDLS_PEER_AT_OFF_STATE){
+			if ((ptdls_sta->tdls_sta_state & TDLS_PEER_AT_OFF_STATE) != TDLS_PEER_AT_OFF_STATE) {
 				issue_nulldata_to_TDLS_peer_STA(padapter, ptdls_sta, 0);
 			}
 			_set_timer(&ptdls_sta->base_ch_timer, TDLS_STAY_TIME);

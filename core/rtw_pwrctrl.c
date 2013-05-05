@@ -76,8 +76,8 @@ int ips_leave(struct rtw_adapter * padapter)
 		{
 			DBG_8192D("==>%s,channel(%d),processing(%x)\n",__func__,padapter->mlmeextpriv.cur_channel,pwrpriv->bips_processing);
 			set_channel_bwmode(padapter, padapter->mlmeextpriv.cur_channel, HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
-			for (keyid=0;keyid<4;keyid++){
-				if (pmlmepriv->key_mask & BIT(keyid)){
+			for (keyid=0;keyid<4;keyid++) {
+				if (pmlmepriv->key_mask & BIT(keyid)) {
 					if (keyid == psecuritypriv->dot11PrivacyKeyIndex)
 						result=rtw_set_key(padapter,psecuritypriv, keyid, 1);
 					else
@@ -405,7 +405,7 @@ _func_enter_;
 	}
 
 	if ((pwrpriv->pwr_mode == ps_mode) &&
-		(pwrpriv->smart_ps == smart_ps)){
+		(pwrpriv->smart_ps == smart_ps)) {
 		return;
 	}
 
@@ -1285,7 +1285,7 @@ int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms, const char 
 	if (padapter->pbuddy_adapter)
 		LeaveAllPowerSaveMode(padapter->pbuddy_adapter);
 
-	if ((padapter->isprimary == false) && padapter->pbuddy_adapter){
+	if ((padapter->isprimary == false) && padapter->pbuddy_adapter) {
 		padapter = padapter->pbuddy_adapter;
 		pwrpriv = &padapter->pwrctrlpriv;
 		pmlmepriv = &padapter->mlmepriv;
@@ -1320,7 +1320,7 @@ int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms, const char 
 	}
 
 	//System suspend is not allowed to wakeup
-	if ((pwrpriv->bInternalAutoSuspend == false) && (true == pwrpriv->bInSuspend)){
+	if ((pwrpriv->bInternalAutoSuspend == false) && (true == pwrpriv->bInSuspend)) {
 		ret = _FAIL;
 		goto exit;
 	}
@@ -1376,7 +1376,7 @@ int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms, const char 
 	if (padapter->bDriverStopped
 		|| !padapter->bup
 		|| !padapter->hw_init_completed
-	){
+	) {
 		DBG_8192D("%s: bDriverStopped=%d, bup=%d, hw_init_completed=%u\n"
 			, caller
 			, padapter->bDriverStopped
@@ -1430,7 +1430,7 @@ int rtw_pm_set_ips(struct rtw_adapter *padapter, u8 mode)
 		DBG_8192D("%s %s\n", __func__, mode == IPS_NORMAL?"IPS_NORMAL":"IPS_LEVEL_2");
 		return 0;
 	}
-	else if (mode ==IPS_NONE){
+	else if (mode ==IPS_NONE) {
 		rtw_ips_mode_req(pwrctrlpriv, mode);
 		DBG_8192D("%s %s\n", __func__, "IPS_NONE");
 		if ((padapter->bSurpriseRemoved ==0)&&(_FAIL == rtw_pwr_wakeup(padapter)))

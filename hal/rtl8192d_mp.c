@@ -1207,7 +1207,7 @@ void
 
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 0)
 		{
-			if (bNeedPowerDownRadio){
+			if (bNeedPowerDownRadio) {
 				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
 			PHY_PowerDownAnotherPHY(Adapter, true);

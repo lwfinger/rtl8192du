@@ -65,7 +65,7 @@ int rtw_os_recvbuf_resource_alloc(struct rtw_adapter *padapter, struct recv_buf 
 
 	precvbuf->irp_pending = false;
 	precvbuf->purb = usb_alloc_urb(0, GFP_KERNEL);
-	if (precvbuf->purb == NULL){
+	if (precvbuf->purb == NULL) {
 		res = _FAIL;
 	}
 

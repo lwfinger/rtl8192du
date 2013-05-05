@@ -120,7 +120,7 @@ void rtl8192du_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 		//Clear first
 		ptxdesc->txdw7 &= cpu_to_le32(0xffff0000);
 
-		for (index = 0 ; index < count ; index++){
+		for (index = 0 ; index < count ; index++) {
 			checksum = checksum ^ le16_to_cpu(*(usPtr + index));
 		}
 
@@ -284,12 +284,12 @@ if (padapter->registrypriv.mp_mode == 0)
 
 		fill_txdesc_sectype(pattrib, ptxdesc);
 
-		if (pattrib->ampdu_en==true){
+		if (pattrib->ampdu_en==true) {
 			ptxdesc->txdw1 |= cpu_to_le32(BIT(5));//AGG EN
 			//Insert Early Mode Content after tx desc position.
-			if ((pHalData->bEarlyModeEnable) && (true == bagg_pkt)){
+			if ((pHalData->bEarlyModeEnable) && (true == bagg_pkt)) {
 				ptxdesc->txdw0 |= cpu_to_le32(((USB_HWDESC_HEADER_LEN-8) << OFFSET_SHT) & 0x00ff0000);//32 bytes for TX Desc
-				if (pxmitframe->EMPktNum > 0){
+				if (pxmitframe->EMPktNum > 0) {
 					InsertEMContent(pxmitframe, pmem+TXDESC_SIZE);
 				}
 			}

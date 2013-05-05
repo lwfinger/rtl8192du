@@ -56,10 +56,10 @@ _FWDownloadEnable(
 #if 0
 	u32	value32 = rtw_read32(Adapter, REG_MCUFWDL);
 
-	if (enable){
+	if (enable) {
 		value32 |= MCUFWDL_EN;
 	}
-	else{
+	else {
 		value32 &= ~MCUFWDL_EN;
 	}
 
@@ -119,7 +119,7 @@ _BlockWrite_92d(
 
 	blockCount = size / blockSize;
 	remain8 = size % blockSize;
-	for (i = 0 ; i < blockCount ; i++){
+	for (i = 0 ; i < blockCount ; i++) {
 		offset = i * blockSize;
 		ret = rtw_writeN(Adapter, (FW_8192D_START_ADDRESS + offset), 64,(bufferPtr + offset));
 
@@ -128,34 +128,34 @@ _BlockWrite_92d(
 	}
 
 
-	if (remain8){
+	if (remain8) {
 		offset = blockCount * blockSize;
 
 		blockCount8=remain8/blockSize8;
 		remain4=remain8%blockSize8;
 		//RT_TRACE(COMP_INIT,DBG_LOUD,("remain4 size %x blockcount %x blockCount8 %x\n",remain4,blockCount,blockCount8));
-		for (i = 0 ; i < blockCount8 ; i++){
+		for (i = 0 ; i < blockCount8 ; i++) {
 			ret = rtw_writeN(Adapter, (FW_8192D_START_ADDRESS + offset+i*blockSize8), 8,(bufferPtr + offset+i*blockSize8));
 
 			if (ret == _FAIL)
 				goto exit;
 		}
 
-		if (remain4){
+		if (remain4) {
 			offset=blockCount * blockSize+blockCount8*blockSize8;
 			blockCount4=remain4/blocksize4;
 			remainSize=remain8%blocksize4;
 
-			for (i = 0 ; i < blockCount4 ; i++){
+			for (i = 0 ; i < blockCount4 ; i++) {
 				ret = rtw_write32(Adapter, (FW_8192D_START_ADDRESS + offset+i*blocksize4), cpu_to_le32(*(pu4BytePtr+ offset/4+i)));
 
 				if (ret == _FAIL)
 					goto exit;
 			}
 
-			if (remainSize){
+			if (remainSize) {
 				offset=blockCount * blockSize+blockCount8*blockSize8+blockCount4*blocksize4;
-				for (i = 0 ; i < remainSize ; i++){
+				for (i = 0 ; i < remainSize ; i++) {
 					ret = rtw_write8(Adapter, (FW_8192D_START_ADDRESS + offset + i), *(bufferPtr +offset+ i));
 
 					if (ret == _FAIL)
@@ -204,14 +204,14 @@ _WriteFW(
 	pageNums = size / MAX_PAGE_SIZE ;
 	remainSize = size % MAX_PAGE_SIZE;
 
-	for (page = 0; page < pageNums;  page++){
+	for (page = 0; page < pageNums;  page++) {
 		offset = page *MAX_PAGE_SIZE;
 		ret = _PageWrite(Adapter,page, (bufferPtr+offset),MAX_PAGE_SIZE);
 
 		if (ret == _FAIL)
 			goto exit;
 	}
-	if (remainSize){
+	if (remainSize) {
 		offset = pageNums *MAX_PAGE_SIZE;
 		page = pageNums;
 		ret = _PageWrite(Adapter,page, (bufferPtr+offset),remainSize);
@@ -238,7 +238,7 @@ int _FWFreeToGo_92D(
 		value32 = rtw_read32(Adapter, REG_MCUFWDL);
 	}while ((counter ++ < POLLING_READY_TIMEOUT_COUNT) && (!(value32 & FWDL_ChkSum_rpt )));
 
-	if (counter >= POLLING_READY_TIMEOUT_COUNT){
+	if (counter >= POLLING_READY_TIMEOUT_COUNT) {
 		DBG_8192D("chksum report faill ! REG_MCUFWDL:0x%08x .\n",value32);
 		return _FAIL;
 	}
@@ -316,15 +316,15 @@ int _FWInit(
 	counter = 0;
 	do
 	{
-		if (pHalData->interfaceIndex==0){
-			if (rtw_read8(Adapter, FW_MAC0_ready) & mac0_ready){
+		if (pHalData->interfaceIndex==0) {
+			if (rtw_read8(Adapter, FW_MAC0_ready) & mac0_ready) {
 				DBG_8192D("Polling FW ready success!! FW_MAC0_ready:0x%x .\n",rtw_read8(Adapter, FW_MAC0_ready));
 				return _SUCCESS;
 			}
 			rtw_udelay_os(5);
 		}
-		else{
-			if (rtw_read8(Adapter, FW_MAC1_ready) &mac1_ready){
+		else {
+			if (rtw_read8(Adapter, FW_MAC1_ready) &mac1_ready) {
 				DBG_8192D("Polling FW ready success!! FW_MAC1_ready:0x%x .\n",rtw_read8(Adapter, FW_MAC1_ready));
 				return _SUCCESS;
 			}
@@ -333,10 +333,10 @@ int _FWInit(
 
 	}while (counter++ < POLLING_READY_TIMEOUT_COUNT);
 
-	if (pHalData->interfaceIndex==0){
+	if (pHalData->interfaceIndex==0) {
 		DBG_8192D("Polling FW ready fail!! MAC0 FW init not ready:0x%x .\n",rtw_read8(Adapter, FW_MAC0_ready));
 	}
-	else{
+	else {
 		DBG_8192D("Polling FW ready fail!! MAC1 FW init not ready:0x%x .\n",rtw_read8(Adapter, FW_MAC1_ready));
 	}
 
@@ -378,7 +378,7 @@ int FirmwareDownload92D(
 	u32		count;
 	bool	 bFwDownloaded = false,bFwDownloadInProcess = false;
 
-	if (Adapter->bSurpriseRemoved){
+	if (Adapter->bSurpriseRemoved) {
 		return _FAIL;
 	}
 
@@ -429,7 +429,7 @@ int FirmwareDownload92D(
 			break;
 		case FW_SOURCE_HEADER_FILE:
 #if 0
-			if (ImgArrayLength > FW_8192C_SIZE){
+			if (ImgArrayLength > FW_8192C_SIZE) {
 				rtStatus = _FAIL;
 				//RT_TRACE(COMP_INIT, DBG_SERIOUS, ("Firmware size exceed 0x%X. Check it.\n", FW_8192C_SIZE));
 				goto Exit;
@@ -572,7 +572,7 @@ int FirmwareDownload92D(
 		);
 	}
 	_FWDownloadEnable(Adapter, false);
-	if (_SUCCESS != rtStatus){
+	if (_SUCCESS != rtStatus) {
 		DBG_8192D("DL Firmware failed!\n");
 		goto Exit;
 	}
@@ -585,7 +585,7 @@ int FirmwareDownload92D(
 	rtw_write8(Adapter, 0x1f,value);
 	RELEASE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 
-	if (_SUCCESS != rtStatus){
+	if (_SUCCESS != rtStatus) {
 		DBG_8192D("Firmware is not ready to run!\n");
 		goto Exit;
 	}
@@ -777,9 +777,9 @@ hal_ReadPowerValueFromPROM92D(
 
 	memset(pwrInfo, 0, sizeof(struct tx_power_info));
 
-	if (AutoLoadFail){
-		for (group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
-			for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
+	if (AutoLoadFail) {
+		for (group = 0 ; group < CHANNEL_GROUP_MAX ; group++) {
+			for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++) {
 				if (group< CHANNEL_GROUP_MAX_2G)
 				{
 					pwrInfo->CCKIndex[rfPath][group]		= EEPROM_Default_TxPowerLevel_2G;
@@ -808,8 +808,8 @@ hal_ReadPowerValueFromPROM92D(
 
 	//Maybe autoload OK,buf the tx power index vlaue is not filled.
 	//If we find it,we set it default value.
-	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
-		for (group = 0 ; group < CHANNEL_GROUP_MAX_2G; group++){
+	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++) {
+		for (group = 0 ; group < CHANNEL_GROUP_MAX_2G; group++) {
 			eeAddr = EEPROM_CCK_TX_PWR_INX_2G + (rfPath * 3) + group;
 			pwrInfo->CCKIndex[rfPath][group] =
 				(PROMContent[eeAddr] == 0xFF)?(eeAddr>0x7B?EEPROM_Default_TxPowerLevel_5G:EEPROM_Default_TxPowerLevel_2G):PROMContent[eeAddr];
@@ -817,8 +817,8 @@ hal_ReadPowerValueFromPROM92D(
 				pHalData->bNOPG = true;
 		}
 	}
-	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
-		for (group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
+	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++) {
+		for (group = 0 ; group < CHANNEL_GROUP_MAX ; group++) {
 			offset1 = group / 3;
 			offset2 = group % 3;
 			eeAddr = EEPROM_HT40_1S_TX_PWR_INX_2G+ (rfPath * 3) + offset2 + offset1*21;
@@ -828,8 +828,8 @@ hal_ReadPowerValueFromPROM92D(
 	}
 
 	//These just for 92D efuse offset.
-	for (group = 0 ; group < CHANNEL_GROUP_MAX ; group++){
-		for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
+	for (group = 0 ; group < CHANNEL_GROUP_MAX ; group++) {
+		for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++) {
 			offset1 = group / 3;
 			offset2 = group % 3;
 
@@ -874,7 +874,7 @@ hal_ReadPowerValueFromPROM92D(
 		}
 	}
 
-	if (PROMContent[EEPROM_TSSI_A_5G] != 0xFF){
+	if (PROMContent[EEPROM_TSSI_A_5G] != 0xFF) {
 		//5GL
 		pwrInfo->TSSI_A_5G[0] = PROMContent[EEPROM_TSSI_A_5G] & 0x3F;	//[0:5]
 		pwrInfo->TSSI_B_5G[0] = PROMContent[EEPROM_TSSI_B_5G] & 0x3F;
@@ -1031,8 +1031,8 @@ rtl8192d_ReadTxPowerInfo(
 	//RTPRINT(FINIT, INIT_TxPower, ("CrystalCap = 0x%x\n", pHalData->CrystalCap));
 	//RTPRINT(FINIT, INIT_TxPower, ("Delta_IQK = 0x%x Delta_LCK = 0x%x\n", pHalData->Delta_IQK, pHalData->Delta_LCK));
 
-	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
-		for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++) {
+		for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++) {
 			group = Hal_GetChnlGroupfromArray((u8)ch);
 
 			if (ch < CHANNEL_MAX_NUMBER_2G)
@@ -1053,8 +1053,8 @@ rtl8192d_ReadTxPowerInfo(
 
 #if DBG
 
-	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++){
-		for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++) {
+		for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++) {
 			if (ch < CHANNEL_MAX_NUMBER_2G)
 			{
 				DBG_8192D("RF(%d)-Ch(%d) [CCK / HT40_1S / HT40_2S] = [0x%x / 0x%x / 0x%x]\n",
@@ -1073,19 +1073,19 @@ rtl8192d_ReadTxPowerInfo(
 		}
 	}
 
-	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++) {
 		DBG_8192D("RF-A Ht20 to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrHt20Diff[RF_PATH_A][ch]);
 	}
 
-	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++) {
 		DBG_8192D("RF-A Legacy to Ht40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrLegacyHtDiff[RF_PATH_A][ch]);
 	}
 
-	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++) {
 		DBG_8192D("RF-B Ht20 to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrHt20Diff[RF_PATH_B][ch]);
 	}
 
-	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++){
+	for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++) {
 		DBG_8192D("RF-B Legacy to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrLegacyHtDiff[RF_PATH_B][ch]);
 	}
 
@@ -1163,7 +1163,7 @@ PHY_CheckPowerOffFor8192D(
 	}
 
 	ACQUIRE_GLOBAL_MUTEX(GlobalMutexForPowerOnAndPowerOff);
-	if (pHalData->interfaceIndex == 0){
+	if (pHalData->interfaceIndex == 0) {
 		u1bTmp = rtw_read8(Adapter, REG_MAC0);
 		rtw_write8(Adapter, REG_MAC0, u1bTmp&(~MAC0_ON));
 		u1bTmp = rtw_read8(Adapter, REG_MAC1);
@@ -1305,12 +1305,12 @@ rtl8192d_EfusePowerSwitch(
 
 		// Clock: Gated(0x0008h[5]) 8M(0x0008h[1]) clock from ANA, default valid
 		tmpV16 = rtw_read16(pAdapter, REG_SYS_CLKR);
-		if ((!(tmpV16 & LOADER_CLK_EN)) || (!(tmpV16 & ANA8M))){
+		if ((!(tmpV16 & LOADER_CLK_EN)) || (!(tmpV16 & ANA8M))) {
 			tmpV16 |= (LOADER_CLK_EN | ANA8M);
 			rtw_write16(pAdapter, REG_SYS_CLKR, tmpV16);
 		}
 
-		if (bWrite == true){
+		if (bWrite == true) {
 			// Enable LDO 2.5V before read/write action
 			tempval = rtw_read8(pAdapter, EFUSE_TEST+3);
 			tempval &= 0x0F;
@@ -1516,7 +1516,7 @@ hal_EfuseUpdateNormalChipVersion_92D(
 	ReadEFuseByte(Adapter,EEPROME_CHIP_VERSION_L,&CutValue[0], false);
 
 	ChipValue= (CutValue[1]<<8)|CutValue[0];
-	switch (ChipValue){
+	switch (ChipValue) {
 		case 0xAA55:
 			//ChipVer |= CHIP_92D_C_CUT;
 			ChipVer = (enum VERSION_8192D)(ChipVer | C_CUT_VERSION);
@@ -1774,29 +1774,29 @@ rtl8192d_Efuse_PgPacketRead(	struct rtw_adapter *	pAdapter,
 				word_cnts = Efuse_CalculateWordCnts(hworden);
 				bDataEmpty = true ;
 
-				if (hoffset==offset){
-					for (tmpidx = 0;tmpidx< word_cnts*2 ;tmpidx++){
-						if (efuse_OneByteRead(pAdapter, efuse_addr+1+tmpidx ,&efuse_data, bPseudoTest)){
+				if (hoffset==offset) {
+					for (tmpidx = 0;tmpidx< word_cnts*2 ;tmpidx++) {
+						if (efuse_OneByteRead(pAdapter, efuse_addr+1+tmpidx ,&efuse_data, bPseudoTest)) {
 							tmpdata[tmpidx] = efuse_data;
-							if (efuse_data!=0xff){
+							if (efuse_data!=0xff) {
 								bDataEmpty = false;
 							}
 						}
 					}
-					if (bDataEmpty==false){
+					if (bDataEmpty==false) {
 						ReadState = PG_STATE_DATA;
-					}else{//read next header
+					} else {//read next header
 						efuse_addr = efuse_addr + (word_cnts*2)+1;
 						ReadState = PG_STATE_HEADER;
 					}
 				}
-				else{//read next header
+				else {//read next header
 					efuse_addr = efuse_addr + (word_cnts*2)+1;
 					ReadState = PG_STATE_HEADER;
 				}
 
 			}
-			else{
+			else {
 				bContinual = false ;
 			}
 		}
@@ -1941,7 +1941,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 					//************  so-2 *******************
 					for (tmpindex=0 ; tmpindex<(tmp_word_cnts*2) ; tmpindex++)
 					{
-						if (efuse_OneByteRead(pAdapter, (efuse_addr+1+tmpindex) ,&efuse_data, bPseudoTest)&&(efuse_data != 0xFF)){
+						if (efuse_OneByteRead(pAdapter, (efuse_addr+1+tmpindex) ,&efuse_data, bPseudoTest)&&(efuse_data != 0xFF)) {
 							bDataEmpty = false;
 						}
 					}
@@ -2012,7 +2012,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 							}
 
 							//************  so-2-2-A-2 *******************
-							if ((tmp_word_en&0x0F)!=0x0F){
+							if ((tmp_word_en&0x0F)!=0x0F) {
 								//reorganize other pg packet
 //								efuse_addr = efuse_addr + (2*tmp_word_cnts) +1;//next pg packet addr
 								efuse_addr = Efuse_GetCurrentSize(pAdapter, efuseType, bPseudoTest);
@@ -2020,19 +2020,19 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 								target_pkt.offset = offset;
 								target_pkt.word_en= tmp_word_en;
 								//===========================
-							}else{
+							} else {
 								bContinual = false;
 							}
 #if (EFUSE_ERROE_HANDLE == 1)
 							WriteState=PG_STATE_HEADER;
 							repeat_times++;
-							if (repeat_times>EFUSE_REPEAT_THRESHOLD_){
+							if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
 								bContinual = false;
 								bResult = false;
 							}
 #endif
 						}
-						else{//************  so-2-2-B *******************
+						else {//************  so-2-2-B *******************
 							//reorganize other pg packet
 							efuse_addr = efuse_addr + (2*tmp_word_cnts) +1;//next pg packet addr
 							//===========================
@@ -2066,7 +2066,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 
 						repeat_times++;
 
-						if (repeat_times>EFUSE_REPEAT_THRESHOLD_){
+						if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
 							bContinual = false;
 							bResult = false;
 							efuse_addr++;
@@ -2094,7 +2094,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 						{
 							repeat_times++;
 
-							if (repeat_times>EFUSE_REPEAT_THRESHOLD_){
+							if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
 								bContinual = false;
 								bResult = false;
 								break;
@@ -2110,7 +2110,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 						{
 							repeat_times++;
 
-							if (repeat_times>EFUSE_REPEAT_THRESHOLD_){
+							if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
 								bContinual = false;
 								bResult = false;
 								break;
@@ -2147,11 +2147,11 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 					WriteState = PG_STATE_DATA;
 				}
 #if (EFUSE_ERROE_HANDLE == 1)
-				else if (tmp_header == 0xFF){//************  s1-3: if Write or read func doesn't work *******************
+				else if (tmp_header == 0xFF) {//************  s1-3: if Write or read func doesn't work *******************
 					//efuse_addr doesn't change
 					WriteState = PG_STATE_HEADER;
 					repeat_times++;
-					if (repeat_times>EFUSE_REPEAT_THRESHOLD_){
+					if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
 						bContinual = false;
 						bResult = false;
 					}
@@ -2183,7 +2183,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 							efuse_addr = Efuse_GetCurrentSize(pAdapter, efuseType, bPseudoTest);
 						}
 						//############################
-						else{
+						else {
 							efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; //Next pg_packet
 						}
 					}
@@ -2196,7 +2196,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 #if (EFUSE_ERROE_HANDLE == 1)
 					WriteState=PG_STATE_HEADER;
 					repeat_times++;
-					if (repeat_times>EFUSE_REPEAT_THRESHOLD_){
+					if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
 						bContinual = false;
 						bResult = false;
 					}
@@ -2230,7 +2230,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 #if (EFUSE_ERROE_HANDLE == 1)
 				WriteState=PG_STATE_HEADER;
 				repeat_times++;
-				if (repeat_times>EFUSE_REPEAT_THRESHOLD_){
+				if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
 					bContinual = false;
 					bResult = false;
 				}
@@ -2275,7 +2275,7 @@ rtl8192d_Efuse_WordEnableDataWrite(	struct rtw_adapter *	pAdapter,
 
 		efuse_OneByteRead(pAdapter,tmpaddr, &tmpdata[0], bPseudoTest);
 		efuse_OneByteRead(pAdapter,tmpaddr+1, &tmpdata[1], bPseudoTest);
-		if ((data[0]!=tmpdata[0])||(data[1]!=tmpdata[1])){
+		if ((data[0]!=tmpdata[0])||(data[1]!=tmpdata[1])) {
 			badworden &= (~BIT0);
 		}
 	}
@@ -2287,7 +2287,7 @@ rtl8192d_Efuse_WordEnableDataWrite(	struct rtw_adapter *	pAdapter,
 
 		efuse_OneByteRead(pAdapter,tmpaddr    , &tmpdata[2], bPseudoTest);
 		efuse_OneByteRead(pAdapter,tmpaddr+1, &tmpdata[3], bPseudoTest);
-		if ((data[2]!=tmpdata[2])||(data[3]!=tmpdata[3])){
+		if ((data[2]!=tmpdata[2])||(data[3]!=tmpdata[3])) {
 			badworden &=(~BIT1);
 		}
 	}
@@ -2299,7 +2299,7 @@ rtl8192d_Efuse_WordEnableDataWrite(	struct rtw_adapter *	pAdapter,
 
 		efuse_OneByteRead(pAdapter,tmpaddr, &tmpdata[4], bPseudoTest);
 		efuse_OneByteRead(pAdapter,tmpaddr+1, &tmpdata[5], bPseudoTest);
-		if ((data[4]!=tmpdata[4])||(data[5]!=tmpdata[5])){
+		if ((data[4]!=tmpdata[4])||(data[5]!=tmpdata[5])) {
 			badworden &=(~BIT2);
 		}
 	}
@@ -2311,7 +2311,7 @@ rtl8192d_Efuse_WordEnableDataWrite(	struct rtw_adapter *	pAdapter,
 
 		efuse_OneByteRead(pAdapter,tmpaddr, &tmpdata[6], bPseudoTest);
 		efuse_OneByteRead(pAdapter,tmpaddr+1, &tmpdata[7], bPseudoTest);
-		if ((data[6]!=tmpdata[6])||(data[7]!=tmpdata[7])){
+		if ((data[6]!=tmpdata[6])||(data[7]!=tmpdata[7])) {
 			badworden &=(~BIT3);
 		}
 	}

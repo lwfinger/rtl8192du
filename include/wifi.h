@@ -383,12 +383,12 @@ enum WIFI_REG_DOMAIN {
 
 #define SetEOSP(pbuf, eosp)	\
 	do	{	\
-		*(unsigned short *)(pbuf) |= cpu_to_le16( (eosp & 1) << 4); \
+		*(unsigned short *)(pbuf) |= cpu_to_le16((eosp & 1) << 4); \
 	} while (0)
 
 #define SetAckpolicy(pbuf, ack)	\
 	do	{	\
-		*(unsigned short *)(pbuf) |= cpu_to_le16( (ack & 3) << 5); \
+		*(unsigned short *)(pbuf) |= cpu_to_le16((ack & 3) << 5); \
 	} while (0)
 
 #define GetAckpolicy(pbuf) (((le16_to_cpu(*(unsigned short *)pbuf)) >> 5) & 0x3)
@@ -397,7 +397,7 @@ enum WIFI_REG_DOMAIN {
 
 #define SetAMsdu(pbuf, amsdu)	\
 	do	{	\
-		*(unsigned short *)(pbuf) |= cpu_to_le16( (amsdu & 1) << 7); \
+		*(unsigned short *)(pbuf) |= cpu_to_le16((amsdu & 1) << 7); \
 	} while (0)
 
 #define GetAid(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + 2)) & 0x3fff)
@@ -413,10 +413,10 @@ enum WIFI_REG_DOMAIN {
 #define GetAddr4Ptr(pbuf)	((unsigned char *)((SIZE_PTR)(pbuf) + 24))
 
 #define MacAddr_isBcst(addr) \
-( \
-	( (addr[0] == 0xff) && (addr[1] == 0xff) && \
+(\
+	((addr[0] == 0xff) && (addr[1] == 0xff) && \
 		(addr[2] == 0xff) && (addr[3] == 0xff) && \
-		(addr[4] == 0xff) && (addr[5] == 0xff) )  ? true : false \
+		(addr[4] == 0xff) && (addr[5] == 0xff))  ? true : false \
 )
 
 __inline static int IS_MCAST(unsigned char *da)
@@ -986,7 +986,7 @@ struct ADDBA_request
 #define	P2P_GRPCAP_PERSISTENT_RECONN		BIT(5)
 #define	P2P_GRPCAP_GROUP_FORMATION			BIT(6)
 
-//	P2P Public Action Frame ( Management Frame )
+//	P2P Public Action Frame (Management Frame)
 #define	P2P_PUB_ACTION_ACTION				0x09
 
 //	P2P Public Action Frame Type
@@ -1026,7 +1026,7 @@ struct ADDBA_request
 #define	P2P_TX_PRESCAN_TIMEOUT				100		//	100ms
 #define	P2P_INVITE_TIMEOUT					5000	//	5 seconds timeout for sending the invitation request
 #define	P2P_CONCURRENT_INVITE_TIMEOUT		3000	//	3 seconds timeout for sending the invitation request under concurrent mode
-#define	P2P_RESET_SCAN_CH						15000	//	15 seconds timeout to reset the scan channel ( based on channel plan )
+#define	P2P_RESET_SCAN_CH						15000	//	15 seconds timeout to reset the scan channel (based on channel plan)
 #define	P2P_MAX_INTENT						15
 
 #define	P2P_MAX_NOA_NUM						2

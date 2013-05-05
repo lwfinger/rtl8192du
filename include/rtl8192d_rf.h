@@ -20,7 +20,7 @@
 /******************************************************************************
  *
  *
- * Module:	rtl8192d_rf.h	( Header File)
+ * Module:	rtl8192d_rf.h	(Header File)
  *
  * Note:	Collect every HAL RF type exter API or constant.
  *

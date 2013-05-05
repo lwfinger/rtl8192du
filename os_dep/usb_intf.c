@@ -139,7 +139,7 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf);
 	{USB_DEVICE(0x0DF6, 0x0070)}, /* Sitecom - Edimax */ \
 	{USB_DEVICE(0x0789, 0x016D)}, /* LOGITEC - Edimax */ \
 	/****** 8192CE-VAU  ********/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8186)},/* Intel-Xavi( Azwave) */
+	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8186)},/* Intel-Xavi(Azwave) */
 
 #define RTL8192D_USB_IDS \
 	/*=== Realtek demoboard ===*/ \
@@ -271,12 +271,11 @@ static u8 rtw_init_intf_priv(struct dvobj_priv *dvobj)
 		goto exit;
 	}
 	dvobj->usb_vendor_req_buf  =
-		(u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(dvobj->usb_alloc_vendor_req_buf ), ALIGNMENT_UNIT);
+		(u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(dvobj->usb_alloc_vendor_req_buf), ALIGNMENT_UNIT);
 exit:
 	#endif
 
 	return rst;
-
 }
 
 static u8 rtw_deinit_intf_priv(struct dvobj_priv *dvobj)
@@ -534,7 +533,6 @@ static void usb_intf_stop(struct rtw_adapter *padapter)
 	//todo:cancel other irps
 
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-usb_intf_stop\n"));
-
 }
 
 static void rtw_dev_unload(struct rtw_adapter *padapter)
@@ -560,7 +558,7 @@ static void rtw_dev_unload(struct rtw_adapter *padapter)
 		}
 
 		//s4.
-		if (!padapter->pwrctrlpriv.bInternalAutoSuspend )
+		if (!padapter->pwrctrlpriv.bInternalAutoSuspend)
 		rtw_stop_drv_threads(padapter);
 
 
@@ -587,13 +585,12 @@ static void rtw_dev_unload(struct rtw_adapter *padapter)
 	}
 	else
 	{
-		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("r871x_dev_unload():padapter->bup == false\n" ));
+		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("r871x_dev_unload():padapter->bup == false\n"));
 	}
 
 	DBG_8192D("<=== rtw_dev_unload\n");
 
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-rtw_dev_unload\n"));
-
 }
 
 static void process_spec_devid(const struct usb_device_id *pdid)
@@ -622,7 +619,7 @@ static void process_spec_devid(const struct usb_device_id *pdid)
 }
 
 #ifdef SUPPORT_HW_RFOFF_DETECTED
-int rtw_hw_suspend(struct rtw_adapter *padapter )
+int rtw_hw_suspend(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
@@ -697,7 +694,6 @@ int rtw_hw_suspend(struct rtw_adapter *padapter )
 error_exit:
 	DBG_8192D("%s, failed\n",__func__);
 	return (-1);
-
 }
 
 int rtw_hw_resume(struct rtw_adapter *padapter)
@@ -775,12 +771,12 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 		goto exit;
 	}
 
-	if (pwrpriv->bInternalAutoSuspend )
+	if (pwrpriv->bInternalAutoSuspend)
 	{
 	#ifdef CONFIG_AUTOSUSPEND
 	#ifdef SUPPORT_HW_RFOFF_DETECTED
 		// The FW command register update must after MAC and FW init ready.
-		if ((padapter->bFWReady) && ( padapter->pwrctrlpriv.bHWPwrPindetect ) && (padapter->registrypriv.usbss_enable ))
+		if ((padapter->bFWReady) && (padapter->pwrctrlpriv.bHWPwrPindetect) && (padapter->registrypriv.usbss_enable))
 		{
 			u8 bOpen = true;
 			rtw_interface_ps_func(padapter,HAL_USB_SELECT_SUSPEND,&bOpen);
@@ -818,7 +814,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	}
 
 #ifdef CONFIG_LAYER2_ROAMING_RESUME
-	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED) )
+	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED))
 	{
 		//DBG_8192D("%s:%d assoc_ssid:%s\n", __func__, __LINE__, pmlmepriv->assoc_ssid.Ssid);
 		DBG_8192D("%s:%d %s(%pM), length:%d assoc_ssid.length:%d\n",__func__, __LINE__,
@@ -834,7 +830,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	//s2-3.
 	rtw_free_assoc_resources(padapter, 1);
 #ifdef CONFIG_AUTOSUSPEND
-	if (!pwrpriv->bInternalAutoSuspend )
+	if (!pwrpriv->bInternalAutoSuspend)
 #endif
 	//s2-4.
 	rtw_free_network_queue(padapter, true);
@@ -868,7 +864,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	 int ret = 0;
 
-	if (pwrpriv->bInternalAutoSuspend ){
+	if (pwrpriv->bInternalAutoSuspend){
 		ret = rtw_resume_process(padapter);
 	} else {
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
@@ -888,7 +884,6 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	}
 
 	return ret;
-
 }
 
 int rtw_resume_process(struct rtw_adapter *padapter)
@@ -920,12 +915,12 @@ int rtw_resume_process(struct rtw_adapter *padapter)
 	netif_carrier_on(pnetdev);
 
 #ifdef CONFIG_AUTOSUSPEND
-	if (pwrpriv->bInternalAutoSuspend )
+	if (pwrpriv->bInternalAutoSuspend)
 	{
 		#ifdef CONFIG_AUTOSUSPEND
 		#ifdef SUPPORT_HW_RFOFF_DETECTED
 			// The FW command register update must after MAC and FW init ready.
-		if ((padapter->bFWReady) && ( padapter->pwrctrlpriv.bHWPwrPindetect ) && (padapter->registrypriv.usbss_enable ))
+		if ((padapter->bFWReady) && (padapter->pwrctrlpriv.bHWPwrPindetect) && (padapter->registrypriv.usbss_enable))
 		{
 			//rtl8192c_set_FwSelectSuspend_cmd(padapter,false ,500);//note fw to support hw power down ping detect
 			u8 bOpen = false;
@@ -958,7 +953,7 @@ int rtw_resume_process(struct rtw_adapter *padapter)
 #endif
 	_exit_pwrlock(&pwrpriv->lock);
 
-	if ( padapter->pid[1]!=0) {
+	if (padapter->pid[1]!=0) {
 		DBG_8192D("pid[1]:%d\n",padapter->pid[1]);
 		rtw_signal_process(padapter->pid[1], SIGUSR2);
 	}
@@ -993,7 +988,7 @@ void autosuspend_enter(struct rtw_adapter* padapter)
 
 	DBG_8192D("==>autosuspend_enter...........\n");
 
-	if (rf_off == pwrpriv->change_rfpwrstate )
+	if (rf_off == pwrpriv->change_rfpwrstate)
 	{
 		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 		usb_enable_autosuspend(dvobj->pusbdev);
@@ -1014,8 +1009,8 @@ void autosuspend_enter(struct rtw_adapter* padapter)
 	#else
 	DBG_8192D("...pm_usage_cnt(%d).....\n", dvobj->pusbintf->pm_usage_cnt);
 	#endif
-
 }
+
 int autoresume_enter(struct rtw_adapter* padapter)
 {
 	int result = _SUCCESS;
@@ -1028,13 +1023,13 @@ int autoresume_enter(struct rtw_adapter* padapter)
 
 	DBG_8192D("====> autoresume_enter\n");
 
-	if (rf_off == pwrpriv->rf_pwrstate )
+	if (rf_off == pwrpriv->rf_pwrstate)
 	{
 		pwrpriv->ps_flag = false;
 		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,33))
 			if (usb_autopm_get_interface(dvobj->pusbintf) < 0)
 			{
-				DBG_8192D( "can't get autopm: %d\n", result);
+				DBG_8192D("can't get autopm: %d\n", result);
 				result = _FAIL;
 				goto error_exit;
 			}
@@ -1152,9 +1147,9 @@ struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 #endif
 
 #ifdef CONFIG_AUTOSUSPEND
-	if ( padapter->registrypriv.power_mgnt != PS_MODE_ACTIVE )
+	if (padapter->registrypriv.power_mgnt != PS_MODE_ACTIVE)
 	{
-		if (padapter->registrypriv.usbss_enable ){	/* autosuspend (2s delay) */
+		if (padapter->registrypriv.usbss_enable){	/* autosuspend (2s delay) */
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,38))
 			dvobj->pusbdev->dev.power.autosuspend_delay = 0 * HZ;//15 * HZ; idle-delay time
 			#else
@@ -1168,7 +1163,7 @@ struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 			dvobj->pusbdev->autosuspend_disabled = 0;//autosuspend disabled by the user
 			#endif
 
-			usb_autopm_get_interface(dvobj->pusbintf );//init pm_usage_cnt ,let it start from 1
+			usb_autopm_get_interface(dvobj->pusbintf);//init pm_usage_cnt ,let it start from 1
 
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
 			DBG_8192D("%s...pm_usage_cnt(%d).....\n",__func__, atomic_read(&(dvobj->pusbintf ->pm_usage_cnt)));

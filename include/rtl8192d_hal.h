@@ -243,7 +243,7 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	// channel 1~14
 					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D0 ||\
 					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D1 ||\
 					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D2 ||\
-					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D3 )
+					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D3)
 
 #define FW_8192D_SIZE				0x8020 // Max FW len = 32k + 32(FW header length).
 #define FW_8192D_START_ADDRESS	0x1000
@@ -737,7 +737,7 @@ extern void Hal_SetBandwidth(struct rtw_adapter * pAdapter);
 
 extern void Hal_SetTxPower(struct rtw_adapter * pAdapter);
 extern void Hal_SetCarrierSuppressionTx(struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_SetSingleToneTx ( struct rtw_adapter * pAdapter , u8 bStart );
+extern void Hal_SetSingleToneTx (struct rtw_adapter * pAdapter , u8 bStart);
 extern void Hal_SetSingleCarrierTx (struct rtw_adapter * pAdapter, u8 bStart);
 extern void Hal_SetContinuousTx (struct rtw_adapter * pAdapter, u8 bStart);
 extern void Hal_SetBandwidth(struct rtw_adapter * pAdapter);

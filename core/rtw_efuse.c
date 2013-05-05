@@ -260,7 +260,6 @@ u8 EFUSE_Read1Byte(struct rtw_adapter *Adapter, u16 address)
 	} else {
 		return 0xFF;
 	}
-
 } /* EFUSE_Read1Byte */
 
 /*-----------------------------------------------------------------------------
@@ -677,7 +676,6 @@ static void efuse_ShadowRead1Byte(struct rtw_adapter *pAdapter, u16 Offset, u8 *
 	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(pAdapter);
 
 	*value = pEEPROM->efuse_eeprom_data[Offset];
-
 }	/*  EFUSE_ShadowRead1Byte */
 
 /* Read Two Bytes */
@@ -687,7 +685,6 @@ static void efuse_ShadowRead2Byte(struct rtw_adapter *pAdapter, u16 Offset, u16 
 
 	*value = pEEPROM->efuse_eeprom_data[Offset];
 	*value |= pEEPROM->efuse_eeprom_data[Offset+1]<<8;
-
 }	/*  EFUSE_ShadowRead2Byte */
 
 /* Read Four Bytes */
@@ -699,7 +696,6 @@ static void efuse_ShadowRead4Byte(struct rtw_adapter *pAdapter, u16 Offset, u32 
 	*value |= pEEPROM->efuse_eeprom_data[Offset+1]<<8;
 	*value |= pEEPROM->efuse_eeprom_data[Offset+2]<<16;
 	*value |= pEEPROM->efuse_eeprom_data[Offset+3]<<24;
-
 }	/*  efuse_ShadowRead4Byte */
 
 
@@ -726,7 +722,6 @@ static void efuse_ShadowWrite1Byte(struct rtw_adapter *pAdapter, u16 Offset, u8 
 	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(pAdapter);
 
 	pEEPROM->efuse_eeprom_data[Offset] = value;
-
 }	/*  efuse_ShadowWrite1Byte */
 
 /* Write Two Bytes */
@@ -736,7 +731,6 @@ static void efuse_ShadowWrite2Byte(struct rtw_adapter *pAdapter, u16 Offset, u16
 
 	pEEPROM->efuse_eeprom_data[Offset] = value&0x00FF;
 	pEEPROM->efuse_eeprom_data[Offset+1] = value>>8;
-
 }	/*  efuse_ShadowWrite1Byte */
 
 /* Write Four Bytes */
@@ -748,7 +742,6 @@ static void efuse_ShadowWrite4Byte(struct rtw_adapter *pAdapter, u16 Offset, u32
 	EEPROM->efuse_eeprom_data[Offset+1] = (u8)((value>>8)&0x0000FF);
 	EEPROM->efuse_eeprom_data[Offset+2] = (u8)((value>>16)&0x00FF);
 	EEPROM->efuse_eeprom_data[Offset+3] = (u8)((value>>24)&0xFF);
-
 }	/*  efuse_ShadowWrite1Byte */
 
 /*-----------------------------------------------------------------------------
@@ -814,7 +807,6 @@ void EFUSE_ShadowRead(struct rtw_adapter *pAdapter, u8 Type, u16 Offset, u32 *va
 		efuse_ShadowRead2Byte(pAdapter, Offset, (u16 *)value);
 	else if (Type == 4)
 		efuse_ShadowRead4Byte(pAdapter, Offset, (u32 *)value);
-
 }	/*  EFUSE_ShadowRead */
 
 /*-----------------------------------------------------------------------------
@@ -845,7 +837,6 @@ void EFUSE_ShadowWrite(struct rtw_adapter *pAdapter, u8 Type, u16 Offset, u32 va
 		efuse_ShadowWrite2Byte(pAdapter, Offset, (u16)value);
 	else if (Type == 4)
 		efuse_ShadowWrite4Byte(pAdapter, Offset, (u32)value);
-
 }	/*  EFUSE_ShadowWrite */
 
 void Efuse_InitSomeVar(struct rtw_adapter *pAdapter)

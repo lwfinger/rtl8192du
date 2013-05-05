@@ -82,7 +82,6 @@ u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe)
 	}
 
 	return addr;
-
 }
 
 int urb_zero_packet_chk(struct rtw_adapter *padapter, int sz);
@@ -91,9 +90,9 @@ int urb_zero_packet_chk(struct rtw_adapter *padapter, int sz)
 	int blnSetTxDescOffset;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(padapter);
 
-	if ( pdvobj->ishighspeed )
+	if (pdvobj->ishighspeed)
 	{
-		if ( ( (sz + TXDESC_SIZE) % 512 ) == 0 ) {
+		if (((sz + TXDESC_SIZE) % 512) == 0) {
 			blnSetTxDescOffset = 1;
 		} else {
 			blnSetTxDescOffset = 0;
@@ -101,7 +100,7 @@ int urb_zero_packet_chk(struct rtw_adapter *padapter, int sz)
 	}
 	else
 	{
-		if ( ( (sz + TXDESC_SIZE) % 64 ) == 0 )		{
+		if (((sz + TXDESC_SIZE) % 64) == 0)		{
 			blnSetTxDescOffset = 1;
 		} else {
 			blnSetTxDescOffset = 0;
@@ -109,7 +108,6 @@ int urb_zero_packet_chk(struct rtw_adapter *padapter, int sz)
 	}
 
 	return blnSetTxDescOffset;
-
 }
 
 void rtl8192du_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
@@ -127,7 +125,6 @@ void rtl8192du_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 		}
 
 		ptxdesc->txdw7 |= cpu_to_le32(0x0000ffff&checksum);
-
 }
 
 void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc);
@@ -157,7 +154,6 @@ void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
 		}
 
 	}
-
 }
 
 static void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
@@ -370,7 +366,7 @@ if (padapter->registrypriv.mp_mode == 0)
 
 		//offset 24
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
-		if ( pattrib->hw_tcp_csum == 1 ) {
+		if (pattrib->hw_tcp_csum == 1) {
 			// ptxdesc->txdw6 = 0; // clear TCP_CHECKSUM and IP_CHECKSUM. It's zero already!!
 			u8 ip_hdr_offset = 32 + pattrib->hdrlen + pattrib->iv_len + 8;
 			ptxdesc->txdw7 = (1 << 31) | (ip_hdr_offset << 16);
@@ -490,7 +486,6 @@ if (padapter->registrypriv.mp_mode == 0)
 	rtl8192du_cal_txdesc_chksum(ptxdesc);
 
 	return pull;
-
 }
 
 s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
@@ -641,7 +636,6 @@ void UpdateEarlyModeInfo8192D(struct rtw_adapter *padapter, struct xmit_frame *p
 		pxmitframe->EMPktNum++;
 	}
 	spin_unlock_bh(&pxmitpriv->lock);
-
 }
 
 #define IDEA_CONDITION 1	// check all packets before enqueue
@@ -925,7 +919,6 @@ s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv 
 	}while (0/*xcnt < (NR_XMITFRAME >> 3)*/);
 
 	return true;
-
 }
 #endif
 
@@ -1145,6 +1138,5 @@ _exit:
 
 	dev_kfree_skb_any(skb);
 	return 0;
-
 }
 #endif

@@ -424,7 +424,6 @@ int proc_get_mac_reg_dump1(char *page, char **start,
 
 	*eof = 1;
 	return len;
-
 }
 
 int proc_get_mac_reg_dump2(char *page, char **start,
@@ -448,7 +447,6 @@ int proc_get_mac_reg_dump2(char *page, char **start,
 
 	*eof = 1;
 	return len;
-
 }
 
 int proc_get_mac_reg_dump3(char *page, char **start,

@@ -31,10 +31,10 @@
 extern void indicate_wx_scan_complete_event(struct rtw_adapter *padapter);
 
 #define IS_MAC_ADDRESS_BROADCAST(addr) \
-( \
-	( (addr[0] == 0xff) && (addr[1] == 0xff) && \
+(\
+	((addr[0] == 0xff) && (addr[1] == 0xff) && \
 		(addr[2] == 0xff) && (addr[3] == 0xff) && \
-		(addr[4] == 0xff) && (addr[5] == 0xff) )  ? true : false \
+		(addr[4] == 0xff) && (addr[5] == 0xff))  ? true : false \
 )
 
 u8 rtw_validate_ssid(struct ndis_802_11_ssid *ssid)
@@ -53,7 +53,7 @@ _func_enter_;
 	for (i = 0; i < ssid->SsidLength; i++)
 	{
 		//wifi, printable ascii code must be supported
-		if (!( (ssid->Ssid[i] >= 0x20) && (ssid->Ssid[i] <= 0x7e) )){
+		if (!((ssid->Ssid[i] >= 0x20) && (ssid->Ssid[i] <= 0x7e))){
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("ssid has nonprintabl ascii\n"));
 			ret= false;
 			break;
@@ -106,7 +106,7 @@ _func_enter_;
 		{
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_do_join(): site survey if scanned_queue is empty\n."));
 			// submit site_survey_cmd
-			if (_SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ) {
+			if (_SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0))) {
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_do_join(): site survey return error\n."));
 			}
 		}
@@ -187,7 +187,7 @@ _func_enter_;
 				)
 				{
 					//DBG_8192D("rtw_do_join() when   no desired bss in scanning queue\n");
-					if ( _SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ){
+					if (_SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0))){
 						RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("do_join(): site survey return error\n."));
 					}
 				}
@@ -269,7 +269,7 @@ handle_tkip_countermeasure:
 	if (padapter->securitypriv.btkip_countermeasure == true) {
 		cur_time = rtw_get_current_time();
 
-		if ( (cur_time - padapter->securitypriv.btkip_countermeasure_time) > 60 * HZ )
+		if ((cur_time - padapter->securitypriv.btkip_countermeasure_time) > 60 * HZ)
 		{
 			padapter->securitypriv.btkip_countermeasure = false;
 			padapter->securitypriv.btkip_countermeasure_time = 0;
@@ -398,7 +398,7 @@ handle_tkip_countermeasure:
 	if (padapter->securitypriv.btkip_countermeasure == true) {
 		cur_time = rtw_get_current_time();
 
-		if ( (cur_time - padapter->securitypriv.btkip_countermeasure_time) > 60 * HZ )
+		if ((cur_time - padapter->securitypriv.btkip_countermeasure_time) > 60 * HZ)
 		{
 			padapter->securitypriv.btkip_countermeasure = false;
 			padapter->securitypriv.btkip_countermeasure_time = 0;
@@ -437,7 +437,6 @@ exit:
 _func_exit_;
 
 	return status;
-
 }
 
 /*
@@ -460,7 +459,6 @@ _func_enter_;
 
 	if (*pold_state != networktype)
 	{
-
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,(" change mode!"));
 		//DBG_8192D("change mode, old_mode=%d, new_mode=%d, fw_state=0x%x\n", *pold_state, networktype, get_fwstate(pmlmepriv));
 
@@ -477,7 +475,7 @@ _func_enter_;
 			rtw_disassoc_cmd(padapter, 0, true);
 
 		if ((check_fwstate(pmlmepriv, _FW_LINKED)== true) ||
-			(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)== true) )
+			(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)== true))
 			rtw_free_assoc_resources(padapter, 0);
 
 		if ((*pold_state == NDIS802_11INFRA) ||(*pold_state == NDIS802_11IBSS))
@@ -519,7 +517,7 @@ _func_enter_;
 		//SecClearAllKeys(adapter);
 
 		//RT_TRACE(COMP_OID_SET, DBG_LOUD, ("set_infrastructure: fw_state:%x after changing mode\n",
-		//									get_fwstate(pmlmepriv) ));
+		//									get_fwstate(pmlmepriv)));
 
 	}
 
@@ -634,7 +632,6 @@ _func_exit_;
 }
 
 u8 rtw_set_802_11_add_wep(struct rtw_adapter* padapter, struct ndis_802_11_wep *wep){
-
 	u8		bdefaultkey;
 	u8		btransmitkey;
 	int		keyid,res;
@@ -694,17 +691,14 @@ exit:
 _func_exit_;
 
 	return ret;
-
 }
 
 u8 rtw_set_802_11_remove_wep(struct rtw_adapter* padapter, u32 keyindex){
-
 	u8 ret=_SUCCESS;
 
 _func_enter_;
 
 	if (keyindex >= 0x80000000 || padapter == NULL){
-
 		ret=false;
 		goto exit;
 
@@ -713,8 +707,7 @@ _func_enter_;
 	{
 		int res;
 		struct security_priv* psecuritypriv=&(padapter->securitypriv);
-		if ( keyindex < 4 ){
-
+		if (keyindex < 4){
 			memset(&psecuritypriv->dot11DefKey[keyindex], 0, 16);
 
 			res=rtw_set_key(padapter,psecuritypriv,keyindex, 0);
@@ -737,11 +730,9 @@ exit:
 _func_exit_;
 
 	return ret;
-
 }
 
 u8 rtw_set_802_11_add_key(struct rtw_adapter* padapter, struct ndis_802_11_key *key){
-
 	uint	encryptionalgo;
 	u8 * pbssid;
 	struct sta_info *stainfo;
@@ -752,7 +743,6 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter* padapter, struct ndis_802_11_key *
 _func_enter_;
 
 	if (((key->KeyIndex & 0x80000000) == 0) && ((key->KeyIndex & 0x40000000) > 0)){
-
 		// It is invalid to clear bit 31 and set bit 30. If the miniport driver encounters this combination,
 		// it must fail the request and return NDIS_STATUS_INVALID_DATA.
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_add_key: ((key->KeyIndex & 0x80000000) == 0)[=%d] ",(int)(key->KeyIndex & 0x80000000) == 0));
@@ -772,7 +762,7 @@ _func_enter_;
 		stainfo=rtw_get_stainfo(&padapter->stapriv, pbssid);
 
 		if ((stainfo!=NULL)&&(padapter->securitypriv.dot11AuthAlgrthm==dot11AuthAlgrthm_8021X)){
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY:( stainfo!=NULL)&&(Adapter->securitypriv.dot11AuthAlgrthm==dot11AuthAlgrthm_8021X)\n"));
+			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY:(stainfo!=NULL)&&(Adapter->securitypriv.dot11AuthAlgrthm==dot11AuthAlgrthm_8021X)\n"));
 			encryptionalgo=stainfo->dot118021XPrivacy;
 		}
 		else{
@@ -780,7 +770,7 @@ _func_enter_;
 			encryptionalgo=padapter->securitypriv.dot11PrivacyAlgrthm;
 		}
 
-		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_add_key: (encryptionalgo ==%d)!\n",encryptionalgo ));
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_add_key: (encryptionalgo ==%d)!\n",encryptionalgo));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_add_key: (Adapter->securitypriv.dot11PrivacyAlgrthm ==%d)!\n",padapter->securitypriv.dot11PrivacyAlgrthm));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_add_key: (Adapter->securitypriv.dot11AuthAlgrthm ==%d)!\n",padapter->securitypriv.dot11AuthAlgrthm));
 
@@ -799,7 +789,6 @@ _func_enter_;
 
 		// check BSSID
 		if (IS_MAC_ADDRESS_BROADCAST(key->BSSID) == true){
-
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("MacAddr_isBcst(key->BSSID)\n"));
 			ret= false;
 			goto exit;
@@ -852,7 +841,7 @@ _func_enter_;
 		// when add wep key through add key and didn't assigned encryption type before
 		if ((padapter->securitypriv.ndisauthtype<=3)&&(padapter->securitypriv.dot118021XGrpPrivacy==0))
 		{
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("keylen=%d( Adapter->securitypriv.dot11PrivacyAlgrthm=%x  )padapter->securitypriv.dot118021XGrpPrivacy(%x)\n", key->KeyLength,padapter->securitypriv.dot11PrivacyAlgrthm,padapter->securitypriv.dot118021XGrpPrivacy));
+			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("keylen=%d(Adapter->securitypriv.dot11PrivacyAlgrthm=%x )padapter->securitypriv.dot118021XGrpPrivacy(%x)\n", key->KeyLength,padapter->securitypriv.dot11PrivacyAlgrthm,padapter->securitypriv.dot118021XGrpPrivacy));
 
 			switch (key->KeyLength)
 			{
@@ -878,7 +867,7 @@ _func_enter_;
 		else
 		{
 			encryptionalgo=padapter->securitypriv.dot118021XGrpPrivacy;
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("( Adapter->securitypriv.dot11PrivacyAlgrthm=%x  )encryptionalgo(%x)=padapter->securitypriv.dot118021XGrpPrivacy(%x)keylen=%d\n", padapter->securitypriv.dot11PrivacyAlgrthm,encryptionalgo,padapter->securitypriv.dot118021XGrpPrivacy,key->KeyLength));
+			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("(Adapter->securitypriv.dot11PrivacyAlgrthm=%x )encryptionalgo(%x)=padapter->securitypriv.dot118021XGrpPrivacy(%x)keylen=%d\n", padapter->securitypriv.dot11PrivacyAlgrthm,encryptionalgo,padapter->securitypriv.dot118021XGrpPrivacy,key->KeyLength));
 
 		}
 
@@ -890,13 +879,11 @@ _func_enter_;
 
 		// Check key length for TKIP
 		if ((encryptionalgo== _TKIP_) && (key->KeyLength != 32)) {
-
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,(" TKIP GTK KeyLength:%u != 32\n", key->KeyLength));
 			ret= _FAIL;
 			goto exit;
 
-		} else if (encryptionalgo== _AES_ && (key->KeyLength != 16 && key->KeyLength != 32) ) {
-
+		} else if (encryptionalgo== _AES_ && (key->KeyLength != 16 && key->KeyLength != 32)) {
 			// Check key length for AES
 			// For NDTEST, we allow keylen=32 in this case. 2005.01.27, by rcnjko.
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("<=== SetInfo, OID_802_11_ADD_KEY: AES GTK KeyLength:%u != 16 or 32\n", key->KeyLength));
@@ -905,9 +892,9 @@ _func_enter_;
 		}
 
 		// Change the key length for EAPPkt9x.vxd. Added by Annie, 2005-11-03.
-		if ((encryptionalgo==  _AES_) && (key->KeyLength == 32) ) {
+		if ((encryptionalgo==  _AES_) && (key->KeyLength == 32)) {
 			key->KeyLength = 16;
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("AES key length changed: %u\n", key->KeyLength) );
+			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("AES key length changed: %u\n", key->KeyLength));
 		}
 
 		if (key->KeyIndex & 0x8000000) {//error ??? 0x8000_0000
@@ -921,8 +908,8 @@ _func_enter_;
 
 		bgroup = true;
 
-		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("------------------------------------------\n") );
-		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("[Group Key set]\n") );
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("------------------------------------------\n"));
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("[Group Key set]\n"));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("------------------------------------------\n")) ;
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("key index: 0x%8x(0x%8x)\n", key->KeyIndex,(key->KeyIndex&0x3)));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("key Length: %d\n", key->KeyLength)) ;
@@ -1046,11 +1033,11 @@ _func_enter_;
 		u8 res;
 
 		pbssid=get_bssid(&padapter->mlmepriv);
-		stainfo=rtw_get_stainfo(&padapter->stapriv , pbssid );
+		stainfo=rtw_get_stainfo(&padapter->stapriv , pbssid);
 
 		if (stainfo!=NULL)
 		{
-			memset( &stainfo->dot118021x_UncstKey, 0, 16);// clear keybuffer
+			memset(&stainfo->dot118021x_UncstKey, 0, 16);// clear keybuffer
 
 			memcpy(&stainfo->dot118021x_UncstKey, key->KeyMaterial, 16);
 
@@ -1076,7 +1063,6 @@ _func_enter_;
 			}
 			else if (encryptionalgo == _AES_)
 			{
-
 			}
 
 
@@ -1106,7 +1092,6 @@ _func_exit_;
 }
 
 u8 rtw_set_802_11_remove_key(struct rtw_adapter*	padapter, struct ndis_802_11_remove_key *key){
-
 	uint				encryptionalgo;
 	u8 * pbssid;
 	struct sta_info *stainfo;
@@ -1130,11 +1115,9 @@ _func_enter_;
 		memset(&padapter->securitypriv.dot118021XGrpKey[keyIndex], 0, 16);
 
 		//! \todo Send a H2C Command to Firmware for removing this Key in CAM Entry.
-
 	} else {
-
 		pbssid=get_bssid(&padapter->mlmepriv);
-		stainfo=rtw_get_stainfo(&padapter->stapriv , pbssid );
+		stainfo=rtw_get_stainfo(&padapter->stapriv , pbssid);
 		if (stainfo !=NULL){
 			encryptionalgo=stainfo->dot118021XPrivacy;
 
@@ -1155,7 +1138,6 @@ exit:
 _func_exit_;
 
 	return true;
-
 }
 
 /*
@@ -1224,7 +1206,7 @@ u16 rtw_get_cur_max_rate(struct rtw_adapter *adapter)
 	else
 #endif //CONFIG_80211N_HT
 	{
-		while ( (pcur_bss->SupportedRates[i]!=0) && (pcur_bss->SupportedRates[i]!=0xFF))
+		while ((pcur_bss->SupportedRates[i]!=0) && (pcur_bss->SupportedRates[i]!=0xFF))
 		{
 			rate = pcur_bss->SupportedRates[i]&0x7F;
 			if (rate>max_rate)

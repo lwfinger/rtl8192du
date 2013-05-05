@@ -326,7 +326,7 @@ struct recv_buf {
 
 	end   ----->
 
-	len = (unsigned int )(tail - data);
+	len = (unsigned int)(tail - data);
 
 */
 struct recv_frame_hdr
@@ -435,7 +435,7 @@ static inline u8 *recvframe_push(union recv_frame *precvframe, int sz)
 
 
 	precvframe->u.hdr.rx_data -= sz ;
-	if ( precvframe->u.hdr.rx_data < precvframe->u.hdr.rx_head )
+	if (precvframe->u.hdr.rx_data < precvframe->u.hdr.rx_head)
 	{
 		precvframe->u.hdr.rx_data += sz ;
 		return NULL;
@@ -584,7 +584,7 @@ static inline int get_recvframe_len(union recv_frame *precvframe)
 	return precvframe->u.hdr.len;
 }
 
-static inline u8 query_rx_pwr_percentage(s8 antpower )
+static inline u8 query_rx_pwr_percentage(s8 antpower)
 {
 	if ((antpower <= -100) || (antpower >= 20))
 	{

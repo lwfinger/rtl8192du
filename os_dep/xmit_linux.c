@@ -121,7 +121,6 @@ void rtw_set_tx_chksum_offload(struct sk_buff *pkt, struct pkt_attrib *pattrib)
 		}
 	}
 #endif
-
 }
 
 int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *pxmitbuf,u32 alloc_sz)
@@ -324,21 +323,21 @@ _func_enter_;
 	}
 #endif
 
-	if ( !rtw_mc2u_disable
+	if (!rtw_mc2u_disable
 		&& check_fwstate(pmlmepriv, WIFI_AP_STATE) == true
-		&& ( IP_MCAST_MAC(pkt->data)
-			|| ICMPV6_MCAST_MAC(pkt->data) )
+		&& (IP_MCAST_MAC(pkt->data)
+			|| ICMPV6_MCAST_MAC(pkt->data))
 		&& (padapter->registrypriv.wifi_spec == 0)
 		)
 	{
-		if ( pxmitpriv->free_xmitframe_cnt > (NR_XMITFRAME/4) ) {
+		if (pxmitpriv->free_xmitframe_cnt > (NR_XMITFRAME/4)) {
 			res = rtw_mlcst2unicst(padapter, pkt);
 			if (res == true) {
 				goto exit;
 			}
 		} else {
 			//DBG_8192D("Stop M2U(%d, %d)! ", pxmitpriv->free_xmitframe_cnt, pxmitpriv->free_xmitbuf_cnt);
-			//DBG_8192D("!m2u );
+			//DBG_8192D("!m2u);
 		}
 	}
 

@@ -467,7 +467,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	}
 
 	rtw_hal_get_hwreg(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
-	if ((RF_1T2R == rf_type) ||(RF_1T1R == rf_type ))	{
+	if ((RF_1T2R == rf_type) ||(RF_1T1R == rf_type))	{
 		entry = create_proc_read_entry("rf_reg_dump3", S_IFREG | S_IRUGO,
 					   dir_dev, proc_get_rf_reg_dump3, dev);
 		if (!entry) {
@@ -601,7 +601,7 @@ void rtw_proc_remove_one(struct net_device *dev)
 		remove_proc_entry("rf_reg_dump1", dir_dev);
 		remove_proc_entry("rf_reg_dump2", dir_dev);
 		rtw_hal_get_hwreg(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
-		if ((RF_1T2R == rf_type) ||(RF_1T1R == rf_type ))	{
+		if ((RF_1T2R == rf_type) ||(RF_1T1R == rf_type))	{
 			remove_proc_entry("rf_reg_dump3", dir_dev);
 			remove_proc_entry("rf_reg_dump4", dir_dev);
 		}
@@ -886,7 +886,6 @@ u16 rtw_recv_select_queue(struct sk_buff *skb)
 	}
 
 	return rtw_1d_to_queue[priority];
-
 }
 
 #endif
@@ -1002,7 +1001,6 @@ struct net_device *rtw_init_netdev(struct rtw_adapter *old_padapter)
 	loadparam(padapter, pnetdev);
 
 	return pnetdev;
-
 }
 
 u32 rtw_start_drv_threads(struct rtw_adapter *padapter)
@@ -1042,7 +1040,6 @@ u32 rtw_start_drv_threads(struct rtw_adapter *padapter)
 #endif
 
 	return _status;
-
 }
 
 void rtw_stop_drv_threads (struct rtw_adapter *padapter)
@@ -1080,7 +1077,6 @@ void rtw_stop_drv_threads (struct rtw_adapter *padapter)
 	_rtw_down_sema(&padapter->recvpriv.terminate_recvthread_sema);
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("\n drv_halt:recv_thread can be terminated!\n"));
 #endif
-
 
 }
 
@@ -1326,7 +1322,6 @@ exit:
 	_func_exit_;
 
 	return ret8;
-
 }
 
 void rtw_cancel_all_timer(struct rtw_adapter *padapter)
@@ -1366,7 +1361,6 @@ void rtw_cancel_all_timer(struct rtw_adapter *padapter)
 
 	/*  cancel dm  timer */
 	rtw_hal_dm_deinit(padapter);
-
 }
 
 u8 rtw_free_drv_sw(struct rtw_adapter *padapter)
@@ -1382,11 +1376,11 @@ u8 rtw_free_drv_sw(struct rtw_adapter *padapter)
 		struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 		if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 		{
-			_cancel_timer_ex( &pwdinfo->find_phase_timer );
-			_cancel_timer_ex( &pwdinfo->restore_p2p_state_timer );
-			_cancel_timer_ex( &pwdinfo->pre_tx_scan_timer);
+			_cancel_timer_ex(&pwdinfo->find_phase_timer);
+			_cancel_timer_ex(&pwdinfo->restore_p2p_state_timer);
+			_cancel_timer_ex(&pwdinfo->pre_tx_scan_timer);
 #ifdef CONFIG_CONCURRENT_MODE
-			_cancel_timer_ex( &pwdinfo->ap_p2p_switch_timer );
+			_cancel_timer_ex(&pwdinfo->ap_p2p_switch_timer);
 #endif /*  CONFIG_CONCURRENT_MODE */
 			rtw_p2p_set_state(pwdinfo, P2P_STATE_NONE);
 		}
@@ -1441,7 +1435,6 @@ u8 rtw_free_drv_sw(struct rtw_adapter *padapter)
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-rtw_free_drv_sw\n"));
 
 	return _SUCCESS;
-
 }
 
 #ifdef CONFIG_CONCURRENT_MODE
@@ -1517,7 +1510,6 @@ _netdev_virtual_iface_open_error:
 	rtw_netif_stop_queue(pnetdev);
 
 	return (-1);
-
 }
 
 int netdev_vir_if_open(struct net_device *pnetdev)
@@ -1720,7 +1712,6 @@ error_rtw_drv_add_iface:
 		rtw_free_netdev(pnetdev);
 
 	return NULL;
-
 }
 
 void rtw_drv_stop_vir_if (struct rtw_adapter *padapter)
@@ -1762,7 +1753,6 @@ void rtw_drv_stop_vir_if (struct rtw_adapter *padapter)
 #ifdef CONFIG_IOCTL_CFG80211
 	rtw_wdev_unregister(padapter->rtw_wdev);
 #endif /* CONFIG_IOCTL_CFG80211 */
-
 }
 
 void rtw_drv_free_vir_if (struct rtw_adapter *padapter)
@@ -1901,7 +1891,6 @@ netdev_if2_open_error:
 	rtw_netif_stop_queue(pnetdev);
 
 	return (-1);
-
 }
 
 static int netdev_if2_open(struct net_device *pnetdev)
@@ -2100,7 +2089,6 @@ error_rtw_drv_if2_init:
 		rtw_free_netdev(pnetdev);
 
 	return NULL;
-
 }
 
 void rtw_drv_if2_free(struct rtw_adapter *if2)
@@ -2121,7 +2109,6 @@ void rtw_drv_if2_free(struct rtw_adapter *if2)
 	rtw_free_drv_sw(padapter);
 
 	rtw_free_netdev(pnetdev);
-
 }
 
 void rtw_drv_if2_stop(struct rtw_adapter *if2)
@@ -2161,7 +2148,6 @@ void rtw_drv_if2_stop(struct rtw_adapter *if2)
 	#ifdef CONFIG_IOCTL_CFG80211
 	rtw_wdev_unregister(padapter->rtw_wdev);
 	#endif
-
 }
 #endif /* end of CONFIG_CONCURRENT_MODE */
 
@@ -2317,7 +2303,6 @@ netdev_open_error:
 	DBG_8192D("-871x_drv - drv_open fail, bup =%d\n", padapter->bup);
 
 	return (-1);
-
 }
 
 int netdev_open(struct net_device *pnetdev)
@@ -2381,7 +2366,6 @@ int rtw_ips_pwr_up(struct rtw_adapter *padapter)
 
 	DBG_8192D("<===  rtw_ips_pwr_up.............. in %dms\n", rtw_get_passing_time_ms(start_time));
 	return result;
-
 }
 
 void rtw_ips_pwr_down(struct rtw_adapter *padapter)

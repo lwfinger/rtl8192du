@@ -107,7 +107,7 @@ struct security_priv
 	u32	dot11DefKeylen[4];
 
 	u32 dot118021XGrpPrivacy;	// This specify the privacy algthm. used for Grp key
-	u32	dot118021XGrpKeyid;		// key id used for Grp Key ( tx key index)
+	u32	dot118021XGrpKeyid;		// key id used for Grp Key (tx key index)
 	union Keytype	dot118021XGrpKey[4];	// 802.1x Group Key, for inx0 and inx1
 	union Keytype	dot118021XGrptxmickey[4];
 	union Keytype	dot118021XGrprxmickey[4];
@@ -200,7 +200,7 @@ do{\
 }while (0)
 
 
-#define SET_ICE_IV_LEN( iv_len, icv_len, encrypt)\
+#define SET_ICE_IV_LEN(iv_len, icv_len, encrypt)\
 do{\
 	switch (encrypt)\
 	{\
@@ -236,8 +236,8 @@ do{\
 }while (0)
 
 
-#define ROL32( A, n )	( ((A) << (n)) | ( ((A)>>(32-(n)))  & ( (1UL << (n)) - 1 ) ) )
-#define ROR32( A, n )	ROL32( (A), 32-(n) )
+#define ROL32(A, n)	(((A) << (n)) | (((A)>>(32-(n)))  & ((1UL << (n)) - 1)))
+#define ROR32(A, n)	ROL32((A), 32-(n))
 
 struct mic_data
 {
@@ -356,7 +356,7 @@ static const unsigned long K[64] = {
 
 /* Various logical functions */
 #define RORc(x, y) \
-( ((((unsigned long) (x) & 0xFFFFFFFFUL) >> (unsigned long) ((y) & 31)) | \
+(((((unsigned long) (x) & 0xFFFFFFFFUL) >> (unsigned long) ((y) & 31)) | \
    ((unsigned long) (x) << (unsigned long) (32 - ((y) & 31)))) & 0xFFFFFFFFUL)
 #define Ch(x,y,z)       (z ^ (x & (y ^ z)))
 #define Maj(x,y,z)      (((x | y) & z) | (x & y))
@@ -370,10 +370,10 @@ static const unsigned long K[64] = {
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 #endif
 
-void rtw_secmicsetkey(struct mic_data *pmicdata, u8 * key );
-void rtw_secmicappendbyte(struct mic_data *pmicdata, u8 b );
-void rtw_secmicappend(struct mic_data *pmicdata, u8 * src, u32 nBytes );
-void rtw_secgetmic(struct mic_data *pmicdata, u8 * dst );
+void rtw_secmicsetkey(struct mic_data *pmicdata, u8 * key);
+void rtw_secmicappendbyte(struct mic_data *pmicdata, u8 b);
+void rtw_secmicappend(struct mic_data *pmicdata, u8 * src, u32 nBytes);
+void rtw_secgetmic(struct mic_data *pmicdata, u8 * dst);
 
 void rtw_seccalctkipmic(
 	u8 * key,

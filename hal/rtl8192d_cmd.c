@@ -46,7 +46,6 @@ CheckWriteH2C(
 		Result = true;
 
 	return Result;
-
 }
 
 static bool
@@ -324,7 +323,7 @@ u8 rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg)
 _func_enter_;
 
 	memset(buf, 0, 5);
-	mask = cpu_to_le32( mask );
+	mask = cpu_to_le32(mask);
 	memcpy(buf, &mask, 4);
 	buf[4]  = arg;
 
@@ -333,7 +332,6 @@ _func_enter_;
 _func_exit_;
 
 	return res;
-
 }
 
 //bitmap[0:27] = tx_rate_bitmap
@@ -364,7 +362,6 @@ void rtl8192d_Add_RateATid(struct rtw_adapter * pAdapter, u32 bitmap, u8 arg)
 
 		rtw_write8(pAdapter, (REG_INIDATA_RATE_SEL+macid), (u8)init_rate);
 	}
-
 }
 
 
@@ -434,7 +431,7 @@ void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	pktlen += 2;
 
 
-	if ( (pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
+	if ((pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
 	{
 		DBG_8192D("ie len=%u\n", cur_network->IELength);
 		pktlen += cur_network->IELength - sizeof(struct ndis_802_11_fixed_ies);
@@ -455,7 +452,7 @@ void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	// DS parameter set
 	pframe = rtw_set_ie(pframe, _DSSET_IE_, 1, (unsigned char *)&(cur_network->Configuration.DSConfig), &pktlen);
 
-	if ( (pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE)
+	if ((pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE)
 	{
 		u32 ATIMWindow;
 		// IBSS Parameter Set...
@@ -488,7 +485,6 @@ _ConstructBeacon:
 	*pLength = pktlen;
 
 	//DBG_8192D("%s bcn_sz=%u\n", __func__, pktlen);
-
 }
 
 void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength);
@@ -637,7 +633,7 @@ FillFakeTxDescriptor92D(
 	memset(pDesc, 0, 32);
 
 	//offset 0
-	ptxdesc->txdw0 |= cpu_to_le32( OWN | FSG | LSG); //own, bFirstSeg, bLastSeg;
+	ptxdesc->txdw0 |= cpu_to_le32(OWN | FSG | LSG); //own, bFirstSeg, bLastSeg;
 
 	ptxdesc->txdw0 |= cpu_to_le32(((TXDESC_SIZE+OFFSET_SZ)<<OFFSET_SHT)&0x00ff0000); //32 bytes for TX Desc
 
@@ -741,7 +737,7 @@ void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: PS-POLL\n",
 		&reservedpagepacket[BufIndex-TxDescLen], (PSPollLength+TxDescLen));
 
-	SET_H2CCMD_RSVDPAGE_LOC_PSPOLL(u1RsvdPageLoc, PageNum );
+	SET_H2CCMD_RSVDPAGE_LOC_PSPOLL(u1RsvdPageLoc, PageNum);
 
 //------------------------------------------------------------------
 
@@ -895,14 +891,13 @@ void rtl8192d_set_p2p_ctw_period_cmd(struct rtw_adapter* padapter, u8 ctwindow)
 	u8	CTWPeriod = ctwindow;
 
 	FillH2CCmd92D(padapter, H2C_P2P_PS_CTW_CMD, 1, (u8 *)(&CTWPeriod));
-
 }
 
 void rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_state)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter);
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-	struct wifidirect_info	*pwdinfo = &( padapter->wdinfo );
+	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 	struct P2P_PS_Offload_t	*p2p_ps_offload = &pHalData->p2p_ps_offload;
 	u8	i;
 	u16	ctwindow;
@@ -919,7 +914,7 @@ _func_enter_;
 		case P2P_PS_ENABLE:
 			DBG_8192D("P2P_PS_ENABLE\n");
 			// update CTWindow value.
-			if ( pwdinfo->ctwindow > 0 )
+			if (pwdinfo->ctwindow > 0)
 			{
 				p2p_ps_offload->CTWindow_En = 1;
 				ctwindow = pwdinfo->ctwindow;
@@ -928,7 +923,7 @@ _func_enter_;
 			}
 
 			// hw only support 2 set of NoA
-			for ( i=0 ; i<pwdinfo->noa_num ; i++)
+			for (i=0 ; i<pwdinfo->noa_num ; i++)
 			{
 				// To control the register setting for which NOA
 				rtw_write8(padapter, 0x5CF, (i << 4));
@@ -948,7 +943,7 @@ _func_enter_;
 				start_time = pwdinfo->noa_start_time[i];
 				if (pwdinfo->noa_count[i] != 1)
 				{
-					while ( start_time <= (tsf_low+(50*1024) ) )
+					while (start_time <= (tsf_low+(50*1024)))
 					{
 						start_time += pwdinfo->noa_interval[i];
 						if (pwdinfo->noa_count[i] != 255)
@@ -961,7 +956,7 @@ _func_enter_;
 				rtw_write8(padapter, 0x5EC, pwdinfo->noa_count[i]);
 			}
 
-			if ( (pwdinfo->opp_ps == 1) || (pwdinfo->noa_num > 0) )
+			if ((pwdinfo->opp_ps == 1) || (pwdinfo->noa_num > 0))
 			{
 				// rst p2p circuit
 				rtw_write8(padapter, REG_DUAL_TSF_RST, BIT(4));
@@ -997,7 +992,6 @@ _func_enter_;
 	FillH2CCmd92D(padapter, H2C_P2P_PS_OFFLOAD, 1, (u8 *)p2p_ps_offload);
 
 _func_exit_;
-
 }
 #endif // CONFIG_P2P_PS
 
@@ -1007,7 +1001,7 @@ _func_exit_;
 /*
 	ask FW to Reset sync register at Beacon early interrupt
 */
-u8 rtl8192d_reset_tsf(struct rtw_adapter *padapter, u8 reset_port )
+u8 rtl8192d_reset_tsf(struct rtw_adapter *padapter, u8 reset_port)
 {
 	u8	buf[2];
 	u8	res=_SUCCESS;
@@ -1025,7 +1019,7 @@ _func_exit_;
 	return res;
 }
 
-int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port )
+int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port)
 {
 	u8 reset_cnt_before = 0, reset_cnt_after = 0, loop_cnt = 0;
 	u32 reg_reset_tsf_cnt = (IFACE_PORT0==reset_port) ?
@@ -1035,7 +1029,7 @@ int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port )
 	reset_cnt_after = reset_cnt_before = rtw_read8(Adapter,reg_reset_tsf_cnt);
 	rtl8192d_reset_tsf(Adapter, reset_port);
 
-	while ((reset_cnt_after == reset_cnt_before ) && (loop_cnt < 10)) {
+	while ((reset_cnt_after == reset_cnt_before) && (loop_cnt < 10)) {
 		rtw_msleep_os(100);
 		loop_cnt++;
 		reset_cnt_after = rtw_read8(Adapter, reg_reset_tsf_cnt);
@@ -1090,18 +1084,18 @@ _func_enter_;
 		rtw_write8(padapter, 0xf8, test);
 
 		pwowlan_parm.mode |=FW_WOWLAN_FUN_EN;
-		//printk("\n %s 1.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
+		//printk("\n %s 1.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
 		if (pwrpriv->wowlan_pattern ==true){
 			pwowlan_parm.mode |= FW_WOWLAN_PATTERN_MATCH;
-		//printk("\n %s 2.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
+		//printk("\n %s 2.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
 		}
 		if (pwrpriv->wowlan_magic ==true){
 			//pwowlan_parm.mode |=FW_WOWLAN_MAGIC_PKT;
-		//printk("\n %s 3.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
+		//printk("\n %s 3.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
 		}
 		if (pwrpriv->wowlan_unicast ==true){
 			pwowlan_parm.mode |=FW_WOWLAN_UNICAST;
-		//printk("\n %s 4.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
+		//printk("\n %s 4.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
 		}
 
 		rtl8192d_set_FwJoinBssReport_cmd(padapter, 1);
@@ -1119,9 +1113,9 @@ _func_enter_;
 
 		pwowlan_parm.second_mode|=FW_WOWLAN_GPIO_WAKEUP_EN;
 		pwowlan_parm.second_mode|=FW_FW_PARSE_MAGIC_PKT;
-		//printk("\n %s 5.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
+		//printk("\n %s 5.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
 		{	u8 *ptr=(u8 *)&pwowlan_parm;
-			printk("\n %s H2C_WO_WLAN=%x %02x:%02x:%02x:%02x:%02x\n",__func__,H2C_WO_WLAN_CMD,ptr[0],ptr[1],ptr[2],ptr[3],ptr[4] );
+			printk("\n %s H2C_WO_WLAN=%x %02x:%02x:%02x:%02x:%02x\n",__func__,H2C_WO_WLAN_CMD,ptr[0],ptr[1],ptr[2],ptr[3],ptr[4]);
 		}
 		FillH2CCmd92D(padapter, H2C_WO_WLAN_CMD, 4, (u8 *)&pwowlan_parm);
 
@@ -1153,7 +1147,6 @@ _func_enter_;
 _func_exit_;
 
 	return ;
-
 }
 
 #endif  //CONFIG_WOWLAN

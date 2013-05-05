@@ -90,7 +90,6 @@ u32 _rtw_read32(struct rtw_adapter *adapter, u32 addr)
 	r_val = _read32(pintfhdl, addr);
 	_func_exit_;
 	return r_val;
-
 }
 
 int _rtw_write8(struct rtw_adapter *adapter, u32 addr, u8 val)
@@ -208,7 +207,7 @@ void _rtw_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 	_func_enter_;
 
-	if ( (adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
+	if ((adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
 	{
 	     RT_TRACE(_module_rtl871x_io_c_, _drv_info_, ("rtw_read_mem:bDriverStopped(%d) OR bSurpriseRemoved(%d)", adapter->bDriverStopped, adapter->bSurpriseRemoved));
 	     return;
@@ -219,7 +218,6 @@ void _rtw_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	_read_mem(pintfhdl, addr, cnt, pmem);
 
 	_func_exit_;
-
 }
 
 void _rtw_write_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
@@ -236,7 +234,6 @@ void _rtw_write_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	_write_mem(pintfhdl, addr, cnt, pmem);
 
 	_func_exit_;
-
 }
 
 void _rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
@@ -248,7 +245,7 @@ void _rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 	_func_enter_;
 
-	if ( (adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
+	if ((adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
 	{
 	     RT_TRACE(_module_rtl871x_io_c_, _drv_info_, ("rtw_read_port:bDriverStopped(%d) OR bSurpriseRemoved(%d)", adapter->bDriverStopped, adapter->bSurpriseRemoved));
 	     return;
@@ -259,7 +256,6 @@ void _rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	_read_port(pintfhdl, addr, cnt, pmem);
 
 	_func_exit_;
-
 }
 
 void _rtw_read_port_cancel(struct rtw_adapter *adapter)
@@ -272,7 +268,6 @@ void _rtw_read_port_cancel(struct rtw_adapter *adapter)
 
 	if (_read_port_cancel)
 		_read_port_cancel(pintfhdl);
-
 }
 
 u32 _rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
@@ -321,7 +316,6 @@ void _rtw_write_port_cancel(struct rtw_adapter *adapter)
 
 	if (_write_port_cancel)
 		_write_port_cancel(pintfhdl);
-
 }
 
 int rtw_init_io_priv(struct rtw_adapter *padapter, void (*set_intf_ops)(struct _io_ops *pops))

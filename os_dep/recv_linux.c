@@ -47,13 +47,11 @@ int rtw_os_recv_resource_alloc(struct rtw_adapter *padapter, union recv_frame *p
 	precvframe->u.hdr.pkt_newalloc = precvframe->u.hdr.pkt = NULL;
 
 	return res;
-
 }
 
 //free os related resource in union recv_frame
 void rtw_os_recv_resource_free(struct recv_priv *precvpriv)
 {
-
 }
 
 
@@ -119,7 +117,6 @@ int rtw_os_recvbuf_resource_free(struct rtw_adapter *padapter, struct recv_buf *
 
 
 	return ret;
-
 }
 
 void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
@@ -133,7 +130,7 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 	struct security_priv	*psecuritypriv = &padapter->securitypriv;
 	u32 cur_time = 0;
 
-	if ( psecuritypriv->last_mic_err_time == 0 )
+	if (psecuritypriv->last_mic_err_time == 0)
 	{
 		psecuritypriv->last_mic_err_time = rtw_get_current_time();
 	}
@@ -141,7 +138,7 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 	{
 		cur_time = rtw_get_current_time();
 
-		if ( cur_time - psecuritypriv->last_mic_err_time < 60*HZ )
+		if (cur_time - psecuritypriv->last_mic_err_time < 60*HZ)
 		{
 			psecuritypriv->btkip_countermeasure = true;
 			psecuritypriv->last_mic_err_time = 0;
@@ -154,7 +151,7 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 	}
 
 #ifdef CONFIG_IOCTL_CFG80211
-	if ( bgroup )
+	if (bgroup)
 	{
 		key_type |= NL80211_KEYTYPE_GROUP;
 	}
@@ -167,8 +164,8 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 		NULL, GFP_ATOMIC);
 #endif
 
-	memset( &ev, 0x00, sizeof( ev ) );
-	if ( bgroup )
+	memset(&ev, 0x00, sizeof(ev));
+	if (bgroup)
 	{
 	    ev.flags |= IW_MICFAILURE_GROUP;
 	}
@@ -178,12 +175,12 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 	}
 
 	ev.src_addr.sa_family = ARPHRD_ETHER;
-	memcpy( ev.src_addr.sa_data, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
+	memcpy(ev.src_addr.sa_data, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
 
-	memset( &wrqu, 0x00, sizeof( wrqu ) );
-	wrqu.data.length = sizeof( ev );
+	memset(&wrqu, 0x00, sizeof(wrqu));
+	wrqu.data.length = sizeof(ev);
 
-	wireless_send_event( padapter->pnetdev, IWEVMICHAELMICFAILURE, &wrqu, (char*) &ev );
+	wireless_send_event(padapter->pnetdev, IWEVMICHAELMICFAILURE, &wrqu, (char*) &ev);
 }
 
 void rtw_hostapd_mlme_rx(struct rtw_adapter *padapter, union recv_frame *precv_frame)
@@ -333,7 +330,7 @@ _func_enter_;
 	rcu_read_unlock();
 #endif  // (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
 
-	if ( br_port	&& (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true) )
+	if (br_port	&& (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true))
 	{
 		int nat25_handle_frame(struct rtw_adapter *priv, struct sk_buff *skb);
 		if (nat25_handle_frame(padapter, skb) == -1) {
@@ -352,7 +349,7 @@ _func_enter_;
 
 
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-	if ( (pattrib->tcpchk_valid == 1) && (pattrib->tcp_chkrpt == 1) ) {
+	if ((pattrib->tcpchk_valid == 1) && (pattrib->tcp_chkrpt == 1)) {
 		skb->ip_summed = CHECKSUM_UNNECESSARY;
 		//DBG_871X("CHECKSUM_UNNECESSARY\n");
 	} else {
@@ -391,7 +388,6 @@ _recv_indicatepkt_drop:
 	 return _FAIL;
 
 _func_exit_;
-
 }
 
 void rtw_os_read_port(struct rtw_adapter *padapter, struct recv_buf *precvbuf)
@@ -421,5 +417,4 @@ void rtw_init_recv_timer(struct recv_reorder_ctrl *preorder_ctrl)
 	struct rtw_adapter *padapter = preorder_ctrl->padapter;
 
 	_init_timer(&(preorder_ctrl->reordering_ctrl_timer), padapter->pnetdev, _rtw_reordering_ctrl_timeout_handler, preorder_ctrl);
-
 }

@@ -237,7 +237,7 @@ static inline int rtw_netif_queue_stopped(struct net_device *pnetdev)
 	return (netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 0)) &&
 		netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 1)) &&
 		netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 2)) &&
-		netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 3)) );
+		netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 3)));
 #else
 	return netif_queue_stopped(pnetdev);
 #endif
@@ -273,7 +273,7 @@ static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 #include <rtw_byteorder.h>
 
 #ifndef BIT
-	#define BIT(x)	( 1 << (x))
+	#define BIT(x)	(1 << (x))
 #endif
 
 extern int RTW_STATUS_CODE(int error_code);
@@ -497,7 +497,7 @@ struct rtw_netdev_priv_indicator {
 struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv);
 extern struct net_device * rtw_alloc_etherdev(int sizeof_priv);
 
-#define rtw_netdev_priv(netdev) ( ((struct rtw_netdev_priv_indicator *)netdev_priv(netdev))->priv )
+#define rtw_netdev_priv(netdev) (((struct rtw_netdev_priv_indicator *)netdev_priv(netdev))->priv)
 
 extern void rtw_free_netdev(struct net_device * netdev);
 

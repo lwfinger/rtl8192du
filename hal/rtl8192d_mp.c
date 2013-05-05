@@ -31,7 +31,7 @@
 #define dm_CheckTXPowerTracking(a)	rtl8192d_dm_CheckTXPowerTracking(a)
 #define PHY_SetRFPathSwitch(a,b)	rtl8192d_PHY_SetRFPathSwitch(a,b)
 
-void Hal_MptSet8256CCKTxPower( PADAPTER pAdapter,u8 *pTxPower)
+void Hal_MptSet8256CCKTxPower(PADAPTER pAdapter,u8 *pTxPower)
 {
 	u8				TxAGC[2]={0, 0};
 	u32			 tmpval=0;
@@ -50,7 +50,6 @@ void Hal_MptSet8256CCKTxPower( PADAPTER pAdapter,u8 *pTxPower)
 
 	tmpval = (TxAGC[RF_PATH_B]<<16)|(TxAGC[RF_PATH_B]<<8)|(TxAGC[RF_PATH_B]);
 	PHY_SetBBReg(pAdapter, rTxAGC_B_CCK1_55_Mcs32, 0xffffff00, tmpval);
-
 }
 
 
@@ -83,7 +82,6 @@ void Hal_MptSet8256OFDMTxPower(PADAPTER pAdapter,u8 *pTxPower)
 	PHY_SetBBReg(pAdapter, rTxAGC_B_Mcs07_Mcs04, bMaskDWord, TxAGC);
 	PHY_SetBBReg(pAdapter, rTxAGC_B_Mcs11_Mcs08, bMaskDWord, TxAGC);
 	PHY_SetBBReg(pAdapter, rTxAGC_B_Mcs15_Mcs12, bMaskDWord, TxAGC);
-
 
 
 }
@@ -312,8 +310,8 @@ void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
     if (bStart)
     { // Start Carrier Suppression.
         //if (pMgntInfo->dot11CurrentWirelessMode == WIRELESS_MODE_B)
-        if ( pMptCtx->MptRateIndex >= MPT_RATE_1M &&
-            pMptCtx->MptRateIndex <= MPT_RATE_11M )
+        if (pMptCtx->MptRateIndex >= MPT_RATE_1M &&
+            pMptCtx->MptRateIndex <= MPT_RATE_11M)
         { // Start CCK Carrier Suppression
             // 1. if CCK block on?
             if (!PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bCCKEn))
@@ -334,8 +332,8 @@ void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
     else
     { // Stop Carrier Suppression.
         //if (pMgntInfo->dot11CurrentWirelessMode == WIRELESS_MODE_B)
-        if ( pMptCtx->MptRateIndex >= MPT_RATE_1M &&
-            pMptCtx->MptRateIndex <= MPT_RATE_11M )
+        if (pMptCtx->MptRateIndex >= MPT_RATE_1M &&
+            pMptCtx->MptRateIndex <= MPT_RATE_11M)
         { // Stop Carrier Suppression
             PHY_SetBBReg(pAdapter, rCCK0_System, bCCKBBMode, 0x0);    //normal mode
             PHY_SetBBReg(pAdapter, rCCK0_System, bCCKScramble, 0x1);  //turn on scramble setting
@@ -345,11 +343,10 @@ void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
             PHY_SetBBReg(pAdapter, rPMAC_Reset, bBBResetB, 0x1);
         }
     }
-
 }
 
 
-void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart )
+void Hal_SetSingleToneTx (PADAPTER pAdapter , u8 bStart)
 {
    // PMGNT_INFO          pMgntInfo = &(pAdapter->MgntInfo);
     HAL_DATA_TYPE       *pHalData   = GET_HAL_DATA(pAdapter);
@@ -418,7 +415,6 @@ void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart )
 		PHY_SetBBReg(pAdapter, rOFDM1_LSTF, BIT30|BIT29|BIT28, OFDM_ALL_OFF);
 
     }
-
 }
 
 
@@ -449,7 +445,7 @@ s32 Hal_SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
 }
 
 
-void Hal_TriggerRFThermalMeter( PADAPTER pAdapter )
+void Hal_TriggerRFThermalMeter(PADAPTER pAdapter)
 {
    // PADAPTER			  pAdapter = (PADAPTER)Context;
 	PHY_SetRFReg(pAdapter, RF_PATH_A, RF_T_METER, BIT17 | BIT16, 0x03);
@@ -539,7 +535,7 @@ void Hal_SetSingleCarrierTx (PADAPTER pAdapter, u8 bStart)
     u8              CurrChannel = pAdapter->mppriv.channel;
      PMPT_CONTEXT        pMptCtx = &(pAdapter->mppriv.MptCtx);
 
-    if ( bStart )
+    if (bStart)
     {// Start Single Carrier.
         // 1. if OFDM block on?
         if (!PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
@@ -617,7 +613,6 @@ static  void Hal_mpt_StartCckContTx(PADAPTER pAdapter,bool bScrambleOn)
 
     pMptCtx->bCckContTx = true;
     pMptCtx->bOfdmContTx = false;
-
 }   /* mpt_StartCckContTx */
 
 
@@ -637,11 +632,10 @@ static  void Hal_mpt_StopCckCoNtTx(PADAPTER pAdapter)
     //BB Reset
     PHY_SetBBReg(pAdapter, rPMAC_Reset, bBBResetB, 0x0);
     PHY_SetBBReg(pAdapter, rPMAC_Reset, bBBResetB, 0x1);
-
 }   /* mpt_StopCckCoNtTx */
 
 
-static  void Hal_mpt_StartOfdmContTx( PADAPTER pAdapter )
+static  void Hal_mpt_StartOfdmContTx(PADAPTER pAdapter)
 {
 
     HAL_DATA_TYPE   *pHalData   = GET_HAL_DATA(pAdapter);
@@ -671,11 +665,10 @@ static  void Hal_mpt_StartOfdmContTx( PADAPTER pAdapter )
     pMptCtx->bCckContTx = false;
     pMptCtx->bOfdmContTx = true;
     //pMptCtx->bCtxTriggerPktSent = false;
-
 }   /* mpt_StartOfdmContTx */
 
 
-static  void Hal_mpt_StopOfdmContTx( PADAPTER pAdapter)
+static  void Hal_mpt_StopOfdmContTx(PADAPTER pAdapter)
 {
     HAL_DATA_TYPE   *pHalData   = GET_HAL_DATA(pAdapter);
     PMPT_CONTEXT        pMptCtx = &(pAdapter->mppriv.MptCtx);
@@ -693,7 +686,6 @@ static  void Hal_mpt_StopOfdmContTx( PADAPTER pAdapter)
     //BB Reset
     PHY_SetBBReg(pAdapter, rPMAC_Reset, bBBResetB, 0x0);
     PHY_SetBBReg(pAdapter, rPMAC_Reset, bBBResetB, 0x1);
-
 }   /* mpt_StopOfdmContTx */
 
 
@@ -704,11 +696,11 @@ void Hal_SetContinuousTx (PADAPTER pAdapter, u8 bStart)
 
     if (bStart)
     { // Start Continuous Tx.
-        if ( pAdapter->mppriv.rateidx >= MPT_RATE_1M &&
-            pAdapter->mppriv.rateidx <= MPT_RATE_11M )
+        if (pAdapter->mppriv.rateidx >= MPT_RATE_1M &&
+            pAdapter->mppriv.rateidx <= MPT_RATE_11M)
             Hal_mpt_StartCckContTx(pAdapter, true);
         else if (pAdapter->mppriv.rateidx >= MPT_RATE_6M &&
-                pAdapter->mppriv.rateidx <= MPT_RATE_MCS15 )
+                pAdapter->mppriv.rateidx <= MPT_RATE_MCS15)
             Hal_mpt_StartOfdmContTx(pAdapter);
         else
         {
@@ -740,7 +732,6 @@ void Hal_SetContinuousTx (PADAPTER pAdapter, u8 bStart)
 
         }
     }
-
 }
 
 
@@ -766,7 +757,7 @@ u4Byte RT8192DU_Reg_Offset_Conver(PADAPTER Adapter, u4Byte offset)
 	//{
 		if (offset < 0x1000)
 			offset|=0x4000;
-		else if ( (offset&MAC1_ACCESS_PHY0) && !(offset&0x8000))// MAC1 need to access PHY0
+		else if ((offset&MAC1_ACCESS_PHY0) && !(offset&0x8000))// MAC1 need to access PHY0
 			offset &= 0xFFF;
 	//}
 
@@ -909,7 +900,6 @@ phy_RestoreRFENV(
 			break;
 	}
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("<=====phy_RestoreRFENV\n"));
-
 }
 
 void
@@ -954,7 +944,6 @@ phy_EnableRFENV(
 	rtw_msleep_os(1);
 
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("<====phy_EnableRFENV\n"));
-
 }
 
 
@@ -1036,7 +1025,7 @@ void
 			index = 2;
 		else if (channel == 151 || channel == 153 || channel == 163 || channel == 165)
 			index = 3;
-		else if (channel == 157 || channel == 159 )
+		else if (channel == 157 || channel == 159)
 			index = 4;
 
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
@@ -1235,7 +1224,6 @@ void
 	}
 
 	//RT_TRACE(COMP_CMD, DBG_LOUD, ("<====phy_SwitchRfSetting8192D interface %u\n", Adapter->interfaceIndex));
-
 }
 
 void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
@@ -1308,8 +1296,8 @@ void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 		// get the current swing index
 		for (i=0 ; i<CCK_TABLE_SIZE ; i++)
 		{
-			if ( ((CurrCCKSwingVal&0xff) == (u4Byte)CCKSwingTable_Ch1_Ch13[i][0]) &&
-				( ((CurrCCKSwingVal&0xff00)>>8) == (u4Byte)CCKSwingTable_Ch1_Ch13[i][1]) )
+			if (((CurrCCKSwingVal&0xff) == (u4Byte)CCKSwingTable_Ch1_Ch13[i][0]) &&
+				(((CurrCCKSwingVal&0xff00)>>8) == (u4Byte)CCKSwingTable_Ch1_Ch13[i][1]))
 			{
 				CCKSwingIndex = i;
 				//RT_TRACE(COMP_INIT, DBG_LOUD,("Ch1~13, Current reg0x%x = 0x%lx, CCKSwingIndex=0x%x\n", (rCCK0_TxFilter1+2), CurrCCKSwingVal, CCKSwingIndex));
@@ -1326,7 +1314,7 @@ void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 		TempVal2 = 0;
 		TempVal2 =	CCKSwingTable_Ch1_Ch13[CCKSwingIndex][2] +
 					(CCKSwingTable_Ch1_Ch13[CCKSwingIndex][3]<<8) +
-					(CCKSwingTable_Ch1_Ch13[CCKSwingIndex][4]<<16 )+
+					(CCKSwingTable_Ch1_Ch13[CCKSwingIndex][4]<<16)+
 					(CCKSwingTable_Ch1_Ch13[CCKSwingIndex][5]<<24);
 
 		//Write 0xa28  0xa29
@@ -1340,8 +1328,8 @@ void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 	{
 		for (i=0 ; i<CCK_TABLE_SIZE ; i++)
 		{
-			if ( ((CurrCCKSwingVal&0xff) == (u4Byte)CCKSwingTable_Ch14[i][0]) &&
-				( ((CurrCCKSwingVal&0xff00)>>8) == (u4Byte)CCKSwingTable_Ch14[i][1]) )
+			if (((CurrCCKSwingVal&0xff) == (u4Byte)CCKSwingTable_Ch14[i][0]) &&
+				(((CurrCCKSwingVal&0xff00)>>8) == (u4Byte)CCKSwingTable_Ch14[i][1]))
 			{
 				CCKSwingIndex = i;
 				//RT_TRACE(COMP_INIT, DBG_LOUD,("Ch14, Current reg0x%x = 0x%lx, CCKSwingIndex=0x%x\n", (rCCK0_TxFilter1+2), CurrCCKSwingVal, CCKSwingIndex));
@@ -1357,7 +1345,7 @@ void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 		TempVal2= 0;
 		TempVal2 =	CCKSwingTable_Ch14[CCKSwingIndex][2] +
 					(CCKSwingTable_Ch14[CCKSwingIndex][3]<<8) +
-					(CCKSwingTable_Ch14[CCKSwingIndex][4]<<16 )+
+					(CCKSwingTable_Ch14[CCKSwingIndex][4]<<16)+
 					(CCKSwingTable_Ch14[CCKSwingIndex][5]<<24);
 
 		//Write 0xa28  0xa29
@@ -1372,7 +1360,6 @@ void MPT_CCKTxPowerAdjust(PADAPTER Adapter,bool	bInCH14)
 	//RTPRINT(FMP, MP_SWICH_CH, ("0xA24=0x%x\n", TempVal2));
 	PHY_SetBBReg(Adapter, rCCK0_DebugPort,bMaskLWord, TempVal3);
 	//RTPRINT(FMP, MP_SWICH_CH, ("0xA28=0x%x\n", TempVal3));
-
 }
 
 
@@ -1628,7 +1615,6 @@ void Hal_ProSetCrystalCap (PADAPTER pAdapter , u32 CrystalCapVal)
 
 	PHY_SetBBReg(pAdapter, 0x24, 0xF0, CrystalCapVal & 0x0F);
 	PHY_SetBBReg(pAdapter, 0x28, 0xF0000000, (CrystalCapVal & 0xF0) >> 4);
-
 }
 
 

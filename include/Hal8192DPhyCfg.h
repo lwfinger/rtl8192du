@@ -306,7 +306,7 @@ int	rtl8192d_PHY_ConfigRFWithHeaderFile(	struct rtw_adapter *			Adapter,
 /* BB/RF readback check for making sure init OK */
 int	rtl8192d_PHY_CheckBBAndRFOK(	struct rtw_adapter *			Adapter,
 				enum HW90_BLOCK		CheckBlock,
-				enum RF_RADIO_PATH_E	eRFPath	  );
+				enum RF_RADIO_PATH_E	eRFPath	 );
 /* Read initi reg value for tx power setting. */
 void	rtl8192d_PHY_GetHWRegOriginalValue(	struct rtw_adapter *		Adapter	);
 

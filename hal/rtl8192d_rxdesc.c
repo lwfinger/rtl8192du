@@ -50,7 +50,7 @@ static u8 evm_db2percentage(s8 value)
 }
 
 
-static s32 signal_scale_mapping(struct rtw_adapter *padapter, s32 cur_sig )
+static s32 signal_scale_mapping(struct rtw_adapter *padapter, s32 cur_sig)
 {
 	s32 ret_sig;
 
@@ -314,7 +314,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 		//
 		// (2)PWDB, Average PWDB cacluated by hardware (for rate adaptive)
 		//
-		rx_pwr_all = (((pOfdm_buf->pwdb_all) >> 1 )& 0x7f) -106;
+		rx_pwr_all = (((pOfdm_buf->pwdb_all) >> 1)& 0x7f) -106;
 		pwdb_all = query_rx_pwr_percentage(rx_pwr_all);
 
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("PWDB_ALL=%d\n",	pwdb_all));
@@ -338,7 +338,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 				// Do not use shift operation like "rx_evmX >>= 1" because the compilor of free build environment
 				// fill most significant bit to "zero" when doing shifting operation which may change a negative
 				// value to positive one, then the dbm value (which is supposed to be negative)  is not correct anymore.
-				evm = evm_db2percentage( (pOfdm_buf->rxevm_X[i] /*/ 2*/));//dbm
+				evm = evm_db2percentage((pOfdm_buf->rxevm_X[i] /*/ 2*/));//dbm
 
 				RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("RXRATE=%x RXEVM=%x EVM=%s%d\n",
 					pattrib->mcs_rate, pOfdm_buf->rxevm_X[i], "%",evm));
@@ -375,7 +375,6 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 			pattrib->signal_strength= (u8)(signal_scale_mapping(padapter, total_rssi/=rf_rx_num));
 		}
 	}
-
 }
 
 
@@ -422,7 +421,6 @@ static void process_rssi(struct rtw_adapter *padapter,union recv_frame *prframe)
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("UI RSSI = %d, ui_rssi.TotalVal = %d, ui_rssi.TotalNum = %d\n", tmp_val, padapter->recvpriv.signal_strength_data.total_val,padapter->recvpriv.signal_strength_data.total_num));
 	#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
 	}
-
 }// Process_UI_RSSI_8192S
 
 
@@ -453,7 +451,7 @@ static void process_PWDB(struct rtw_adapter *padapter, union recv_frame *prframe
 		if (pattrib->RxPWDBAll > (u32)UndecoratedSmoothedPWDB)
 		{
 			UndecoratedSmoothedPWDB =
-					( ((UndecoratedSmoothedPWDB)*(Rx_Smooth_Factor-1)) +
+					(((UndecoratedSmoothedPWDB)*(Rx_Smooth_Factor-1)) +
 					(pattrib->RxPWDBAll)) /(Rx_Smooth_Factor);
 
 			UndecoratedSmoothedPWDB = UndecoratedSmoothedPWDB + 1;
@@ -461,7 +459,7 @@ static void process_PWDB(struct rtw_adapter *padapter, union recv_frame *prframe
 		else
 		{
 			UndecoratedSmoothedPWDB =
-					( ((UndecoratedSmoothedPWDB)*(Rx_Smooth_Factor-1)) +
+					(((UndecoratedSmoothedPWDB)*(Rx_Smooth_Factor-1)) +
 					(pattrib->RxPWDBAll)) /(Rx_Smooth_Factor);
 		}
 
@@ -537,7 +535,6 @@ static void process_link_qual(struct rtw_adapter *padapter,union recv_frame *prf
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" pattrib->signal_qual =%d\n", pattrib->signal_qual));
 	}
 #endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
-
 }// Process_UiLinkQuality8192S
 
 
@@ -630,7 +627,7 @@ void rtl8192d_query_rx_desc_status(union recv_frame *precvframe, struct recv_sta
 
 	pattrib->crc_err = (u8)((le32_to_cpu(pdesc->rxdw0) >> 14) & 0x1);
 	pattrib->icv_err = (u8)((le32_to_cpu(pdesc->rxdw0) >> 15) & 0x1);
-	pattrib->qos = (u8)(( le32_to_cpu( pdesc->rxdw0 ) >> 23) & 0x1);// Qos data, wireless lan header length is 26
+	pattrib->qos = (u8)((le32_to_cpu(pdesc->rxdw0) >> 23) & 0x1);// Qos data, wireless lan header length is 26
 	pattrib->bdecrypted = (le32_to_cpu(pdesc->rxdw0) & BIT(27))? 0:1;
 
 	//Offset 4
@@ -641,16 +638,16 @@ void rtl8192d_query_rx_desc_status(union recv_frame *precvframe, struct recv_sta
 
 	//Offset 12
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-	if ( le32_to_cpu(pdesc->rxdw3) & BIT(13)){
+	if (le32_to_cpu(pdesc->rxdw3) & BIT(13)){
 		pattrib->tcpchk_valid = 1; // valid
-		if ( le32_to_cpu(pdesc->rxdw3) & BIT(11) ) {
+		if (le32_to_cpu(pdesc->rxdw3) & BIT(11)) {
 			pattrib->tcp_chkrpt = 1; // correct
 			//DBG_8192C("tcp csum ok\n");
 		}
 		else
 			pattrib->tcp_chkrpt = 0; // incorrect
 
-		if ( le32_to_cpu(pdesc->rxdw3) & BIT(12) )
+		if (le32_to_cpu(pdesc->rxdw3) & BIT(12))
 			pattrib->ip_chkrpt = 1; // correct
 		else
 			pattrib->ip_chkrpt = 0; // incorrect
@@ -665,5 +662,4 @@ void rtl8192d_query_rx_desc_status(union recv_frame *precvframe, struct recv_sta
 
 	//Offset 16
 	//Offset 20
-
 }

@@ -45,7 +45,6 @@ void rtl8192du_init_recvbuf(struct rtw_adapter *padapter, struct recv_buf *precv
 		precvbuf->pdata = precvbuf->phead = precvbuf->ptail = precvbuf->pbuf;
 		precvbuf->pend = precvbuf->pdata + MAX_RECVBUF_SZ;
 	}
-
 }
 
 int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
@@ -160,7 +159,6 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 exit:
 
 	return res;
-
 }
 
 void rtl8192du_free_recv_priv (struct rtw_adapter *padapter)

@@ -104,9 +104,9 @@ struct _vlan {
 
 
 
-#define get_vlan_id(pvlan) ((ntohs((unsigned short )pvlan->h_vlan_TCI)) & 0xfff)
-#define get_vlan_priority(pvlan) ((ntohs((unsigned short )pvlan->h_vlan_TCI))>>13)
-#define get_vlan_encap_proto(pvlan) (ntohs((unsigned short )pvlan->h_vlan_encapsulated_proto))
+#define get_vlan_id(pvlan) ((ntohs((unsigned short)pvlan->h_vlan_TCI)) & 0xfff)
+#define get_vlan_priority(pvlan) ((ntohs((unsigned short)pvlan->h_vlan_TCI))>>13)
+#define get_vlan_encap_proto(pvlan) (ntohs((unsigned short)pvlan->h_vlan_encapsulated_proto))
 
 
 #endif	/* _LINUX_IF_ETHER_H */

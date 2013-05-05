@@ -104,7 +104,7 @@ void rtw_os_indicate_scan_done(struct rtw_adapter *padapter, bool aborted)
 }
 
 static struct RT_PMKID_LIST   backupPMKIDList[ NUM_PMKID_CACHE ];
-void rtw_reset_securitypriv(struct rtw_adapter *adapter )
+void rtw_reset_securitypriv(struct rtw_adapter *adapter)
 {
 	u8	backupPMKIDIndex = 0;
 	u8	backupTKIPCountermeasure = 0x00;
@@ -118,9 +118,9 @@ void rtw_reset_securitypriv(struct rtw_adapter *adapter )
 		// Backup the btkip_countermeasure information.
 		// When the countermeasure is trigger, the driver have to disconnect with AP for 60 seconds.
 
-		memset( &backupPMKIDList[ 0 ], 0x00, sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE );
+		memset(&backupPMKIDList[ 0 ], 0x00, sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
 
-		memcpy( &backupPMKIDList[ 0 ], &adapter->securitypriv.PMKIDList[ 0 ], sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE );
+		memcpy(&backupPMKIDList[ 0 ], &adapter->securitypriv.PMKIDList[ 0 ], sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
 		backupPMKIDIndex = adapter->securitypriv.PMKIDIndex;
 		backupTKIPCountermeasure = adapter->securitypriv.btkip_countermeasure;
 		backupTKIPcountermeasure_time = adapter->securitypriv.btkip_countermeasure_time;
@@ -130,7 +130,7 @@ void rtw_reset_securitypriv(struct rtw_adapter *adapter )
 
 		// Added by Albert 2009/02/18
 		// Restore the PMK information to securitypriv structure for the following connection.
-		memcpy( &adapter->securitypriv.PMKIDList[ 0 ], &backupPMKIDList[ 0 ], sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE );
+		memcpy(&adapter->securitypriv.PMKIDList[ 0 ], &backupPMKIDList[ 0 ], sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
 		adapter->securitypriv.PMKIDIndex = backupPMKIDIndex;
 		adapter->securitypriv.btkip_countermeasure = backupTKIPCountermeasure;
 		adapter->securitypriv.btkip_countermeasure_time = backupTKIPcountermeasure_time;
@@ -158,7 +158,7 @@ void rtw_reset_securitypriv(struct rtw_adapter *adapter )
 	}
 }
 
-void rtw_os_indicate_disconnect(struct rtw_adapter *adapter )
+void rtw_os_indicate_disconnect(struct rtw_adapter *adapter)
 {
    //struct RT_PMKID_LIST   backupPMKIDList[ NUM_PMKID_CACHE ];
 
@@ -172,10 +172,9 @@ _func_enter_;
 
 	rtw_indicate_wx_disassoc_event(adapter);
 
-	 rtw_reset_securitypriv( adapter );
+	 rtw_reset_securitypriv(adapter);
 
 _func_exit_;
-
 }
 
 void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie)
@@ -223,7 +222,6 @@ _func_enter_;
 	}
 
 _func_exit_;
-
 }
 
 static void _survey_timer_hdl (void *FunctionContext)
@@ -301,7 +299,6 @@ void rtw_indicate_sta_assoc_event(struct rtw_adapter *padapter, struct sta_info 
 	DBG_8192D("+rtw_indicate_sta_assoc_event\n");
 
 	wireless_send_event(padapter->pnetdev, IWEVREGISTERED, &wrqu, NULL);
-
 }
 
 void rtw_indicate_sta_disassoc_event(struct rtw_adapter *padapter, struct sta_info *psta)
@@ -326,7 +323,6 @@ void rtw_indicate_sta_disassoc_event(struct rtw_adapter *padapter, struct sta_in
 	DBG_8192D("+rtw_indicate_sta_disassoc_event\n");
 
 	wireless_send_event(padapter->pnetdev, IWEVEXPIRED, &wrqu, NULL);
-
 }
 
 
@@ -480,7 +476,6 @@ int hostapd_mode_init(struct rtw_adapter *padapter)
 	}
 
 	return 0;
-
 }
 
 void hostapd_mode_unload(struct rtw_adapter *padapter)
@@ -490,7 +485,6 @@ void hostapd_mode_unload(struct rtw_adapter *padapter)
 
 	unregister_netdev(pnetdev);
 	rtw_free_netdev(pnetdev);
-
 }
 
 #endif

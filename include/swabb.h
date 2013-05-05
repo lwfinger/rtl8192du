@@ -47,26 +47,26 @@
 #define ___swahw32(x) \
 ({ \
 	__u32 __x = (x); \
-	((__u32)( \
+	((__u32)(\
 		(((__u32)(__x) & (__u32)0x0000ffffUL) << 16) | \
-		(((__u32)(__x) & (__u32)0xffff0000UL) >> 16) )); \
+		(((__u32)(__x) & (__u32)0xffff0000UL) >> 16))); \
 })
 #define ___swahb32(x) \
 ({ \
 	__u32 __x = (x); \
-	((__u32)( \
+	((__u32)(\
 		(((__u32)(__x) & (__u32)0x00ff00ffUL) << 8) | \
-		(((__u32)(__x) & (__u32)0xff00ff00UL) >> 8) )); \
+		(((__u32)(__x) & (__u32)0xff00ff00UL) >> 8))); \
 })
 
 #define ___constant_swahw32(x) \
-	((__u32)( \
+	((__u32)(\
 		(((__u32)(x) & (__u32)0x0000ffffUL) << 16) | \
-		(((__u32)(x) & (__u32)0xffff0000UL) >> 16) ))
+		(((__u32)(x) & (__u32)0xffff0000UL) >> 16)))
 #define ___constant_swahb32(x) \
-	((__u32)( \
+	((__u32)(\
 		(((__u32)(x) & (__u32)0x00ff00ffUL) << 8) | \
-		(((__u32)(x) & (__u32)0xff00ff00UL) >> 8) ))
+		(((__u32)(x) & (__u32)0xff00ff00UL) >> 8)))
 
 /*
  * provide defaults when no architecture-specific optimization is detected

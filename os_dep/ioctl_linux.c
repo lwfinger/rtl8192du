@@ -240,7 +240,7 @@ uint	rtw_is_cckrates_included(u8 *rate)
 
 		while (rate[i]!=0)
 		{
-			if  ( (((rate[i]) & 0x7f) == 2)	|| (((rate[i]) & 0x7f) == 4) ||
+			if  ((((rate[i]) & 0x7f) == 2)	|| (((rate[i]) & 0x7f) == 4) ||
 			(((rate[i]) & 0x7f) == 11)  || (((rate[i]) & 0x7f) == 22))
 			return true;
 			i++;
@@ -255,7 +255,7 @@ uint	rtw_is_cckratesonly_included(u8 *rate)
 
 	while (rate[i]!=0)
 	{
-			if  ( (((rate[i]) & 0x7f) != 2) && (((rate[i]) & 0x7f) != 4) &&
+			if  ((((rate[i]) & 0x7f) != 2) && (((rate[i]) & 0x7f) != 4) &&
 				(((rate[i]) & 0x7f) != 11)  && (((rate[i]) & 0x7f) != 22))
 			return false;
 			i++;
@@ -647,7 +647,6 @@ static int wpa_set_auth_algs(struct net_device *dev, u32 value)
 	}
 
 	return ret;
-
 }
 
 static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, u32 param_len)
@@ -1219,7 +1218,6 @@ exit:
 	_func_exit_;
 
 	return ret;
-
 }
 
 static int rtw_wx_get_mode(struct net_device *dev, struct iw_request_info *a,
@@ -1254,7 +1252,6 @@ static int rtw_wx_get_mode(struct net_device *dev, struct iw_request_info *a,
 	_func_exit_;
 
 	return 0;
-
 }
 
 
@@ -1489,7 +1486,6 @@ static int rtw_wx_get_range(struct net_device *dev,
 	_func_exit_;
 
 	return 0;
-
 }
 
 //set bssid flow
@@ -1638,7 +1634,6 @@ static int rtw_wx_get_wap(struct net_device *dev,
 	_func_exit_;
 
 	return 0;
-
 }
 
 static int rtw_wx_set_mlme(struct net_device *dev,
@@ -1679,7 +1674,6 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 	}
 
 	return ret;
-
 }
 
 static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
@@ -2068,7 +2062,6 @@ exit:
 	#endif
 
 	return ret ;
-
 }
 
 //set ssid flow
@@ -2289,7 +2282,6 @@ exit:
 	_func_exit_;
 
 	return ret;
-
 }
 
 static int rtw_wx_set_rate(struct net_device *dev,
@@ -2421,7 +2413,6 @@ static int rtw_wx_set_rts(struct net_device *dev,
 	_func_exit_;
 
 	return 0;
-
 }
 
 static int rtw_wx_get_rts(struct net_device *dev,
@@ -2466,7 +2457,6 @@ static int rtw_wx_set_frag(struct net_device *dev,
 	_func_exit_;
 
 	return 0;
-
 }
 
 static int rtw_wx_get_frag(struct net_device *dev,
@@ -2500,7 +2490,6 @@ static int rtw_wx_get_retry(struct net_device *dev,
 	wrqu->retry.disabled = 1;
 
 	return 0;
-
 }
 
 static int rtw_wx_set_enc(struct net_device *dev,
@@ -2637,7 +2626,6 @@ exit:
 	_func_exit_;
 
 	return ret;
-
 }
 
 static int rtw_wx_get_enc(struct net_device *dev,
@@ -2736,7 +2724,6 @@ static int rtw_wx_get_enc(struct net_device *dev,
 	_func_exit_;
 
 	return ret;
-
 }
 
 static int rtw_wx_get_power(struct net_device *dev,
@@ -2750,7 +2737,6 @@ static int rtw_wx_get_power(struct net_device *dev,
 	wrqu->power.disabled = 1;
 
 	return 0;
-
 }
 
 static int rtw_wx_set_gen_ie(struct net_device *dev,
@@ -2876,7 +2862,6 @@ static int rtw_wx_set_auth(struct net_device *dev,
 	}
 
 	return ret;
-
 }
 
 static int rtw_wx_set_enc_ext(struct net_device *dev,
@@ -2961,7 +2946,6 @@ static int rtw_wx_set_enc_ext(struct net_device *dev,
 
 
 	return ret;
-
 }
 
 
@@ -3127,7 +3111,6 @@ static int dummy(struct net_device *dev, struct iw_request_info *a,
 	//DBG_8192D("cmd_code=%x, fwstate=0x%x\n", a->cmd, get_fwstate(pmlmepriv));
 
 	return -1;
-
 }
 
 static int rtw_wx_set_channel_plan(struct net_device *dev,
@@ -3273,7 +3256,6 @@ _rtw_drvext_hdl_exit:
 #endif
 
 	return 0;
-
 }
 
 static void rtw_dbg_mode_hdl(struct rtw_adapter *padapter, u32 id, u8 *pdata, u32 len)
@@ -3373,7 +3355,6 @@ static void rtw_dbg_mode_hdl(struct rtw_adapter *padapter, u32 id, u8 *pdata, u3
 		default:
 			break;
 	}
-
 }
 
 static int rtw_mp_ioctl_hdl(struct net_device *dev, struct iw_request_info *info,
@@ -3599,7 +3580,6 @@ static int rtw_get_ap_info(struct net_device *dev,
 exit:
 
 	return ret;
-
 }
 
 static int rtw_set_pid(struct net_device *dev,
@@ -3671,7 +3651,6 @@ static int rtw_wps_start(struct net_device *dev,
 exit:
 
 	return ret;
-
 }
 
 #ifdef CONFIG_P2P
@@ -3756,7 +3735,6 @@ static int rtw_wext_p2p_enable(struct net_device *dev,
 
 exit:
 	return ret;
-
 }
 
 static int rtw_p2p_set_go_nego_ssid(struct net_device *dev,
@@ -3775,7 +3753,6 @@ static int rtw_p2p_set_go_nego_ssid(struct net_device *dev,
 	pwdinfo->nego_ssidlen = strlen(extra);
 
 	return ret;
-
 }
 
 
@@ -3814,7 +3791,6 @@ static int rtw_p2p_set_intent(struct net_device *dev,
 	DBG_8192D("[%s] intent = %d\n", __func__, intent);
 
 	return ret;
-
 }
 
 static int rtw_p2p_set_listen_ch(struct net_device *dev,
@@ -3854,7 +3830,6 @@ static int rtw_p2p_set_listen_ch(struct net_device *dev,
 	DBG_8192D("[%s] listen_ch = %d\n", __func__, pwdinfo->listen_channel);
 
 	return ret;
-
 }
 
 static int rtw_p2p_set_op_ch(struct net_device *dev,
@@ -3895,7 +3870,6 @@ static int rtw_p2p_set_op_ch(struct net_device *dev,
 	DBG_8192D("[%s] op_ch = %d\n", __func__, pwdinfo->operating_channel);
 
 	return ret;
-
 }
 
 
@@ -3955,7 +3929,6 @@ static int rtw_p2p_profilefound(struct net_device *dev,
 	}
 
 	return ret;
-
 }
 
 static int rtw_p2p_setDN(struct net_device *dev,
@@ -3968,13 +3941,12 @@ static int rtw_p2p_setDN(struct net_device *dev,
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	memset(pwdinfo->device_name, 0x00, WPS_MAX_DEVICE_NAME_LEN);
 	memcpy(pwdinfo->device_name, extra, wrqu->data.length - 1);
 	pwdinfo->device_name_len = wrqu->data.length - 1;
 	return ret;
-
 }
 
 
@@ -4003,7 +3975,6 @@ static int rtw_p2p_get_status(struct net_device *dev,
 	wrqu->data.length = strlen(extra);
 
 	return ret;
-
 }
 
 //	Commented by Albert 20110520
@@ -4024,7 +3995,6 @@ static int rtw_p2p_get_req_cm(struct net_device *dev,
 	sprintf(extra, "\n\nCM=%s\n", pwdinfo->rx_prov_disc_info.strconfig_method_desc_of_prov_disc_req);
 	wrqu->data.length = strlen(extra);
 	return ret;
-
 }
 
 
@@ -4046,7 +4016,6 @@ static int rtw_p2p_get_role(struct net_device *dev,
 	sprintf(extra, "\n\nRole=%.2d\n", rtw_p2p_role(pwdinfo));
 	wrqu->data.length = strlen(extra);
 	return ret;
-
 }
 
 
@@ -4070,7 +4039,6 @@ static int rtw_p2p_get_peer_ifaddr(struct net_device *dev,
 			pwdinfo->p2p_peer_interface_addr[ 3 ], pwdinfo->p2p_peer_interface_addr[ 4 ], pwdinfo->p2p_peer_interface_addr[ 5 ]);
 	wrqu->data.length = strlen(extra);
 	return ret;
-
 }
 
 static int rtw_p2p_get_peer_devaddr(struct net_device *dev,
@@ -4094,7 +4062,6 @@ static int rtw_p2p_get_peer_devaddr(struct net_device *dev,
 			pwdinfo->rx_prov_disc_info.peerDevAddr[ 4 ], pwdinfo->rx_prov_disc_info.peerDevAddr[ 5 ]);
 	wrqu->data.length = strlen(extra);
 	return ret;
-
 }
 
 static int rtw_p2p_get_peer_devaddr_by_invitation(struct net_device *dev,
@@ -4118,7 +4085,6 @@ static int rtw_p2p_get_peer_devaddr_by_invitation(struct net_device *dev,
 			pwdinfo->p2p_peer_device_addr[ 4 ], pwdinfo->p2p_peer_device_addr[ 5 ]);
 	wrqu->data.length = strlen(extra);
 	return ret;
-
 }
 
 static int rtw_p2p_get_groupid(struct net_device *dev,
@@ -4139,7 +4105,6 @@ static int rtw_p2p_get_groupid(struct net_device *dev,
 			pwdinfo->groupid_info.ssid);
 	wrqu->data.length = strlen(extra);
 	return ret;
-
 }
 
 static int rtw_p2p_get_op_ch(struct net_device *dev,
@@ -4159,7 +4124,6 @@ static int rtw_p2p_get_op_ch(struct net_device *dev,
 	sprintf(extra, "\n\nOp_ch=%.2d\n", pwdinfo->operating_channel);
 	wrqu->data.length = strlen(extra);
 	return ret;
-
 }
 
 inline static void macstr2num(u8 *dst, u8 *src)
@@ -4243,7 +4207,6 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 	memcpy(extra, attr_content_str, wrqu->data.length);
 
 	return ret;
-
 }
 
 #ifdef CONFIG_WFD
@@ -4264,7 +4227,6 @@ static int rtw_p2p_get_peer_wfd_port(struct net_device *dev,
 
 	wrqu->data.length = strlen(extra);
 	return ret;
-
 }
 
 static int rtw_p2p_get_peer_wfd_preferred_connection(struct net_device *dev,
@@ -4283,7 +4245,6 @@ static int rtw_p2p_get_peer_wfd_preferred_connection(struct net_device *dev,
 	wrqu->data.length = strlen(extra);
 	pwdinfo->wfd_info->wfd_pc = false;	//	Reset the WFD preferred connection to P2P
 	return ret;
-
 }
 
 static int rtw_p2p_get_peer_wfd_session_available(struct net_device *dev,
@@ -4302,7 +4263,6 @@ static int rtw_p2p_get_peer_wfd_session_available(struct net_device *dev,
 	wrqu->data.length = strlen(extra);
 	pwdinfo->wfd_info->peer_session_avail = true;	//	Reset the WFD session available
 	return ret;
-
 }
 
 #endif // CONFIG_WFD
@@ -4395,7 +4355,6 @@ static int rtw_p2p_get_go_device_address(struct net_device *dev,
 	memcpy(extra, go_devadd_str, wrqu->data.length);
 
 	return ret;
-
 }
 
 static int rtw_p2p_get_device_type(struct net_device *dev,
@@ -4472,7 +4431,6 @@ static int rtw_p2p_get_device_type(struct net_device *dev,
 	memcpy(extra, dev_type_str, wrqu->data.length);
 
 	return ret;
-
 }
 
 static int rtw_p2p_get_device_name(struct net_device *dev,
@@ -4545,7 +4503,6 @@ static int rtw_p2p_get_device_name(struct net_device *dev,
 	memcpy(extra, dev_name_str, wrqu->data.length);
 
 	return ret;
-
 }
 
 static int rtw_p2p_get_invitation_procedure(struct net_device *dev,
@@ -4633,7 +4590,6 @@ static int rtw_p2p_get_invitation_procedure(struct net_device *dev,
 	memcpy(extra, inv_proc_str, wrqu->data.length);
 
 	return ret;
-
 }
 
 static int rtw_p2p_connect(struct net_device *dev,
@@ -4986,7 +4942,6 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 exit:
 
 	return ret;
-
 }
 
 static int rtw_p2p_set_persistent(struct net_device *dev,
@@ -5051,7 +5006,6 @@ static int rtw_p2p_set_persistent(struct net_device *dev,
 exit:
 
 	return ret;
-
 }
 
 #ifdef CONFIG_WFD
@@ -5187,7 +5141,6 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 exit:
 
 	return ret;
-
 }
 
 static int rtw_p2p_set_wfd_device_type(struct net_device *dev,
@@ -5220,7 +5173,6 @@ static int rtw_p2p_set_wfd_device_type(struct net_device *dev,
 exit:
 
 	return ret;
-
 }
 
 static int rtw_p2p_set_scan_result_type(struct net_device *dev,
@@ -5264,7 +5216,6 @@ static int rtw_p2p_set_scan_result_type(struct net_device *dev,
 exit:
 
 	return ret;
-
 }
 
 //	To set the WFD session available to enable or disable
@@ -5306,7 +5257,6 @@ static int rtw_p2p_set_sa(struct net_device *dev,
 exit:
 
 	return ret;
-
 }
 #endif //CONFIG_WFD
 
@@ -5552,7 +5502,6 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 exit:
 
 	return ret;
-
 }
 
 //	Added by Albert 20110328
@@ -5598,7 +5547,6 @@ static int rtw_p2p_got_wpsinfo(struct net_device *dev,
 	}
 
 	return ret;
-
 }
 
 #endif //CONFIG_P2P
@@ -5716,7 +5664,6 @@ static int rtw_p2p_set(struct net_device *dev,
 #endif //CONFIG_P2P
 
 	return ret;
-
 }
 
 static int rtw_p2p_get(struct net_device *dev,
@@ -5769,7 +5716,6 @@ static int rtw_p2p_get(struct net_device *dev,
 #endif //CONFIG_P2P
 
 	return ret;
-
 }
 
 static int rtw_p2p_get2(struct net_device *dev,
@@ -5825,7 +5771,6 @@ bad:
 #endif //CONFIG_P2P
 
 	return ret;
-
 }
 
 extern int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname);
@@ -5895,7 +5840,6 @@ static int rtw_rereg_nd_name(struct net_device *dev,
 	}
 exit:
 	return ret;
-
 }
 
 void mac_reg_dump(struct rtw_adapter *padapter)
@@ -6523,7 +6467,6 @@ static int rtw_dbg_port(struct net_device *dev,
 
 
 	return ret;
-
 }
 
 static int wpa_set_param(struct net_device *dev, u8 name, u32 value)
@@ -6619,7 +6562,6 @@ static int wpa_set_param(struct net_device *dev, u8 name, u32 value)
 	}
 
 	return ret;
-
 }
 
 static int wpa_mlme(struct net_device *dev, u32 command, u32 reason)
@@ -6649,7 +6591,6 @@ static int wpa_mlme(struct net_device *dev, u32 command, u32 reason)
 	}
 
 	return ret;
-
 }
 
 static int wpa_supplicant_ioctl(struct net_device *dev, struct iw_point *p)
@@ -6714,7 +6655,6 @@ out:
 	//up(&ieee->wx_sem);
 
 	return ret;
-
 }
 
 #ifdef CONFIG_AP_MODE
@@ -6753,7 +6693,6 @@ static u8 set_pairwise_key(struct rtw_adapter *padapter, struct sta_info *psta)
 exit:
 
 	return res;
-
 }
 
 static int set_group_key(struct rtw_adapter *padapter, u8 *key, u8 alg, int keyid)
@@ -6819,7 +6758,6 @@ exit:
 
 	return res;
 
-
 }
 
 static int set_wep_key(struct rtw_adapter *padapter, u8 *key, u8 keylen, int keyid)
@@ -6839,7 +6777,6 @@ static int set_wep_key(struct rtw_adapter *padapter, u8 *key, u8 keylen, int key
 	}
 
 	return set_group_key(padapter, key, alg, keyid);
-
 }
 
 
@@ -7163,7 +7100,6 @@ exit:
 	kfree(pwep);
 
 	return ret;
-
 }
 
 static int rtw_set_beacon(struct net_device *dev, struct ieee_param *param, int len)
@@ -7193,7 +7129,6 @@ static int rtw_set_beacon(struct net_device *dev, struct ieee_param *param, int 
 
 
 	return ret;
-
 }
 
 static int rtw_hostapd_sta_flush(struct net_device *dev)
@@ -7208,7 +7143,6 @@ static int rtw_hostapd_sta_flush(struct net_device *dev)
 	ret = rtw_sta_flush(padapter);
 
 	return ret;
-
 }
 
 static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
@@ -7296,7 +7230,6 @@ static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 	}
 
 	return ret;
-
 }
 
 static int rtw_del_sta(struct net_device *dev, struct ieee_param *param)
@@ -7347,7 +7280,6 @@ static int rtw_del_sta(struct net_device *dev, struct ieee_param *param)
 
 
 	return ret;
-
 }
 
 static int rtw_ioctl_get_sta_data(struct net_device *dev, struct ieee_param *param, int len)
@@ -7418,7 +7350,6 @@ static int rtw_ioctl_get_sta_data(struct net_device *dev, struct ieee_param *par
 	}
 
 	return ret;
-
 }
 
 static int rtw_get_sta_wpaie(struct net_device *dev, struct ieee_param *param)
@@ -7471,7 +7402,6 @@ static int rtw_get_sta_wpaie(struct net_device *dev, struct ieee_param *param)
 	}
 
 	return ret;
-
 }
 
 static int rtw_set_wps_beacon(struct net_device *dev, struct ieee_param *param, int len)
@@ -7514,7 +7444,6 @@ static int rtw_set_wps_beacon(struct net_device *dev, struct ieee_param *param, 
 
 
 	return ret;
-
 }
 
 static int rtw_set_wps_probe_resp(struct net_device *dev, struct ieee_param *param, int len)
@@ -7548,7 +7477,6 @@ static int rtw_set_wps_probe_resp(struct net_device *dev, struct ieee_param *par
 
 
 	return ret;
-
 }
 
 static int rtw_set_wps_assoc_resp(struct net_device *dev, struct ieee_param *param, int len)
@@ -7582,7 +7510,6 @@ static int rtw_set_wps_assoc_resp(struct net_device *dev, struct ieee_param *par
 
 
 	return ret;
-
 }
 
 static int rtw_set_hidden_ssid(struct net_device *dev, struct ieee_param *param, int len)
@@ -7658,7 +7585,6 @@ static int rtw_ioctl_acl_remove_sta(struct net_device *dev, struct ieee_param *p
 	ret = rtw_acl_remove_sta(padapter, param->sta_addr);
 
 	return ret;
-
 }
 
 static int rtw_ioctl_acl_add_sta(struct net_device *dev, struct ieee_param *param, int len)
@@ -7680,7 +7606,6 @@ static int rtw_ioctl_acl_add_sta(struct net_device *dev, struct ieee_param *para
 	ret = rtw_acl_add_sta(padapter, param->sta_addr);
 
 	return ret;
-
 }
 
 static int rtw_ioctl_set_macaddr_acl(struct net_device *dev, struct ieee_param *param, int len)
@@ -7840,7 +7765,6 @@ static int rtw_hostapd_ioctl(struct net_device *dev, struct iw_point *p)
 out:
 
 	return ret;
-
 }
 #endif
 
@@ -8026,7 +7950,6 @@ FREE_EXT:
 	//		dev->name, ret);
 
 	return ret;
-
 }
 
 static int rtw_mp_efuse_get(struct net_device *dev,
@@ -9322,7 +9245,6 @@ static int rtw_mp_phypara(struct net_device *dev,
 	wrqu->length = strlen(extra) + 1;
 
 return 0;
-
 }
 
 
@@ -9518,7 +9440,7 @@ static int rtw_wfd_tdls_enable(struct net_device *dev,
 
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	if (extra[ 0 ] == '0')
 	{
@@ -9546,7 +9468,7 @@ static int rtw_tdls_weaksec(struct net_device *dev,
 	u8 i, j;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	if (extra[ 0 ] == '0')
 	{
@@ -9579,7 +9501,7 @@ static int rtw_tdls_enable(struct net_device *dev,
 	u8 tdls_sta[NUM_STA][ETH_ALEN];
 	u8 empty_hwaddr[ETH_ALEN] = { 0x00 };
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	memset(tdls_sta, 0x00, sizeof(tdls_sta));
 
@@ -9644,7 +9566,7 @@ static int rtw_tdls_setup(struct net_device *dev,
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 #endif // CONFIG_WFD
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	for (i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -9687,7 +9609,7 @@ static int rtw_tdls_teardown(struct net_device *dev,
 	struct sta_info *ptdls_sta = NULL;
 	u8 mac_addr[ETH_ALEN];
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	for (i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -9718,7 +9640,7 @@ static int rtw_tdls_discovery(struct net_device *dev,
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	issue_tdls_dis_req(padapter, NULL);
 
@@ -9740,7 +9662,7 @@ static int rtw_tdls_ch_switch (struct net_device *dev,
 	u8 i, j, mac_addr[ETH_ALEN];
 	struct sta_info *ptdls_sta = NULL;
 
-	DBG_8192S("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192S("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	for (i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -9772,7 +9694,7 @@ static int rtw_tdls_pson(struct net_device *dev,
 	u8 i, j, mac_addr[ETH_ALEN];
 	struct sta_info *ptdls_sta = NULL;
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	for (i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -9801,7 +9723,7 @@ static int rtw_tdls_psoff(struct net_device *dev,
 	u8 i, j, mac_addr[ETH_ALEN];
 	struct sta_info *ptdls_sta = NULL;
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	for (i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
@@ -9830,7 +9752,7 @@ static int rtw_tdls_setip(struct net_device *dev,
 	struct wifi_display_info *pwfd_info = ptdlsinfo->wfd_info;
 	u8 i=0, j=0, k=0, tag=0, ip[3] = { 0xff }, *ptr = extra;
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length - 1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length - 1);
 
 
 	while (i < 4)
@@ -9922,7 +9844,6 @@ static int rtw_tdls_getport(struct net_device *dev,
 #endif //CONFIG_TDLS
 
 	return ret;
-
 }
 
 //WFDTDLS, for sigma test
@@ -9954,7 +9875,6 @@ static int rtw_tdls_dis_result(struct net_device *dev,
 #endif //CONFIG_TDLS
 
 	return ret;
-
 }
 
 //WFDTDLS, for sigma test
@@ -9989,7 +9909,6 @@ static int rtw_wfd_tdls_status(struct net_device *dev,
 #endif //CONFIG_TDLS
 
 	return ret;
-
 }
 
 static int rtw_tdls_ch_switch_off(struct net_device *dev,
@@ -10004,7 +9923,7 @@ static int rtw_tdls_ch_switch_off(struct net_device *dev,
 	u8 i, j, mac_addr[ETH_ALEN];
 	struct sta_info *ptdls_sta = NULL;
 
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1 );
+	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
 	for (i=0, j=0 ; i < ETH_ALEN; i++, j+=3){
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));

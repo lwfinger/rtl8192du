@@ -173,7 +173,6 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 	RT_TRACE(_module_hal_init_c_,_drv_err_,("-rtl871x_hal_init:status=0x%x\n",status));
 
 	return status;
-
 }
 
 uint rtw_hal_deinit(struct rtw_adapter *padapter)
@@ -229,7 +228,6 @@ void rtw_hal_enable_interrupt(struct rtw_adapter *padapter)
 		padapter->HalFunc.enable_interrupt(padapter);
 	else
 		DBG_8192D("%s: HalFunc.enable_interrupt is NULL!\n", __func__);
-
 }
 void rtw_hal_disable_interrupt(struct rtw_adapter *padapter)
 {
@@ -237,7 +235,6 @@ void rtw_hal_disable_interrupt(struct rtw_adapter *padapter)
 		padapter->HalFunc.disable_interrupt(padapter);
 	else
 		DBG_8192D("%s: HalFunc.disable_interrupt is NULL!\n", __func__);
-
 }
 
 u32	rtw_hal_inirp_init(struct rtw_adapter *padapter)
@@ -257,7 +254,6 @@ u32	rtw_hal_inirp_deinit(struct rtw_adapter *padapter)
 		return padapter->HalFunc.inirp_deinit(padapter);
 
 	return _FAIL;
-
 }
 
 u8 rtw_hal_intf_ps_func(struct rtw_adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val)

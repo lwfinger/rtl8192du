@@ -257,17 +257,14 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 
 
 	return _SUCCESS;
-
 }
 
 void usb_read_mem(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 {
-
 }
 
 void usb_write_mem(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 {
-
 }
 
 
@@ -445,7 +442,6 @@ check_completion:
 	}
 
 _func_exit_;
-
 }
 
 u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
@@ -470,9 +466,9 @@ _func_enter_;
 	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx)) {
 		#ifdef DBG_TX
 		DBG_8192D(" DBG_TX %s:%d bDriverStopped%d, bSurpriseRemoved:%d, pnp_bstop_trx:%d\n",__func__, __LINE__
-			,padapter->bDriverStopped, padapter->bSurpriseRemoved, padapter->pwrctrlpriv.pnp_bstop_trx );
+			,padapter->bDriverStopped, padapter->bSurpriseRemoved, padapter->pwrctrlpriv.pnp_bstop_trx);
 		#endif
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port:( padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
+		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port:(padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_TX_DENY);
 		goto exit;
 	}
@@ -532,8 +528,8 @@ _func_enter_;
 	pipe = ffaddr2pipehdl(pdvobj, addr);
 
 #ifdef CONFIG_REDUCE_USB_TX_INT
-	if ( (pxmitpriv->free_xmitbuf_cnt%NR_XMITBUFF == 0)
-		|| (pxmitbuf->ext_tag == true) )
+	if ((pxmitpriv->free_xmitbuf_cnt%NR_XMITBUFF == 0)
+		|| (pxmitbuf->ext_tag == true))
 	{
 		purb->transfer_flags  &=  (~URB_NO_INTERRUPT);
 	} else {
@@ -603,7 +599,6 @@ exit:
 		rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
 _func_exit_;
 	return ret;
-
 }
 
 void usb_write_port_cancel(struct intf_hdl *pintfhdl)

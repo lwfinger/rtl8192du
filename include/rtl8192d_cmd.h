@@ -108,7 +108,7 @@ void	rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_sta
 #endif //CONFIG_P2P
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
-int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port );
+int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port);
 #endif	// CONFIG_TSF_RESET_OFFLOAD
 
 #ifdef CONFIG_WOWLAN

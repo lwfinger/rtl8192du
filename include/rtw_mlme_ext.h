@@ -27,7 +27,7 @@
 
 
 //	Commented by Albert 20101105
-//	Increase the SURVEY_TO value from 100 to 150  ( 100ms to 150ms )
+//	Increase the SURVEY_TO value from 100 to 150  (100ms to 150ms)
 //	The Realtek 8188CE SoftAP will spend around 100ms to send the probe response after receiving the probe request.
 //	So, this driver tried to extend the dwell time for each scanning channel.
 //	This will increase the chance to receive the probe response from SoftAP.
@@ -611,7 +611,7 @@ void issue_p2p_GO_request(struct rtw_adapter *padapter, u8* raddr);
 void issue_probereq_p2p(struct rtw_adapter *padapter, u8 *da);
 int issue_probereq_p2p_ex(struct rtw_adapter *adapter, u8 *da, int try_cnt, int wait_ms);
 void issue_p2p_invitation_response(struct rtw_adapter *padapter, u8* raddr, u8 dialogToken, u8 success);
-void issue_p2p_invitation_request(struct rtw_adapter *padapter, u8* raddr );
+void issue_p2p_invitation_request(struct rtw_adapter *padapter, u8* raddr);
 #endif //CONFIG_P2P
 void issue_beacon(struct rtw_adapter *padapter);
 void issue_probersp(struct rtw_adapter *padapter, unsigned char *da, u8 is_valid_p2p_probereq);

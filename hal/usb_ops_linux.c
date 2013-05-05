@@ -66,7 +66,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	}
 
 	if (len>MAX_VENDOR_REQ_CMD_SIZE){
-		DBG_8192D( "[%s] Buffer len error ,vendor request failed\n", __func__ );
+		DBG_8192D("[%s] Buffer len error ,vendor request failed\n", __func__);
 		status = -EINVAL;
 		goto exit;
 	}
@@ -81,7 +81,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	pIo_buf = pdvobjpriv->usb_vendor_req_buf;
 #else
 	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
-	tmp_buf = rtw_malloc( (u32) len + ALIGNMENT_UNIT);
+	tmp_buf = rtw_malloc((u32) len + ALIGNMENT_UNIT);
 	tmp_buflen =  (u32)len + ALIGNMENT_UNIT;
 	#else // use stack memory
 	tmp_buflen = MAX_USB_IO_CTL_SIZE;
@@ -90,11 +90,11 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	// Added by Albert 2010/02/09
 	// For mstar platform, mstar suggests the address for USB IO should be 16 bytes alignment.
 	// Trying to fix it here.
-	pIo_buf = (tmp_buf==NULL)?NULL:tmp_buf + ALIGNMENT_UNIT -((SIZE_PTR)(tmp_buf) & 0x0f );
+	pIo_buf = (tmp_buf==NULL)?NULL:tmp_buf + ALIGNMENT_UNIT -((SIZE_PTR)(tmp_buf) & 0x0f);
 #endif
 
-	if ( pIo_buf== NULL) {
-		DBG_8192D( "[%s] pIo_buf == NULL\n", __func__ );
+	if (pIo_buf== NULL) {
+		DBG_8192D("[%s] pIo_buf == NULL\n", __func__);
 		status = -ENOMEM;
 		goto release_mutex;
 	}
@@ -112,17 +112,17 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 		{
 			pipe = usb_sndctrlpipe(udev, 0);//write_out
 			reqtype =  REALTEK_USB_VENQT_WRITE;
-			memcpy( pIo_buf, pdata, len);
+			memcpy(pIo_buf, pdata, len);
 		}
 
 		status = rtw_usb_control_msg(udev, pipe, request, reqtype, value, index, pIo_buf, len, RTW_USB_CONTROL_MSG_TIMEOUT);
 
-		if ( status == len)   // Success this control transfer.
+		if (status == len)   // Success this control transfer.
 		{
 			rtw_reset_continual_urb_error(pdvobjpriv);
-			if ( requesttype == 0x01 )
+			if (requesttype == 0x01)
 			{   // For Control read transfer, we have to copy the read data from pIo_buf to pdata.
-				memcpy( pdata, pIo_buf,  len );
+				memcpy(pdata, pIo_buf,  len);
 			}
 		}
 		else { // error cases
@@ -145,14 +145,14 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 			else // status != len && status >= 0
 			{
 				if (status > 0) {
-					if ( requesttype == 0x01 )
+					if (requesttype == 0x01)
 					{   // For Control read transfer, we have to copy the read data from pIo_buf to pdata.
-						memcpy( pdata, pIo_buf,  len );
+						memcpy(pdata, pIo_buf,  len);
 					}
 				}
 			}
 
-			if (rtw_inc_and_chk_continual_urb_error(pdvobjpriv) == true ){
+			if (rtw_inc_and_chk_continual_urb_error(pdvobjpriv) == true){
 				padapter->bSurpriseRemoved = true;
 				break;
 			}
@@ -160,7 +160,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 		}
 
 		// firmware download is checksumed, don't retry
-		if ( (value >= FW_8192D_START_ADDRESS && value <= FW_8192D_END_ADDRESS) || status == len )
+		if ((value >= FW_8192D_START_ADDRESS && value <= FW_8192D_END_ADDRESS) || status == len)
 			break;
 
 	}
@@ -176,7 +176,6 @@ release_mutex:
 	#endif
 exit:
 	return status;
-
 }
 
 static void usb_read_reg_rf_byfw(struct intf_hdl *pintfhdl, u16 byteCount, u32 registerIndex, void *buffer)
@@ -208,7 +207,6 @@ static void usb_read_reg_rf_byfw(struct intf_hdl *pintfhdl, u16 byteCount, u32 r
 	// IN a vendor request to read back MAC register.
 	//
 	usbctrl_vendorreq(pintfhdl, 0x05, offset, wPage, buffer, byteCount, 0x01);
-
 }
 
 static void usb_read_reg(struct intf_hdl *pintfhdl, u16 value, void *pdata, u16 len)
@@ -273,7 +271,6 @@ static u8 usb_read8(struct intf_hdl *pintfhdl, u32 addr)
 	_func_exit_;
 
 	return (u8)(le32_to_cpu(data)&0x0ff);
-
 }
 
 static u16 usb_read16(struct intf_hdl *pintfhdl, u32 addr)
@@ -292,7 +289,6 @@ static u16 usb_read16(struct intf_hdl *pintfhdl, u32 addr)
 	_func_exit_;
 
 	return (u16)(le32_to_cpu(data)&0xffff);
-
 }
 
 static u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
@@ -316,7 +312,6 @@ static u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 	_func_exit_;
 
 	return le32_to_cpu(data);
-
 }
 
 static int usb_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val)
@@ -361,7 +356,6 @@ static int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
 	_func_exit_;
 
 	return ret;
-
 }
 
 static int usb_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
@@ -382,7 +376,6 @@ static int usb_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
 	_func_exit_;
 
 	return ret;
-
 }
 
 static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata)
@@ -396,14 +389,13 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 
 	wvalue = (u16)(addr&0x0000ffff);
 	len = length;
-	 memcpy(buf, pdata, len );
+	 memcpy(buf, pdata, len);
 
 	ret = usb_write_reg(pintfhdl, wvalue, buf, len);
 
 	_func_exit_;
 
 	return ret;
-
 }
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
@@ -450,7 +442,6 @@ static void usb_read_interrupt_complete(struct urb *purb, struct pt_regs *regs)
 				break;
 		}
 	}
-
 }
 
 static u32 usb_read_interrupt(struct intf_hdl *pintfhdl, u32 addr)
@@ -583,8 +574,8 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 					precvframe_if2->u.hdr.pkt = pkt_copy;
 					precvframe_if2->u.hdr.rx_head = pkt_copy->data;
 					precvframe_if2->u.hdr.rx_end = pkt_copy->data + alloc_sz;
-					skb_reserve( pkt_copy, 8 - ((SIZE_PTR)( pkt_copy->data ) & 7 ));//force pkt_copy->data at 8-byte alignment address
-					skb_reserve( pkt_copy, shift_sz );//force ip_hdr at 8-byte alignment address according to shift_sz.
+					skb_reserve(pkt_copy, 8 - ((SIZE_PTR)(pkt_copy->data) & 7));//force pkt_copy->data at 8-byte alignment address
+					skb_reserve(pkt_copy, shift_sz);//force ip_hdr at 8-byte alignment address according to shift_sz.
 					memcpy(pkt_copy->data, pbuf, skb_len);
 					precvframe_if2->u.hdr.rx_data = precvframe_if2->u.hdr.rx_tail = pkt_copy->data;
 				}
@@ -609,7 +600,6 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 #endif
 
 	return ret;
-
 }
 
 #ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
@@ -712,8 +702,8 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 			precvframe->u.hdr.pkt = pkt_copy;
 			precvframe->u.hdr.rx_head = pkt_copy->data;
 			precvframe->u.hdr.rx_end = pkt_copy->data + alloc_sz;
-			skb_reserve( pkt_copy, 8 - ((SIZE_PTR)( pkt_copy->data ) & 7 ));//force pkt_copy->data at 8-byte alignment address
-			skb_reserve( pkt_copy, shift_sz );//force ip_hdr at 8-byte alignment address according to shift_sz.
+			skb_reserve(pkt_copy, 8 - ((SIZE_PTR)(pkt_copy->data) & 7));//force pkt_copy->data at 8-byte alignment address
+			skb_reserve(pkt_copy, shift_sz);//force ip_hdr at 8-byte alignment address according to shift_sz.
 			memcpy(pkt_copy->data, (pbuf + pattrib->shift_sz + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
 			precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pkt_copy->data;
 		}
@@ -811,7 +801,6 @@ void rtl8192du_recv_tasklet(void *priv)
 
 		rtw_read_port(padapter, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf);
 	}
-
 }
 
 static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
@@ -882,7 +871,6 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 exit:
 
 _func_exit_;
-
 }
 
 static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
@@ -900,7 +888,7 @@ _func_enter_;
 
 	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)
 	{
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port:( padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
+		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port:(padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
 		return _FAIL;
 	}
 
@@ -1046,8 +1034,8 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 			precvframe->u.hdr.pkt = pkt_copy;
 			precvframe->u.hdr.rx_head = pkt_copy->data;
 			precvframe->u.hdr.rx_end = pkt_copy->data + alloc_sz;
-			skb_reserve( pkt_copy, 8 - ((SIZE_PTR)( pkt_copy->data ) & 7 ));//force pkt_copy->data at 8-byte alignment address
-			skb_reserve( pkt_copy, shift_sz );//force ip_hdr at 8-byte alignment address according to shift_sz.
+			skb_reserve(pkt_copy, 8 - ((SIZE_PTR)(pkt_copy->data) & 7));//force pkt_copy->data at 8-byte alignment address
+			skb_reserve(pkt_copy, shift_sz);//force ip_hdr at 8-byte alignment address according to shift_sz.
 			memcpy(pkt_copy->data, (pbuf + pattrib->shift_sz + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
 			precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pkt_copy->data;
 		}
@@ -1155,7 +1143,6 @@ void rtl8192du_recv_tasklet(void *priv)
 #endif
 
 	}
-
 }
 
 
@@ -1243,7 +1230,6 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 exit:
 
 _func_exit_;
-
 }
 
 static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
@@ -1263,7 +1249,7 @@ _func_enter_;
 
 	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)
 	{
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port:( padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
+		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port:(padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
 		return _FAIL;
 	}
 
@@ -1377,7 +1363,6 @@ void rtl8192du_xmit_tasklet(void *priv)
 		if (ret==false)
 			break;
 	}
-
 }
 
 void rtl8192du_set_intf_ops(struct _io_ops	*pops)
@@ -1413,5 +1398,4 @@ void rtl8192du_set_intf_ops(struct _io_ops	*pops)
 #endif
 
 	_func_exit_;
-
 }

@@ -20,7 +20,7 @@
 /******************************************************************************
  *
  *
- * Module:	HalRf6052.c	( Source C File)
+ * Module:	HalRf6052.c	(Source C File)
  *
  * Note:	Provide RF 6052 series relative API.
  *
@@ -97,7 +97,6 @@ void rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	Adapter,
 										u16		DataRate)
 {
 // We do not support gain table change inACUT now !!!! Delete later !!!
-
 }	/* RF_ChangeTxPath */
 
 
@@ -145,7 +144,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 			break;
 
 		default:
-			//RT_TRACE(COMP_DBG, DBG_LOUD, ("PHY_SetRF8225Bandwidth(): unknown Bandwidth: %#X\n",Bandwidth ));
+			//RT_TRACE(COMP_DBG, DBG_LOUD, ("PHY_SetRF8225Bandwidth(): unknown Bandwidth: %#X\n",Bandwidth));
 			break;
 	}
 	//RT_TRACE(COMP_MLME,DBG_LOUD,("<==== PHY_RF6052SetBandwidth()Bandwidth:%d\n",Bandwidth));
@@ -255,7 +254,6 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 	PHY_SetBBReg(Adapter, rTxAGC_B_CCK1_55_Mcs32, 0xffffff00, tmpval);
 	//RTPRINT(FPHY, PHY_TXPWR, ("CCK PWR 1~5.5M (rf-B) = 0x%x (reg 0x%x)\n",
 	//	tmpval, rTxAGC_B_CCK1_55_Mcs32));
-
 }	/* PHY_RF6052SetCckTxPower */
 
 //
@@ -868,7 +866,6 @@ PHY_RF6052_Config8192D(
 	rtStatus = phy_RF6052_Config_ParaFile(Adapter);
 
 	return rtStatus;
-
 }
 
 
@@ -908,7 +905,6 @@ PHY_RFShadowRead(
 	u32				Offset)
 {
 	return	RF_Shadow[eRFPath][Offset].Value;
-
 }	/* PHY_RFShadowRead */
 
 
@@ -921,7 +917,6 @@ PHY_RFShadowWrite(
 {
 	RF_Shadow[eRFPath][Offset].Value = (Data & bRFRegOffsetMask);
 	RF_Shadow[eRFPath][Offset].Driver_Write = true;
-
 }	/* PHY_RFShadowWrite */
 
 bool
@@ -977,7 +972,6 @@ PHY_RFShadowRecorver(
 			//eRFPath, Offset, RF_Shadow[eRFPath][Offset].Value));
 		}
 	}
-
 }	/* PHY_RFShadowRecorver */
 void
 PHY_RFShadowCompareAll(
@@ -996,7 +990,6 @@ PHY_RFShadowCompareAll(
 			PHY_RFShadowCompare(Adapter, (enum RF_RADIO_PATH_E)eRFPath, Offset);
 		}
 	}
-
 }	/* PHY_RFShadowCompareAll */
 void
 PHY_RFShadowRecorverAll(
@@ -1015,7 +1008,6 @@ PHY_RFShadowRecorverAll(
 			PHY_RFShadowRecorver(Adapter, (enum RF_RADIO_PATH_E)eRFPath, Offset);
 		}
 	}
-
 }	/* PHY_RFShadowRecorverAll */
 void
 PHY_RFShadowCompareFlagSet(
@@ -1032,7 +1024,6 @@ PHY_RFShadowCompareFlagSet(
 {
 	// Set True or False!!!
 	RF_Shadow[eRFPath][Offset].Compare = Type;
-
 }	/* PHY_RFShadowCompareFlagSet */
 void
 PHY_RFShadowRecorverFlagSet(
@@ -1049,7 +1040,6 @@ PHY_RFShadowRecorverFlagSet(
 {
 	// Set True or False!!!
 	RF_Shadow[eRFPath][Offset].Recorver= Type;
-
 }	/* PHY_RFShadowRecorverFlagSet */
 void
 PHY_RFShadowCompareFlagSetAll(
@@ -1072,7 +1062,6 @@ PHY_RFShadowCompareFlagSetAll(
 				PHY_RFShadowCompareFlagSet(Adapter, (enum RF_RADIO_PATH_E)eRFPath, Offset, true);
 		}
 	}
-
 }	/* PHY_RFShadowCompareFlagSetAll */
 void
 PHY_RFShadowRecorverFlagSetAll(
@@ -1095,7 +1084,6 @@ PHY_RFShadowRecorverFlagSetAll(
 				PHY_RFShadowRecorverFlagSet(Adapter, (enum RF_RADIO_PATH_E)eRFPath, Offset, true);
 		}
 	}
-
 }	/* PHY_RFShadowCompareFlagSetAll */
 void
 PHY_RFShadowRefresh(
@@ -1118,7 +1106,6 @@ PHY_RFShadowRefresh(
 			RF_Shadow[eRFPath][Offset].Driver_Write = false;
 		}
 	}
-
 }	/* PHY_RFShadowRead */
 
 /* End of HalRf6052.c */

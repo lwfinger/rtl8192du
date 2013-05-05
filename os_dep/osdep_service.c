@@ -64,7 +64,6 @@ u32 rtw_atoi(u8* s)
 	   num = num * -1;
 
 	 return(num);
-
 }
 
 inline u8* _rtw_vmalloc(u32 sz)
@@ -218,7 +217,6 @@ void	_rtw_init_queue(struct __queue *pqueue)
 	INIT_LIST_HEAD(&(pqueue->queue));
 
 	_rtw_spinlock_init(&(pqueue->lock));
-
 }
 
 u32	  _rtw_queue_empty(struct __queue *pqueue)
@@ -285,10 +283,10 @@ void rtw_msleep_os(int ms)
 void rtw_usleep_os(int us)
 {
       // msleep((unsigned int)us);
-      if ( 1 < (us/1000) )
+      if (1 < (us/1000))
                 msleep(1);
       else
-		msleep( (us/1000) + 1);
+		msleep((us/1000) + 1);
 }
 
 #ifdef DBG_DELAY_OS
@@ -469,7 +467,6 @@ static int readFile(struct file *fp,char *buf,int len)
 	}
 
 	return  sum;
-
 }
 
 static int writeFile(struct file *fp,char *buf,int len)
@@ -490,7 +487,6 @@ static int writeFile(struct file *fp,char *buf,int len)
 	}
 
 	return sum;
-
 }
 
 /*
@@ -535,7 +531,7 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 	struct file *fp;
 
 	if (path && buf) {
-		if ( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
+		if (0 == (ret=openFile(&fp,path, O_RDONLY, 0))){
 			DBG_8192D("%s openFile path:%s fp=%p\n",__func__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
@@ -569,7 +565,7 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 	struct file *fp;
 
 	if (path && buf) {
-		if ( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
+		if (0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666))) {
 			DBG_8192D("%s openFile path:%s fp=%p\n",__func__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
@@ -747,7 +743,7 @@ int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname)
 #endif
 		ret = register_netdevice(pnetdev);
 
-	if ( ret != 0) {
+	if (ret != 0) {
 		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("register_netdev() failed\n"));
 		goto error;
 	}
@@ -759,7 +755,6 @@ int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname)
 error:
 
 	return -1;
-
 }
 
 u64 rtw_modular64(u64 x, u64 y)

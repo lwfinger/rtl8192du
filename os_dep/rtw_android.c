@@ -228,7 +228,7 @@ int rtw_android_cmdstr_to_num(char *cmdstr)
 {
 	int cmd_num;
 	for (cmd_num=0 ; cmd_num<ANDROID_WIFI_CMD_MAX; cmd_num++)
-		if (0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
+		if (0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])))
 			break;
 
 	return cmd_num;
@@ -308,20 +308,20 @@ static int rtw_android_set_block(struct net_device *net, char *command, int tota
 	return 0;
 }
 
-static int get_int_from_command( char* pcmd )
+static int get_int_from_command(char* pcmd)
 {
 	int i = 0;
 
-	for ( i = 0; i < strlen( pcmd ); i++ )
+	for (i = 0; i < strlen(pcmd); i++)
 	{
-		if ( pcmd[ i ] == '=' )
+		if (pcmd[ i ] == '=')
 		{
 			//	Skip the '=' and space characters.
 			i += 2;
 			break;
 		}
 	}
-	return ( rtw_atoi( pcmd + i ) );
+	return (rtw_atoi(pcmd + i));
 }
 
 int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
@@ -419,7 +419,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	case ANDROID_WIFI_CMD_SETBAND:
 	{
 		uint band = *(command + strlen("SETBAND") + 1) - '0';
-		struct rtw_adapter*	padapter = (struct rtw_adapter * ) rtw_netdev_priv(net);
+		struct rtw_adapter*	padapter = (struct rtw_adapter *) rtw_netdev_priv(net);
 
 		if (padapter->chip_type == RTL8192D)
 			padapter->setband = band;
@@ -465,7 +465,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		//	wpa_cli driver wfd-enable
 
 		struct wifi_display_info		*pwfd_info;
-		struct rtw_adapter*	padapter = (struct rtw_adapter * ) rtw_netdev_priv(net);
+		struct rtw_adapter*	padapter = (struct rtw_adapter *) rtw_netdev_priv(net);
 
 		pwfd_info = &padapter->wfd_info;
 		pwfd_info->wfd_enable = true;
@@ -478,7 +478,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		//	wpa_cli driver wfd-disable
 
 		struct wifi_display_info		*pwfd_info;
-		struct rtw_adapter*	padapter = (struct rtw_adapter * ) rtw_netdev_priv(net);
+		struct rtw_adapter*	padapter = (struct rtw_adapter *) rtw_netdev_priv(net);
 
 		pwfd_info = &padapter->wfd_info;
 		pwfd_info->wfd_enable = false;
@@ -491,10 +491,10 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		//	wpa_cli driver wfd-set-tcpport = 554
 
 		struct wifi_display_info		*pwfd_info;
-		struct rtw_adapter*	padapter = (struct rtw_adapter * ) rtw_netdev_priv(net);
+		struct rtw_adapter*	padapter = (struct rtw_adapter *) rtw_netdev_priv(net);
 
 		pwfd_info = &padapter->wfd_info;
-		pwfd_info->rtsp_ctrlport = ( u16 ) get_int_from_command( priv_cmd.buf );
+		pwfd_info->rtsp_ctrlport = (u16) get_int_from_command(priv_cmd.buf);
 		break;
 	}
 	case ANDROID_WIFI_CMD_WFD_SET_MAX_TPUT:
@@ -502,13 +502,13 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	case ANDROID_WIFI_CMD_WFD_SET_DEVTYPE:
 	{
 		//	Commented by Albert 2012/08/28
-		//	Specify the WFD device type ( WFD source/primary sink )
+		//	Specify the WFD device type (WFD source/primary sink)
 
 		struct wifi_display_info		*pwfd_info;
-		struct rtw_adapter*	padapter = (struct rtw_adapter * ) rtw_netdev_priv(net);
+		struct rtw_adapter*	padapter = (struct rtw_adapter *) rtw_netdev_priv(net);
 
 		pwfd_info = &padapter->wfd_info;
-		pwfd_info->wfd_device_type = ( u8 ) get_int_from_command( priv_cmd.buf );
+		pwfd_info->wfd_device_type = (u8) get_int_from_command(priv_cmd.buf);
 
 		pwfd_info->wfd_device_type &= WFD_DEVINFO_DUAL;
 		break;

@@ -306,7 +306,7 @@ void rtw_ps_processor(struct rtw_adapter*padapter);
 int autoresume_enter(struct rtw_adapter* padapter);
 #endif
 #ifdef SUPPORT_HW_RFOFF_DETECTED
-rt_rf_power_state RfOnOffDetect(IN	struct rtw_adapter * pAdapter );
+rt_rf_power_state RfOnOffDetect(IN	struct rtw_adapter * pAdapter);
 #endif
 
 
@@ -319,7 +319,7 @@ void rtw_lps_leave(struct rtw_adapter * padapter);
 void rtw_resume_in_workqueue(struct pwrctrl_priv *pwrpriv);
 #endif //CONFIG_RESUME_IN_WORKQUEUE
 
-#if defined(CONFIG_HAS_EARLYSUSPEND ) || defined(CONFIG_ANDROID_POWER)
+#if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 bool rtw_is_earlysuspend_registered(struct pwrctrl_priv *pwrpriv);
 bool rtw_is_do_late_resume(struct pwrctrl_priv *pwrpriv);
 void rtw_set_do_late_resume(struct pwrctrl_priv *pwrpriv, bool enable);

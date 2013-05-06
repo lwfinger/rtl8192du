@@ -103,7 +103,7 @@ void rtw_os_indicate_scan_done(struct rtw_adapter *padapter, bool aborted)
 	indicate_wx_scan_complete_event(padapter);
 }
 
-static struct RT_PMKID_LIST   backupPMKIDList[ NUM_PMKID_CACHE ];
+static struct RT_PMKID_LIST   backupPMKIDList[NUM_PMKID_CACHE];
 void rtw_reset_securitypriv(struct rtw_adapter *adapter)
 {
 	u8	backupPMKIDIndex = 0;
@@ -118,9 +118,9 @@ void rtw_reset_securitypriv(struct rtw_adapter *adapter)
 		// Backup the btkip_countermeasure information.
 		// When the countermeasure is trigger, the driver have to disconnect with AP for 60 seconds.
 
-		memset(&backupPMKIDList[ 0 ], 0x00, sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
+		memset(&backupPMKIDList[0], 0x00, sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
 
-		memcpy(&backupPMKIDList[ 0 ], &adapter->securitypriv.PMKIDList[ 0 ], sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
+		memcpy(&backupPMKIDList[0], &adapter->securitypriv.PMKIDList[0], sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
 		backupPMKIDIndex = adapter->securitypriv.PMKIDIndex;
 		backupTKIPCountermeasure = adapter->securitypriv.btkip_countermeasure;
 		backupTKIPcountermeasure_time = adapter->securitypriv.btkip_countermeasure_time;
@@ -130,7 +130,7 @@ void rtw_reset_securitypriv(struct rtw_adapter *adapter)
 
 		// Added by Albert 2009/02/18
 		// Restore the PMK information to securitypriv structure for the following connection.
-		memcpy(&adapter->securitypriv.PMKIDList[ 0 ], &backupPMKIDList[ 0 ], sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
+		memcpy(&adapter->securitypriv.PMKIDList[0], &backupPMKIDList[0], sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
 		adapter->securitypriv.PMKIDIndex = backupPMKIDIndex;
 		adapter->securitypriv.btkip_countermeasure = backupTKIPCountermeasure;
 		adapter->securitypriv.btkip_countermeasure_time = backupTKIPcountermeasure_time;
@@ -160,7 +160,7 @@ void rtw_reset_securitypriv(struct rtw_adapter *adapter)
 
 void rtw_os_indicate_disconnect(struct rtw_adapter *adapter)
 {
-   //struct RT_PMKID_LIST   backupPMKIDList[ NUM_PMKID_CACHE ];
+   //struct RT_PMKID_LIST   backupPMKIDList[NUM_PMKID_CACHE];
 
 _func_enter_;
 

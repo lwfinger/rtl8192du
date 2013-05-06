@@ -31,7 +31,7 @@ int rtw_p2p_is_channel_list_ok(u8 desired_ch, u8* ch_list, u8 ch_cnt)
 
 	for (i = 0; i < ch_cnt; i++)
 	{
-		if (ch_list[ i ] == desired_ch)
+		if (ch_list[i] == desired_ch)
 		{
 			found = 1;
 			break;
@@ -283,10 +283,10 @@ static void issue_p2p_devdisc_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 s
 	/* Build P2P IE */
 	/* 	P2P OUI */
 	p2pielen = 0;
-	p2pie[ p2pielen++ ] = 0x50;
-	p2pie[ p2pielen++ ] = 0x6F;
-	p2pie[ p2pielen++ ] = 0x9A;
-	p2pie[ p2pielen++ ] = 0x09;	/* 	WFA P2P v1.0 */
+	p2pie[p2pielen++] = 0x50;
+	p2pie[p2pielen++] = 0x6F;
+	p2pie[p2pielen++] = 0x9A;
+	p2pie[p2pielen++] = 0x09;	/* 	WFA P2P v1.0 */
 
 	/*  P2P_ATTR_STATUS */
 	p2pielen += rtw_set_p2p_attr_content(&p2pie[p2pielen], P2P_ATTR_STATUS, 1, &status);
@@ -306,7 +306,7 @@ static void issue_p2p_provision_resp(struct wifidirect_info *pwdinfo, u8* raddr,
 	u8			dialogToken = frame_body[7];	/* 	The Dialog Token of provisioning discovery request frame. */
 	u32			p2poui = cpu_to_be32(P2POUI);
 	u8			oui_subtype = P2P_PROVISION_DISC_RESP;
-	u8			wpsie[ 100 ] = { 0x00 };
+	u8			wpsie[100] = { 0x00 };
 	u8			wpsielen = 0;
 #ifdef CONFIG_WFD
 	u32					wfdielen = 0;
@@ -402,7 +402,7 @@ static void issue_p2p_presence_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 
 	unsigned char category = RTW_WLAN_CATEGORY_P2P;/* P2P action frame */
 	u32	p2poui = cpu_to_be32(P2POUI);
 	u8	oui_subtype = P2P_PRESENCE_RESPONSE;
-	u8 p2pie[ MAX_P2P_IE_LEN] = { 0x00 };
+	u8 p2pie[MAX_P2P_IE_LEN] = { 0x00 };
 	u8 noa_attr_content[32] = { 0x00 };
 	u32 p2pielen = 0;
 
@@ -446,10 +446,10 @@ static void issue_p2p_presence_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 
 	/* Add P2P IE header */
 	/* 	P2P OUI */
 	p2pielen = 0;
-	p2pie[ p2pielen++ ] = 0x50;
-	p2pie[ p2pielen++ ] = 0x6F;
-	p2pie[ p2pielen++ ] = 0x9A;
-	p2pie[ p2pielen++ ] = 0x09;	/* 	WFA P2P v1.0 */
+	p2pie[p2pielen++] = 0x50;
+	p2pie[p2pielen++] = 0x6F;
+	p2pie[p2pielen++] = 0x9A;
+	p2pie[p2pielen++] = 0x09;	/* 	WFA P2P v1.0 */
 
 	/* Add Status attribute in P2P IE */
 	p2pielen += rtw_set_p2p_attr_content(&p2pie[p2pielen], P2P_ATTR_STATUS, 1, &status);
@@ -474,17 +474,17 @@ static void issue_p2p_presence_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 
 
 u32 build_beacon_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 p2pie[ MAX_P2P_IE_LEN] = { 0x00 };
+	u8 p2pie[MAX_P2P_IE_LEN] = { 0x00 };
 	u16 capability=0;
 	u32 len=0, p2pielen = 0;
 
 
 	/* 	P2P OUI */
 	p2pielen = 0;
-	p2pie[ p2pielen++ ] = 0x50;
-	p2pie[ p2pielen++ ] = 0x6F;
-	p2pie[ p2pielen++ ] = 0x9A;
-	p2pie[ p2pielen++ ] = 0x09;	/* 	WFA P2P v1.0 */
+	p2pie[p2pielen++] = 0x50;
+	p2pie[p2pielen++] = 0x6F;
+	p2pie[p2pielen++] = 0x9A;
+	p2pie[p2pielen++] = 0x09;	/* 	WFA P2P v1.0 */
 
 
 	/* 	According to the P2P Specification, the beacon frame should contain 3 P2P attributes */
@@ -531,7 +531,7 @@ u32 build_beacon_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 #ifdef CONFIG_WFD
 u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -539,10 +539,10 @@ u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110812 */
 	/* 	According to the WFD Specification, the beacon frame should contain 4 WFD attributes */
@@ -553,7 +553,7 @@ u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -599,7 +599,7 @@ u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -610,7 +610,7 @@ u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -621,7 +621,7 @@ u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -631,14 +631,14 @@ u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, &len);
 
@@ -647,7 +647,7 @@ u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -655,10 +655,10 @@ u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110812 */
 	/* 	According to the WFD Specification, the probe request frame should contain 4 WFD attributes */
@@ -669,7 +669,7 @@ u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -711,7 +711,7 @@ u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -722,7 +722,7 @@ u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -733,7 +733,7 @@ u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -743,14 +743,14 @@ u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, &len);
 
@@ -759,7 +759,7 @@ u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunneled)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -767,10 +767,10 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110812 */
 	/* 	According to the WFD Specification, the probe response frame should contain 4 WFD attributes */
@@ -782,7 +782,7 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -867,7 +867,7 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -878,7 +878,7 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -889,7 +889,7 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -899,20 +899,20 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 	if (P2P_ROLE_GO == pwdinfo->role)
 	{
 		/* 	WFD Session Information ATTR */
 		/* 	Type: */
-		wfdie[ wfdielen++ ] = WFD_ATTR_SESSION_INFO;
+		wfdie[wfdielen++] = WFD_ATTR_SESSION_INFO;
 
 		/* 	Length: */
 		/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -928,7 +928,7 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 	{
 		/* 	Alternative MAC Address ATTR */
 		/* 	Type: */
-		wfdie[ wfdielen++ ] = WFD_ATTR_ALTER_MAC;
+		wfdie[wfdielen++] = WFD_ATTR_ALTER_MAC;
 
 		/* 	Length: */
 		/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -937,7 +937,7 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 
 		/* 	Value: */
 		/* 	Alternative MAC Address */
-		memcpy(wfdie + wfdielen, &padapter->pbuddy_adapter->eeprompriv.mac_addr[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &padapter->pbuddy_adapter->eeprompriv.mac_addr[0], ETH_ALEN);
 		/* 	This mac address is used to make the WFD session when TDLS is enable. */
 
 		wfdielen += ETH_ALEN;
@@ -952,7 +952,7 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 
 u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter					*padapter = NULL;
 	struct mlme_priv			*pmlmepriv = NULL;
@@ -969,10 +969,10 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	pwfd_info = padapter->wdinfo.wfd_info;
 
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110812 */
 	/* 	According to the WFD Specification, the probe request frame should contain 4 WFD attributes */
@@ -983,7 +983,7 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1010,7 +1010,7 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1021,7 +1021,7 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -1032,7 +1032,7 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1042,14 +1042,14 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, &len);
 
@@ -1058,7 +1058,7 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -1066,10 +1066,10 @@ u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110812 */
 	/* 	According to the WFD Specification, the probe request frame should contain 4 WFD attributes */
@@ -1080,7 +1080,7 @@ u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1107,7 +1107,7 @@ u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1118,7 +1118,7 @@ u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -1129,7 +1129,7 @@ u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1139,14 +1139,14 @@ u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, &len);
 
@@ -1155,7 +1155,7 @@ u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_nego_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -1163,10 +1163,10 @@ u32 build_nego_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110825 */
 	/* 	According to the WFD Specification, the negotiation request frame should contain 3 WFD attributes */
@@ -1177,7 +1177,7 @@ u32 build_nego_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1204,7 +1204,7 @@ u32 build_nego_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1215,7 +1215,7 @@ u32 build_nego_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -1226,7 +1226,7 @@ u32 build_nego_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1236,14 +1236,14 @@ u32 build_nego_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, &len);
 
@@ -1252,7 +1252,7 @@ u32 build_nego_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -1260,10 +1260,10 @@ u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110825 */
 	/* 	According to the WFD Specification, the negotiation request frame should contain 3 WFD attributes */
@@ -1274,7 +1274,7 @@ u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1301,7 +1301,7 @@ u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1312,7 +1312,7 @@ u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -1323,7 +1323,7 @@ u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1333,14 +1333,14 @@ u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, &len);
@@ -1350,7 +1350,7 @@ u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_nego_confirm_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -1358,10 +1358,10 @@ u32 build_nego_confirm_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110825 */
 	/* 	According to the WFD Specification, the negotiation request frame should contain 3 WFD attributes */
@@ -1372,7 +1372,7 @@ u32 build_nego_confirm_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1399,7 +1399,7 @@ u32 build_nego_confirm_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1410,7 +1410,7 @@ u32 build_nego_confirm_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -1421,7 +1421,7 @@ u32 build_nego_confirm_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1431,14 +1431,14 @@ u32 build_nego_confirm_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, &len);
@@ -1448,7 +1448,7 @@ u32 build_nego_confirm_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_invitation_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -1456,10 +1456,10 @@ u32 build_invitation_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110825 */
 	/* 	According to the WFD Specification, the provision discovery request frame should contain 3 WFD attributes */
@@ -1470,7 +1470,7 @@ u32 build_invitation_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1497,7 +1497,7 @@ u32 build_invitation_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1508,7 +1508,7 @@ u32 build_invitation_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -1519,7 +1519,7 @@ u32 build_invitation_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1529,20 +1529,20 @@ u32 build_invitation_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 	if (P2P_ROLE_GO == pwdinfo->role)
 	{
 		/* 	WFD Session Information ATTR */
 		/* 	Type: */
-		wfdie[ wfdielen++ ] = WFD_ATTR_SESSION_INFO;
+		wfdie[wfdielen++] = WFD_ATTR_SESSION_INFO;
 
 		/* 	Length: */
 		/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1560,7 +1560,7 @@ u32 build_invitation_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_invitation_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -1568,10 +1568,10 @@ u32 build_invitation_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110825 */
 	/* 	According to the WFD Specification, the provision discovery request frame should contain 3 WFD attributes */
@@ -1582,7 +1582,7 @@ u32 build_invitation_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1609,7 +1609,7 @@ u32 build_invitation_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1620,7 +1620,7 @@ u32 build_invitation_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -1631,7 +1631,7 @@ u32 build_invitation_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1641,20 +1641,20 @@ u32 build_invitation_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 	if (P2P_ROLE_GO == pwdinfo->role)
 	{
 		/* 	WFD Session Information ATTR */
 		/* 	Type: */
-		wfdie[ wfdielen++ ] = WFD_ATTR_SESSION_INFO;
+		wfdie[wfdielen++] = WFD_ATTR_SESSION_INFO;
 
 		/* 	Length: */
 		/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1672,7 +1672,7 @@ u32 build_invitation_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -1680,10 +1680,10 @@ u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110825 */
 	/* 	According to the WFD Specification, the provision discovery request frame should contain 3 WFD attributes */
@@ -1694,7 +1694,7 @@ u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1721,7 +1721,7 @@ u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1732,7 +1732,7 @@ u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -1743,7 +1743,7 @@ u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1753,14 +1753,14 @@ u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, &len);
@@ -1770,7 +1770,7 @@ u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 len=0, wfdielen = 0;
 	struct rtw_adapter *padapter = pwdinfo->padapter;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -1778,10 +1778,10 @@ u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110825 */
 	/* 	According to the WFD Specification, the provision discovery response frame should contain 3 WFD attributes */
@@ -1792,7 +1792,7 @@ u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1819,7 +1819,7 @@ u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1830,7 +1830,7 @@ u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -1841,7 +1841,7 @@ u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Coupled Sink Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_COUPLED_SINK_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_COUPLED_SINK_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1851,14 +1851,14 @@ u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/* 	Value: */
 	/* 	Coupled Sink Status bitmap */
 	/* 	Not coupled/available for Coupling */
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
 	/*   MAC Addr. */
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
-	wfdie[ wfdielen++ ] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
+	wfdie[wfdielen++] = 0;
 
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, &len);
 
@@ -1869,7 +1869,7 @@ u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	u8 p2pie[ MAX_P2P_IE_LEN] = { 0x00 };
+	u8 p2pie[MAX_P2P_IE_LEN] = { 0x00 };
 	u32 len=0, p2pielen = 0;
 #ifdef CONFIG_INTEL_WIDI
 	u8 zero_array_check[L2SDTA_SERVICE_VE_LEN] = { 0x00 };
@@ -1877,10 +1877,10 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	P2P OUI */
 	p2pielen = 0;
-	p2pie[ p2pielen++ ] = 0x50;
-	p2pie[ p2pielen++ ] = 0x6F;
-	p2pie[ p2pielen++ ] = 0x9A;
-	p2pie[ p2pielen++ ] = 0x09;	/* 	WFA P2P v1.0 */
+	p2pie[p2pielen++] = 0x50;
+	p2pie[p2pielen++] = 0x6F;
+	p2pie[p2pielen++] = 0x9A;
+	p2pie[p2pielen++] = 0x09;	/* 	WFA P2P v1.0 */
 
 	/* 	Commented by Albert 20100907 */
 	/* 	According to the P2P Specification, the probe response frame should contain 5 P2P attributes */
@@ -1892,7 +1892,7 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	P2P Capability ATTR */
 	/* 	Type: */
-	p2pie[ p2pielen++ ] = P2P_ATTR_CAPABILITY;
+	p2pie[p2pielen++] = P2P_ATTR_CAPABILITY;
 
 	/* 	Length: */
 	RTW_PUT_LE16(p2pie + p2pielen, 0x0002);
@@ -1900,15 +1900,15 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Value: */
 	/* 	Device Capability Bitmap, 1 byte */
-	p2pie[ p2pielen++ ] = DMP_P2P_DEVCAP_SUPPORT;
+	p2pie[p2pielen++] = DMP_P2P_DEVCAP_SUPPORT;
 
 	/* 	Group Capability Bitmap, 1 byte */
 	if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO))
 	{
-		p2pie[ p2pielen ] = (P2P_GRPCAP_GO | P2P_GRPCAP_INTRABSS);
+		p2pie[p2pielen] = (P2P_GRPCAP_GO | P2P_GRPCAP_INTRABSS);
 
 		if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_PROVISIONING_ING))
-			p2pie[ p2pielen ] |= P2P_GRPCAP_GROUP_FORMATION;
+			p2pie[p2pielen] |= P2P_GRPCAP_GROUP_FORMATION;
 
 		p2pielen++;
 	}
@@ -1916,15 +1916,15 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	{
 		/* 	Group Capability Bitmap, 1 byte */
 		if (pwdinfo->persistent_supported)
-			p2pie[ p2pielen++ ] = P2P_GRPCAP_PERSISTENT_GROUP | DMP_P2P_GRPCAP_SUPPORT;
+			p2pie[p2pielen++] = P2P_GRPCAP_PERSISTENT_GROUP | DMP_P2P_GRPCAP_SUPPORT;
 		else
-			p2pie[ p2pielen++ ] = DMP_P2P_GRPCAP_SUPPORT;
+			p2pie[p2pielen++] = DMP_P2P_GRPCAP_SUPPORT;
 
 	}
 
 	/* 	Extended Listen Timing ATTR */
 	/* 	Type: */
-	p2pie[ p2pielen++ ] = P2P_ATTR_EX_LISTEN_TIMING;
+	p2pie[p2pielen++] = P2P_ATTR_EX_LISTEN_TIMING;
 
 	/* 	Length: */
 	RTW_PUT_LE16(p2pie + p2pielen, 0x0004);
@@ -1951,7 +1951,7 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* 	Device Info ATTR */
 	/* 	Type: */
-	p2pie[ p2pielen++ ] = P2P_ATTR_DEVICE_INFO;
+	p2pie[p2pielen++] = P2P_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	21 -> P2P Device Address (6bytes) + Config Methods (2bytes) + Primary Device Type (8bytes) */
@@ -1993,7 +1993,7 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 #ifdef CONFIG_INTEL_WIDI
 	if (_rtw_memcmp(pwdinfo->padapter->mlmepriv.sa_ext, zero_array_check, L2SDTA_SERVICE_VE_LEN) == false)
 	{
-		p2pie[ p2pielen++ ] = 0x01;
+		p2pie[p2pielen++] = 0x01;
 
 		RTW_PUT_BE16(p2pie + p2pielen, WPS_PDT_CID_DISPLAYS);
 		p2pielen += 2;
@@ -2006,7 +2006,7 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	}
 	else
 #endif /* CONFIG_INTEL_WIDI */
-	p2pie[ p2pielen++ ] = 0x00;	/* 	No Secondary Device Type List */
+	p2pie[p2pielen++] = 0x00;	/* 	No Secondary Device Type List */
 
 	/* 	Device Name */
 	/* 	Type: */
@@ -2039,15 +2039,15 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 u32 build_prov_disc_request_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8* pssid, u8 ussidlen, u8* pdev_raddr)
 {
-	u8 p2pie[ MAX_P2P_IE_LEN] = { 0x00 };
+	u8 p2pie[MAX_P2P_IE_LEN] = { 0x00 };
 	u32 len=0, p2pielen = 0;
 
 	/* 	P2P OUI */
 	p2pielen = 0;
-	p2pie[ p2pielen++ ] = 0x50;
-	p2pie[ p2pielen++ ] = 0x6F;
-	p2pie[ p2pielen++ ] = 0x9A;
-	p2pie[ p2pielen++ ] = 0x09;	/* 	WFA P2P v1.0 */
+	p2pie[p2pielen++] = 0x50;
+	p2pie[p2pielen++] = 0x6F;
+	p2pie[p2pielen++] = 0x9A;
+	p2pie[p2pielen++] = 0x09;	/* 	WFA P2P v1.0 */
 
 	/* 	Commented by Albert 20110301 */
 	/* 	According to the P2P Specification, the provision discovery request frame should contain 3 P2P attributes */
@@ -2057,7 +2057,7 @@ u32 build_prov_disc_request_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8
 
 	/* 	P2P Capability ATTR */
 	/* 	Type: */
-	p2pie[ p2pielen++ ] = P2P_ATTR_CAPABILITY;
+	p2pie[p2pielen++] = P2P_ATTR_CAPABILITY;
 
 	/* 	Length: */
 	RTW_PUT_LE16(p2pie + p2pielen, 0x0002);
@@ -2065,18 +2065,18 @@ u32 build_prov_disc_request_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8
 
 	/* 	Value: */
 	/* 	Device Capability Bitmap, 1 byte */
-	p2pie[ p2pielen++ ] = DMP_P2P_DEVCAP_SUPPORT;
+	p2pie[p2pielen++] = DMP_P2P_DEVCAP_SUPPORT;
 
 	/* 	Group Capability Bitmap, 1 byte */
 	if (pwdinfo->persistent_supported)
-		p2pie[ p2pielen++ ] = P2P_GRPCAP_PERSISTENT_GROUP | DMP_P2P_GRPCAP_SUPPORT;
+		p2pie[p2pielen++] = P2P_GRPCAP_PERSISTENT_GROUP | DMP_P2P_GRPCAP_SUPPORT;
 	else
-		p2pie[ p2pielen++ ] = DMP_P2P_GRPCAP_SUPPORT;
+		p2pie[p2pielen++] = DMP_P2P_GRPCAP_SUPPORT;
 
 
 	/* 	Device Info ATTR */
 	/* 	Type: */
-	p2pie[ p2pielen++ ] = P2P_ATTR_DEVICE_INFO;
+	p2pie[p2pielen++] = P2P_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	21 -> P2P Device Address (6bytes) + Config Methods (2bytes) + Primary Device Type (8bytes) */
@@ -2116,7 +2116,7 @@ u32 build_prov_disc_request_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8
 	p2pielen += 2;
 
 	/* 	Number of Secondary Device Types */
-	p2pie[ p2pielen++ ] = 0x00;	/* 	No Secondary Device Type List */
+	p2pie[p2pielen++] = 0x00;	/* 	No Secondary Device Type List */
 
 	/* 	Device Name */
 	/* 	Type: */
@@ -2138,7 +2138,7 @@ u32 build_prov_disc_request_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8
 
 		/* 	P2P Group ID ATTR */
 		/* 	Type: */
-		p2pie[ p2pielen++ ] = P2P_ATTR_GROUP_ID;
+		p2pie[p2pielen++] = P2P_ATTR_GROUP_ID;
 
 		/* 	Length: */
 		RTW_PUT_LE16(p2pie + p2pielen, ETH_ALEN + ussidlen);
@@ -2162,15 +2162,15 @@ u32 build_prov_disc_request_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8
 
 u32 build_assoc_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 status_code)
 {
-	u8 p2pie[ MAX_P2P_IE_LEN] = { 0x00 };
+	u8 p2pie[MAX_P2P_IE_LEN] = { 0x00 };
 	u32 len=0, p2pielen = 0;
 
 	/* 	P2P OUI */
 	p2pielen = 0;
-	p2pie[ p2pielen++ ] = 0x50;
-	p2pie[ p2pielen++ ] = 0x6F;
-	p2pie[ p2pielen++ ] = 0x9A;
-	p2pie[ p2pielen++ ] = 0x09;	/* 	WFA P2P v1.0 */
+	p2pie[p2pielen++] = 0x50;
+	p2pie[p2pielen++] = 0x6F;
+	p2pie[p2pielen++] = 0x9A;
+	p2pie[p2pielen++] = 0x09;	/* 	WFA P2P v1.0 */
 
 	/*  According to the P2P Specification, the Association response frame should contain 2 P2P attributes */
 	/* 	1. Status */
@@ -2421,7 +2421,7 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 
 	if ((p2p_ie=rtw_get_p2p_ie(frame_body + _PUBLIC_ACTION_IE_OFFSET_, len - _PUBLIC_ACTION_IE_OFFSET_, NULL, &p2p_ielen)))
 	{
-		u8 groupid[ 38 ] = { 0x00 };
+		u8 groupid[38] = { 0x00 };
 		u8 dev_addr[ETH_ALEN] = { 0x00 };
 		u32	attr_contentlen = 0;
 
@@ -2573,7 +2573,7 @@ u8 rtw_p2p_check_peer_oper_ch(struct mlme_ext_priv *pmlmeext, u8 ch)
 
 	for (i = 0; i < pmlmeext->max_chan_nums; i++)
 	{
-		if (pmlmeext->channel_set[ i ].ChannelNum == ch)
+		if (pmlmeext->channel_set[i].ChannelNum == ch)
 		{
 			return _SUCCESS;
 		}
@@ -2591,9 +2591,9 @@ u8 rtw_p2p_ch_inclusion(struct mlme_ext_priv *pmlmeext, u8 *peer_ch_list, u8 pee
 	{
 		for (j = temp; j < pmlmeext->max_chan_nums; j++)
 		{
-			if (*(peer_ch_list + i) == pmlmeext->channel_set[ j ].ChannelNum)
+			if (*(peer_ch_list + i) == pmlmeext->channel_set[j].ChannelNum)
 			{
-				ch_list_inclusioned[ ch_no++ ] = *(peer_ch_list + i);
+				ch_list_inclusioned[ch_no++] = *(peer_ch_list + i);
 				temp = j;
 				break;
 			}
@@ -2615,7 +2615,7 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
 	u16		wps_devicepassword_id = 0x0000;
 	uint	wps_devicepassword_id_len = 0;
 #ifdef CONFIG_WFD
-	u8	wfd_ie[ 128 ] = { 0x00 };
+	u8	wfd_ie[128] = { 0x00 };
 	u32	wfd_ielen = 0;
 #ifdef CONFIG_TDLS
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
@@ -2823,7 +2823,7 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
 	/* 	Try to get the TCP port information when receiving the negotiation request. */
 	if (rtw_get_wfd_ie(pframe + _PUBLIC_ACTION_IE_OFFSET_, len - _PUBLIC_ACTION_IE_OFFSET_, wfd_ie, &wfd_ielen))
 	{
-		u8	attr_content[ 10 ] = { 0x00 };
+		u8	attr_content[10] = { 0x00 };
 		u32	attr_contentlen = 0;
 
 		DBG_8192D("[%s] WFD IE Found!!\n", __func__);
@@ -2848,7 +2848,7 @@ u8 process_p2p_group_negotation_resp(struct wifidirect_info *pwdinfo, u8 *pframe
 	u32 ies_len;
 	u8 * p2p_ie;
 #ifdef CONFIG_WFD
-	u8	wfd_ie[ 128 ] = { 0x00 };
+	u8	wfd_ie[128] = { 0x00 };
 	u32	wfd_ielen = 0;
 #ifdef CONFIG_TDLS
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
@@ -2884,7 +2884,7 @@ u8 process_p2p_group_negotation_resp(struct wifidirect_info *pwdinfo, u8 *pframe
 		u8	operatingch_info[5] = { 0x00 };
 		uint	ch_cnt = 0;
 		u8	ch_content[50] = { 0x00 };
-		u8	groupid[ 38 ];
+		u8	groupid[38];
 		u16	cap_attr;
 		u8	peer_ch_list[50] = { 0x00 };
 		u8	peer_ch_num = 0;
@@ -3082,7 +3082,7 @@ u8 process_p2p_group_negotation_resp(struct wifidirect_info *pwdinfo, u8 *pframe
 	/* 	Try to get the TCP port information when receiving the negotiation response. */
 	if (rtw_get_wfd_ie(pframe + _PUBLIC_ACTION_IE_OFFSET_, len - _PUBLIC_ACTION_IE_OFFSET_, wfd_ie, &wfd_ielen))
 	{
-		u8	attr_content[ 10 ] = { 0x00 };
+		u8	attr_content[10] = { 0x00 };
 		u32	attr_contentlen = 0;
 
 		DBG_8192D("[%s] WFD IE Found!!\n", __func__);
@@ -3112,7 +3112,7 @@ u8 process_p2p_group_negotation_confirm(struct wifidirect_info *pwdinfo, u8 *pfr
 	while (p2p_ie)	/* 	Found the P2P IE. */
 	{
 		u8	attr_content = 0x00, operatingch_info[5] = { 0x00 };
-		u8	groupid[ 38 ] = { 0x00 };
+		u8	groupid[38] = { 0x00 };
 		u32	attr_contentlen = 0;
 
 		pwdinfo->negotiation_dialog_token = 1;
@@ -4497,7 +4497,7 @@ void init_wifidirect_info(struct rtw_adapter* padapter, enum P2P_ROLE role)
 	pwdinfo->inviteresp_info.token = 0;
 
 	pwdinfo->profileindex = 0;
-	memset(&pwdinfo->profileinfo[ 0 ], 0x00, sizeof(struct profile_info) * P2P_MAX_PERSISTENT_GROUP_NUM);
+	memset(&pwdinfo->profileinfo[0], 0x00, sizeof(struct profile_info) * P2P_MAX_PERSISTENT_GROUP_NUM);
 
 	rtw_p2p_findphase_ex_set(pwdinfo, P2P_FINDPHASE_EX_NONE);
 

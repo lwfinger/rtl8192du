@@ -327,12 +327,12 @@ static char *translate_scan(struct rtw_adapter *padapter,
 	if (SCAN_RESULT_WFD_TYPE == pwdinfo->wfd_info->scan_result_type)
 	{
 		u32	blnGotWFD = false;
-		u8	wfd_ie[ 128 ] = { 0x00 };
+		u8	wfd_ie[128] = { 0x00 };
 		uint	wfd_ielen = 0;
 
 		if (rtw_get_wfd_ie(&pnetwork->network.IEs[12], pnetwork->network.IELength - 12,  wfd_ie, &wfd_ielen))
 		{
-			u8	wfd_devinfo[ 6 ] = { 0x00 };
+			u8	wfd_devinfo[6] = { 0x00 };
 			uint	wfd_devlen = 6;
 
 			if (rtw_get_wfd_attr_content(wfd_ie, wfd_ielen, WFD_ATTR_DEVICE_INFO, wfd_devinfo, &wfd_devlen))
@@ -340,7 +340,7 @@ static char *translate_scan(struct rtw_adapter *padapter,
 				if (pwdinfo->wfd_info->wfd_device_type == WFD_DEVINFO_PSINK)
 				{
 					//	the first two bits will indicate the WFD device type
-					if ((wfd_devinfo[ 1 ] & 0x03) == WFD_DEVINFO_SOURCE)
+					if ((wfd_devinfo[1] & 0x03) == WFD_DEVINFO_SOURCE)
 					{
 						//	If this device is Miracast PSink device, the scan reuslt should just provide the Miracast source.
 						blnGotWFD = true;
@@ -349,7 +349,7 @@ static char *translate_scan(struct rtw_adapter *padapter,
 				else if (pwdinfo->wfd_info->wfd_device_type == WFD_DEVINFO_SOURCE)
 				{
 					//	the first two bits will indicate the WFD device type
-					if ((wfd_devinfo[ 1 ] & 0x03) == WFD_DEVINFO_PSINK)
+					if ((wfd_devinfo[1] & 0x03) == WFD_DEVINFO_PSINK)
 					{
 						//	If this device is Miracast source device, the scan reuslt should just provide the Miracast PSink.
 						//	Todo: How about the SSink?!
@@ -1265,8 +1265,8 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
 	struct mlme_priv  *pmlmepriv = &padapter->mlmepriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
         struct iw_pmksa*  pPMK = (struct iw_pmksa*) extra;
-        u8     strZeroMacAddress[ ETH_ALEN ] = { 0x00 };
-        u8     strIssueBssid[ ETH_ALEN ] = { 0x00 };
+        u8     strZeroMacAddress[ETH_ALEN] = { 0x00 };
+        u8     strIssueBssid[ETH_ALEN] = { 0x00 };
 
 /*
         struct iw_pmksa
@@ -1304,7 +1304,7 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
                                 DBG_8192D("[rtw_wx_set_pmkid] BSSID exists in the PMKList.\n");
 
 				memcpy(psecuritypriv->PMKIDList[j].PMKID, pPMK->pmkid, IW_PMKID_LEN);
-                                psecuritypriv->PMKIDList[ j ].bUsed = true;
+                                psecuritypriv->PMKIDList[j].bUsed = true;
 				psecuritypriv->PMKIDIndex = j+1;
 				blInserted = true;
 				break;
@@ -1320,7 +1320,7 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
 	            memcpy(psecuritypriv->PMKIDList[psecuritypriv->PMKIDIndex].Bssid, strIssueBssid, ETH_ALEN);
 		    memcpy(psecuritypriv->PMKIDList[psecuritypriv->PMKIDIndex].PMKID, pPMK->pmkid, IW_PMKID_LEN);
 
-                    psecuritypriv->PMKIDList[ psecuritypriv->PMKIDIndex ].bUsed = true;
+                    psecuritypriv->PMKIDList[psecuritypriv->PMKIDIndex].bUsed = true;
 		    psecuritypriv->PMKIDIndex++ ;
 		    if (psecuritypriv->PMKIDIndex==16)
                     {
@@ -1336,8 +1336,8 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
 		{
 			if (_rtw_memcmp(psecuritypriv->PMKIDList[j].Bssid, strIssueBssid, ETH_ALEN) ==true)
 			{ // BSSID is matched, the same AP => Remove this PMKID information and reset it.
-                                memset(psecuritypriv->PMKIDList[ j ].Bssid, 0x00, ETH_ALEN);
-                                psecuritypriv->PMKIDList[ j ].bUsed = false;
+                                memset(psecuritypriv->PMKIDList[j].Bssid, 0x00, ETH_ALEN);
+                                psecuritypriv->PMKIDList[j].bUsed = false;
 				break;
 			}
 	        }
@@ -1345,7 +1345,7 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
         else if (pPMK->cmd == IW_PMKSA_FLUSH)
         {
             DBG_8192D("[rtw_wx_set_pmkid] IW_PMKSA_FLUSH!\n");
-            memset(&psecuritypriv->PMKIDList[ 0 ], 0x00, sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
+            memset(&psecuritypriv->PMKIDList[0], 0x00, sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
             psecuritypriv->PMKIDIndex = 0;
             intReturn = true;
         }
@@ -3769,12 +3769,12 @@ static int rtw_p2p_set_intent(struct net_device *dev,
 	{
 		case 1:
 		{
-			intent = extra[ 0 ] - '0';
+			intent = extra[0] - '0';
 			break;
 		}
 		case 2:
 		{
-			intent = str_2char2num(extra[ 0 ], extra[ 1 ]);
+			intent = str_2char2num(extra[0], extra[1]);
 			break;
 		}
 	}
@@ -3807,12 +3807,12 @@ static int rtw_p2p_set_listen_ch(struct net_device *dev,
 	{
 		case 1:
 		{
-			listen_ch = extra[ 0 ] - '0';
+			listen_ch = extra[0] - '0';
 			break;
 		}
 		case 2:
 		{
-			listen_ch = str_2char2num(extra[ 0 ], extra[ 1 ]);
+			listen_ch = str_2char2num(extra[0], extra[1]);
 			break;
 		}
 	}
@@ -3848,12 +3848,12 @@ static int rtw_p2p_set_op_ch(struct net_device *dev,
 	{
 		case 1:
 		{
-			op_ch = extra[ 0 ] - '0';
+			op_ch = extra[0] - '0';
 			break;
 		}
 		case 2:
 		{
-			op_ch = str_2char2num(extra[ 0 ], extra[ 1 ]);
+			op_ch = str_2char2num(extra[0], extra[1]);
 			break;
 		}
 	}
@@ -3898,10 +3898,10 @@ static int rtw_p2p_profilefound(struct net_device *dev,
 	//	The upper application should pass the SSID to driver by using this rtw_p2p_profilefound function.
 	if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 	{
-		if (extra[ 0 ] == '0')
+		if (extra[0] == '0')
 		{
 			//	Remove all the profile information of wifidirect_info structure.
-			memset(&pwdinfo->profileinfo[ 0 ], 0x00, sizeof(struct profile_info) * P2P_MAX_PERSISTENT_GROUP_NUM);
+			memset(&pwdinfo->profileinfo[0], 0x00, sizeof(struct profile_info) * P2P_MAX_PERSISTENT_GROUP_NUM);
 			pwdinfo->profileindex = 0;
 		}
 		else
@@ -3918,11 +3918,11 @@ static int rtw_p2p_profilefound(struct net_device *dev,
 				//	Ex:  1XX:XX:XX:XX:XX:XXYYSSID
 				for (jj = 0, kk = 1; jj < ETH_ALEN; jj++, kk += 3)
 				{
-					pwdinfo->profileinfo[ pwdinfo->profileindex ].peermac[ jj ] = key_2char2num(extra[ kk ], extra[ kk+ 1 ]);
+					pwdinfo->profileinfo[pwdinfo->profileindex].peermac[jj] = key_2char2num(extra[kk], extra[kk+ 1]);
 				}
 
-				//pwdinfo->profileinfo[ pwdinfo->profileindex ].ssidlen = (extra[18] - '0') * 10 + (extra[ 19 ] - '0');
-				//memcpy(pwdinfo->profileinfo[ pwdinfo->profileindex ].ssid, &extra[ 20 ], pwdinfo->profileinfo[ pwdinfo->profileindex ].ssidlen);
+				//pwdinfo->profileinfo[pwdinfo->profileindex].ssidlen = (extra[18] - '0') * 10 + (extra[19] - '0');
+				//memcpy(pwdinfo->profileinfo[pwdinfo->profileindex].ssid, &extra[20], pwdinfo->profileinfo[pwdinfo->profileindex].ssidlen);
 				pwdinfo->profileindex++;
 			}
 		}
@@ -3964,8 +3964,8 @@ static int rtw_p2p_get_status(struct net_device *dev,
 	if (padapter->bShowGetP2PState)
 	{
 		DBG_8192D("[%s] Role = %d, Status = %d, peer addr = %.2X:%.2X:%.2X:%.2X:%.2X:%.2X\n", __func__, rtw_p2p_role(pwdinfo), rtw_p2p_state(pwdinfo),
-				pwdinfo->p2p_peer_interface_addr[ 0 ], pwdinfo->p2p_peer_interface_addr[ 1 ], pwdinfo->p2p_peer_interface_addr[ 2 ],
-				pwdinfo->p2p_peer_interface_addr[ 3 ], pwdinfo->p2p_peer_interface_addr[ 4 ], pwdinfo->p2p_peer_interface_addr[ 5 ]);
+				pwdinfo->p2p_peer_interface_addr[0], pwdinfo->p2p_peer_interface_addr[1], pwdinfo->p2p_peer_interface_addr[2],
+				pwdinfo->p2p_peer_interface_addr[3], pwdinfo->p2p_peer_interface_addr[4], pwdinfo->p2p_peer_interface_addr[5]);
 	}
 
 	//	Commented by Albert 2010/10/12
@@ -4010,8 +4010,8 @@ static int rtw_p2p_get_role(struct net_device *dev,
 
 
 	DBG_8192D("[%s] Role = %d, Status = %d, peer addr = %.2X:%.2X:%.2X:%.2X:%.2X:%.2X\n", __func__, rtw_p2p_role(pwdinfo), rtw_p2p_state(pwdinfo),
-			pwdinfo->p2p_peer_interface_addr[ 0 ], pwdinfo->p2p_peer_interface_addr[ 1 ], pwdinfo->p2p_peer_interface_addr[ 2 ],
-			pwdinfo->p2p_peer_interface_addr[ 3 ], pwdinfo->p2p_peer_interface_addr[ 4 ], pwdinfo->p2p_peer_interface_addr[ 5 ]);
+			pwdinfo->p2p_peer_interface_addr[0], pwdinfo->p2p_peer_interface_addr[1], pwdinfo->p2p_peer_interface_addr[2],
+			pwdinfo->p2p_peer_interface_addr[3], pwdinfo->p2p_peer_interface_addr[4], pwdinfo->p2p_peer_interface_addr[5]);
 
 	sprintf(extra, "\n\nRole=%.2d\n", rtw_p2p_role(pwdinfo));
 	wrqu->data.length = strlen(extra);
@@ -4031,12 +4031,12 @@ static int rtw_p2p_get_peer_ifaddr(struct net_device *dev,
 
 
 	DBG_8192D("[%s] Role = %d, Status = %d, peer addr = %.2X:%.2X:%.2X:%.2X:%.2X:%.2X\n", __func__, rtw_p2p_role(pwdinfo), rtw_p2p_state(pwdinfo),
-			pwdinfo->p2p_peer_interface_addr[ 0 ], pwdinfo->p2p_peer_interface_addr[ 1 ], pwdinfo->p2p_peer_interface_addr[ 2 ],
-			pwdinfo->p2p_peer_interface_addr[ 3 ], pwdinfo->p2p_peer_interface_addr[ 4 ], pwdinfo->p2p_peer_interface_addr[ 5 ]);
+			pwdinfo->p2p_peer_interface_addr[0], pwdinfo->p2p_peer_interface_addr[1], pwdinfo->p2p_peer_interface_addr[2],
+			pwdinfo->p2p_peer_interface_addr[3], pwdinfo->p2p_peer_interface_addr[4], pwdinfo->p2p_peer_interface_addr[5]);
 
 	sprintf(extra, "\nMAC %.2X:%.2X:%.2X:%.2X:%.2X:%.2X",
-			pwdinfo->p2p_peer_interface_addr[ 0 ], pwdinfo->p2p_peer_interface_addr[ 1 ], pwdinfo->p2p_peer_interface_addr[ 2 ],
-			pwdinfo->p2p_peer_interface_addr[ 3 ], pwdinfo->p2p_peer_interface_addr[ 4 ], pwdinfo->p2p_peer_interface_addr[ 5 ]);
+			pwdinfo->p2p_peer_interface_addr[0], pwdinfo->p2p_peer_interface_addr[1], pwdinfo->p2p_peer_interface_addr[2],
+			pwdinfo->p2p_peer_interface_addr[3], pwdinfo->p2p_peer_interface_addr[4], pwdinfo->p2p_peer_interface_addr[5]);
 	wrqu->data.length = strlen(extra);
 	return ret;
 }
@@ -4053,13 +4053,13 @@ static int rtw_p2p_get_peer_devaddr(struct net_device *dev,
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 
 	DBG_8192D("[%s] Role = %d, Status = %d, peer addr = %.2X:%.2X:%.2X:%.2X:%.2X:%.2X\n", __func__, rtw_p2p_role(pwdinfo), rtw_p2p_state(pwdinfo),
-			pwdinfo->rx_prov_disc_info.peerDevAddr[ 0 ], pwdinfo->rx_prov_disc_info.peerDevAddr[ 1 ],
-			pwdinfo->rx_prov_disc_info.peerDevAddr[ 2 ], pwdinfo->rx_prov_disc_info.peerDevAddr[ 3 ],
-			pwdinfo->rx_prov_disc_info.peerDevAddr[ 4 ], pwdinfo->rx_prov_disc_info.peerDevAddr[ 5 ]);
+			pwdinfo->rx_prov_disc_info.peerDevAddr[0], pwdinfo->rx_prov_disc_info.peerDevAddr[1],
+			pwdinfo->rx_prov_disc_info.peerDevAddr[2], pwdinfo->rx_prov_disc_info.peerDevAddr[3],
+			pwdinfo->rx_prov_disc_info.peerDevAddr[4], pwdinfo->rx_prov_disc_info.peerDevAddr[5]);
 	sprintf(extra, "\n%.2X%.2X%.2X%.2X%.2X%.2X",
-			pwdinfo->rx_prov_disc_info.peerDevAddr[ 0 ], pwdinfo->rx_prov_disc_info.peerDevAddr[ 1 ],
-			pwdinfo->rx_prov_disc_info.peerDevAddr[ 2 ], pwdinfo->rx_prov_disc_info.peerDevAddr[ 3 ],
-			pwdinfo->rx_prov_disc_info.peerDevAddr[ 4 ], pwdinfo->rx_prov_disc_info.peerDevAddr[ 5 ]);
+			pwdinfo->rx_prov_disc_info.peerDevAddr[0], pwdinfo->rx_prov_disc_info.peerDevAddr[1],
+			pwdinfo->rx_prov_disc_info.peerDevAddr[2], pwdinfo->rx_prov_disc_info.peerDevAddr[3],
+			pwdinfo->rx_prov_disc_info.peerDevAddr[4], pwdinfo->rx_prov_disc_info.peerDevAddr[5]);
 	wrqu->data.length = strlen(extra);
 	return ret;
 }
@@ -4076,13 +4076,13 @@ static int rtw_p2p_get_peer_devaddr_by_invitation(struct net_device *dev,
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 
 	DBG_8192D("[%s] Role = %d, Status = %d, peer addr = %.2X:%.2X:%.2X:%.2X:%.2X:%.2X\n", __func__, rtw_p2p_role(pwdinfo), rtw_p2p_state(pwdinfo),
-			pwdinfo->p2p_peer_device_addr[ 0 ], pwdinfo->p2p_peer_device_addr[ 1 ],
-			pwdinfo->p2p_peer_device_addr[ 2 ], pwdinfo->p2p_peer_device_addr[ 3 ],
-			pwdinfo->p2p_peer_device_addr[ 4 ], pwdinfo->p2p_peer_device_addr[ 5 ]);
+			pwdinfo->p2p_peer_device_addr[0], pwdinfo->p2p_peer_device_addr[1],
+			pwdinfo->p2p_peer_device_addr[2], pwdinfo->p2p_peer_device_addr[3],
+			pwdinfo->p2p_peer_device_addr[4], pwdinfo->p2p_peer_device_addr[5]);
 	sprintf(extra, "\nMAC %.2X:%.2X:%.2X:%.2X:%.2X:%.2X",
-			pwdinfo->p2p_peer_device_addr[ 0 ], pwdinfo->p2p_peer_device_addr[ 1 ],
-			pwdinfo->p2p_peer_device_addr[ 2 ], pwdinfo->p2p_peer_device_addr[ 3 ],
-			pwdinfo->p2p_peer_device_addr[ 4 ], pwdinfo->p2p_peer_device_addr[ 5 ]);
+			pwdinfo->p2p_peer_device_addr[0], pwdinfo->p2p_peer_device_addr[1],
+			pwdinfo->p2p_peer_device_addr[2], pwdinfo->p2p_peer_device_addr[3],
+			pwdinfo->p2p_peer_device_addr[4], pwdinfo->p2p_peer_device_addr[5]);
 	wrqu->data.length = strlen(extra);
 	return ret;
 }
@@ -4099,9 +4099,9 @@ static int rtw_p2p_get_groupid(struct net_device *dev,
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 
 	sprintf(extra, "\n%.2X:%.2X:%.2X:%.2X:%.2X:%.2X %s",
-			pwdinfo->groupid_info.go_device_addr[ 0 ], pwdinfo->groupid_info.go_device_addr[ 1 ],
-			pwdinfo->groupid_info.go_device_addr[ 2 ], pwdinfo->groupid_info.go_device_addr[ 3 ],
-			pwdinfo->groupid_info.go_device_addr[ 4 ], pwdinfo->groupid_info.go_device_addr[ 5 ],
+			pwdinfo->groupid_info.go_device_addr[0], pwdinfo->groupid_info.go_device_addr[1],
+			pwdinfo->groupid_info.go_device_addr[2], pwdinfo->groupid_info.go_device_addr[3],
+			pwdinfo->groupid_info.go_device_addr[4], pwdinfo->groupid_info.go_device_addr[5],
 			pwdinfo->groupid_info.ssid);
 	wrqu->data.length = strlen(extra);
 	return ret;
@@ -4600,9 +4600,9 @@ static int rtw_p2p_connect(struct net_device *dev,
 	int ret = 0;
 	struct rtw_adapter				*padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-	u8					peerMAC[ ETH_ALEN ] = { 0x00 };
+	u8					peerMAC[ETH_ALEN] = { 0x00 };
 	int					jj,kk;
-	u8					peerMACStr[ ETH_ALEN * 2 ] = { 0x00 };
+	u8					peerMACStr[ETH_ALEN * 2] = { 0x00 };
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct list_head *plist, *phead;
 	struct __queue *queue	= &(pmlmepriv->scanned_queue);
@@ -4636,7 +4636,7 @@ static int rtw_p2p_connect(struct net_device *dev,
 
 	for (jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3)
 	{
-		peerMAC[ jj ] = key_2char2num(extra[kk], extra[kk+ 1]);
+		peerMAC[jj] = key_2char2num(extra[kk], extra[kk+ 1]);
 	}
 
 	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
@@ -4674,7 +4674,7 @@ static int rtw_p2p_connect(struct net_device *dev,
 		memset(&pwdinfo->nego_req_info, 0x00, sizeof(struct tx_nego_req_info));
 		memset(&pwdinfo->groupid_info, 0x00, sizeof(struct group_id_info));
 
-		pwdinfo->nego_req_info.peer_channel_num[ 0 ] = uintPeerChannel;
+		pwdinfo->nego_req_info.peer_channel_num[0] = uintPeerChannel;
 		memcpy(pwdinfo->nego_req_info.peerDevAddr, pnetwork->network.MacAddress, ETH_ALEN);
 		pwdinfo->nego_req_info.benable = true;
 
@@ -4734,7 +4734,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 	struct iw_point				*pdata = &wrqu->data;
 	struct wifidirect_info		*pwdinfo = &(padapter->wdinfo);
 	int						jj,kk;
-	u8						peerMACStr[ ETH_ALEN * 2 ] = { 0x00 };
+	u8						peerMACStr[ETH_ALEN * 2] = { 0x00 };
 	struct mlme_priv			*pmlmepriv = &padapter->mlmepriv;
 	struct list_head *plist, *phead;
 	struct __queue *queue = &(pmlmepriv->scanned_queue);
@@ -4788,7 +4788,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 
 	for (jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3)
 	{
-		pinvite_req_info->peer_macaddr[ jj ] = key_2char2num(extra[kk], extra[kk+ 1]);
+		pinvite_req_info->peer_macaddr[jj] = key_2char2num(extra[kk], extra[kk+ 1]);
 	}
 
 	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
@@ -4842,12 +4842,12 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 #ifdef CONFIG_WFD
 	if (uintPeerChannel)
 	{
-		u8	wfd_ie[ 128 ] = { 0x00 };
+		u8	wfd_ie[128] = { 0x00 };
 		uint	wfd_ielen = 0;
 
 		if (rtw_get_wfd_ie(&pnetwork->network.IEs[12], pnetwork->network.IELength - 12,  wfd_ie, &wfd_ielen))
 		{
-			u8	wfd_devinfo[ 6 ] = { 0x00 };
+			u8	wfd_devinfo[6] = { 0x00 };
 			uint	wfd_devlen = 6;
 
 			DBG_8192D("[%s] Found WFD IE!\n", __func__);
@@ -4890,12 +4890,12 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 		//	Store the GO's bssid
 		for (jj = 0, kk = 18; jj < ETH_ALEN; jj++, kk += 3)
 		{
-			pinvite_req_info->go_bssid[ jj ] = key_2char2num(extra[kk], extra[kk+ 1]);
+			pinvite_req_info->go_bssid[jj] = key_2char2num(extra[kk], extra[kk+ 1]);
 		}
 
 		//	Store the GO's ssid
 		pinvite_req_info->ssidlen = wrqu->data.length - 36;
-		memcpy(pinvite_req_info->go_ssid, &extra[ 36 ], (u32) pinvite_req_info->ssidlen);
+		memcpy(pinvite_req_info->go_ssid, &extra[36], (u32) pinvite_req_info->ssidlen);
 		pinvite_req_info->benable = true;
 		pinvite_req_info->peer_ch = uintPeerChannel;
 
@@ -4954,7 +4954,7 @@ static int rtw_p2p_set_persistent(struct net_device *dev,
 	struct iw_point				*pdata = &wrqu->data;
 	struct wifidirect_info		*pwdinfo = &(padapter->wdinfo);
 	int						jj,kk;
-	u8						peerMACStr[ ETH_ALEN * 2 ] = { 0x00 };
+	u8						peerMACStr[ETH_ALEN * 2] = { 0x00 };
 	struct mlme_priv			*pmlmepriv = &padapter->mlmepriv;
 	struct list_head *plist, *phead;
 	struct __queue *queue = &(pmlmepriv->scanned_queue);
@@ -4988,11 +4988,11 @@ static int rtw_p2p_set_persistent(struct net_device *dev,
 	}
 	else
 	{
-		if (extra[ 0 ] == '0')	//	Disable the persistent group function.
+		if (extra[0] == '0')	//	Disable the persistent group function.
 		{
 			pwdinfo->persistent_supported = false;
 		}
-		else if (extra[ 0 ] == '1')	//	Enable the persistent group function.
+		else if (extra[0] == '1')	//	Enable the persistent group function.
 		{
 			pwdinfo->persistent_supported = true;
 		}
@@ -5018,9 +5018,9 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 	struct rtw_adapter				*padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct iw_point			*pdata = &wrqu->data;
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-	u8					peerMAC[ ETH_ALEN ] = { 0x00 };
+	u8					peerMAC[ETH_ALEN] = { 0x00 };
 	int					jj,kk;
-	u8					peerMACStr[ ETH_ALEN * 2 ] = { 0x00 };
+	u8					peerMACStr[ETH_ALEN * 2] = { 0x00 };
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct list_head *plist, *phead;
 	struct __queue *queue = &(pmlmepriv->scanned_queue);
@@ -5049,7 +5049,7 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 
 	for (jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3)
 	{
-		peerMAC[ jj ] = key_2char2num(extra[kk], extra[kk+ 1]);
+		peerMAC[jj] = key_2char2num(extra[kk], extra[kk+ 1]);
 	}
 
 	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
@@ -5105,12 +5105,12 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 
 	if (uintPeerChannel)
 	{
-		u8	wfd_ie[ 128 ] = { 0x00 };
+		u8	wfd_ie[128] = { 0x00 };
 		uint	wfd_ielen = 0;
 
 		if (rtw_get_wfd_ie(&pnetwork->network.IEs[12], pnetwork->network.IELength - 12,  wfd_ie, &wfd_ielen))
 		{
-			u8	wfd_devinfo[ 6 ] = { 0x00 };
+			u8	wfd_devinfo[6] = { 0x00 };
 			uint	wfd_devlen = 6;
 
 			DBG_8192D("[%s] Found WFD IE!\n", __func__);
@@ -5161,7 +5161,7 @@ static int rtw_p2p_set_wfd_device_type(struct net_device *dev,
 
 	DBG_8192D("[%s] data = %s\n", __func__, extra);
 
-	if (extra[ 0 ] == '0')	//	Set to Miracast source device.
+	if (extra[0] == '0')	//	Set to Miracast source device.
 	{
 		pwfd_info->wfd_device_type = WFD_DEVINFO_SOURCE;
 	}
@@ -5196,15 +5196,15 @@ static int rtw_p2p_set_scan_result_type(struct net_device *dev,
 
 	DBG_8192D("[%s] data = %s\n", __func__, extra);
 
-	if (extra[ 0 ] == '0')
+	if (extra[0] == '0')
 	{
 		pwfd_info->scan_result_type = SCAN_RESULT_P2P_ONLY;
 	}
-	else if (extra[ 0 ] == '1')
+	else if (extra[0] == '1')
 	{
 		pwfd_info->scan_result_type = SCAN_RESULT_ALL;
 	}
-	else if (extra[ 0 ] == '2')
+	else if (extra[0] == '2')
 	{
 		pwfd_info->scan_result_type = SCAN_RESULT_WFD_TYPE;
 	}
@@ -5232,9 +5232,9 @@ static int rtw_p2p_set_sa(struct net_device *dev,
 
 	DBG_8192D("[%s] data = %s\n", __func__, extra);
 
-	if (extra[ 0 ] == '0')	//	Disable the session available.
+	if (extra[0] == '0')	//	Disable the session available.
 		pwdinfo->session_available = false;
-	else if (extra[ 0 ] == '1')	//	Enable the session available.
+	else if (extra[0] == '1')	//	Enable the session available.
 		pwdinfo->session_available = true;
 	else
 		pwdinfo->session_available = false;
@@ -5253,9 +5253,9 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 	int ret = 0;
 	struct rtw_adapter				*padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-	u8					peerMAC[ ETH_ALEN ] = { 0x00 };
+	u8					peerMAC[ETH_ALEN] = { 0x00 };
 	int					jj,kk;
-	u8					peerMACStr[ ETH_ALEN * 2 ] = { 0x00 };
+	u8					peerMACStr[ETH_ALEN * 2] = { 0x00 };
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct list_head *plist, *phead;
 	struct __queue *queue = &(pmlmepriv->scanned_queue);
@@ -5295,29 +5295,29 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 		memset(pwdinfo->tx_prov_disc_info.peerDevAddr, 0x00, ETH_ALEN);
 		memset(pwdinfo->tx_prov_disc_info.peerIFAddr, 0x00, ETH_ALEN);
 		memset(&pwdinfo->tx_prov_disc_info.ssid, 0x00, sizeof(struct ndis_802_11_ssid));
-		pwdinfo->tx_prov_disc_info.peer_channel_num[ 0 ] = 0;
-		pwdinfo->tx_prov_disc_info.peer_channel_num[ 1 ] = 0;
+		pwdinfo->tx_prov_disc_info.peer_channel_num[0] = 0;
+		pwdinfo->tx_prov_disc_info.peer_channel_num[1] = 0;
 		pwdinfo->tx_prov_disc_info.benable = false;
 	}
 
 	for (jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3)
 	{
-		peerMAC[ jj ] = key_2char2num(extra[kk], extra[kk+ 1]);
+		peerMAC[jj] = key_2char2num(extra[kk], extra[kk+ 1]);
 	}
 
-	if (_rtw_memcmp(&extra[ 18 ], "display", 7))
+	if (_rtw_memcmp(&extra[18], "display", 7))
 	{
 		pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_DISPLYA;
 	}
-	else if (_rtw_memcmp(&extra[ 18 ], "keypad", 7))
+	else if (_rtw_memcmp(&extra[18], "keypad", 7))
 	{
 		pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_KEYPAD;
 	}
-	else if (_rtw_memcmp(&extra[ 18 ], "pbc", 3))
+	else if (_rtw_memcmp(&extra[18], "pbc", 3))
 	{
 		pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_PUSH_BUTTON;
 	}
-	else if (_rtw_memcmp(&extra[ 18 ], "label", 5))
+	else if (_rtw_memcmp(&extra[18], "label", 5))
 	{
 		pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_LABEL;
 	}
@@ -5385,12 +5385,12 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 
 #ifdef CONFIG_WFD
 	{
-		u8	wfd_ie[ 128 ] = { 0x00 };
+		u8	wfd_ie[128] = { 0x00 };
 		uint	wfd_ielen = 0;
 
 		if (rtw_get_wfd_ie(&pnetwork->network.IEs[12], pnetwork->network.IELength - 12,  wfd_ie, &wfd_ielen))
 		{
-			u8	wfd_devinfo[ 6 ] = { 0x00 };
+			u8	wfd_devinfo[6] = { 0x00 };
 			uint	wfd_devlen = 6;
 
 			DBG_8192D("[%s] Found WFD IE!\n", __func__);
@@ -8121,7 +8121,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	else if (strcmp(tmp[0],"ableraw") == 0) {
 		efuse_GetCurrentSize(padapter,&raw_cursize);
 		raw_maxsize = efuse_GetMaxSize(padapter);
-		sprintf(extra, "%s : [ available raw size] = %d",extra,raw_maxsize-raw_cursize);
+		sprintf(extra, "%s : [available raw size] = %d",extra,raw_maxsize-raw_cursize);
 		wrqu->length = strlen(extra);
 
 		return 0;
@@ -9414,7 +9414,7 @@ static int rtw_wfd_tdls_enable(struct net_device *dev,
 
 	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
-	if (extra[ 0 ] == '0')
+	if (extra[0] == '0')
 	{
 		padapter->wdinfo.wfd_tdls_enable = 0;
 	}
@@ -9442,7 +9442,7 @@ static int rtw_tdls_weaksec(struct net_device *dev,
 
 	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
 
-	if (extra[ 0 ] == '0')
+	if (extra[0] == '0')
 	{
 		padapter->wdinfo.wfd_tdls_weaksec = 0;
 	}
@@ -9477,7 +9477,7 @@ static int rtw_tdls_enable(struct net_device *dev,
 
 	memset(tdls_sta, 0x00, sizeof(tdls_sta));
 
-	if (extra[ 0 ] == '0')
+	if (extra[0] == '0')
 	{
 		ptdlsinfo->enable = 0;
 
@@ -9514,7 +9514,7 @@ static int rtw_tdls_enable(struct net_device *dev,
 		}
 		rtw_tdls_cmd(padapter, myid(&(padapter->eeprompriv)), TDLS_RS_RCR);
 		rtw_reset_tdls_info(padapter);
-	} else if (extra[ 0 ] == '1') {
+	} else if (extra[0] == '1') {
 		ptdlsinfo->enable = 1;
 	}
 #endif //CONFIG_TDLS

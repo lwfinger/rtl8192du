@@ -314,7 +314,7 @@ static int get_int_from_command(char* pcmd)
 
 	for (i = 0; i < strlen(pcmd); i++)
 	{
-		if (pcmd[ i ] == '=')
+		if (pcmd[i] == '=')
 		{
 			//	Skip the '=' and space characters.
 			i += 2;

@@ -150,7 +150,7 @@ _func_enter_;
 
 	for (p = buf; len > 0; ++p, --len)
 	{
-		crc = crc32_table[ (crc ^ *p) & 0xff] ^ (crc >> 8);
+		crc = crc32_table[(crc ^ *p) & 0xff] ^ (crc >> 8);
 	}
 _func_exit_;
 	return ~crc;    /* transmit complement, per CRC-32 spec */
@@ -531,10 +531,10 @@ static const unsigned short Sbox1[2][256]=       /* Sbox for hash (can be in ROM
 *
 * Inputs:
 *     tk[]      = temporal key                         [128 bits]
-*     ta[]      = transmitter's MAC address            [ 48 bits]
-*     iv32      = upper 32 bits of IV                  [ 32 bits]
+*     ta[]      = transmitter's MAC address            [48 bits]
+*     iv32      = upper 32 bits of IV                  [32 bits]
 * Output:
-*     p1k[]     = Phase 1 key                          [ 80 bits]
+*     p1k[]     = Phase 1 key                          [80 bits]
 *
 * Note:
 *     This function only needs to be called every 2**16 packets,
@@ -574,8 +574,8 @@ _func_exit_;
 *
 * Inputs:
 *     tk[]      = Temporal key                         [128 bits]
-*     p1k[]     = Phase 1 output key                   [ 80 bits]
-*     iv16      = low 16 bits of IV counter            [ 16 bits]
+*     p1k[]     = Phase 1 output key                   [80 bits]
+*     iv16      = low 16 bits of IV counter            [16 bits]
 * Output:
 *     rc4key[]  = the key used to encrypt the packet   [128 bits]
 *

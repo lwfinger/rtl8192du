@@ -2709,7 +2709,7 @@ static int cfg80211_rtw_set_pmksa(struct wiphy *wiphy,
 	u8	index,blInserted = false;
 	_adapter	*padapter = wiphy_to_adapter(wiphy);
 	struct security_priv	*psecuritypriv = &padapter->securitypriv;
-	u8	strZeroMacAddress[ ETH_ALEN ] = { 0x00 };
+	u8	strZeroMacAddress[ETH_ALEN] = { 0x00 };
 
 	DBG_871X(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(netdev));
 
@@ -2795,7 +2795,7 @@ static int cfg80211_rtw_flush_pmksa(struct wiphy *wiphy,
 
 	DBG_871X(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(netdev));
 
-	memset(&psecuritypriv->PMKIDList[ 0 ], 0x00, sizeof(RT_PMKID_LIST) * NUM_PMKID_CACHE);
+	memset(&psecuritypriv->PMKIDList[0], 0x00, sizeof(RT_PMKID_LIST) * NUM_PMKID_CACHE);
 	psecuritypriv->PMKIDIndex = 0;
 
 	return 0;
@@ -3743,7 +3743,7 @@ void rtw_cfg80211_issue_p2p_provision_request(_adapter *padapter, const u8 *buf,
 {
 	u16	wps_devicepassword_id = 0x0000;
 	uint	wps_devicepassword_id_len = 0;
-	u8			wpsie[ 255 ] = { 0x00 }, p2p_ie[ 255 ] = { 0x00 };
+	u8			wpsie[255] = { 0x00 }, p2p_ie[255] = { 0x00 };
 	uint			p2p_ielen = 0;
 	uint			wpsielen = 0;
 	u32	devinfo_contentlen = 0;
@@ -3863,10 +3863,10 @@ void rtw_cfg80211_issue_p2p_provision_request(_adapter *padapter, const u8 *buf,
 	//build_prov_disc_request_p2p_ie
 	//	P2P OUI
 	p2pielen = 0;
-	p2p_ie[ p2pielen++ ] = 0x50;
-	p2p_ie[ p2pielen++ ] = 0x6F;
-	p2p_ie[ p2pielen++ ] = 0x9A;
-	p2p_ie[ p2pielen++ ] = 0x09;	//	WFA P2P v1.0
+	p2p_ie[p2pielen++] = 0x50;
+	p2p_ie[p2pielen++] = 0x6F;
+	p2p_ie[p2pielen++] = 0x9A;
+	p2p_ie[p2pielen++] = 0x09;	//	WFA P2P v1.0
 
 	//	Commented by Albert 20110301
 	//	According to the P2P Specification, the provision discovery request frame should contain 3 P2P attributes
@@ -3876,7 +3876,7 @@ void rtw_cfg80211_issue_p2p_provision_request(_adapter *padapter, const u8 *buf,
 
 	//	P2P Capability ATTR
 	//	Type:
-	p2p_ie[ p2pielen++ ] = P2P_ATTR_CAPABILITY;
+	p2p_ie[p2pielen++] = P2P_ATTR_CAPABILITY;
 
 	//	Length:
 	//*(u16*) (p2pie + p2pielen) = cpu_to_le16(0x0002);
@@ -3892,7 +3892,7 @@ void rtw_cfg80211_issue_p2p_provision_request(_adapter *padapter, const u8 *buf,
 
 	//	Device Info ATTR
 	//	Type:
-	p2p_ie[ p2pielen++ ] = P2P_ATTR_DEVICE_INFO;
+	p2p_ie[p2pielen++] = P2P_ATTR_DEVICE_INFO;
 
 	//	Length:
 	//	21 -> P2P Device Address (6bytes) + Config Methods (2bytes) + Primary Device Type (8bytes)

@@ -2589,12 +2589,12 @@ int rtw_restruct_wmm_ie(struct rtw_adapter *adapter, u8 *in_ie, u8 *out_ie, uint
 			/* Append WMM IE to the last index of out_ie */
                         for (j = i; j < i + 9; j++)
                         {
-                            out_ie[ ielength] = in_ie[ j ];
+                            out_ie[ielength] = in_ie[j];
                             ielength++;
                         }
-                        out_ie[ initial_out_len + 1 ] = 0x07;
-                        out_ie[ initial_out_len + 6 ] = 0x00;
-                        out_ie[ initial_out_len + 8 ] = 0x00;
+                        out_ie[initial_out_len + 1] = 0x07;
+                        out_ie[initial_out_len + 6] = 0x00;
+                        out_ie[initial_out_len + 8] = 0x00;
 
 			break;
 		}

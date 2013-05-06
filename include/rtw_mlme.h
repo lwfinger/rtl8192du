@@ -168,17 +168,17 @@ struct rt_link_detect {
 
 struct profile_info {
 	u8	ssidlen;
-	u8	ssid[ WLAN_SSID_MAXLEN ];
-	u8	peermac[ ETH_ALEN ];
+	u8	ssid[WLAN_SSID_MAXLEN];
+	u8	peermac[ETH_ALEN];
 };
 
 struct tx_invite_req_info{
 	u8					token;
 	u8					benable;
-	u8					go_ssid[ WLAN_SSID_MAXLEN ];
+	u8					go_ssid[WLAN_SSID_MAXLEN];
 	u8					ssidlen;
-	u8					go_bssid[ ETH_ALEN ];
-	u8					peer_macaddr[ ETH_ALEN ];
+	u8					go_bssid[ETH_ALEN];
+	u8					peer_macaddr[ETH_ALEN];
 	u8					operating_ch;	//	This information will be set by using the p2p_set op_ch=x
 	u8					peer_ch;		//	The listen channel for peer P2P device
 
@@ -217,26 +217,26 @@ struct tx_provdisc_req_info{
 	u16					wps_config_method_request;	//	Used when sending the provisioning request frame
 	u16					peer_channel_num[2];		//	The channel number which the receiver stands.
 	struct ndis_802_11_ssid	ssid;
-	u8					peerDevAddr[ ETH_ALEN ];		//	Peer device address
-	u8					peerIFAddr[ ETH_ALEN ];		//	Peer interface address
+	u8					peerDevAddr[ETH_ALEN];		//	Peer device address
+	u8					peerIFAddr[ETH_ALEN];		//	Peer interface address
 	u8					benable;					//	This provision discovery request frame is trigger to send or not
 };
 
 struct rx_provdisc_req_info{	//When peer device issue prov_disc_req first, we should store the following informations
-	u8					peerDevAddr[ ETH_ALEN ];		//	Peer device address
+	u8					peerDevAddr[ETH_ALEN];		//	Peer device address
 	u8					strconfig_method_desc_of_prov_disc_req[4];	//	description for the config method located in the provisioning discovery request frame.
 																	//	The UI must know this information to know which config method the remote p2p device is requiring.
 };
 
 struct tx_nego_req_info{
 	u16					peer_channel_num[2];		//	The channel number which the receiver stands.
-	u8					peerDevAddr[ ETH_ALEN ];		//	Peer device address
+	u8					peerDevAddr[ETH_ALEN];		//	Peer device address
 	u8					benable;					//	This negoitation request frame is trigger to send or not
 };
 
 struct group_id_info{
-	u8					go_device_addr[ ETH_ALEN ];	//	The GO's device address of this P2P group
-	u8					ssid[ WLAN_SSID_MAXLEN ];	//	The SSID of this P2P group
+	u8					go_device_addr[ETH_ALEN];	//	The GO's device address of this P2P group
+	u8					ssid[WLAN_SSID_MAXLEN];	//	The SSID of this P2P group
 };
 
 struct scan_limit_info{
@@ -271,7 +271,7 @@ struct wifidirect_info{
 	struct tx_provdisc_req_info	tx_prov_disc_info;
 	struct rx_provdisc_req_info rx_prov_disc_info;
 	struct tx_invite_req_info	invitereq_info;
-	struct profile_info			profileinfo[ P2P_MAX_PERSISTENT_GROUP_NUM ];	//	Store the profile information of persistent group
+	struct profile_info			profileinfo[P2P_MAX_PERSISTENT_GROUP_NUM];	//	Store the profile information of persistent group
 	struct tx_invite_resp_info	inviteresp_info;
 	struct tx_nego_req_info	nego_req_info;
 	struct group_id_info		groupid_info;	//	Store the group id information when doing the group negotiation handshake.
@@ -292,17 +292,17 @@ struct wifidirect_info{
 	u8						support_rate[8];
 	u8						p2p_wildcard_ssid[P2P_WILDCARD_SSID_LEN];
 	u8						intent;		//	should only include the intent value.
-	u8						p2p_peer_interface_addr[ ETH_ALEN ];
-	u8						p2p_peer_device_addr[ ETH_ALEN ];
+	u8						p2p_peer_interface_addr[ETH_ALEN];
+	u8						p2p_peer_device_addr[ETH_ALEN];
 	u8						peer_intent;	//	Included the intent value and tie breaker value.
-	u8						device_name[ WPS_MAX_DEVICE_NAME_LEN ];	//	Device name for displaying on searching device screen
+	u8						device_name[WPS_MAX_DEVICE_NAME_LEN];	//	Device name for displaying on searching device screen
 	u8						device_name_len;
 	u8						profileindex;	//	Used to point to the index of profileinfo array
 	u8						peer_operating_ch;
 	u8						find_phase_state_exchange_cnt;
 	u16						device_password_id_for_nego;	//	The device password ID for group negotation
 	u8						negotiation_dialog_token;
-	u8						nego_ssid[ WLAN_SSID_MAXLEN ];	//	SSID information for group negotitation
+	u8						nego_ssid[WLAN_SSID_MAXLEN];	//	SSID information for group negotitation
 	u8						nego_ssidlen;
 	u8						p2p_group_ssid[WLAN_SSID_MAXLEN];
 	u8						p2p_group_ssid_len;

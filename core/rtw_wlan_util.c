@@ -799,14 +799,14 @@ int WFD_info_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_i
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wifidirect_info	*pwdinfo;
-	u8	wfd_ie[ 128 ] = { 0x00 };
+	u8	wfd_ie[128] = { 0x00 };
 	u32	wfd_ielen = 0;
 
 
 	pwdinfo = &padapter->wdinfo;
 	if (rtw_get_wfd_ie((u8*) pIE, pIE->Length, wfd_ie, &wfd_ielen))
 	{
-		u8	attr_content[ 10 ] = { 0x00 };
+		u8	attr_content[10] = { 0x00 };
 		u32	attr_contentlen = 0;
 
 		printk("[%s] Found WFD IE\n", __func__);

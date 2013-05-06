@@ -160,7 +160,7 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 		key_type |= NL80211_KEYTYPE_PAIRWISE;
 	}
 
-	cfg80211_michael_mic_failure(padapter->pnetdev, (u8 *)&pmlmepriv->assoc_bssid[ 0 ], key_type, -1,
+	cfg80211_michael_mic_failure(padapter->pnetdev, (u8 *)&pmlmepriv->assoc_bssid[0], key_type, -1,
 		NULL, GFP_ATOMIC);
 #endif
 
@@ -175,7 +175,7 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 	}
 
 	ev.src_addr.sa_family = ARPHRD_ETHER;
-	memcpy(ev.src_addr.sa_data, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+	memcpy(ev.src_addr.sa_data, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 
 	memset(&wrqu, 0x00, sizeof(wrqu));
 	wrqu.data.length = sizeof(ev);

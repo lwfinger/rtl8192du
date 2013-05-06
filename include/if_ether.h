@@ -42,7 +42,7 @@
 #define ETH_P_IP	0x0800		/* Internet Protocol packet	*/
 #define ETH_P_X25	0x0805		/* CCITT X.25			*/
 #define ETH_P_ARP	0x0806		/* Address Resolution packet	*/
-#define	ETH_P_BPQ	0x08FF		/* G8BPQ AX.25 Ethernet Packet	[ NOT AN OFFICIALLY REGISTERED ID ] */
+#define	ETH_P_BPQ	0x08FF		/* G8BPQ AX.25 Ethernet Packet	[NOT AN OFFICIALLY REGISTERED ID] */
 #define ETH_P_IEEEPUP	0x0a00		/* Xerox IEEE802.3 PUP packet */
 #define ETH_P_IEEEPUPAT	0x0a01		/* Xerox IEEE802.3 PUP Addr Trans packet */
 #define ETH_P_DEC       0x6000          /* DEC Assigned proto           */

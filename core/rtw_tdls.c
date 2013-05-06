@@ -382,7 +382,7 @@ u8 *rtw_tdls_set_ht_cap(_adapter *padapter, u8 *pframe, struct pkt_attrib *pattr
 
 u8 *rtw_tdls_set_sup_ch(struct mlme_ext_priv *pmlmeext, u8 *pframe, struct pkt_attrib *pattrib)
 {
-	u8 sup_ch[ 30 * 2 ] = { 0x00 }, sup_ch_idx = 0, idx_5g = 2;	/* For supported channel */
+	u8 sup_ch[30 * 2] = { 0x00 }, sup_ch_idx = 0, idx_5g = 2;	/* For supported channel */
 	do{
 		if (pmlmeext->channel_set[sup_ch_idx].ChannelNum <= 14)
 		{
@@ -404,7 +404,7 @@ u8 *rtw_tdls_set_sup_ch(struct mlme_ext_priv *pmlmeext, u8 *pframe, struct pkt_a
 #ifdef CONFIG_WFD
 void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 {
-	u8	wfd_ie[ 128 ] = { 0x00 };
+	u8	wfd_ie[128] = { 0x00 };
 	u32	wfd_ielen = 0;
 	u32	wfd_offset = 0;
 	/* 	Try to get the TCP port information when receiving the negotiation response. */
@@ -414,7 +414,7 @@ void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 	wfd_offset = rtw_get_wfd_ie(ptr + wfd_offset, length - wfd_offset, wfd_ie, &wfd_ielen);
 	while (wfd_offset)
 	{
-		u8	attr_content[ 10 ] = { 0x00 };
+		u8	attr_content[10] = { 0x00 };
 		u32	attr_contentlen = 0;
 		int	i;
 
@@ -1893,15 +1893,15 @@ void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen)
 {
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct wifi_display_info	*pwfd_info = padapter->tdlsinfo.wfd_info;
-	u8 wfdie[ MAX_WFD_IE_LEN] = { 0x00 };
+	u8 wfdie[MAX_WFD_IE_LEN] = { 0x00 };
 	u32 wfdielen = 0;
 
 	/* 	WFD OUI */
 	wfdielen = 0;
-	wfdie[ wfdielen++ ] = 0x50;
-	wfdie[ wfdielen++ ] = 0x6F;
-	wfdie[ wfdielen++ ] = 0x9A;
-	wfdie[ wfdielen++ ] = 0x0A;	/* 	WFA WFD v1.0 */
+	wfdie[wfdielen++] = 0x50;
+	wfdie[wfdielen++] = 0x6F;
+	wfdie[wfdielen++] = 0x9A;
+	wfdie[wfdielen++] = 0x0A;	/* 	WFA WFD v1.0 */
 
 	/* 	Commented by Albert 20110825 */
 	/* 	According to the WFD Specification, the negotiation request frame should contain 3 WFD attributes */
@@ -1911,7 +1911,7 @@ void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen)
 
 	/* 	WFD Device Information ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_DEVICE_INFO;
+	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1939,7 +1939,7 @@ void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen)
 
 	/* 	Associated BSSID ATTR */
 	/* 	Type: */
-	wfdie[ wfdielen++ ] = WFD_ATTR_ASSOC_BSSID;
+	wfdie[wfdielen++] = WFD_ATTR_ASSOC_BSSID;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1950,7 +1950,7 @@ void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen)
 	/* 	Associated BSSID */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN);
+		memcpy(wfdie + wfdielen, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	}
 	else
 	{
@@ -1958,7 +1958,7 @@ void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen)
 	}
 
 	/* 	Local IP Address ATTR */
-	wfdie[ wfdielen++ ] = WFD_ATTR_LOCAL_IP_ADDR;
+	wfdie[wfdielen++] = WFD_ATTR_LOCAL_IP_ADDR;
 
 	/* 	Length: */
 	/* 	Note: In the WFD specification, the size of length field is 2. */
@@ -1967,7 +1967,7 @@ void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen)
 
 	/* 	Version: */
 	/* 	0x01: Version1;IPv4 */
-	wfdie[ wfdielen++ ] = 0x01;
+	wfdie[wfdielen++] = 0x01;
 
 	/* 	IPv4 Address */
 	memcpy(wfdie + wfdielen, pwfd_info->ip_address, 4);
@@ -1996,7 +1996,7 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	u8 link_id_addr[18] = {0};
 	u8 iedata=0;
-	u8 sup_ch[ 30 * 2 ] = {0x00 }, sup_ch_idx = 0, idx_5g = 2;	/* For supported channel */
+	u8 sup_ch[30 * 2] = {0x00 }, sup_ch_idx = 0, idx_5g = 2;	/* For supported channel */
 	u8 timeout_itvl[5];	/* set timeout interval to maximum value */
 	u32 time;
 

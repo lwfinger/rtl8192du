@@ -149,12 +149,12 @@ static inline int  __nat25_has_expired(struct rtw_adapter *priv,
 
 
 static inline void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
-				unsigned int *ipAddr)
+				unsigned int *ipaddr)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
 	networkAddr[0] = NAT25_IPV4;
-	memcpy(networkAddr+7, (unsigned char *)ipAddr, 4);
+	memcpy(networkAddr+7, (unsigned char *)ipaddr, 4);
 }
 
 
@@ -201,12 +201,12 @@ static inline void __nat25_generate_pppoe_network_addr(unsigned char *networkAdd
 
 #ifdef CL_IPV6_PASS
 static  void __nat25_generate_ipv6_network_addr(unsigned char *networkAddr,
-				unsigned int *ipAddr)
+				unsigned int *ipaddr)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
 	networkAddr[0] = NAT25_IPV6;
-	memcpy(networkAddr+1, (unsigned char *)ipAddr, 16);
+	memcpy(networkAddr+1, (unsigned char *)ipaddr, 16);
 }
 
 
@@ -1433,14 +1433,14 @@ void dhcp_flag_bcast(struct rtw_adapter *priv, struct sk_buff *skb)
 }
 
 
-void *scdb_findEntry(struct rtw_adapter *priv, unsigned char *macaddr,
-				unsigned char *ipAddr)
+void *scdb_findentry(struct rtw_adapter *priv, unsigned char *macaddr,
+				unsigned char *ipaddr)
 {
 	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
 	struct nat25_network_db_entry *db;
 	int hash;
 
-	__nat25_generate_ipv4_network_addr(networkAddr, (unsigned int *)ipAddr);
+	__nat25_generate_ipv4_network_addr(networkAddr, (unsigned int *)ipaddr);
 	hash = __nat25_network_hash(networkAddr);
 	db = priv->nethash[hash];
 	while (db != NULL) {

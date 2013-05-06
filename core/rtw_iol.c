@@ -60,11 +60,11 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 	u16 buf_offset;
 	u32 ori_len;
 
-//Todo: bulkout without this offset
+/* Todo: bulkout without this offset */
 	buf_offset = TXDESC_OFFSET;
 	ori_len = buf_offset+pattrib->pktlen;
 
-	//check if the io_buf can accommodate new cmds
+	/* check if the io_buf can accommodate new cmds */
 	if (ori_len + cmd_len + 8 > MAX_XMITBUF_SZ) {
 		DBG_871X("%s %u is large than MAX_XMITBUF_SZ:%u, can't accommodate new cmds\n", __func__
 			, ori_len + cmd_len + 8, MAX_XMITBUF_SZ);
@@ -149,7 +149,7 @@ int rtw_IOL_append_DELAY_US_cmd(struct xmit_frame *xmit_frame, u16 us)
 
 	RTW_PUT_BE32((u8*)&cmd.value, (u32)us);
 
-	//DBG_871X("%s %u\n", __func__, us);
+	/* DBG_871X("%s %u\n", __func__, us); */
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 8);
 }
@@ -160,7 +160,7 @@ int rtw_IOL_append_DELAY_MS_cmd(struct xmit_frame *xmit_frame, u16 ms)
 
 	RTW_PUT_BE32((u8*)&cmd.value, (u32)ms);
 
-	//DBG_871X("%s %u\n", __func__, ms);
+	/* DBG_871X("%s %u\n", __func__, ms); */
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 8);
 }
@@ -172,11 +172,11 @@ int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame)
 	u32 ori_len;
 	IOL_CMD end_cmd = {0x0, IOL_CMD_END, 0x0, 0x0};
 
-//Todo: bulkout without this offset
+/* Todo: bulkout without this offset */
 	buf_offset = TXDESC_OFFSET;
 	ori_len = buf_offset+pattrib->pktlen;
 
-	//check if the io_buf can accommodate new cmds
+	/* check if the io_buf can accommodate new cmds */
 	if (ori_len + 8 > MAX_XMITBUF_SZ) {
 		DBG_871X("%s %u is large than MAX_XMITBUF_SZ:%u, can't accommodate end cmd\n", __func__
 			, ori_len + 8, MAX_XMITBUF_SZ);
@@ -223,4 +223,4 @@ bool rtw_IOL_applied(ADAPTER *adapter)
 	return false;
 }
 
-#endif //CONFIG_IOL
+#endif /* CONFIG_IOL */

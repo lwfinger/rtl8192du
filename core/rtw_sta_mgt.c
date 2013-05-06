@@ -69,7 +69,7 @@ _func_enter_;
 
 	psta->under_exist_checking = 0;
 	psta->keep_alive_trycnt = 0;
-#endif	// CONFIG_AP_MODE
+#endif	/*  CONFIG_AP_MODE */
 
 _func_exit_;
 }
@@ -124,14 +124,12 @@ _func_enter_;
 	pstapriv->asoc_list_cnt = 0;
 	pstapriv->auth_list_cnt = 0;
 
-	pstapriv->auth_to = 3; // 3*2 = 6 sec
+	pstapriv->auth_to = 3; /*  3*2 = 6 sec */
 	pstapriv->assoc_to = 3;
-	//pstapriv->expire_to = 900;// 900*2 = 1800 sec = 30 min, expire after no any traffic.
-	//pstapriv->expire_to = 30;// 30*2 = 60 sec = 1 min, expire after no any traffic.
 #ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
-	pstapriv->expire_to = 3; // 3*2 = 6 sec
+	pstapriv->expire_to = 3; /*  3*2 = 6 sec */
 #else
-	pstapriv->expire_to = 60;// 60*2 = 120 sec = 2 min, expire after no any traffic.
+	pstapriv->expire_to = 60;/*  60*2 = 120 sec = 2 min, expire after no any traffic. */
 #endif
 	pstapriv->max_num_sta = NUM_STA;
 
@@ -199,7 +197,7 @@ _func_exit_;
 }
 
 
-// this function is used to free the memory of lock || sema for all stainfos
+/*  this function is used to free the memory of lock || sema for all stainfos */
 void rtw_mfree_all_stainfo(struct sta_priv *pstapriv)
 {
 	struct list_head *plist, *phead;
@@ -231,7 +229,7 @@ void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
 #endif
 
-	 rtw_mfree_all_stainfo(pstapriv); //be done before free sta_hash_lock
+	 rtw_mfree_all_stainfo(pstapriv); /* be done before free sta_hash_lock */
 
 	_rtw_spinlock_free(&pstapriv->free_sta_queue.lock);
 
@@ -290,7 +288,7 @@ _func_exit_;
 }
 
 
-//struct	sta_info *rtw_alloc_stainfo(_queue *pfree_sta_queue, unsigned char *hwaddr)
+/* struct	sta_info *rtw_alloc_stainfo(_queue *pfree_sta_queue, unsigned char *hwaddr) */
 struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 {
 	uint tmp_aid;
@@ -346,10 +344,10 @@ _func_enter_;
 
 		spin_unlock_bh(&(pstapriv->sta_hash_lock));
 
-// Commented by Albert 2009/08/13
-// For the SMC router, the sequence number of first packet of WPS handshake will be 0.
-// In this case, this packet will be dropped by recv_decache function if we use the 0x00 as the default value for tid_rxseq variable.
-// So, we initialize the tid_rxseq variable as the 0xffff.
+/*  Commented by Albert 2009/08/13 */
+/*  For the SMC router, the sequence number of first packet of WPS handshake will be 0. */
+/*  In this case, this packet will be dropped by recv_decache function if we use the 0x00 as the default value for tid_rxseq variable. */
+/*  So, we initialize the tid_rxseq variable as the 0xffff. */
 
 		for (i = 0; i < 16; i++)
                      memcpy(&psta->sta_recvpriv.rxcache.tid_rxseq[ i ], &wRxSeqInitialValue, 2);
@@ -367,9 +365,9 @@ _func_enter_;
 		init_off_ch_timer(pstapriv->padapter, psta);
 		init_handshake_timer(pstapriv->padapter, psta);
 		init_tdls_alive_timer(pstapriv->padapter, psta);
-#endif //CONFIG_TDLS
+#endif /* CONFIG_TDLS */
 
-		//for A-MPDU Rx reordering buffer control
+		/* for A-MPDU Rx reordering buffer control */
 		for (i=0; i < 16 ; i++)
 		{
 			preorder_ctrl = &psta->recvreorder_ctrl[i];
@@ -384,8 +382,8 @@ _func_enter_;
 				preorder_ctrl->indicate_seq);
 			#endif
 			preorder_ctrl->wend_b= 0xffff;
-			//preorder_ctrl->wsize_b = (NR_RECVBUFF-2);
-			preorder_ctrl->wsize_b = 64;//64;
+			/* preorder_ctrl->wsize_b = (NR_RECVBUFF-2); */
+			preorder_ctrl->wsize_b = 64;/* 64; */
 
 			_rtw_init_queue(&preorder_ctrl->pending_recvframe_queue);
 
@@ -393,7 +391,7 @@ _func_enter_;
 		}
 
 
-		//init for DM
+		/* init for DM */
 		psta->rssi_stat.UndecoratedSmoothedPWDB = 0;
 		psta->rssi_stat.UndecoratedSmoothedCCK = (-1);
 
@@ -410,7 +408,7 @@ _func_exit_;
 }
 
 
-// using pstapriv->sta_hash_lock to protect
+/*  using pstapriv->sta_hash_lock to protect */
 u32	rtw_free_stainfo(struct rtw_adapter *padapter , struct sta_info *psta)
 {
 	int i;
@@ -459,7 +457,7 @@ _func_enter_;
 	pstapriv->asoc_sta_count --;
 
 
-	// re-init sta_info; 20061114
+	/*  re-init sta_info; 20061114 */
 	_rtw_init_sta_xmit_priv(&psta->sta_xmitpriv);
 	_rtw_init_sta_recv_priv(&psta->sta_recvpriv);
 
@@ -472,9 +470,9 @@ _func_enter_;
 	_cancel_timer_ex(&psta->off_ch_timer);
 	_cancel_timer_ex(&psta->alive_timer1);
 	_cancel_timer_ex(&psta->alive_timer2);
-#endif //CONFIG_TDLS
+#endif /* CONFIG_TDLS */
 
-	//for A-MPDU Rx reordering buffer control, cancel reordering_ctrl_timer
+	/* for A-MPDU Rx reordering buffer control, cancel reordering_ctrl_timer */
 	for (i=0; i < 16 ; i++)
 	{
 		struct list_head *phead, *plist;
@@ -537,7 +535,7 @@ _func_enter_;
 	pstapriv->sta_dz_bitmap &=~BIT(psta->aid);
 	pstapriv->tim_bitmap &=~BIT(psta->aid);
 
-	//rtw_indicate_sta_disassoc_event(padapter, psta);
+	/* rtw_indicate_sta_disassoc_event(padapter, psta); */
 
 	if ((psta->aid >0)&&(pstapriv->sta_aid[psta->aid - 1] == psta))
 	{
@@ -545,11 +543,11 @@ _func_enter_;
 		psta->aid = 0;
 	}
 
-#endif	// CONFIG_NATIVEAP_MLME
+#endif	/*  CONFIG_NATIVEAP_MLME */
 
 	psta->under_exist_checking = 0;
 
-#endif	// CONFIG_AP_MODE
+#endif	/*  CONFIG_AP_MODE */
 
 	spin_lock_bh(&(pfree_sta_queue->lock));
 	rtw_list_insert_tail(&psta->list, get_list_head(pfree_sta_queue));
@@ -562,7 +560,7 @@ _func_exit_;
 	return _SUCCESS;
 }
 
-// free all stainfo which in sta_hash[all]
+/*  free all stainfo which in sta_hash[all] */
 void rtw_free_all_stainfo(struct rtw_adapter *padapter)
 {
 	struct list_head *plist, *phead;
@@ -634,7 +632,7 @@ _func_enter_;
 		psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 
 		if ((_rtw_memcmp(psta->hwaddr, addr, ETH_ALEN))== true)
-		{ // if found the matched address
+		{ /*  if found the matched address */
 			break;
 		}
 		psta=NULL;
@@ -665,7 +663,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	// default broadcast & multicast use macid 1
+	/*  default broadcast & multicast use macid 1 */
 	psta->mac_id = 1;
 
 	ptxservq= &(psta->sta_xmitpriv.be_q);
@@ -718,9 +716,9 @@ u8 rtw_access_ctrl(struct rtw_adapter *padapter, u8 *mac_addr)
 	spin_unlock_bh(&(pacl_node_q->lock));
 
 
-	if (pacl_list->mode == 1)//accept unless in deny list
+	if (pacl_list->mode == 1)/* accept unless in deny list */
 		res = (match == true) ?  false:true;
-	else if (pacl_list->mode == 2)//deny unless in accept list
+	else if (pacl_list->mode == 2)/* deny unless in accept list */
 		res = (match == true) ?  true:false;
 	else
 		 res = true;

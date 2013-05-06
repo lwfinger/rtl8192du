@@ -35,7 +35,7 @@ void ips_enter(struct rtw_adapter * padapter)
 
 	pwrpriv->bips_processing = true;
 
-	// syn ips_mode with request
+	/*  syn ips_mode with request */
 	pwrpriv->ips_mode = pwrpriv->ips_mode_req;
 
 	pwrpriv->ips_enter_cnts++;
@@ -124,7 +124,7 @@ bool rtw_pwr_unassociated_idle(struct rtw_adapter *adapter)
 	bool ret = false;
 
 	if (adapter->pwrctrlpriv.ips_deny_time >= rtw_get_current_time()) {
-		//DBG_8192D("%s ips_deny_time\n", __func__);
+		/* DBG_8192D("%s ips_deny_time\n", __func__); */
 		goto exit;
 	}
 
@@ -174,12 +174,12 @@ void rtw_ps_processor(struct rtw_adapter*padapter)
 {
 #ifdef CONFIG_P2P
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-#endif //CONFIG_P2P
+#endif /* CONFIG_P2P */
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 #ifdef SUPPORT_HW_RFOFF_DETECTED
 	rt_rf_power_state rfpwrstate;
-#endif //SUPPORT_HW_RFOFF_DETECTED
+#endif /* SUPPORT_HW_RFOFF_DETECTED */
 
 	pwrpriv->ps_processing = true;
 
@@ -187,7 +187,7 @@ void rtw_ps_processor(struct rtw_adapter*padapter)
 	if (pwrpriv->bips_processing == true)
 		goto exit;
 
-	//DBG_8192D("==> fw report state(0x%x)\n",rtw_read8(padapter,0x1ca));
+	/* DBG_8192D("==> fw report state(0x%x)\n",rtw_read8(padapter,0x1ca)); */
 	if (padapter->pwrctrlpriv.bHWPwrPindetect)
 	{
 	#ifdef CONFIG_AUTOSUSPEND
@@ -215,7 +215,7 @@ void rtw_ps_processor(struct rtw_adapter*padapter)
 			}
 		}
 		else
-	#endif //CONFIG_AUTOSUSPEND
+	#endif /* CONFIG_AUTOSUSPEND */
 		{
 			rfpwrstate = RfOnOffDetect(padapter);
 			DBG_8192D("@@@@- #2  %s==> rfstate:%s\n",__func__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
@@ -239,7 +239,7 @@ void rtw_ps_processor(struct rtw_adapter*padapter)
 		}
 		pwrpriv->pwr_state_check_cnts ++;
 	}
-#endif //SUPPORT_HW_RFOFF_DETECTED
+#endif /* SUPPORT_HW_RFOFF_DETECTED */
 
 	if (pwrpriv->ips_mode_req == IPS_NONE
 		#ifdef CONFIG_CONCURRENT_MODE
@@ -272,7 +272,7 @@ void rtw_ps_processor(struct rtw_adapter*padapter)
 		{
 		}
 		else
-		#endif //CONFIG_AUTOSUSPEND
+		#endif /* CONFIG_AUTOSUSPEND */
 		{
 			#ifdef CONFIG_IPS
 			ips_enter(padapter);
@@ -385,13 +385,13 @@ void rtw_set_ps_mode(struct rtw_adapter * padapter, u8 ps_mode, u8 smart_ps)
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 #ifdef CONFIG_P2P
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-#endif //CONFIG_P2P
+#endif /* CONFIG_P2P */
 #ifdef CONFIG_TDLS
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	int i, j;
 	_list	*plist, *phead;
 	struct sta_info *ptdls_sta;
-#endif //CONFIG_TDLS
+#endif /* CONFIG_TDLS */
 
 _func_enter_;
 
@@ -409,12 +409,12 @@ _func_enter_;
 		return;
 	}
 
-	//if (pwrpriv->pwr_mode == PS_MODE_ACTIVE)
+	/* if (pwrpriv->pwr_mode == PS_MODE_ACTIVE) */
 	if (ps_mode == PS_MODE_ACTIVE)
 	{
 #ifdef CONFIG_P2P_PS
 		if (pwdinfo->opp_ps == 0)
-#endif // CONFIG_P2P_PS
+#endif /*  CONFIG_P2P_PS */
 		{
 #ifdef CONFIG_LPS_LCLK
 			_enter_pwrlock(&pwrpriv->lock);
@@ -439,7 +439,7 @@ _func_enter_;
 			}
 
 			spin_unlock_bh(&pstapriv->sta_hash_lock);
-#endif //CONFIG_TDLS
+#endif /* CONFIG_TDLS */
 
 			pwrpriv->smart_ps = smart_ps;
 			pwrpriv->pwr_mode = ps_mode;
@@ -493,17 +493,17 @@ _func_enter_;
 			}
 
 			spin_unlock_bh(&pstapriv->sta_hash_lock);
-#endif //CONFIG_TDLS
+#endif /* CONFIG_TDLS */
 
 			pwrpriv->smart_ps = smart_ps;
 			pwrpriv->pwr_mode = ps_mode;
 			pwrpriv->bFwCurrentInPSMode = true;
 			rtw_hal_set_hwreg(padapter, HW_VAR_H2C_FW_PWRMODE, (u8 *)(&ps_mode));
 #ifdef CONFIG_P2P_PS
-			// Set CTWindow after LPS
+			/*  Set CTWindow after LPS */
 			if (pwdinfo->opp_ps == 1)
 				p2p_ps_wk_cmd(padapter, P2P_PS_ENABLE, 0);
-#endif // CONFIG_P2P_PS
+#endif /*  CONFIG_P2P_PS */
 #ifdef CONFIG_LPS_LCLK
 			if (pwrpriv->alives == 0)
 				rtw_set_rpwm(padapter, PS_STATE_S0);
@@ -514,20 +514,20 @@ _func_enter_;
 			_exit_pwrlock(&pwrpriv->lock);
 #endif
 		}
-		//else
-		//{
-		//	pwrpriv->pwr_mode = PS_MODE_ACTIVE;
-		//}
+		/* else */
+		/*  */
+		/* 	pwrpriv->pwr_mode = PS_MODE_ACTIVE; */
+		/*  */
 	}
 
 _func_exit_;
 }
 
 
-//
-//	Description:
-//		Enter the leisure power save mode.
-//
+/*  */
+/* 	Description: */
+/* 		Enter the leisure power save mode. */
+/*  */
 void rtw_lps_enter(struct rtw_adapter * padapter)
 {
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
@@ -536,7 +536,7 @@ void rtw_lps_enter(struct rtw_adapter * padapter)
 
 _func_enter_;
 
-//	DBG_8192D("+LeisurePSEnter\n");
+/* 	DBG_8192D("+LeisurePSEnter\n"); */
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (padapter->iface_type != IFACE_PORT0)
@@ -579,8 +579,8 @@ _func_enter_;
 		return ;
 
 	if (pwrpriv->bLeisurePs) {
-		// Idle for a while if we connect to AP a while ago.
-		if (pwrpriv->LpsIdleCount >= 2) //  4 Sec
+		/*  Idle for a while if we connect to AP a while ago. */
+		if (pwrpriv->LpsIdleCount >= 2) /*   4 Sec */
 		{
 			if (pwrpriv->pwr_mode == PS_MODE_ACTIVE)
 			{
@@ -591,16 +591,16 @@ _func_enter_;
 			pwrpriv->LpsIdleCount++;
 	}
 
-//	DBG_8192D("-LeisurePSEnter\n");
+/* 	DBG_8192D("-LeisurePSEnter\n"); */
 
 _func_exit_;
 }
 
 
-//
-//	Description:
-//		Leave the leisure power save mode.
-//
+/*  */
+/* 	Description: */
+/* 		Leave the leisure power save mode. */
+/*  */
 void rtw_lps_leave(struct rtw_adapter * padapter)
 {
 #define LPS_LEAVE_TIMEOUT_MS 100
@@ -611,7 +611,7 @@ void rtw_lps_leave(struct rtw_adapter * padapter)
 
 _func_enter_;
 
-//	DBG_8192D("+LeisurePSLeave\n");
+/* 	DBG_8192D("+LeisurePSLeave\n"); */
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (padapter->iface_type != IFACE_PORT0)
@@ -646,31 +646,31 @@ _func_enter_;
 	}
 
 
-//	DBG_8192D("-LeisurePSLeave\n");
+/* 	DBG_8192D("-LeisurePSLeave\n"); */
 
 _func_exit_;
 }
 
 #endif
 
-//
-// Description: Leave all power save mode: LPS, FwLPS, IPS if needed.
-// Move code to function by tynli. 2010.03.26.
-//
+/*  */
+/*  Description: Leave all power save mode: LPS, FwLPS, IPS if needed. */
+/*  Move code to function by tynli. 2010.03.26. */
+/*  */
 void LeaveAllPowerSaveMode(struct rtw_adapter * Adapter)
 {
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 
 _func_enter_;
 
-	//DBG_8192D("%s.....\n",__func__);
+	/* DBG_8192D("%s.....\n",__func__); */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
-	{ //connect
+	{ /* connect */
 #ifdef CONFIG_P2P_PS
 		p2p_ps_wk_cmd(Adapter, P2P_PS_DISABLE, 0);
-#endif // CONFIG_P2P_PS
+#endif /*  CONFIG_P2P_PS */
 #ifdef CONFIG_LPS
-		//DBG_8192D("==> leave LPS.......\n");
+		/* DBG_8192D("==> leave LPS.......\n"); */
 		rtw_lps_leave(Adapter);
 #endif
 	}
@@ -684,20 +684,12 @@ _func_enter_;
 				#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 				usb_disable_autosuspend(adapter_to_dvobj(Adapter)->pusbdev);
 				#elif (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22) && LINUX_VERSION_CODE<=KERNEL_VERSION(2,6,34))
-				adapter_to_dvobj(Adapter)->pusbdev->autosuspend_disabled = Adapter->bDisableAutosuspend;//autosuspend disabled by the user
+				adapter_to_dvobj(Adapter)->pusbdev->autosuspend_disabled = Adapter->bDisableAutosuspend;/* autosuspend disabled by the user */
 				#endif
 			}
 			else
 			#endif
 			{
-			/*
-				#ifdef CONFIG_IPS
-				if (false == ips_leave(Adapter))
-				{
-					DBG_8192D("======> ips_leave fail.............\n");
-				}
-				#endif
-			*/
 			}
 		}
 	}
@@ -1029,7 +1021,7 @@ _func_exit_;
 
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 static void resume_workitem_callback(struct work_struct *work);
-#endif //CONFIG_RESUME_IN_WORKQUEUE
+#endif /* CONFIG_RESUME_IN_WORKQUEUE */
 
 void rtw_init_pwrctrl_priv(struct rtw_adapter * padapter)
 {
@@ -1058,8 +1050,7 @@ _func_enter_;
 #endif
 
 	pwrctrlpriv->LpsIdleCount = 0;
-	//pwrctrlpriv->FWCtrlPSMode =padapter->registrypriv.power_mgnt;// PS_MODE_MIN;
-	pwrctrlpriv->power_mgnt =padapter->registrypriv.power_mgnt;// PS_MODE_MIN;
+	pwrctrlpriv->power_mgnt =padapter->registrypriv.power_mgnt;/*  PS_MODE_MIN; */
 	pwrctrlpriv->bLeisurePs = (PS_MODE_ACTIVE != pwrctrlpriv->power_mgnt)?true:false;
 
 	pwrctrlpriv->bFwCurrentInPSMode = false;
@@ -1078,12 +1069,12 @@ _func_enter_;
 	#ifdef CONFIG_RESUME_IN_WORKQUEUE
 	_init_workitem(&pwrctrlpriv->resume_work, resume_workitem_callback, NULL);
 	pwrctrlpriv->rtw_workqueue = create_singlethread_workqueue("rtw_workqueue");
-	#endif //CONFIG_RESUME_IN_WORKQUEUE
+	#endif /* CONFIG_RESUME_IN_WORKQUEUE */
 
 	#if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 	pwrctrlpriv->early_suspend.suspend = NULL;
 	rtw_register_early_suspend(pwrctrlpriv);
-	#endif //CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER
+	#endif /* CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER */
 
 
 _func_exit_;
@@ -1096,7 +1087,7 @@ void rtw_free_pwrctrl_priv(struct rtw_adapter * adapter)
 
 _func_enter_;
 
-	//memset((unsigned char *)pwrctrlpriv, 0, sizeof(struct pwrctrl_priv));
+	/* memset((unsigned char *)pwrctrlpriv, 0, sizeof(struct pwrctrl_priv)); */
 
 
 	#ifdef CONFIG_RESUME_IN_WORKQUEUE
@@ -1109,7 +1100,7 @@ _func_enter_;
 
 	#if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 	rtw_unregister_early_suspend(pwrctrlpriv);
-	#endif //CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER
+	#endif /* CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER */
 
 	_free_pwrlock(&pwrctrlpriv->lock);
 
@@ -1129,11 +1120,11 @@ static void resume_workitem_callback(struct work_struct *work)
 
 void rtw_resume_in_workqueue(struct pwrctrl_priv *pwrpriv)
 {
-	// accquire system's suspend lock preventing from falliing asleep while resume in workqueue
+	/*  accquire system's suspend lock preventing from falliing asleep while resume in workqueue */
 	rtw_lock_suspend();
 	queue_work(pwrpriv->rtw_workqueue, &pwrpriv->resume_work);
 }
-#endif //CONFIG_RESUME_IN_WORKQUEUE
+#endif /* CONFIG_RESUME_IN_WORKQUEUE */
 
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 inline bool rtw_is_earlysuspend_registered(struct pwrctrl_priv *pwrpriv)
@@ -1178,7 +1169,7 @@ void rtw_register_early_suspend(struct pwrctrl_priv *pwrpriv)
 {
 	DBG_8192D("%s\n", __func__);
 
-	//jeff: set the early suspend level before blank screen, so we wll do late resume after scree is lit
+	/* jeff: set the early suspend level before blank screen, so we wll do late resume after scree is lit */
 	pwrpriv->early_suspend.level = EARLY_SUSPEND_LEVEL_BLANK_SCREEN - 20;
 	pwrpriv->early_suspend.suspend = rtw_early_suspend;
 	pwrpriv->early_suspend.resume = rtw_late_resume;
@@ -1198,7 +1189,7 @@ void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv)
 	pwrpriv->early_suspend.suspend = NULL;
 	pwrpriv->early_suspend.resume = NULL;
 }
-#endif //CONFIG_HAS_EARLYSUSPEND
+#endif /* CONFIG_HAS_EARLYSUSPEND */
 
 #ifdef CONFIG_ANDROID_POWER
 extern int rtw_resume_process(struct rtw_adapter * padapter);
@@ -1226,7 +1217,7 @@ void rtw_register_early_suspend(struct pwrctrl_priv *pwrpriv)
 {
 	DBG_8192D("%s\n", __func__);
 
-	//jeff: set the early suspend level before blank screen, so we wll do late resume after scree is lit
+	/* jeff: set the early suspend level before blank screen, so we wll do late resume after scree is lit */
 	pwrpriv->early_suspend.level = ANDROID_EARLY_SUSPEND_LEVEL_BLANK_SCREEN - 20;
 	pwrpriv->early_suspend.suspend = rtw_early_suspend;
 	pwrpriv->early_suspend.resume = rtw_late_resume;
@@ -1245,7 +1236,7 @@ void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv)
 	pwrpriv->early_suspend.suspend = NULL;
 	pwrpriv->early_suspend.resume = NULL;
 }
-#endif //CONFIG_ANDROID_POWER
+#endif /* CONFIG_ANDROID_POWER */
 
 u8 rtw_interface_ps_func(struct rtw_adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id,u8* val)
 {
@@ -1314,19 +1305,19 @@ int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms, const char 
 			DBG_8192D("%s wait bInSuspend done\n", __func__);
 	}
 
-	//System suspend is not allowed to wakeup
+	/* System suspend is not allowed to wakeup */
 	if ((pwrpriv->bInternalAutoSuspend == false) && (true == pwrpriv->bInSuspend)) {
 		ret = _FAIL;
 		goto exit;
 	}
 
-	//block???
+	/* block??? */
 	if ((pwrpriv->bInternalAutoSuspend == true)  && (padapter->net_closed == true)) {
 		ret = _FAIL;
 		goto exit;
 	}
 
-	//I think this should be check in IPS, LPS, autosuspend functions...
+	/* I think this should be check in IPS, LPS, autosuspend functions... */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
 		ret = _SUCCESS;
@@ -1367,7 +1358,7 @@ int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms, const char 
 		}
 	}
 
-	//TODO: the following checking need to be merged...
+	/* TODO: the following checking need to be merged... */
 	if (padapter->bDriverStopped
 		|| !padapter->bup
 		|| !padapter->hw_init_completed

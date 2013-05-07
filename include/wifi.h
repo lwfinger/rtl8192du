@@ -1139,5 +1139,6 @@ enum P2P_PS_MODE
 
 #define IP_MCAST_MAC(mac)	((mac[0]==0x01)&&(mac[1]==0x00)&&(mac[2]==0x5e))
 #define ICMPV6_MCAST_MAC(mac)	((mac[0]==0x33)&&(mac[1]==0x33)&&(mac[2]!=0xff))
+extern unsigned char REALTEK_96B_IE[6];
 
 #endif // _WIFI_H_

@@ -257,7 +257,7 @@ rtl8192d_FirmwareSelfReset(
 			//DbgPrint("FirmwareDownload92C(): Fail!!!!!! 0x03 = %x\n", u1bTmp);
 			rtw_write8(Adapter, REG_FWIMR, 0x00);
 			//debug reset fail
-			printk("FirmwareDownload92C(): Fail!!!!!! 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x \n", rtw_read32(Adapter, 0x1c)
+			printk("FirmwareDownload92C(): Fail!!!!!! 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x\n", rtw_read32(Adapter, 0x1c)
 			, rtw_read32(Adapter, 0x130), rtw_read32(Adapter, 0x134), rtw_read32(Adapter, 0x138), rtw_read32(Adapter, 0x1c4),
 			rtw_read32(Adapter, 0x1cc), rtw_read32(Adapter, 0x80), rtw_read32(Adapter, 0x1c0));
 		}

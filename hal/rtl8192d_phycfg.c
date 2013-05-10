@@ -3405,7 +3405,7 @@ PHY_SwChnl8192D(	// Call after initialization
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if ((BuddyAdapter !=NULL) && (pHalData->bSlaveOfDMSP))
 	{
-		DBG_8192D("PHY_SwChnl8192D():slave return when slave \n");
+		DBG_8192D("PHY_SwChnl8192D():slave return when slave\n");
 		//pHalData->SwChnlInProgress=false;
 		return;
 	}
@@ -7014,8 +7014,8 @@ HalChangeCCKStatus8192D(
 		{
 			if (rtw_read32(Adapter, 0x200) != rtw_read32(Adapter, 0x204))
 			{
-				DBG_8192D("packet in tx packet buffer aaaaaaaaa 0x204 %x \n", rtw_read32(Adapter, 0x204));
-				DBG_8192D("packet in tx packet buffer aaaaaaa 0x200 %x \n", rtw_read32(Adapter, 0x200));
+				DBG_8192D("packet in tx packet buffer aaaaaaaaa 0x204 %x\n", rtw_read32(Adapter, 0x204));
+				DBG_8192D("packet in tx packet buffer aaaaaaa 0x200 %x\n", rtw_read32(Adapter, 0x200));
 				rtw_udelay_os(1000);
 			}
 			else
@@ -7034,8 +7034,8 @@ HalChangeCCKStatus8192D(
 			{
 				if (PlatformEFIORead4Byte(BuddyAdapter, 0x200) != PlatformEFIORead4Byte(BuddyAdapter, 0x204))
 				{
-					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("packet in tx packet buffer aaaaaaaaa 0x204 %x \n", PlatformEFIORead4Byte(BuddyAdapter, 0x204)));
-					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("packet in tx packet buffer aaaaaaa 0x200 %x \n", PlatformEFIORead4Byte(BuddyAdapter, 0x200)));
+					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("packet in tx packet buffer aaaaaaaaa 0x204 %x\n", PlatformEFIORead4Byte(BuddyAdapter, 0x204)));
+					RT_TRACE(COMP_EASY_CONCURRENT,DBG_LOUD,("packet in tx packet buffer aaaaaaa 0x200 %x\n", PlatformEFIORead4Byte(BuddyAdapter, 0x200)));
 					PlatformStallExecution(1000);
 				}
 				else

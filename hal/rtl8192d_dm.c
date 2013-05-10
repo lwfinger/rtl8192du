@@ -941,7 +941,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 
 	if (bGetValueFromBuddyAdapter)
 	{
-		DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 1 connect,mac 0 disconnect case \n");
+		DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 1 connect,mac 0 disconnect case\n");
 		if (pdmpriv->bChangeCCKPDStateForAnotherMacOfDMSP)
 		{
 			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac1\n");
@@ -1298,14 +1298,14 @@ static void odm_DynamicTxPower_92D(struct rtw_adapter *	Adapter)
 					DBG_8192D("dm_DynamicTxPower() BuddyAdapter DMSP\n");
 					if (pHalData->bSlaveOfDMSP)
 					{
-						DBG_8192D("dm_DynamicTxPower() bslave case \n");
+						DBG_8192D("dm_DynamicTxPower() bslave case\n");
 						pbuddy_dmpriv = &GET_HAL_DATA(BuddyAdapter)->dmpriv;
 						pbuddy_dmpriv->bChangeTxHighPowerLvlForAnotherMacOfDMSP = true;
 						pbuddy_dmpriv->CurTxHighLvlForAnotherMacOfDMSP = pdmpriv->DynamicTxHighPowerLvl;
 					}
 					else
 					{
-						DBG_8192D("dm_DynamicTxPower() master case \n");
+						DBG_8192D("dm_DynamicTxPower() master case\n");
 						if (!bGetValueFromBuddyAdapter)
 						{
 							DBG_8192D("dm_DynamicTxPower() mac 0 for mac 0\n");

@@ -557,9 +557,9 @@ static int rtw_wowlan_set_pattern(struct rtw_adapter *padapter ,u8* pbuf) {
 	if (crc) {
 		// Have the CRC value
 		crc_val=*(u16 *)(&pbuf[2]);
-		DBG_8192D("rtw_wowlan_set_pattern crc_val  0x%x \n", crc_val);
+		DBG_8192D("rtw_wowlan_set_pattern crc_val  0x%x\n", crc_val);
 		crc_val=__cpu_to_le16(crc_val);
-		DBG_8192D("rtw_wowlan_set_pattern crc_val  after 0x%x \n", crc_val);
+		DBG_8192D("rtw_wowlan_set_pattern crc_val  after 0x%x\n", crc_val);
 	}
 	else {
 		DBG_8192D("+rtw_wowlan_set_pattern   crc=0[%x]  Should calculate the CRC\n", crc);

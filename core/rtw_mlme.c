@@ -505,7 +505,6 @@ _func_enter_;
 _func_exit_;
 }
 
-void rtw_free_network_nolock(struct mlme_priv *pmlmepriv, struct wlan_network *pnetwork);
 void rtw_free_network_nolock(struct mlme_priv *pmlmepriv, struct wlan_network *pnetwork)
 {
 _func_enter_;
@@ -557,7 +556,6 @@ int rtw_is_same_ibss(struct rtw_adapter *adapter, struct wlan_network *pnetwork)
 	return ret;
 }
 
-inline int is_same_ess(struct wlan_bssid_ex *a, struct wlan_bssid_ex *b);
 inline int is_same_ess(struct wlan_bssid_ex *a, struct wlan_bssid_ex *b)
 {
 	/* RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("(%s,%d)(%s,%d)\n", */
@@ -834,7 +832,6 @@ exit:
 _func_exit_;
 }
 
-void rtw_add_network(struct rtw_adapter *adapter, struct wlan_bssid_ex *pnetwork);
 void rtw_add_network(struct rtw_adapter *adapter, struct wlan_bssid_ex *pnetwork)
 {
 	struct	mlme_priv	*pmlmepriv = &(((struct rtw_adapter *)adapter)->mlmepriv);
@@ -862,7 +859,6 @@ _func_exit_;
 /* 			   (3) WMM */
 /* 			   (4) HT */
 /*                      (5) others */
-int rtw_is_desired_network(struct rtw_adapter *adapter, struct wlan_network *pnetwork);
 int rtw_is_desired_network(struct rtw_adapter *adapter, struct wlan_network *pnetwork)
 {
 	struct security_priv *psecuritypriv = &adapter->securitypriv;

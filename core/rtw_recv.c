@@ -125,7 +125,6 @@ exit:
 	return res;
 }
 
-void rtw_mfree_recv_priv_lock(struct recv_priv *precvpriv);
 void rtw_mfree_recv_priv_lock(struct recv_priv *precvpriv)
 {
 	_rtw_spinlock_free(&precvpriv->lock);
@@ -690,8 +689,6 @@ union recv_frame *decryptor(struct rtw_adapter *padapter,
 
 /* set the security information in the recv_frame */
 union recv_frame *portctrl(struct rtw_adapter *adapter,
-			   union recv_frame *precv_frame);
-union recv_frame *portctrl(struct rtw_adapter *adapter,
 			   union recv_frame *precv_frame)
 {
 	u8 *psta_addr, *ptr;
@@ -781,8 +778,6 @@ union recv_frame *portctrl(struct rtw_adapter *adapter,
 }
 
 int recv_decache(union recv_frame *precv_frame, u8 bretry,
-		 struct stainfo_rxcache *prxcache);
-int recv_decache(union recv_frame *precv_frame, u8 bretry,
 		 struct stainfo_rxcache *prxcache)
 {
 	int tid = precv_frame->u.hdr.attrib.priority;
@@ -843,8 +838,6 @@ void process_pwrbit_data(struct rtw_adapter *padapter,
 #endif
 }
 
-void process_wmmps_data(struct rtw_adapter *padapter,
-			union recv_frame *precv_frame);
 void process_wmmps_data(struct rtw_adapter *padapter,
 			union recv_frame *precv_frame)
 {
@@ -998,8 +991,6 @@ exit:
 #endif /* CONFIG_TDLS */
 
 void count_rx_stats(struct rtw_adapter *padapter, union recv_frame *prframe,
-		    struct sta_info *sta);
-void count_rx_stats(struct rtw_adapter *padapter, union recv_frame *prframe,
 		    struct sta_info *sta)
 {
 	int sz;
@@ -1029,8 +1020,6 @@ void count_rx_stats(struct rtw_adapter *padapter, union recv_frame *prframe,
 	}
 }
 
-int sta2sta_data_frame(struct rtw_adapter *adapter,
-		       union recv_frame *precv_frame, struct sta_info **psta);
 int sta2sta_data_frame(struct rtw_adapter *adapter,
 		       union recv_frame *precv_frame, struct sta_info **psta)
 {
@@ -1235,8 +1224,6 @@ exit:
 }
 
 int ap2sta_data_frame(struct rtw_adapter *adapter,
-		      union recv_frame *precv_frame, struct sta_info **psta);
-int ap2sta_data_frame(struct rtw_adapter *adapter,
 		      union recv_frame *precv_frame, struct sta_info **psta)
 {
 	u8 *ptr = precv_frame->u.hdr.rx_data;
@@ -1393,8 +1380,6 @@ exit:
 }
 
 int sta2ap_data_frame(struct rtw_adapter *adapter,
-		      union recv_frame *precv_frame, struct sta_info **psta);
-int sta2ap_data_frame(struct rtw_adapter *adapter,
 		      union recv_frame *precv_frame, struct sta_info **psta)
 {
 	u8 *ptr = precv_frame->u.hdr.rx_data;
@@ -1461,8 +1446,6 @@ exit:
 	return ret;
 }
 
-int validate_recv_ctrl_frame(struct rtw_adapter *padapter,
-			     union recv_frame *precv_frame);
 int validate_recv_ctrl_frame(struct rtw_adapter *padapter,
 			     union recv_frame *precv_frame)
 {
@@ -1604,8 +1587,6 @@ int validate_recv_ctrl_frame(struct rtw_adapter *padapter,
 
 union recv_frame *recvframe_chk_defrag(struct rtw_adapter *padapter,
 				       union recv_frame *precv_frame);
-int validate_recv_mgnt_frame(struct rtw_adapter *padapter,
-			     union recv_frame *precv_frame);
 int validate_recv_mgnt_frame(struct rtw_adapter *padapter,
 			     union recv_frame *precv_frame)
 {
@@ -1792,8 +1773,6 @@ exit:
 	return ret;
 }
 
-int validate_recv_frame(struct rtw_adapter *adapter,
-			union recv_frame *precv_frame);
 int validate_recv_frame(struct rtw_adapter *adapter,
 			union recv_frame *precv_frame)
 {
@@ -2373,7 +2352,6 @@ exit:
 	return ret;
 }
 
-int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num);
 int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
 {
 	u8 wsize = preorder_ctrl->wsize_b;
@@ -2431,8 +2409,6 @@ int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
 }
 
 int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl,
-			      union recv_frame *prframe);
-int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl,
 			      union recv_frame *prframe)
 {
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
@@ -2461,9 +2437,6 @@ int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl,
 	return true;
 }
 
-int recv_indicatepkts_in_order(struct rtw_adapter *padapter,
-			       struct recv_reorder_ctrl *preorder_ctrl,
-			       int bforced);
 int recv_indicatepkts_in_order(struct rtw_adapter *padapter,
 			       struct recv_reorder_ctrl *preorder_ctrl,
 			       int bforced)
@@ -3014,7 +2987,6 @@ _recv_data_drop:
 	return ret;
 }
 
-int recv_func(struct rtw_adapter *padapter, union recv_frame *rframe);
 int recv_func(struct rtw_adapter *padapter, union recv_frame *rframe)
 {
 	int ret;

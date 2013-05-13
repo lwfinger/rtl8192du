@@ -282,7 +282,6 @@ static bool HalUsbSetQueuePipeMapping8192DUsb(
 	return result;
 }
 
-void rtl8192du_interface_configure(struct rtw_adapter *padapter);
 void rtl8192du_interface_configure(struct rtw_adapter *padapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter);
@@ -1705,7 +1704,6 @@ static void dump_wakup_reason(struct rtw_adapter *padapter)
 }
 #endif //CONFIG_WOWLAN
 
-u32 rtl8192du_hal_init(struct rtw_adapter *padapter);
 u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 {
 	u8	val8 = 0, tmpU1b;
@@ -2867,7 +2865,6 @@ CardDisableWithoutHWSM(// without HW Auto state machine
 	return rtStatus;
 }
 
-u32 rtl8192du_hal_deinit(struct rtw_adapter *padapter);
 u32 rtl8192du_hal_deinit(struct rtw_adapter *padapter)
  {
 	u8	u1bTmp;
@@ -2919,7 +2916,6 @@ _func_exit_;
 	return _SUCCESS;
  }
 
-unsigned int rtl8192du_inirp_init(struct rtw_adapter * padapter);
 unsigned int rtl8192du_inirp_init(struct rtw_adapter * padapter)
 {
 	u8 i;
@@ -2975,7 +2971,6 @@ _func_exit_;
 	return status;
 }
 
-unsigned int rtl8192du_inirp_deinit(struct rtw_adapter * padapter);
 unsigned int rtl8192du_inirp_deinit(struct rtw_adapter * padapter)
 {
 	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit\n"));
@@ -3011,14 +3006,7 @@ _ReadPROMVersion(
 	}
 }
 
-u32
-_GetChannelGroup(
-	u32	channel
-	);
-u32
-_GetChannelGroup(
-	u32	channel
-	)
+u32 _GetChannelGroup(u32 channel)
 {
 	//RT_ASSERT((channel < 14), ("Channel %d no is supported!\n"));
 
@@ -3504,14 +3492,7 @@ ResumeTxBeacon(
 //
 // 2010.11.17. Added by tynli.
 //
-u8
-SelectRTSInitialRate(
-	struct rtw_adapter *	Adapter
-);
-u8
-SelectRTSInitialRate(
-	struct rtw_adapter *	Adapter
-)
+u8 SelectRTSInitialRate(struct rtw_adapter *Adapter)
 {
 	struct sta_info		*psta;
 	struct mlme_priv		*pmlmepriv = &Adapter->mlmepriv;
@@ -3621,14 +3602,7 @@ SelectRTSInitialRate(
 // Description: Selcet the RTS init rate and set the rate to HW.
 // 2010.11.25. Created by tynli.
 //
-void
-SetRTSRateWorkItemCallback(
-	void *			pContext
-);
-void
-SetRTSRateWorkItemCallback(
-	void *			pContext
-)
+void SetRTSRateWorkItemCallback(void *pContext)
 {
 	struct rtw_adapter *Adapter =  (struct rtw_adapter *)pContext;
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
@@ -4341,7 +4315,6 @@ static void dc_hw_var_mlme_join(struct rtw_adapter * Adapter, u8 join_state)
 }
 #endif
 
-void SetHwReg8192DU(struct rtw_adapter * Adapter, u8 variable, u8* val);
 void SetHwReg8192DU(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
@@ -5254,7 +5227,6 @@ _func_enter_;
 _func_exit_;
 }
 
-void GetHwReg8192DU(struct rtw_adapter * Adapter, u8 variable, u8* val);
 void GetHwReg8192DU(struct rtw_adapter * Adapter, u8 variable, u8* val)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
@@ -5358,12 +5330,6 @@ SetHalDefVar8192DUsb(
 	struct rtw_adapter *				Adapter,
 	enum HAL_DEF_VARIABLE		eVariable,
 	void *pValue
-	);
-u8
-SetHalDefVar8192DUsb(
-	struct rtw_adapter *				Adapter,
-	enum HAL_DEF_VARIABLE		eVariable,
-	void *pValue
 	)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
@@ -5447,7 +5413,6 @@ u32  _update_92cu_basic_rate(struct rtw_adapter *padapter, unsigned int mask)
 	return BrateCfg;
 }
 
-void _update_response_rate(struct rtw_adapter *padapter,unsigned int mask);
 void _update_response_rate(struct rtw_adapter *padapter,unsigned int mask)
 {
 	u8	RateIndex = 0;
@@ -5465,7 +5430,6 @@ void _update_response_rate(struct rtw_adapter *padapter,unsigned int mask)
 	rtw_write8(padapter, REG_INIRTS_RATE_SEL, RateIndex);
 }
 
-void UpdateHalRAMask8192DUsb(struct rtw_adapter * padapter, u32 mac_id);
 void UpdateHalRAMask8192DUsb(struct rtw_adapter * padapter, u32 mac_id)
 {
 	u32	value[2];

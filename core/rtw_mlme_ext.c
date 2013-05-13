@@ -10208,7 +10208,6 @@ void mlmeext_sta_del_event_callback(struct rtw_adapter *adapt)
 Following are the functions for the timer handlers
 
 *****************************************************************************/
-void _linked_rx_signal_strehgth_display(struct rtw_adapter *adapt);
 void _linked_rx_signal_strehgth_display(struct rtw_adapter *adapt)
 {
 	int UndecoratedSmoothedPWDB;

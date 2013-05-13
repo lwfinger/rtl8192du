@@ -294,7 +294,6 @@ FillH2CCmd92D(
 	return;
 }
 
-u8 rtl8192d_h2c_msg_hdl(struct rtw_adapter *padapter, unsigned char *pbuf);
 u8 rtl8192d_h2c_msg_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 {
 	u8 ElementID, CmdLen;
@@ -384,7 +383,6 @@ _func_enter_;
 _func_exit_;
 }
 
-void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength);
 void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
@@ -487,7 +485,6 @@ _ConstructBeacon:
 	//DBG_8192D("%s bcn_sz=%u\n", __func__, pktlen);
 }
 
-void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength);
 void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
@@ -517,7 +514,6 @@ void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	*pLength = 16;
 }
 
-void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bForcePowerSave);
 void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bForcePowerSave)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
@@ -571,7 +567,6 @@ void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pL
 	*pLength = pktlen;
 }
 
-void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID);
 void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;

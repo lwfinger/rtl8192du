@@ -2503,17 +2503,7 @@ PHY_StopTRXBeforeChangeBand8192D(
 	PHY_SetBBReg(Adapter, rOFDM1_TRxPathEnable, bDWord, 0x0);
 }
 
-/*
-
-*/
-void
-PHY_SwitchWirelessBand(
-	struct rtw_adapter *		 Adapter,
-	u8		Band);
-void
-PHY_SwitchWirelessBand(
-	struct rtw_adapter *		 Adapter,
-	u8		Band)
+void PHY_SwitchWirelessBand(struct rtw_adapter *Adapter, u8 Band)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;

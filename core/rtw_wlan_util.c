@@ -204,7 +204,6 @@ static unsigned char ratetbl_val_2wifirate(unsigned char rate)
 	return val;
 }
 
-int is_basicrate(struct rtw_adapter *padapter, unsigned char rate);
 int is_basicrate(struct rtw_adapter *padapter, unsigned char rate)
 {
 	int i;
@@ -223,7 +222,6 @@ int is_basicrate(struct rtw_adapter *padapter, unsigned char rate)
 	return false;
 }
 
-unsigned int ratetbl2rateset(struct rtw_adapter *padapter, unsigned char *rateset);
 unsigned int ratetbl2rateset(struct rtw_adapter *padapter, unsigned char *rateset)
 {
 	int i;
@@ -1167,7 +1165,6 @@ unsigned int is_ap_in_tkip(struct rtw_adapter *padapter)
 	}
 }
 
-int wifirate2_ratetbl_inx(unsigned char rate);
 int wifirate2_ratetbl_inx(unsigned char rate)
 {
 	int	inx = 0;
@@ -1303,7 +1300,6 @@ void Update_RA_Entry(struct rtw_adapter *padapter, u32 mac_id)
 	rtw_hal_update_ra_mask(padapter, mac_id);
 }
 
-void enable_rate_adaptive(struct rtw_adapter *padapter, u32 mac_id);
 void enable_rate_adaptive(struct rtw_adapter *padapter, u32 mac_id)
 {
 	Update_RA_Entry(padapter, mac_id);

@@ -923,11 +923,6 @@ bool
 PHY_RFShadowCompare(
 	struct rtw_adapter *			Adapter,
 	enum RF_RADIO_PATH_E	eRFPath,
-	u32				Offset);
-bool
-PHY_RFShadowCompare(
-	struct rtw_adapter *			Adapter,
-	enum RF_RADIO_PATH_E	eRFPath,
 	u32				Offset)
 {
 	u32	reg;
@@ -948,11 +943,7 @@ PHY_RFShadowCompare(
 	}
 	return false;
 }	/* PHY_RFShadowCompare */
-void
-PHY_RFShadowRecorver(
-	struct rtw_adapter *			Adapter,
-	enum RF_RADIO_PATH_E	eRFPath,
-	u32				Offset);
+
 void
 PHY_RFShadowRecorver(
 	struct rtw_adapter *			Adapter,
@@ -973,12 +964,8 @@ PHY_RFShadowRecorver(
 		}
 	}
 }	/* PHY_RFShadowRecorver */
-void
-PHY_RFShadowCompareAll(
-	struct rtw_adapter *			Adapter);
-void
-PHY_RFShadowCompareAll(
-	struct rtw_adapter *			Adapter)
+
+void PHY_RFShadowCompareAll(struct rtw_adapter *Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -991,12 +978,8 @@ PHY_RFShadowCompareAll(
 		}
 	}
 }	/* PHY_RFShadowCompareAll */
-void
-PHY_RFShadowRecorverAll(
-	struct rtw_adapter *			Adapter);
-void
-PHY_RFShadowRecorverAll(
-	struct rtw_adapter *			Adapter)
+
+void PHY_RFShadowRecorverAll( struct rtw_adapter *Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1009,12 +992,7 @@ PHY_RFShadowRecorverAll(
 		}
 	}
 }	/* PHY_RFShadowRecorverAll */
-void
-PHY_RFShadowCompareFlagSet(
-	struct rtw_adapter *			Adapter,
-	enum RF_RADIO_PATH_E	eRFPath,
-	u32				Offset,
-	u8				Type);
+
 void
 PHY_RFShadowCompareFlagSet(
 	struct rtw_adapter *			Adapter,
@@ -1025,12 +1003,7 @@ PHY_RFShadowCompareFlagSet(
 	// Set True or False!!!
 	RF_Shadow[eRFPath][Offset].Compare = Type;
 }	/* PHY_RFShadowCompareFlagSet */
-void
-PHY_RFShadowRecorverFlagSet(
-	struct rtw_adapter *			Adapter,
-	enum RF_RADIO_PATH_E	eRFPath,
-	u32				Offset,
-	u8				Type);
+
 void
 PHY_RFShadowRecorverFlagSet(
 	struct rtw_adapter *			Adapter,
@@ -1041,12 +1014,8 @@ PHY_RFShadowRecorverFlagSet(
 	// Set True or False!!!
 	RF_Shadow[eRFPath][Offset].Recorver= Type;
 }	/* PHY_RFShadowRecorverFlagSet */
-void
-PHY_RFShadowCompareFlagSetAll(
-	struct rtw_adapter *			Adapter);
-void
-PHY_RFShadowCompareFlagSetAll(
-	struct rtw_adapter *			Adapter)
+
+void PHY_RFShadowCompareFlagSetAll(struct rtw_adapter *Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1063,12 +1032,8 @@ PHY_RFShadowCompareFlagSetAll(
 		}
 	}
 }	/* PHY_RFShadowCompareFlagSetAll */
-void
-PHY_RFShadowRecorverFlagSetAll(
-	struct rtw_adapter *			Adapter);
-void
-PHY_RFShadowRecorverFlagSetAll(
-	struct rtw_adapter *			Adapter)
+
+void PHY_RFShadowRecorverFlagSetAll(struct rtw_adapter *Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1085,12 +1050,8 @@ PHY_RFShadowRecorverFlagSetAll(
 		}
 	}
 }	/* PHY_RFShadowCompareFlagSetAll */
-void
-PHY_RFShadowRefresh(
-	struct rtw_adapter *			Adapter);
-void
-PHY_RFShadowRefresh(
-	struct rtw_adapter *			Adapter)
+
+void PHY_RFShadowRefresh(struct rtw_adapter *Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;

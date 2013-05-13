@@ -42,7 +42,6 @@ void	rtl8192du_free_xmit_priv(struct rtw_adapter *padapter)
 {
 }
 
-u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe);
 u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe)
 {
 	u32 addr;
@@ -84,7 +83,6 @@ u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe)
 	return addr;
 }
 
-int urb_zero_packet_chk(struct rtw_adapter *padapter, int sz);
 int urb_zero_packet_chk(struct rtw_adapter *padapter, int sz)
 {
 	int blnSetTxDescOffset;
@@ -127,7 +125,6 @@ void rtl8192du_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 		ptxdesc->txdw7 |= cpu_to_le32(0x0000ffff&checksum);
 }
 
-void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc);
 void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
 {
 	if ((pattrib->encrypt > 0) && !pattrib->bswenc)
@@ -218,10 +215,7 @@ Len1	Len0	Pkt_num
 Len4	Len3	Len2
 
 */
-void
-InsertEMContent(struct xmit_frame *pxmitframe, u8 *VirtualAddress);
-void
-InsertEMContent(struct xmit_frame *pxmitframe, u8 *VirtualAddress)
+void InsertEMContent(struct xmit_frame *pxmitframe, u8 *VirtualAddress)
 {
 	memset(VirtualAddress, 0, 8);
 	SET_EARLYMODE_PKTNUM(VirtualAddress, pxmitframe->EMPktNum);
@@ -597,7 +591,6 @@ static u32 xmitframe_need_length(struct xmit_frame *pxmitframe)
 	return len;
 }
 
-void UpdateEarlyModeInfo8192D(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq);
 void UpdateEarlyModeInfo8192D(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq)
 {
 	u32	len;

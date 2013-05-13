@@ -192,9 +192,7 @@ _WriteFW(
 exit:
 	return ret;
 }
-int _FWFreeToGo_92D(
-		struct rtw_adapter *		Adapter
-	);
+
 int _FWFreeToGo_92D(
 		struct rtw_adapter *		Adapter
 	)
@@ -267,12 +265,7 @@ rtl8192d_FirmwareSelfReset(
 //
 // description :polling fw ready
 //
-int _FWInit(
-	struct rtw_adapter *			  Adapter
-	);
-int _FWInit(
-	struct rtw_adapter *			  Adapter
-	)
+int _FWInit(struct rtw_adapter *Adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u32			counter = 0;

@@ -284,7 +284,6 @@ exit:
 	return;
 }
 
-void pwr_state_check_handler(void *FunctionContext);
 void pwr_state_check_handler(void *FunctionContext)
 {
 	struct rtw_adapter *padapter = (struct rtw_adapter *)FunctionContext;
@@ -344,7 +343,6 @@ void rtw_set_rpwm(struct rtw_adapter *padapter, u8 pslv)
 	_func_exit_;
 }
 
-u8 PS_RDY_CHECK(struct rtw_adapter *padapter);
 u8 PS_RDY_CHECK(struct rtw_adapter *padapter)
 {
 	u32 curr_time, delta_time;

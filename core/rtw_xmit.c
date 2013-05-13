@@ -26,7 +26,7 @@
 #include <wifi.h>
 #include <osdep_intf.h>
 #include <circ_buf.h>
-#include <ip.h>
+#include <linux/ip.h>
 
 #include <usb_ops.h>
 

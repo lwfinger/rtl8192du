@@ -215,12 +215,6 @@ module_param(rtw_max_roaming_times, uint, 0644);
 MODULE_PARM_DESC(rtw_max_roaming_times,"The max roaming times to try");
 #endif /* CONFIG_LAYER2_ROAMING */
 
-#ifdef CONFIG_IOL
-bool rtw_force_iol = false;
-module_param(rtw_force_iol, bool, 0644);
-MODULE_PARM_DESC(rtw_force_iol,"Force to enable IOL");
-#endif /* CONFIG_IOL */
-
 #ifdef CONFIG_FILE_FWIMG
 char *rtw_fw_file_path = "";
 module_param(rtw_fw_file_path, charp, 0644);
@@ -766,10 +760,6 @@ _func_enter_;
 #ifdef CONFIG_INTEL_WIDI
 	registry_par->max_roaming_times = (u8)rtw_max_roaming_times + 2;
 #endif /*  CONFIG_INTEL_WIDI */
-#endif
-
-#ifdef CONFIG_IOL
-	registry_par->force_iol = rtw_force_iol;
 #endif
 
 	registry_par->mac_phy_mode = rtw_mac_phy_mode;

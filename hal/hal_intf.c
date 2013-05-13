@@ -445,15 +445,6 @@ u8 rtw_hal_sreset_get_wifi_status(struct rtw_adapter *padapter)
 }
 #endif //DBG_CONFIG_ERROR_DETECT
 
-#ifdef CONFIG_IOL
-int rtw_hal_iol_cmd(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms)
-{
-	if (adapter->HalFunc.IOL_exec_cmds_sync)
-		return adapter->HalFunc.IOL_exec_cmds_sync(adapter, xmit_frame, max_wating_ms);
-	return _FAIL;
-}
-#endif
-
 void rtw_hal_notch_filter(struct rtw_adapter *adapter, bool enable)
 {
 	if (adapter->HalFunc.hal_notch_filter)

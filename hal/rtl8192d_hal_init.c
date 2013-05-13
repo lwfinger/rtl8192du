@@ -2332,9 +2332,6 @@ void rtl8192d_set_hal_ops(struct hal_ops *pHalFunc)
 	pHalFunc->Efuse_PgPacketWrite = &rtl8192d_Efuse_PgPacketWrite;
 	pHalFunc->Efuse_WordEnableDataWrite = &rtl8192d_Efuse_WordEnableDataWrite;
 
-#ifdef CONFIG_IOL
-	pHalFunc->IOL_exec_cmds_sync = NULL;
-#endif
 	pHalFunc->hal_notch_filter = &hal_notch_filter_8192d;
 
 	pHalFunc->c2h_handler = c2h_handler_8192d;

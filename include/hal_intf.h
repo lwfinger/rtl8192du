@@ -217,9 +217,6 @@ struct hal_ops {
 	u8 (*sreset_get_wifi_status)(struct rtw_adapter *padapter);
 #endif
 
-#ifdef CONFIG_IOL
-	int (*IOL_exec_cmds_sync)(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms);
-#endif
 	void (*hal_notch_filter)(struct rtw_adapter *adapter, bool enable);
 	void (*hal_reset_security_engine)(struct rtw_adapter *adapter);
 
@@ -385,10 +382,6 @@ void rtw_hal_sreset_reset_value(struct rtw_adapter *padapter);
 void rtw_hal_sreset_xmit_status_check(struct rtw_adapter *padapter);
 void rtw_hal_sreset_linked_status_check(struct rtw_adapter *padapter);
 u8 rtw_hal_sreset_get_wifi_status(struct rtw_adapter *padapter);
-#endif
-
-#ifdef CONFIG_IOL
-int rtw_hal_iol_cmd(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms);
 #endif
 
 void rtw_hal_notch_filter(struct rtw_adapter *adapter, bool enable);

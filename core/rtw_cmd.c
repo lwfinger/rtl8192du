@@ -936,9 +936,6 @@ void rtw_getbbrfreg_cmdrsp_callback(struct rtw_adapter *padapter,  struct cmd_ob
 	kfree(pcmd->parmbuf);
 	kfree(pcmd);
 
-#ifdef CONFIG_MP_INCLUDED
-	padapter->mppriv.workparam.bcompleted = true;
-#endif
 _func_exit_;
 }
 
@@ -948,10 +945,6 @@ void rtw_readtssi_cmdrsp_callback(struct rtw_adapter *padapter,  struct cmd_obj 
 
 	kfree(pcmd->parmbuf);
 	kfree(pcmd);
-
-#ifdef CONFIG_MP_INCLUDED
-	padapter->mppriv.workparam.bcompleted = true;
-#endif
 
 _func_exit_;
 }
@@ -2560,9 +2553,5 @@ void rtw_getrttbl_cmd_cmdrsp_callback(struct rtw_adapter *padapter,  struct cmd_
 _func_enter_;
 
 	rtw_free_cmd_obj(pcmd);
-#ifdef CONFIG_MP_INCLUDED
-	padapter->mppriv.workparam.bcompleted = true;
-#endif
-
 _func_exit_;
 }

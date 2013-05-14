@@ -20,7 +20,6 @@ EXTRA_CFLAGS += -I$(src)/include
 
 CONFIG_AUTOCFG_CP = n
 
-CONFIG_MP_INCLUDED = n
 CONFIG_POWER_SAVING = y
 CONFIG_USB_AUTOSUSPEND = n
 CONFIG_HW_PWRP_DETECTION = n
@@ -75,10 +74,6 @@ _HAL_INTFS_FILES :=	hal/hal_intf.o \
 
 _HAL_INTFS_FILES += hal/$(HCI_NAME)_ops_linux.o
 
-ifeq ($(CONFIG_MP_INCLUDED), y)
-_HAL_INTFS_FILES += hal/$(RTL871X)_mp.o
-endif
-
 _HAL_INTFS_FILES += $(CHIP_FILES)
 
 
@@ -132,12 +127,6 @@ ifneq ($(USER_MODULE_NAME),)
 MODULE_NAME := $(USER_MODULE_NAME)
 endif
 
-ifeq ($(CONFIG_MP_INCLUDED), y)
-MODULE_NAME := $(MODULE_NAME)_mp
-EXTRA_CFLAGS += -DCONFIG_MP_INCLUDED
-endif
-
-
 ifneq ($(KERNELRELEASE),)
 
 
@@ -170,9 +159,6 @@ $(MODULE_NAME)-y += core/rtw_efuse.o
 $(MODULE_NAME)-y += $(_HAL_INTFS_FILES)
 
 $(MODULE_NAME)-y += $(_OS_INTFS_FILES)
-
-$(MODULE_NAME)-$(CONFIG_MP_INCLUDED) += core/rtw_mp.o \
-					core/rtw_mp_ioctl.o
 
 obj-$(CONFIG_RTL8192DU) := $(MODULE_NAME).o
 

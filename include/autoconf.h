@@ -59,20 +59,8 @@
 
 #define CONFIG_RECV_REORDERING_CTRL	1
 
-//#define CONFIG_TCP_CSUM_OFFLOAD_RX	1
-
-//#define CONFIG_DRVEXT_MODULE	1
-
-//#define CONFIG_DEINIT_BEFORE_INIT	1
-
-#ifndef CONFIG_MP_INCLUDED
-	#define CONFIG_IPS	1
-	#define CONFIG_LPS	1
-	//#define CONFIG_BT_COEXIST	1
-	//#define SUPPORT_HW_RFOFF_DETECTED	1
-#else
-	#define CONFIG_MP_IWPRIV_SUPPORT 1
-#endif
+#define CONFIG_IPS	1
+#define CONFIG_LPS	1
 
 #define CONFIG_AP_MODE 1
 #ifdef CONFIG_AP_MODE
@@ -81,7 +69,6 @@
 		#define CONFIG_HOSTAPD_MLME	1
 	#endif
 	#define CONFIG_FIND_BEST_CHANNEL	1
-	//#define CONFIG_NO_WIRELESS_HANDLERS	1
 #endif
 
 //	Added by Albert 20110314
@@ -216,13 +203,7 @@
 
 #define FW_PROCESS_VENDOR_CMD 1
 
-#ifdef CONFIG_MP_INCLUDED
-	#define MP_DRIVER 1
-	#undef CONFIG_USB_TX_AGGREGATION
-	#undef CONFIG_USB_RX_AGGREGATION
-#else
-	#define MP_DRIVER 0
-#endif
+#define MP_DRIVER 0
 
 /*
  * Debug  Related Config

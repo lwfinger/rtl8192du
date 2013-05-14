@@ -1797,14 +1797,6 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	}
 #endif //CONFIG_CONCURRENT_MODE
 
-#ifdef CONFIG_MP_INCLUDED
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
-	{
-		ret = -EPERM;
-		goto exit;
-	}
-#endif
-
 	spin_lock_bh(&pwdev_priv->scan_req_lock);
 	pwdev_priv->scan_request = request;
 	spin_unlock_bh(&pwdev_priv->scan_req_lock);

@@ -1064,13 +1064,6 @@ u16 rtw_get_cur_max_rate(struct rtw_adapter *adapter)
 	u32	ht_ielen = 0;
 #endif
 
-#ifdef CONFIG_MP_INCLUDED
-	if (adapter->registrypriv.mp_mode == 1) {
-		if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
-			return 0;
-	}
-#endif
-
 	if ((check_fwstate(pmlmepriv, _FW_LINKED) != true) &&
 	    (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) != true))
 		return 0;

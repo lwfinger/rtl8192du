@@ -211,27 +211,6 @@ struct bb_register_def {
 	u32 rfLSSIReadBackPi;	//LSSI RF readback data PI mode 0x8b8-8bc for Path A and B
 };
 
-#ifdef CONFIG_MP_INCLUDED
-enum ANTENNA_PATH {
-        ANTENNA_NONE	= 0x00,
-	ANTENNA_D,
-	ANTENNA_C,
-	ANTENNA_CD,
-	ANTENNA_B,
-	ANTENNA_BD,
-	ANTENNA_BC,
-	ANTENNA_BCD,
-	ANTENNA_A,
-	ANTENNA_AD,
-	ANTENNA_AC,
-	ANTENNA_ACD,
-	ANTENNA_AB,
-	ANTENNA_ABD,
-	ANTENNA_ABC,
-	ANTENNA_ABCD
-};
-#endif
-
 struct antenna_select_ofdm {
 	u32			r_tx_antenna:4;
 	u32			r_ant_l:4;

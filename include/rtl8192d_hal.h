@@ -723,41 +723,7 @@ void rtl8192d_ResetDualMacSwitchVariables(struct rtw_adapter * Adapter);
 u8 GetEEPROMSize8192D(struct rtw_adapter * Adapter);
 bool PHY_CheckPowerOffFor8192D(struct rtw_adapter * Adapter);
 void PHY_SetPowerOnFor8192D(struct rtw_adapter * Adapter);
-//void PHY_ConfigMacPhyMode92D(struct rtw_adapter * Adapter);
 void rtl8192d_free_hal_data(struct rtw_adapter *padapter);
 void rtl8192d_set_hal_ops(struct hal_ops *pHalFunc);
 
 #endif
-
-#ifdef CONFIG_MP_INCLUDED
-
-
-extern void Hal_SetAntenna(struct rtw_adapter * pAdapter);
-extern void Hal_SetBandwidth(struct rtw_adapter * pAdapter);
-
-extern void Hal_SetTxPower(struct rtw_adapter * pAdapter);
-extern void Hal_SetCarrierSuppressionTx(struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_SetSingleToneTx (struct rtw_adapter * pAdapter , u8 bStart);
-extern void Hal_SetSingleCarrierTx (struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_SetContinuousTx (struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_SetBandwidth(struct rtw_adapter * pAdapter);
-
-extern void Hal_SetDataRate(struct rtw_adapter * pAdapter);
-extern void Hal_SetChannel(struct rtw_adapter * pAdapter);
-extern void Hal_SetAntennaPathPower(struct rtw_adapter * pAdapter);
-extern s32 Hal_SetThermalMeter(struct rtw_adapter * pAdapter, u8 target_ther);
-extern s32 Hal_SetPowerTracking(struct rtw_adapter * padapter, u8 enable);
-extern void Hal_GetPowerTracking(struct rtw_adapter * padapter, u8 *enable);
-extern void Hal_GetThermalMeter(struct rtw_adapter * pAdapter, u8 *value);
-extern void Hal_mpt_SwitchRfSetting(struct rtw_adapter * pAdapter);
-extern void Hal_MPT_CCKTxPowerAdjust(struct rtw_adapter * Adapter, bool bInCH14);
-extern void Hal_MPT_CCKTxPowerAdjustbyIndex(struct rtw_adapter * pAdapter, bool beven);
-extern void Hal_SetCCKTxPower(struct rtw_adapter * pAdapter, u8 *TxPower);
-extern void Hal_SetOFDMTxPower(struct rtw_adapter * pAdapter, u8 *TxPower);
-extern void Hal_TriggerRFThermalMeter(struct rtw_adapter * pAdapter);
-extern u8 Hal_ReadRFThermalMeter(struct rtw_adapter * pAdapter);
-extern void Hal_SetCCKContinuousTx(struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_SetOFDMContinuousTx(struct rtw_adapter * pAdapter, u8 bStart);
-
-
-#endif //end CONFIG_MP_INCLUDED

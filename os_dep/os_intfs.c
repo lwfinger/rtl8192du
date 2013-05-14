@@ -76,41 +76,37 @@ static int rtw_long_retry_lmt = 7;
 static int rtw_short_retry_lmt = 7;
 static int rtw_busy_thresh = 40;
 static int rtw_ack_policy = NORMAL_ACK;
-#ifdef CONFIG_MP_INCLUDED
-int rtw_mp_mode = 1;
-#else
-static int rtw_mp_mode = 0;
-#endif
-static int rtw_software_encrypt = 0;
-static int rtw_software_decrypt = 0;
+static int rtw_mp_mode;
+static int rtw_software_encrypt;
+static int rtw_software_decrypt;
 
-static int rtw_acm_method = 0;/*  0:By SW 1:By HW. */
+static int rtw_acm_method;/*  0:By SW 1:By HW. */
 
 static int rtw_wmm_enable = 1;/*  default is set to enable the wmm. */
-static int rtw_uapsd_enable = 0;
+static int rtw_uapsd_enable;
 static int rtw_uapsd_max_sp = NO_LIMIT;
-static int rtw_uapsd_acbk_en = 0;
-static int rtw_uapsd_acbe_en = 0;
-static int rtw_uapsd_acvi_en = 0;
-static int rtw_uapsd_acvo_en = 0;
+static int rtw_uapsd_acbk_en;
+static int rtw_uapsd_acbe_en;
+static int rtw_uapsd_acvi_en;
+static int rtw_uapsd_acvo_en;
 
 #ifdef CONFIG_80211N_HT
 int rtw_ht_enable = 1;
 int rtw_cbw40_enable = 3; /*  0 :diable, bit(0): enable 2.4g, bit(1): enable 5g */
 int rtw_ampdu_enable = 1;/* for enable tx_ampdu */
 static int rtw_rx_stbc = 1;/*  0: disable, bit(0):enable 2.4g, bit(1):enable 5g, default is set to enable 2.4GHZ for IOT issue with bufflao's AP at 5GHZ */
-static int rtw_ampdu_amsdu = 0;/*  0: disabled, 1:enabled, 2:auto */
+static int rtw_ampdu_amsdu;/*  0: disabled, 1:enabled, 2:auto */
 #endif
 
 static int rtw_lowrate_two_xmit = 1;/* Use 2 path Tx to transmit MCS0~7 and legacy mode */
 
 /* int rf_config = RF_1T2R;   1T2R */
 static int rtw_rf_config = RF_819X_MAX_TYPE;  /* auto */
-static int rtw_low_power = 0;
+static int rtw_low_power;
 #ifdef CONFIG_WIFI_TEST
 int rtw_wifi_spec = 1;/* for wifi test */
 #else
-static int rtw_wifi_spec = 0;
+static int rtw_wifi_spec;
 #endif
 
 static int rtw_special_rf_path = 0; /* 0: 2T2R , 1: only turn on path A 1T1R, 2: only turn on path B 1T1R */
@@ -1287,12 +1283,6 @@ _func_enter_;
 	rtw_init_bcmc_stainfo(padapter);
 
 	rtw_init_pwrctrl_priv(padapter);
-
-#ifdef CONFIG_MP_INCLUDED
-	if (init_mp_priv(padapter) == _FAIL) {
-		DBG_8192D("%s: initialize MP private data Fail!\n", __func__);
-	}
-#endif
 
 	ret8 = rtw_init_default_value(padapter);
 

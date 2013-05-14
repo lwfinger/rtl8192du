@@ -66,10 +66,6 @@ enum {
 #include <drvext_api.h>
 #endif
 
-#ifdef CONFIG_MP_INCLUDED
-#include <rtw_mp.h>
-#endif
-
 #ifdef CONFIG_BR_EXT
 #include <rtw_br_ext.h>
 #endif	// CONFIG_BR_EXT
@@ -317,10 +313,6 @@ struct rtw_adapter {
 	struct	pwrctrl_priv	pwrctrlpriv;
 	struct	eeprom_priv eeprompriv;
 	struct	led_priv	ledpriv;
-
-#ifdef CONFIG_MP_INCLUDED
-       struct	mp_priv	mppriv;
-#endif
 
 #ifdef CONFIG_DRVEXT_MODULE
 	struct	drvext_priv	drvextpriv;

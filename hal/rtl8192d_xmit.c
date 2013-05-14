@@ -59,4 +59,4 @@ void handle_txrpt_ccx_8192d(struct rtw_adapter *adapter, void *buf)
 			rtw_ack_tx_done(&adapter->xmitpriv, RTW_SCTX_DONE_CCX_PKT_FAIL);
 	}
 }
-#endif //CONFIG_XMIT_ACK
+#endif /* CONFIG_XMIT_ACK */

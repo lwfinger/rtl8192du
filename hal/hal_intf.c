@@ -63,7 +63,7 @@ void rtw_hal_dm_init(struct rtw_adapter *padapter)
 
 void rtw_hal_dm_deinit(struct rtw_adapter *padapter)
 {
-	// cancel dm  timer
+	/*  cancel dm  timer */
 	if (padapter->HalFunc.dm_deinit)
 		padapter->HalFunc.dm_deinit(padapter);
 }
@@ -98,7 +98,7 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 #endif
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	// before init mac0, driver must init mac1 first to avoid usb rx error.
+	/*  before init mac0, driver must init mac1 first to avoid usb rx error. */
 	if ((padapter->pbuddy_adapter != NULL) && (padapter->DualMacConcurrent == true)
 		&& (padapter->adapter_type == PRIMARY_ADAPTER))
 	{
@@ -398,7 +398,7 @@ s32	rtw_hal_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
 		return padapter->HalFunc.hostap_mgnt_xmit_entry(padapter, pkt);
 	return _FAIL;
 }
-#endif //CONFIG_HOSTAPD_MLME
+#endif /* CONFIG_HOSTAPD_MLME */
 
 #ifdef DBG_CONFIG_ERROR_DETECT
 void rtw_hal_sreset_init(struct rtw_adapter *padapter)
@@ -442,7 +442,7 @@ u8 rtw_hal_sreset_get_wifi_status(struct rtw_adapter *padapter)
 		status = padapter->HalFunc.sreset_get_wifi_status(padapter);
 	return status;
 }
-#endif //DBG_CONFIG_ERROR_DETECT
+#endif /* DBG_CONFIG_ERROR_DETECT */
 
 void rtw_hal_notch_filter(struct rtw_adapter *adapter, bool enable)
 {

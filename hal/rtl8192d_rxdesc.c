@@ -25,13 +25,13 @@
 
 static u8 evm_db2percentage(s8 value)
 {
-	//
-	// -33dB~0dB to 0%~99%
-	//
+	/*  */
+	/*  -33dB~0dB to 0%~99% */
+	/*  */
 	s8 ret_val;
 
 	ret_val = value;
-	//ret_val /= 2;
+	/* ret_val /= 2; */
 
 	RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("EVMdbToPercentage92S Value=%d / %x\n", ret_val, ret_val));
 
@@ -75,10 +75,10 @@ static s32 signal_scale_mapping(struct rtw_adapter *padapter, s32 cur_sig)
 
 static s32  translate2dbm(u8 signal_strength_idx)
 {
-	s32	signal_power; // in dBm.
+	s32	signal_power; /*  in dBm. */
 
 
-	// Translate to dBm (x=0.5y-95).
+	/*  Translate to dBm (x=0.5y-95). */
 	signal_power = (s32)((signal_strength_idx + 1) >> 1);
 	signal_power -= 95;
 
@@ -105,22 +105,21 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 
 	bcck_rate=(pattrib->mcs_rate<=3? 1:0);
 
-	// Record it for next packet processing
+	/*  Record it for next packet processing */
 	pattrib->rx_mimo_signal_qual[0]= -1;
 	pattrib->rx_mimo_signal_qual[1]= -1;
 
-	if (bcck_rate) //CCK
+	if (bcck_rate) /* CCK */
 	{
 		u8 report;
 
-		// CCK Driver info Structure is not the same as OFDM packet.
+		/*  CCK Driver info Structure is not the same as OFDM packet. */
 		pCck_buf = (struct phy_cck_rx_status_report_8192cd *)pphy_stat;
-		//Adapter->RxStats.NumQryPhyStatusCCK++;
 
-		//
-		// (1)Hardware does not provide RSSI for CCK
-		// (2)PWDB, Average PWDB cacluated by hardware (for rate adaptive)
-		//
+		/*  */
+		/*  (1)Hardware does not provide RSSI for CCK */
+		/*  (2)PWDB, Average PWDB cacluated by hardware (for rate adaptive) */
+		/*  */
 
 		if (padapter->pwrctrlpriv.rf_pwrstate == rf_on)
 			cck_highpwr = (u8)pHalData->bCckHighPower;
@@ -133,9 +132,9 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 			report = report>>6;
 			switch (report)
 			{
-				// 03312009 modified by cosa
-				// Modify the RF RNA gain value to -40, -20, -2, 14 by Jenyu's suggestion
-				// Note: different RF with the different RNA gain.
+				/*  03312009 modified by cosa */
+				/*  Modify the RF RNA gain value to -40, -20, -2, 14 by Jenyu's suggestion */
+				/*  Note: different RF with the different RNA gain. */
 				case 0x3:
 					rx_pwr_all = (-46) - (pCck_buf->cck_agc_rpt & 0x3e);
 					break;
@@ -172,14 +171,13 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 		}
 
 		pwdb_all= query_rx_pwr_percentage(rx_pwr_all);
-		//if (pHalData->CustomerID == RT_CID_819x_Lenovo)
 		{
-			// CCK gain is smaller than OFDM/MCS gain,
-			// so we add gain diff by experiences, the val is 6
+			/*  CCK gain is smaller than OFDM/MCS gain, */
+			/*  so we add gain diff by experiences, the val is 6 */
 			pwdb_all+=6;
 			if (pwdb_all > 100)
 				pwdb_all = 100;
-			// modify the offset to make the same gain index with OFDM.
+			/*  modify the offset to make the same gain index with OFDM. */
 			if (pwdb_all > 34 && pwdb_all <= 42)
 				pwdb_all -= 2;
 			else if (pwdb_all > 26 && pwdb_all <= 34)
@@ -194,18 +192,18 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 		pattrib->RecvSignalPower = rx_pwr_all;
 		padapter->recvpriv.rxpwdb = rx_pwr_all;
 
-		//
-		// (3) Get Signal Quality (EVM)
-		//
+		/*  */
+		/*  (3) Get Signal Quality (EVM) */
+		/*  */
 		if (bPacketMatchBSSID)
 		{
 			u8	sq;
 
 			if (pHalData->CustomerID == RT_CID_819x_Lenovo)
 			{
-				// mapping to 5 bars for vista signal strength
-				// signal quality in driver will be displayed to signal strength
-				// in vista.
+				/*  mapping to 5 bars for vista signal strength */
+				/*  signal quality in driver will be displayed to signal strength */
+				/*  in vista. */
 				if (pwdb_all >= 50)
 					sq = 100;
 				else if (pwdb_all >= 35 && pwdb_all < 50)
@@ -242,20 +240,18 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 			pattrib->rx_mimo_signal_qual[1]=(-1);
 		}
 	}
-	else //OFDM/HT
+	else /* OFDM/HT */
 	{
 		pOfdm_buf = (struct phy_ofdm_rx_status_report_8192cd *)pphy_stat;
 
-		//
-		// (1)Get RSSI for HT rate
-		//
+		/*  */
+		/*  (1)Get RSSI for HT rate */
+		/*  */
 		for (i=0; i<pHalData->NumTotalRFPath; i++)
 		{
-			// 2008/01/30 MH we will judge RF RX path now.
+			/*  2008/01/30 MH we will judge RF RX path now. */
 			if (pHalData->bRFPathRxEnable[i])
 				rf_rx_num++;
-			//else
-				//continue;
 
 			rx_pwr[i] = ((pOfdm_buf->trsw_gain_X[+i]&0x3F)*2) - 110;
 			if (check_fwstate(pmlmepriv, WIFI_STATION_STATE))
@@ -271,7 +267,7 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("RF-%d RXPWR=%x RSSI=%d\n", i, rx_pwr[i], rssi));
 
-			//Get Rx snr value in DB
+			/* Get Rx snr value in DB */
 			tmp_rxsnr = pOfdm_buf->rxsnr_X[i];
 			rx_snrX = (s8)(tmp_rxsnr);
 			rx_snrX >>= 1;
@@ -280,18 +276,17 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 			/* Record Signal Strength for next packet */
 			if (bPacketMatchBSSID)
 			{
-				//pRfd->Status.RxMIMOSignalStrength[i] =(u8) rssi;
 
-				//The following is for lenovo signal strength in vista
+				/* The following is for lenovo signal strength in vista */
 				if (pHalData->CustomerID == RT_CID_819x_Lenovo)
 				{
 					u8	SQ;
 
 					if (i == 0)
 					{
-						// mapping to 5 bars for vista signal strength
-						// signal quality in driver will be displayed to signal strength
-						// in vista.
+						/*  mapping to 5 bars for vista signal strength */
+						/*  signal quality in driver will be displayed to signal strength */
+						/*  in vista. */
 						if (rssi >= 50)
 							SQ = 100;
 						else if (rssi >= 35 && rssi < 50)
@@ -302,50 +297,50 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 							SQ = 40;
 						else
 							SQ = 20;
-						//DbgPrint("ofdm/mcs RSSI=%d\n", RSSI);
+						/* DbgPrint("ofdm/mcs RSSI=%d\n", RSSI); */
 						pattrib->signal_qual = SQ;
-						//DbgPrint("ofdm/mcs SQ = %d\n", pRfd->Status.SignalQuality);
+						/* DbgPrint("ofdm/mcs SQ = %d\n", pRfd->Status.SignalQuality); */
 					}
 				}
 			}
 		}
 
 
-		//
-		// (2)PWDB, Average PWDB cacluated by hardware (for rate adaptive)
-		//
+		/*  */
+		/*  (2)PWDB, Average PWDB cacluated by hardware (for rate adaptive) */
+		/*  */
 		rx_pwr_all = (((pOfdm_buf->pwdb_all) >> 1)& 0x7f) -106;
 		pwdb_all = query_rx_pwr_percentage(rx_pwr_all);
 
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("PWDB_ALL=%d\n",	pwdb_all));
 
-		pattrib->RxPWDBAll = pwdb_all;	//for DIG/rate adaptive
+		pattrib->RxPWDBAll = pwdb_all;	/* for DIG/rate adaptive */
 		pattrib->RecvSignalPower = rx_pwr_all;
 		padapter->recvpriv.rxpwdb = rx_pwr_all;
 
-		//
-		// (3)EVM of HT rate
-		//
+		/*  */
+		/*  (3)EVM of HT rate */
+		/*  */
 		if (pHalData->CustomerID != RT_CID_819x_Lenovo)
 		{
 			if (pattrib->rxht &&  pattrib->mcs_rate >=20 && pattrib->mcs_rate<=27)
-				max_spatial_stream = 2; //both spatial stream make sense
+				max_spatial_stream = 2; /* both spatial stream make sense */
 			else
-				max_spatial_stream = 1; //only spatial stream 1 makes sense
+				max_spatial_stream = 1; /* only spatial stream 1 makes sense */
 
 			for (i=0; i<max_spatial_stream; i++)
 			{
-				// Do not use shift operation like "rx_evmX >>= 1" because the compilor of free build environment
-				// fill most significant bit to "zero" when doing shifting operation which may change a negative
-				// value to positive one, then the dbm value (which is supposed to be negative)  is not correct anymore.
-				evm = evm_db2percentage((pOfdm_buf->rxevm_X[i] /*/ 2*/));//dbm
+				/*  Do not use shift operation like "rx_evmX >>= 1" because the compilor of free build environment */
+				/*  fill most significant bit to "zero" when doing shifting operation which may change a negative */
+				/*  value to positive one, then the dbm value (which is supposed to be negative)  is not correct anymore. */
+				evm = evm_db2percentage((pOfdm_buf->rxevm_X[i] /*/ 2*/));/* dbm */
 
 				RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("RXRATE=%x RXEVM=%x EVM=%s%d\n",
 					pattrib->mcs_rate, pOfdm_buf->rxevm_X[i], "%",evm));
 
 				if (bPacketMatchBSSID)
 				{
-					if (i==0) // Fill value in RFD, Get the first spatial stream only
+					if (i==0) /*  Fill value in RFD, Get the first spatial stream only */
 					{
 						pattrib->signal_qual = (u8)(evm & 0xff);
 					}
@@ -355,15 +350,15 @@ static void query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy
 
 		}
 
-		//
-		// 4. Record rx statistics for debug
-		//
+		/*  */
+		/*  4. Record rx statistics for debug */
+		/*  */
 
 	}
 
 
-	//UI BSS List signal strength(in percentage), make it good looking, from 0~100.
-	//It is assigned to the BSS List in GetValueFromBeaconOrProbeRsp().
+	/* UI BSS List signal strength(in percentage), make it good looking, from 0~100. */
+	/* It is assigned to the BSS List in GetValueFromBeaconOrProbeRsp(). */
 	if (bcck_rate)
 	{
 		pattrib->signal_strength=(u8)signal_scale_mapping(padapter, pwdb_all);
@@ -384,9 +379,8 @@ static void process_rssi(struct rtw_adapter *padapter,union recv_frame *prframe)
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	struct signal_stat * signal_stat = &padapter->recvpriv.signal_strength_data;
-#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
+#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
-	//if (pRfd->Status.bPacketToSelf || pRfd->Status.bPacketBeacon)
 	{
 	#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 		if (signal_stat->update_req) {
@@ -398,9 +392,8 @@ static void process_rssi(struct rtw_adapter *padapter,union recv_frame *prframe)
 		signal_stat->total_num++;
 		signal_stat->total_val  += pattrib->signal_strength;
 		signal_stat->avg_val = signal_stat->total_val / signal_stat->total_num;
-	#else //CONFIG_NEW_SIGNAL_STAT_PROCESS
+	#else /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
-		//Adapter->RxStats.RssiCalculateCnt++;	//For antenna Test
 		if (padapter->recvpriv.signal_strength_data.total_num++ >= PHY_RSSI_SLID_WIN_MAX)
 		{
 			padapter->recvpriv.signal_strength_data.total_num = PHY_RSSI_SLID_WIN_MAX;
@@ -419,9 +412,9 @@ static void process_rssi(struct rtw_adapter *padapter,union recv_frame *prframe)
 		padapter->recvpriv.rssi=(s8)translate2dbm((u8)tmp_val);
 
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("UI RSSI = %d, ui_rssi.TotalVal = %d, ui_rssi.TotalNum = %d\n", tmp_val, padapter->recvpriv.signal_strength_data.total_val,padapter->recvpriv.signal_strength_data.total_num));
-	#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
+	#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 	}
-}// Process_UI_RSSI_8192S
+}/*  Process_UI_RSSI_8192S */
 
 
 static void process_PWDB(struct rtw_adapter *padapter, union recv_frame *prframe)
@@ -441,9 +434,8 @@ static void process_PWDB(struct rtw_adapter *padapter, union recv_frame *prframe
 		UndecoratedSmoothedPWDB = pdmpriv->UndecoratedSmoothedPWDB;
 	}
 
-	//if (pRfd->Status.bPacketToSelf || pRfd->Status.bPacketBeacon)
 	{
-		if (UndecoratedSmoothedPWDB == 0) // initialize
+		if (UndecoratedSmoothedPWDB == 0) /*  initialize */
 		{
 			UndecoratedSmoothedPWDB = pattrib->RxPWDBAll;
 		}
@@ -472,8 +464,6 @@ static void process_PWDB(struct rtw_adapter *padapter, union recv_frame *prframe
 		{
 			pdmpriv->UndecoratedSmoothedPWDB = UndecoratedSmoothedPWDB;
 		}
-
-		//UpdateRxSignalStatistics8192C(Adapter, pRfd);
 	}
 }
 
@@ -484,7 +474,7 @@ static void process_link_qual(struct rtw_adapter *padapter,union recv_frame *prf
 	struct rx_pkt_attrib *pattrib;
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	struct signal_stat * signal_stat;
-#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
+#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 	if (prframe == NULL || padapter==NULL) {
 		return;
@@ -493,7 +483,7 @@ static void process_link_qual(struct rtw_adapter *padapter,union recv_frame *prf
 	pattrib = &prframe->u.hdr.attrib;
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	signal_stat = &padapter->recvpriv.signal_qual_data;
-#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
+#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	if (signal_stat->update_req) {
@@ -506,12 +496,12 @@ static void process_link_qual(struct rtw_adapter *padapter,union recv_frame *prf
 	signal_stat->total_val  += pattrib->signal_qual;
 	signal_stat->avg_val = signal_stat->total_val / signal_stat->total_num;
 
-#else //CONFIG_NEW_SIGNAL_STAT_PROCESS
+#else /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 	if (pattrib->signal_qual != 0)
 	{
-			//
-			// 1. Record the general EVM to the sliding window.
-			//
+			/*  */
+			/*  1. Record the general EVM to the sliding window. */
+			/*  */
 			if (padapter->recvpriv.signal_qual_data.total_num++ >= PHY_LINKQUALITY_SLID_WIN_MAX)
 			{
 				padapter->recvpriv.signal_qual_data.total_num = PHY_LINKQUALITY_SLID_WIN_MAX;
@@ -526,7 +516,7 @@ static void process_link_qual(struct rtw_adapter *padapter,union recv_frame *prf
 
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("Total SQ=%d  pattrib->signal_qual= %d\n", padapter->recvpriv.signal_qual_data.total_val, pattrib->signal_qual));
 
-			// <1> Showed on UI for user, in percentage.
+			/*  <1> Showed on UI for user, in percentage. */
 			tmpVal = padapter->recvpriv.signal_qual_data.total_val/padapter->recvpriv.signal_qual_data.total_num;
 			padapter->recvpriv.signal_qual=(u8)tmpVal;
 	}
@@ -534,25 +524,25 @@ static void process_link_qual(struct rtw_adapter *padapter,union recv_frame *prf
 	{
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" pattrib->signal_qual =%d\n", pattrib->signal_qual));
 	}
-#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
-}// Process_UiLinkQuality8192S
+#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
+}/*  Process_UiLinkQuality8192S */
 
 
 static void process_phy_info(struct rtw_adapter *padapter, union recv_frame *prframe)
 {
 	union recv_frame *precvframe = (union recv_frame *)prframe;
 
-	//
-	// Check RSSI
-	//
+	/*  */
+	/*  Check RSSI */
+	/*  */
 	process_rssi(padapter, precvframe);
-	//
-	// Check PWDB.
-	//
+	/*  */
+	/*  Check PWDB. */
+	/*  */
 	process_PWDB(padapter, precvframe);
-	//
-	// Check EVM
-	//
+	/*  */
+	/*  Check EVM */
+	/*  */
 	process_link_qual(padapter,  precvframe);
 }
 
@@ -618,48 +608,47 @@ void rtl8192d_query_rx_desc_status(union recv_frame *precvframe, struct recv_sta
 {
 	struct rx_pkt_attrib	*pattrib = &precvframe->u.hdr.attrib;
 
-	//Offset 0
+	/* Offset 0 */
 	pattrib->physt = (u8)((le32_to_cpu(pdesc->rxdw0) >> 26) & 0x1);
 	pattrib->pkt_len =  (u16)(le32_to_cpu(pdesc->rxdw0)&0x00003fff);
-	pattrib->drvinfo_sz = (u8)((le32_to_cpu(pdesc->rxdw0) >> 16) & 0xf) * 8;//uint 2^3 = 8 bytes
+	pattrib->drvinfo_sz = (u8)((le32_to_cpu(pdesc->rxdw0) >> 16) & 0xf) * 8;/* uint 2^3 = 8 bytes */
 
 	pattrib->shift_sz = (u8)((le32_to_cpu(pdesc->rxdw0) >> 24) & 0x3);
 
 	pattrib->crc_err = (u8)((le32_to_cpu(pdesc->rxdw0) >> 14) & 0x1);
 	pattrib->icv_err = (u8)((le32_to_cpu(pdesc->rxdw0) >> 15) & 0x1);
-	pattrib->qos = (u8)((le32_to_cpu(pdesc->rxdw0) >> 23) & 0x1);// Qos data, wireless lan header length is 26
+	pattrib->qos = (u8)((le32_to_cpu(pdesc->rxdw0) >> 23) & 0x1);/*  Qos data, wireless lan header length is 26 */
 	pattrib->bdecrypted = (le32_to_cpu(pdesc->rxdw0) & BIT(27))? 0:1;
 
-	//Offset 4
-	pattrib->mfrag = (u8)((le32_to_cpu(pdesc->rxdw1) >> 27) & 0x1);//more fragment bit
+	/* Offset 4 */
+	pattrib->mfrag = (u8)((le32_to_cpu(pdesc->rxdw1) >> 27) & 0x1);/* more fragment bit */
 
-	//Offset 8
-	pattrib->frag_num = (u8)((le32_to_cpu(pdesc->rxdw2) >> 12) & 0xf);//fragmentation number
+	/* Offset 8 */
+	pattrib->frag_num = (u8)((le32_to_cpu(pdesc->rxdw2) >> 12) & 0xf);/* fragmentation number */
 
-	//Offset 12
+	/* Offset 12 */
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
 	if (le32_to_cpu(pdesc->rxdw3) & BIT(13)) {
-		pattrib->tcpchk_valid = 1; // valid
+		pattrib->tcpchk_valid = 1; /*  valid */
 		if (le32_to_cpu(pdesc->rxdw3) & BIT(11)) {
-			pattrib->tcp_chkrpt = 1; // correct
-			//DBG_8192C("tcp csum ok\n");
+			pattrib->tcp_chkrpt = 1; /*  correct */
 		}
 		else
-			pattrib->tcp_chkrpt = 0; // incorrect
+			pattrib->tcp_chkrpt = 0; /*  incorrect */
 
 		if (le32_to_cpu(pdesc->rxdw3) & BIT(12))
-			pattrib->ip_chkrpt = 1; // correct
+			pattrib->ip_chkrpt = 1; /*  correct */
 		else
-			pattrib->ip_chkrpt = 0; // incorrect
+			pattrib->ip_chkrpt = 0; /*  incorrect */
 	}
 	else {
-		pattrib->tcpchk_valid = 0; // invalid
+		pattrib->tcpchk_valid = 0; /*  invalid */
 	}
 #endif
 
 	pattrib->mcs_rate=(u8)((le32_to_cpu(pdesc->rxdw3))&0x3f);
 	pattrib->rxht=(u8)((le32_to_cpu(pdesc->rxdw3) >>6)&0x1);
 
-	//Offset 16
-	//Offset 20
+	/* Offset 16 */
+	/* Offset 20 */
 }

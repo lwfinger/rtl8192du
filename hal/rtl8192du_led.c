@@ -21,31 +21,31 @@
 #include "drv_types.h"
 #include "rtl8192d_hal.h"
 
-//================================================================================
-//	Constant.
-//================================================================================
+/*  */
+/* 	Constant. */
+/*  */
 
-//
-// Default LED behavior.
-//
+/*  */
+/*  Default LED behavior. */
+/*  */
 #define LED_BLINK_NORMAL_INTERVAL	100
 #define LED_BLINK_SLOWLY_INTERVAL	200
 #define LED_BLINK_LONG_INTERVAL	400
 
 #define LED_BLINK_NO_LINK_INTERVAL_ALPHA		1000
-#define LED_BLINK_LINK_INTERVAL_ALPHA			500		//500
-#define LED_BLINK_SCAN_INTERVAL_ALPHA		180	//150
+#define LED_BLINK_LINK_INTERVAL_ALPHA			500		/* 500 */
+#define LED_BLINK_SCAN_INTERVAL_ALPHA		180	/* 150 */
 #define LED_BLINK_FASTER_INTERVAL_ALPHA		50
 #define LED_BLINK_WPS_SUCESS_INTERVAL_ALPHA	5000
 
-//================================================================================
-// LED object.
-//================================================================================
+/*  */
+/*  LED object. */
+/*  */
 
 
-//================================================================================
-//	Prototype of protected function.
-//================================================================================
+/*  */
+/* 	Prototype of protected function. */
+/*  */
 
 static void
 BlinkTimerCallback(
@@ -59,27 +59,27 @@ BlinkWorkItemCallback(
 
 static void
 ResetLedStatus(struct LED_871X *	pLed) {
-	pLed->CurrLedState = RTW_LED_OFF; // Current LED state.
-	pLed->bLedOn = false; // true if LED is ON, false if LED is OFF.
+	pLed->CurrLedState = RTW_LED_OFF; /*  Current LED state. */
+	pLed->bLedOn = false; /*  true if LED is ON, false if LED is OFF. */
 
-	pLed->bLedBlinkInProgress = false; // true if it is blinking, false o.w..
+	pLed->bLedBlinkInProgress = false; /*  true if it is blinking, false o.w.. */
 	pLed->bLedNoLinkBlinkInProgress = false;
 	pLed->bLedLinkBlinkInProgress = false;
 	pLed->bLedStartToLinkBlinkInProgress = false;
 	pLed->bLedScanBlinkInProgress = false;
 	pLed->bLedWPSBlinkInProgress = false;
-	pLed->BlinkTimes = 0; // Number of times to toggle led state for blinking.
-	pLed->BlinkingLedState = LED_UNKNOWN; // Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are.
+	pLed->BlinkTimes = 0; /*  Number of times to toggle led state for blinking. */
+	pLed->BlinkingLedState = LED_UNKNOWN; /*  Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are. */
 }
 
-//================================================================================
-// LED_819xUsb routines.
-//================================================================================
+/*  */
+/*  LED_819xUsb routines. */
+/*  */
 
-//
-//	Description:
-//		Initialize an struct LED_871X object.
-//
+/*  */
+/* 	Description: */
+/* 		Initialize an struct LED_871X object. */
+/*  */
 
 void InitLed871x(struct rtw_adapter *padapter,
 	struct LED_871X *		pLed,
@@ -103,27 +103,27 @@ void InitLed871x(struct rtw_adapter *padapter,
 }
 
 
-//
-//	Description:
-//		DeInitialize an struct LED_871X object.
-//
+/*  */
+/* 	Description: */
+/* 		DeInitialize an struct LED_871X object. */
+/*  */
 void DeInitLed871x(struct LED_871X *pLed)
 {
-	//call _cancel_workitem_sync(&(pLed->BlinkWorkItem))
-    //before _cancel_timer_ex(&(pLed->BlinkTimer)) to
-    //avoid led timer restarting when driver is removed
+	/* call _cancel_workitem_sync(&(pLed->BlinkWorkItem)) */
+    /* before _cancel_timer_ex(&(pLed->BlinkTimer)) to */
+    /* avoid led timer restarting when driver is removed */
 
 	_cancel_workitem_sync(&(pLed->BlinkWorkItem));
 	_cancel_timer_ex(&(pLed->BlinkTimer));
-	// We should reset bLedBlinkInProgress if we cancel the LedControlTimer, 2005.03.10, by rcnjko.
+	/*  We should reset bLedBlinkInProgress if we cancel the LedControlTimer, 2005.03.10, by rcnjko. */
 	ResetLedStatus(pLed);
 }
 
 
-//
-//	Description:
-//		Turn on LED according to LedPin specified.
-//
+/*  */
+/* 	Description: */
+/* 		Turn on LED according to LedPin specified. */
+/*  */
 
 void SwLedOn(struct rtw_adapter *padapter, struct LED_871X *pLed)
 {
@@ -134,7 +134,6 @@ void SwLedOn(struct rtw_adapter *padapter, struct LED_871X *pLed)
 		return;
 	}
 
-	//LedCfg = PlatformEFIORead1Byte(Adapter, LEDCFG);
 
 	switch (pLed->LedPin)
 	{
@@ -143,15 +142,13 @@ void SwLedOn(struct rtw_adapter *padapter, struct LED_871X *pLed)
 
 		case LED_PIN_LED0:
 			LedCfg = rtw_read8(padapter, REG_LEDCFG2);
-			rtw_write8(padapter, REG_LEDCFG2, LedCfg&0xf0); // SW control led0 on.
-			//RT_TRACE(COMP_LED, DBG_LOUD, ("SwLedOn LED0\n"));
+			rtw_write8(padapter, REG_LEDCFG2, LedCfg&0xf0); /*  SW control led0 on. */
 
 			break;
 
 		case LED_PIN_LED1:
 			LedCfg = rtw_read8(padapter, (REG_LEDCFG2 + 1));
-			rtw_write8(padapter, (REG_LEDCFG2 + 1), LedCfg&0x0f); // SW control led1 on.
-			//RT_TRACE(COMP_LED, DBG_LOUD, ("SwLedOn LED1\n"));
+			rtw_write8(padapter, (REG_LEDCFG2 + 1), LedCfg&0x0f); /*  SW control led1 on. */
 
 			break;
 
@@ -163,10 +160,10 @@ void SwLedOn(struct rtw_adapter *padapter, struct LED_871X *pLed)
 }
 
 
-//
-//	Description:
-//		Turn off LED according to LedPin specified.
-//
+/*  */
+/* 	Description: */
+/* 		Turn off LED according to LedPin specified. */
+/*  */
 void SwLedOff(struct rtw_adapter *padapter, struct LED_871X *pLed)
 {
 	u8	LedCfg;
@@ -176,7 +173,6 @@ void SwLedOff(struct rtw_adapter *padapter, struct LED_871X *pLed)
              return;
 	}
 
-	//LedCfg = PlatformEFIORead1Byte(Adapter, LEDCFG);
 
 	switch (pLed->LedPin)
 	{
@@ -185,17 +181,15 @@ void SwLedOff(struct rtw_adapter *padapter, struct LED_871X *pLed)
 
 		case LED_PIN_LED0:
 			LedCfg = rtw_read8(padapter, REG_LEDCFG2);
-			LedCfg &= 0xf0; // Set to software control.
+			LedCfg &= 0xf0; /*  Set to software control. */
 			rtw_write8(padapter, REG_LEDCFG2, (LedCfg|BIT3));
-			//RT_TRACE(COMP_LED, DBG_LOUD, ("SwLedOff LED0\n"));
 
 			break;
 
 		case LED_PIN_LED1:
 			LedCfg = rtw_read8(padapter, (REG_LEDCFG2+1));
-			LedCfg &= 0x0f; // Set to software control.
+			LedCfg &= 0x0f; /*  Set to software control. */
 			rtw_write8(padapter, (REG_LEDCFG2+1), (LedCfg|BIT3));
-			//RT_TRACE(COMP_LED, DBG_LOUD, ("SwLedOff LED1\n"));
 
 			break;
 
@@ -206,18 +200,18 @@ void SwLedOff(struct rtw_adapter *padapter, struct LED_871X *pLed)
 	pLed->bLedOn = false;
 }
 
-//
-//	Description:
-//		Implementation of LED blinking behavior.
-//		It toggle off LED and schedule corresponding timer if necessary.
-//
+/*  */
+/* 	Description: */
+/* 		Implementation of LED blinking behavior. */
+/* 		It toggle off LED and schedule corresponding timer if necessary. */
+/*  */
 void SwLedBlink(struct LED_871X *pLed)
 {
 	struct rtw_adapter			*padapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	u8				bStopBlinking = false;
 
-	// Change LED according to BlinkingLedState specified.
+	/*  Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON)
 	{
 		SwLedOn(padapter, pLed);
@@ -229,7 +223,7 @@ void SwLedBlink(struct LED_871X *pLed)
 		RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Blinktimes (%d): turn off\n", pLed->BlinkTimes));
 	}
 
-	// Determine if we shall change LED state again.
+	/*  Determine if we shall change LED state again. */
 	pLed->BlinkTimes--;
 	switch (pLed->CurrLedState)
 	{
@@ -291,13 +285,13 @@ void SwLedBlink(struct LED_871X *pLed)
 	}
 	else
 	{
-		// Assign LED state to toggle.
+		/*  Assign LED state to toggle. */
 		if (pLed->BlinkingLedState == RTW_LED_ON)
 			pLed->BlinkingLedState = RTW_LED_OFF;
 		else
 			pLed->BlinkingLedState = RTW_LED_ON;
 
-		// Schedule a timer to toggle LED state.
+		/*  Schedule a timer to toggle LED state. */
 		switch (pLed->CurrLedState)
 		{
 		case LED_BLINK_NORMAL:
@@ -337,7 +331,7 @@ void SwLedBlink1(struct LED_871X *pLed)
 	if (pHalData->CustomerID == RT_CID_819x_CAMEO)
 		pLed = &(ledpriv->SwLed1);
 
-	// Change LED according to BlinkingLedState specified.
+	/*  Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON)
 	{
 		SwLedOn(padapter, pLed);
@@ -511,7 +505,7 @@ void SwLedBlink1(struct LED_871X *pLed)
 			_set_timer(&(pLed->BlinkTimer), LED_BLINK_SCAN_INTERVAL_ALPHA);
 			break;
 
-		case LED_BLINK_WPS_STOP:	//WPS success
+		case LED_BLINK_WPS_STOP:	/* WPS success */
 			if (pLed->BlinkingLedState == RTW_LED_ON)
 			{
 				pLed->BlinkingLedState = RTW_LED_OFF;
@@ -555,7 +549,7 @@ void SwLedBlink2(struct LED_871X *pLed)
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 	u8					bStopBlinking = false;
 
-	// Change LED according to BlinkingLedState specified.
+	/*  Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON)
 	{
 		SwLedOn(padapter, pLed);
@@ -673,7 +667,7 @@ void SwLedBlink3(struct LED_871X *pLed)
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	u8				bStopBlinking = false;
 
-	// Change LED according to BlinkingLedState specified.
+	/*  Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON)
 	{
 		SwLedOn(padapter, pLed);
@@ -798,7 +792,7 @@ void SwLedBlink3(struct LED_871X *pLed)
 			_set_timer(&(pLed->BlinkTimer), LED_BLINK_SCAN_INTERVAL_ALPHA);
 			break;
 
-		case LED_BLINK_WPS_STOP:	//WPS success
+		case LED_BLINK_WPS_STOP:	/* WPS success */
 			if (pLed->BlinkingLedState == RTW_LED_ON)
 			{
 				pLed->BlinkingLedState = RTW_LED_OFF;
@@ -840,7 +834,7 @@ void SwLedBlink4(struct LED_871X *pLed)
 	struct LED_871X *		pLed1 = &(ledpriv->SwLed1);
 	u8				bStopBlinking = false;
 
-	// Change LED according to BlinkingLedState specified.
+	/*  Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON)
 	{
 		SwLedOn(padapter, pLed);
@@ -978,7 +972,7 @@ void SwLedBlink4(struct LED_871X *pLed)
 			}
 			break;
 
-		case LED_BLINK_WPS_STOP:	//WPS authentication fail
+		case LED_BLINK_WPS_STOP:	/* WPS authentication fail */
 			if (pLed->bLedOn)
 				pLed->BlinkingLedState = RTW_LED_OFF;
 			else
@@ -987,7 +981,7 @@ void SwLedBlink4(struct LED_871X *pLed)
 			_set_timer(&(pLed->BlinkTimer), LED_BLINK_NORMAL_INTERVAL);
 			break;
 
-		case LED_BLINK_WPS_STOP_OVERLAP:	//WPS session overlap
+		case LED_BLINK_WPS_STOP_OVERLAP:	/* WPS session overlap */
 			pLed->BlinkTimes--;
 			if (pLed->BlinkTimes == 0)
 			{
@@ -1032,7 +1026,7 @@ void SwLedBlink5(struct LED_871X *pLed)
 	struct rtw_adapter			*padapter = pLed->padapter;
 	u8				bStopBlinking = false;
 
-	// Change LED according to BlinkingLedState specified.
+	/*  Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON)
 	{
 		SwLedOn(padapter, pLed);
@@ -1140,11 +1134,11 @@ void SwLedBlink5(struct LED_871X *pLed)
 
 }
 
-//
-//	Description:
-//		Callback function of LED BlinkTimer,
-//		it just schedules to corresponding BlinkWorkItem.
-//
+/*  */
+/* 	Description: */
+/* 		Callback function of LED BlinkTimer, */
+/* 		it just schedules to corresponding BlinkWorkItem. */
+/*  */
 void
 BlinkTimerCallback(
 	unsigned long data
@@ -1162,11 +1156,11 @@ BlinkTimerCallback(
 }
 
 
-//
-//	Description:
-//		Callback function of LED BlinkWorkItem.
-//		We dispatch acture LED blink action according to LedStrategy.
-//
+/*  */
+/* 	Description: */
+/* 		Callback function of LED BlinkWorkItem. */
+/* 		We dispatch acture LED blink action according to LedStrategy. */
+/*  */
 void BlinkWorkItemCallback(struct work_struct *work)
 {
 	struct LED_871X *	 pLed = container_of(work, struct LED_871X, BlinkWorkItem);
@@ -1211,15 +1205,15 @@ void BlinkWorkItemCallback(struct work_struct *work)
 }
 
 
-//================================================================================
-// Default LED behavior.
-//================================================================================
+/*  */
+/*  Default LED behavior. */
+/*  */
 
-//
-//	Description:
-//		Implement each led action for SW_LED_MODE0.
-//		This is default strategy.
-//
+/*  */
+/* 	Description: */
+/* 		Implement each led action for SW_LED_MODE0. */
+/* 		This is default strategy. */
+/*  */
 void
 SwLedControlMode0(
 	struct rtw_adapter		*padapter,
@@ -1229,7 +1223,7 @@ SwLedControlMode0(
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
 	struct LED_871X *	pLed = &(ledpriv->SwLed1);
 
-	// Decide led state
+	/*  Decide led state */
 	switch (LedAction)
 	{
 	case LED_CTL_TX:
@@ -1335,7 +1329,7 @@ SwLedControlMode0(
 	RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Led %d\n", pLed->CurrLedState));
 }
 
- //ALPHA, added by chiyoko, 20090106
+ /* ALPHA, added by chiyoko, 20090106 */
 void
 SwLedControlMode1(
 	struct rtw_adapter		*padapter,
@@ -1471,7 +1465,7 @@ SwLedControlMode1(
 			}
 			break;
 
-		case LED_CTL_START_WPS: //wait until xinpin finish
+		case LED_CTL_START_WPS: /* wait until xinpin finish */
 		case LED_CTL_START_WPS_BOTTON:
 			 if (pLed->bLedWPSBlinkInProgress ==false)
 			 {
@@ -1606,7 +1600,7 @@ SwLedControlMode1(
 	RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Led %d\n", pLed->CurrLedState));
 }
 
- //Arcadyan/Sitecom , added by chiyoko, 20090216
+ /* Arcadyan/Sitecom , added by chiyoko, 20090216 */
 void
 SwLedControlMode2(
 	struct rtw_adapter				*padapter,
@@ -1680,7 +1674,7 @@ SwLedControlMode2(
 			_set_timer(&(pLed->BlinkTimer), 0);
 			break;
 
-		case LED_CTL_START_WPS: //wait until xinpin finish
+		case LED_CTL_START_WPS: /* wait until xinpin finish */
 		case LED_CTL_START_WPS_BOTTON:
 			if (pLed->bLedWPSBlinkInProgress ==false)
 			{
@@ -1771,7 +1765,7 @@ SwLedControlMode2(
 	RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("CurrLedState %d\n", pLed->CurrLedState));
 }
 
-  //COREGA, added by chiyoko, 20090316
+  /* COREGA, added by chiyoko, 20090316 */
  void
  SwLedControlMode3(
 	struct rtw_adapter				*padapter,
@@ -1848,7 +1842,7 @@ SwLedControlMode2(
 			_set_timer(&(pLed->BlinkTimer), 0);
 			break;
 
-		case LED_CTL_START_WPS: //wait until xinpin finish
+		case LED_CTL_START_WPS: /* wait until xinpin finish */
 		case LED_CTL_START_WPS_BOTTON:
 			if (pLed->bLedWPSBlinkInProgress ==false)
 			{
@@ -1950,7 +1944,7 @@ SwLedControlMode2(
 }
 
 
- //Edimax-Belkin, added by chiyoko, 20090413
+ /* Edimax-Belkin, added by chiyoko, 20090413 */
 void
 SwLedControlMode4(
 	struct rtw_adapter				*padapter,
@@ -2011,7 +2005,7 @@ SwLedControlMode4(
 
 		case LED_CTL_LINK:
 		case LED_CTL_NO_LINK:
-			//LED1 settings
+			/* LED1 settings */
 			if (LedAction == LED_CTL_LINK)
 			{
 				if (pLed1->bLedWPSBlinkInProgress)
@@ -2102,7 +2096,7 @@ SwLedControlMode4(
 			}
 			break;
 
-		case LED_CTL_START_WPS: //wait until xinpin finish
+		case LED_CTL_START_WPS: /* wait until xinpin finish */
 		case LED_CTL_START_WPS_BOTTON:
 			if (pLed1->bLedWPSBlinkInProgress)
 			{
@@ -2148,7 +2142,7 @@ SwLedControlMode4(
 			}
 			break;
 
-		case LED_CTL_STOP_WPS:	//WPS connect success
+		case LED_CTL_STOP_WPS:	/* WPS connect success */
 			if (pLed->bLedWPSBlinkInProgress)
 			{
 				_cancel_timer_ex(&(pLed->BlinkTimer));
@@ -2165,7 +2159,7 @@ SwLedControlMode4(
 
 			break;
 
-		case LED_CTL_STOP_WPS_FAIL:		//WPS authentication fail
+		case LED_CTL_STOP_WPS_FAIL:		/* WPS authentication fail */
 			if (pLed->bLedWPSBlinkInProgress)
 			{
 				_cancel_timer_ex(&(pLed->BlinkTimer));
@@ -2180,7 +2174,7 @@ SwLedControlMode4(
 				pLed->BlinkingLedState = RTW_LED_ON;
 			_set_timer(&(pLed->BlinkTimer), LED_BLINK_NO_LINK_INTERVAL_ALPHA);
 
-			//LED1 settings
+			/* LED1 settings */
 			if (pLed1->bLedWPSBlinkInProgress)
 				_cancel_timer_ex(&(pLed1->BlinkTimer));
 			else
@@ -2195,7 +2189,7 @@ SwLedControlMode4(
 
 			break;
 
-		case LED_CTL_STOP_WPS_FAIL_OVERLAP:	//WPS session overlap
+		case LED_CTL_STOP_WPS_FAIL_OVERLAP:	/* WPS session overlap */
 			if (pLed->bLedWPSBlinkInProgress)
 			{
 				_cancel_timer_ex(&(pLed->BlinkTimer));
@@ -2210,7 +2204,7 @@ SwLedControlMode4(
 				pLed->BlinkingLedState = RTW_LED_ON;
 			_set_timer(&(pLed->BlinkTimer), LED_BLINK_NO_LINK_INTERVAL_ALPHA);
 
-			//LED1 settings
+			/* LED1 settings */
 			if (pLed1->bLedWPSBlinkInProgress)
 				_cancel_timer_ex(&(pLed1->BlinkTimer));
 			else
@@ -2282,7 +2276,7 @@ SwLedControlMode4(
 
 
 
- //Sercomm-Belkin, added by chiyoko, 20090415
+ /* Sercomm-Belkin, added by chiyoko, 20090415 */
 void
 SwLedControlMode5(
 	struct rtw_adapter				*padapter,
@@ -2301,7 +2295,7 @@ SwLedControlMode5(
 	{
 		case LED_CTL_POWER_ON:
 		case LED_CTL_NO_LINK:
-		case LED_CTL_LINK:	//solid blue
+		case LED_CTL_LINK:	/* solid blue */
 			pLed->CurrLedState = RTW_LED_ON;
 			pLed->BlinkingLedState = RTW_LED_ON;
 
@@ -2370,10 +2364,10 @@ SwLedControlMode5(
 }
 
 
-//
-//	Description:
-//		Dispatch LED action according to pHalData->LedStrategy.
-//
+/*  */
+/* 	Description: */
+/* 		Dispatch LED action according to pHalData->LedStrategy. */
+/*  */
 void
 LedControl871x(
 	struct rtw_adapter				*padapter,
@@ -2390,12 +2384,6 @@ LedControl871x(
 	if (ledpriv->bRegUseLed == false)
 		return;
 
-	//if (!priv->up)
-	//	return;
-
-	//if (priv->bInHctTest)
-	//	return;
-
 	if (	padapter->pwrctrlpriv.rf_pwrstate != rf_on &&
 		(LedAction == LED_CTL_TX || LedAction == LED_CTL_RX ||
 		 LedAction == LED_CTL_SITE_SURVEY ||
@@ -2409,7 +2397,6 @@ LedControl871x(
 	switch (ledpriv->LedStrategy)
 	{
 		case SW_LED_MODE0:
-			//SwLedControlMode0(padapter, LedAction);
 			break;
 
 		case SW_LED_MODE1:
@@ -2439,14 +2426,14 @@ LedControl871x(
 	RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("LedStrategy:%d, LedAction %d\n", ledpriv->LedStrategy,LedAction));
 }
 
-//================================================================================
-// Interface to manipulate LED objects.
-//================================================================================
+/*  */
+/*  Interface to manipulate LED objects. */
+/*  */
 
-//
-//	Description:
-//		Initialize all struct LED_871X objects.
-//
+/*  */
+/* 	Description: */
+/* 		Initialize all struct LED_871X objects. */
+/*  */
 void rtl8192du_InitSwLeds(struct rtw_adapter	*padapter)
 {
 	struct led_priv *pledpriv = &(padapter->ledpriv);
@@ -2459,10 +2446,10 @@ void rtl8192du_InitSwLeds(struct rtw_adapter	*padapter)
 }
 
 
-//
-//	Description:
-//		DeInitialize all LED_819xUsb objects.
-//
+/*  */
+/* 	Description: */
+/* 		DeInitialize all LED_819xUsb objects. */
+/*  */
 void rtl8192du_DeInitSwLeds(struct rtw_adapter *padapter)
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);

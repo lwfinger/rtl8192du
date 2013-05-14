@@ -54,9 +54,9 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 	struct recv_buf *precvbuf;
 
 #ifdef CONFIG_RECV_THREAD_MODE
-	_rtw_init_sema(&precvpriv->recv_sema, 0);//will be removed
-	_rtw_init_sema(&precvpriv->terminate_recvthread_sema, 0);//will be removed
-#endif //CONFIG_RECV_THREAD_MODE
+	_rtw_init_sema(&precvpriv->recv_sema, 0);/* will be removed */
+	_rtw_init_sema(&precvpriv->terminate_recvthread_sema, 0);/* will be removed */
+#endif /* CONFIG_RECV_THREAD_MODE */
 
 	tasklet_init(&precvpriv->recv_tasklet,
 	     (void(*)(unsigned long))rtl8192du_recv_tasklet,
@@ -64,7 +64,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 
 #ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
 	_rtw_init_queue(&precvpriv->recv_buf_pending_queue);
-#endif	// CONFIG_USE_USB_BUFFER_ALLOC_RX
+#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_RX */
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
 
@@ -76,9 +76,9 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 	if (precvpriv->int_in_buf == NULL) {
 		DBG_8192D("alloc_mem for interrupt in endpoint fail !!!!\n");
 	}
-#endif //CONFIG_USB_INTERRUPT_IN_PIPE
+#endif /* CONFIG_USB_INTERRUPT_IN_PIPE */
 
-	//init recv_buf
+	/* init recv_buf */
 	_rtw_init_queue(&precvpriv->free_recv_buf_queue);
 
 	precvpriv->pallocated_recv_buf = rtw_zmalloc(NR_RECVBUFF *sizeof(struct recv_buf) + 4);
@@ -106,10 +106,6 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 
 		precvbuf->ref_cnt = 0;
 		precvbuf->adapter =padapter;
-
-
-		//rtw_list_insert_tail(&precvbuf->list, &(precvpriv->free_recv_buf_queue.queue));
-
 		precvbuf++;
 
 	}
@@ -120,7 +116,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 #ifdef CONFIG_RX_INDICATE_QUEUE
 	memset(&precvpriv->rx_indicate_queue, 0, sizeof(struct ifqueue));
 	mtx_init(&precvpriv->rx_indicate_queue.ifq_mtx, "rx_indicate_queue", NULL, MTX_DEF);
-#endif	// CONFIG_RX_INDICATE_QUEUE
+#endif	/*  CONFIG_RX_INDICATE_QUEUE */
 
 #ifdef CONFIG_PREALLOC_RECV_SKB
 	{
@@ -133,11 +129,11 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 
 		for (i=0; i<NR_PREALLOC_RECV_SKB; i++)
 		{
-	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) // http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html
+	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) /*  http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html */
 			pskb = dev_alloc_skb(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 	#else
 			pskb = netdev_alloc_skb(padapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
-	#endif //(LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18))
+	#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) */
 
 			if (pskb)
 			{

@@ -58,19 +58,19 @@ static void _FWDownloadEnable(struct rtw_adapter *Adapter, bool enable)
 				DBG_8192D("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __func__, __LINE__, val);
 		}
 		#endif
-		// 8051 enable
+		/*  8051 enable */
 		tmp = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
 		rtw_write8(Adapter, REG_SYS_FUNC_EN+1, tmp|0x04);
 
-		// MCU firmware download enable.
+		/*  MCU firmware download enable. */
 		tmp = rtw_read8(Adapter, REG_MCUFWDL);
 		rtw_write8(Adapter, REG_MCUFWDL, tmp|0x01);
 
-		// 8051 reset
+		/*  8051 reset */
 		tmp = rtw_read8(Adapter, REG_MCUFWDL+2);
 		rtw_write8(Adapter, REG_MCUFWDL+2, tmp&0xf7);
 	} else {
-		// MCU firmware download enable.
+		/*  MCU firmware download enable. */
 		tmp = rtw_read8(Adapter, REG_MCUFWDL);
 		rtw_write8(Adapter, REG_MCUFWDL, tmp&0xfe);
 	}
@@ -162,8 +162,8 @@ _WriteFW(
 	)
 {
 	int ret = _SUCCESS;
-	// Since we need dynamic decide method of dwonload fw, so we call this function to get chip version.
-	// We can remove _ReadChipVersion from ReadAdapterInfo8192C later.
+	/*  Since we need dynamic decide method of dwonload fw, so we call this function to get chip version. */
+	/*  We can remove _ReadChipVersion from ReadAdapterInfo8192C later. */
 	u32	pageNums,remainSize ;
 	u32	page,offset;
 	u8*	bufferPtr = (u8*)buffer;
@@ -198,7 +198,7 @@ int _FWFreeToGo_92D(
 {
 	u32			counter = 0;
 	u32			value32;
-	// polling CheckSum report
+	/*  polling CheckSum report */
 	do{
 		value32 = rtw_read32(Adapter, REG_MCUFWDL);
 	}while ((counter ++ < POLLING_READY_TIMEOUT_COUNT) && (!(value32 & FWDL_ChkSum_rpt )));
@@ -220,50 +220,42 @@ rtl8192d_FirmwareSelfReset(
 	struct rtw_adapter *		Adapter
 )
 {
-	//struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8	u1bTmp;
 	u8	Delay = 100;
 
-	//if ((pHalData->FirmwareVersion > 0x21) ||
-	//	(pHalData->FirmwareVersion == 0x21 &&
-	//	pHalData->FirmwareSubVersion >= 0x01))
+	rtw_write8(Adapter, REG_FSIMR, 0x00);
+	/*  2010/08/25 MH Accordign to RD alfred's suggestion, we need to disable other */
+	/*  HRCV INT to influence 8051 reset. */
+	rtw_write8(Adapter, REG_FWIMR, 0x20);
+	/*  2011/02/15 MH According to Alex's suggestion, close mask to prevent incorrect FW write operation. */
+	rtw_write8(Adapter, REG_FTIMR, 0x00);
+
+	/* 0x1cf=0x20. Inform 8051 to reset. 2009.12.25. tynli_test */
+	rtw_write8(Adapter, REG_HMETFR+3, 0x20);
+
+	u1bTmp = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
+	while (u1bTmp&BIT2)
 	{
-		rtw_write8(Adapter, REG_FSIMR, 0x00);
-		// 2010/08/25 MH Accordign to RD alfred's suggestion, we need to disable other
-		// HRCV INT to influence 8051 reset.
-		rtw_write8(Adapter, REG_FWIMR, 0x20);
-		// 2011/02/15 MH According to Alex's suggestion, close mask to prevent incorrect FW write operation.
-		rtw_write8(Adapter, REG_FTIMR, 0x00);
-
-		//0x1cf=0x20. Inform 8051 to reset. 2009.12.25. tynli_test
-		rtw_write8(Adapter, REG_HMETFR+3, 0x20);
-
+		Delay--;
+		if (Delay == 0)
+			break;
+		rtw_udelay_os(50);
 		u1bTmp = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-		while (u1bTmp&BIT2)
-		{
-			Delay--;
-			//RT_TRACE(COMP_INIT, DBG_LOUD, ("PowerOffAdapter8192CE(): polling 0x03[2] Delay = %d\n", Delay));
-			if (Delay == 0)
-				break;
-			rtw_udelay_os(50);
-			u1bTmp = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-		}
+	}
 
-		if ((u1bTmp&BIT2) && (Delay == 0))
-		{
-			//DbgPrint("FirmwareDownload92C(): Fail!!!!!! 0x03 = %x\n", u1bTmp);
-			rtw_write8(Adapter, REG_FWIMR, 0x00);
-			//debug reset fail
-			printk("FirmwareDownload92C(): Fail!!!!!! 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x\n", rtw_read32(Adapter, 0x1c)
-			, rtw_read32(Adapter, 0x130), rtw_read32(Adapter, 0x134), rtw_read32(Adapter, 0x138), rtw_read32(Adapter, 0x1c4),
-			rtw_read32(Adapter, 0x1cc), rtw_read32(Adapter, 0x80), rtw_read32(Adapter, 0x1c0));
-		}
+	if ((u1bTmp&BIT2) && (Delay == 0))
+	{
+		rtw_write8(Adapter, REG_FWIMR, 0x00);
+		/* debug reset fail */
+		printk("FirmwareDownload92C(): Fail!!!!!! 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x\n", rtw_read32(Adapter, 0x1c)
+		, rtw_read32(Adapter, 0x130), rtw_read32(Adapter, 0x134), rtw_read32(Adapter, 0x138), rtw_read32(Adapter, 0x1c4),
+		rtw_read32(Adapter, 0x1cc), rtw_read32(Adapter, 0x80), rtw_read32(Adapter, 0x1c0));
 	}
 }
 
-//
-// description :polling fw ready
-//
+/*  */
+/*  description :polling fw ready */
+/*  */
 int _FWInit(struct rtw_adapter *Adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
@@ -272,7 +264,7 @@ int _FWInit(struct rtw_adapter *Adapter)
 
 	DBG_8192D("FW already have download ;\n");
 
-	// polling for FW ready
+	/*  polling for FW ready */
 	counter = 0;
 	do
 	{
@@ -307,12 +299,12 @@ int _FWInit(struct rtw_adapter *Adapter)
 #ifdef CONFIG_FILE_FWIMG
 extern char *rtw_fw_file_path;
 u8	FwBuffer8192D[FW_8192D_SIZE];
-#endif //CONFIG_FILE_FWIMG
-//
-//	Description:
-//		Download 8192C firmware code.
-//
-//
+#endif /* CONFIG_FILE_FWIMG */
+/*  */
+/* 	Description: */
+/* 		Download 8192C firmware code. */
+/*  */
+/*  */
 int FirmwareDownload92D(
 	struct rtw_adapter *			Adapter,
 	bool			bUsedWoWLANFw
@@ -329,7 +321,7 @@ int FirmwareDownload92D(
 #ifdef CONFIG_WOWLAN
 	u8*			FwImageWoWLAN;
 	u32			FwImageWoWLANLen;
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 	struct RT_FIRMWARE_92D	*pFirmware = NULL;
 	struct rt_8192d_firmware_hdr *pFwHdr = NULL;
 	u8		*pFirmwareBuf;
@@ -354,17 +346,17 @@ int FirmwareDownload92D(
 #ifdef CONFIG_WOWLAN
 	FwImageWoWLAN= Rtl8192D_FwWWImageArray;
 	FwImageWoWLANLen =DUWWImgArrayLength ;
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 	DBG_8192D(" ===> FirmwareDownload92D() fw:Rtl8192D_FwImageArray\n");
 
 	#ifdef CONFIG_FILE_FWIMG
 	if (rtw_is_file_readable(rtw_fw_file_path) == true)
 	{
 		DBG_8192D("%s accquire FW from file:%s\n", __func__, rtw_fw_file_path);
-		pFirmware->eFWSource = FW_SOURCE_IMG_FILE; // We should decided by Reg.
+		pFirmware->eFWSource = FW_SOURCE_IMG_FILE; /*  We should decided by Reg. */
 	}
 	else
-	#endif //CONFIG_FILE_FWIMG
+	#endif /* CONFIG_FILE_FWIMG */
 	{
 		DBG_8192D("%s accquire FW from embedded image\n", __func__);
 		pFirmware->eFWSource = FW_SOURCE_HEADER_FILE;
@@ -379,7 +371,7 @@ int FirmwareDownload92D(
 
 			pFirmware->ulFwLength = rtStatus>=0?rtStatus:0;
 			pFirmware->szFwBuffer = FwBuffer8192D;
-			#endif //CONFIG_FILE_FWIMG
+			#endif /* CONFIG_FILE_FWIMG */
 
 			if (pFirmware->ulFwLength <= 0)
 			{
@@ -396,11 +388,11 @@ int FirmwareDownload92D(
 				pFirmware->szWoWLANFwBuffer=FwImageWoWLAN;
 				pFirmware->ulWoWLANFwLength = FwImageWoWLANLen;
 			}
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 			break;
 	}
 
-	#ifdef DBG_FW_STORE_FILE_PATH //used to store firmware to file...
+	#ifdef DBG_FW_STORE_FILE_PATH /* used to store firmware to file... */
 	if (pFirmware->ulFwLength > 0)
 	{
 		rtw_store_to_file(DBG_FW_STORE_FILE_PATH, pFirmware->szFwBuffer, pFirmware->ulFwLength);
@@ -414,12 +406,12 @@ int FirmwareDownload92D(
 		pFwHdr = (struct rt_8192d_firmware_hdr *)pFirmware->szWoWLANFwBuffer;
 	}
 	else
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 	{
 	pFirmwareBuf = pFirmware->szFwBuffer;
 	FirmwareLen = pFirmware->ulFwLength;
 
-	// To Check Fw header. Added by tynli. 2009.12.04.
+	/*  To Check Fw header. Added by tynli. 2009.12.04. */
 	pFwHdr = (struct rt_8192d_firmware_hdr *)pFirmware->szFwBuffer;
 	}
 
@@ -430,13 +422,12 @@ int FirmwareDownload92D(
 
 	if (IS_FW_HEADER_EXIST(pFwHdr))
 	{
-		//DBG_8192D("Shift 32 bytes for FW header!!\n");
 		pFirmwareBuf = pFirmwareBuf + 32;
 		FirmwareLen = FirmwareLen -32;
 	}
 
 #ifdef CONFIG_WOWLAN
-	//write 0x5 BIT(3), don't suspend to reset MAC
+	/* write 0x5 BIT(3), don't suspend to reset MAC */
 	if (bUsedWoWLANFw)
 	{
 		u8 test;
@@ -445,7 +436,7 @@ int FirmwareDownload92D(
 		rtw_write8(Adapter, REG_APS_FSMCO+1, test);
 	}
 
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 	ACQUIRE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 	if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY ||
 		pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY)
@@ -497,9 +488,9 @@ int FirmwareDownload92D(
 		RELEASE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 	}
 
-	// Suggested by Filen. If 8051 is running in RAM code, driver should inform Fw to reset by itself,
-	// or it will cause download Fw fail. 2010.02.01. by tynli.
-	if (rtw_read8(Adapter, REG_MCUFWDL)&BIT7) //8051 RAM code
+	/*  Suggested by Filen. If 8051 is running in RAM code, driver should inform Fw to reset by itself, */
+	/*  or it will cause download Fw fail. 2010.02.01. by tynli. */
+	if (rtw_read8(Adapter, REG_MCUFWDL)&BIT7) /* 8051 RAM code */
 	{
 		DBG_8192D("Firmware self reset\n");
 		rtl8192d_FirmwareSelfReset(Adapter);
@@ -509,7 +500,7 @@ int FirmwareDownload92D(
 	_FWDownloadEnable(Adapter, true);
 	fwdl_start_time = rtw_get_current_time();
 	while (1) {
-		//reset the FWDL chksum
+		/* reset the FWDL chksum */
 		rtw_write8(Adapter, REG_MCUFWDL, rtw_read8(Adapter, REG_MCUFWDL)|FWDL_ChkSum_rpt);
 
 		rtStatus = _WriteFW(Adapter, pFirmwareBuf, FirmwareLen);
@@ -532,7 +523,7 @@ int FirmwareDownload92D(
 
 	ACQUIRE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 	rtStatus=_FWFreeToGo_92D(Adapter);
-	// download fw over,clear 0x1f[5]
+	/*  download fw over,clear 0x1f[5] */
 	value=rtw_read8(Adapter, 0x1f);
 	value&=(~BIT5);
 	rtw_write8(Adapter, 0x1f,value);
@@ -551,7 +542,6 @@ Exit:
 		rtw_vmfree((u8*)pFirmware, sizeof(struct RT_FIRMWARE_92D));
 	}
 
-	//RT_TRACE(COMP_INIT, DBG_LOUD, (" <=== FirmwareDownload91C()\n"));
 	return rtStatus;
 }
 
@@ -565,25 +555,25 @@ InitializeFirmwareVars92D(
 	struct pwrctrl_priv *pwrpriv;
 	pwrpriv = &Adapter->pwrctrlpriv;
 
-	// Init Fw LPS related.
+	/*  Init Fw LPS related. */
 	Adapter->pwrctrlpriv.bFwCurrentInPSMode = false;
 
 	pwrpriv->bkeepfwalive = true;
-	//Init H2C counter. by tynli. 2009.12.09.
+	/* Init H2C counter. by tynli. 2009.12.09. */
 	pHalData->LastHMEBoxNum = 0;
 }
 
 
-//===========================================
+/*  */
 
-//
-// Description: Prepare some information to Fw for WoWLAN.
-//			(1) Download wowlan Fw.
-//			(2) Download RSVD page packets.
-//			(3) Enable AP offload if needed.
-//
-// 2011.04.12 by tynli.
-//
+/*  */
+/*  Description: Prepare some information to Fw for WoWLAN. */
+/* 			(1) Download wowlan Fw. */
+/* 			(2) Download RSVD page packets. */
+/* 			(3) Enable AP offload if needed. */
+/*  */
+/*  2011.04.12 by tynli. */
+/*  */
 void
 SetFwRelatedForWoWLAN8192DU(
 	struct rtw_adapter *			padapter,
@@ -596,9 +586,9 @@ SetFwRelatedForWoWLAN8192DU(
 
 	if (bHostIsGoingtoSleep)
 	{
-		//
-		// 1. Before WoWLAN we need to re-download WoWLAN Fw.
-		//
+		/*  */
+		/*  1. Before WoWLAN we need to re-download WoWLAN Fw. */
+		/*  */
 		status = FirmwareDownload92D(padapter, bHostIsGoingtoSleep);
 		if (status != _SUCCESS)
 		{
@@ -610,30 +600,30 @@ SetFwRelatedForWoWLAN8192DU(
 			DBG_8192D("ConfigFwRelatedForWoWLAN8192DU(): Re-Download Firmware Success !!\n");
 		}
 
-		//
-		// 2. Re-Init the variables about Fw related setting.
-		//
+		/*  */
+		/*  2. Re-Init the variables about Fw related setting. */
+		/*  */
 		InitializeFirmwareVars92D(padapter);
 
 
 	}
 }
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 
-//"chnl" begins from 0. It's not a real channel.
-//"channel_info[chnl]" is a real channel.
+/* chnl" begins from 0. It's not a real channel. */
+/* channel_info[chnl]" is a real channel. */
 static u8 Hal_GetChnlGroupfromArray(u8 chnl)
 {
 	u8	group=0;
 	u8	channel_info[59] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,100,102,104,106,108,110,112,114,116,118,120,122,124,126,128,130,132,134,136,138,140,149,151,153,155,157,159,161,163,165};
 
-	if (channel_info[chnl] <= 3)			// Chanel 1-3
+	if (channel_info[chnl] <= 3)			/*  Chanel 1-3 */
 		group = 0;
-	else if (channel_info[chnl] <= 9)		// Channel 4-9
+	else if (channel_info[chnl] <= 9)		/*  Channel 4-9 */
 		group = 1;
-	else	if (channel_info[chnl] <=14)				// Channel 10-14
+	else	if (channel_info[chnl] <=14)				/*  Channel 10-14 */
 		group = 2;
-	// For TX_POWER_FOR_5G_BAND
+	/*  For TX_POWER_FOR_5G_BAND */
 	else if (channel_info[chnl] <= 44)
 		group = 3;
 	else if (channel_info[chnl] <= 54)
@@ -670,10 +660,10 @@ rtl8192d_ReadChipVersion(
 
 	ChipVersion = (enum VERSION_8192D)(VERSION_NORMAL_CHIP_92D_SINGLEPHY | CHIP_92D);
 
-	//Decide TestChip or NormalChip here.
-	//92D's RF_type will be decided when the reg0x2c is filled.
+	/* Decide TestChip or NormalChip here. */
+	/* 92D's RF_type will be decided when the reg0x2c is filled. */
 	if (!(value32 & 0x000f0000))
-	{ //Test or Normal Chip:  hardward id 0xf0[19:16] =0 test chip
+	{ /* Test or Normal Chip:  hardward id 0xf0[19:16] =0 test chip */
 		ChipVersion = VERSION_TEST_CHIP_92D_SINGLEPHY;
 		DBG_8192D("TEST CHIP!!!\n");
 	}
@@ -686,11 +676,11 @@ rtl8192d_ReadChipVersion(
 	pHalData->VersionID = ChipVersion;
 }
 
-//-------------------------------------------------------------------------
-//
-//	Channel Plan
-//
-//-------------------------------------------------------------------------
+/*  */
+/*  */
+/* 	Channel Plan */
+/*  */
+/*  */
 
 void
 rtl8192d_EfuseParseChnlPlan(
@@ -710,11 +700,11 @@ rtl8192d_EfuseParseChnlPlan(
 	DBG_8192D("mlmepriv.ChannelPlan = 0x%02x\n" , Adapter->mlmepriv.ChannelPlan);
 }
 
-//-------------------------------------------------------------------------
-//
-//	EEPROM Power index mapping
-//
-//-------------------------------------------------------------------------
+/*  */
+/*  */
+/* 	EEPROM Power index mapping */
+/*  */
+/*  */
 
 static void
 hal_ReadPowerValueFromPROM92D(
@@ -759,8 +749,8 @@ hal_ReadPowerValueFromPROM92D(
 		return;
 	}
 
-	//Maybe autoload OK,buf the tx power index vlaue is not filled.
-	//If we find it,we set it default value.
+	/* Maybe autoload OK,buf the tx power index vlaue is not filled. */
+	/* If we find it,we set it default value. */
 	for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++) {
 		for (group = 0 ; group < CHANNEL_GROUP_MAX_2G; group++) {
 			eeAddr = EEPROM_CCK_TX_PWR_INX_2G + (rfPath * 3) + group;
@@ -780,7 +770,7 @@ hal_ReadPowerValueFromPROM92D(
 		}
 	}
 
-	//These just for 92D efuse offset.
+	/* These just for 92D efuse offset. */
 	for (group = 0 ; group < CHANNEL_GROUP_MAX ; group++) {
 		for (rfPath = 0 ; rfPath < RF_PATH_MAX ; rfPath++) {
 			offset1 = group / 3;
@@ -789,8 +779,6 @@ hal_ReadPowerValueFromPROM92D(
 			if (PROMContent[EEPROM_HT40_2S_TX_PWR_INX_DIFF_2G+ offset2 + offset1*21] != 0xFF)
 				pwrInfo->HT40_2SIndexDiff[rfPath][group] =
 					(PROMContent[EEPROM_HT40_2S_TX_PWR_INX_DIFF_2G+ offset2 + offset1*21] >> (rfPath * 4)) & 0xF;
-					//RT_TRACE(COMP_INIT,DBG_LOUD,
-					//	("ht40_2sdiff:group:%d,%x:0x%x.\n",group,EEPROM_HT40_2S_TX_PWR_INX_DIFF_2G+ offset2 + offset1*21,PROMContent[EEPROM_HT40_2S_TX_PWR_INX_DIFF_2G+ offset2 + offset1*21]));
 			else
 				pwrInfo->HT40_2SIndexDiff[rfPath][group]	= EEPROM_Default_HT40_2SDiff;
 
@@ -798,7 +786,7 @@ hal_ReadPowerValueFromPROM92D(
 			{
 				pwrInfo->HT20IndexDiff[rfPath][group] =
 					(PROMContent[EEPROM_HT20_TX_PWR_INX_DIFF_2G+ offset2 + offset1*21] >> (rfPath * 4)) & 0xF;
-				if (pwrInfo->HT20IndexDiff[rfPath][group] & BIT3)	//4bit sign number to 8 bit sign number
+				if (pwrInfo->HT20IndexDiff[rfPath][group] & BIT3)	/* 4bit sign number to 8 bit sign number */
 					pwrInfo->HT20IndexDiff[rfPath][group] |= 0xF0;
 			}
 			else
@@ -828,16 +816,16 @@ hal_ReadPowerValueFromPROM92D(
 	}
 
 	if (PROMContent[EEPROM_TSSI_A_5G] != 0xFF) {
-		//5GL
-		pwrInfo->TSSI_A_5G[0] = PROMContent[EEPROM_TSSI_A_5G] & 0x3F;	//[0:5]
+		/* 5GL */
+		pwrInfo->TSSI_A_5G[0] = PROMContent[EEPROM_TSSI_A_5G] & 0x3F;	/* 0:5] */
 		pwrInfo->TSSI_B_5G[0] = PROMContent[EEPROM_TSSI_B_5G] & 0x3F;
 
-		//5GM
+		/* 5GM */
 		pwrInfo->TSSI_A_5G[1] = PROMContent[EEPROM_TSSI_AB_5G] & 0x3F;
 		pwrInfo->TSSI_B_5G[1] = (PROMContent[EEPROM_TSSI_AB_5G] & 0xC0) >> 6 |
 							(PROMContent[EEPROM_TSSI_AB_5G+1] & 0x0F) << 2;
 
-		//5GH
+		/* 5GH */
 		pwrInfo->TSSI_A_5G[2] = (PROMContent[EEPROM_TSSI_AB_5G+1] & 0xF0) >> 4 |
 							(PROMContent[EEPROM_TSSI_AB_5G+2] & 0x03) << 4;
 		pwrInfo->TSSI_B_5G[2] = (PROMContent[EEPROM_TSSI_AB_5G+2] & 0xFC) >> 2 ;
@@ -869,7 +857,7 @@ rtl8192d_ReadTxPowerInfo(
 
 	if (!AutoLoadFail)
 	{
-		pHalData->EEPROMRegulatory = (PROMContent[EEPROM_RF_OPT1]&0x7);	//bit0~2
+		pHalData->EEPROMRegulatory = (PROMContent[EEPROM_RF_OPT1]&0x7);	/* bit0~2 */
 		pHalData->EEPROMThermalMeter = PROMContent[EEPROM_THERMAL_METER]&0x1f;
 		pHalData->CrystalCap = PROMContent[EEPROM_XTAL_K];
 		tempval[0] = PROMContent[EEPROM_IQK_DELTA]&0x03;
@@ -898,7 +886,7 @@ rtl8192d_ReadTxPowerInfo(
 	{
 		switch (pHalData->PAMode)
 		{
-			//external pa
+			/* external pa */
 			case 0:
 				pHalData->EEPROMC9 = EEPROM_Default_externalPA_C9;
 				pHalData->EEPROMCC = EEPROM_Default_externalPA_CC;
@@ -906,7 +894,7 @@ rtl8192d_ReadTxPowerInfo(
 				pHalData->InternalPA5G[1] = false;
 				break;
 
-			// internal pa - SP3T
+			/*  internal pa - SP3T */
 			case 1:
 				pHalData->EEPROMC9 = EEPROM_Default_internalPA_SP3T_C9;
 				pHalData->EEPROMCC = EEPROM_Default_internalPA_SP3T_CC;
@@ -914,7 +902,7 @@ rtl8192d_ReadTxPowerInfo(
 				pHalData->InternalPA5G[1] = true;
 				break;
 
-			//intermal pa = SPDT
+			/* intermal pa = SPDT */
 			case 2:
 				pHalData->EEPROMC9 = EEPROM_Default_internalPA_SPDT_C9;
 				pHalData->EEPROMCC = EEPROM_Default_internalPA_SPDT_CC;
@@ -928,15 +916,15 @@ rtl8192d_ReadTxPowerInfo(
 	}
 	DBG_8192D("PHY_SetPAMode mode %d, c9 = 0x%x cc = 0x%x interface index %d\n", pHalData->PAMode, pHalData->EEPROMC9, pHalData->EEPROMCC, pHalData->interfaceIndex);
 
-	//Use default value to fill parameters if efuse is not filled on some place.
+	/* Use default value to fill parameters if efuse is not filled on some place. */
 
-	// ThermalMeter from EEPROM
+	/*  ThermalMeter from EEPROM */
 	if (pHalData->EEPROMThermalMeter < 0x06 || pHalData->EEPROMThermalMeter > 0x1c)
 		pHalData->EEPROMThermalMeter = 0x12;
 
 	pdmpriv->ThermalMeter[0] = pHalData->EEPROMThermalMeter;
 
-	//check XTAL_K
+	/* check XTAL_K */
 	if (pHalData->CrystalCap == 0xFF)
 		pHalData->CrystalCap = 0;
 
@@ -966,7 +954,7 @@ rtl8192d_ReadTxPowerInfo(
 		}
 	}
 
-	//this is suggested by Mimic, every 4 steps to redo IQK, every 7 steps to redo LCK
+	/* this is suggested by Mimic, every 4 steps to redo IQK, every 7 steps to redo LCK */
 	pdmpriv->Delta_IQK = 4;
 	pdmpriv->Delta_LCK = 7;
 	if (pHalData->EEPROMC9 == 0xFF)
@@ -1033,44 +1021,16 @@ rtl8192d_ReadTxPowerInfo(
 #endif
 }
 
-//
-//	Description:
-//		Reset Dual Mac Mode Switch related settings
-//
-//	Assumption:
-//
+/*  */
+/* 	Description: */
+/* 		Reset Dual Mac Mode Switch related settings */
+/*  */
+/* 	Assumption: */
+/*  */
 void rtl8192d_ResetDualMacSwitchVariables(
 		struct rtw_adapter *			Adapter
 )
 {
-#ifdef CONFIG_DUALMAC_CONCURRENT
-/*	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
-	struct rtw_adapter *		BuddyAdapter = Adapter->BuddyAdapter;
-
-	Adapter->bNeedReConfigMac = false;
-	Adapter->bNeedReConfigPhyRf = false;
-	Adapter->bNeedTurnOffAdapterInModeSwitchProcess = false;
-	Adapter->bNeedRecoveryAfterModeSwitch = false;
-	Adapter->bInModeSwitchProcess = false;
-	Adapter->bDoTurnOffPhyRf  = false;
-
-	if (BuddyAdapter != NULL)
-	{
-		Adapter->PreChangeAction = BuddyAdapter->PreChangeAction;
-	}
-	else
-	{
-		Adapter->PreChangeAction = MAXACTION;
-	}
-
-	//set dual mac role to set
-	Adapter->DualMacRoleToSet.BandType = pHalData->CurrentBandType92D;
-	Adapter->DualMacRoleToSet.BandSet = pHalData->BandSet92D;
-	Adapter->DualMacRoleToSet.RFType = pHalData->RF_Type;
-	Adapter->DualMacRoleToSet.macPhyMode = pHalData->MacPhyMode92D ;
-	Adapter->DualMacRoleToSet.bMasterOfDMSP = Adapter->bMasterOfDMSP;
-	Adapter->DualMacRoleToSet.bSlaveOfDMSP = Adapter->bSlaveOfDMSP;*/
-#endif //CONFIG_DUALMAC_CONCURRENT
 }
 
 u8 GetEEPROMSize8192D(struct rtw_adapter * Adapter)
@@ -1079,7 +1039,7 @@ u8 GetEEPROMSize8192D(struct rtw_adapter * Adapter)
 	u32	curRCR;
 
 	curRCR = rtw_read16(Adapter, REG_9346CR);
-	size = (curRCR & BOOT_FROM_EEPROM) ? 6 : 4; // 6: EEPROM used is 93C46, 4: boot from E-Fuse.
+	size = (curRCR & BOOT_FROM_EEPROM) ? 6 : 4; /*  6: EEPROM used is 93C46, 4: boot from E-Fuse. */
 
 	MSG_8192D("EEPROM type is %s\n", size==4 ? "E-FUSE" : "93C46");
 
@@ -1144,7 +1104,7 @@ PHY_SetPowerOnFor8192D(
 	u8	value8;
 	u16	i;
 
-	// notice fw know band status  0x81[1]/0x53[1] = 0: 5G, 1: 2G
+	/*  notice fw know band status  0x81[1]/0x53[1] = 0: 5G, 1: 2G */
 	if (pHalData->CurrentBandType92D==BAND_ON_2_4G)
 	{
 		value8 = rtw_read8(Adapter, (pHalData->interfaceIndex==0?REG_MAC0:REG_MAC1));
@@ -1212,9 +1172,9 @@ _func_enter_;
 _func_exit_;
 }
 
-//===========================================================
-//				Efuse related code
-//===========================================================
+/*  */
+/* 				Efuse related code */
+/*  */
 enum{
 		VOLTAGE_V25						= 0x03,
 		LDOE25_SHIFT						= 28 ,
@@ -1231,20 +1191,20 @@ rtl8192d_EfusePowerSwitch(
 
 	if (PwrState == true)
 	{
-		// 1.2V Power: From VDDON with Power Cut(0x0000h[15]), defualt valid
+		/*  1.2V Power: From VDDON with Power Cut(0x0000h[15]), defualt valid */
 		tmpV16 = rtw_read16(pAdapter, REG_SYS_ISO_CTRL);
 		if (!(tmpV16 & PWC_EV12V)) {
 			tmpV16 |= PWC_EV12V ;
 			 rtw_write16(pAdapter, REG_SYS_ISO_CTRL, tmpV16);
 		}
-		// Reset: 0x0000h[28], default valid
+		/*  Reset: 0x0000h[28], default valid */
 		tmpV16 = rtw_read16(pAdapter, REG_SYS_FUNC_EN);
 		if (!(tmpV16 & FEN_ELDR)) {
 			tmpV16 |= FEN_ELDR ;
 			rtw_write16(pAdapter,REG_SYS_FUNC_EN,tmpV16);
 		}
 
-		// Clock: Gated(0x0008h[5]) 8M(0x0008h[1]) clock from ANA, default valid
+		/*  Clock: Gated(0x0008h[5]) 8M(0x0008h[1]) clock from ANA, default valid */
 		tmpV16 = rtw_read16(pAdapter, REG_SYS_CLKR);
 		if ((!(tmpV16 & LOADER_CLK_EN)) || (!(tmpV16 & ANA8M))) {
 			tmpV16 |= (LOADER_CLK_EN | ANA8M);
@@ -1252,7 +1212,7 @@ rtl8192d_EfusePowerSwitch(
 		}
 
 		if (bWrite == true) {
-			// Enable LDO 2.5V before read/write action
+			/*  Enable LDO 2.5V before read/write action */
 			tempval = rtw_read8(pAdapter, EFUSE_TEST+3);
 			tempval &= 0x0F;
 			tempval |= (VOLTAGE_V25 << 4);
@@ -1262,7 +1222,7 @@ rtl8192d_EfusePowerSwitch(
 	else
 	{
 		if (bWrite == true) {
-			// Disable LDO 2.5V after read/write action
+			/*  Disable LDO 2.5V after read/write action */
 			tempval = rtw_read8(pAdapter, EFUSE_TEST+3);
 			rtw_write8(pAdapter, EFUSE_TEST+3, (tempval & 0x7F));
 		}
@@ -1289,56 +1249,48 @@ ReadEFuse_RTL8192D(
 	u8	efuse_usage = 0;
 	u8	u1temp = 0;
 
-	//
-	// Do NOT excess total size of EFuse table. Added by Roger, 2008.11.10.
-	//
+	/*  */
+	/*  Do NOT excess total size of EFuse table. Added by Roger, 2008.11.10. */
+	/*  */
 	if ((_offset + _size_byte)>EFUSE_MAP_LEN)
-	{// total E-Fuse table is 128bytes
+	{/*  total E-Fuse table is 128bytes */
 		DBG_8192D("ReadEFuse(): Invalid offset(%#x) with read bytes(%#x)!!\n",_offset, _size_byte);
 		return;
 	}
 
-	// 0. Refresh efuse init map as all oxFF.
+	/*  0. Refresh efuse init map as all oxFF. */
 	for (i = 0; i < EFUSE_MAX_SECTION; i++)
 		for (j = 0; j < EFUSE_MAX_WORD_UNIT; j++)
 			eFuseWord[i][j] = 0xFFFF;
 
 
-	//
-	// 1. Read the first byte to check if efuse is empty!!!
-	//
-	//
+	/*  */
+	/*  1. Read the first byte to check if efuse is empty!!! */
+	/*  */
+	/*  */
 	ReadEFuseByte(Adapter, eFuse_Addr, rtemp8, bPseudoTest);
 	if (*rtemp8 != 0xFF)
 	{
 		efuse_utilized++;
-		//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d\n", eFuse_Addr));
 		eFuse_Addr++;
 	}
 	else
 	{
-		//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("EFUSE is empty efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, *rtemp8));
 		return;
 	}
 
-	//
-	// 2. Read real efuse content. Filter PG header and every section data.
-	//
+	/*  */
+	/*  2. Read real efuse content. Filter PG header and every section data. */
+	/*  */
 	while ((*rtemp8 != 0xFF) && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN))
 	{
-		// Check PG header for section num.
-		if ((*rtemp8 & 0x1F) == 0x0F)		//extended header
+		/*  Check PG header for section num. */
+		if ((*rtemp8 & 0x1F) == 0x0F)		/* extended header */
 		{
-
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x *rtemp&0xE0 0x%x\n", u1temp, *rtemp8 & 0xE0));
 
 			u1temp =((*rtemp8 & 0xE0) >> 5);
 
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x\n", u1temp));
-
 			ReadEFuseByte(Adapter, eFuse_Addr, rtemp8, bPseudoTest);
-
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, *rtemp8));
 
 			if ((*rtemp8 & 0x0F) == 0x0F)
 			{
@@ -1366,18 +1318,15 @@ ReadEFuse_RTL8192D(
 
 		if (offset < EFUSE_MAX_SECTION)
 		{
-			// Get word enable value from PG header
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Offset-%d Worden=%x\n", offset, wren));
+			/*  Get word enable value from PG header */
 
 			for (i=0; i<EFUSE_MAX_WORD_UNIT; i++)
 			{
-				// Check word enable condition in the section
+				/*  Check word enable condition in the section */
 				if (!(wren & 0x01))
 				{
-					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d\n", eFuse_Addr));
 					ReadEFuseByte(Adapter, eFuse_Addr, rtemp8, bPseudoTest);
 					eFuse_Addr++;
-					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8));
 					efuse_utilized++;
 					eFuseWord[offset][i] = (*rtemp8 & 0xff);
 
@@ -1385,10 +1334,8 @@ ReadEFuse_RTL8192D(
 					if (eFuse_Addr >= EFUSE_REAL_CONTENT_LEN)
 						break;
 
-					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d\n", eFuse_Addr));
 					ReadEFuseByte(Adapter, eFuse_Addr, rtemp8, bPseudoTest);
 					eFuse_Addr++;
-					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8));
 
 					efuse_utilized++;
 					eFuseWord[offset][i] |= (((u16)*rtemp8 << 8) & 0xff00);
@@ -1402,9 +1349,8 @@ ReadEFuse_RTL8192D(
 			}
 		}
 
-		// Read next PG header
+		/*  Read next PG header */
 		ReadEFuseByte(Adapter, eFuse_Addr, rtemp8, bPseudoTest);
-		//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d rtemp 0x%x\n", eFuse_Addr, *rtemp8));
 
 		if (*rtemp8 != 0xFF && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN))
 		{
@@ -1413,9 +1359,9 @@ ReadEFuse_RTL8192D(
 		}
 	}
 
-	//
-	// 3. Collect 16 sections and 4 word unit into Efuse map.
-	//
+	/*  */
+	/*  3. Collect 16 sections and 4 word unit into Efuse map. */
+	/*  */
 	for (i=0; i<EFUSE_MAX_SECTION; i++)
 	{
 		for (j=0; j<EFUSE_MAX_WORD_UNIT; j++)
@@ -1425,22 +1371,19 @@ ReadEFuse_RTL8192D(
 		}
 	}
 
-	//
-	// 4. Copy from Efuse map to output pointer memory!!!
-	//
+	/*  */
+	/*  4. Copy from Efuse map to output pointer memory!!! */
+	/*  */
 	for (i=0; i<_size_byte; i++)
 	{
 		pbuf[i] = efuseTbl[_offset+i];
 	}
 
-	//
-	// 5. Calculate Efuse utilization.
-	//
-	//priv->EfuseUsedBytes = efuse_utilized;
+	/*  */
+	/*  5. Calculate Efuse utilization. */
+	/*  */
 	efuse_usage = (u8)((efuse_utilized*100)/EFUSE_REAL_CONTENT_LEN);
-	//priv->EfuseUsedPercentage = efuse_usage;
 	rtw_hal_set_hwreg(Adapter, HW_VAR_EFUSE_BYTES, (u8*)&efuse_utilized);
-	//rtw_hal_set_hwreg(dev, HW_VAR_EFUSE_USAGE, (u8*)&efuse_usage);
 }
 
 static void
@@ -1459,12 +1402,10 @@ hal_EfuseUpdateNormalChipVersion_92D(
 	ChipValue= (CutValue[1]<<8)|CutValue[0];
 	switch (ChipValue) {
 		case 0xAA55:
-			//ChipVer |= CHIP_92D_C_CUT;
 			ChipVer = (enum VERSION_8192D)(ChipVer | C_CUT_VERSION);
 			MSG_8192D("C-CUT!!!\n");
 			break;
 		case 0x9966:
-			//ChipVer |= CHIP_92D_D_CUT;
 			ChipVer = (enum VERSION_8192D)(ChipVer | D_CUT_VERSION);
 			MSG_8192D("D-CUT!!!\n");
 			break;
@@ -1473,7 +1414,6 @@ hal_EfuseUpdateNormalChipVersion_92D(
 			MSG_8192D("E-CUT!!!\n");
 			break;
 		default:
-			//ChipVer |= CHIP_92D_D_CUT;
 			ChipVer = (enum VERSION_8192D)(ChipVer | D_CUT_VERSION);
 			MSG_8192D("Unkown CUT!\n");
 			break;
@@ -1490,26 +1430,22 @@ hal_EfuseMacMode_ISVS_92D(
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8	PartNo;
 	bool bResult = false;
-	// 92D VS not support dual mac mode
+	/*  92D VS not support dual mac mode */
 	if (IS_NORMAL_CHIP92D(pHalData->VersionID))
 	{
 		ReadEFuseByte(Adapter,EEPROM_DEF_PART_NO,&PartNo, false);
-		//RT_TRACE(COMP_INIT, DBG_LOUD, ("92D efuse byte 1021 content :%d\n",PartNo));
 
 		if ((((PartNo & 0xc0) ==  PARTNO_92D_NIC)&&((PartNo & 0x0c) == PARTNO_SINGLE_BAND_VS))||
 			(((PartNo & 0xF0) == PARTNO_92D_NIC_REMARK) &&((PartNo & 0x0F) == PARTNO_SINGLE_BAND_VS_REMARK)))
 		{
-			//RT_TRACE(COMP_INIT, DBG_SERIOUS, ("92D VS !\n"));
 			bResult = true;
 		}
 		else if (PartNo == 0x00)
 		{
 			ReadEFuseByte(Adapter,EEPROM_DEF_PART_NO+1,&PartNo, false);
-			//RT_TRACE(COMP_INIT, DBG_LOUD, ("92D efuse byte 1022 content :%d\n",PartNo));
 			if ((((PartNo & 0xc0) ==  PARTNO_92D_NIC)&&((PartNo & 0x0c) == PARTNO_SINGLE_BAND_VS))||
 				(((PartNo & 0xF0) == PARTNO_92D_NIC_REMARK) &&((PartNo & 0x0F) == PARTNO_SINGLE_BAND_VS_REMARK)))
 			{
-				//RT_TRACE(COMP_INIT, DBG_SERIOUS, ("92D VS !\n"));
 				bResult = true;
 			}
 		}
@@ -1617,7 +1553,7 @@ rtl8192d_EfuseGetCurrentSize(
 	{
 		if (efuse_data!=0xFF)
 		{
-			if ((efuse_data&0x1F) == 0x0F)		//extended header
+			if ((efuse_data&0x1F) == 0x0F)		/* extended header */
 			{
 				hoffset = efuse_data;
 				efuse_addr++;
@@ -1639,7 +1575,7 @@ rtl8192d_EfuseGetCurrentSize(
 				hworden =  efuse_data & 0x0F;
 			}
 			word_cnts = Efuse_CalculateWordCnts(hworden);
-			//read next header
+			/* read next header */
 			efuse_addr = efuse_addr + (word_cnts*2)+1;
 		}
 		else
@@ -1676,16 +1612,14 @@ rtl8192d_Efuse_PgPacketRead(	struct rtw_adapter *	pAdapter,
 	memset((void *)data, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
 	memset((void *)tmpdata, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
 
-	//RT_PRINT_DATA(COMP_EFUSE, DBG_LOUD, ("efuse_PgPacketRead-1\n"), data, 8);
-
-	//
-	// <Roger_TODO> Efuse has been pre-programmed dummy 5Bytes at the end of Efuse by CP.
-	// Skip dummy parts to prevent unexpected data read from Efuse.
-	// By pass right now. 2009.02.19.
-	//
+	/*  */
+	/*  <Roger_TODO> Efuse has been pre-programmed dummy 5Bytes at the end of Efuse by CP. */
+	/*  Skip dummy parts to prevent unexpected data read from Efuse. */
+	/*  By pass right now. 2009.02.19. */
+	/*  */
 	while (bContinual && (efuse_addr  < EFUSE_REAL_CONTENT_LEN))
 	{
-		//-------  Header Read -------------
+		/*   Header Read ------------- */
 		if (ReadState & PG_STATE_HEADER)
 		{
 			if (efuse_OneByteRead(pAdapter, efuse_addr ,&efuse_data, bPseudoTest)&&(efuse_data!=0xFF))
@@ -1726,12 +1660,12 @@ rtl8192d_Efuse_PgPacketRead(	struct rtw_adapter *	pAdapter,
 					}
 					if (bDataEmpty==false) {
 						ReadState = PG_STATE_DATA;
-					} else {//read next header
+					} else {/* read next header */
 						efuse_addr = efuse_addr + (word_cnts*2)+1;
 						ReadState = PG_STATE_HEADER;
 					}
 				}
-				else {//read next header
+				else {/* read next header */
 					efuse_addr = efuse_addr + (word_cnts*2)+1;
 					ReadState = PG_STATE_HEADER;
 				}
@@ -1741,7 +1675,7 @@ rtl8192d_Efuse_PgPacketRead(	struct rtw_adapter *	pAdapter,
 				bContinual = false ;
 			}
 		}
-		//-------  Data section Read -------------
+		/*   Data section Read ------------- */
 		else if (ReadState & PG_STATE_DATA)
 		{
 			efuse_WordEnableDataRead(hworden,tmpdata,data);
@@ -1750,9 +1684,6 @@ rtl8192d_Efuse_PgPacketRead(	struct rtw_adapter *	pAdapter,
 		}
 
 	}
-	//efuse_reg_ctrl(pAdapter,false);//power off
-
-	//RT_PRINT_DATA(COMP_EFUSE, DBG_LOUD, ("efuse_PgPacketRead-2\n"), data, 8);
 
 	if (	(data[0]==0xff) &&(data[1]==0xff) && (data[2]==0xff)  && (data[3]==0xff) &&
 		(data[4]==0xff) &&(data[5]==0xff) && (data[6]==0xff)  && (data[7]==0xff))
@@ -1795,40 +1726,34 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 	bool		bExtendedHeader = false;
 	u8	efuseType=EFUSE_WIFI;
 
-	//
-	// <Roger_Notes> Efuse has been pre-programmed dummy 5Bytes at the end of Efuse by CP.
-	// So we have to prevent unexpected data string connection, which will cause
-	// incorrect data auto-load from HW. The total size is equal or smaller than 498bytes
-	// (i.e., offset 0~497, and dummy 1bytes) expected after CP test.
-	// 2009.02.19.
-	//
+	/*  */
+	/*  <Roger_Notes> Efuse has been pre-programmed dummy 5Bytes at the end of Efuse by CP. */
+	/*  So we have to prevent unexpected data string connection, which will cause */
+	/*  incorrect data auto-load from HW. The total size is equal or smaller than 498bytes */
+	/*  (i.e., offset 0~497, and dummy 1bytes) expected after CP test. */
+	/*  2009.02.19. */
+	/*  */
 	if (Efuse_GetCurrentSize(pAdapter, efuseType, bPseudoTest) >= (EFUSE_REAL_CONTENT_LEN-EFUSE_OOB_PROTECT_BYTES))
 	{
-		//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite error\n"));
 		return false;
 	}
 
-	// Init the 8 bytes content as 0xff
+	/*  Init the 8 bytes content as 0xff */
 	target_pkt.offset = offset;
 	target_pkt.word_en= word_en;
-
-	//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite target offset 0x%x word_en 0x%x\n", target_pkt.offset, target_pkt.word_en));
-
 
 	memset((void *)target_pkt.data, 0xFF, sizeof(u8)*8);
 
 	efuse_WordEnableDataRead(word_en, data, target_pkt.data);
 	target_word_cnts = Efuse_CalculateWordCnts(target_pkt.word_en);
 
-	//efuse_reg_ctrl(pAdapter,true);//power on
-	//RTPRINT(FEEPROM, EFUSE_PG, ("EFUSE Power ON\n"));
 
-	//
-	// <Roger_Notes> Efuse has been pre-programmed dummy 5Bytes at the end of Efuse by CP.
-	// So we have to prevent unexpected data string connection, which will cause
-	// incorrect data auto-load from HW. Dummy 1bytes is additional.
-	// 2009.02.19.
-	//
+	/*  */
+	/*  <Roger_Notes> Efuse has been pre-programmed dummy 5Bytes at the end of Efuse by CP. */
+	/*  So we have to prevent unexpected data string connection, which will cause */
+	/*  incorrect data auto-load from HW. Dummy 1bytes is additional. */
+	/*  2009.02.19. */
+	/*  */
 	while (bContinual && (efuse_addr  < (EFUSE_REAL_CONTENT_LEN-EFUSE_OOB_PROTECT_BYTES)))
 	{
 
@@ -1836,17 +1761,16 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 		{
 			bDataEmpty=true;
 			badworden = 0x0F;
-			//************  so *******************
-			//RTPRINT(FEEPROM, EFUSE_PG, ("EFUSE PG_STATE_HEADER\n"));
+			/*   so ******************* */
 			if (	efuse_OneByteRead(pAdapter, efuse_addr ,&efuse_data, bPseudoTest) &&
 				(efuse_data!=0xFF))
 			{
-				if ((efuse_data&0x1F) == 0x0F)		//extended header
+				if ((efuse_data&0x1F) == 0x0F)		/* extended header */
 				{
 					tmp_header = efuse_data;
 					efuse_addr++;
 					efuse_OneByteRead(pAdapter, efuse_addr ,&efuse_data, bPseudoTest);
-					if ((efuse_data & 0x0F) == 0x0F)	//wren fail
+					if ((efuse_data & 0x0F) == 0x0F)	/* wren fail */
 					{
 						efuse_addr++;
 						continue;
@@ -1865,43 +1789,35 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 				}
 				tmp_word_cnts =  Efuse_CalculateWordCnts(tmp_pkt.word_en);
 
-				//RTPRINT(FEEPROM, EFUSE_PG, ("section offset 0x%x worden 0x%x\n", tmp_pkt.offset, tmp_pkt.word_en));
-
-				//************  so-1 *******************
+				/*   so-1 ******************* */
 				if (tmp_pkt.offset  != target_pkt.offset)
 				{
-					efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; //Next pg_packet
+					efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; /* Next pg_packet */
 #if (EFUSE_ERROE_HANDLE == 1)
 					WriteState = PG_STATE_HEADER;
 #endif
 				}
-				else		//write the same offset
+				else		/* write the same offset */
 				{
-					//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite section offset the same\n"));
-
-					//************  so-2 *******************
+					/*   so-2 ******************* */
 					for (tmpindex=0 ; tmpindex<(tmp_word_cnts*2) ; tmpindex++)
 					{
 						if (efuse_OneByteRead(pAdapter, (efuse_addr+1+tmpindex) ,&efuse_data, bPseudoTest)&&(efuse_data != 0xFF)) {
 							bDataEmpty = false;
 						}
 					}
-					//************  so-2-1 *******************
+					/*   so-2-1 ******************* */
 					if (bDataEmpty == false)
 					{
-						//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite section offset the same and data is NOT empty\n"));
-
-						efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; //Next pg_packet
+						efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; /* Next pg_packet */
 #if (EFUSE_ERROE_HANDLE == 1)
 						WriteState=PG_STATE_HEADER;
 #endif
 					}
 					else
-					{//************  so-2-2 *******************
+					{/*   so-2-2 ******************* */
 
-						//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite section data empty\n"));
-
-						match_word_en = 0x0F;			//same bit as original wren
+						match_word_en = 0x0F;			/* same bit as original wren */
 						if (  !((target_pkt.word_en&BIT0)|(tmp_pkt.word_en&BIT0) ))
 						{
 							 match_word_en &= (~BIT0);
@@ -1919,22 +1835,22 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 							 match_word_en &= (~BIT3);
 						}
 
-						//************  so-2-2-A *******************
+						/*   so-2-2-A ******************* */
 						if ((match_word_en&0x0F)!=0x0F)
 						{
 							badworden = Efuse_WordEnableDataWrite(pAdapter,efuse_addr+1, tmp_pkt.word_en ,target_pkt.data, bPseudoTest);
 
-							//************  so-2-2-A-1 *******************
-							//############################
+							/*   so-2-2-A-1 ******************* */
+							/*  */
 							if (0x0F != (badworden&0x0F))
 							{
 								u8	reorg_offset = offset;
 								u8	reorg_worden=badworden;
 								Efuse_PgPacketWrite(pAdapter, reorg_offset, reorg_worden, target_pkt.data, bPseudoTest);
 							}
-							//############################
+							/*  */
 
-							tmp_word_en = 0x0F;		//not the same bit as original wren
+							tmp_word_en = 0x0F;		/* not the same bit as original wren */
 							if ( (target_pkt.word_en&BIT0)^(match_word_en&BIT0) )
 							{
 								tmp_word_en &= (~BIT0);
@@ -1952,15 +1868,14 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 								tmp_word_en &=(~BIT3);
 							}
 
-							//************  so-2-2-A-2 *******************
+							/*   so-2-2-A-2 ******************* */
 							if ((tmp_word_en&0x0F)!=0x0F) {
-								//reorganize other pg packet
-//								efuse_addr = efuse_addr + (2*tmp_word_cnts) +1;//next pg packet addr
+								/* reorganize other pg packet */
 								efuse_addr = Efuse_GetCurrentSize(pAdapter, efuseType, bPseudoTest);
-								//===========================
+								/*  */
 								target_pkt.offset = offset;
 								target_pkt.word_en= tmp_word_en;
-								//===========================
+								/*  */
 							} else {
 								bContinual = false;
 							}
@@ -1973,22 +1888,21 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 							}
 #endif
 						}
-						else {//************  so-2-2-B *******************
-							//reorganize other pg packet
-							efuse_addr = efuse_addr + (2*tmp_word_cnts) +1;//next pg packet addr
-							//===========================
+						else {/*   so-2-2-B ******************* */
+							/* reorganize other pg packet */
+							efuse_addr = efuse_addr + (2*tmp_word_cnts) +1;/* next pg packet addr */
+							/*  */
 							target_pkt.offset = offset;
 							target_pkt.word_en= target_pkt.word_en;
-							//===========================
+							/*  */
 #if (EFUSE_ERROE_HANDLE == 1)
 							WriteState=PG_STATE_HEADER;
 #endif
 						}
 					}
 				}
-				//RTPRINT(FEEPROM, EFUSE_PG, ("EFUSE PG_STATE_HEADER-1\n"));
 			}
-			else		//************  s1: header == oxff  *******************
+			else		/*   s1: header == oxff  ******************* */
 			{
 				bExtendedHeader = false;
 
@@ -1996,15 +1910,11 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 				{
 					pg_header = ((target_pkt.offset &0x07) << 5) | 0x0F;
 
-					//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite extended pg_header[2:0] |0x0F 0x%x\n", pg_header));
-
 					efuse_OneByteWrite(pAdapter,efuse_addr, pg_header, bPseudoTest);
 					efuse_OneByteRead(pAdapter,efuse_addr, &tmp_header, bPseudoTest);
 
 					while (tmp_header == 0xFF)
 					{
-						//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite extended pg_header[2:0] wirte fail\n"));
-
 						repeat_times++;
 
 						if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
@@ -2026,8 +1936,6 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 						pg_header_temp = pg_header;
 						pg_header = ((target_pkt.offset & 0x78) << 1) | target_pkt.word_en;
 
-						//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_PgPacketWrite extended pg_header[6:3] | worden 0x%x word_en 0x%x\n", pg_header));
-
 						efuse_OneByteWrite(pAdapter,efuse_addr, pg_header, bPseudoTest);
 						efuse_OneByteRead(pAdapter,efuse_addr, &tmp_header, bPseudoTest);
 
@@ -2047,7 +1955,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 						if (!bContinual)
 							break;
 
-						if ((tmp_header & 0x0F) == 0x0F)	//wren PG fail
+						if ((tmp_header & 0x0F) == 0x0F)	/* wren PG fail */
 						{
 							repeat_times++;
 
@@ -2062,7 +1970,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 								continue;
 							}
 						}
-						else if (pg_header != tmp_header)	//offset PG fail
+						else if (pg_header != tmp_header)	/* offset PG fail */
 						{
 							bExtendedHeader = true;
 							tmp_pkt.offset = ((pg_header_temp & 0xE0) >> 5) | ((tmp_header & 0xF0) >> 1);
@@ -2070,7 +1978,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 							tmp_word_cnts =  Efuse_CalculateWordCnts(tmp_pkt.word_en);
 						}
 					}
-					else if ((tmp_header & 0x1F) == 0x0F)		//wrong extended header
+					else if ((tmp_header & 0x1F) == 0x0F)		/* wrong extended header */
 					{
 						efuse_addr+=2;
 						continue;
@@ -2084,12 +1992,12 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 				}
 
 				if (tmp_header == pg_header)
-				{ //************  s1-1*******************
+				{ /*   s1-1******************* */
 					WriteState = PG_STATE_DATA;
 				}
 #if (EFUSE_ERROE_HANDLE == 1)
-				else if (tmp_header == 0xFF) {//************  s1-3: if Write or read func doesn't work *******************
-					//efuse_addr doesn't change
+				else if (tmp_header == 0xFF) {/*   s1-3: if Write or read func doesn't work ******************* */
+					/* efuse_addr doesn't change */
 					WriteState = PG_STATE_HEADER;
 					repeat_times++;
 					if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
@@ -2099,7 +2007,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 				}
 #endif
 				else
-				{//************  s1-2 : fixed the header procedure *******************
+				{/*   s1-2 : fixed the header procedure ******************* */
 					if (!bExtendedHeader)
 					{
 						tmp_pkt.offset = (tmp_header>>4) & 0x0F;
@@ -2107,15 +2015,13 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 						tmp_word_cnts =  Efuse_CalculateWordCnts(tmp_pkt.word_en);
 					}
 
-					//************  s1-2-A :cover the exist data *******************
-					//memset(originaldata,0xff,sizeof(UINT8)*8);
+					/*   s1-2-A :cover the exist data ******************* */
 					memset((void *)originaldata, 0xff, sizeof(u8)*8);
 
 					if (Efuse_PgPacketRead(pAdapter, tmp_pkt.offset,originaldata, bPseudoTest))
-					{	//check if data exist
-						//efuse_reg_ctrl(pAdapter,true);//power on
+					{	/* check if data exist */
 						badworden = Efuse_WordEnableDataWrite(pAdapter,efuse_addr+1,tmp_pkt.word_en,originaldata, bPseudoTest);
-						//############################
+						/*  */
 						if (0x0F != (badworden&0x0F))
 						{
 							u8	reorg_offset = tmp_pkt.offset;
@@ -2123,15 +2029,15 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 							Efuse_PgPacketWrite(pAdapter,reorg_offset,reorg_worden,originaldata, bPseudoTest);
 							efuse_addr = Efuse_GetCurrentSize(pAdapter, efuseType, bPseudoTest);
 						}
-						//############################
+						/*  */
 						else {
-							efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; //Next pg_packet
+							efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; /* Next pg_packet */
 						}
 					}
-					 //************  s1-2-B: wrong address*******************
+					 /*   s1-2-B: wrong address******************* */
 					else
 					{
-						efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; //Next pg_packet
+						efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; /* Next pg_packet */
 					}
 
 #if (EFUSE_ERROE_HANDLE == 1)
@@ -2142,32 +2048,29 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 						bResult = false;
 					}
 #endif
-
-					//RTPRINT(FEEPROM, EFUSE_PG, ("EFUSE PG_STATE_HEADER-2\n"));
 				}
 
 			}
 
 		}
-		//write data state
+		/* write data state */
 		else if (WriteState==PG_STATE_DATA)
-		{	//************  s1-1  *******************
-			//RTPRINT(FEEPROM, EFUSE_PG, ("EFUSE PG_STATE_DATA\n"));
+		{	/*   s1-1  ******************* */
 			badworden = 0x0f;
 			badworden = Efuse_WordEnableDataWrite(pAdapter,efuse_addr+1,target_pkt.word_en,target_pkt.data , bPseudoTest);
 			if ((badworden&0x0F)==0x0F)
-			{ //************  s1-1-A *******************
+			{ /*   s1-1-A ******************* */
 				bContinual = false;
 			}
 			else
-			{//reorganize other pg packet //************  s1-1-B *******************
-				efuse_addr = efuse_addr + (2*target_word_cnts) +1;//next pg packet addr
+			{/* reorganize other pg packet ************  s1-1-B ******************* */
+				efuse_addr = efuse_addr + (2*target_word_cnts) +1;/* next pg packet addr */
 
-				//===========================
+				/*  */
 				target_pkt.offset = offset;
 				target_pkt.word_en= badworden;
 				target_word_cnts =  Efuse_CalculateWordCnts(target_pkt.word_en);
-				//===========================
+				/*  */
 #if (EFUSE_ERROE_HANDLE == 1)
 				WriteState=PG_STATE_HEADER;
 				repeat_times++;
@@ -2176,17 +2079,9 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 					bResult = false;
 				}
 #endif
-				//RTPRINT(FEEPROM, EFUSE_PG, ("EFUSE PG_STATE_HEADER-3\n"));
 			}
 		}
 	}
-
-	if (efuse_addr  >= (EFUSE_REAL_CONTENT_LEN-EFUSE_OOB_PROTECT_BYTES))
-	{
-		//RT_TRACE(COMP_EFUSE, DBG_LOUD, ("efuse_PgPacketWrite(): efuse_addr(%#x) Out of size!!\n", efuse_addr));
-	}
-	//efuse_reg_ctrl(pAdapter,false);//power off
-
 	return true;
 }
 
@@ -2202,12 +2097,7 @@ rtl8192d_Efuse_WordEnableDataWrite(	struct rtw_adapter *	pAdapter,
 	u8	badworden = 0x0F;
 	u8	tmpdata[8];
 
-	//memset(tmpdata,0xff,PGPKT_DATA_SIZE);
 	memset((void *)tmpdata, 0xff, PGPKT_DATA_SIZE);
-	//RT_TRACE(COMP_EFUSE, DBG_LOUD, ("word_en = %x efuse_addr=%x\n", word_en, efuse_addr));
-
-	//RT_PRINT_DATA(COMP_EFUSE, DBG_LOUD, ("U-EFUSE\n"), data, 8);
-
 	if (!(word_en&BIT0))
 	{
 		tmpaddr = start_addr;
@@ -2322,7 +2212,7 @@ void rtl8192d_set_hal_ops(struct hal_ops *pHalFunc)
 	pHalFunc->read_rfreg = &rtl8192d_PHY_QueryRFReg;
 	pHalFunc->write_rfreg = &rtl8192d_PHY_SetRFReg;
 
-	//Efuse related function
+	/* Efuse related function */
 	pHalFunc->EfusePowerSwitch = &rtl8192d_EfusePowerSwitch;
 	pHalFunc->ReadEFuse = &rtl8192d_ReadEFuse;
 	pHalFunc->EFUSEGetEfuseDefinition = &rtl8192d_EFUSE_GetEfuseDefinition;

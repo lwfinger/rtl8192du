@@ -41,6 +41,11 @@
 #endif
 #endif
 
+/* some architectures need an extra header */
+#ifndef csum_ipv6_magic
+#include <net/ip6_checksum.h>
+#endif
+
 #ifdef CONFIG_BR_EXT
 
 #define NAT25_IPV4		01
@@ -1266,12 +1271,10 @@ int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method)
 								      GET_MY_HWADDR(priv))) {
 						struct icmp6hdr  *hdr = (struct icmp6hdr *)(skb->data + ETH_HLEN + sizeof(*iph));
 						hdr->icmp6_cksum = 0;
-#ifdef csum_ipv6_magic
 						hdr->icmp6_cksum = csum_ipv6_magic(&iph->saddr, &iph->daddr,
 										iph->payload_len,
 										IPPROTO_ICMPV6,
 										csum_partial((__u8 *)hdr, iph->payload_len, 0));
-#endif
 					}
 				}
 			}

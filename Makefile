@@ -115,9 +115,13 @@ ifeq ($(CONFIG_INTEL_WIDI), y)
 EXTRA_CFLAGS += -DCONFIG_INTEL_WIDI
 endif
 
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
-SUBARCH := $(shell uname -m | sed -e s/i.86/i386/)
+SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/)
 ARCH ?= $(SUBARCH)
+ifeq ($(ARCH), "powerpc")
+EXTRA_CFLAGS += -DCONFIG_BIG_ENDIAN
+else
+EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
+endif
 CROSS_COMPILE ?=
 KVER  := $(shell uname -r)
 KSRC := /lib/modules/$(KVER)/build

@@ -1266,10 +1266,12 @@ int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method)
 								      GET_MY_HWADDR(priv))) {
 						struct icmp6hdr  *hdr = (struct icmp6hdr *)(skb->data + ETH_HLEN + sizeof(*iph));
 						hdr->icmp6_cksum = 0;
+#ifdef csum_ipv6_magic
 						hdr->icmp6_cksum = csum_ipv6_magic(&iph->saddr, &iph->daddr,
 										iph->payload_len,
 										IPPROTO_ICMPV6,
 										csum_partial((__u8 *)hdr, iph->payload_len, 0));
+#endif
 					}
 				}
 			}

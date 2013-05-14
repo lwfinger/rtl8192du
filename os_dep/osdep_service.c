@@ -38,8 +38,6 @@ inline int RTW_STATUS_CODE(int error_code) {
 		return _SUCCESS;
 
 	switch (error_code) {
-		//case -ETIMEDOUT:
-		//	return RTW_STATUS_TIMEDOUT;
 		default:
 			return _FAIL;
 	}
@@ -109,7 +107,7 @@ u8* _rtw_zmalloc(u32 sz)
 
 int	_rtw_memcmp(void *dst, void *src, u32 sz)
 {
-//under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0
+/* under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0 */
 	if (!(memcmp(dst, src, sz)))
 		return true;
 	else
@@ -248,7 +246,7 @@ inline u32 rtw_ms_to_systime(u32 ms)
 	return ms * HZ / 1000;
 }
 
-// the input parameter start use the same unit as returned by rtw_get_current_time
+/*  the input parameter start use the same unit as returned by rtw_get_current_time */
 inline s32 rtw_get_passing_time_ms(u32 start)
 {
 	return rtw_systime_to_ms(jiffies-start);
@@ -263,9 +261,9 @@ void rtw_sleep_schedulable(int ms)
 {
     u32 delta;
 
-    delta = (ms * HZ)/1000;//(ms)
+    delta = (ms * HZ)/1000;/* ms) */
     if (delta == 0) {
-        delta = 1;// 1 ms
+        delta = 1;/*  1 ms */
     }
     set_current_state(TASK_INTERRUPTIBLE);
     if (schedule_timeout(delta) != 0) {
@@ -281,7 +279,6 @@ void rtw_msleep_os(int ms)
 
 void rtw_usleep_os(int us)
 {
-      // msleep((unsigned int)us);
       if (1 < (us/1000))
                 msleep(1);
       else
@@ -706,7 +703,7 @@ int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname)
 
 	rereg_priv = &padapter->rereg_nd_name_priv;
 
-	//free the old_pnetdev
+	/* free the old_pnetdev */
 	if (rereg_priv->old_pnetdev) {
 		free_netdev(rereg_priv->old_pnetdev);
 		rereg_priv->old_pnetdev = NULL;

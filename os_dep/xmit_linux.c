@@ -96,18 +96,17 @@ void rtw_set_tx_chksum_offload(struct sk_buff *pkt, struct pkt_attrib *pattrib)
 		{
                         const struct iphdr *ip = ip_hdr(skb);
                         if (ip->protocol == IPPROTO_TCP) {
-                                // TCP checksum offload by HW
+                                /*  TCP checksum offload by HW */
                                 DBG_8192D("CHECKSUM_PARTIAL TCP\n");
                                 pattrib->hw_tcp_csum = 1;
-                                //skb_checksum_help(skb);
+                                /* skb_checksum_help(skb); */
                         } else if (ip->protocol == IPPROTO_UDP) {
-                                //DBG_8192D("CHECKSUM_PARTIAL UDP\n");
                                 skb_checksum_help(skb);
                         } else {
 				DBG_8192D("%s-%d TCP CSUM offload Error!!\n", __func__, __LINE__);
                                 WARN_ON(1);     /* we need a WARN() */
 			    }
-		} else { // IP fragmentation case
+		} else { /*  IP fragmentation case */
 			DBG_8192D("%s-%d nr_frags != 0, using skb_checksum_help(skb);!!\n", __func__, __LINE__);
 			skb_checksum_help(skb);
 		}
@@ -126,7 +125,7 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 	pxmitbuf->pbuf = pxmitbuf->pallocated_buf;
 	if (pxmitbuf->pallocated_buf == NULL)
 		return _FAIL;
-#else // CONFIG_USE_USB_BUFFER_ALLOC_TX
+#else /*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 
 	pxmitbuf->pallocated_buf = rtw_zmalloc(alloc_sz);
 	if (pxmitbuf->pallocated_buf == NULL)
@@ -137,7 +136,7 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 	pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitbuf->pallocated_buf), XMITBUF_ALIGN_SZ);
 	pxmitbuf->dma_transfer_addr = 0;
 
-#endif // CONFIG_USE_USB_BUFFER_ALLOC_TX
+#endif /*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 
 	for (i=0; i<8; i++)
 	{
@@ -163,7 +162,6 @@ void rtw_os_xmit_resource_free(struct rtw_adapter *padapter, struct xmit_buf *px
 	{
 		if (pxmitbuf->pxmit_urb[i])
 		{
-			//usb_kill_urb(pxmitbuf->pxmit_urb[i]);
 			usb_free_urb(pxmitbuf->pxmit_urb[i]);
 		}
 	}
@@ -172,9 +170,9 @@ void rtw_os_xmit_resource_free(struct rtw_adapter *padapter, struct xmit_buf *px
 	rtw_usb_buffer_free(pusbd, (size_t)free_sz, pxmitbuf->pallocated_buf, pxmitbuf->dma_transfer_addr);
 	pxmitbuf->pallocated_buf =  NULL;
 	pxmitbuf->dma_transfer_addr = 0;
-#else	// CONFIG_USE_USB_BUFFER_ALLOC_TX
+#else	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 	kfree(pxmitbuf->pallocated_buf);
-#endif	// CONFIG_USE_USB_BUFFER_ALLOC_TX
+#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 }
 
 void rtw_os_pkt_complete(struct rtw_adapter *padapter, struct sk_buff *pkt)
@@ -201,9 +199,7 @@ void rtw_os_xmit_complete(struct rtw_adapter *padapter, struct xmit_frame *pxfra
 {
 	if (pxframe->pkt)
 	{
-		//RT_TRACE(_module_xmit_osdep_c_,_drv_err_,("linux : rtw_os_xmit_complete, dev_kfree_skb()\n"));
 
-		//dev_kfree_skb_any(pxframe->pkt);
 		rtw_os_pkt_complete(padapter, pxframe->pkt);
 
 	}
@@ -245,7 +241,7 @@ int rtw_mlcst2unicst(struct rtw_adapter *padapter, struct sk_buff *skb)
 	phead = &pstapriv->asoc_list;
 	plist = get_next(phead);
 
-	//free sta asoc_queue
+	/* free sta asoc_queue */
 	while ((rtw_end_of_queue_search(phead, plist)) == false)
 	{
 		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
@@ -272,8 +268,7 @@ int rtw_mlcst2unicst(struct rtw_adapter *padapter, struct sk_buff *skb)
 			pxmitpriv->tx_drop++;
 
 			spin_unlock_bh(&pstapriv->asoc_list_lock);
-			//dev_kfree_skb_any(skb);
-			return false;	// Caller shall tx this multicast frame via normal way.
+			return false;	/*  Caller shall tx this multicast frame via normal way. */
 		}
 	}
 
@@ -309,7 +304,6 @@ _func_enter_;
 	queue = skb_get_queue_mapping(pkt);
 	/* No free space for Tx, tx_worker is too slow */
 	if (pxmitpriv->hwxmits[queue].accnt > NR_XMITFRAME/2) {
-		//DBG_8192D("%s(): stop netif_subqueue[%d]\n", __func__, queue);
 		netif_stop_subqueue(padapter->pnetdev, queue);
 		return NETDEV_TX_BUSY;
 	}
@@ -327,9 +321,6 @@ _func_enter_;
 			if (res == true) {
 				goto exit;
 			}
-		} else {
-			//DBG_8192D("Stop M2U(%d, %d)! ", pxmitpriv->free_xmitframe_cnt, pxmitpriv->free_xmitbuf_cnt);
-			//DBG_8192D("!m2u);
 		}
 	}
 

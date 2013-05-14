@@ -288,7 +288,7 @@ static int rtw_android_get_p2p_dev_addr(struct net_device *net, char *command, i
 	int ret;
 	int bytes_written = 0;
 
-	//We use the same address as our HW MAC address
+	/* We use the same address as our HW MAC address */
 	memcpy(command, net->dev_addr, ETH_ALEN);
 
 	bytes_written = ETH_ALEN;
@@ -316,7 +316,7 @@ static int get_int_from_command(char* pcmd)
 	{
 		if (pcmd[i] == '=')
 		{
-			//	Skip the '=' and space characters.
+			/* 	Skip the '=' and space characters. */
 			i += 2;
 			break;
 		}
@@ -368,7 +368,6 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 
 	switch (cmd_num) {
 	case ANDROID_WIFI_CMD_START:
-		//bytes_written = wl_android_wifi_on(net);
 		goto response;
 	case ANDROID_WIFI_CMD_SETFWPATH:
 		goto response;
@@ -455,14 +454,14 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		bytes_written = rtw_cfg80211_set_mgnt_wpsp2pie(net, command + skip, priv_cmd.total_len - skip, *(command + skip - 2) - '0');
 		break;
 	}
-#endif //CONFIG_IOCTL_CFG80211
+#endif /* CONFIG_IOCTL_CFG80211 */
 
 #ifdef CONFIG_WFD
 	case ANDROID_WIFI_CMD_WFD_ENABLE:
 	{
-		//	Commented by Albert 2012/07/24
-		//	We can enable the WFD function by using the following command:
-		//	wpa_cli driver wfd-enable
+		/* 	Commented by Albert 2012/07/24 */
+		/* 	We can enable the WFD function by using the following command: */
+		/* 	wpa_cli driver wfd-enable */
 
 		struct wifi_display_info		*pwfd_info;
 		struct rtw_adapter*	padapter = (struct rtw_adapter *) rtw_netdev_priv(net);
@@ -473,9 +472,9 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	}
 	case ANDROID_WIFI_CMD_WFD_DISABLE:
 	{
-		//	Commented by Albert 2012/07/24
-		//	We can disable the WFD function by using the following command:
-		//	wpa_cli driver wfd-disable
+		/* 	Commented by Albert 2012/07/24 */
+		/* 	We can disable the WFD function by using the following command: */
+		/* 	wpa_cli driver wfd-disable */
 
 		struct wifi_display_info		*pwfd_info;
 		struct rtw_adapter*	padapter = (struct rtw_adapter *) rtw_netdev_priv(net);
@@ -486,9 +485,9 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	}
 	case ANDROID_WIFI_CMD_WFD_SET_TCPPORT:
 	{
-		//	Commented by Albert 2012/07/24
-		//	We can set the tcp port number by using the following command:
-		//	wpa_cli driver wfd-set-tcpport = 554
+		/* 	Commented by Albert 2012/07/24 */
+		/* 	We can set the tcp port number by using the following command: */
+		/* 	wpa_cli driver wfd-set-tcpport = 554 */
 
 		struct wifi_display_info		*pwfd_info;
 		struct rtw_adapter*	padapter = (struct rtw_adapter *) rtw_netdev_priv(net);
@@ -501,8 +500,8 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		break;
 	case ANDROID_WIFI_CMD_WFD_SET_DEVTYPE:
 	{
-		//	Commented by Albert 2012/08/28
-		//	Specify the WFD device type (WFD source/primary sink)
+		/* 	Commented by Albert 2012/08/28 */
+		/* 	Specify the WFD device type (WFD source/primary sink) */
 
 		struct wifi_display_info		*pwfd_info;
 		struct rtw_adapter*	padapter = (struct rtw_adapter *) rtw_netdev_priv(net);

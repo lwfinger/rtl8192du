@@ -270,7 +270,6 @@ static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 #endif
 }
 
-#include <rtw_byteorder.h>
 
 #ifndef BIT
 	#define BIT(x)	(1 << (x))

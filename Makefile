@@ -112,11 +112,6 @@ endif
 
 SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/)
 ARCH ?= $(SUBARCH)
-ifeq ($(ARCH), "powerpc")
-EXTRA_CFLAGS += -DCONFIG_BIG_ENDIAN
-else
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
-endif
 CROSS_COMPILE ?=
 KVER  := $(shell uname -r)
 KSRC := /lib/modules/$(KVER)/build

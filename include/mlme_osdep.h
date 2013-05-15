@@ -32,4 +32,4 @@ extern void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie
 
 void rtw_reset_securitypriv(struct rtw_adapter *adapter);
 
-#endif	//_MLME_OSDEP_H_
+#endif	/* _MLME_OSDEP_H_ */

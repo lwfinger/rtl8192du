@@ -27,7 +27,7 @@
 
 #ifdef CONFIG_AP_MODE
 
-//external function
+/* external function */
 extern void rtw_indicate_sta_assoc_event(struct rtw_adapter *padapter, struct sta_info *psta);
 extern void rtw_indicate_sta_disassoc_event(struct rtw_adapter *padapter, struct sta_info *psta);
 
@@ -56,6 +56,6 @@ int rtw_ap_inform_ch_switch (struct rtw_adapter *padapter, u8 new_ch, u8 ch_offs
 void start_ap_mode(struct rtw_adapter *padapter);
 void stop_ap_mode(struct rtw_adapter *padapter);
 #endif
-#endif //end of CONFIG_AP_MODE
+#endif /* end of CONFIG_AP_MODE */
 
 #endif

@@ -19,22 +19,22 @@
  ******************************************************************************/
 #ifndef	__RTL8192D_DM_H__
 #define __RTL8192D_DM_H__
-//============================================================
-// Description:
-//
-// This file is for 92CE/92CU dynamic mechanism only
-//
-//
-//============================================================
-//============================================================
-// Global var
-//============================================================
+/*  */
+/*  Description: */
+/*  */
+/*  This file is for 92CE/92CU dynamic mechanism only */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  Global var */
+/*  */
 
 extern u32 EDCAParam[maxAP][3] ;
 
-//============================================================
-// structure and define
-//============================================================
+/*  */
+/*  structure and define */
+/*  */
 
 struct FALSE_ALARM_STATISTICS {
 	u32	Cnt_Parity_Fail;
@@ -146,17 +146,17 @@ enum DM_DIG_CONNECT_E {
 #define		DM_FALSEALARM_THRESH_HIGH	1000
 
 #define		DM_DIG_MAX					0x3e
-#define		DM_DIG_MIN					0x1e //0x22//0x1c
+#define		DM_DIG_MIN					0x1e
 
 #define		DM_DIG_FA_UPPER				0x32
 #define		DM_DIG_FA_LOWER				0x20
 
-//vivi 92c&92d has different definition, 20110504
-//this is for 92c
-#define		DM_DIG_FA_TH0				0x200//0x20
-#define		DM_DIG_FA_TH1				0x300//0x100
-#define		DM_DIG_FA_TH2				0x400//0x200
-//this is for 92d
+/* vivi 92c&92d has different definition, 20110504 */
+/* this is for 92c */
+#define		DM_DIG_FA_TH0				0x200/* 0x20 */
+#define		DM_DIG_FA_TH1				0x300/* 0x100 */
+#define		DM_DIG_FA_TH2				0x400/* 0x200 */
+/* this is for 92d */
 #define		DM_DIG_FA_TH0_92D			0x100
 #define		DM_DIG_FA_TH1_92D			0x150
 #define		DM_DIG_FA_TH2_92D			0x250
@@ -178,7 +178,7 @@ enum DM_DIG_CONNECT_E {
 
 #define		WAIotTHVal						25
 
-//Dynamic Tx Power Control Threshold
+/* Dynamic Tx Power Control Threshold */
 #define		TX_POWER_NEAR_FIELD_THRESH_LVL2	74
 #define		TX_POWER_NEAR_FIELD_THRESH_LVL1	67
 
@@ -212,9 +212,9 @@ struct rate_adaptive {
 	u32				LowRSSIThresholdRATR;
 	u32				LowRSSIThresholdRATR40M;
 	u32				LowRSSIThresholdRATR20M;
-	u8				PingRSSIEnable;	//cosa add for Netcore long range ping issue
-	u32				PingRSSIRATR;	//cosa add for Netcore long range ping issue
-	u32				PingRSSIThreshForRA;//cosa add for Netcore long range ping issue
+	u8				PingRSSIEnable;	/* cosa add for Netcore long range ping issue */
+	u32				PingRSSIRATR;	/* cosa add for Netcore long range ping issue */
+	u32				PingRSSIThreshForRA;/* cosa add for Netcore long range ping issue */
 	u32				LastRATR;
 	u8				PreRATRState;
 };
@@ -225,11 +225,11 @@ enum DM_SWAS_E {
 	Antenna_MAX = 3,
 };
 
-// 20100514 Joseph: Add definition for antenna switching test after link.
-// This indicates two different the steps.
-// In SWAW_STEP_PEAK, driver needs to switch antenna and listen to the signal on the air.
-// In SWAW_STEP_DETERMINE, driver just compares the signal captured in SWAW_STEP_PEAK
-// with original RSSI to determine if it is necessary to switch antenna.
+/*  20100514 Joseph: Add definition for antenna switching test after link. */
+/*  This indicates two different the steps. */
+/*  In SWAW_STEP_PEAK, driver needs to switch antenna and listen to the signal on the air. */
+/*  In SWAW_STEP_DETERMINE, driver just compares the signal captured in SWAW_STEP_PEAK */
+/*  with original RSSI to determine if it is necessary to switch antenna. */
 #define SWAW_STEP_PEAK		0
 #define SWAW_STEP_DETERMINE	1
 
@@ -238,10 +238,10 @@ enum DM_SWAS_E {
 #define	TRAFFIC_LOW	0
 #define	TRAFFIC_HIGH	1
 
-//=============================
-//Neil Chen---2011--06--15--
-//==============================
-//3 PathDiv
+/*  */
+/* Neil Chen---2011--06--15-- */
+/*  */
+/* 3 PathDiv */
 struct sw_antenna_switch {
 	u8		try_flag;
 	s32		PreRSSI;
@@ -252,32 +252,31 @@ struct sw_antenna_switch {
 	u8		bTriggerAntennaSwitch;
 	u8		SelectAntennaMap;
 
-	// Before link Antenna Switch check
+	/*  Before link Antenna Switch check */
 	u8		SWAS_NoLink_State;
 	u32		SWAS_NoLink_BK_Reg860;
 };
 
-//========================================
+/*  */
 
 struct	dm_priv
 {
 	u8	DM_Type;
 	u8	DMFlag, DMFlag_tmp;
 
-	//for DIG
+	/* for DIG */
 	u8	bDMInitialGainEnable;
-	//u8	binitialized; // for dm_initial_gain_Multi_STA use.
 	struct DIG_T	DM_DigTable;
 
 	struct PS_T	DM_PSTable;
 
 	struct FALSE_ALARM_STATISTICS	falsealmcnt;
 
-	//for rate adaptive, in fact,  88c/92c fw will handle this
+	/* for rate adaptive, in fact,  88c/92c fw will handle this */
 	u8	bUseRAMask;
 	struct rate_adaptive RateAdaptive;
 
-	//* Upper and Lower Signal threshold for Rate Adaptive*/
+	/* Upper and Lower Signal threshold for Rate Adaptive*/
 	int	UndecoratedSmoothedPWDB;
 	int	EntryMinUndecoratedSmoothedPWDB;
 	int	EntryMaxUndecoratedSmoothedPWDB;
@@ -293,19 +292,19 @@ struct	dm_priv
 	u8	CurTxHighLvlForAnotherMacOfDMSP;
 #endif
 
-	//for High Power
+	/* for High Power */
 	u8	bDynamicTxPowerEnable;
 	u8	LastDTPLvl;
-	u8	DynamicTxHighPowerLvl;//Add by Jacken Tx Power Control for Near/Far Range 2008/03/06
+	u8	DynamicTxHighPowerLvl;/* Add by Jacken Tx Power Control for Near/Far Range 2008/03/06 */
 
-	//for tx power tracking
+	/* for tx power tracking */
 	u8	bTXPowerTracking;
 	u8	TXPowercount;
 	u8	bTXPowerTrackingInit;
-	u8	TxPowerTrackControl;	//for mp mode, turn off txpwrtracking as default
+	u8	TxPowerTrackControl;	/* for mp mode, turn off txpwrtracking as default */
 	u8	TM_Trigger;
 
-	u8	ThermalMeter[2];	// ThermalMeter, index 0 for RFIC0, and 1 for RFIC1
+	u8	ThermalMeter[2];	/*  ThermalMeter, index 0 for RFIC0, and 1 for RFIC1 */
 	u8	ThermalValue;
 	u8	ThermalValue_LCK;
 	u8	ThermalValue_IQK;
@@ -319,8 +318,8 @@ struct	dm_priv
 	u8	bReloadtxpowerindex;
 	u8	bDoneTxpower;
 
-	//for APK
-	u32	APKoutput[2][2];	//path A/B; output1_1a/output1_2a
+	/* for APK */
+	u32	APKoutput[2][2];	/* path A/B; output1_1a/output1_2a */
 	u8	bAPKdone;
 	u8	bAPKThermalMeterIgnore;
 	bool		bDPKdone[2];
@@ -331,7 +330,7 @@ struct	dm_priv
 
 	u32	RegA24;
 
-	//for IQK
+	/* for IQK */
 	u32	Reg874;
 	u32	RegC08;
 	u32	Reg88C;
@@ -346,13 +345,11 @@ struct	dm_priv
 	u8	bCCKinCH14;
 
 	char	CCK_index;
-	//u8 Record_CCK_20Mindex;
-	//u8 Record_CCK_40Mindex;
 	char	OFDM_index[2];
 
 	struct sw_antenna_switch DM_SWAT_Table;
 
-	//for TxPwrTracking
+	/* for TxPwrTracking */
 	int	RegE94;
 	int	RegE9C;
 	int	RegEB4;
@@ -361,13 +358,13 @@ struct	dm_priv
 	u8	RegC04_MP;
 	u32	RegD04_MP;
 #endif
-	u32	TXPowerTrackingCallbackCnt;	//cosa add for debug
+	u32	TXPowerTrackingCallbackCnt;	/* cosa add for debug */
 
-	u32	prv_traffic_idx; // edca turbo
+	u32	prv_traffic_idx; /*  edca turbo */
 
-	u32	RegRF3C[2];	//pathA / pathB
+	u32	RegRF3C[2];	/* pathA / pathB */
 
-	// Add for Reading Initial Data Rate SEL Register 0x484 during watchdog. Using for fill tx desc. 2011.3.21 by Thomas
+	/*  Add for Reading Initial Data Rate SEL Register 0x484 during watchdog. Using for fill tx desc. 2011.3.21 by Thomas */
 	u8	INIDATA_RATE[32];
 };
 
@@ -375,12 +372,12 @@ struct	dm_priv
 /*------------------------Export global variable----------------------------*/
 /*------------------------Export global variable----------------------------*/
 /*------------------------Export Marco Definition---------------------------*/
-//#define DM_MultiSTA_InitGainChangeNotify(Event) {DM_DigTable.CurMultiSTAConnectState = Event;}
+/* define DM_MultiSTA_InitGainChangeNotify(Event) {DM_DigTable.CurMultiSTAConnectState = Event;} */
 
 
-//============================================================
-// function prototype
-//============================================================
+/*  */
+/*  function prototype */
+/*  */
 void rtl8192d_init_dm_priv(struct rtw_adapter * Adapter);
 void rtl8192d_deinit_dm_priv(struct rtw_adapter * Adapter);
 void	rtl8192d_InitHalDm(struct rtw_adapter * Adapter);
@@ -388,4 +385,4 @@ void	rtl8192d_HalDmWatchDog(struct rtw_adapter * Adapter);
 
 void rtl8192d_dm_CheckTXPowerTracking(struct rtw_adapter * Adapter);
 
-#endif	//__HAL8190PCIDM_H__
+#endif	/* __HAL8190PCIDM_H__ */

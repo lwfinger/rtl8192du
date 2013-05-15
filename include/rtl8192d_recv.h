@@ -29,14 +29,14 @@
 	#define NR_RECVBUFF (1)
 #else
 	#define NR_RECVBUFF (4)
-#endif //CONFIG_SINGLE_RECV_BUF
+#endif /* CONFIG_SINGLE_RECV_BUF */
 	#define NR_PREALLOC_RECV_SKB (8)
 
 #define RECV_BLK_SZ 512
 #define RECV_BLK_CNT 16
 #define RECV_BLK_TH RECV_BLK_CNT
 
-#define MAX_RECVBUF_SZ (8192+1024) // 8K+1k
+#define MAX_RECVBUF_SZ (8192+1024) /*  8K+1k */
 
 #define RECV_BULK_IN_ADDR		0x80
 #define RECV_INT_IN_ADDR		0x81
@@ -75,7 +75,7 @@ struct phy_ofdm_rx_status_report_8192cd {
 	unsigned char r_ant_train_en:1;
 	unsigned char ANTSELB:1;
 	unsigned char ANTSEL:1;
-#else	// _BIG_ENDIAN_
+#else	/*  _BIG_ENDIAN_ */
 	unsigned char ANTSEL:1;
 	unsigned char ANTSELB:1;
 	unsigned char r_ant_train_en:1;
@@ -94,7 +94,7 @@ struct phy_cck_rx_status_report_8192cd {
 	u8	cck_agc_rpt;
 };
 
-// Rx smooth factor
+/*  Rx smooth factor */
 #define	Rx_Smooth_Factor (20)
 
 void rtl8192du_init_recvbuf(struct rtw_adapter *padapter, struct recv_buf *precvbuf);

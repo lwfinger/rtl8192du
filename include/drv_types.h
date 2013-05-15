@@ -68,11 +68,11 @@ enum {
 
 #ifdef CONFIG_BR_EXT
 #include <rtw_br_ext.h>
-#endif	// CONFIG_BR_EXT
+#endif	/*  CONFIG_BR_EXT */
 
 #ifdef CONFIG_IOCTL_CFG80211
 	#include "ioctl_cfg80211.h"
-#endif //CONFIG_IOCTL_CFG80211
+#endif /* CONFIG_IOCTL_CFG80211 */
 
 #define SPEC_DEV_ID_NONE BIT(0)
 #define SPEC_DEV_ID_DISABLE_HT BIT(1)
@@ -94,14 +94,14 @@ struct registry_priv {
 	u8	lbkmode;
 	u8	hci;
 	struct ndis_802_11_ssid	ssid;
-	u8	network_mode;	//infra, ad-hoc, auto
-	u8	channel;//ad-hoc support requirement
-	u8	wireless_mode;//A, B, G, auto
-	u8	scan_mode;//active, passive
+	u8	network_mode;	/* infra, ad-hoc, auto */
+	u8	channel;/* ad-hoc support requirement */
+	u8	wireless_mode;/* A, B, G, auto */
+	u8	scan_mode;/* active, passive */
 	u8	radio_enable;
-	u8	preamble;//long, short, auto
-	u8	vrtl_carrier_sense;//Enable, Disable, Auto
-	u8	vcs_type;//RTS/CTS, CTS-to-self
+	u8	preamble;/* long, short, auto */
+	u8	vrtl_carrier_sense;/* Enable, Disable, Auto */
+	u8	vcs_type;/* RTS/CTS, CTS-to-self */
 	u16	rts_thresh;
 	u16	frag_thresh;
 	u8	adhoc_tx_pwr;
@@ -118,7 +118,7 @@ struct registry_priv {
 	u8	software_decrypt;
 
 	u8	acm_method;
-	  //UAPSD
+	  /* UAPSD */
 	u8	wmm_enable;
 	u8	uapsd_enable;
 	u8	uapsd_max_sp;
@@ -132,16 +132,16 @@ struct registry_priv {
 #ifdef CONFIG_80211N_HT
 	u8	ht_enable;
 	u8	cbw40_enable;
-	u8	ampdu_enable;//for tx
+	u8	ampdu_enable;/* for tx */
 	u8	rx_stbc;
-	u8	ampdu_amsdu;//A-MPDU Supports A-MSDU is permitted
+	u8	ampdu_amsdu;/* A-MPDU Supports A-MSDU is permitted */
 #endif
 	u8	lowrate_two_xmit;
 
 	u8	rf_config ;
 	u8	low_power ;
 
-	u8	wifi_spec;// !turbo_mode
+	u8	wifi_spec;/*  !turbo_mode */
 
 	u8	channel_plan;
 #ifdef CONFIG_BT_COEXIST
@@ -153,22 +153,22 @@ struct registry_priv {
 
 	u8	antdiv_cfg;
 
-	u8	usbss_enable;//0:disable,1:enable
-	u8	hwpdn_mode;//0:disable,1:enable,2:decide by EFUSE config
-	u8	hwpwrp_detect;//0:disable,1:enable
+	u8	usbss_enable;/* 0:disable,1:enable */
+	u8	hwpdn_mode;/* 0:disable,1:enable,2:decide by EFUSE config */
+	u8	hwpwrp_detect;/* 0:disable,1:enable */
 
-	u8	hw_wps_pbc;//0:disable,1:enable
+	u8	hw_wps_pbc;/* 0:disable,1:enable */
 
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
 	char	adaptor_info_caching_file_path[PATH_LENGTH_MAX];
 #endif
 
 #ifdef CONFIG_LAYER2_ROAMING
-	u8	max_roaming_times; // the max number driver will try to roaming
+	u8	max_roaming_times; /*  the max number driver will try to roaming */
 #endif
 
-	u8  special_rf_path; //0: 2T2R ,1: only turn on path A 1T1R, 2: only turn on path B 1T1R
-	u8	mac_phy_mode; //0:by efuse, 1:smsp, 2:dmdp, 3:dmsp.
+	u8  special_rf_path; /* 0: 2T2R ,1: only turn on path A 1T1R, 2: only turn on path B 1T1R */
+	u8	mac_phy_mode; /* 0:by efuse, 1:smsp, 2:dmdp, 3:dmsp. */
 
 #ifdef CONFIG_80211D
 	u8 enable80211d;
@@ -180,12 +180,12 @@ struct registry_priv {
 	u8 notch_filter;
 
 #ifdef CONFIG_MULTI_VIR_IFACES
-	u8 ext_iface_num;//primary/secondary iface is excluded
+	u8 ext_iface_num;/* primary/secondary iface is excluded */
 #endif
 };
 
 
-//For registry parameters
+/* For registry parameters */
 #define RGTRY_OFT(field) ((u32)FIELD_OFFSET(struct registry_priv, field))
 #define RGTRY_SZ(field)   sizeof(((struct registry_priv*) 0)->field)
 #define BSSID_OFT(field) ((u32)FIELD_OFFSET(struct wlan_bssid_ex, field))
@@ -198,37 +198,37 @@ struct registry_priv {
 #ifdef CONFIG_CONCURRENT_MODE
 #define GET_IFACE_NUMS(padapter) (((struct rtw_adapter *)padapter)->dvobj->iface_nums)
 #define GET_ADAPTER(padapter, iface_id) (((struct rtw_adapter *)padapter)->dvobj->padapters[iface_id])
-#endif //CONFIG_CONCURRENT_MODE
+#endif /* CONFIG_CONCURRENT_MODE */
 
 enum _IFACE_ID {
-	IFACE_ID0, //maping to PRIMARY_ADAPTER
-	IFACE_ID1, //maping to SECONDARY_ADAPTER
+	IFACE_ID0, /* maping to PRIMARY_ADAPTER */
+	IFACE_ID1, /* maping to SECONDARY_ADAPTER */
 	IFACE_ID2,
 	IFACE_ID3,
 	IFACE_ID_MAX,
 };
 
 struct dvobj_priv {
-	struct rtw_adapter *if1; //PRIMARY_ADAPTER
-	struct rtw_adapter *if2; //SECONDARY_ADAPTER
+	struct rtw_adapter *if1; /* PRIMARY_ADAPTER */
+	struct rtw_adapter *if2; /* SECONDARY_ADAPTER */
 
-	//for local/global synchronization
+	/* for local/global synchronization */
 	_mutex hw_init_mutex;
 	_mutex h2c_fwcmd_mutex;
 	_mutex setch_mutex;
 	_mutex setbw_mutex;
 
-	unsigned char	oper_channel; //saved channel info when call set_channel_bw
+	unsigned char	oper_channel; /* saved channel info when call set_channel_bw */
 	unsigned char	oper_bwmode;
-	unsigned char	oper_ch_offset;//PRIME_CHNL_OFFSET
+	unsigned char	oper_ch_offset;/* PRIME_CHNL_OFFSET */
 
 #ifdef CONFIG_CONCURRENT_MODE
-	//extend to support mulitu interface
+	/* extend to support mulitu interface */
 	struct rtw_adapter *padapters[IFACE_ID_MAX];
-	u8 iface_nums; // total number of ifaces used runtime
-#endif //CONFIG_CONCURRENT_MODE
+	u8 iface_nums; /*  total number of ifaces used runtime */
+#endif /* CONFIG_CONCURRENT_MODE */
 
-	//For 92D, DMDP have 2 interface.
+	/* For 92D, DMDP have 2 interface. */
 	u8	InterfaceNumber;
 	u8	NumInterfaces;
 	u8	DualMacMode;
@@ -246,7 +246,7 @@ struct dvobj_priv {
 	u8	ishighspeed;
 	u8	RtNumInPipes;
 	u8	RtNumOutPipes;
-	int	ep_num[5]; //endpoint number
+	int	ep_num[5]; /* endpoint number */
 
 	int	RegUsbSS;
 
@@ -274,8 +274,8 @@ static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 }
 
 enum _IFACE_TYPE {
-	IFACE_PORT0, //mapping to port0 for C/D series chips
-	IFACE_PORT1, //mapping to port1 for C/D series chip
+	IFACE_PORT0, /* mapping to port0 for C/D series chips */
+	IFACE_PORT1, /* mapping to port1 for C/D series chip */
 	MAX_IFACE_PORT,
 };
 
@@ -292,12 +292,12 @@ enum DRIVER_STATE {
 };
 
 struct rtw_adapter {
-	int	DriverState;// for disable driver using module, use dongle to replace module.
-	int	pid[3];//process id from UI, 0:wps, 1:hostapd, 2:dhcpcd
-	int	bDongle;//build-in module or external dongle
+	int	DriverState;/*  for disable driver using module, use dongle to replace module. */
+	int	pid[3];/* process id from UI, 0:wps, 1:hostapd, 2:dhcpcd */
+	int	bDongle;/* build-in module or external dongle */
 	u16	chip_type;
 	u16	HardwareType;
-	u16	interface_type;//USB,SDIO,PCI
+	u16	interface_type;/* USB,SDIO,PCI */
 
 	struct dvobj_priv *dvobj;
 	struct	mlme_priv mlmepriv;
@@ -325,20 +325,20 @@ struct rtw_adapter {
 #ifdef CONFIG_IOCTL_CFG80211
 #ifdef CONFIG_P2P
 	struct cfg80211_wifidirect_info	cfg80211_wdinfo;
-#endif //CONFIG_P2P
-#endif //CONFIG_IOCTL_CFG80211
+#endif /* CONFIG_P2P */
+#endif /* CONFIG_IOCTL_CFG80211 */
 	u32	setband;
 #ifdef CONFIG_P2P
 	struct wifidirect_info	wdinfo;
-#endif //CONFIG_P2P
+#endif /* CONFIG_P2P */
 
 #ifdef CONFIG_TDLS
 	struct tdls_info	tdlsinfo;
-#endif //CONFIG_TDLS
+#endif /* CONFIG_TDLS */
 
 #ifdef CONFIG_WFD
 	struct wifi_display_info wfd_info;
-#endif //CONFIG_WFD
+#endif /* CONFIG_WFD */
 
 	void *HalData;
 	u32 hal_data_sz;
@@ -367,7 +367,7 @@ struct rtw_adapter {
 
 	struct net_device *pnetdev;
 
-	// used by rtw_rereg_nd_name related function
+	/*  used by rtw_rereg_nd_name related function */
 	struct rereg_nd_name_data {
 		struct net_device *old_pnetdev;
 		char old_ifname[IFNAMSIZ];
@@ -378,11 +378,11 @@ struct rtw_adapter {
 	int bup;
 	struct net_device_stats stats;
 	struct iw_statistics iwstats;
-	struct proc_dir_entry *dir_dev;// for proc directory
+	struct proc_dir_entry *dir_dev;/*  for proc directory */
 
 #ifdef CONFIG_IOCTL_CFG80211
 	struct wireless_dev *rtw_wdev;
-#endif //CONFIG_IOCTL_CFG80211
+#endif /* CONFIG_IOCTL_CFG80211 */
 
 	int net_closed;
 
@@ -390,46 +390,46 @@ struct rtw_adapter {
 	u8 bReadPortCancel;
 	u8 bWritePortCancel;
 	u8 bRxRSSIDisplay;
-	//	Added by Albert 2012/07/26
-	//	The driver will write the initial gain everytime when running in the DM_Write_DIG function.
+	/* 	Added by Albert 2012/07/26 */
+	/* 	The driver will write the initial gain everytime when running in the DM_Write_DIG function. */
 	u8 bForceWriteInitGain;
-	//	Added by Albert 2012/10/26
-	//	The driver will show up the desired channel number when this flag is 1.
+	/* 	Added by Albert 2012/10/26 */
+	/* 	The driver will show up the desired channel number when this flag is 1. */
 	u8 bNotifyChannelChange;
 #ifdef CONFIG_P2P
-	//	Added by Albert 2012/12/06
-	//	The driver will show the current P2P status when the upper application reads it.
+	/* 	Added by Albert 2012/12/06 */
+	/* 	The driver will show the current P2P status when the upper application reads it. */
 	u8 bShowGetP2PState;
 #endif
 #ifdef CONFIG_AUTOSUSPEND
 	u8	bDisableAutosuspend;
 #endif
 
-	//pbuddy_adapter is used only in  two inteface case, (iface_nums=2 in struct dvobj_priv)
-	//PRIMARY_ADAPTER's buddy is SECONDARY_ADAPTER
-	//SECONDARY_ADAPTER's buddy is PRIMARY_ADAPTER
-	//for iface_id > SECONDARY_ADAPTER(IFACE_ID1), refer to padapters[iface_id]  in struct dvobj_priv
-	//and their pbuddy_adapter is PRIMARY_ADAPTER.
-	//for PRIMARY_ADAPTER(IFACE_ID0) can directly refer to if1 in struct dvobj_priv
+	/* pbuddy_adapter is used only in  two inteface case, (iface_nums=2 in struct dvobj_priv) */
+	/* PRIMARY_ADAPTER's buddy is SECONDARY_ADAPTER */
+	/* SECONDARY_ADAPTER's buddy is PRIMARY_ADAPTER */
+	/* for iface_id > SECONDARY_ADAPTER(IFACE_ID1), refer to padapters[iface_id]  in struct dvobj_priv */
+	/* and their pbuddy_adapter is PRIMARY_ADAPTER. */
+	/* for PRIMARY_ADAPTER(IFACE_ID0) can directly refer to if1 in struct dvobj_priv */
 	struct rtw_adapter *pbuddy_adapter;
 
 #if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
-	u8 isprimary; //is primary adapter or not
-	//notes:
-	// if isprimary is true, the adapter_type value is 0, iface_id is IFACE_ID0 for PRIMARY_ADAPTER
-	// if isprimary is false, the adapter_type value is 1, iface_id is IFACE_ID1 for SECONDARY_ADAPTER
-	// refer to iface_id if iface_nums>2 and isprimary is false and the adapter_type value is 0xff.
-	u8 adapter_type;//used only in  two inteface case(PRIMARY_ADAPTER and SECONDARY_ADAPTER) .
-	u8 iface_type; //interface port type, it depends on HW port
+	u8 isprimary; /* is primary adapter or not */
+	/* notes: */
+	/*  if isprimary is true, the adapter_type value is 0, iface_id is IFACE_ID0 for PRIMARY_ADAPTER */
+	/*  if isprimary is false, the adapter_type value is 1, iface_id is IFACE_ID1 for SECONDARY_ADAPTER */
+	/*  refer to iface_id if iface_nums>2 and isprimary is false and the adapter_type value is 0xff. */
+	u8 adapter_type;/* used only in  two inteface case(PRIMARY_ADAPTER and SECONDARY_ADAPTER) . */
+	u8 iface_type; /* interface port type, it depends on HW port */
 
-	//extend to support multi interface
-       //IFACE_ID0 is equals to PRIMARY_ADAPTER
-       //IFACE_ID1 is equals to SECONDARY_ADAPTER
+	/* extend to support multi interface */
+       /* IFACE_ID0 is equals to PRIMARY_ADAPTER */
+       /* IFACE_ID1 is equals to SECONDARY_ADAPTER */
 	u8 iface_id;
 #endif
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	u8 DualMacConcurrent; // 1: DMSP 0:DMDP
+	u8 DualMacConcurrent; /*  1: DMSP 0:DMDP */
 #endif
 
 #ifdef CONFIG_BR_EXT
@@ -444,7 +444,7 @@ struct rtw_adapter {
 	unsigned char			br_ip[4];
 
 	struct br_ext_info		eth_br_ext_info;
-#endif	// CONFIG_BR_EXT
+#endif	/*  CONFIG_BR_EXT */
 };
 
 #define adapter_to_dvobj(adapter) (adapter->dvobj)
@@ -456,4 +456,4 @@ __inline static u8 *myid(struct eeprom_priv *peepriv)
 	return (peepriv->mac_addr);
 }
 
-#endif //__DRV_TYPES_H__
+#endif /* __DRV_TYPES_H__ */

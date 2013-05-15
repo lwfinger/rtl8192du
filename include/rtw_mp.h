@@ -20,8 +20,8 @@
 #ifndef _RTW_MP_H_
 #define _RTW_MP_H_
 
-//	00 - Success
-//	11 - Error
+/* 	00 - Success */
+/* 	11 - Error */
 #define STATUS_SUCCESS				(0x00000000L)
 #define STATUS_PENDING				(0x00000103L)
 
@@ -73,12 +73,12 @@
 #define uint_SAP_IN_USE			((uint)0xC0010021L)
 #define uint_INVALID_ADDRESS		((uint)0xC0010022L)
 #define uint_VC_NOT_ACTIVATED		((uint)0xC0010023L)
-#define uint_DEST_OUT_OF_ORDER		((uint)0xC0010024L)  // cause 27
-#define uint_VC_NOT_AVAILABLE		((uint)0xC0010025L)  // cause 35,45
-#define uint_CELLRATE_NOT_AVAILABLE	((uint)0xC0010026L)  // cause 37
-#define uint_INCOMPATABLE_QOS		((uint)0xC0010027L)  // cause 49
-#define uint_AAL_PARAMS_UNSUPPORTED	((uint)0xC0010028L)  // cause 93
-#define uint_NO_ROUTE_TO_DESTINATION	((uint)0xC0010029L)  // cause 3
+#define uint_DEST_OUT_OF_ORDER		((uint)0xC0010024L)  /*  cause 27 */
+#define uint_VC_NOT_AVAILABLE		((uint)0xC0010025L)  /*  cause 35,45 */
+#define uint_CELLRATE_NOT_AVAILABLE	((uint)0xC0010026L)  /*  cause 37 */
+#define uint_INCOMPATABLE_QOS		((uint)0xC0010027L)  /*  cause 49 */
+#define uint_AAL_PARAMS_UNSUPPORTED	((uint)0xC0010028L)  /*  cause 93 */
+#define uint_NO_ROUTE_TO_DESTINATION	((uint)0xC0010029L)  /*  cause 3 */
 
 #define MAX_MP_XMITBUF_SZ	2048
 #define NR_MP_XMITFRAME		8
@@ -89,8 +89,7 @@ struct mp_xmit_frame {
 	struct sk_buff *pkt;
 	int frame_tag;
 	struct rtw_adapter *padapter;
-	//insert urb, irp, and irpcnt info below...
-	//max frag_cnt = 8
+	/* insert urb, irp, and irpcnt info below... */
 	u8 *mem_addr;
 	u32 sz[8];
 	struct urb *pxmit_urb[8];
@@ -130,70 +129,66 @@ struct mp_tx {
 #define s4Byte s32
 
 struct mpt_context {
-	// Indicate if we have started Mass Production Test.
+	/*  Indicate if we have started Mass Production Test. */
 	bool			bMassProdTest;
 
-	// Indicate if the driver is unloading or unloaded.
+	/*  Indicate if the driver is unloading or unloaded. */
 	bool			bMptDrvUnload;
 
-	// Indicate a MptWorkItem is scheduled and not yet finished.
+	/*  Indicate a MptWorkItem is scheduled and not yet finished. */
 	bool			bMptWorkItemInProgress;
 
-	// 1=Start, 0=Stop from UI.
+	/*  1=Start, 0=Stop from UI. */
 	u32			MptTestStart;
-	// _TEST_MODE, defined in MPT_Req2.h
+	/*  _TEST_MODE, defined in MPT_Req2.h */
 	u32			MptTestItem;
-	// Variable needed in each implementation of CurrMptAct.
-	u32			MptActType;	// Type of action performed in CurrMptAct.
-	// The Offset of IO operation is depend of MptActType.
+	/*  Variable needed in each implementation of CurrMptAct. */
+	u32			MptActType;	/*  Type of action performed in CurrMptAct. */
+	/*  The Offset of IO operation is depend of MptActType. */
 	u32			MptIoOffset;
-	// The Value of IO operation is depend of MptActType.
+	/*  The Value of IO operation is depend of MptActType. */
 	u32			MptIoValue;
-	// The RfPath of IO operation is depend of MptActType.
+	/*  The RfPath of IO operation is depend of MptActType. */
 	u32			MptRfPath;
 
-	enum WIRELESS_MODE	MptWirelessModeToSw;	// Wireless mode to switch.
-	u8			MptChannelToSw;		// Channel to switch.
-	u8			MptInitGainToSet;	// Initial gain to set.
-	//u32			bMptAntennaA;		// TRUE if we want to use antenna A.
-	u32			MptBandWidth;		// bandwidth to switch.
-	u32			MptRateIndex;		// rate index.
-	// Register value kept for Single Carrier Tx test.
+	enum WIRELESS_MODE	MptWirelessModeToSw;	/*  Wireless mode to switch. */
+	u8			MptChannelToSw;		/*  Channel to switch. */
+	u8			MptInitGainToSet;	/*  Initial gain to set. */
+	u32			MptBandWidth;		/*  bandwidth to switch. */
+	u32			MptRateIndex;		/*  rate index. */
+	/*  Register value kept for Single Carrier Tx test. */
 	u8			btMpCckTxPower;
-	// Register value kept for Single Carrier Tx test.
+	/*  Register value kept for Single Carrier Tx test. */
 	u8			btMpOfdmTxPower;
-	// For MP Tx Power index
-	u8			TxPwrLevel[2];	// rf-A, rf-B
+	/*  For MP Tx Power index */
+	u8			TxPwrLevel[2];	/*  rf-A, rf-B */
 
-	// Content of RCR Regsiter for Mass Production Test.
+	/*  Content of RCR Regsiter for Mass Production Test. */
 	u32			MptRCR;
-	// TRUE if we only receive packets with specific pattern.
+	/*  TRUE if we only receive packets with specific pattern. */
 	bool			bMptFilterPattern;
-	// Rx OK count, statistics used in Mass Production Test.
+	/*  Rx OK count, statistics used in Mass Production Test. */
 	u32			MptRxOkCnt;
-	// Rx CRC32 error count, statistics used in Mass Production Test.
+	/*  Rx CRC32 error count, statistics used in Mass Production Test. */
 	u32			MptRxCrcErrCnt;
 
-	bool			bCckContTx;	// TRUE if we are in CCK Continuous Tx test.
-	bool			bOfdmContTx;	// TRUE if we are in OFDM Continuous Tx test.
-	bool			bStartContTx;	// TRUE if we have start Continuous Tx test.
-	// TRUE if we are in Single Carrier Tx test.
+	bool			bCckContTx;	/*  TRUE if we are in CCK Continuous Tx test. */
+	bool			bOfdmContTx;	/*  TRUE if we are in OFDM Continuous Tx test. */
+	bool			bStartContTx;	/*  TRUE if we have start Continuous Tx test. */
+	/*  TRUE if we are in Single Carrier Tx test. */
 	bool			bSingleCarrier;
-	// TRUE if we are in Carrier Suppression Tx Test.
+	/*  TRUE if we are in Carrier Suppression Tx Test. */
 	bool			bCarrierSuppression;
-	//TRUE if we are in Single Tone Tx test.
+	/* TRUE if we are in Single Tone Tx test. */
 	bool			bSingleTone;
 
-	// ACK counter asked by K.Y..
+	/*  ACK counter asked by K.Y.. */
 	bool			bMptEnableAckCounter;
 	u32			MptAckCounter;
 
-	// SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~!
-	//s1Byte		BufOfLines[2][MAX_LINES_HWCONFIG_TXT][MAX_BYTES_LINE_HWCONFIG_TXT];
-	//s1Byte			BufOfLines[2][MP_MAX_LINES][MP_MAX_LINES_BYTES];
-	//s4Byte			RfReadLine[2];
+	/*  SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~! */
 
-	u8		APK_bound[2];	//for APK	path A/path B
+	u8		APK_bound[2];	/* for APK	path A/path B */
 	bool		bMptIndexEven;
 
 	u8		backup0xc50;
@@ -207,7 +202,6 @@ struct mpt_context {
 
 /* end of E-Fuse */
 
-//#define RTPRIV_IOCTL_MP					(SIOCIWFIRSTPRIV + 0x17)
 enum {
 	WRITE_REG = 1,
 	READ_REG,
@@ -240,28 +234,27 @@ struct mp_priv
 {
 	struct rtw_adapter *papdater;
 
-	//Testing Flag
-	u32 mode;//0 for normal type packet, 1 for loopback packet (16bytes TXCMD)
+	/* Testing Flag */
+	u32 mode;/* 0 for normal type packet, 1 for loopback packet (16bytes TXCMD) */
 
 	u32 prev_fw_state;
 
-	//OID cmd handler
+	/* OID cmd handler */
 	struct mp_wiparam workparam;
-//	u8 act_in_progress;
 
-	//Tx Section
+	/* Tx Section */
 	u8 TID;
 	u32 tx_pktcount;
 	struct mp_tx tx;
 
-	//Rx Section
+	/* Rx Section */
 	u32 rx_pktcount;
 	u32 rx_crcerrpktcount;
 	u32 rx_pktloss;
 
 	struct recv_stat rxstat;
 
-	//RF/BB relative
+	/* RF/BB relative */
 	u8 channel;
 	u8 bandwidth;
 	u8 prime_channel_offset;
@@ -269,17 +262,13 @@ struct mp_priv
 	u8 txpoweridx_b;
 	u8 rateidx;
 	u32 preamble;
-//	u8 modem;
 	u32 CrystalCap;
-//	u32 curr_crystalcap;
 
 	u16 antenna_tx;
 	u16 antenna_rx;
-//	u8 curr_rfpath;
 
 	u8 check_mp_pkt;
 
-//	uint ForcedDataRate;
 
 	struct wlan_network mp_network;
 	unsigned char network_macaddr[6];
@@ -302,7 +291,7 @@ struct bb_reg_param {
 	u32 offset;
 	u32 value;
 };
-//=======================================================================
+/*  */
 
 #define LOWER	true
 #define RAISE	false
@@ -370,7 +359,7 @@ enum MPT_RATE_E {
 	MPT_RATE_LAST
 };
 
-#define MAX_TX_PWR_INDEX_N_MODE 64	// 0x3F
+#define MAX_TX_PWR_INDEX_N_MODE 64	/*  0x3F */
 
 enum POWER_MODE {
 	POWER_LOW = 0,
@@ -383,10 +372,10 @@ enum POWER_MODE {
 #define RX_PKT_PHY_MATCH	3
 
 enum ENCRY_CTRL_STATE {
-	HW_CONTROL,		//hw encryption& decryption
-	SW_CONTROL,		//sw encryption& decryption
-	HW_ENCRY_SW_DECRY,	//hw encryption & sw decryption
-	SW_ENCRY_HW_DECRY	//sw encryption & hw decryption
+	HW_CONTROL,		/* hw encryption& decryption */
+	SW_CONTROL,		/* sw encryption& decryption */
+	HW_ENCRY_SW_DECRY,	/* hw encryption & sw decryption */
+	SW_ENCRY_HW_DECRY	/* sw encryption & hw decryption */
 };
 
 enum OFDM_TX_MODE {
@@ -396,9 +385,7 @@ enum OFDM_TX_MODE {
 	OFDM_SingleTone		= 4,
 };
 
-//=======================================================================
-//extern struct mp_xmit_frame *alloc_mp_xmitframe(struct mp_priv *pmp_priv);
-//extern int free_mp_xmitframe(struct xmit_priv *pxmitpriv, struct mp_xmit_frame *pmp_xmitframe);
+/*  */
 
 extern s32 init_mp_priv(struct rtw_adapter * padapter);
 extern void free_mp_priv(struct mp_priv *pmp_priv);
@@ -407,18 +394,9 @@ extern void MPT_DeInitAdapter(struct rtw_adapter * padapter);
 extern s32 mp_start_test(struct rtw_adapter * padapter);
 extern void mp_stop_test(struct rtw_adapter * padapter);
 
-//=======================================================================
-//extern void	IQCalibrateBcut(struct rtw_adapter * pAdapter);
+/*  */
 
-//extern u32	bb_reg_read(struct rtw_adapter * Adapter, u16 offset);
-//extern u8	bb_reg_write(struct rtw_adapter * Adapter, u16 offset, u32 value);
-//extern u32	rf_reg_read(struct rtw_adapter * Adapter, u8 path, u8 offset);
-//extern u8	rf_reg_write(struct rtw_adapter * Adapter, u8 path, u8 offset, u32 value);
 
-//extern u32	get_bb_reg(struct rtw_adapter * Adapter, u16 offset, u32 bitmask);
-//extern u8	set_bb_reg(struct rtw_adapter * Adapter, u16 offset, u32 bitmask, u32 value);
-//extern u32	get_rf_reg(struct rtw_adapter * Adapter, u8 path, u8 offset, u32 bitmask);
-//extern u8	set_rf_reg(struct rtw_adapter * Adapter, u8 path, u8 offset, u32 bitmask, u32 value);
 
 extern u32 _read_rfreg(struct rtw_adapter * padapter, u8 rfpath, u32 addr, u32 bitmask);
 extern void _write_rfreg(struct rtw_adapter * padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val);
@@ -434,12 +412,10 @@ extern void	SetChannel(struct rtw_adapter * pAdapter);
 extern void	SetBandwidth(struct rtw_adapter * pAdapter);
 extern void	SetTxPower(struct rtw_adapter * pAdapter);
 extern void	SetAntennaPathPower(struct rtw_adapter * pAdapter);
-//extern void	SetTxAGCOffset(struct rtw_adapter * pAdapter, u32 ulTxAGCOffset);
 extern void	SetDataRate(struct rtw_adapter * pAdapter);
 
 extern void	SetAntenna(struct rtw_adapter * pAdapter);
 
-//extern void	SetCrystalCap(struct rtw_adapter * pAdapter);
 
 extern s32	SetThermalMeter(struct rtw_adapter * pAdapter, u8 target_ther);
 extern void	GetThermalMeter(struct rtw_adapter * pAdapter, u8 *value);
@@ -491,4 +467,4 @@ extern void Hal_SetCCKContinuousTx(struct rtw_adapter * pAdapter, u8 bStart);
 extern void Hal_SetOFDMContinuousTx(struct rtw_adapter * pAdapter, u8 bStart);
 extern void Hal_ProSetCrystalCap (struct rtw_adapter * pAdapter, u32 CrystalCapVal);
 
-#endif //_RTW_MP_H_
+#endif /* _RTW_MP_H_ */

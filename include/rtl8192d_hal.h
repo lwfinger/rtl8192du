@@ -50,7 +50,6 @@
 #define TARGET_CHNL_NUM_2G_5G	59
 #define CV_CURVE_CNT			64
 
-//static u32	 RF_REG_FOR_5G_SWCHNL[MAX_RF_IMR_INDEX]={0,0x2f,0x30,0x31,0x32,0x33,0x34,0x35,0x36,0x38,0x39,0x0};
 static u32	   RF_REG_FOR_5G_SWCHNL_NORMAL[MAX_RF_IMR_INDEX_NORMAL]={0,0x2f,0x30,0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0x0};
 
 static u8	RF_REG_for_C_CUT_5G[RF_REG_NUM_for_C_CUT_5G] =
@@ -66,7 +65,7 @@ static u32	RF_REG_MASK_for_C_CUT_2G[RF_REG_NUM_for_C_CUT_2G] =
 			{BIT19|BIT18|BIT17|BIT14|BIT1,	BIT10|BIT9,
 			BIT18|BIT17|BIT16|BIT1,		BIT2|BIT1,
 			BIT15|BIT14|BIT13|BIT12|BIT11};
-#endif	//amy, temp remove
+#endif	/* amy, temp remove */
 static u8	RF_CHNL_5G[RF_CHNL_NUM_5G] =
 			{36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140};
 static u8	RF_CHNL_5G_40M[RF_CHNL_NUM_5G_40M] =
@@ -95,16 +94,14 @@ static u32	RF_REG_Param_for_C_CUT_5G_internalPA[3][RF_REG_NUM_for_C_CUT_5G_inter
 
 
 
-//[mode][patha+b][reg]
+/* mode][patha+b][reg] */
 static u32 RF_IMR_Param_Normal[1][3][MAX_RF_IMR_INDEX_NORMAL]={{
-	{0x70000,0x00ff0,0x4400f,0x00ff0,0x0,0x0,0x0,0x0,0x0,0x64888,0xe266c,0x00090,0x22fff},// channel 1-14.
-	{0x70000,0x22880,0x4470f,0x55880,0x00070, 0x88000, 0x0,0x88080,0x70000,0x64a82,0xe466c,0x00090,0x32c9a}, //path 36-64
-	{0x70000,0x44880,0x4477f,0x77880,0x00070, 0x88000, 0x0,0x880b0,0x0,0x64b82,0xe466c,0x00090,0x32c9a} //100 -165
+	{0x70000,0x00ff0,0x4400f,0x00ff0,0x0,0x0,0x0,0x0,0x0,0x64888,0xe266c,0x00090,0x22fff},/*  channel 1-14. */
+	{0x70000,0x22880,0x4470f,0x55880,0x00070, 0x88000, 0x0,0x88080,0x70000,0x64a82,0xe466c,0x00090,0x32c9a}, /* path 36-64 */
+	{0x70000,0x44880,0x4477f,0x77880,0x00070, 0x88000, 0x0,0x880b0,0x0,0x64b82,0xe466c,0x00090,0x32c9a} /* 100 -165 */
 }
 };
 
-//static u32 CurveIndex_5G[TARGET_CHNL_NUM_5G]={0};
-//static u32 CurveIndex_2G[TARGET_CHNL_NUM_2G]={0};
 static u32 CurveIndex[TARGET_CHNL_NUM_2G_5G]={0};
 
 static u32 TargetChnl_5G[TARGET_CHNL_NUM_5G] = {
@@ -154,7 +151,7 @@ static u32 TargetChnl_5G[TARGET_CHNL_NUM_5G] = {
 25292,	25267,	25242,	25216,	25191,
 25166	};
 
-static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	// channel 1~14
+static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	/*  channel 1~14 */
 26084, 26030, 25976, 25923, 25869, 25816, 25764,
 25711, 25658, 25606, 25554, 25502, 25451, 25328
 };
@@ -164,12 +161,12 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	// channel 1~14
 
 #ifdef CONFIG_WOWLAN
 	#include "Hal8192DUHWImg_wowlan.h"
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 	#define RTL819X_DEFAULT_RF_TYPE		RF_1T2R
 
-//---------------------------------------------------------------------
-//		RTL8192DU From file
-//---------------------------------------------------------------------
+/*  */
+/* 		RTL8192DU From file */
+/*  */
 	#define RTL8192D_FW_IMG					"rtl8192DU\\rtl8192dfw.bin"
 
 	#define RTL8192D_PHY_REG					"rtl8192DU\\PHY_REG.txt"
@@ -185,16 +182,16 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	// channel 1~14
 	#define RTL8192D_PHY_RADIO_B_intPA		"rtl8192DU\\radio_b_intPA.txt"
 	#define RTL8192D_PHY_MACREG				"rtl8192DU\\MAC_REG.txt"
 
-//---------------------------------------------------------------------
-//		RTL8192DU From header
-//---------------------------------------------------------------------
+/*  */
+/* 		RTL8192DU From header */
+/*  */
 
-	// Fw Array
+	/*  Fw Array */
 	#define Rtl8192D_FwImageArray					Rtl8192DUFwImgArray
 #ifdef CONFIG_WOWLAN
 	#define Rtl8192D_FwWWImageArray				Rtl8192DUFwWWImgArray
-#endif //CONFIG_WOWLAN
-	// MAC/BB/PHY Array
+#endif /* CONFIG_WOWLAN */
+	/*  MAC/BB/PHY Array */
 	#define Rtl8192D_MAC_Array						Rtl8192DUMAC_2T_Array
 	#define Rtl8192D_AGCTAB_Array					Rtl8192DUAGCTAB_Array
 	#define Rtl8192D_AGCTAB_5GArray				Rtl8192DUAGCTAB_5GArray
@@ -212,7 +209,7 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	// channel 1~14
 	#define Rtl8192D_RadioA_2T_intPAArray			Rtl8192DURadioA_2T_intPAArray
 	#define Rtl8192D_RadioB_2T_intPAArray			Rtl8192DURadioB_2T_intPAArray
 
-	// Array length
+	/*  Array length */
 	#define Rtl8192D_FwImageArrayLength			Rtl8192DUImgArrayLength
 	#define Rtl8192D_MAC_ArrayLength				Rtl8192DUMAC_2T_ArrayLength
 	#define Rtl8192D_AGCTAB_5GArrayLength			Rtl8192DUAGCTAB_5GArrayLength
@@ -229,15 +226,15 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	// channel 1~14
 	#define Rtl8192D_RadioA_2T_intPAArrayLength		Rtl8192DURadioA_2T_intPAArrayLength
 	#define Rtl8192D_RadioB_2T_intPAArrayLength		Rtl8192DURadioB_2T_intPAArrayLength
 
-	// The file name "_2T" is for 92CU, "_1T"  is for 88CU. Modified by tynli. 2009.11.24.
+	/*  The file name "_2T" is for 92CU, "_1T"  is for 88CU. Modified by tynli. 2009.11.24. */
 
-#define DRVINFO_SZ	4 // unit is 8bytes
+#define DRVINFO_SZ	4 /*  unit is 8bytes */
 #define PageNum_128(_Len)		(u32)(((_Len)>>7) + ((_Len)&0x7F ? 1:0))
 
-//
-// Check if FW header exists. We do not consider the lower 4 bits in this case.
-// By tynli. 2009.12.04.
-//
+/*  */
+/*  Check if FW header exists. We do not consider the lower 4 bits in this case. */
+/*  By tynli. 2009.12.04. */
+/*  */
 #define IS_FW_HEADER_EXIST(_pFwHdr)	((le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x92C0 ||\
 					(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x88C0 ||\
 					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D0 ||\
@@ -245,15 +242,15 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	// channel 1~14
 					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D2 ||\
 					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D3)
 
-#define FW_8192D_SIZE				0x8020 // Max FW len = 32k + 32(FW header length).
+#define FW_8192D_SIZE				0x8020 /*  Max FW len = 32k + 32(FW header length). */
 #define FW_8192D_START_ADDRESS	0x1000
 #define FW_8192D_END_ADDRESS		0x1FFF
 
-#define MAX_PAGE_SIZE				4096	// @ page : 4k bytes
+#define MAX_PAGE_SIZE				4096	/*  @ page : 4k bytes */
 
 enum FIRMWARE_SOURCE {
 	FW_SOURCE_IMG_FILE = 0,
-	FW_SOURCE_HEADER_FILE = 1,              //from header file
+	FW_SOURCE_HEADER_FILE = 1,              /* from header file */
 };
 
 struct RT_FIRMWARE_92D {
@@ -263,37 +260,37 @@ struct RT_FIRMWARE_92D {
 #ifdef CONFIG_WOWLAN
 	u8*			szWoWLANFwBuffer;
 	u32			ulWoWLANFwLength;
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 };
 
-//
-// This structure must be cared byte-ordering
-//
-// Added by tynli. 2009.12.04.
-struct rt_8192d_firmware_hdr { //8-byte alinment required
+/*  */
+/*  This structure must be cared byte-ordering */
+/*  */
+/*  Added by tynli. 2009.12.04. */
+struct rt_8192d_firmware_hdr { /* 8-byte alinment required */
 
-	//--- LONG WORD 0 ----
-	u16		Signature;	// 92C0: test chip; 92C, 88C0: test chip; 88C1: MP A-cut; 92C1: MP A-cut
-	u8		Category;	// AP/NIC and USB/PCI
-	u8		Function;	// Reserved for different FW function indcation, for further use when driver needs to download different FW in different conditions
-	u16		Version;		// FW Version
-	u8		Subversion;	// FW Subversion, default 0x00
+	/*  LONG WORD 0 ---- */
+	u16		Signature;	/*  92C0: test chip; 92C, 88C0: test chip; 88C1: MP A-cut; 92C1: MP A-cut */
+	u8		Category;	/*  AP/NIC and USB/PCI */
+	u8		Function;	/*  Reserved for different FW function indcation, for further use when driver needs to download different FW in different conditions */
+	u16		Version;		/*  FW Version */
+	u8		Subversion;	/*  FW Subversion, default 0x00 */
 	u8		Rsvd1;
 
 
-	//--- LONG WORD 1 ----
-	u8		Month;	// Release time Month field
-	u8		Date;	// Release time Date field
-	u8		Hour;	// Release time Hour field
-	u8		Minute;	// Release time Minute field
-	u16		RamCodeSize;	// The size of RAM code
+	/*  LONG WORD 1 ---- */
+	u8		Month;	/*  Release time Month field */
+	u8		Date;	/*  Release time Date field */
+	u8		Hour;	/*  Release time Hour field */
+	u8		Minute;	/*  Release time Minute field */
+	u16		RamCodeSize;	/*  The size of RAM code */
 	u16		Rsvd2;
 
-	//--- LONG WORD 2 ----
-	u32		SvnIdx;	// The SVN entry index
+	/*  LONG WORD 2 ---- */
+	u32		SvnIdx;	/*  The SVN entry index */
 	u32		Rsvd3;
 
-	//--- LONG WORD 3 ----
+	/*  LONG WORD 3 ---- */
 	u32		Rsvd4;
 	u32		Rsvd5;
 };
@@ -301,7 +298,7 @@ struct rt_8192d_firmware_hdr { //8-byte alinment required
 #define DRIVER_EARLY_INT_TIME		0x05
 #define BCN_DMA_ATIME_INT_TIME		0x02
 
-//Added for 92D IQK setting.
+/* Added for 92D IQK setting. */
 struct iqk_matrix_regs_setting {
 	bool		bIQKDone;
 	int		Value[1][IQK_Matrix_REG_NUM];
@@ -316,28 +313,28 @@ enum USB_RX_AGG_MODE {
 	USB_RX_AGG_DMA_USB
 };
 
-#define MAX_RX_DMA_BUFFER_SIZE	10240		// 10K for 8192C RX DMA buffer
+#define MAX_RX_DMA_BUFFER_SIZE	10240		/*  10K for 8192C RX DMA buffer */
 
 #endif
 
 
-#define TX_SELE_HQ			BIT(0)		// High Queue
-#define TX_SELE_LQ			BIT(1)		// Low Queue
-#define TX_SELE_NQ			BIT(2)		// Normal Queue
+#define TX_SELE_HQ			BIT(0)		/*  High Queue */
+#define TX_SELE_LQ			BIT(1)		/*  Low Queue */
+#define TX_SELE_NQ			BIT(2)		/*  Normal Queue */
 
 
-// Note: We will divide number of page equally for each queue other than public queue!
+/*  Note: We will divide number of page equally for each queue other than public queue! */
 
 #define TX_TOTAL_PAGE_NUMBER		0xF8
 #define TX_PAGE_BOUNDARY			(TX_TOTAL_PAGE_NUMBER + 1)
 
-// For Normal Chip Setting
-// (HPQ + LPQ + NPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER
+/*  For Normal Chip Setting */
+/*  (HPQ + LPQ + NPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER */
 #define NORMAL_PAGE_NUM_PUBQ		0x56
 
 
-// For Test Chip Setting
-// (HPQ + LPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER
+/*  For Test Chip Setting */
+/*  (HPQ + LPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER */
 #define TEST_PAGE_NUM_PUBQ			0x89
 #define TX_TOTAL_PAGE_NUMBER_92D_DUAL_MAC		0x7A
 #define NORMAL_PAGE_NUM_PUBQ_92D_DUAL_MAC			0x5A
@@ -347,52 +344,52 @@ enum USB_RX_AGG_MODE {
 
 #define TX_PAGE_BOUNDARY_DUAL_MAC			(TX_TOTAL_PAGE_NUMBER_92D_DUAL_MAC + 1)
 
-// For Test Chip Setting
+/*  For Test Chip Setting */
 #define WMM_TEST_TX_TOTAL_PAGE_NUMBER	0xF5
-#define WMM_TEST_TX_PAGE_BOUNDARY	(WMM_TEST_TX_TOTAL_PAGE_NUMBER + 1) //F6
+#define WMM_TEST_TX_PAGE_BOUNDARY	(WMM_TEST_TX_TOTAL_PAGE_NUMBER + 1) /* F6 */
 
 #define WMM_TEST_PAGE_NUM_PUBQ		0xA3
 #define WMM_TEST_PAGE_NUM_HPQ		0x29
 #define WMM_TEST_PAGE_NUM_LPQ		0x29
 
 
-//Note: For Normal Chip Setting ,modify later
+/* Note: For Normal Chip Setting ,modify later */
 #define WMM_NORMAL_TX_TOTAL_PAGE_NUMBER	0xF5
-#define WMM_NORMAL_TX_PAGE_BOUNDARY	(WMM_TEST_TX_TOTAL_PAGE_NUMBER + 1) //F6
+#define WMM_NORMAL_TX_PAGE_BOUNDARY	(WMM_TEST_TX_TOTAL_PAGE_NUMBER + 1) /* F6 */
 
 #define WMM_NORMAL_PAGE_NUM_PUBQ		0xB0
 #define WMM_NORMAL_PAGE_NUM_HPQ		0x29
 #define WMM_NORMAL_PAGE_NUM_LPQ			0x1C
 #define WMM_NORMAL_PAGE_NUM_NPQ		0x1C
 
-#define WMM_NORMAL_PAGE_NUM_PUBQ_92D		0X65//0x82
-#define WMM_NORMAL_PAGE_NUM_HPQ_92D		0X30//0x29
+#define WMM_NORMAL_PAGE_NUM_PUBQ_92D		0X65/* 0x82 */
+#define WMM_NORMAL_PAGE_NUM_HPQ_92D		0X30/* 0x29 */
 #define WMM_NORMAL_PAGE_NUM_LPQ_92D		0X30
 #define WMM_NORMAL_PAGE_NUM_NPQ_92D		0X30
 
-//-------------------------------------------------------------------------
-//	Chip specific
-//-------------------------------------------------------------------------
+/*  */
+/* 	Chip specific */
+/*  */
 
 #define CHIP_BONDING_IDENTIFIER(_value)	(((_value)>>22)&0x3)
 #define CHIP_BONDING_92C_1T2R	0x1
 #define CHIP_BONDING_88C_USB_MCARD	0x2
 #define CHIP_BONDING_88C_USB_HP	0x1
 
-//
-// 2011.01.06. Define new structure of chip version for RTL8723 and so on. Added by tynli.
-//
+/*  */
+/*  2011.01.06. Define new structure of chip version for RTL8723 and so on. Added by tynli. */
+/*  */
 /*
      | BIT15:12           |  BIT11:8        | BIT 7              |  BIT6:4  |      BIT3          | BIT2:0  |
      |-------------+-----------+-----------+-------+-----------+-------|
      | IC version(CUT)  | ROM version  | Manufacturer  | RF type  |  Chip type       | IC Type |
      |                           |                      | TSMC/UMC    |              | TEST/NORMAL|             |
 */
-// [15:12] IC version(CUT): A-cut=0, B-cut=1, C-cut=2, D-cut=3
-// [7] Manufacturer: TSMC=0, UMC=1
-// [6:4] RF type: 1T1R=0, 1T2R=1, 2T2R=2
-// [3] Chip type: TEST=0, NORMAL=1
-// [2:0] IC type: 81xxC=0, 8723=1, 92D=2
+/*  [15:12] IC version(CUT): A-cut=0, B-cut=1, C-cut=2, D-cut=3 */
+/*  [7] Manufacturer: TSMC=0, UMC=1 */
+/*  [6:4] RF type: 1T1R=0, 1T2R=1, 2T2R=2 */
+/*  [3] Chip type: TEST=0, NORMAL=1 */
+/*  [2:0] IC type: 81xxC=0, 8723=1, 92D=2 */
 
 #define CHIP_8723						BIT(0)
 #define CHIP_92D						BIT(1)
@@ -407,7 +404,7 @@ enum USB_RX_AGG_MODE {
 #define E_CUT_VERSION					BIT(14)
 
 
-// MASK
+/*  MASK */
 #define IC_TYPE_MASK					(BIT(0)|BIT(1)|BIT(2))
 #define CHIP_TYPE_MASK				BIT(3)
 #define RF_TYPE_MASK					(BIT(4)|BIT(5)|BIT(6))
@@ -415,7 +412,7 @@ enum USB_RX_AGG_MODE {
 #define ROM_VERSION_MASK				(BIT(11)|BIT(10)|BIT(9)|BIT(8))
 #define CUT_VERSION_MASK				(BIT(15)|BIT(14)|BIT(13)|BIT(12))
 
-// Get element
+/*  Get element */
 #define GET_CVID_IC_TYPE(version)			((version) & IC_TYPE_MASK)
 #define GET_CVID_CHIP_TYPE(version)			((version) & CHIP_TYPE_MASK)
 #define GET_CVID_RF_TYPE(version)			((version) & RF_TYPE_MASK)
@@ -434,7 +431,7 @@ enum USB_RX_AGG_MODE {
 #define IS_92C_SERIAL(version)					((IS_81XXC(version) && IS_2T2R(version)) ? true : false)
 #define IS_VENDOR_UMC_A_CUT(version)		((IS_CHIP_VENDOR_UMC(version)) ? ((GET_CVID_CUT_VERSION(version)) ? false : true) : false)
 #define IS_VENDOR_8723_A_CUT(version)		((IS_8723_SERIES(version)) ? ((GET_CVID_CUT_VERSION(version)) ? false : true) : false)
-// <tynli_Note> 88/92C UMC B-cut vendor is set to TSMC so we need to check CHIP_VENDOR_UMC bit is not 1.
+/*  <tynli_Note> 88/92C UMC B-cut vendor is set to TSMC so we need to check CHIP_VENDOR_UMC bit is not 1. */
 #define IS_81xxC_VENDOR_UMC_B_CUT(version)	((IS_CHIP_VENDOR_UMC(version)) ? ((GET_CVID_CUT_VERSION(version) == B_CUT_VERSION) ? true : false):false)
 #define IS_92D_SINGLEPHY(version)			((IS_92D(version)) ? (IS_2T2R(version) ? true: false) : false)
 
@@ -471,9 +468,9 @@ enum VERSION_8192D {
 };
 
 
-//-------------------------------------------------------------------------
-//	Channel Plan
-//-------------------------------------------------------------------------
+/*  */
+/* 	Channel Plan */
+/*  */
 enum ChannelPlan{
 	CHPL_FCC	= 0,
 	CHPL_IC		= 1,
@@ -498,7 +495,7 @@ struct tx_power_info {
 	u8 HT20MaxOffset[RF_PATH_MAX][CHANNEL_GROUP_MAX];
 	u8 TSSI_A[3];
 	u8 TSSI_B[3];
-	u8 TSSI_A_5G[3];		//5GL/5GM/5GH
+	u8 TSSI_A_5G[3];		/* 5GL/5GM/5GH */
 	u8 TSSI_B_5G[3];
 };
 
@@ -506,11 +503,11 @@ struct tx_power_info {
 #define EFUSE_MAP_LEN				256
 #define EFUSE_MAX_SECTION			32
 #define EFUSE_MAX_SECTION_BASE	16
-// <Roger_Notes> To prevent out of boundary programming case, leave 1byte and program full section
-// 9bytes + 1byt + 5bytes and pre 1byte.
-// For worst case:
-// | 2byte|----8bytes----|1byte|--7bytes--| //92D
-#define EFUSE_OOB_PROTECT_BYTES		18 // PG data exclude header, dummy 7 bytes frome CP test and reserved 1byte.
+/*  <Roger_Notes> To prevent out of boundary programming case, leave 1byte and program full section */
+/*  9bytes + 1byt + 5bytes and pre 1byte. */
+/*  For worst case: */
+/*  | 2byte|----8bytes----|1byte|--7bytes--| 92D */
+#define EFUSE_OOB_PROTECT_BYTES		18 /*  PG data exclude header, dummy 7 bytes frome CP test and reserved 1byte. */
 
 enum PA_MODE {
 	PA_MODE_EXTERNAL = 0x00,
@@ -537,9 +534,9 @@ enum c2h_id_8192d {
 struct hal_data_8192du {
 	enum VERSION_8192D	VersionID;
 
-	// add for 92D Phy mode/mac/Band mode
+	/*  add for 92D Phy mode/mac/Band mode */
 	enum MACPHY_MODE_8192D	MacPhyMode92D;
-	enum BAND_TYPE	CurrentBandType92D;	//0:2.4G, 1:5G
+	enum BAND_TYPE	CurrentBandType92D;	/* 0:2.4G, 1:5G */
 	enum BAND_TYPE	BandSet92D;
 	bool		bIsVS;
 
@@ -558,22 +555,22 @@ struct hal_data_8192du {
 	u16	FirmwareVersionRev;
 	u16	FirmwareSubVersion;
 
-	//current WIFI_PHY values
+	/* current WIFI_PHY values */
 	u32	ReceiveConfig;
 	enum WIRELESS_MODE	CurrentWirelessMode;
 	enum HT_CHANNEL_WIDTH	CurrentChannelBW;
 	u8	CurrentChannel;
-	u8	nCur40MhzPrimeSC;// Control channel sub-carrier
+	u8	nCur40MhzPrimeSC;/*  Control channel sub-carrier */
 	u16	BasicRateSet;
 
-	//rf_ctrl
+	/* rf_ctrl */
 	u8	rf_chip;
 	u8	rf_type;
 	u8	NumTotalRFPath;
 
-	//
-	// EEPROM setting.
-	//
+	/*  */
+	/*  EEPROM setting. */
+	/*  */
 	u8	EEPROMVersion;
 	u16	EEPROMVID;
 	u16	EEPROMPID;
@@ -590,23 +587,23 @@ struct hal_data_8192du {
 	u8	PAMode;
 
 	u8	TxPwrLevelCck[RF_PATH_MAX][CHANNEL_MAX_NUMBER_2G];
-	u8	TxPwrLevelHT40_1S[RF_PATH_MAX][CHANNEL_MAX_NUMBER];	// For HT 40MHZ pwr
-	u8	TxPwrLevelHT40_2S[RF_PATH_MAX][CHANNEL_MAX_NUMBER];	// For HT 40MHZ pwr
-	s8	TxPwrHt20Diff[RF_PATH_MAX][CHANNEL_MAX_NUMBER];// HT 20<->40 Pwr diff
-	u8	TxPwrLegacyHtDiff[RF_PATH_MAX][CHANNEL_MAX_NUMBER];// For HT<->legacy pwr diff
-	// For power group
+	u8	TxPwrLevelHT40_1S[RF_PATH_MAX][CHANNEL_MAX_NUMBER];	/*  For HT 40MHZ pwr */
+	u8	TxPwrLevelHT40_2S[RF_PATH_MAX][CHANNEL_MAX_NUMBER];	/*  For HT 40MHZ pwr */
+	s8	TxPwrHt20Diff[RF_PATH_MAX][CHANNEL_MAX_NUMBER];/*  HT 20<->40 Pwr diff */
+	u8	TxPwrLegacyHtDiff[RF_PATH_MAX][CHANNEL_MAX_NUMBER];/*  For HT<->legacy pwr diff */
+	/*  For power group */
 	u8	PwrGroupHT20[RF_PATH_MAX][CHANNEL_MAX_NUMBER];
 	u8	PwrGroupHT40[RF_PATH_MAX][CHANNEL_MAX_NUMBER];
 
-	u8	LegacyHTTxPowerDiff;// Legacy to HT rate power diff
+	u8	LegacyHTTxPowerDiff;/*  Legacy to HT rate power diff */
 
-	u8	CrystalCap;	// CrystalCap.
+	u8	CrystalCap;	/*  CrystalCap. */
 
 #ifdef CONFIG_BT_COEXIST
 	struct btcoexist_priv	bt_coexist;
 #endif
 
-	// Read/write are allow for following hardware information variables
+	/*  Read/write are allow for following hardware information variables */
 	u8	framesync;
 	u32	framesyncC34;
 	u8	framesyncMonitor;
@@ -615,23 +612,23 @@ struct hal_data_8192du {
 	u32	MCSTxPowerLevelOriginalOffset[MAX_PG_GROUP][16];
 	u32	CCKTxPowerLevelOriginalOffset;
 
-	u32	AntennaTxPath;					// Antenna path Tx
-	u32	AntennaRxPath;					// Antenna path Rx
+	u32	AntennaTxPath;					/*  Antenna path Tx */
+	u32	AntennaRxPath;					/*  Antenna path Rx */
 	u8	BluetoothCoexist;
 	u8	ExternalPA;
-	u8	InternalPA5G[2];	//pathA / pathB
-	u8	b1x1RecvCombine;	// for 1T1R receive combining
+	u8	InternalPA5G[2];	/* pathA / pathB */
+	u8	b1x1RecvCombine;	/*  for 1T1R receive combining */
 
 	u8	bCurrentTurboEDCA;
-	u32	AcParam_BE; //Original parameter for BE, use for EDCA turbo.
+	u32	AcParam_BE; /* Original parameter for BE, use for EDCA turbo. */
 
-	// The current Tx Power Level
+	/*  The current Tx Power Level */
 	u8	CurrentCckTxPwrIdx;
 	u8	CurrentOfdm24GTxPwrIdx;
 
-	struct bb_register_def PHYRegDef[4];	//Radio A/B/C/D
+	struct bb_register_def PHYRegDef[4];	/* Radio A/B/C/D */
 
-	bool		bRFPathRxEnable[4];	// We support 4 RF path now.
+	bool		bRFPathRxEnable[4];	/*  We support 4 RF path now. */
 
 	u32	RfRegChnlVal[2];
 
@@ -643,10 +640,10 @@ struct hal_data_8192du {
 
 	bool		bInSetPower;
 
-	//RDG enable
+	/* RDG enable */
 	bool		bRDGEnable;
 
-	bool		bLoadIMRandIQKSettingFor2G;// True if IMR or IQK  have done  for 2.4G in scan progress
+	bool		bLoadIMRandIQKSettingFor2G;/*  True if IMR or IQK  have done  for 2.4G in scan progress */
 	bool		bNeedIQK;
 
 	bool		bLCKInProgress;
@@ -655,23 +652,23 @@ struct hal_data_8192du {
 
 	struct iqk_matrix_regs_setting IQKMatrixRegSetting[IQK_Matrix_Settings_NUM];
 
-	//for host message to fw
+	/* for host message to fw */
 	u8	LastHMEBoxNum;
 	u8	fw_ractrl;
-	// Beacon function related global variable.
+	/*  Beacon function related global variable. */
 	u32	RegBcnCtrlVal;
 	u8	RegTxPause;
 	u8	RegFwHwTxQCtrl;
 	u8	RegReg542;
 	u8	RegCR_1;
 	struct dm_priv	dmpriv;
-	u8	FwRsvdPageStartOffset; //2010.06.23. Added by tynli. Reserve page start offset except beacon in TxQ.
+	u8	FwRsvdPageStartOffset; /* 2010.06.23. Added by tynli. Reserve page start offset except beacon in TxQ. */
 
-	//Query RF by FW
+	/* Query RF by FW */
 	bool		bReadRFbyFW;
 
-	// For 92C USB endpoint setting
-	//
+	/*  For 92C USB endpoint setting */
+	/*  */
 
 	u32	UsbBulkOutSize;
 
@@ -679,36 +676,36 @@ struct hal_data_8192du {
 	int	RtBulkInPipe;
 	int	RtIntInPipe;
 
-	// Add for dual MAC  0--Mac0 1--Mac1
+	/*  Add for dual MAC  0--Mac0 1--Mac1 */
 	u32	interfaceIndex;
 
 	u8	OutEpQueueSel;
 	u8	OutEpNumber;
 
-	u8	Queue2EPNum[8];//for out endpoint number mapping
+	u8	Queue2EPNum[8];/* for out endpoint number mapping */
 
 #ifdef CONFIG_USB_TX_AGGREGATION
 	u8	UsbTxAggMode;
 	u8	UsbTxAggDescNum;
 #endif
 #ifdef CONFIG_USB_RX_AGGREGATION
-	u16	HwRxPageSize;				// Hardware setting
+	u16	HwRxPageSize;				/*  Hardware setting */
 	u32	MaxUsbRxAggBlock;
 
 	enum USB_RX_AGG_MODE	UsbRxAggMode;
-	u8	UsbRxAggBlockCount;			// USB Block count. Block size is 512-byte in hight speed and 64-byte in full speed
+	u8	UsbRxAggBlockCount;			/*  USB Block count. Block size is 512-byte in hight speed and 64-byte in full speed */
 	u8	UsbRxAggBlockTimeout;
-	u8	UsbRxAggPageCount;			// 8192C DMA page count
+	u8	UsbRxAggPageCount;			/*  8192C DMA page count */
 	u8	UsbRxAggPageTimeout;
 #endif
 
 	u16	RegRRSR;
 
 	u16	EfuseUsedBytes;
-	u8	RTSInitRate;	 // 2010.11.24.by tynli.
+	u8	RTSInitRate;	 /*  2010.11.24.by tynli. */
 #ifdef CONFIG_P2P
 	struct P2P_PS_Offload_t	p2p_ps_offload;
-#endif //CONFIG_P2P
+#endif /* CONFIG_P2P */
 };
 
 #define GET_HAL_DATA(__pAdapter)	((struct hal_data_8192du *)((__pAdapter)->HalData))

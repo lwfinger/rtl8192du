@@ -28,7 +28,7 @@ void rtl8192du_set_hal_ops(struct rtw_adapter * padapter);
 #ifdef CONFIG_WOWLAN_MANUAL
 extern int rtw_suspend_toshiba(struct rtw_adapter * Adapter);
 extern int rtw_resume_toshiba(struct rtw_adapter * Adapter);
-#endif // CONFIG_WOWLAN_MANUAL
-#endif //CONFIG_WOWLAN
+#endif /*  CONFIG_WOWLAN_MANUAL */
+#endif /* CONFIG_WOWLAN */
 
-#endif //__USB_HAL_H__
+#endif /* __USB_HAL_H__ */

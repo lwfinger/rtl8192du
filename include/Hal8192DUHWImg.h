@@ -63,4 +63,4 @@ extern const u32 Rtl8192DUAGCTAB_2TArray[Rtl8192DUAGCTAB_2TArrayLength];
 #define Rtl8192DUAGCTAB_1TArrayLength 1
 extern const u32 Rtl8192DUAGCTAB_1TArray[Rtl8192DUAGCTAB_1TArrayLength];
 
-#endif //__INC_HAL8192CU_FW_IMG_H
+#endif /* __INC_HAL8192CU_FW_IMG_H */

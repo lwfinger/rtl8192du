@@ -21,34 +21,34 @@
 #define __RTL8192D_CMD_H_
 
 
-//--------------------------------------------
-//3				Host Message Box
-//--------------------------------------------
+/*  */
+/* 3				Host Message Box */
+/*  */
 
-// User Define Message [31:8]
+/*  User Define Message [31:8] */
 
-//_SETPWRMODE_PARM
+/* _SETPWRMODE_PARM */
 #define SET_H2CCMD_PWRMODE_PARM_MODE(__pH2CCmd, __Value)			SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 8, __Value)
 #define SET_H2CCMD_PWRMODE_PARM_SMART_PS(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE((__pH2CCmd)+1, 0, 8, __Value)
 #define SET_H2CCMD_PWRMODE_PARM_BCN_PASS_TIME(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE((__pH2CCmd)+2, 0, 8, __Value)
 
-//JOINBSSRPT_PARM
+/* JOINBSSRPT_PARM */
 #define SET_H2CCMD_JOINBSSRPT_PARM_OPMODE(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 8, __Value)
 
-//_RSVDPAGE_LOC
+/* _RSVDPAGE_LOC */
 #define SET_H2CCMD_RSVDPAGE_LOC_PROBE_RSP(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 8, __Value)
 #define SET_H2CCMD_RSVDPAGE_LOC_PSPOLL(__pH2CCmd, __Value)			SET_BITS_TO_LE_1BYTE((__pH2CCmd)+1, 0, 8, __Value)
 #define SET_H2CCMD_RSVDPAGE_LOC_NULL_DATA(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE((__pH2CCmd)+2, 0, 8, __Value)
 
-//P2P_PS_OFFLOAD
+/* P2P_PS_OFFLOAD */
 
 struct P2P_PS_Offload_t {
  unsigned char Offload_En:1;
- unsigned char role:1; // 1: Owner, 0: Client
+ unsigned char role:1; /*  1: Owner, 0: Client */
  unsigned char CTWindow_En:1;
  unsigned char NoA0_En:1;
  unsigned char NoA1_En:1;
- unsigned char AllStaSleep:1; // Only valid in Owner
+ unsigned char AllStaSleep:1; /*  Only valid in Owner */
  unsigned char discovery:1;
  unsigned char rsvd:1;
 };
@@ -61,8 +61,8 @@ struct P2P_PS_Offload_t {
 #define SET_H2CCMD_P2P_PS_OFFLOAD_ALLSTASLEEP(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 5, 1, __Value)
 #define SET_H2CCMD_P2P_PS_OFFLOAD_DISCOVERY(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 6, 1, __Value)
 
-// Description: Determine the types of H2C commands that are the same in driver and Fw.
-// Fisrt constructed by tynli. 2009.10.09.
+/*  Description: Determine the types of H2C commands that are the same in driver and Fw. */
+/*  Fisrt constructed by tynli. 2009.10.09. */
 enum RTL8192D_H2C_CMD {
 	H2C_AP_OFFLOAD = 0,		/*0*/
 	H2C_SETPWRMODE = 1,		/*1*/
@@ -74,30 +74,30 @@ enum RTL8192D_H2C_CMD {
 	H2C_MAC_MODE_SEL = 9,
 	H2C_PWRM=15,
 #ifdef CONFIG_WOWLAN
-	H2C_WO_WLAN_CMD = 20,	// Wake on Wlan.
-#endif // CONFIG_WOWLAN
+	H2C_WO_WLAN_CMD = 20,	/*  Wake on Wlan. */
+#endif /*  CONFIG_WOWLAN */
 	H2C_P2P_PS_CTW_CMD = 24,
-	H2C_PathDiv = 26,                  //PathDiv--NeilChen--2011.07.15
+	H2C_PathDiv = 26,                  /* PathDiv--NeilChen--2011.07.15 */
 #ifdef CONFIG_WOWLAN
-	KEEP_ALIVE_CONTROL_CMD=31, //keep alive for wake on wlan
+	KEEP_ALIVE_CONTROL_CMD=31, /* keep alive for wake on wlan */
 	DISCONNECT_DECISION_CTRL_CMD=32,
 	REMOTE_WAKE_CTRL_CMD=34,
-#endif // CONFIG_WOWLAN
+#endif /*  CONFIG_WOWLAN */
 	H2C_92D_TSF_SYNC=36,
 	H2C_92D_RESET_TSF = 43,
 	H2C_CMD_MAX
 };
 
 struct cmd_msg_parm {
-	u8 eid; //element id
-	u8 sz; // sz
+	u8 eid; /* element id */
+	u8 sz; /*  sz */
 	u8 buf[6];
 };
 
 
 void	FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLen, u8* pCmdBuffer);
 
-// host message to firmware cmd
+/*  host message to firmware cmd */
 void	rtl8192d_set_FwPwrMode_cmd(struct rtw_adapter*padapter, u8 Mode);
 void	rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus);
 u8	rtl8192d_set_rssi_cmd(struct rtw_adapter*padapter, u8 *param);
@@ -105,11 +105,11 @@ u8	rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg);
 void	rtl8192d_Add_RateATid(struct rtw_adapter * pAdapter, u32 bitmap, u8 arg);
 #ifdef CONFIG_P2P
 void	rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_state);
-#endif //CONFIG_P2P
+#endif /* CONFIG_P2P */
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
 int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port);
-#endif	// CONFIG_TSF_RESET_OFFLOAD
+#endif	/*  CONFIG_TSF_RESET_OFFLOAD */
 
 #ifdef CONFIG_WOWLAN
 struct set_wowlan_parm {
@@ -134,6 +134,6 @@ struct set_wowlan_parm {
 
 void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter);
 void SetFwRelatedForWoWLAN8192DU(struct rtw_adapter*	padapter,u8 bHostIsGoingtoSleep);
-#endif // CONFIG_WOWLAN
+#endif /*  CONFIG_WOWLAN */
 
-#endif	// __RTL8192D_CMD_H_
+#endif	/*  __RTL8192D_CMD_H_ */

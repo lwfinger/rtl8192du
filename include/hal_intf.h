@@ -107,7 +107,7 @@ enum HW_VARIABLES {
 	HW_VAR_EFUSE_BYTES,
 	HW_VAR_FIFO_CLEARN_UP,
 	HW_VAR_CHECK_TXBUF,
-	HW_VAR_APFM_ON_MAC, //Auto FSM to Turn On, include clock, isolation, power control for MAC only
+	HW_VAR_APFM_ON_MAC, /* Auto FSM to Turn On, include clock, isolation, power control for MAC only */
 	HW_VAR_WOWLAN,
 	HW_VAR_VID,
 	HW_VAR_PID,
@@ -123,8 +123,8 @@ enum HAL_DEF_VARIABLE {
 	HAL_DEF_DRVINFO_SZ,
 	HAL_DEF_MAX_RECVBUF_SZ,
 	HAL_DEF_RX_PACKET_OFFSET,
-	HAL_DEF_DBG_DUMP_RXPKT,//for dbg
-	HAL_DEF_DBG_DM_FUNC,//for dbg
+	HAL_DEF_DBG_DUMP_RXPKT,/* for dbg */
+	HAL_DEF_DBG_DM_FUNC,/* for dbg */
 
 };
 
@@ -262,9 +262,9 @@ enum HARDWARE_TYPE {
 	HARDWARE_TYPE_MAX,
 };
 
-//
-// RTL8192D Series
-//
+/*  */
+/*  RTL8192D Series */
+/*  */
 #define IS_HARDWARE_TYPE_8192DE(_Adapter)			\
 		(((struct rtw_adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DE)
 #define IS_HARDWARE_TYPE_8192DU(_Adapter)			\
@@ -306,7 +306,7 @@ struct wowlan_ioctl_param{
 #define Rx_MagicPkt				BIT(5)
 #define FinishBtFwPatch				BIT(7)
 
-#endif // CONFIG_WOWLAN
+#endif /*  CONFIG_WOWLAN */
 
 void rtw_hal_def_value_init(struct rtw_adapter *padapter);
 void rtw_hal_free_data(struct rtw_adapter *padapter);
@@ -390,4 +390,4 @@ void rtw_hal_reset_security_engine(struct rtw_adapter *adapter);
 s32 rtw_hal_c2h_handler(struct rtw_adapter *adapter, struct c2h_evt_hdr *c2h_evt);
 c2h_id_filter rtw_hal_c2h_id_filter_ccx(struct rtw_adapter *adapter);
 
-#endif //__HAL_INTF_H__
+#endif /* __HAL_INTF_H__ */

@@ -28,14 +28,14 @@
 struct intf_priv {
 
 	u8 *intf_dev;
-	u32	max_iosz;	//USB2.0: 128, USB1.1: 64, SDIO:64
-	u32	max_xmitsz; //USB2.0: unlimited, SDIO:512
-	u32	max_recvsz; //USB2.0: unlimited, SDIO:512
+	u32	max_iosz;	/* USB2.0: 128, USB1.1: 64, SDIO:64 */
+	u32	max_xmitsz; /* USB2.0: unlimited, SDIO:512 */
+	u32	max_recvsz; /* USB2.0: unlimited, SDIO:512 */
 
 	volatile u8 *io_rwmem;
 	volatile u8 *allocated_io_rwmem;
-	u32	io_wsz; //unit: 4bytes
-	u32	io_rsz;//unit: 4bytes
+	u32	io_wsz; /* unit: 4bytes */
+	u32	io_rsz;/* unit: 4bytes */
 	u8 intf_status;
 
 	void (*_bus_io)(u8 *priv);
@@ -50,7 +50,7 @@ The protection mechanism is through the pending queue.
 
 	_mutex ioctl_mutex;
 
-	// when in USB, IO is through interrupt in/out endpoints
+	/*  when in USB, IO is through interrupt in/out endpoints */
 	struct usb_device	*udev;
 	struct urb *piorw_urb;
 	u8 io_irp_cnt;
@@ -82,15 +82,15 @@ struct net_device *rtw_init_netdev(struct rtw_adapter *padapter);
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 u16 rtw_recv_select_queue(struct sk_buff *skb);
-#endif //LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35)
+#endif /* LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35) */
 
 #ifdef CONFIG_PROC_DEBUG
 void rtw_proc_init_one(struct net_device *dev);
 void rtw_proc_remove_one(struct net_device *dev);
-#else //!CONFIG_PROC_DEBUG
+#else /* CONFIG_PROC_DEBUG */
 static void rtw_proc_init_one(struct net_device *dev) {}
 static void rtw_proc_remove_one(struct net_device *dev) {}
-#endif //!CONFIG_PROC_DEBUG
+#endif /* CONFIG_PROC_DEBUG */
 
 void rtw_ips_dev_unload(struct rtw_adapter *padapter);
 #ifdef CONFIG_IPS
@@ -108,9 +108,9 @@ struct dvobj_priv;
 _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,	void (*set_intf_ops)(struct _io_ops *pops));
 void rtw_drv_stop_vir_ifaces(struct dvobj_priv *dvobj);
 void rtw_drv_free_vir_ifaces(struct dvobj_priv *dvobj);
-#endif //CONFIG_MULTI_VIR_IFACES
+#endif /* CONFIG_MULTI_VIR_IFACES */
 #endif
 
 void rtw_ndev_destructor(struct net_device *ndev);
 
-#endif	//_OSDEP_INTF_H_
+#endif	/* _OSDEP_INTF_H_ */

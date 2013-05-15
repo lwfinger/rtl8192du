@@ -37,15 +37,15 @@ enum LED_CTL_MODE {
 	LED_CTL_START_TO_LINK = 8,
 	LED_CTL_START_WPS = 9,
 	LED_CTL_STOP_WPS = 10,
-	LED_CTL_START_WPS_BOTTON = 11, //added for runtop
-	LED_CTL_STOP_WPS_FAIL = 12, //added for ALPHA
-	LED_CTL_STOP_WPS_FAIL_OVERLAP = 13, //added for BELKIN
+	LED_CTL_START_WPS_BOTTON = 11, /* added for runtop */
+	LED_CTL_STOP_WPS_FAIL = 12, /* added for ALPHA */
+	LED_CTL_STOP_WPS_FAIL_OVERLAP = 13, /* added for BELKIN */
 };
 
 
-//================================================================================
-// LED object.
-//================================================================================
+/*  */
+/*  LED object. */
+/*  */
 
 enum LED_STATE_871X {
 	LED_UNKNOWN = 0,
@@ -54,13 +54,13 @@ enum LED_STATE_871X {
 	LED_BLINK_NORMAL = 3,
 	LED_BLINK_SLOWLY = 4,
 	LED_POWER_ON_BLINK = 5,
-	LED_SCAN_BLINK = 6, // LED is blinking during scanning period, the # of times to blink is depend on time for scanning.
-	LED_NO_LINK_BLINK = 7, // LED is blinking during no link state.
-	LED_BLINK_StartToBlink = 8,// Customzied for Sercomm Printer Server case
-	LED_BLINK_WPS = 9,	// LED is blinkg during WPS communication
+	LED_SCAN_BLINK = 6, /*  LED is blinking during scanning period, the # of times to blink is depend on time for scanning. */
+	LED_NO_LINK_BLINK = 7, /*  LED is blinking during no link state. */
+	LED_BLINK_StartToBlink = 8,/*  Customzied for Sercomm Printer Server case */
+	LED_BLINK_WPS = 9,	/*  LED is blinkg during WPS communication */
 	LED_TXRX_BLINK = 10,
-	LED_BLINK_WPS_STOP = 11,	//for ALPHA
-	LED_BLINK_WPS_STOP_OVERLAP = 12,	//for BELKIN
+	LED_BLINK_WPS_STOP = 11,	/* for ALPHA */
+	LED_BLINK_WPS_STOP_OVERLAP = 12,	/* for BELKIN */
 };
 
 #define IS_LED_WPS_BLINKING(_LED_871X)	(((struct LED_871X *)_LED_871X)->CurrLedState==LED_BLINK_WPS \
@@ -78,43 +78,43 @@ enum LED_PIN_871X {
 
 struct LED_871X {
 	struct rtw_adapter				*padapter;
-	enum LED_PIN_871X		LedPin;	// Identify how to implement this SW led.
-	enum LED_STATE_871X		CurrLedState; // Current LED state.
-	u8					bLedOn; // true if LED is ON, false if LED is OFF.
+	enum LED_PIN_871X		LedPin;	/*  Identify how to implement this SW led. */
+	enum LED_STATE_871X		CurrLedState; /*  Current LED state. */
+	u8					bLedOn; /*  true if LED is ON, false if LED is OFF. */
 
 	u8					bSWLedCtrl;
 
-	u8					bLedBlinkInProgress; // true if it is blinking, false o.w..
-	// ALPHA, added by chiyoko, 20090106
+	u8					bLedBlinkInProgress; /*  true if it is blinking, false o.w.. */
+	/*  ALPHA, added by chiyoko, 20090106 */
 	u8					bLedNoLinkBlinkInProgress;
 	u8					bLedLinkBlinkInProgress;
 	u8					bLedStartToLinkBlinkInProgress;
 	u8					bLedScanBlinkInProgress;
 	u8					bLedWPSBlinkInProgress;
 
-	u32					BlinkTimes; // Number of times to toggle led state for blinking.
-	enum LED_STATE_871X		BlinkingLedState; // Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are.
+	u32					BlinkTimes; /*  Number of times to toggle led state for blinking. */
+	enum LED_STATE_871X		BlinkingLedState; /*  Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are. */
 
-	struct timer_list		BlinkTimer; // Timer object for led blinking.
+	struct timer_list		BlinkTimer; /*  Timer object for led blinking. */
 #if LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0)
-	struct work_struct BlinkWorkItem; // Workitem used by BlinkTimer to manipulate H/W to blink LED.
+	struct work_struct BlinkWorkItem; /*  Workitem used by BlinkTimer to manipulate H/W to blink LED. */
 #endif
 };
 
 
-//================================================================================
-// LED customization.
-//================================================================================
+/*  */
+/*  LED customization. */
+/*  */
 
 enum LED_STRATEGY_871X {
-	SW_LED_MODE0, // SW control 1 LED via GPIO0. It is default option.
-	SW_LED_MODE1, // 2 LEDs, through LED0 and LED1. For ALPHA.
-	SW_LED_MODE2, // SW control 1 LED via GPIO0, customized for AzWave 8187 minicard.
-	SW_LED_MODE3, // SW control 1 LED via GPIO0, customized for Sercomm Printer Server case.
-	SW_LED_MODE4, //for Edimax / Belkin
-	SW_LED_MODE5, //for Sercomm / Belkin
-	SW_LED_MODE6, //for 88CU minicard, porting from ce SW_LED_MODE7
-	HW_LED, // HW control 2 LEDs, LED0 and LED1 (there are 4 different control modes, see MAC.CONFIG1 for details.)
+	SW_LED_MODE0, /*  SW control 1 LED via GPIO0. It is default option. */
+	SW_LED_MODE1, /*  2 LEDs, through LED0 and LED1. For ALPHA. */
+	SW_LED_MODE2, /*  SW control 1 LED via GPIO0, customized for AzWave 8187 minicard. */
+	SW_LED_MODE3, /*  SW control 1 LED via GPIO0, customized for Sercomm Printer Server case. */
+	SW_LED_MODE4, /* for Edimax / Belkin */
+	SW_LED_MODE5, /* for Sercomm / Belkin */
+	SW_LED_MODE6, /* for 88CU minicard, porting from ce SW_LED_MODE7 */
+	HW_LED, /*  HW control 2 LEDs, LED0 and LED1 (there are 4 different control modes, see MAC.CONFIG1 for details.) */
 };
 
 struct led_priv{
@@ -133,10 +133,10 @@ struct led_priv{
 		if ((adapter)->ledpriv.LedControlHandler) \
 			(adapter)->ledpriv.LedControlHandler((adapter), (LedAction)); \
 	} while (0)
-#else //CONFIG_SW_LED
+#else /* CONFIG_SW_LED */
 #define rtw_led_control(adapter, LedAction)
-#endif //CONFIG_SW_LED
+#endif /* CONFIG_SW_LED */
 
 extern void BlinkHandler(struct LED_871X *pLed);
 
-#endif //__RTW_LED_H_
+#endif /* __RTW_LED_H_ */

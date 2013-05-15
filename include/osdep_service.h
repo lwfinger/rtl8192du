@@ -22,12 +22,10 @@
 
 #include <drv_conf.h>
 #include <basic_types.h>
-//#include <rtl871x_byteorder.h>
 
 #define _FAIL		0
 #define _SUCCESS	1
 #define RTW_RX_HANDLED 2
-//#define RTW_STATUS_TIMEDOUT -110
 
 	#include <linux/version.h>
 	#include <linux/spinlock.h>
@@ -60,16 +58,15 @@
 	#include <linux/if_arp.h>
 	#include <linux/rtnetlink.h>
 	#include <linux/delay.h>
-	#include <linux/proc_fs.h>	// Necessary because we use the proc fs
-	#include <linux/interrupt.h>	// for struct tasklet_struct
+	#include <linux/proc_fs.h>	/*  Necessary because we use the proc fs */
+	#include <linux/interrupt.h>	/*  for struct tasklet_struct */
 	#include <linux/ip.h>
 	#include <linux/kthread.h>
 
 #ifdef CONFIG_IOCTL_CFG80211
-//	#include <linux/ieee80211.h>
         #include <net/ieee80211_radiotap.h>
 	#include <net/cfg80211.h>
-#endif //CONFIG_IOCTL_CFG80211
+#endif /* CONFIG_IOCTL_CFG80211 */
 
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
 	#include <linux/in.h>
@@ -106,7 +103,7 @@
 #endif
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22))
-// Porting from linux kernel, for compatible with old kernel.
+/*  Porting from linux kernel, for compatible with old kernel. */
 static inline unsigned char *skb_tail_pointer(const struct sk_buff *skb)
 {
 	return skb->tail;
@@ -213,9 +210,9 @@ static inline void _cancel_workitem_sync(struct work_struct *pwork)
 #endif
 }
 
-//
-// Global Mutex: can only be used at PASSIVE level.
-//
+/*  */
+/*  Global Mutex: can only be used at PASSIVE level. */
+/*  */
 
 #define ACQUIRE_GLOBAL_MUTEX(_MutexCounter)                              \
 {                                                               \
@@ -277,7 +274,7 @@ static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 
 extern int RTW_STATUS_CODE(int error_code);
 
-//flags used for rtw_update_mem_stat()
+/* flags used for rtw_update_mem_stat() */
 enum {
 	MEM_STAT_VIR_ALLOC_SUCCESS,
 	MEM_STAT_VIR_ALLOC_FAIL,
@@ -285,11 +282,11 @@ enum {
 	MEM_STAT_PHY_ALLOC_SUCCESS,
 	MEM_STAT_PHY_ALLOC_FAIL,
 	MEM_STAT_PHY_FREE,
-	MEM_STAT_TX, //used to distinguish TX/RX, asigned from caller
+	MEM_STAT_TX, /* used to distinguish TX/RX, asigned from caller */
 	MEM_STAT_TX_ALLOC_SUCCESS,
 	MEM_STAT_TX_ALLOC_FAIL,
 	MEM_STAT_TX_FREE,
-	MEM_STAT_RX, //used to distinguish TX/RX, asigned from caller
+	MEM_STAT_RX, /* used to distinguish TX/RX, asigned from caller */
 	MEM_STAT_RX_ALLOC_SUCCESS,
 	MEM_STAT_RX_ALLOC_FAIL,
 	MEM_STAT_RX_FREE
@@ -450,13 +447,13 @@ static inline u32 bitshift(u32 bitmask)
 	return i;
 }
 
-//#ifdef __GNUC__
+/* ifdef __GNUC__ */
 #define STRUCT_PACKED __attribute__ ((packed))
 
-// limitation of path length
+/*  limitation of path length */
 	#define PATH_LENGTH_MAX PATH_MAX
 
-// Suspend lock prevent system from going suspend
+/*  Suspend lock prevent system from going suspend */
 #ifdef CONFIG_WAKELOCK
 #include <linux/wakelock.h>
 #elif defined(CONFIG_ANDROID_POWER)
@@ -469,7 +466,7 @@ extern void rtw_lock_suspend(void);
 extern void rtw_unlock_suspend(void);
 
 
-//Atomic integer operations
+/* Atomic integer operations */
 	#define ATOMIC_T atomic_t
 
 extern void ATOMIC_SET(ATOMIC_T *v, int i);
@@ -483,7 +480,7 @@ extern int ATOMIC_SUB_RETURN(ATOMIC_T *v, int i);
 extern int ATOMIC_INC_RETURN(ATOMIC_T *v);
 extern int ATOMIC_DEC_RETURN(ATOMIC_T *v);
 
-//File operation APIs, just for linux now
+/* File operation APIs, just for linux now */
 extern int rtw_is_file_readable(char *path);
 extern int rtw_retrive_from_file(char *path, u8* buf, u32 sz);
 extern int rtw_store_to_file(char *path, u8* buf, u32 sz);
@@ -511,9 +508,9 @@ extern void rtw_free_netdev(struct net_device * netdev);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
 #define rtw_signal_process(pid, sig) kill_pid(find_vpid((pid)),(sig), 1)
-#else //(LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
+#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)) */
 #define rtw_signal_process(pid, sig) kill_proc((pid), (sig), 1)
-#endif //(LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
+#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)) */
 
 extern u64 rtw_modular64(u64 x, u64 y);
 extern u64 rtw_division64(u64 x, u64 y);

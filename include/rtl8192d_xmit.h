@@ -20,24 +20,24 @@
 #ifndef _RTL8192D_XMIT_H_
 #define _RTL8192D_XMIT_H_
 
-//
-// Queue Select Value in TxDesc
-//
-#define QSLT_BK							0x2//0x01
+/*  */
+/*  Queue Select Value in TxDesc */
+/*  */
+#define QSLT_BK							0x2/* 0x01 */
 #define QSLT_BE							0x0
-#define QSLT_VI							0x5//0x4
-#define QSLT_VO							0x7//0x6
+#define QSLT_VI							0x5/* 0x4 */
+#define QSLT_VO							0x7/* 0x6 */
 #define QSLT_BEACON						0x10
 #define QSLT_HIGH						0x11
 #define QSLT_MGNT						0x12
 #define QSLT_CMD						0x13
 
-//Because we open EM for normal case, we just always insert 2*8 bytes.by wl
+/* Because we open EM for normal case, we just always insert 2*8 bytes.by wl */
 #define USB_92D_DUMMY_OFFSET		2
 #define USB_92D_DUMMY_LENGTH		(USB_92D_DUMMY_OFFSET * PACKET_OFFSET_SZ)
 #define USB_HWDESC_HEADER_LEN	(TXDESC_SIZE + USB_92D_DUMMY_LENGTH)
 
-//For 92D early mode
+/* For 92D early mode */
 #define SET_EARLYMODE_PKTNUM(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr, 0, 3, __Value)
 #define SET_EARLYMODE_LEN0(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr, 4, 12, __Value)
 #define SET_EARLYMODE_LEN1(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr, 16, 12, __Value)

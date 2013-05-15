@@ -28,9 +28,6 @@
 #define USBD_HALTED(Status) ((u32)(Status) >> 30 == 3)
 
 
-//uint usb_dvobj_init(_adapter * adapter);
-//void usb_dvobj_deinit(_adapter * adapter);
-
 u8 usbvendorrequest(struct dvobj_priv *pdvobjpriv,
 		    enum RT_USB_BREQUEST brequest,
 		    enum RT_USB_WVALUE wvalue, u8 windex, void *data,

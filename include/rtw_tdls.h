@@ -24,25 +24,25 @@
 
 #ifdef CONFIG_TDLS
 /* TDLS STA state */
-#define	TDLS_STATE_NONE				0x00000000	//default state
+#define	TDLS_STATE_NONE				0x00000000	/* default state */
 #define	TDLS_INITIATOR_STATE			0x10000000
 #define	TDLS_RESPONDER_STATE			0x20000000
 #define	TDLS_LINKED_STATE				0x40000000
 #define	TDLS_CH_SWITCH_ON_STATE		0x01000000
-#define	TDLS_PEER_AT_OFF_STATE		0x02000000	//could send pkt on target ch
+#define	TDLS_PEER_AT_OFF_STATE		0x02000000	/* could send pkt on target ch */
 #define	TDLS_AT_OFF_CH_STATE			0x04000000
-#define	TDLS_CH_SW_INITIATOR_STATE	0x08000000	//avoiding duplicated or unconditional ch. switch rsp.
-#define	TDLS_APSD_CHSW_STATE		0x00100000	//in APSD and want to setup channel switch
-#define	TDLS_PEER_SLEEP_STATE		0x00200000	//peer sta is sleeping
-#define	TDLS_SW_OFF_STATE			0x00400000	//terminate channel swithcing
-#define	TDLS_ALIVE_STATE				0x00010000	//Check if peer sta is alived.
+#define	TDLS_CH_SW_INITIATOR_STATE	0x08000000	/* avoiding duplicated or unconditional ch. switch rsp. */
+#define	TDLS_APSD_CHSW_STATE		0x00100000	/* in APSD and want to setup channel switch */
+#define	TDLS_PEER_SLEEP_STATE		0x00200000	/* peer sta is sleeping */
+#define	TDLS_SW_OFF_STATE			0x00400000	/* terminate channel swithcing */
+#define	TDLS_ALIVE_STATE				0x00010000	/* Check if peer sta is alived. */
 
 #define	TPK_RESEND_COUNT				301
 #define		CH_SWITCH_TIME				10
 #define		CH_SWITCH_TIMEOUT			30
 #define	TDLS_STAY_TIME				500
 #define	TDLS_SIGNAL_THRESH			0x20
-#define	TDLS_WATCHDOG_PERIOD		10	//Periodically sending tdls discovery request in TDLS_WATCHDOG_PERIOD * 2 sec
+#define	TDLS_WATCHDOG_PERIOD		10	/* Periodically sending tdls discovery request in TDLS_WATCHDOG_PERIOD * 2 sec */
 #define	TDLS_ALIVE_TIMER_PH1			5000
 #define	TDLS_ALIVE_TIMER_PH2			2000
 #define	TDLS_STAY_TIME				500
@@ -63,7 +63,7 @@ struct wpa_tdls_ftie {
 	u8 Anonce[WPA_NONCE_LEN]; /* Responder Nonce in TDLS */
 	u8 Snonce[WPA_NONCE_LEN]; /* Initiator Nonce in TDLS */
 	/* followed by optional elements */
-} ;
+};
 
 struct wpa_tdls_lnkid {
 	u8 ie_type; /* Link Identifier IE */
@@ -71,23 +71,24 @@ struct wpa_tdls_lnkid {
 	u8 bssid[ETH_ALEN];
 	u8 init_sta[ETH_ALEN];
 	u8 resp_sta[ETH_ALEN];
-} ;
+};
 
-static u8 TDLS_RSNIE[]={	0x01, 0x00,	//version shall be set to 1
-						0x00, 0x0f, 0xac, 0x07,	//group sipher suite
-						0x01, 0x00,	//pairwise cipher suite count
-						0x00, 0x0f, 0xac, 0x04,	//pairwise cipher suite list; CCMP only
-						0x01, 0x00,	//AKM suite count
-						0x00, 0x0f, 0xac, 0x07,	//TPK Handshake
-						0x00, 0x02,
-						//PMKID shall not be present
-						};
+static u8 TDLS_RSNIE[] = {
+	0x01, 0x00,	/* version shall be set to 1 */
+	0x00, 0x0f, 0xac, 0x07,	/* group sipher suite */
+	0x01, 0x00,	/* pairwise cipher suite count */
+	0x00, 0x0f, 0xac, 0x04,	/* pairwise cipher suite list; CCMP only */
+	0x01, 0x00,	/* AKM suite count */
+	0x00, 0x0f, 0xac, 0x07,	/* TPK Handshake */
+	0x00, 0x02,
+	/* PMKID shall not be present */
+};
 
-static u8 TDLS_WMMIE[]={0x00, 0x50, 0xf2, 0x02, 0x00, 0x01, 0x00};	//Qos info all set zero
+static u8 TDLS_WMMIE[]={0x00, 0x50, 0xf2, 0x02, 0x00, 0x01, 0x00};	/* Qos info all set zero */
 
-static u8 TDLS_EXT_CAPIE[] = {0x00, 0x00, 0x00, 0x50, 0x20};	//bit(28), bit(30), bit(37)
+static u8 TDLS_EXT_CAPIE[] = {0x00, 0x00, 0x00, 0x50, 0x20};	/* bit(28), bit(30), bit(37) */
 
-//	SRC: Supported Regulatory Classes
+/* 	SRC: Supported Regulatory Classes */
 static u8 TDLS_SRC[] = { 0x01, 0x01, 0x02, 0x03, 0x04, 0x0c, 0x16, 0x17, 0x18, 0x19, 0x1b, 0x1c, 0x1d, 0x1e, 0x20, 0x21 };
 
 void rtw_reset_tdls_info(_adapter* padapter);
@@ -104,7 +105,7 @@ void free_tdls_sta(_adapter *padapter, struct sta_info *ptdls_sta);
 #ifdef CONFIG_WFD
 void issue_tunneled_probe_req(_adapter *padapter);
 void issue_tunneled_probe_rsp(_adapter *padapter, union recv_frame *precv_frame);
-#endif //CONFIG_WFD
+#endif /* CONFIG_WFD */
 void issue_tdls_dis_req(_adapter *padapter, u8 *mac_addr);
 void issue_tdls_setup_req(_adapter *padapter, u8 *mac_addr);
 void issue_tdls_setup_rsp(_adapter *padapter, union recv_frame *precv_frame);
@@ -137,6 +138,6 @@ void rtw_build_tunneled_probe_rsp_ies(_adapter * padapter, struct xmit_frame * p
 
 int update_sgi_tdls(_adapter *padapter, struct sta_info *psta);
 u32 update_mask_tdls(_adapter *padapter, struct sta_info *psta);
-#endif //CONFIG_TDLS
+#endif /* CONFIG_TDLS */
 
 #endif

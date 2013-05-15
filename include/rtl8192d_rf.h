@@ -44,9 +44,9 @@
 
 /*--------------------------Define Parameters-------------------------------*/
 
-//
-// For RF 6052 Series
-//
+/*  */
+/*  For RF 6052 Series */
+/*  */
 #define		RF6052_MAX_TX_PWR			0x3F
 #define		RF6052_MAX_REG				0x3F
 #define		RF6052_MAX_PATH				2
@@ -68,9 +68,9 @@
 
 /*--------------------------Exported Function prototype---------------------*/
 
-//
-// RF RL6052 Series API
-//
+/*  */
+/*  RF RL6052 Series API */
+/*  */
 void		rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	Adapter,
 										u16		DataRate);
 void		rtl8192d_PHY_RF6052SetBandwidth(

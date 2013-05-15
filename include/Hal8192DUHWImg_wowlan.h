@@ -26,4 +26,4 @@
 #define DUWWImgArrayLength 24818
 extern u8 Rtl8192DUFwWWImgArray[DUWWImgArrayLength];
 
-#endif //__INC_HAL8192DU_FW_IMG_WOWLAN_H
+#endif /* __INC_HAL8192DU_FW_IMG_WOWLAN_H */

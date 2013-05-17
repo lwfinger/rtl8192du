@@ -23,7 +23,6 @@
 #include <drv_types.h>
 #include <wifi.h>
 #include <osdep_intf.h>
-#include <circ_buf.h>
 #include <usb_ops.h>
 #include <rtl8192d_hal.h>
 

@@ -28,7 +28,6 @@
 #include <ethernet.h>
 #include <usb_ops.h>
 #include <wifi.h>
-#include <circ_buf.h>
 #include <rtl8192d_hal.h>
 
 void rtl8192du_init_recvbuf(struct rtw_adapter *padapter, struct recv_buf *precvbuf)

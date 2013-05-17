@@ -55,7 +55,8 @@ static int rtw_frag_thresh = 2346;/*  */
 static int rtw_preamble = PREAMBLE_LONG;/* long, short, auto */
 static int rtw_scan_mode = 1;/* active, passive */
 static int rtw_adhoc_tx_pwr = 1;
-static int rtw_soft_ap = 0;
+static int rtw_soft_ap;
+static int debug = 1;
 /* int smart_ps = 1; */
 #ifdef CONFIG_POWER_SAVING
 static int rtw_power_mgnt = 1;
@@ -69,7 +70,9 @@ int rtw_power_mgnt = PS_MODE_ACTIVE;
 int rtw_ips_mode = IPS_NONE;
 #endif
 module_param(rtw_ips_mode, int, 0644);
+module_param(debug, int, 0644);
 MODULE_PARM_DESC(rtw_ips_mode,"The default IPS mode");
+MODULE_PARM_DESC(debug, "Set debug level (0-7) (default 1)");
 
 static int rtw_radio_enable = 1;
 static int rtw_long_retry_lmt = 7;
@@ -759,6 +762,7 @@ _func_enter_;
 #endif
 
 	registry_par->mac_phy_mode = rtw_mac_phy_mode;
+	GlobalDebugLevel = debug;
 
 #ifdef CONFIG_80211D
 	registry_par->enable80211d = (u8)rtw_80211d;

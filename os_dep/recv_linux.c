@@ -259,28 +259,27 @@ _func_enter_;
 
 	skb->len = precv_frame->u.hdr.len;
 
-	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("\n skb->head=%p skb->data=%p skb->tail=%p skb->end=%p skb->len=%d\n", skb->head, skb->data, skb->tail, skb->end, skb->len));
+	RT_TRACE(_module_recv_osdep_c_, _drv_info_,
+		 ("\n skb->head=%p skb->data=%p skb->tail=%p skb->end=%p skb->len=%d\n",
+		 skb->head, skb->data, skb_tail_pointer(skb),
+		 skb_end_pointer(skb), skb->len));
 
-	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
-	{
-		struct sk_buff *pskb2=NULL;
+	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
+		struct sk_buff *pskb2 = NULL;
 		struct sta_info *psta = NULL;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 		struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 		int bmcast = IS_MCAST(pattrib->dst);
 
-		if (_rtw_memcmp(pattrib->dst, myid(&padapter->eeprompriv), ETH_ALEN)==false)
-		{
-			if (bmcast)
-			{
+		if (_rtw_memcmp(pattrib->dst, myid(&padapter->eeprompriv), ETH_ALEN)==false) {
+			if (bmcast) {
 				psta = rtw_get_bcmc_stainfo(padapter);
 				pskb2 = skb_clone(skb, GFP_ATOMIC);
 			} else {
 				psta = rtw_get_stainfo(pstapriv, pattrib->dst);
 			}
 
-			if (psta)
-			{
+			if (psta) {
 				struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
 
 				skb->dev = pnetdev;

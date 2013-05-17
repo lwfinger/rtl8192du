@@ -28,13 +28,11 @@
 #define	_no_debug_			0
 #define _drv_emerg_			1
 #define _drv_alert_			2
-#define _drv_crit_			3
-#define _drv_err_			4
-#define	_drv_warning_		5
-#define _drv_notice_			6
-#define _drv_info_			7
-#define _drv_dump_			8
-#define	_drv_debug_		9
+#define _drv_err_			3
+#define	_drv_warning_			4
+#define _drv_notice_			5
+#define _drv_info_			6
+#define	_drv_debug_			7
 
 
 #define _module_rtl871x_xmit_c_		BIT(0)
@@ -158,84 +156,74 @@
 
 #undef	_dbgdump
 
-#ifdef CONFIG_DEBUG_RTL871X
-
 #ifndef _RTL871X_DEBUG_C_
 	extern u32 GlobalDebugLevel;
 	extern u64 GlobalDebugComponents;
 #endif
 
-#define _dbgdump	printk
+#define _dbgdump	pr_info
 
-#endif /* CONFIG_DEBUG_RTL871X */
-
-
-#if	defined (_dbgdump) && defined (_MODULE_DEFINE_)
-
-		#undef RT_TRACE
-		#define RT_TRACE(_Comp, _Level, Fmt)\
-		do {\
-			if ((_Comp & GlobalDebugComponents) && (_Level <= GlobalDebugLevel)) {\
-				_dbgdump("%s [0x%08x,%d]", RTL871X_MODULE_NAME, (unsigned int)_Comp, _Level);\
-				_dbgdump Fmt;\
-			}\
-		}while (0)
-
+#if defined (_dbgdump) && defined (_MODULE_DEFINE_)
+	#undef RT_TRACE
+	#define RT_TRACE(_Comp, _Level, Fmt)				\
+	do {								\
+		if (_Level <= GlobalDebugLevel) {			\
+			_dbgdump("%s [0x%08x,%d]", RTL871X_MODULE_NAME,	\
+				 (unsigned int)_Comp, _Level);		\
+			_dbgdump Fmt;					\
+		}							\
+	} while (0)
 #endif
 
+#if defined (_dbgdump)
+	#undef  _func_enter_
+	#define _func_enter_						\
+	do {								\
+		if (GlobalDebugLevel >= _drv_debug_) {			\
+			_dbgdump("\n %s : %s enters at %d\n",		\
+				 RTL871X_MODULE_NAME, __func__, __LINE__);\
+		}						\
+	} while (0)
 
-#if	defined (_dbgdump)
+	#undef  _func_exit_
+	#define _func_exit_						\
+	do {								\
+		if (GlobalDebugLevel >= _drv_debug_) {			\
+			_dbgdump("\n %s : %s exits at %d\n",		\
+				 RTL871X_MODULE_NAME, __func__, __LINE__); \
+		}							\
+	} while (0)
 
-		#undef  _func_enter_
-		#define _func_enter_ \
-		do {	\
-			if (GlobalDebugLevel >= _drv_debug_) \
-			{																	\
-				_dbgdump("\n %s : %s enters at %d\n", RTL871X_MODULE_NAME, __func__, __LINE__);\
-			}		\
-		} while (0)
-
-		#undef  _func_exit_
-		#define _func_exit_ \
-		do {	\
-			if (GlobalDebugLevel >= _drv_debug_) \
-			{																	\
-				_dbgdump("\n %s : %s exits at %d\n", RTL871X_MODULE_NAME, __func__, __LINE__); \
-			}	\
-		} while (0)
-
-		#undef RT_PRINT_DATA
-		#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen)			\
-			if (((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
-			{									\
-				int __i;								\
-				u8	*ptr = (u8 *)_HexData;				\
-				_dbgdump("Rtl871x: ");						\
-				_dbgdump(_TitleString);						\
-				for (__i=0; __i<(int)_HexDataLen; __i++)				\
-				{								\
-					_dbgdump("%02X%s", ptr[__i], (((__i + 1) % 4) == 0)?"  ":" ");	\
-					if (((__i + 1) % 16) == 0)	_dbgdump("\n");			\
-				}								\
-				_dbgdump("\n");							\
+	#undef RT_PRINT_DATA
+	#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData,	\
+			      _HexDataLen)				\
+		if (((_Comp) & GlobalDebugComponents) &&		\
+		    (_Level <= GlobalDebugLevel)) {			\
+			int __i;					\
+			u8 *ptr = (u8 *)_HexData;			\
+			_dbgdump("Rtl871x: ");				\
+				_dbgdump(_TitleString);			\
+				for (__i = 0; __i < (int)_HexDataLen; __i++) {\
+					_dbgdump("%02X%s", ptr[__i],	\
+						 (((__i + 1) % 4) == 0) ?\
+						 " " : " ");	\
+					if (((__i + 1) % 16) == 0)	\
+						_dbgdump("\n");		\
+				}					\
+				_dbgdump("\n");				\
 			}
 #endif
 
-
-#ifdef CONFIG_DEBUG_RTL819X
-
 #undef	_dbgdump
 
-#define _dbgdump	printk
-
-#endif /* CONFIG_DEBUG_RTL819X */
+#define _dbgdump	pr_info
 
 extern u32 GlobalDebugLevel;
 #define LOG_LEVEL(level, ...)\
 	do {\
-		if (level <= GlobalDebugLevel) {\
-			pr_debug(__VA_ARGS__);\
-		}\
+		if (level <= GlobalDebugLevel) {			\
+			pr_debug(__VA_ARGS__);				\
+		}							\
 	} while (0)
 
 #define DBG_8192D(...) LOG_LEVEL(_drv_debug_ ,  __VA_ARGS__)

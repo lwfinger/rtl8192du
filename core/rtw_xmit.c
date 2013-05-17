@@ -770,7 +770,7 @@ _func_enter_;
 				 ("xmitframe_addmic: pattrib->last_txcmdsz =%d!!!\n",
 				 pattrib->last_txcmdsz));
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_,
-				 ("xmitframe_addmic: mic[0]= 0x%.2x , mic[1]= 0x%.2x , mic[2]= 0x%.2x , mic[3]= 0x%.2x\n\mic[4]= 0x%.2x , mic[5]= 0x%.2x , mic[6]= 0x%.2x , mic[7]= 0x%.2x !!!!\n",
+				 ("xmitframe_addmic: mic[0]= 0x%.2x , mic[1]= 0x%.2x , mic[2]= 0x%.2x , mic[3]= 0x%.2x\nmic[4]= 0x%.2x , mic[5]= 0x%.2x , mic[6]= 0x%.2x , mic[7]= 0x%.2x !!!!\n",
 				 mic[0], mic[1], mic[2], mic[3], mic[4], mic[5],
 				 mic[6], mic[7]));
 			/* add mic code  and add the mic code length in last_txcmdsz */

@@ -9484,28 +9484,25 @@ static void process_80211d(struct rtw_adapter *adapt,
 		}
 		chplan_ap.Len = i;
 
-#ifdef CONFIG_DEBUG_RTL871X
 		i = 0;
-		printk("%s: AP[%s] channel plan {", __func__, bssid->Ssid.Ssid);
+		DBG_8192D("%s: AP[%s] channel plan {", __func__,
+			  bssid->Ssid.Ssid);
 		while ((i < chplan_ap.Len) && (chplan_ap.Channel[i] != 0)) {
-			printk("%02d,", chplan_ap.Channel[i]);
+			DBG_8192D("%02d,", chplan_ap.Channel[i]);
 			i++;
 		}
-		printk("}\n");
-#endif
+		DBG_8192D("}\n");
 
 		memcpy(chplan_sta, pmlmeext->channel_set, sizeof(chplan_sta));
-#ifdef CONFIG_DEBUG_RTL871X
 		i = 0;
-		printk("%s: STA channel plan {", __func__);
+		DBG_8192D("%s: STA channel plan {", __func__);
 		while ((i < MAX_CHANNEL_NUM) && (chplan_sta[i].ChannelNum != 0)) {
-			printk("%02d(%c),", chplan_sta[i].ChannelNum,
+			DBG_8192D("%02d(%c),", chplan_sta[i].ChannelNum,
 			       chplan_sta[i].ScanType ==
 			       SCAN_PASSIVE ? 'p' : 'a');
 			i++;
 		}
-		printk("}\n");
-#endif
+		DBG_8192D("}\n");
 
 		memset(pmlmeext->channel_set, 0, sizeof(pmlmeext->channel_set));
 		chplan_new = pmlmeext->channel_set;
@@ -9650,17 +9647,15 @@ static void process_80211d(struct rtw_adapter *adapt,
 
 		pmlmeext->update_channel_plan_by_ap_done = 1;
 
-#ifdef CONFIG_DEBUG_RTL871X
 		k = 0;
-		printk("%s: new STA channel plan {", __func__);
+		DBG_8192D("%s: new STA channel plan {", __func__);
 		while ((k < MAX_CHANNEL_NUM) && (chplan_new[k].ChannelNum != 0)) {
-			pr_info("%02d(%c),", chplan_new[k].ChannelNum,
+			DBG_8192D("%02d(%c),", chplan_new[k].ChannelNum,
 			        chplan_new[k].ScanType ==
 			        SCAN_PASSIVE ? 'p' : 'c');
 			k++;
 		}
-		printk("}\n");
-#endif
+		DBG_8192D("}\n");
 	}
 
 	/*  If channel is used by AP, set channel scan type to active */

@@ -25,7 +25,7 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <mlme_osdep.h>
-
+                               
 void rtw_join_timeout_handler (void *FunctionContext)
 {
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
@@ -72,9 +72,6 @@ void rtw_init_mlme_timer(struct rtw_adapter *padapter)
 	#endif
 }
 
-extern void rtw_indicate_wx_assoc_event(struct rtw_adapter *padapter);
-extern void rtw_indicate_wx_disassoc_event(struct rtw_adapter *padapter);
-
 void rtw_os_indicate_connect(struct rtw_adapter *adapter)
 {
 
@@ -93,7 +90,6 @@ _func_enter_;
 _func_exit_;
 }
 
-extern void indicate_wx_scan_complete_event(struct rtw_adapter *padapter);
 void rtw_os_indicate_scan_done(struct rtw_adapter *padapter, bool aborted)
 {
 #ifdef CONFIG_IOCTL_CFG80211

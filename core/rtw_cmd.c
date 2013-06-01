@@ -25,9 +25,11 @@
 #include <recv_osdep.h>
 #include <cmd_osdep.h>
 #include <mlme_osdep.h>
+#include <rtw_cmd.h>
 #ifdef CONFIG_BR_EXT
 #include <rtw_br_ext.h>
 #endif /* CONFIG_BR_EXT */
+#include <usb_osintf.h>
 /*
 Caller and the rtw_cmd_thread can protect cmd_q by spin_lock.
 No irqsave is necessary.
@@ -257,7 +259,7 @@ _func_enter_;
 _func_exit_;
 }
 
-int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
+static int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 {
 	u8 allow = false; /* set to true to allow enqueuing cmd when hw_init_completed is false */
 
@@ -1868,7 +1870,7 @@ static void traffic_status_watchdog(struct rtw_adapter *padapter)
 	pmlmepriv->LinkDetectInfo.bHigherBusyTxTraffic = bHigherBusyTxTraffic;
 }
 
-void dynamic_chk_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
+static void dynamic_chk_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
 {
 	struct mlme_priv *pmlmepriv;
 
@@ -1906,7 +1908,7 @@ void dynamic_chk_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
 
 #ifdef CONFIG_LPS
 
-void lps_ctrl_wk_hdl(struct rtw_adapter *padapter, u8 lps_ctrl_type)
+static void lps_ctrl_wk_hdl(struct rtw_adapter *padapter, u8 lps_ctrl_type)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
@@ -2044,7 +2046,7 @@ _func_exit_;
 }
 #endif
 
-void power_saving_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
+static void power_saving_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
 {
 	 rtw_ps_processor(padapter);
 }
@@ -2548,7 +2550,7 @@ exit:
 _func_exit_;
 }
 
-void rtw_getrttbl_cmd_cmdrsp_callback(struct rtw_adapter *padapter,  struct cmd_obj *pcmd)
+static void rtw_getrttbl_cmd_cmdrsp_callback(struct rtw_adapter *padapter,  struct cmd_obj *pcmd)
 {
 _func_enter_;
 

@@ -50,6 +50,19 @@
 #define TARGET_CHNL_NUM_2G_5G	59
 #define CV_CURVE_CNT			64
 
+extern atomic_t GlobalMutexForGlobalAdapterList;
+/* add mutex to solve the problem that reading efuse and power on/fw download do */
+/* on the same time */
+extern atomic_t GlobalMutexForMac0_2G_Mac1_5G;
+extern atomic_t GlobalMutexForPowerAndEfuse;
+extern atomic_t GlobalMutexForPowerOnAndPowerOff;
+#ifdef CONFIG_DUALMAC_CONCURRENT
+extern atomic_t GlobalCounterForMutex;
+extern bool GlobalFirstConfigurationForNormalChip;
+#endif
+
+
+
 static u32	   RF_REG_FOR_5G_SWCHNL_NORMAL[MAX_RF_IMR_INDEX_NORMAL]={0,0x2f,0x30,0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0x0};
 
 static u8	RF_REG_for_C_CUT_5G[RF_REG_NUM_for_C_CUT_5G] =

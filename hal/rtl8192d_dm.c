@@ -48,8 +48,6 @@ u32 EDCAParam[maxAP][3] =
 	{0x5ea42b, 0x5ea42b, 0x5ea42b}, /* unknown AP */
 };
 
-extern atomic_t GlobalMutexForGlobalAdapterList;
-
 /*-----------------------------------------------------------------------------
  * Function:	dm_DIGInit()
  *

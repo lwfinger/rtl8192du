@@ -692,7 +692,8 @@ extern struct wlan_network* _rtw_alloc_network(struct mlme_priv *pmlmepriv);
 
 extern void _rtw_free_network(struct mlme_priv *pmlmepriv, struct wlan_network *pnetwork, u8 isfreeall);
 extern void _rtw_free_network_nolock(struct mlme_priv *pmlmepriv, struct wlan_network *pnetwork);
-
+extern void rtw_indicate_wx_assoc_event(struct rtw_adapter *padapter);
+extern void rtw_indicate_wx_disassoc_event(struct rtw_adapter *padapter);
 
 extern struct wlan_network* _rtw_find_network(struct __queue *scanned_queue, u8 *addr);
 

@@ -40,5 +40,6 @@ u16 rtw_get_cur_max_rate(struct rtw_adapter *adapter);
 int rtw_set_scan_mode(struct rtw_adapter *adapter, enum RT_SCAN_TYPE scan_mode);
 int rtw_set_channel_plan(struct rtw_adapter *adapter, u8 channel_plan);
 int rtw_set_country(struct rtw_adapter *adapter, const char *country_code);
+int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname);
 
 #endif

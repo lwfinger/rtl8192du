@@ -28,7 +28,7 @@
 #include <mlme_osdep.h>
 #include <recv_osdep.h>
 
-struct mlme_handler mlme_sta_tbl[] = {
+static struct mlme_handler mlme_sta_tbl[] = {
 	{WIFI_ASSOCREQ, "OnAssocReq", &OnAssocReq},
 	{WIFI_ASSOCRSP, "OnAssocRsp", &OnAssocRsp},
 	{WIFI_REASSOCREQ, "OnReAssocReq", &OnAssocReq},
@@ -50,7 +50,7 @@ struct mlme_handler mlme_sta_tbl[] = {
 };
 
 #ifdef _CONFIG_NATIVEAP_MLME_
-struct mlme_handler mlme_ap_tbl[] = {
+static struct mlme_handler mlme_ap_tbl[] = {
 	{WIFI_ASSOCREQ, "OnAssocReq", &OnAssocReq},
 	{WIFI_ASSOCRSP, "OnAssocRsp", &OnAssocRsp},
 	{WIFI_REASSOCREQ, "OnReAssocReq", &OnAssocReq},
@@ -72,7 +72,7 @@ struct mlme_handler mlme_ap_tbl[] = {
 };
 #endif
 
-struct action_handler OnAction_tbl[] = {
+static struct action_handler OnAction_tbl[] = {
 	{RTW_WLAN_CATEGORY_SPECTRUM_MGMT, "ACTION_SPECTRUM_MGMT",
 	 on_action_spct},
 	{RTW_WLAN_CATEGORY_QOS, "ACTION_QOS", &OnAction_qos},
@@ -88,7 +88,7 @@ struct action_handler OnAction_tbl[] = {
 	{RTW_WLAN_CATEGORY_P2P, "ACTION_P2P", &OnAction_p2p},
 };
 
-u8 null_addr[ETH_ALEN] = { 0, 0, 0, 0, 0, 0 };
+static u8 null_addr[ETH_ALEN] = { 0, 0, 0, 0, 0, 0 };
 
 /**************************************************
 OUI definitions for the vendor specific IE
@@ -704,7 +704,7 @@ void mgt_dispatcher(struct rtw_adapter *adapt, union recv_frame *precv_frame)
 }
 
 #ifdef CONFIG_P2P
-u32 p2p_listen_state_process(struct rtw_adapter *adapt, unsigned char *da)
+static u32 p2p_listen_state_process(struct rtw_adapter *adapt, unsigned char *da)
 {
 	bool response = true;
 
@@ -2170,9 +2170,9 @@ unsigned int OnAtim(struct rtw_adapter *adapt, union recv_frame *precv_frame)
 	return _SUCCESS;
 }
 
-unsigned int on_action_spct_ch_switch(struct rtw_adapter *adapt,
-				      struct sta_info *psta, u8 *ies,
-				      uint ies_len)
+static unsigned int on_action_spct_ch_switch(struct rtw_adapter *adapt,
+					     struct sta_info *psta, u8 *ies,
+					     uint ies_len)
 {
 	unsigned int ret = _FAIL;
 	struct mlme_ext_priv *mlmeext = &adapt->mlmeextpriv;

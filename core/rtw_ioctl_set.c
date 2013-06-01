@@ -27,8 +27,7 @@
 #include <hal_intf.h>
 #include <usb_osintf.h>
 #include <usb_ops.h>
-
-extern void indicate_wx_scan_complete_event(struct rtw_adapter *padapter);
+#include <mlme_osdep.h>
 
 #define IS_MAC_ADDRESS_BROADCAST(addr) \
 (\

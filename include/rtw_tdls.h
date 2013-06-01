@@ -139,5 +139,6 @@ void rtw_build_tunneled_probe_rsp_ies(_adapter * padapter, struct xmit_frame * p
 int update_sgi_tdls(_adapter *padapter, struct sta_info *psta);
 u32 update_mask_tdls(_adapter *padapter, struct sta_info *psta);
 #endif /* CONFIG_TDLS */
+s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe);
 
 #endif

@@ -30,9 +30,9 @@
 #include <wifi.h>
 #include <wlan_bssdef.h>
 #include <rtw_ioctl_set.h>
-
-extern void indicate_wx_scan_complete_event(struct rtw_adapter *padapter);
-extern u8 rtw_do_join(struct rtw_adapter *padapter);
+#include <mlme_osdep.h>
+#include <usb_osintf.h>
+#include <rtw_mlme.h>
 
 #ifdef CONFIG_DISABLE_MCS13TO15
 extern unsigned char MCS_rate_2R_MCS13TO15_OFF[16];
@@ -102,7 +102,7 @@ exit:
 	return res;
 }
 
-void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv)
+static void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv)
 {
 	_rtw_spinlock_free(&pmlmepriv->lock);
 	_rtw_spinlock_free(&(pmlmepriv->free_bss_pool.lock));
@@ -476,7 +476,7 @@ void rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
 	_func_exit_;
 }
 
-int rtw_enqueue_network(struct __queue *queue, struct wlan_network *pnetwork)
+static int rtw_enqueue_network(struct __queue *queue, struct wlan_network *pnetwork)
 {
 	int res;
 	_func_enter_;
@@ -494,8 +494,8 @@ static struct wlan_network *rtw_dequeue_network(struct __queue *queue)
 	return pnetwork;
 }
 
-struct wlan_network *rtw_alloc_network(struct mlme_priv *pmlmepriv)
-{				/* struct __queue *free_queue) */
+static struct wlan_network *rtw_alloc_network(struct mlme_priv *pmlmepriv)
+{
 	struct wlan_network *pnetwork;
 	_func_enter_;
 	pnetwork = _rtw_alloc_network(pmlmepriv);
@@ -503,8 +503,8 @@ struct wlan_network *rtw_alloc_network(struct mlme_priv *pmlmepriv)
 	return pnetwork;
 }
 
-void rtw_free_network(struct mlme_priv *pmlmepriv,
-		      struct wlan_network *pnetwork, u8 is_freeall)
+static void rtw_free_network(struct mlme_priv *pmlmepriv,
+			     struct wlan_network *pnetwork, u8 is_freeall)
 {
 	_func_enter_;
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_,
@@ -514,8 +514,8 @@ void rtw_free_network(struct mlme_priv *pmlmepriv,
 	_func_exit_;
 }
 
-void rtw_free_network_nolock(struct mlme_priv *pmlmepriv,
-			     struct wlan_network *pnetwork)
+static void rtw_free_network_nolock(struct mlme_priv *pmlmepriv,
+				    struct wlan_network *pnetwork)
 {
 	_func_enter_;
 	/* RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("rtw_free_network==> ssid = %s\n\n" , pnetwork->network.Ssid.Ssid)); */
@@ -848,8 +848,8 @@ exit:
 	_func_exit_;
 }
 
-void rtw_add_network(struct rtw_adapter *adapter,
-		     struct wlan_bssid_ex *pnetwork)
+static void rtw_add_network(struct rtw_adapter *adapter,
+			    struct wlan_bssid_ex *pnetwork)
 {
 	struct mlme_priv *pmlmepriv =
 	    &(((struct rtw_adapter *)adapter)->mlmepriv);
@@ -877,8 +877,8 @@ void rtw_add_network(struct rtw_adapter *adapter,
 /* 			   (3) WMM */
 /* 			   (4) HT */
 /*                      (5) others */
-int rtw_is_desired_network(struct rtw_adapter *adapter,
-			   struct wlan_network *pnetwork)
+static int rtw_is_desired_network(struct rtw_adapter *adapter,
+				  struct wlan_network *pnetwork)
 {
 	struct security_priv *psecuritypriv = &adapter->securitypriv;
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
@@ -1252,14 +1252,13 @@ void rtw_free_assoc_resources(struct rtw_adapter *adapter,
 				     TDLS_RS_RCR);
 			rtw_reset_tdls_info(adapter);
 			rtw_free_all_stainfo(adapter);
-			spin_lock_bh(&(pstapriv->sta_hash_lock));
 		} else
 #endif /* CONFIG_TDLS */
 		{
 			spin_lock_bh(&(pstapriv->sta_hash_lock));
 			rtw_free_stainfo(adapter, psta);
+			spin_unlock_bh(&(pstapriv->sta_hash_lock));
 		}
-		spin_unlock_bh(&(pstapriv->sta_hash_lock));
 	}
 
 	if (check_fwstate
@@ -2288,7 +2287,6 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 	    && (check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE)
 		== true)) {
 		/*  expire NAT2.5 entry */
-		void nat25_db_expire(struct rtw_adapter *priv);
 		nat25_db_expire(adapter);
 
 		if (adapter->pppoe_connection_in_progress > 0) {
@@ -2403,17 +2401,14 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv,
 
 	if (updated) {
 		DBG_8192D("[by_bssid:%u][assoc_ssid:%s]"
-#ifdef CONFIG_LAYER2_ROAMING
-			  "[to_roaming:%u] "
-#endif
 			  "new candidate: %s(%pM) rssi:%d\n",
 			  pmlmepriv->assoc_by_bssid, pmlmepriv->assoc_ssid.Ssid,
-#ifdef CONFIG_LAYER2_ROAMING
-			  rtw_to_roaming(adapter),
-#endif
 			  (*candidate)->network.Ssid.Ssid,
 			  (*candidate)->network.MacAddress,
 			  (int)(*candidate)->network.Rssi);
+#ifdef CONFIG_LAYER2_ROAMING
+		DBG_8192D("[to_roaming:%u]\n", rtw_to_roaming(adapter));
+#endif
 	}
 
 exit:

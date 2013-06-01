@@ -31,7 +31,7 @@ atomic_t GlobalMutexForGlobalAdapterList = ATOMIC_INIT(0);
 atomic_t GlobalMutexForMac0_2G_Mac1_5G = ATOMIC_INIT(0);
 atomic_t GlobalMutexForPowerAndEfuse = ATOMIC_INIT(0);
 atomic_t GlobalMutexForPowerOnAndPowerOff = ATOMIC_INIT(0);
-atomic_t GlobalMutexForFwDownload = ATOMIC_INIT(0);
+static atomic_t GlobalMutexForFwDownload = ATOMIC_INIT(0);
 #ifdef CONFIG_DUALMAC_CONCURRENT
 atomic_t GlobalCounterForMutex = ATOMIC_INIT(0);
 bool GlobalFirstConfigurationForNormalChip = true;
@@ -192,9 +192,7 @@ exit:
 	return ret;
 }
 
-int _FWFreeToGo_92D(
-		struct rtw_adapter *		Adapter
-	)
+static int _FWFreeToGo_92D(struct rtw_adapter *Adapter)
 {
 	u32			counter = 0;
 	u32			value32;
@@ -256,7 +254,7 @@ rtl8192d_FirmwareSelfReset(
 /*  */
 /*  description :polling fw ready */
 /*  */
-int _FWInit(struct rtw_adapter *Adapter)
+static int _FWInit(struct rtw_adapter *Adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u32			counter = 0;
@@ -2148,7 +2146,8 @@ rtl8192d_Efuse_WordEnableDataWrite(	struct rtw_adapter *	pAdapter,
 	}
 	return badworden;
 }
-void hal_notch_filter_8192d(struct rtw_adapter *adapter, bool enable)
+
+static void hal_notch_filter_8192d(struct rtw_adapter *adapter, bool enable)
 {
 	if (enable) {
 		DBG_8192D("Enable notch filter\n");

@@ -1043,7 +1043,7 @@ enum rtw_h2c_cmd
 #define _SETRFREG_CMD_		_WRITE_RFREG_CMD_
 
 #ifdef _RTW_CMD_C_
-struct _cmd_callback	rtw_cmd_callback[] =
+static struct _cmd_callback	rtw_cmd_callback[] =
 {
 	{GEN_CMD_CODE(_READ_MACREG), NULL}, /*0*/
 	{GEN_CMD_CODE(_WRITE_MACREG), NULL},

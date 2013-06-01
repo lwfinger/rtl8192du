@@ -362,7 +362,7 @@ enum WIFI_REG_DOMAIN {
 #define SetSeqNum(pbuf, num) \
 	do {    \
 		*(unsigned short *)((SIZE_PTR)(pbuf) + 22) = \
-			((*(unsigned short *)((SIZE_PTR)(pbuf) + 22)) & le16_to_cpu((unsigned short)~0xfff0)) | \
+			((*(unsigned short *)((SIZE_PTR)(pbuf) + 22)) & le16_to_cpu((unsigned short)0x000f)) | \
 			le16_to_cpu((unsigned short)(0xfff0 & (num << 4))); \
 	} while (0)
 
@@ -1128,5 +1128,13 @@ enum P2P_PS_MODE
 #define IP_MCAST_MAC(mac)	((mac[0]==0x01)&&(mac[1]==0x00)&&(mac[2]==0x5e))
 #define ICMPV6_MCAST_MAC(mac)	((mac[0]==0x33)&&(mac[1]==0x33)&&(mac[2]!=0xff))
 extern unsigned char REALTEK_96B_IE[6];
+extern unsigned char MCS_rate_2R[16];
+#ifdef CONFIG_DISABLE_MCS13TO15
+extern unsigned char MCS_rate_2R_MCS13TO15_OFF[16];
+#endif /* CONFIG_DISABLE_MCS13TO15 */
+extern unsigned char MCS_rate_1R[16];
+extern unsigned char RTW_WPA_OUI[];
+extern unsigned char WPA_TKIP_CIPHER[4];
+extern unsigned char RSN_TKIP_CIPHER[4];
 
 #endif /*  _WIFI_H_ */

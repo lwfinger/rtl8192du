@@ -26,9 +26,7 @@
 #include <drv_types.h>
 #include <recv_osdep.h>
 #include <linux/vmalloc.h>
-
-#define RT_TAG	'1178'
-
+#include <rtw_ioctl_set.h>
 /*
 * Translate the OS dependent @param error_code to OS independent RTW_STATUS_CODE
 * @return: one of RTW_STATUS_CODE
@@ -188,22 +186,22 @@ void	_rtw_spinlock_free(spinlock_t *plock)
 {
 }
 
-void	_rtw_spinlock(spinlock_t *plock)
+inline void	_rtw_spinlock(spinlock_t *plock)
 {
 	spin_lock(plock);
 }
 
-void	_rtw_spinunlock(spinlock_t *plock)
+inline void	_rtw_spinunlock(spinlock_t *plock)
 {
 	spin_unlock(plock);
 }
 
-void	_rtw_spinlock_ex(spinlock_t *plock)
+inline void	_rtw_spinlock_ex(spinlock_t *plock)
 {
 	spin_lock(plock);
 }
 
-void	_rtw_spinunlock_ex(spinlock_t *plock)
+inline void	_rtw_spinunlock_ex(spinlock_t *plock)
 {
 	spin_unlock(plock);
 }
@@ -309,7 +307,7 @@ void rtw_udelay_os(int us)
 }
 #endif
 
-void rtw_yield_os()
+void rtw_yield_os(void)
 {
 	yield();
 }
@@ -324,7 +322,7 @@ static android_suspend_lock_t rtw_suspend_lock ={
 };
 #endif
 
-inline void rtw_suspend_lock_init()
+inline void rtw_suspend_lock_init(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock_init(&rtw_suspend_lock, WAKE_LOCK_SUSPEND, RTW_SUSPEND_LOCK_NAME);
@@ -333,7 +331,7 @@ inline void rtw_suspend_lock_init()
 	#endif
 }
 
-inline void rtw_suspend_lock_uninit()
+inline void rtw_suspend_lock_uninit(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock_destroy(&rtw_suspend_lock);
@@ -342,7 +340,7 @@ inline void rtw_suspend_lock_uninit()
 	#endif
 }
 
-inline void rtw_lock_suspend()
+inline void rtw_lock_suspend(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock(&rtw_suspend_lock);
@@ -351,7 +349,7 @@ inline void rtw_lock_suspend()
 	#endif
 }
 
-inline void rtw_unlock_suspend()
+inline void rtw_unlock_suspend(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_unlock(&rtw_suspend_lock);
@@ -445,7 +443,7 @@ static int closeFile(struct file *fp)
 	return 0;
 }
 
-static int readFile(struct file *fp,char *buf,int len)
+static int readFile(struct file *fp,char __user *buf,int len)
 {
 	int rlen=0, sum=0;
 
@@ -465,7 +463,7 @@ static int readFile(struct file *fp,char *buf,int len)
 	return  sum;
 }
 
-static int writeFile(struct file *fp,char *buf,int len)
+static int writeFile(struct file *fp,char __user *buf,int len)
 {
 	int wlen=0, sum=0;
 
@@ -473,7 +471,7 @@ static int writeFile(struct file *fp,char *buf,int len)
 		return -EPERM;
 
 	while (sum<len) {
-		wlen=fp->f_op->write(fp,buf+sum,len-sum, &fp->f_pos);
+		wlen=fp->f_op->write(fp, buf+sum, len-sum, &fp->f_pos);
 		if (wlen>0)
 			sum+=wlen;
 		else if (0 != wlen)
@@ -495,7 +493,7 @@ static int isFileReadable(char *path)
 	struct file *fp;
 	int ret = 0;
 	mm_segment_t oldfs;
-	char buf;
+	char __user buf;
 
 	fp=filp_open(path, O_RDONLY, 0);
 	if (IS_ERR(fp)) {
@@ -520,7 +518,7 @@ static int isFileReadable(char *path)
 * @param sz how many bytes to read at most
 * @return the byte we've read, or Linux specific error code
 */
-static int retriveFromFile(char *path, u8* buf, u32 sz)
+static int retriveFromFile(char *path, u8 __user *buf, u32 sz)
 {
 	int ret =-1;
 	mm_segment_t oldfs;
@@ -554,7 +552,7 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 * @param sz how many bytes to write at most
 * @return the byte we've written, or Linux specific error code
 */
-static int storeToFile(char *path, u8* buf, u32 sz)
+static int storeToFile(char *path, u8 __user *buf, u32 sz)
 {
 	int ret =0;
 	mm_segment_t oldfs;
@@ -601,7 +599,7 @@ int rtw_is_file_readable(char *path)
 * @param sz how many bytes to read at most
 * @return the byte we've read
 */
-int rtw_retrive_from_file(char *path, u8* buf, u32 sz)
+int rtw_retrive_from_file(char *path, u8 __user *buf, u32 sz)
 {
 	int ret =retriveFromFile(path, buf, sz);
 	return ret>=0?ret:0;
@@ -614,7 +612,7 @@ int rtw_retrive_from_file(char *path, u8* buf, u32 sz)
 * @param sz how many bytes to write at most
 * @return the byte we've written
 */
-int rtw_store_to_file(char *path, u8* buf, u32 sz)
+int rtw_store_to_file(char *path, u8 __user *buf, u32 sz)
 {
 	int ret =storeToFile(path, buf, sz);
 	return ret>=0?ret:0;

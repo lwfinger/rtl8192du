@@ -30,13 +30,6 @@
 #include <usb_osintf.h>
 #include <usb_hal.h>
 
-#ifdef CONFIG_80211N_HT
-extern int rtw_ht_enable;
-extern int rtw_cbw40_enable;
-extern int rtw_ampdu_enable;/* for enable tx_ampdu */
-#endif
-
-extern int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
 static int rtw_resume(struct usb_interface *intf);
 int rtw_resume_process(struct rtw_adapter *padapter);
@@ -177,7 +170,7 @@ static struct usb_device_id rtw_usb_id_tbl[] ={
 };
 MODULE_DEVICE_TABLE(usb, rtw_usb_id_tbl);
 
-int const rtw_usb_id_len = sizeof(rtw_usb_id_tbl) / sizeof(struct usb_device_id);
+static int const rtw_usb_id_len = sizeof(rtw_usb_id_tbl) / sizeof(struct usb_device_id);
 
 static struct specific_device_id specific_device_id_tbl[] = {
 	{.idVendor=USB_VENDER_ID_REALTEK, .idProduct=0x8177, .flags=SPEC_DEV_ID_DISABLE_HT},/* 8188cu 1*1 dongole, (b/g mode only) */
@@ -198,7 +191,7 @@ static struct usb_device_id rtl8192d_usb_id_tbl[] ={
 	{}	/* Terminating entry */
 };
 
-struct rtw_usb_drv rtl8192d_usb_drv = {
+static struct rtw_usb_drv rtl8192d_usb_drv = {
 	.usbdrv.name = (char*)"rtl8192du",
 	.usbdrv.probe = rtw_drv_init,
 	.usbdrv.disconnect = rtw_dev_remove,
@@ -973,8 +966,9 @@ error_exit:
 }
 #endif
 
-struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
-	struct usb_interface *pusb_intf, const struct usb_device_id *pdid)
+static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
+					    struct usb_interface *pusb_intf,
+					    const struct usb_device_id *pdid)
 {
 	struct rtw_adapter *padapter = NULL;
 	struct net_device *pnetdev = NULL;
@@ -1200,7 +1194,7 @@ static void rtw_usb_if1_deinit(struct rtw_adapter *if1)
  *        We accept the new device by returning 0.
 */
 
-struct rtw_adapter  *rtw_sw_export = NULL;
+static struct rtw_adapter  *rtw_sw_export = NULL;
 
 static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device_id *did)
 {

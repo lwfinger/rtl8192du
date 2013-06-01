@@ -25,6 +25,7 @@
 #include <wifi.h>
 #include <osdep_intf.h>
 #include <linux/ip.h>
+#include <usb_osintf.h>
 
 #include <usb_ops.h>
 
@@ -230,7 +231,7 @@ _func_exit_;
 	return res;
 }
 
-void  rtw_mfree_xmit_priv_lock(struct xmit_priv *pxmitpriv)
+static void  rtw_mfree_xmit_priv_lock(struct xmit_priv *pxmitpriv)
 {
 	_rtw_spinlock_free(&pxmitpriv->lock);
 	_rtw_free_sema(&pxmitpriv->xmit_sema);
@@ -2134,11 +2135,10 @@ _func_exit_;
 }
 
 #ifdef CONFIG_BR_EXT
-int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
+static int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 {
 	struct sk_buff *skb = *pskb;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-	void dhcp_flag_bcast(struct rtw_adapter *priv, struct sk_buff *skb);
 	int res, is_vlan_tag = 0, i, do_nat25 = 1;
 	unsigned short vlan_hdr = 0;
 	void *br_port = NULL;
@@ -2174,8 +2174,6 @@ int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 
 		if (*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)) {
 			if (memcmp(padapter->scdb_mac, skb->data+MACADDRLEN, MACADDRLEN)) {
-				void *scdb_findentry(struct rtw_adapter *priv, unsigned char *macaddr, unsigned char *ipaddr);
-
 				padapter->scdb_entry = (struct nat25_network_db_entry *)
 						       scdb_findentry(padapter,
 						       skb->data+MACADDRLEN,
@@ -2198,7 +2196,6 @@ int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 		}
 		spin_unlock_bh(&padapter->br_ext_lock);
 		if (do_nat25) {
-			int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method);
 			if (nat25_db_handle(padapter, skb, NAT25_CHECK) == 0) {
 				struct sk_buff *newskb;
 
@@ -2822,7 +2819,7 @@ int rtw_sctx_wait(struct submit_ctx *sctx)
 	return ret;
 }
 
-bool rtw_sctx_chk_waring_status(int status)
+static bool rtw_sctx_chk_waring_status(int status)
 {
 	switch (status) {
 	case RTW_SCTX_DONE_UNKNOWN:
@@ -2855,7 +2852,6 @@ void rtw_sctx_done(struct submit_ctx **sctx)
 #ifdef CONFIG_XMIT_ACK
 
 #ifdef CONFIG_XMIT_ACK_POLLING
-s32 c2h_evt_hdl(struct rtw_adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter);
 
 /**
  * rtw_ack_tx_polling -
@@ -2866,7 +2862,7 @@ s32 c2h_evt_hdl(struct rtw_adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id
  * till tx report or timeout
  * Returns: _SUCCESS if TX report ok, _FAIL for others
  */
-int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
+static int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 {
 	int ret = _FAIL;
 	struct submit_ctx *pack_tx_ops = &pxmitpriv->ack_tx_ops;

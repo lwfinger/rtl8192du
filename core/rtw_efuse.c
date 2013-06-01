@@ -47,7 +47,7 @@ u8 fakeBTEfuseModifiedMap[EFUSE_BT_MAX_MAP_LEN] = {0};
 #define EFUSE_CTRL			REG_EFUSE_CTRL		/*  E-Fuse Control. */
 /*  */
 
-bool Efuse_Read1ByteFromFakeContent(struct rtw_adapter *pAdapter, u16 Offset, u8 *value)
+static bool Efuse_Read1ByteFromFakeContent(struct rtw_adapter *pAdapter, u16 Offset, u8 *value)
 {
 	if (Offset >= EFUSE_MAX_HW_SIZE)
 		return false;
@@ -58,7 +58,7 @@ bool Efuse_Read1ByteFromFakeContent(struct rtw_adapter *pAdapter, u16 Offset, u8
 	return true;
 }
 
-bool Efuse_Write1ByteToFakeContent(struct rtw_adapter *pAdapter, u16 Offset, u8 value)
+static bool Efuse_Write1ByteToFakeContent(struct rtw_adapter *pAdapter, u16 Offset, u8 value)
 {
 	if (Offset >= EFUSE_MAX_HW_SIZE)
 		return false;
@@ -195,7 +195,7 @@ void ReadEFuseByte(struct rtw_adapter *Adapter, u16 _offset, u8 *pbuf, bool test
 /*	2008/12/22 MH	Read Efuse must check if we write section 1 data again!!! Sec1 */
 /*					write addr must be after sec5. */
 
-void efuse_ReadEFuse(struct rtw_adapter *Adapter, u8 efusetype, u16 _offset, u16 _size_byte, u8 *pbuf, bool test)
+static void efuse_ReadEFuse(struct rtw_adapter *Adapter, u8 efusetype, u16 _offset, u16 _size_byte, u8 *pbuf, bool test)
 {
 	Adapter->HalFunc.ReadEFuse(Adapter, efusetype, _offset, _size_byte, pbuf, test);
 }
@@ -261,62 +261,6 @@ u8 EFUSE_Read1Byte(struct rtw_adapter *Adapter, u16 address)
 		return 0xFF;
 	}
 } /* EFUSE_Read1Byte */
-
-/*-----------------------------------------------------------------------------
- * Function:	EFUSE_Write1Byte
- *
- * Overview:	Copy from WMAC fot EFUSE write 1 byte.
- *
- * Input:       NONE
- *
- * Output:      NONE
- *
- * Return:      NONE
- *
- * Revised History:
- * When			Who		Remark
- * 09/23/2008	MHC		Copy from WMAC.
- *
- *---------------------------------------------------------------------------*/
-
-void EFUSE_Write1Byte(struct rtw_adapter *Adapter, u16 address, u8 value)
-{
-	u8 bytetemp = {0x00};
-	u8 temp = {0x00};
-	u32 k = 0;
-	u16 contentlen = 0;
-
-	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI , TYPE_EFUSE_REAL_CONTENT_LEN, (void *)&contentlen, false);
-
-	if (address < contentlen) {	/* E-fuse 512Byte */
-		rtw_write8(Adapter, EFUSE_CTRL, value);
-
-		/* Write E-fuse Register address bit0~7 */
-		temp = address & 0xFF;
-		rtw_write8(Adapter, EFUSE_CTRL+1, temp);
-		bytetemp = rtw_read8(Adapter, EFUSE_CTRL+2);
-
-		/* Write E-fuse Register address bit8~9 */
-		temp = ((address >> 8) & 0x03) | (bytetemp & 0xFC);
-		rtw_write8(Adapter, EFUSE_CTRL+2, temp);
-
-		/* Write 0x30[31]= 1 */
-		bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
-		temp = bytetemp | 0x80;
-		rtw_write8(Adapter, EFUSE_CTRL+3, temp);
-
-		/* Wait Write-ready (0x30[31]= 0) */
-		bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
-		while (bytetemp & 0x80) {
-			bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
-			k++;
-			if (k == 100) {
-				k = 0;
-				break;
-			}
-		}
-	}
-} /* EFUSE_Write1Byte */
 
 /*  11/16/2008 MH Read one byte from real Efuse. */
 u8 efuse_OneByteRead(struct rtw_adapter *pAdapter, u16 addr, u8 *data, bool test)
@@ -643,7 +587,7 @@ exit:
  * 11/11/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-void Efuse_ReadAllMap(struct rtw_adapter *pAdapter, u8 efusetype, u8 *efuse, bool test)
+static void Efuse_ReadAllMap(struct rtw_adapter *pAdapter, u8 efusetype, u8 *efuse, bool test)
 {
 	u16 maplen = 0;
 
@@ -782,81 +726,6 @@ void EFUSE_ShadowMapUpdate(struct rtw_adapter *pAdapter, u8 efusetype, bool test
 		#endif
 	}
 } /*  EFUSE_ShadowMapUpdate */
-
-/*-----------------------------------------------------------------------------
- * Function:	EFUSE_ShadowRead
- *
- * Overview:	Read from efuse init map !!!!!
- *
- * Input:       NONE
- *
- * Output:      NONE
- *
- * Return:      NONE
- *
- * Revised History:
- * When			Who		Remark
- * 11/12/2008	MHC		Create Version 0.
- *
- *---------------------------------------------------------------------------*/
-void EFUSE_ShadowRead(struct rtw_adapter *pAdapter, u8 Type, u16 Offset, u32 *value)
-{
-	if (Type == 1)
-		efuse_ShadowRead1Byte(pAdapter, Offset, (u8 *)value);
-	else if (Type == 2)
-		efuse_ShadowRead2Byte(pAdapter, Offset, (u16 *)value);
-	else if (Type == 4)
-		efuse_ShadowRead4Byte(pAdapter, Offset, (u32 *)value);
-}	/*  EFUSE_ShadowRead */
-
-/*-----------------------------------------------------------------------------
- * Function:	EFUSE_ShadowWrite
- *
- * Overview:	Write efuse modify map for later update operation to use!!!!!
- *
- * Input:       NONE
- *
- * Output:      NONE
- *
- * Return:      NONE
- *
- * Revised History:
- * When			Who		Remark
- * 11/12/2008	MHC		Create Version 0.
- *
- *---------------------------------------------------------------------------*/
-void EFUSE_ShadowWrite(struct rtw_adapter *pAdapter, u8 Type, u16 Offset, u32 value)
-{
-#if (MP_DRIVER == 0)
-	return;
-#endif
-
-	if (Type == 1)
-		efuse_ShadowWrite1Byte(pAdapter, Offset, (u8)value);
-	else if (Type == 2)
-		efuse_ShadowWrite2Byte(pAdapter, Offset, (u16)value);
-	else if (Type == 4)
-		efuse_ShadowWrite4Byte(pAdapter, Offset, (u32)value);
-}	/*  EFUSE_ShadowWrite */
-
-void Efuse_InitSomeVar(struct rtw_adapter *pAdapter)
-{
-	u8 i;
-
-	memset((void *)&fakeEfuseContent[0], 0xff, EFUSE_MAX_HW_SIZE);
-	memset((void *)&fakeEfuseInitMap[0], 0xff, EFUSE_MAX_MAP_LEN);
-	memset((void *)&fakeEfuseModifiedMap[0], 0xff, EFUSE_MAX_MAP_LEN);
-
-	for (i = 0; i < EFUSE_MAX_BT_BANK; i++)
-		memset((void *)&BTEfuseContent[i][0], EFUSE_MAX_HW_SIZE, 0xff);
-	memset((void *)&BTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
-	memset((void *)&BTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
-
-	for (i = 0; i < EFUSE_MAX_BT_BANK; i++)
-		memset((void *)&fakeBTEfuseContent[i][0], 0xff, EFUSE_MAX_HW_SIZE);
-	memset((void *)&fakeBTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
-	memset((void *)&fakeBTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
-}
 
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
 

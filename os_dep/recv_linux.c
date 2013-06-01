@@ -368,7 +368,7 @@ void rtw_os_read_port(struct rtw_adapter *padapter, struct recv_buf *precvbuf)
 		rtw_read_port(padapter, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf);
 }
 
-void _rtw_reordering_ctrl_timeout_handler (void *FunctionContext)
+static void _rtw_reordering_ctrl_timeout_handler (void *FunctionContext)
 {
 	struct recv_reorder_ctrl *preorder_ctrl = (struct recv_reorder_ctrl *)FunctionContext;
 	rtw_reordering_ctrl_timeout_handler(preorder_ctrl);

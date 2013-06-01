@@ -23,12 +23,11 @@
 #include <ethernet.h>
 #include <rtw_tdls.h>
 #include <wifi.h>
+#include <usb_osintf.h>
 
 #ifdef CONFIG_TDLS
 extern unsigned char MCS_rate_2R[16];
 extern unsigned char MCS_rate_1R[16];
-extern void process_wmmps_data(_adapter *padapter, union recv_frame *precv_frame);
-extern s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe);
 
 void rtw_reset_tdls_info(_adapter *padapter)
 {

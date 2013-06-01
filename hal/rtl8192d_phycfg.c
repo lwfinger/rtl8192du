@@ -58,7 +58,7 @@
 
 #include <hal_intf.h>
 #include <rtl8192d_hal.h>
-
+#include <Hal8192DPhyCfg.h>
 
 /*---------------------------Define Local Constant---------------------------*/
 
@@ -712,7 +712,7 @@ phy_ConfigMACWithHeaderFile(
  *  08/12/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-extern	int
+int
 PHY_MACConfig8192D(
 	struct rtw_adapter *	Adapter
 	)
@@ -1421,7 +1421,7 @@ PHY_BBConfig8192D(
 }
 
 
-extern	int
+int
 PHY_RFConfig8192D(
 	struct rtw_adapter *	Adapter
 	)
@@ -2287,7 +2287,7 @@ PHY_StopTRXBeforeChangeBand8192D(
 	PHY_SetBBReg(Adapter, rOFDM1_TRxPathEnable, bDWord, 0x0);
 }
 
-void PHY_SwitchWirelessBand(struct rtw_adapter *Adapter, u8 Band)
+static void PHY_SwitchWirelessBand(struct rtw_adapter *Adapter, u8 Band)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;

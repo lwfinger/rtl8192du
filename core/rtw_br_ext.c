@@ -31,6 +31,7 @@
 #include <drv_conf.h>
 #include <drv_types.h>
 #include "rtw_br_ext.h"
+#include <usb_osintf.h>
 
 #ifdef CL_IPV6_PASS
 #ifdef __KERNEL__
@@ -89,9 +90,8 @@ static inline unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsign
 			return cur_ptr;
 		cur_ptr = cur_ptr + TAG_HDR_LEN + tagLen;
 	}
-	return 0;
+	return NULL;
 }
-
 
 static inline int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
 {
@@ -762,7 +762,6 @@ int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method)
 						/*  forward unknown IP packet to upper TCP/IP */
 						DBG_8192D("NAT25: Replace DA with BR's MAC\n");
 						if ((*(u32 *)priv->br_mac) == 0 && (*(u16 *)(priv->br_mac+4)) == 0) {
-							void netdev_br_init(struct net_device *netdev);
 							printk("Re-init netdev_br_init() due to br_mac == 0!\n");
 							netdev_br_init(priv->pnetdev);
 						}
@@ -1124,7 +1123,7 @@ int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method)
 					int offset = 0;
 
 					ptr = __nat25_find_pppoe_tag(ph, ntohs(PTT_RELAY_SID));
-					if (ptr == 0) {
+					if (ptr == NULL) {
 						ERR_8192D("Fail to find PTT_RELAY_SID in FADO!\n");
 						return -1;
 					}

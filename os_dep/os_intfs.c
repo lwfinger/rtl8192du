@@ -143,21 +143,21 @@ static int rtw_hw_wps_pbc = 1;
 
 int rtw_mc2u_disable = 0;
 
-int rtw_mac_phy_mode = 0; /* 0:by efuse, 1:smsp, 2:dmdp, 3:dmsp. */
+static int rtw_mac_phy_mode; /* 0:by efuse, 1:smsp, 2:dmdp, 3:dmsp. */
 
 #ifdef CONFIG_80211D
 static int rtw_80211d = 0;
 #endif
 
-static char* ifname = "wlan%d";
+static char *ifname = "wlan%d";
 module_param(ifname, charp, 0644);
 MODULE_PARM_DESC(ifname, "The default name to allocate for first interface");
 
-static char* if2name = "wlan%d";
+static char *if2name = "wlan%d";
 module_param(if2name, charp, 0644);
 MODULE_PARM_DESC(if2name, "The default name to allocate for second interface");
 
-char* rtw_initmac = NULL;  /*  temp mac address if users want to use instead of the mac address in Efuse */
+char *rtw_initmac = NULL;  /*  temp mac address if users want to use instead of the mac address in Efuse */
 
 #ifdef CONFIG_MULTI_VIR_IFACES
 int rtw_ext_iface_num  = 1;/* primary/secondary iface is excluded */
@@ -232,7 +232,6 @@ static uint rtw_notch_filter = RTW_NOTCH_FILTER;
 module_param(rtw_notch_filter, uint, 0644);
 MODULE_PARM_DESC(rtw_notch_filter, "0:Disable, 1:Enable, 2:Enable only for P2P");
 
-static uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev);
 int _netdev_open(struct net_device *pnetdev);
 int netdev_open (struct net_device *pnetdev);
 static int netdev_close (struct net_device *pnetdev);
@@ -662,9 +661,8 @@ void rtw_proc_remove_one(struct net_device *dev)
 }
 #endif
 #endif
-uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev)
+static uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev)
 {
-
 	uint status = _SUCCESS;
 	struct registry_priv  *registry_par = &padapter->registrypriv;
 

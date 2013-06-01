@@ -29,7 +29,7 @@
 #include <mlme_osdep.h>
 #include <xmit_osdep.h>
 #include <osdep_intf.h>
-
+#include <usb_osintf.h>
 
 uint rtw_remainder_len(struct pkt_file *pfile)
 {
@@ -227,7 +227,7 @@ void rtw_os_xmit_schedule(struct rtw_adapter *padapter)
 
 
 
-int rtw_mlcst2unicst(struct rtw_adapter *padapter, struct sk_buff *skb)
+static int rtw_mlcst2unicst(struct rtw_adapter *padapter, struct sk_buff *skb)
 {
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
@@ -281,7 +281,6 @@ int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(pnetdev);
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-	extern int rtw_mc2u_disable;
 	s32 res = 0;
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 	u16 queue;

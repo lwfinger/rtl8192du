@@ -278,7 +278,7 @@ FillH2CCmd92D(
 	return;
 }
 
-u8 rtl8192d_h2c_msg_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
+static u8 rtl8192d_h2c_msg_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 {
 	u8 ElementID, CmdLen;
 	u8 *pCmdBuffer;
@@ -367,7 +367,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
+static void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -464,7 +464,7 @@ _ConstructBeacon:
 
 }
 
-void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
+static void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -492,7 +492,7 @@ void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
 	*pLength = 16;
 }
 
-void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bForcePowerSave)
+static void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bForcePowerSave)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -544,7 +544,7 @@ void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, u32 *pL
 	*pLength = pktlen;
 }
 
-void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID)
+static void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -647,7 +647,7 @@ FillFakeTxDescriptor92D(
 /* 			      TRUE: At the second time, we should send the first packet (default:beacon) */
 /* 						to Hw again and set the lengh in descriptor to the real beacon lengh. */
 /*  2009.10.15 by tynli. */
-void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
+static void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	struct xmit_frame	*pmgntframe;
@@ -965,7 +965,7 @@ _func_exit_;
 /*
 	ask FW to Reset sync register at Beacon early interrupt
 */
-u8 rtl8192d_reset_tsf(struct rtw_adapter *padapter, u8 reset_port)
+static u8 rtl8192d_reset_tsf(struct rtw_adapter *padapter, u8 reset_port)
 {
 	u8	buf[2];
 	u8	res=_SUCCESS;

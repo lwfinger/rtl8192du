@@ -117,7 +117,7 @@ int rtw_hw_suspend(struct rtw_adapter *padapter);
 int rtw_hw_resume(struct rtw_adapter *padapter);
 #endif
 
-bool rtw_pwr_unassociated_idle(struct rtw_adapter *adapter)
+static bool rtw_pwr_unassociated_idle(struct rtw_adapter *adapter)
 {
 	struct rtw_adapter *buddy = adapter->pbuddy_adapter;
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
@@ -284,9 +284,10 @@ exit:
 	return;
 }
 
-void pwr_state_check_handler(void *FunctionContext)
+static void pwr_state_check_handler(void *FunctionContext)
 {
 	struct rtw_adapter *padapter = (struct rtw_adapter *)FunctionContext;
+
 	rtw_ps_cmd(padapter);
 }
 
@@ -343,7 +344,7 @@ void rtw_set_rpwm(struct rtw_adapter *padapter, u8 pslv)
 	_func_exit_;
 }
 
-u8 PS_RDY_CHECK(struct rtw_adapter *padapter)
+static u8 ps_rdy_check(struct rtw_adapter *padapter)
 {
 	u32 curr_time, delta_time;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
@@ -473,7 +474,7 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 #endif
 		}
 	} else {
-		if (PS_RDY_CHECK(padapter)) {
+		if (ps_rdy_check(padapter)) {
 #ifdef CONFIG_LPS_LCLK
 			_enter_pwrlock(&pwrpriv->lock);
 #endif

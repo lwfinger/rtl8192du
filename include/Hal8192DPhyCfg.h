@@ -272,9 +272,9 @@ void	rtl8192d_PHY_SetRFReg(	struct rtw_adapter *			Adapter,
 /*  Initialization related function */
 /*  */
 /* MAC/BB/RF HAL config */
-extern	int	PHY_MACConfig8192D(	struct rtw_adapter *	Adapter	);
-extern	int	PHY_BBConfig8192D(	struct rtw_adapter *	Adapter	);
-extern	int	PHY_RFConfig8192D(	struct rtw_adapter *	Adapter	);
+int	PHY_MACConfig8192D(	struct rtw_adapter *	Adapter	);
+int	PHY_BBConfig8192D(	struct rtw_adapter *	Adapter	);
+int	PHY_RFConfig8192D(	struct rtw_adapter *	Adapter	);
 /* RF config */
 int	rtl8192d_PHY_ConfigRFWithParaFile(	struct rtw_adapter *	Adapter,
 						u8 *pFileName,

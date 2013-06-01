@@ -25,6 +25,8 @@
 #include <osdep_intf.h>
 #include <usb_ops.h>
 #include <rtl8192d_hal.h>
+#include <rtw_tdls.h>
+#include <rtw_tdls.h>
 
 s32	rtl8192du_init_xmit_priv(struct rtw_adapter *padapter)
 {
@@ -40,48 +42,45 @@ void	rtl8192du_free_xmit_priv(struct rtw_adapter *padapter)
 {
 }
 
-u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe)
+static u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe)
 {
 	u32 addr;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 
-	switch (pattrib->qsel)
-	{
-		case 0:
-		case 3:
-			addr = BE_QUEUE_INX;
-			break;
-		case 1:
-		case 2:
-			addr = BK_QUEUE_INX;
-			break;
-		case 4:
-		case 5:
-			addr = VI_QUEUE_INX;
-			break;
-		case 6:
-		case 7:
-			addr = VO_QUEUE_INX;
-			break;
-		case 0x10:
-			addr = BCN_QUEUE_INX;
-			break;
-		case 0x11:/* BC/MC in PS (HIQ) */
-			addr = HIGH_QUEUE_INX;
-			break;
-		case 0x12:
-			addr = MGT_QUEUE_INX;
-			break;
-		default:
-			addr = BE_QUEUE_INX;
-			break;
-
+	switch (pattrib->qsel) {
+	case 0:
+	case 3:
+		addr = BE_QUEUE_INX;
+		break;
+	case 1:
+	case 2:
+		addr = BK_QUEUE_INX;
+		break;
+	case 4:
+	case 5:
+		addr = VI_QUEUE_INX;
+		break;
+	case 6:
+	case 7:
+		addr = VO_QUEUE_INX;
+		break;
+	case 0x10:
+		addr = BCN_QUEUE_INX;
+		break;
+	case 0x11:/* BC/MC in PS (HIQ) */
+		addr = HIGH_QUEUE_INX;
+		break;
+	case 0x12:
+		addr = MGT_QUEUE_INX;
+		break;
+	default:
+		addr = BE_QUEUE_INX;
+		break;
 	}
-
 	return addr;
 }
 
-int urb_zero_packet_chk(struct rtw_adapter *padapter, int sz)
+static int urb_zero_packet_chk(struct rtw_adapter *padapter, int sz)
 {
 	int blnSetTxDescOffset;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(padapter);
@@ -123,7 +122,7 @@ void rtl8192du_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 		ptxdesc->txdw7 |= cpu_to_le32(0x0000ffff&checksum);
 }
 
-void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
+static void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
 {
 	if ((pattrib->encrypt > 0) && !pattrib->bswenc)
 	{
@@ -210,7 +209,7 @@ Len1	Len0	Pkt_num
 Len4	Len3	Len2
 
 */
-void InsertEMContent(struct xmit_frame *pxmitframe, u8 *VirtualAddress)
+static void InsertEMContent(struct xmit_frame *pxmitframe, u8 *VirtualAddress)
 {
 	memset(VirtualAddress, 0, 8);
 	SET_EARLYMODE_PKTNUM(VirtualAddress, pxmitframe->EMPktNum);
@@ -572,7 +571,9 @@ static u32 xmitframe_need_length(struct xmit_frame *pxmitframe)
 	return len;
 }
 
-void UpdateEarlyModeInfo8192D(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq)
+static void UpdateEarlyModeInfo8192D(struct rtw_adapter *padapter,
+				     struct xmit_frame *pxmitframe,
+				     struct tx_servq *ptxservq)
 {
 	u32	len;
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;

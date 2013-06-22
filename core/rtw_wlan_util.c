@@ -1568,7 +1568,11 @@ int update_sta_support_rate(struct rtw_adapter *padapter, u8 *pvar_ie, uint var_
 void process_addba_req(struct rtw_adapter *padapter, u8 *paddba_req, u8 *addr)
 {
 	struct sta_info *psta;
-	u16 tid, start_seq, param;
+	u16 tid;
+#ifdef CONFIG_UPDATE_INDICATE_SEQ_WHILE_PROCESS_ADDBA_REQ
+	u16 start_seq;
+#endif
+	u16 param;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct ADDBA_request	*preq = (struct ADDBA_request *)paddba_req;
@@ -1578,8 +1582,9 @@ void process_addba_req(struct rtw_adapter *padapter, u8 *paddba_req, u8 *addr)
 	psta = rtw_get_stainfo(pstapriv, addr);
 
 	if (psta) {
+		#ifdef CONFIG_UPDATE_INDICATE_SEQ_WHILE_PROCESS_ADDBA_REQ
 		start_seq = le16_to_cpu(preq->BA_starting_seqctrl) >> 4;
-
+		#endif
 		param = le16_to_cpu(preq->BA_para_set);
 		tid = (param>>2)&0x0f;
 

@@ -871,17 +871,13 @@ u16 rtw_recv_select_queue(struct sk_buff *skb)
 	memcpy(&eth_type, pdata+(ETH_ALEN<<1), 2);
 
 	switch (eth_type) {
-		case htons(ETH_P_IP):
-
-			piphdr = (struct iphdr *)(pdata+ETH_HLEN);
-
-			dscp = piphdr->tos & 0xfc;
-
-			priority = dscp >> 5;
-
-			break;
-		default:
-			priority = 0;
+	case __constant_htons(ETH_P_IP):
+		piphdr = (struct iphdr *)(pdata+ETH_HLEN);
+		dscp = piphdr->tos & 0xfc;
+		priority = dscp >> 5;
+		break;
+	default:
+		priority = 0;
 	}
 
 	return rtw_1d_to_queue[priority];
@@ -1930,7 +1926,6 @@ static const struct net_device_ops rtw_netdev_if2_ops = {
 struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char *name,
 	void (*set_intf_ops)(struct _io_ops *pops))
 {
-	int res = _FAIL;
 	struct net_device *pnetdev;
 	struct rtw_adapter *padapter = NULL;
 	struct dvobj_priv *pdvobjpriv;
@@ -2064,10 +2059,7 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 		goto error_rtw_drv_if2_init;
 	}
 
-	res = _SUCCESS;
-
 	return padapter;
-
 
 error_rtw_drv_if2_init:
 

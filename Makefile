@@ -32,6 +32,7 @@ CONFIG_DRVEXT_MODULE = n
 
 export TopDIR ?= $(shell pwd)
 
+ccflags-y += -D__CHECK_ENDIAN__
 
 RTL871X = rtl8192d
 

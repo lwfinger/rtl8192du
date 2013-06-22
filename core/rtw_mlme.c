@@ -560,7 +560,7 @@ int rtw_is_same_ibss(struct rtw_adapter *adapter, struct wlan_network *pnetwork)
 	return ret;
 }
 
-inline int is_same_ess(struct wlan_bssid_ex *a, struct wlan_bssid_ex *b)
+static inline int is_same_ess(struct wlan_bssid_ex *a, struct wlan_bssid_ex *b)
 {
 	/* RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("(%s,%d)(%s,%d)\n", */
 	/*              a->Ssid.Ssid,a->Ssid.SsidLength,b->Ssid.Ssid,b->Ssid.SsidLength)); */
@@ -1612,7 +1612,9 @@ static void rtw_joinbss_update_network(struct rtw_adapter *padapter,
 /* define REJOIN */
 void rtw_joinbss_event_prehandle(struct rtw_adapter *adapter, u8 *pbuf)
 {
+#ifdef REJOIN
 	static u8 retry;
+#endif
 	u8 timer_cancelled;
 	struct sta_info *ptarget_sta = NULL, *pcur_sta = NULL;
 	struct sta_priv *pstapriv = &adapter->stapriv;
@@ -1657,7 +1659,9 @@ void rtw_joinbss_event_prehandle(struct rtw_adapter *adapter, u8 *pbuf)
 
 	if (pnetwork->join_res > 0) {
 		spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
+#ifdef REJOIN
 		retry = 0;
+#endif
 		if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING)) {
 			/* s1. find ptarget_wlan */
 			if (check_fwstate(pmlmepriv, _FW_LINKED)) {
@@ -2958,8 +2962,8 @@ unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
 				   u8 *out_ie, uint in_len, uint *pout_len,
 				   u8 channel)
 {
-	u32 ielen, out_len;
-	unsigned char *p, *pframe;
+	u32 ielen;
+	unsigned char *p;
 	struct rtw_ieee80211_ht_cap ht_capie;
 	unsigned char WMM_IE[] = { 0x00, 0x50, 0xf2, 0x02, 0x00, 0x01, 0x00 };
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -2973,16 +2977,8 @@ unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
 	p = rtw_get_ie(in_ie + 12, _HT_CAPABILITY_IE_, &ielen, in_len - 12);
 
 	if (p && ielen > 0) {
-		if (pqospriv->qos_option == 0) {
-			out_len = *pout_len;
-			pframe =
-			    rtw_set_ie(out_ie + out_len, _VENDOR_SPECIFIC_IE_,
-				       _WMM_IE_Length_, WMM_IE, pout_len);
-
+		if (pqospriv->qos_option == 0)
 			pqospriv->qos_option = 1;
-		}
-
-		out_len = *pout_len;
 
 		memset(&ht_capie, 0, sizeof(struct rtw_ieee80211_ht_cap));
 
@@ -3008,10 +3004,6 @@ unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
 					    &rx_packet_offset);
 			rtw_hal_get_def_var(padapter, HAL_DEF_MAX_RECVBUF_SZ,
 					    &max_recvbuf_sz);
-			/* if (max_recvbuf_sz-rx_packet_offset>(8191-256)) { */
-			/*      DBG_8192D("%s IEEE80211_HT_CAP_MAX_AMSDU is set\n", __func__); */
-			/*      ht_capie.cap_info = ht_capie.cap_info |IEEE80211_HT_CAP_MAX_AMSDU; */
-			/*  */
 		}
 
 		ht_capie.ampdu_params_info =
@@ -3024,19 +3016,10 @@ unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
 			ht_capie.ampdu_params_info |=
 			    (IEEE80211_HT_CAP_AMPDU_DENSITY & 0x00);
 
-		pframe = rtw_set_ie(out_ie + out_len, _HT_CAPABILITY_IE_,
-				    sizeof(struct rtw_ieee80211_ht_cap),
-				    (unsigned char *)&ht_capie, pout_len);
 		phtpriv->ht_option = true;
 
 		p = rtw_get_ie(in_ie + 12, _HT_ADD_INFO_IE_, &ielen,
 			       in_len - 12);
-		if (p && (ielen == sizeof(struct ieee80211_ht_addt_info))) {
-			out_len = *pout_len;
-			pframe =
-			    rtw_set_ie(out_ie + out_len, _HT_ADD_INFO_IE_,
-				       ielen, p + 2, pout_len);
-		}
 	}
 	return phtpriv->ht_option;
 }
@@ -3049,7 +3032,6 @@ void rtw_update_ht_cap(struct rtw_adapter *padapter, u8 *pie, uint ie_len,
 	int len;
 	/* struct sta_info *bmc_sta, *psta; */
 	struct rtw_ieee80211_ht_cap *pht_capie;
-	struct ieee80211_ht_addt_info *pht_addtinfo;
 	/* struct recv_reorder_ctrl *preorder_ctrl; */
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct ht_priv *phtpriv = &pmlmepriv->htpriv;
@@ -3100,10 +3082,6 @@ void rtw_update_ht_cap(struct rtw_adapter *padapter, u8 *pie, uint ie_len,
 	p = rtw_get_ie(pie + sizeof(struct ndis_802_11_fixed_ies),
 		       _HT_ADD_INFO_IE_, &len,
 		       ie_len - sizeof(struct ndis_802_11_fixed_ies));
-	if (p && len > 0) {
-		pht_addtinfo = (struct ieee80211_ht_addt_info *)(p + 2);
-		/* todo: */
-	}
 
 	if (channel > 14) {
 		if (pregistrypriv->cbw40_enable & BIT(1))

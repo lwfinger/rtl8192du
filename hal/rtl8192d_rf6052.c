@@ -586,7 +586,10 @@ phy_RF6052_Config_ParaFile(
 	int	rtStatus = _SUCCESS;
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	u8	*pszRadioAFile = NULL, *pszRadioBFile = NULL;
+#ifndef CONFIG_EMBEDDED_FWIMG
+	u8	*pszRadioAFile = NULL;
+	u8	*pszRadioBFile = NULL;
+#endif
 	static s8		sz92DRadioAFile[] = RTL8192D_PHY_RADIO_A;
 	static s8		sz92DRadioBFile[] = RTL8192D_PHY_RADIO_B;
 	static s8		sz92DRadioAintPAFile[] = RTL8192D_PHY_RADIO_A_intPA;
@@ -597,13 +600,17 @@ phy_RF6052_Config_ParaFile(
 	u32	MaskforPhySet = 0; /* For 92d PHY cross access, 88c must set value 0. */
 
 
+#ifndef CONFIG_EMBEDDED_FWIMG
 	pszRadioAFile = sz92DRadioAFile;
 	pszRadioBFile = sz92DRadioBFile;
+#endif
 
+#ifndef CONFIG_EMBEDDED_FWIMG
 	if (pHalData->InternalPA5G[0])
 		pszRadioAFile = sz92DRadioAintPAFile;
 	if (pHalData->InternalPA5G[1])
 		pszRadioBFile = sz92DRadioBintPAFile;
+#endif
 
 	/* DMDP,MAC0 on G band,MAC1 on A band. */
 	if (pHalData->MacPhyMode92D==DUALMAC_DUALPHY)
@@ -639,7 +646,9 @@ phy_RF6052_Config_ParaFile(
 		else if (pHalData->interfaceIndex == 1)
 		{
 			/*  MAC0 enabled, only init radia B. */
+#ifndef CONFIG_EMBEDDED_FWIMG
 			pszRadioAFile = pszRadioBFile;
+#endif
 			bTrueBPath = true;  /* vivi added this for read parameter from header, 20100909 */
 		}
 	}
@@ -663,7 +672,9 @@ phy_RF6052_Config_ParaFile(
 				bMac1NeedInitRadioAFirst = false;
 				eRFPath = RF_PATH_A;
 				bTrueBPath = true;
+#ifndef CONFIG_EMBEDDED_FWIMG
 				pszRadioAFile = pszRadioBFile;
+#endif
 				pHalData->NumTotalRFPath = 1;
 			}
 		}
@@ -681,7 +692,9 @@ phy_RF6052_Config_ParaFile(
 				bNeedPowerDownRadioB = true;
 				eRFPath = RF_PATH_A;
 				bTrueBPath = true;
+#ifndef CONFIG_EMBEDDED_FWIMG
 				pszRadioAFile = pszRadioBFile;
+#endif
 				pHalData->NumTotalRFPath = 1;
 			}
 		}

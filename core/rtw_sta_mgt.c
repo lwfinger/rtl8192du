@@ -285,7 +285,6 @@ _func_exit_;
 
 struct	sta_info *rtw_alloc_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 {
-	uint tmp_aid;
 	s32	index;
 	struct list_head *phash_list;
 	struct sta_info	*psta;
@@ -310,8 +309,6 @@ _func_enter_;
 		rtw_list_delete(&(psta->list));
 
 		spin_unlock_bh(&(pfree_sta_queue->lock));
-
-		tmp_aid = psta->aid;
 
 		_rtw_init_stainfo(psta);
 
@@ -631,7 +628,6 @@ _func_exit_;
 u32 rtw_init_bcmc_stainfo(struct rtw_adapter *padapter)
 {
 	struct sta_info		*psta;
-	struct tx_servq	*ptxservq;
 	u32 res = _SUCCESS;
 	unsigned char bcast_addr[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
@@ -651,11 +647,10 @@ _func_enter_;
 	/*  default broadcast & multicast use macid 1 */
 	psta->mac_id = 1;
 
-	ptxservq = &(psta->sta_xmitpriv.be_q);
 
 exit:
 _func_exit_;
-	return _SUCCESS;
+	return res;
 }
 
 

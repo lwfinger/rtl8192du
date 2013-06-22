@@ -315,7 +315,6 @@ int FirmwareDownload92D(
 	s8				R92DFwImageFileName[] ={RTL8192D_FW_IMG};
 	u8*				FwImage;
 	u32				FwImageLen;
-	char*			pFwImageFileName;
 #ifdef CONFIG_WOWLAN
 	u8*			FwImageWoWLAN;
 	u32			FwImageWoWLANLen;
@@ -338,7 +337,6 @@ int FirmwareDownload92D(
 		goto Exit;
 	}
 
-	pFwImageFileName = R92DFwImageFileName;
 	FwImage = (u8 *)Rtl8192D_FwImageArray;
 	FwImageLen = Rtl8192D_FwImageArrayLength;
 #ifdef CONFIG_WOWLAN
@@ -1244,7 +1242,6 @@ ReadEFuse_RTL8192D(
 	u16  i, j;
 	u16	eFuseWord[EFUSE_MAX_SECTION][EFUSE_MAX_WORD_UNIT];
 	u16	efuse_utilized = 0;
-	u8	efuse_usage = 0;
 	u8	u1temp = 0;
 
 	/*  */
@@ -1380,7 +1377,6 @@ ReadEFuse_RTL8192D(
 	/*  */
 	/*  5. Calculate Efuse utilization. */
 	/*  */
-	efuse_usage = (u8)((efuse_utilized*100)/EFUSE_REAL_CONTENT_LEN);
 	rtw_hal_set_hwreg(Adapter, HW_VAR_EFUSE_BYTES, (u8*)&efuse_utilized);
 }
 
@@ -2080,7 +2076,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	pAdapter,
 			}
 		}
 	}
-	return true;
+	return bResult;
 }
 
 static u8

@@ -640,7 +640,6 @@ u32 rtw_tkip_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 	u8 crc[4];
 	struct arc4context mycontext;
 	int curfragnum, length;
-	u32 prwskeylen;
 	u8 *pframe, *payload, *iv, *prwskey;
 	union pn48 dot11txpn;
 	struct sta_info *stainfo;
@@ -680,8 +679,6 @@ u32 rtw_tkip_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 						     dot118021XGrpKeyid].skey;
 			else
 				prwskey = &stainfo->dot118021x_UncstKey.skey[0];
-
-			prwskeylen = 16;
 
 			for (curfragnum = 0; curfragnum < pattrib->nr_frags;
 			     curfragnum++) {
@@ -755,7 +752,6 @@ u32 rtw_tkip_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 	u8 crc[4];
 	struct arc4context mycontext;
 	int length;
-	u32 prwskeylen;
 
 	u8 *pframe, *payload, *iv, *prwskey;
 	union pn48 dot11txpn;
@@ -786,12 +782,10 @@ u32 rtw_tkip_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 				    psecuritypriv->dot118021XGrpKey[prxattrib->
 								    key_index].
 				    skey;
-				prwskeylen = 16;
 			} else {
 				RT_TRACE(_module_rtl871x_security_c_, _drv_err_,
 					 ("rtw_tkip_decrypt: stainfo!= NULL!!!\n"));
 				prwskey = &stainfo->dot118021x_UncstKey.skey[0];
-				prwskeylen = 16;
 			}
 
 			iv = pframe + prxattrib->hdrlen;
@@ -1393,7 +1387,6 @@ u32 rtw_aes_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 
 	/* Intermediate Buffers */
 	int curfragnum, length;
-	u32 prwskeylen;
 	u8 *pframe, *prwskey;	/*  *payload,*iv */
 	struct sta_info *stainfo;
 	struct pkt_attrib *pattrib = &((struct xmit_frame *)pxmitframe)->attrib;
@@ -1450,8 +1443,6 @@ u32 rtw_aes_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 				}
 			}
 #endif /* CONFIG_TDLS */
-
-			prwskeylen = 16;
 
 			for (curfragnum = 0; curfragnum < pattrib->nr_frags;
 			     curfragnum++) {

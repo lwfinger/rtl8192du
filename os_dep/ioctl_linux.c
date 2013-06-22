@@ -260,7 +260,8 @@ static char *translate_scan(struct rtw_adapter *padapter,
 				char *start, char *stop)
 {
 	struct iw_event iwe;
-	u16 cap;
+	__le16 cap;
+	u16 cpu_cap;
 	u32 ht_ielen = 0;
 	char custom[MAX_CUSTOM_LEN];
 	char *p;
@@ -424,10 +425,10 @@ static char *translate_scan(struct rtw_adapter *padapter,
 	memcpy((u8 *)&cap, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
 
 
-	cap = le16_to_cpu(cap);
+	cpu_cap = le16_to_cpu(cap);
 
-	if (cap & (WLAN_CAPABILITY_IBSS |WLAN_CAPABILITY_BSS)) {
-		if (cap & WLAN_CAPABILITY_BSS)
+	if (cpu_cap & (WLAN_CAPABILITY_IBSS |WLAN_CAPABILITY_BSS)) {
+		if (cpu_cap & WLAN_CAPABILITY_BSS)
 			iwe.u.mode = IW_MODE_MASTER;
 		else
 			iwe.u.mode = IW_MODE_ADHOC;
@@ -447,7 +448,7 @@ static char *translate_scan(struct rtw_adapter *padapter,
 
 	/* Add encryption capability */
 	iwe.cmd = SIOCGIWENCODE;
-	if (cap & WLAN_CAPABILITY_PRIVACY)
+	if (cpu_cap & WLAN_CAPABILITY_PRIVACY)
 		iwe.u.data.flags = IW_ENCODE_ENABLED | IW_ENCODE_NOKEY;
 	else
 		iwe.u.data.flags = IW_ENCODE_DISABLED;
@@ -499,8 +500,8 @@ static char *translate_scan(struct rtw_adapter *padapter,
 		u8 wpa_ie[255], rsn_ie[255];
 		u16 wpa_len = 0, rsn_len = 0;
 		u8 *p;
-		int out_len = 0;
-		out_len = rtw_get_sec_ie(pnetwork->network.IEs , pnetwork->network.IELength, rsn_ie,&rsn_len, wpa_ie,&wpa_len);
+
+		rtw_get_sec_ie(pnetwork->network.IEs , pnetwork->network.IELength, rsn_ie,&rsn_len, wpa_ie,&wpa_len);
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_get_scan: ssid =%s\n", pnetwork->network.Ssid.Ssid));
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_get_scan: wpa_len =%d rsn_len =%d\n", wpa_len, rsn_len));
 
@@ -845,7 +846,7 @@ exit:
 
 static int rtw_set_wpa_ie(struct rtw_adapter *padapter, char *pie, unsigned short ielen)
 {
-	u8 *buf = NULL, *pos = NULL;
+	u8 *buf = NULL;
 	u32 left;
 	int group_cipher = 0, pairwise_cipher = 0;
 	int ret = 0;
@@ -880,7 +881,6 @@ static int rtw_set_wpa_ie(struct rtw_adapter *padapter, char *pie, unsigned shor
 				DBG_8192D("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\n", buf[i], buf[i+1], buf[i+2], buf[i+3], buf[i+4], buf[i+5], buf[i+6], buf[i+7]);
 		}
 
-		pos = buf;
 		if (ielen < RSN_HEADER_LEN) {
 			RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_err_, ("Ie len too short %d\n", ielen));
 			ret  = -1;
@@ -1586,7 +1586,7 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 			     union iwreq_data *wrqu, char *extra)
 {
 	int ret = 0;
-	u16 reason;
+	__le16 reason;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct iw_mlme *mlme = (struct iw_mlme *) extra;
 
@@ -1601,23 +1601,18 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 
 	DBG_8192D("%s, cmd =%d, reason =%d\n", __func__, mlme->cmd, reason);
 
-	switch (mlme->cmd)
-	{
-		case IW_MLME_DEAUTH:
-				if (!rtw_set_802_11_disassociate(padapter))
-				ret = -1;
-				break;
-
-		case IW_MLME_DISASSOC:
-				if (!rtw_set_802_11_disassociate(padapter))
-						ret = -1;
-
-				break;
-
-		default:
-			return -EOPNOTSUPP;
+	switch (mlme->cmd) {
+	case IW_MLME_DEAUTH:
+			if (!rtw_set_802_11_disassociate(padapter))
+			ret = -1;
+			break;
+	case IW_MLME_DISASSOC:
+			if (!rtw_set_802_11_disassociate(padapter))
+					ret = -1;
+			break;
+	default:
+		return -EOPNOTSUPP;
 	}
-
 	return ret;
 }
 
@@ -3403,8 +3398,7 @@ static int rtw_wps_start(struct net_device *dev,
         unsigned int uintRet = 0;
 
         uintRet = copy_from_user((void*) &u32wps_start, pdata->pointer, 4);
-
-	if ((padapter->bDriverStopped) || (pdata == NULL)) {
+	if (uintRet || padapter->bDriverStopped || pdata == NULL) {
 		ret = -EINVAL;
 		goto exit;
 	}
@@ -3916,10 +3910,9 @@ inline static void macstr2num(u8 *dst, u8 *src)
 }
 
 static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
-										struct iw_request_info *info,
-										union iwreq_data *wrqu, char *extra, char *subcmd)
+					struct iw_request_info *info,
+					union iwreq_data *wrqu, char *extra, char *subcmd)
 {
-
 	int ret = 0;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	u8 peerMAC[ETH_ALEN] = { 0x00 };
@@ -3928,7 +3921,8 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 	struct __queue *queue = &(pmlmepriv->scanned_queue);
 	struct wlan_network *pnetwork = NULL;
 	u8 blnMatch = 0;
-	u16	attr_content = 0;
+	__be16	attr_content = 0;
+	u16 c_attr_content;
 	uint attr_contentlen = 0;
 	u8	attr_content_str[P2P_PRIVATE_IOCTL_SET_LEN] = { 0x00 };
 
@@ -3961,14 +3955,12 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 			if ((wpsie = rtw_get_wps_ie(&pnetwork->network.IEs[12], pnetwork->network.IELength - 12, NULL, &wpsie_len)))
 			{
 				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_CONF_METHOD, (u8 *)&attr_content, &attr_contentlen);
-				if (attr_contentlen)
-				{
-					attr_content = be16_to_cpu(attr_content);
-					sprintf(attr_content_str, "\n\nM =%.4d", attr_content);
+				if (attr_contentlen) {
+					c_attr_content = be16_to_cpu(attr_content);
+					sprintf(attr_content_str, "\n\nM =%.4d", c_attr_content);
 					blnMatch = 1;
 				}
 			}
-
 			break;
 		}
 
@@ -4138,8 +4130,8 @@ static int rtw_p2p_get_go_device_address(struct net_device *dev,
 }
 
 static int rtw_p2p_get_device_type(struct net_device *dev,
-								   struct iw_request_info *info,
-								   union iwreq_data *wrqu, char *extra, char *subcmd)
+				   struct iw_request_info *info,
+				   union iwreq_data *wrqu, char *extra, char *subcmd)
 {
 
 	int ret = 0;
@@ -4185,11 +4177,10 @@ static int rtw_p2p_get_device_type(struct net_device *dev,
 				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_PRIMARY_DEV_TYPE, dev_type, &dev_type_len);
 				if (dev_type_len)
 				{
-					u16	type = 0;
+					__be16 type;
 
 					memcpy(&type, dev_type, 2);
-					type = be16_to_cpu(type);
-					sprintf(dev_type_str, "\n\nN =%.2d", type);
+					sprintf(dev_type_str, "\n\nN =%.2d", be16_to_cpu(type));
 					blnMatch = 1;
 				}
 			}
@@ -5673,7 +5664,8 @@ static int rtw_dbg_port(struct net_device *dev,
 	int ret = 0;
 	u8 major_cmd, minor_cmd;
 	u16 arg;
-	u32 extra_arg, *pdata, val32;
+	s32 extra_arg;
+	u32 *pdata, val32;
 	struct sta_info *psta;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);

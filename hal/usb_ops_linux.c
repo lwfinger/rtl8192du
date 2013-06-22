@@ -257,7 +257,7 @@ static u8 usb_read8(struct intf_hdl *pintfhdl, u32 addr)
 {
 	u16 wvalue;
 	u16 len;
-	u32 data=0;
+	__le32 data;
 
 	_func_enter_;
 
@@ -275,7 +275,7 @@ static u16 usb_read16(struct intf_hdl *pintfhdl, u32 addr)
 {
 	u16 wvalue;
 	u16 len;
-	u32 data=0;
+	__le32 data;
 
 	_func_enter_;
 
@@ -293,7 +293,7 @@ static u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 {
 	u16 wvalue;
 	u16 len;
-	u32 data=0;
+	__le32 data;
 
 	_func_enter_;
 
@@ -316,7 +316,7 @@ static int usb_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val)
 {
 	u16 wvalue;
 	u16 len;
-	u32 data;
+	__le32 data;
 	int ret;
 
 	_func_enter_;
@@ -324,8 +324,7 @@ static int usb_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val)
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 1;
 
-	data = val;
-	data = cpu_to_le32(data&0x000000ff);
+	data = cpu_to_le32(val & 0x000000ff);
 
 	ret = usb_write_reg(pintfhdl, wvalue, &data, len);
 
@@ -338,7 +337,7 @@ static int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
 {
 	u16 wvalue;
 	u16 len;
-	u32 data;
+	__le32 data;
 	int ret;
 
 	_func_enter_;
@@ -346,8 +345,7 @@ static int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 2;
 
-	data = val;
-	data = cpu_to_le32(data&0x0000ffff);
+	data = cpu_to_le32(val & 0x0000ffff);
 
 	ret = usb_write_reg(pintfhdl, wvalue, &data, len);
 
@@ -360,7 +358,7 @@ static int usb_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
 {
 	u16 wvalue;
 	u16 len;
-	u32 data;
+	__le32 data;
 	int ret;
 
 	_func_enter_;

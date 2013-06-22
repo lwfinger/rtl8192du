@@ -712,13 +712,12 @@ phy_ConfigMACWithHeaderFile(
  *  08/12/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-int
-PHY_MACConfig8192D(
-	struct rtw_adapter *	Adapter
-	)
+int PHY_MACConfig8192D(struct rtw_adapter *Adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+#ifndef CONFIG_EMBEDDED_FWIMG
 	char		*pszMACRegFile;
+#endif
 	char		sz92DMACRegFile[] = RTL8192D_PHY_MACREG;
 	int		rtStatus = _SUCCESS;
 
@@ -727,7 +726,9 @@ PHY_MACConfig8192D(
 		return rtStatus;
 	}
 
+#ifndef CONFIG_EMBEDDED_FWIMG
 	pszMACRegFile = sz92DMACRegFile;
+#endif
 
 	/*  */
 	/*  Config MAC */
@@ -1233,22 +1234,28 @@ phy_BB8192D_Config_ParaFile(
 	s8		sz92DAGCTableFile[] = RTL8192D_AGC_TAB;
 	s8		sz92D2GAGCTableFile[] = RTL8192D_AGC_TAB_2G;
 	s8		sz92D5GAGCTableFile[] = RTL8192D_AGC_TAB_5G;
-	char		*pszBBRegFile, *pszAGCTableFile, *pszBBRegPgFile, *pszBBRegMpFile;
+#ifndef CONFIG_EMBEDDED_FWIMG
+	char		*pszBBRegFile;
+	char *pszAGCTableFile;
+	char *pszBBRegPgFile;
+	char *pszBBRegMpFile;
+#endif
 
+#ifndef CONFIG_EMBEDDED_FWIMG
 	pszBBRegFile = sz92DBBRegFile;
 	pszBBRegPgFile = sz92DBBRegPgFile;
 
 	/* Normal chip,Mac0 use AGC_TAB.txt for 2G and 5G band. */
-	if (pHalData->interfaceIndex == 0)
+	if (pHalData->interfaceIndex == 0) {
 		pszAGCTableFile = sz92DAGCTableFile;
-	else
-	{
+	} else {
 		if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 			pszAGCTableFile = sz92D2GAGCTableFile;
 		else
 			pszAGCTableFile = sz92D5GAGCTableFile;
 	}
 	pszBBRegMpFile = sz92DBBRegMpFile;
+#endif
 
 	/*  1. Read PHY_REG.TXT BB INIT!! */
 	/*  We will seperate as 88C / 92C according to chip version */
@@ -1622,7 +1629,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 			break;
 	}
 
-	return _SUCCESS;
+	return rtStatus;
 }
 
 
@@ -3363,7 +3370,7 @@ phy_PathA_IQK_5G_Normal(
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	u32	regEAC, regE94, regE9C, regEA4;
+	u32	regEAC, regE94, regEA4;
 	u8	result = 0x00;
 	u8	i = 0;
 #if MP_DRIVER == 1
@@ -3432,7 +3439,6 @@ phy_PathA_IQK_5G_Normal(
 		/*  Check failed */
 		regEAC = PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord);
 		regE94 = PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_A, bMaskDWord);
-		regE9C= PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_A, bMaskDWord);
 		regEA4= PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_A_2, bMaskDWord);
 
 		if (!(regEAC & TxOKBit) &&
@@ -3523,7 +3529,7 @@ phy_PathB_IQK_5G_Normal(
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	u32	regEAC, regEB4, regEBC, regEC4, regECC;
+	u32	regEAC, regEB4, regEC4;
 	u8	result = 0x00;
 	u8	i = 0;
 #if MP_DRIVER == 1
@@ -3579,9 +3585,7 @@ phy_PathB_IQK_5G_Normal(
 		/*  Check failed */
 		regEAC = PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord);
 		regEB4 = PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_B, bMaskDWord);
-		regEBC= PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_B, bMaskDWord);
 		regEC4= PHY_QueryBBReg(pAdapter, rRx_Power_Before_IQK_B_2, bMaskDWord);
-		regECC= PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_B_2, bMaskDWord);
 
 		if (!(regEAC & BIT31) &&
 			(((regEB4 & 0x03FF0000)>>16) != 0x142))
@@ -4129,13 +4133,7 @@ phy_IQCalibrate(
 
 	/*  Note: IQ calibration must be performed after loading */
 	/* 		PHY_REG.txt , and radio_a, radio_b.txt */
-
-	u32 bbvalue;
-
-	if (t==0)
-	{
-		bbvalue = PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bMaskDWord);
-
+	if (t == 0) {
 		/*  Save ADDA parameters, turn Path A ADDA on */
 		phy_SaveADDARegisters(pAdapter, ADDA_REG, pdmpriv->ADDA_backup, IQK_ADDA_REG_NUM);
 		phy_SaveMACRegisters(pAdapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
@@ -4151,9 +4149,7 @@ phy_IQCalibrate(
 		PHY_SetBBReg(pAdapter, rPdp_AntA, bMaskDWord, 0x01017038);
 
 	if (t==0)
-	{
 		pdmpriv->bRfPiEnable = (u8)PHY_QueryBBReg(pAdapter, rFPGA0_XA_HSSIParameter1, BIT(8));
-	}
 
 	if (!pdmpriv->bRfPiEnable) {
 		/*  Switch BB to PI mode to do IQ Calibration. */
@@ -4309,7 +4305,7 @@ phy_IQCalibrate_5G(
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	u32			extPAon, REG0xe5c, RX0REG0xe40, REG0xe40, REG0xe94, REG0xe9c;
+	u32			extPAon, REG0xe5c, RX0REG0xe40, REG0xe40, REG0xe94;
 	u32			REG0xeac, RX1REG0xe40, REG0xeb4, REG0xea4,REG0xec4;
 	u8			TX0IQKOK = false, TX1IQKOK = false ;
 	u32			TX_X0, TX_Y0, TX_X1, TX_Y1, RX_X0, RX_Y0, RX_X1, RX_Y1;
@@ -4429,7 +4425,6 @@ phy_IQCalibrate_5G(
 
 	if (((REG0xeac&BIT(28)) == 0) && (((REG0xe94&0x3FF0000)>>16)!=0x142))
 	{
-		REG0xe9c = PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_A, bMaskDWord);
 		TX_X0 = (PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_A, bMaskDWord)&0x3FF0000)>>16;
 		TX_Y0 = (PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_A, bMaskDWord)&0x3FF0000)>>16;
 		RX0REG0xe40 =  0x80000000 | (REG0xe40 & 0xfc00fc00) | (TX_X0<<16) | TX_Y0;
@@ -4718,15 +4713,11 @@ phy_IQCalibrate_5G_Normal(
 	u8                 rfPathDiv;   /* for Path Diversity */
 	/*  */
 
-	u32	bbvalue;
 	bool		is2T =  IS_92D_SINGLEPHY(pHalData->VersionID);
 
 	rtw_mdelay_os(IQK_DELAY_TIME*20);
 
-	if (t==0)
-	{
-		bbvalue = PHY_QueryBBReg(pAdapter, rFPGA0_RFMOD, bMaskDWord);
-
+	if (t==0) {
 		/*  Save ADDA parameters, turn Path A ADDA on */
 		phy_SaveADDARegisters(pAdapter, ADDA_REG, pdmpriv->ADDA_backup, IQK_ADDA_REG_NUM);
 		phy_SaveMACRegisters(pAdapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
@@ -4990,22 +4981,17 @@ phy_CalcCurvIndex(
 		end_base = is5G?BASE_CHNL_NUM:BASE_CHNL_NUM_2G;
 	u8	chnl_num = is5G?TARGET_CHNL_NUM_2G_5G:TARGET_CHNL_NUM_2G;
 	u8	Base_chnl[BASE_CHNL_NUM] = {1, 14, 36, 100, 149};
-	u32	j, base_index = 0, search_bound=128;
-	bool	bBase = false;
+	u32	j, base_index = 0, search_bound = 128;
 
-	for (i=start; i<chnl_num; i++)
-	{
-		if (is5G)
-		{
+	for (i = start; i < chnl_num; i++) {
+		if (is5G) {
 			if (i != start)
 				pre_channel = channel;
 			channel = GetChnlFromPlace(i);	/* actual channel number */
 
 			if (i == start)
 				pre_channel = channel;
-		}
-		else
-		{
+		} else {
 			if (i != start)
 				pre_channel = channel;
 			channel = i+1;
@@ -5014,13 +5000,8 @@ phy_CalcCurvIndex(
 				pre_channel = channel;
 		}
 
-		bBase = false;
-
-		for (j = start_base; j < end_base; j++)
-		{
-			if (channel == Base_chnl[j])
-			{
-				bBase = true;
+		for (j = start_base; j < end_base; j++) {
+			if (channel == Base_chnl[j]) {
 				base_index = 0;
 				search_bound = (CV_CURVE_CNT*2);	/* search every 128 */
 				break;

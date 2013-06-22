@@ -551,16 +551,12 @@ _func_exit_;
 
 u8 rtw_set_802_11_add_wep(struct rtw_adapter *padapter, struct ndis_802_11_wep *wep)
 {
-	u8		bdefaultkey;
-	u8		btransmitkey;
 	int		keyid, res;
 	struct security_priv *psecuritypriv = &(padapter->securitypriv);
 	u8		ret = _SUCCESS;
 
 _func_enter_;
 
-	bdefaultkey = (wep->KeyIndex & 0x40000000) > 0 ? false : true;   /* for ??? */
-	btransmitkey = (wep->KeyIndex & 0x80000000) > 0 ? true  : false;	/* for ??? */
 	keyid = wep->KeyIndex & 0x3fffffff;
 
 	if (keyid > 4) {
@@ -837,7 +833,6 @@ _func_enter_;
 	/*  If WEP encryption algorithm, just call rtw_set_802_11_add_wep(). */
 	if ((padapter->securitypriv.dot11AuthAlgrthm != dot11AuthAlgrthm_8021X) && (encryptionalgo == _WEP40_ ||
 	    encryptionalgo == _WEP104_)) {
-		u8 ret;
 		u32 keyindex;
 		u32 len = FIELD_OFFSET(struct ndis_802_11_key, KeyMaterial) + key->KeyLength;
 		struct ndis_802_11_wep *wep = &padapter->securitypriv.ndiswep;
@@ -997,7 +992,6 @@ _func_exit_;
 u8 rtw_set_802_11_remove_key(struct rtw_adapter *padapter,
 			     struct ndis_802_11_remove_key *key)
 {
-	uint	encryptionalgo;
 	u8 *pbssid;
 	struct sta_info *stainfo;
 	u8	bgroup = (key->KeyIndex & 0x4000000) > 0 ? false : true;
@@ -1011,7 +1005,6 @@ _func_enter_;
 		goto exit;
 	}
 	if (bgroup == true) {
-		encryptionalgo = padapter->securitypriv.dot118021XGrpPrivacy;
 		/*  clear group key by index */
 
 		memset(&padapter->securitypriv.dot118021XGrpKey[keyIndex], 0, 16);
@@ -1021,8 +1014,6 @@ _func_enter_;
 		pbssid = get_bssid(&padapter->mlmepriv);
 		stainfo = rtw_get_stainfo(&padapter->stapriv, pbssid);
 		if (stainfo != NULL) {
-			encryptionalgo = stainfo->dot118021XPrivacy;
-
 			/*  clear key by BSSID */
 			memset(&stainfo->dot118021x_UncstKey, 0, 16);
 			/*  \todo Send a H2C Command to Firmware for disable this Key in CAM Entry. */
@@ -1036,7 +1027,7 @@ exit:
 
 _func_exit_;
 
-	return true;
+	return ret;
 }
 
 /*

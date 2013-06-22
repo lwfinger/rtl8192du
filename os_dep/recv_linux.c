@@ -226,10 +226,6 @@ int rtw_recv_indicatepkt(struct rtw_adapter *padapter, union recv_frame *precv_f
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 #endif
 
-#ifdef CONFIG_BR_EXT
-	void *br_port = NULL;
-#endif
-
 _func_enter_;
 
 	precvpriv = &(padapter->recvpriv);
@@ -298,19 +294,6 @@ _func_enter_;
 
 		}
 	}
-
-
-#ifdef CONFIG_BR_EXT
-
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-	br_port = padapter->pnetdev->br_port;
-#else   /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-	rcu_read_lock();
-	br_port = rcu_dereference(padapter->pnetdev->rx_handler_data);
-	rcu_read_unlock();
-#endif  /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-
-#endif	/*  CONFIG_BR_EXT */
 
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
 	if ((pattrib->tcpchk_valid == 1) && (pattrib->tcp_chkrpt == 1)) {

@@ -1447,7 +1447,6 @@ _InitOperationMode(
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
 	u8 regBwOpMode = 0, MinSpaceCfg = 0;
-	u32 regRATR = 0, regRRSR = 0;
 
 	/* 1 This part need to modified according to the rate set we filtered!! */
 	/*  */
@@ -1456,37 +1455,25 @@ _InitOperationMode(
 	switch (pHalData->CurrentWirelessMode) {
 	case WIRELESS_MODE_B:
 		regBwOpMode = BW_OPMODE_20MHZ;
-		regRATR = RATE_ALL_CCK;
-		regRRSR = RATE_ALL_CCK;
 		break;
 	case WIRELESS_MODE_A:
 		/* RT_ASSERT(FALSE,("Error wireless a mode\n")); */
 		regBwOpMode = BW_OPMODE_5G |BW_OPMODE_20MHZ;
-		regRATR = RATE_ALL_OFDM_AG;
-		regRRSR = RATE_ALL_OFDM_AG;
 		break;
 	case WIRELESS_MODE_G:
 		regBwOpMode = BW_OPMODE_20MHZ;
-		regRATR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
-		regRRSR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
 		break;
 	case WIRELESS_MODE_UNKNOWN:
 	case WIRELESS_MODE_AUTO:
 		regBwOpMode = BW_OPMODE_20MHZ;
-		regRATR = RATE_ALL_CCK | RATE_ALL_OFDM_AG | RATE_ALL_OFDM_1SS | RATE_ALL_OFDM_2SS;
-		regRRSR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
 		break;
 	case WIRELESS_MODE_N_24G:
 		/*  It support CCK rate by default. */
 		/*  CCK rate will be filtered out only when associated AP does not support it. */
 		regBwOpMode = BW_OPMODE_20MHZ;
-			regRATR = RATE_ALL_CCK | RATE_ALL_OFDM_AG | RATE_ALL_OFDM_1SS | RATE_ALL_OFDM_2SS;
-			regRRSR = RATE_ALL_CCK | RATE_ALL_OFDM_AG;
 		break;
 	case WIRELESS_MODE_N_5G:
 		regBwOpMode = BW_OPMODE_5G;
-		regRATR = RATE_ALL_OFDM_AG | RATE_ALL_OFDM_1SS | RATE_ALL_OFDM_2SS;
-		regRRSR = RATE_ALL_OFDM_AG;
 		break;
 	}
 

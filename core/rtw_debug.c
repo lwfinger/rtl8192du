@@ -98,7 +98,7 @@ int proc_set_log_level(struct file *file, const char __user *buffer,
 	struct net_device *dev = (struct net_device *)data;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	char tmp[32];
-	u32 is_signal_dbg;
+	s32 is_signal_dbg;
 
 	if (count < 1)
 		return -EFAULT;
@@ -673,7 +673,8 @@ int proc_set_rx_signal(struct file *file, const char __user *buffer,
 	struct net_device *dev = (struct net_device *)data;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	char tmp[32];
-	u32 is_signal_dbg, signal_strength;
+	u32 is_signal_dbg;
+	s32 signal_strength;
 
 	if (count < 1)
 		return -EFAULT;
@@ -727,7 +728,7 @@ int proc_set_ht_enable(struct file *file, const char __user *buffer,
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
-	u32 mode;
+	s32 mode;
 
 	if (count < 1)
 		return -EFAULT;
@@ -771,7 +772,7 @@ int proc_set_cbw40_enable(struct file *file, const char __user *buffer,
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
-	u32 mode;
+	s32 mode;
 
 	if (count < 1)
 		return -EFAULT;
@@ -814,7 +815,7 @@ int proc_set_ampdu_enable(struct file *file, const char __user *buffer,
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
-	u32 mode;
+	s32 mode;
 
 	if (count < 1)
 		return -EFAULT;

@@ -89,7 +89,6 @@ static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLe
 	u16	BOXReg=0, BOXExtReg=0;
 	u8	BoxContent[4], BoxExtContent[2];
 	u8	BufIndex=0;
-	u8	U1btmp; /* Read 0x1bf */
 	u8	bWriteSucess = false;
 	u8	IsFwRead = false;
 	u8	WaitH2cLimmit = 100;
@@ -150,7 +149,6 @@ _func_enter_;
 			}
 			rtw_udelay_os(10); /* us */
 			IsFwRead = CheckFwReadLastH2C(padapter, BoxNum);
-			U1btmp = rtw_read8(padapter, 0x1BF);
 		}
 
 		/*  If Fw has not read the last H2C cmd, break and give up this H2C. */

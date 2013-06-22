@@ -166,12 +166,12 @@ struct rx_pkt_attrib {
 
 struct recv_stat
 {
-	unsigned int rxdw0;
-	unsigned int rxdw1;
-	unsigned int rxdw2;
-	unsigned int rxdw3;
-	unsigned int rxdw4;
-	unsigned int rxdw5;
+	__le32 rxdw0;
+	__le32 rxdw1;
+	__le32 rxdw2;
+	__le32 rxdw3;
+	__le32 rxdw4;
+	__le32 rxdw5;
 };
 
 #define EOR BIT(30)
@@ -474,17 +474,13 @@ static inline u8 *recvframe_put(union recv_frame *precvframe, int sz)
 
 	/* used for append sz bytes from ptr to rx_tail, update rx_tail and return the updated rx_tail to the caller */
 	/* after putting, rx_tail must be still larger than rx_end. */
-	unsigned char * prev_rx_tail;
 
 	if (precvframe==NULL)
 		return NULL;
 
-	prev_rx_tail = precvframe->u.hdr.rx_tail;
-
 	precvframe->u.hdr.rx_tail += sz;
 
-	if (precvframe->u.hdr.rx_tail > precvframe->u.hdr.rx_end)
-	{
+	if (precvframe->u.hdr.rx_tail > precvframe->u.hdr.rx_end) {
 		precvframe->u.hdr.rx_tail -= sz;
 		return NULL;
 	}
@@ -492,7 +488,6 @@ static inline u8 *recvframe_put(union recv_frame *precvframe, int sz)
 	precvframe->u.hdr.len +=sz;
 
 	return precvframe->u.hdr.rx_tail;
-
 }
 
 

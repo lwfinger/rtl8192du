@@ -1964,7 +1964,7 @@ static union recv_frame *recvframe_defrag(struct rtw_adapter *adapter,
 				   struct __queue *defrag_q)
 {
 	struct list_head *plist, *phead;
-	u8 *data, wlanhdr_offset;
+	u8 wlanhdr_offset;
 	u8 curfragnum;
 	struct recv_frame_hdr *pfhdr, *pnfhdr;
 	union recv_frame *prframe, *pnextrframe;
@@ -1995,8 +1995,6 @@ static union recv_frame *recvframe_defrag(struct rtw_adapter *adapter,
 	plist = get_list_head(defrag_q);
 
 	plist = get_next(plist);
-
-	data = get_recvframe_data(prframe);
 
 	while (rtw_end_of_queue_search(phead, plist) == false) {
 		pnextrframe = LIST_CONTAINOR(plist, union recv_frame, u);
@@ -3000,8 +2998,10 @@ void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS)
 	u32 tmp_s, tmp_q;
 	u8 avg_signal_strength = 0;
 	u8 avg_signal_qual = 0;
+#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING)
 	u32 num_signal_strength = 0;
 	u32 num_signal_qual = 0;
+#endif
 	u8 _alpha = 3;		/*  this value is based on converging_constant = 5000 and sampling_interval = 1000 */
 
 	if (adapter->recvpriv.is_signal_dbg) {
@@ -3015,15 +3015,19 @@ void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS)
 		if (recvpriv->signal_strength_data.update_req == 0) {	/*  update_req is clear, means we got rx */
 			avg_signal_strength =
 			    recvpriv->signal_strength_data.avg_val;
+#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING)
 			num_signal_strength =
 			    recvpriv->signal_strength_data.total_num;
+#endif
 			/*  after avg_vals are accquired, we can re-stat the signal values */
 			recvpriv->signal_strength_data.update_req = 1;
 		}
 
 		if (recvpriv->signal_qual_data.update_req == 0) {	/*  update_req is clear, means we got rx */
 			avg_signal_qual = recvpriv->signal_qual_data.avg_val;
+#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING)
 			num_signal_qual = recvpriv->signal_qual_data.total_num;
+#endif
 			/*  after avg_vals are accquired, we can re-stat the signal values */
 			recvpriv->signal_qual_data.update_req = 1;
 		}

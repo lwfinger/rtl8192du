@@ -1268,7 +1268,7 @@ auth_fail:
 unsigned int OnAuthClient(struct rtw_adapter *adapt,
 			  union recv_frame *precv_frame)
 {
-	unsigned int seq, len, status, algthm, offset;
+	unsigned int seq, len, status, offset;
 	unsigned char *p;
 	unsigned int go2asoc = 0;
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
@@ -1288,14 +1288,9 @@ unsigned int OnAuthClient(struct rtw_adapter *adapt,
 
 	offset = (GetPrivacy(pframe)) ? 4 : 0;
 
-	algthm =
-	    le16_to_cpu(*(unsigned short *)
-			((SIZE_PTR) pframe + WLAN_HDR_A3_LEN + offset));
-	seq =
-	    le16_to_cpu(*(unsigned short *)
+	seq = le16_to_cpu(*(unsigned short *)
 			((SIZE_PTR) pframe + WLAN_HDR_A3_LEN + offset + 2));
-	status =
-	    le16_to_cpu(*(unsigned short *)
+	status = le16_to_cpu(*(unsigned short *)
 			((SIZE_PTR) pframe + WLAN_HDR_A3_LEN + offset + 4));
 
 	if (status != 0) {
@@ -1359,7 +1354,7 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 			union recv_frame *precv_frame)
 {
 #ifdef CONFIG_AP_MODE
-	u16 capab_info, listen_interval;
+	u16 capab_info;
 	struct rtw_ieee802_11_elems elems;
 	struct sta_info *pstat;
 	unsigned char reassoc, *p, *pos, *wpa_ie;
@@ -1423,7 +1418,6 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 	}
 
 	capab_info = RTW_GET_LE16(pframe + WLAN_HDR_A3_LEN);
-	listen_interval = RTW_GET_LE16(pframe + WLAN_HDR_A3_LEN + 2);
 
 	left = pkt_len - (IEEE80211_3ADDR_LEN + ie_offset);
 	pos = pframe + (IEEE80211_3ADDR_LEN + ie_offset);
@@ -2881,7 +2875,7 @@ void issue_p2p_GO_request(struct rtw_adapter *adapt, u8 *raddr)
 	return;
 }
 
-void issue_p2p_GO_response(struct rtw_adapter *adapt, u8 *raddr,
+static void issue_p2p_GO_response(struct rtw_adapter *adapt, u8 *raddr,
 			   u8 *frame_body, uint len, u8 result)
 {
 	unsigned char category = RTW_WLAN_CATEGORY_PUBLIC;
@@ -3358,7 +3352,7 @@ void issue_p2p_GO_response(struct rtw_adapter *adapt, u8 *raddr,
 	return;
 }
 
-void issue_p2p_GO_confirm(struct rtw_adapter *adapt, u8 *raddr, u8 result)
+static void issue_p2p_GO_confirm(struct rtw_adapter *adapt, u8 *raddr, u8 result)
 {
 	unsigned char category = RTW_WLAN_CATEGORY_PUBLIC;
 	u8 action = P2P_PUB_ACTION_ACTION;
@@ -4321,7 +4315,7 @@ void issue_p2p_provision_request(struct rtw_adapter *adapt, u8 *pssid,
 	return;
 }
 
-u8 is_matched_in_profilelist(u8 *peermacaddr,
+static u8 is_matched_in_profilelist(u8 *peermacaddr,
 			     struct profile_info *profileinfo)
 {
 	u8 i, match_result = 0;
@@ -4715,7 +4709,7 @@ void issue_probersp_p2p(struct rtw_adapter *adapt, unsigned char *da)
 	return;
 }
 
-int _issue_probereq_p2p(struct rtw_adapter *adapt, u8 *da, int wait_ack)
+static int _issue_probereq_p2p(struct rtw_adapter *adapt, u8 *da, int wait_ack)
 {
 	int ret = _FAIL;
 	struct xmit_frame *pmgntframe;
@@ -5134,7 +5128,7 @@ exit:
 
 #endif /* CONFIG_P2P */
 
-s32 rtw_action_public_decache(union recv_frame *recv_frame, s32 token)
+static s32 rtw_action_public_decache(union recv_frame *recv_frame, s32 token)
 {
 	struct rtw_adapter *adapter = recv_frame->u.hdr.adapter;
 	struct mlme_ext_priv *mlmeext = &(adapter->mlmeextpriv);
@@ -5171,7 +5165,7 @@ s32 rtw_action_public_decache(union recv_frame *recv_frame, s32 token)
 	return _SUCCESS;
 }
 
-unsigned int on_action_public_p2p(union recv_frame *precv_frame)
+static unsigned int on_action_public_p2p(union recv_frame *precv_frame)
 {
 	struct rtw_adapter *adapt = precv_frame->u.hdr.adapter;
 	u8 *pframe = precv_frame->u.hdr.rx_data;
@@ -5255,11 +5249,9 @@ unsigned int on_action_public_p2p(union recv_frame *precv_frame)
 			/*      Commented by Kurt 20120113 */
 			/*      Get peer_dev_addr here if peer doesn't issue prov_disc frame. */
 /* XXXXXXXX */
-			if (_rtw_memcmp
-			    (pwdinfo->rx_prov_disc_info.peerDevAddr,
-			     empty_addr, ETH_ALEN)) ;
-			memcpy(pwdinfo->rx_prov_disc_info.peerDevAddr,
-			       GetAddr2Ptr(pframe), ETH_ALEN);
+			if (_rtw_memcmp(pwdinfo->rx_prov_disc_info.peerDevAddr, empty_addr, ETH_ALEN))
+				memcpy(pwdinfo->rx_prov_disc_info.peerDevAddr,
+			GetAddr2Ptr(pframe), ETH_ALEN);
 
 			result =
 			    process_p2p_group_negotation_req(pwdinfo,
@@ -5760,7 +5752,7 @@ unsigned int on_action_public_p2p(union recv_frame *precv_frame)
 	return _SUCCESS;
 }
 
-unsigned int on_action_public_vendor(union recv_frame *precv_frame)
+static unsigned int on_action_public_vendor(union recv_frame *precv_frame)
 {
 	unsigned int ret = _FAIL;
 	u8 *pframe = precv_frame->u.hdr.rx_data;
@@ -5774,7 +5766,7 @@ unsigned int on_action_public_vendor(union recv_frame *precv_frame)
 	return ret;
 }
 
-unsigned int on_action_public_default(union recv_frame *precv_frame, u8 action)
+static unsigned int on_action_public_default(union recv_frame *precv_frame, u8 action)
 {
 	unsigned int ret = _FAIL;
 	u8 *pframe = precv_frame->u.hdr.rx_data;
@@ -5852,7 +5844,7 @@ unsigned int OnAction_p2p(struct rtw_adapter *adapt,
 {
 #ifdef CONFIG_P2P
 	u8 *frame_body;
-	u8 category, OUI_Subtype, dialogToken = 0;
+	u8 category, OUI_Subtype;
 	u8 *pframe = precv_frame->u.hdr.rx_data;
 	uint len = precv_frame->u.hdr.len;
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
@@ -5882,7 +5874,6 @@ unsigned int OnAction_p2p(struct rtw_adapter *adapt,
 	{
 		len -= sizeof(struct rtw_ieee80211_hdr_3addr);
 		OUI_Subtype = frame_body[5];
-		dialogToken = frame_body[6];
 		switch (OUI_Subtype) {
 		case P2P_NOTICE_OF_ABSENCE:
 			break;
@@ -6077,7 +6068,7 @@ s32 dump_mgntframe_and_wait_ack(struct rtw_adapter *adapt,
 #endif /* CONFIG_XMIT_ACK */
 }
 
-int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)
+static int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)
 {
 	u8 *ssid_ie;
 	int ssid_len_ori;
@@ -6727,7 +6718,7 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 	return;
 }
 
-int _issue_probereq(struct rtw_adapter *adapt,
+static int _issue_probereq(struct rtw_adapter *adapt,
 		    struct ndis_802_11_ssid *pssid, u8 *da, int wait_ack)
 {
 	int ret = _FAIL;
@@ -10203,7 +10194,7 @@ void mlmeext_sta_del_event_callback(struct rtw_adapter *adapt)
 Following are the functions for the timer handlers
 
 *****************************************************************************/
-void _linked_rx_signal_strehgth_display(struct rtw_adapter *adapt)
+static void _linked_rx_signal_strehgth_display(struct rtw_adapter *adapt)
 {
 	int UndecoratedSmoothedPWDB;
 
@@ -10265,7 +10256,7 @@ void _linked_rx_signal_strehgth_display(struct rtw_adapter *adapt)
 	DBG_8192D(" FalseAlmCnt_all(%d)\n", adapt->recvpriv.falsealmcnt_all);
 }
 
-u8 chk_ap_is_alive(struct rtw_adapter *adapt, struct sta_info *psta)
+static u8 chk_ap_is_alive(struct rtw_adapter *adapt, struct sta_info *psta)
 {
 	u8 ret = false;
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
@@ -10908,7 +10899,7 @@ u8 disconnect_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 	return H2C_SUCCESS;
 }
 
-int rtw_scan_ch_decision(struct rtw_adapter *adapt,
+static int rtw_scan_ch_decision(struct rtw_adapter *adapt,
 			 struct rtw_ieee80211_channel *out, u32 out_num,
 			 struct rtw_ieee80211_channel *in, u32 in_num)
 {
@@ -11336,7 +11327,10 @@ exit:
 
 u8 mlme_evt_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 {
-	u8 evt_code, evt_seq;
+	u8 evt_code;
+#ifdef CHECK_EVENT_SEQ
+	u8 evt_seq;
+#endif
 	u16 evt_sz;
 	uint *peventbuf;
 	void (*event_callback) (struct rtw_adapter *dev, u8 *pbuf);
@@ -11344,7 +11338,9 @@ u8 mlme_evt_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 
 	peventbuf = (uint *)pbuf;
 	evt_sz = (u16) (*peventbuf & 0xffff);
+#ifdef CHECK_EVENT_SEQ
 	evt_seq = (u8) ((*peventbuf >> 24) & 0x7f);
+#endif
 	evt_code = (u8) ((*peventbuf >> 16) & 0xff);
 
 #ifdef CHECK_EVENT_SEQ
@@ -12146,7 +12142,6 @@ int concurrent_chk_start_clnt_join(struct rtw_adapter *adapt)
 {
 	int ret = _FAIL;
 	struct mlme_ext_priv *pmlmeext;
-	struct mlme_ext_info *pmlmeinfo;
 	struct rtw_adapter *pbuddy_adapter;
 	struct mlme_ext_priv *pbuddy_mlmeext;
 	struct mlme_ext_info *pbuddy_pmlmeinfo;
@@ -12156,7 +12151,6 @@ int concurrent_chk_start_clnt_join(struct rtw_adapter *adapt)
 		return _SUCCESS;
 
 	pmlmeext = &adapt->mlmeextpriv;
-	pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	pbuddy_adapter = adapt->pbuddy_adapter;
 	pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
@@ -12226,7 +12220,6 @@ int concurrent_chk_start_clnt_join(struct rtw_adapter *adapt)
 void concurrent_chk_joinbss_done(struct rtw_adapter *adapt, int join_res)
 {
 	struct mlme_ext_priv *pmlmeext;
-	struct mlme_ext_info *pmlmeinfo;
 	struct rtw_adapter *pbuddy_adapter;
 	struct mlme_priv *pbuddy_mlmepriv;
 	struct mlme_ext_priv *pbuddy_mlmeext;
@@ -12237,7 +12230,6 @@ void concurrent_chk_joinbss_done(struct rtw_adapter *adapt, int join_res)
 		return;
 
 	pmlmeext = &adapt->mlmeextpriv;
-	pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	pbuddy_adapter = adapt->pbuddy_adapter;
 	pbuddy_mlmepriv = &(pbuddy_adapter->mlmepriv);
@@ -12522,17 +12514,16 @@ u8 set_chplan_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 
 u8 led_blink_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 {
+#ifdef CONFIG_LED_HANDLED_BY_CMD_THREAD
 	struct LedBlink_param *ledBlink_param;
-
+#endif
 	if (!pbuf)
 		return H2C_PARAMETERS_ERROR;
 
-	ledBlink_param = (struct LedBlink_param *)pbuf;
-
 #ifdef CONFIG_LED_HANDLED_BY_CMD_THREAD
+	ledBlink_param = (struct LedBlink_param *)pbuf;
 	BlinkHandler(ledBlink_param->pLed);
 #endif
-
 	return H2C_SUCCESS;
 }
 

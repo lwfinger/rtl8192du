@@ -367,7 +367,7 @@ int rtw_cmd_thread(void *context)
 {
 	u8 ret;
 	struct cmd_obj *pcmd;
-	u8 *pcmdbuf, *prspbuf;
+	u8 *pcmdbuf;
 	u8 (*cmd_hdl)(struct rtw_adapter *padapter, u8 *pbuf);
 	void (*pcmd_callback)(struct rtw_adapter *dev, struct cmd_obj *pcmd);
 	struct rtw_adapter *padapter = (struct rtw_adapter *)context;
@@ -378,7 +378,6 @@ _func_enter_;
 	thread_enter("RTW_CMD_THREAD");
 
 	pcmdbuf = pcmdpriv->cmd_buf;
-	prspbuf = pcmdpriv->rsp_buf;
 
 	pcmdpriv->cmdthd_running = true;
 	_rtw_up_sema(&pcmdpriv->terminate_cmdthread_sema);
@@ -1022,7 +1021,7 @@ _func_exit_;
 
 u8 rtw_joinbss_cmd(struct rtw_adapter *padapter, struct wlan_network *pnetwork)
 {
-	u8 *auth, res = _SUCCESS;
+	u8 res = _SUCCESS;
 	uint	t_len = 0;
 	struct wlan_bssid_ex	*psecnetwork;
 	struct cmd_obj *pcmd;
@@ -1084,7 +1083,6 @@ _func_enter_;
 
 	memcpy(psecnetwork, &pnetwork->network, get_wlan_bssid_ex_sz(&pnetwork->network));
 
-	auth = &psecuritypriv->authenticator_ie[0];
 	psecuritypriv->authenticator_ie[0] = (unsigned char)psecnetwork->IELength;
 
 	if ((psecnetwork->IELength-12) < (256-1)) {

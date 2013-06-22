@@ -1,0 +1,35 @@
+--- os_dep/ioctl_linux.c
++++ os_dep/ioctl_linux.c
+@@ -260,7 +260,8 @@
+ 				char *start, char *stop)
+ {
+ 	struct iw_event iwe;
+-	u16 cap;
++	__le16 cap;
++	u16 cpu_cap;
+ 	u32 ht_ielen = 0;
+ 	char custom[MAX_CUSTOM_LEN];
+ 	char *p;
+@@ -424,10 +425,10 @@
+ 	memcpy((u8 *)&cap, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
+ 
+ 
+-	cap = le16_to_cpu(cap);
++	cpu_cap = le16_to_cpu(cap);
+ 
+-	if (cap & (WLAN_CAPABILITY_IBSS |WLAN_CAPABILITY_BSS)) {
+-		if (cap & WLAN_CAPABILITY_BSS)
++	if (cpu_cap & (WLAN_CAPABILITY_IBSS |WLAN_CAPABILITY_BSS)) {
++		if (cpu_cap & WLAN_CAPABILITY_BSS)
+ 			iwe.u.mode = IW_MODE_MASTER;
+ 		else
+ 			iwe.u.mode = IW_MODE_ADHOC;
+@@ -447,7 +448,7 @@
+ 
+ 	/* Add encryption capability */
+ 	iwe.cmd = SIOCGIWENCODE;
+-	if (cap & WLAN_CAPABILITY_PRIVACY)
++	if (cpu_cap & WLAN_CAPABILITY_PRIVACY)
+ 		iwe.u.data.flags = IW_ENCODE_ENABLED | IW_ENCODE_NOKEY;
+ 	else
+ 		iwe.u.data.flags = IW_ENCODE_DISABLED;

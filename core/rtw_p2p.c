@@ -2325,7 +2325,7 @@ u8 process_p2p_provdisc_resp(struct wifidirect_info *pwdinfo,  u8 *pframe)
 	return true;
 }
 
-u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_content, u8 ch_cnt, u8 *peer_ch_list)
+static u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_content, u8 ch_cnt, u8 *peer_ch_list)
 {
 	u8 i = 0, j = 0;
 	u8 temp = 0;
@@ -2347,7 +2347,7 @@ u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_content, u8 
 	return ch_no;
 }
 
-u8 rtw_p2p_check_peer_oper_ch(struct mlme_ext_priv *pmlmeext, u8 ch)
+static u8 rtw_p2p_check_peer_oper_ch(struct mlme_ext_priv *pmlmeext, u8 ch)
 {
 	u8 i = 0;
 
@@ -2359,7 +2359,7 @@ u8 rtw_p2p_check_peer_oper_ch(struct mlme_ext_priv *pmlmeext, u8 ch)
 	return _FAIL;
 }
 
-u8 rtw_p2p_ch_inclusion(struct mlme_ext_priv *pmlmeext, u8 *peer_ch_list, u8 peer_ch_num, u8 *ch_list_inclusioned)
+static u8 rtw_p2p_ch_inclusion(struct mlme_ext_priv *pmlmeext, u8 *peer_ch_list, u8 peer_ch_num, u8 *ch_list_inclusioned)
 {
 	int	i = 0, j = 0, temp = 0;
 	u8 ch_no = 0;
@@ -2870,12 +2870,11 @@ u8 process_p2p_presence_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 	return true;
 }
 
-void find_phase_handler(struct rtw_adapter *padapter)
+static void find_phase_handler(struct rtw_adapter *padapter)
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct ndis_802_11_ssid	ssid;
-	u8 _status = 0;
 
 _func_enter_;
 
@@ -2886,7 +2885,7 @@ _func_enter_;
 	rtw_p2p_set_state(pwdinfo, P2P_STATE_FIND_PHASE_SEARCH);
 
 	spin_lock_bh(&pmlmepriv->lock);
-	_status = rtw_sitesurvey_cmd(padapter, &ssid, 1, NULL, 0);
+	rtw_sitesurvey_cmd(padapter, &ssid, 1, NULL, 0);
 	spin_unlock_bh(&pmlmepriv->lock);
 
 
@@ -2895,7 +2894,7 @@ _func_exit_;
 
 void p2p_concurrent_handler(struct rtw_adapter *padapter);
 
-void restore_p2p_state_handler(struct rtw_adapter *padapter)
+static void restore_p2p_state_handler(struct rtw_adapter *padapter)
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -2934,7 +2933,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void pre_tx_invitereq_handler(struct rtw_adapter *padapter)
+static void pre_tx_invitereq_handler(struct rtw_adapter *padapter)
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	u8 val8 = 1;
@@ -2948,7 +2947,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void pre_tx_provdisc_handler(struct rtw_adapter *padapter)
+static void pre_tx_provdisc_handler(struct rtw_adapter *padapter)
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	u8 val8 = 1;
@@ -2962,7 +2961,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void pre_tx_negoreq_handler(struct rtw_adapter *padapter)
+static void pre_tx_negoreq_handler(struct rtw_adapter *padapter)
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	u8 val8 = 1;
@@ -3843,7 +3842,7 @@ static void find_phase_timer_process(void *FunctionContext)
 }
 
 #ifdef CONFIG_CONCURRENT_MODE
-void ap_p2p_switch_timer_process(void *FunctionContext)
+static void ap_p2p_switch_timer_process(void *FunctionContext)
 {
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
 	struct	wifidirect_info		*pwdinfo = &adapter->wdinfo;
@@ -3931,8 +3930,6 @@ void init_wifidirect_info(struct rtw_adapter *padapter, enum P2P_ROLE role)
 #endif
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter				*pbuddy_adapter = padapter->pbuddy_adapter;
-	struct wifidirect_info	*pbuddy_wdinfo;
-	struct mlme_priv		*pbuddy_mlmepriv;
 	struct mlme_ext_priv	*pbuddy_mlmeext;
 #endif
 
@@ -3947,11 +3944,8 @@ void init_wifidirect_info(struct rtw_adapter *padapter, enum P2P_ROLE role)
 	pwdinfo->social_chan[3] = 0;	/*	channel 0 for scanning ending in site survey function. */
 
 #ifdef CONFIG_CONCURRENT_MODE
-	if (pbuddy_adapter) {
-		pbuddy_wdinfo = &pbuddy_adapter->wdinfo;
-		pbuddy_mlmepriv = &pbuddy_adapter->mlmepriv;
+	if (pbuddy_adapter)
 		pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
-	}
 
 	if ((check_buddy_fwstate(padapter, _FW_LINKED) == true) &&
 	    ((pbuddy_mlmeext->cur_channel == 1) ||

@@ -293,7 +293,6 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 	int	status = _FAIL;
 	struct dvobj_priv *pdvobjpriv = NULL;
 	struct usb_device				*pusbd;
-	struct usb_device_descriptor	*pdev_desc;
 	struct usb_host_config			*phost_conf;
 	struct usb_config_descriptor		*pconf_desc;
 	struct usb_host_interface		*phost_iface;
@@ -320,8 +319,6 @@ _func_enter_;
 	pdvobjpriv->RtNumInPipes = 0;
 	pdvobjpriv->RtNumOutPipes = 0;
 
-
-	pdev_desc = &pusbd->descriptor;
 	phost_conf = pusbd->actconfig;
 	pconf_desc = &phost_conf->desc;
 

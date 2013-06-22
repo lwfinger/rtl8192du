@@ -89,37 +89,19 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 		DBG_8192D("rtw_hal_init: hw_init_completed == true\n");
 		return status;
 	}
-#ifdef CONFIG_DEINIT_BEFORE_INIT
-	status = padapter->HalFunc.hal_deinit(padapter);
-	if (status != _SUCCESS) {
-		DBG_8192D("rtw_hal_init: hal_deinit before hal_init FAIL !!\n");
-		return status;
-	}
-#endif
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	/*  before init mac0, driver must init mac1 first to avoid usb rx error. */
 	if ((padapter->pbuddy_adapter != NULL) && (padapter->DualMacConcurrent == true)
 		&& (padapter->adapter_type == PRIMARY_ADAPTER))
 	{
-		if (padapter->pbuddy_adapter->hw_init_completed == true)
-		{
+		if (padapter->pbuddy_adapter->hw_init_completed == true) {
 			DBG_8192D("rtw_hal_init: pbuddy_adapter hw_init_completed == true\n");
-		}
-		else
-		{
-#ifdef CONFIG_DEINIT_BEFORE_INIT
-			status = padapter->HalFunc.hal_deinit(padapter->pbuddy_adapter);
-			if (status != _SUCCESS) {
-				DBG_8192D("rtw_hal_init: hal_deinit before hal_init FAIL !!(pbuddy_adapter)\n");
-				return status;
-			}
-#endif
+		} else {
 			status =	padapter->HalFunc.hal_init(padapter->pbuddy_adapter);
 			if (status == _SUCCESS) {
 				padapter->pbuddy_adapter->hw_init_completed = true;
-			}
-			else {
+			} else {
 				padapter->pbuddy_adapter->hw_init_completed = false;
 				RT_TRACE(_module_hal_init_c_,_drv_err_,("rtw_hal_init: hal__init fail(pbuddy_adapter)\n"));
 				return status;
@@ -127,24 +109,14 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 		}
 	}
 #else
-	if (adapter_to_dvobj(padapter)->NumInterfaces == 2 && padapter->registrypriv.mac_phy_mode != 1)
-	{
+	if (adapter_to_dvobj(padapter)->NumInterfaces == 2 && padapter->registrypriv.mac_phy_mode != 1) {
 		if (WARN_ON_ONCE(!padapter->pbuddy_adapter))
 			return _FAIL;
-		if (padapter->pbuddy_adapter->hw_init_completed == false)
-		{
-#ifdef CONFIG_DEINIT_BEFORE_INIT
-			status = padapter->HalFunc.hal_deinit(padapter->pbuddy_adapter);
-			if (status != _SUCCESS) {
-				DBG_8192D("rtw_hal_init: hal_deinit before hal_init FAIL !!(pbuddy_adapter)\n");
-				return status;
-			}
-#endif
+		if (padapter->pbuddy_adapter->hw_init_completed == false) {
 			status = padapter->HalFunc.hal_init(padapter->pbuddy_adapter);
 			if (status == _SUCCESS) {
 				padapter->pbuddy_adapter->hw_init_completed = true;
-			}
-			else {
+			} else {
 				padapter->pbuddy_adapter->hw_init_completed = false;
 				RT_TRACE(_module_hal_init_c_,_drv_err_,("rtw_hal_init: hal__init fail for another interface\n"));
 			}
@@ -163,8 +135,7 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 			rtw_hal_notch_filter(padapter, 1);
 
 		rtw_hal_reset_security_engine(padapter);
-	}
-	else {
+	} else {
 		padapter->hw_init_completed = false;
 		RT_TRACE(_module_hal_init_c_,_drv_err_,("rtw_hal_init: hal__init fail\n"));
 	}

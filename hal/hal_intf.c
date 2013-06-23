@@ -84,17 +84,16 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 {
 	uint	status = _SUCCESS;
 
-	if (padapter->hw_init_completed == true)
-	{
+	if (padapter->hw_init_completed == true) {
 		DBG_8192D("rtw_hal_init: hw_init_completed == true\n");
 		return status;
 	}
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	/*  before init mac0, driver must init mac1 first to avoid usb rx error. */
-	if ((padapter->pbuddy_adapter != NULL) && (padapter->DualMacConcurrent == true)
-		&& (padapter->adapter_type == PRIMARY_ADAPTER))
-	{
+	if ((padapter->pbuddy_adapter != NULL) &&
+	    (padapter->DualMacConcurrent == true) &&
+	    (padapter->adapter_type == PRIMARY_ADAPTER)) {
 		if (padapter->pbuddy_adapter->hw_init_completed == true) {
 			DBG_8192D("rtw_hal_init: pbuddy_adapter hw_init_completed == true\n");
 		} else {
@@ -105,20 +104,6 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 				padapter->pbuddy_adapter->hw_init_completed = false;
 				RT_TRACE(_module_hal_init_c_,_drv_err_,("rtw_hal_init: hal__init fail(pbuddy_adapter)\n"));
 				return status;
-			}
-		}
-	}
-#else
-	if (adapter_to_dvobj(padapter)->NumInterfaces == 2 && padapter->registrypriv.mac_phy_mode != 1) {
-		if (WARN_ON_ONCE(!padapter->pbuddy_adapter))
-			return _FAIL;
-		if (padapter->pbuddy_adapter->hw_init_completed == false) {
-			status = padapter->HalFunc.hal_init(padapter->pbuddy_adapter);
-			if (status == _SUCCESS) {
-				padapter->pbuddy_adapter->hw_init_completed = true;
-			} else {
-				padapter->pbuddy_adapter->hw_init_completed = false;
-				RT_TRACE(_module_hal_init_c_,_drv_err_,("rtw_hal_init: hal__init fail for another interface\n"));
 			}
 		}
 	}
@@ -153,14 +138,10 @@ _func_enter_;
 
 	status = padapter->HalFunc.hal_deinit(padapter);
 
-	if (status == _SUCCESS) {
+	if (status == _SUCCESS)
 		padapter->hw_init_completed = false;
-	}
 	else
-	{
 		RT_TRACE(_module_hal_init_c_,_drv_err_,("\n rtw_hal_deinit: hal_init fail\n"));
-	}
-
 _func_exit_;
 
 	return status;

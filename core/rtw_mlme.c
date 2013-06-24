@@ -440,7 +440,7 @@ u8 *rtw_get_capability_from_ie(u8 *ie)
 
 u16 rtw_get_capability(struct wlan_bssid_ex *bss)
 {
-	u16 val;
+	__le16 val;
 	_func_enter_;
 
 	memcpy((u8 *)&val, rtw_get_capability_from_ie(bss->IEs), 2);
@@ -572,14 +572,15 @@ static inline int is_same_ess(struct wlan_bssid_ex *a, struct wlan_bssid_ex *b)
 int is_same_network(struct wlan_bssid_ex *src, struct wlan_bssid_ex *dst)
 {
 	u16 s_cap, d_cap;
+	__le16 le_scap, le_dcap;
 
 	_func_enter_;
 
-	memcpy((u8 *)&s_cap, rtw_get_capability_from_ie(src->IEs), 2);
-	memcpy((u8 *)&d_cap, rtw_get_capability_from_ie(dst->IEs), 2);
+	memcpy((u8 *)&le_scap, rtw_get_capability_from_ie(src->IEs), 2);
+	memcpy((u8 *)&le_dcap, rtw_get_capability_from_ie(dst->IEs), 2);
 
-	s_cap = le16_to_cpu(s_cap);
-	d_cap = le16_to_cpu(d_cap);
+	s_cap = le16_to_cpu(le_scap);
+	d_cap = le16_to_cpu(le_dcap);
 
 	_func_exit_;
 
@@ -1649,7 +1650,7 @@ void rtw_joinbss_event_prehandle(struct rtw_adapter *adapter, u8 *pbuf)
 	if (pnetwork->network.Length > sizeof(struct wlan_bssid_ex)) {
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_,
 			 ("\n\n ***joinbss_evt_callback return a wrong bss ***\n\n"));
-		goto ignore_joinbss_callback;
+		goto ignore_nolock;
 	}
 
 	spin_lock_bh(&pmlmepriv->lock);
@@ -1830,6 +1831,7 @@ void rtw_joinbss_event_prehandle(struct rtw_adapter *adapter, u8 *pbuf)
 ignore_joinbss_callback:
 
 	spin_unlock_bh(&pmlmepriv->lock);
+ignore_nolock:
 	_func_exit_;
 }
 
@@ -3092,7 +3094,7 @@ void rtw_update_ht_cap(struct rtw_adapter *padapter, u8 *pie, uint ie_len,
 
 	/* update cur_bwmode & cur_ch_offset */
 	if ((cbw40_enable) &&
-	    (pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info & BIT(1)) &&
+	    (le16_to_cpu(pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info) & BIT(1)) &&
 	    (pmlmeinfo->HT_info.infos[0] & BIT(2))) {
 		int i;
 		u8 rf_type;
@@ -3151,7 +3153,7 @@ void rtw_update_ht_cap(struct rtw_adapter *padapter, u8 *pie, uint ie_len,
 	/*  Config SM Power Save setting */
 	/*  */
 	pmlmeinfo->SM_PS =
-	    (pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info & 0x0C) >> 2;
+	    (le16_to_cpu(pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info) & 0x0C) >> 2;
 	if (pmlmeinfo->SM_PS == WLAN_HT_CAP_SM_PS_STATIC) {
 		DBG_8192D("%s(): WLAN_HT_CAP_SM_PS_STATIC\n", __func__);
 	}

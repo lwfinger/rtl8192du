@@ -163,7 +163,7 @@ static void issue_group_disc_req(struct wifidirect_info *pwdinfo, u8 *da)
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	unsigned char category = RTW_WLAN_CATEGORY_P2P;/* P2P action frame */
-	u32	p2poui = cpu_to_be32(P2POUI);
+	__be32	p2poui = cpu_to_be32(P2POUI);
 	u8 oui_subtype = P2P_GO_DISC_REQUEST;
 	u8 dialogToken = 0;
 
@@ -221,7 +221,7 @@ static void issue_p2p_devdisc_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 s
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	unsigned char category = RTW_WLAN_CATEGORY_PUBLIC;
 	u8 action = P2P_PUB_ACTION_ACTION;
-	u32			p2poui = cpu_to_be32(P2POUI);
+	__be32 	p2poui = cpu_to_be32(P2POUI);
 	u8 oui_subtype = P2P_DEVDISC_RESP;
 	u8 p2pie[8] = { 0x00 };
 	u32 p2pielen = 0;
@@ -287,7 +287,7 @@ static void issue_p2p_provision_resp(struct wifidirect_info *pwdinfo, u8 *raddr,
 	unsigned char category = RTW_WLAN_CATEGORY_PUBLIC;
 	u8 action = P2P_PUB_ACTION_ACTION;
 	u8 dialogToken = frame_body[7];	/*	The Dialog Token of provisioning discovery request frame. */
-	u32			p2poui = cpu_to_be32(P2POUI);
+	__be32 	p2poui = cpu_to_be32(P2POUI);
 	u8 oui_subtype = P2P_PROVISION_DISC_RESP;
 	u8 wpsie[100] = { 0x00 };
 	u8 wpsielen = 0;
@@ -382,7 +382,7 @@ static void issue_p2p_presence_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	unsigned char category = RTW_WLAN_CATEGORY_P2P;/* P2P action frame */
-	u32	p2poui = cpu_to_be32(P2POUI);
+	__be32	p2poui = cpu_to_be32(P2POUI);
 	u8 oui_subtype = P2P_PRESENCE_RESPONSE;
 	u8 p2pie[MAX_P2P_IE_LEN] = { 0x00 };
 	u8 noa_attr_content[32] = { 0x00 };
@@ -458,7 +458,7 @@ u32 build_beacon_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	u8 p2pie[MAX_P2P_IE_LEN] = { 0x00 };
 	u16 capability = 0;
 	u32 len = 0, p2pielen = 0;
-
+	__le16 le_tmp;
 
 	/*	P2P OUI */
 	p2pielen = 0;
@@ -486,9 +486,9 @@ u32 build_beacon_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_PROVISIONING_ING))
 		capability |= (P2P_GRPCAP_GROUP_FORMATION<<8);
 
-	capability = cpu_to_le16(capability);
+	le_tmp = cpu_to_le16(capability);
 
-	p2pielen += rtw_set_p2p_attr_content(&p2pie[p2pielen], P2P_ATTR_CAPABILITY, 2, (u8 *)&capability);
+	p2pielen += rtw_set_p2p_attr_content(&p2pie[p2pielen], P2P_ATTR_CAPABILITY, 2, (u8 *)&le_tmp);
 
 
 	/*  P2P Device ID ATTR */
@@ -2130,6 +2130,8 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 	u32 ies_len;
 	u8 *p2p_ie;
 	u32	p2p_ielen = 0;
+	__be16 be_tmp;
+	__le16 le_tmp;
 
 	if (!rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO))
 		return P2P_STATUS_FAIL_REQUEST_UNABLE;
@@ -2154,9 +2156,9 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 
 	while (p2p_ie) {
 		/* Check P2P Capability ATTR */
-		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CAPABILITY, (u8 *)&cap_attr, (uint *)&attr_contentlen)) {
+		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CAPABILITY, (u8 *)&le_tmp, (uint *)&attr_contentlen)) {
 			DBG_8192D("[%s] Got P2P Capability Attr!!\n", __func__);
-			cap_attr = le16_to_cpu(cap_attr);
+			cap_attr = le16_to_cpu(le_tmp);
 			psta->dev_cap = cap_attr&0xff;
 		}
 
@@ -2179,8 +2181,8 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 
 				pattr_content += ETH_ALEN;
 
-				memcpy(&psta->config_methods, pattr_content, 2);/* Config Methods */
-				psta->config_methods = be16_to_cpu(psta->config_methods);
+				memcpy(&be_tmp, pattr_content, 2);/* Config Methods */
+				psta->config_methods = be16_to_cpu(be_tmp);
 
 				pattr_content += 2;
 
@@ -2204,8 +2206,8 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 					pattr_content += (num_of_secdev_type*8);
 				}
 				psta->dev_name_len = 0;
-				if (WPS_ATTR_DEVICE_NAME == be16_to_cpu(*(u16 *)pattr_content)) {
-					dev_name_len = be16_to_cpu(*(u16 *)(pattr_content+2));
+				if (WPS_ATTR_DEVICE_NAME == be16_to_cpu(*(__be16 *)pattr_content)) {
+					dev_name_len = be16_to_cpu(*(__be16 *)(pattr_content+2));
 					psta->dev_name_len = (sizeof(psta->dev_name) < dev_name_len) ? sizeof(psta->dev_name) : dev_name_len;
 					memcpy(psta->dev_name, pattr_content+4, psta->dev_name_len);
 				}
@@ -2291,14 +2293,14 @@ u8 process_p2p_provdisc_req(struct wifidirect_info *pwdinfo,  u8 *pframe, uint l
 	u8 *wpsie;
 	uint	wps_ielen = 0, attr_contentlen = 0;
 	u16	uconfig_method = 0;
-
+	__be16 be_tmp;
 
 	frame_body = (pframe + sizeof(struct rtw_ieee80211_hdr_3addr));
 
 	wpsie = rtw_get_wps_ie(frame_body + _PUBLIC_ACTION_IE_OFFSET_, len - _PUBLIC_ACTION_IE_OFFSET_, NULL, &wps_ielen);
 	if (wpsie) {
-		if (rtw_get_wps_attr_content(wpsie, wps_ielen, WPS_ATTR_CONF_METHOD, (u8 *)&uconfig_method, &attr_contentlen)) {
-			uconfig_method = be16_to_cpu(uconfig_method);
+		if (rtw_get_wps_attr_content(wpsie, wps_ielen, WPS_ATTR_CONF_METHOD, (u8 *)&be_tmp, &attr_contentlen)) {
+			uconfig_method = be16_to_cpu(be_tmp);
 			switch (uconfig_method) {
 			case WPS_CM_DISPLYA:
 				memcpy(pwdinfo->rx_prov_disc_info.strconfig_method_desc_of_prov_disc_req, "dis", 3);
@@ -2388,6 +2390,7 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
 	u8 *wpsie;
 	u16		wps_devicepassword_id = 0x0000;
 	uint	wps_devicepassword_id_len = 0;
+	__be16 be_tmp;
 #ifdef CONFIG_WFD
 	u8 wfd_ie[128] = { 0x00 };
 	u32	wfd_ielen = 0;
@@ -2408,8 +2411,8 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
 		/*	If some device wants to do p2p handshake without sending prov_disc_req */
 		/*	We have to get peer_req_cm from here. */
 		if (_rtw_memcmp(pwdinfo->rx_prov_disc_info.strconfig_method_desc_of_prov_disc_req, "000", 3)) {
-			rtw_get_wps_attr_content(wpsie, wps_ielen, WPS_ATTR_DEVICE_PWID, (u8 *)&wps_devicepassword_id, &wps_devicepassword_id_len);
-			wps_devicepassword_id = be16_to_cpu(wps_devicepassword_id);
+			rtw_get_wps_attr_content(wpsie, wps_ielen, WPS_ATTR_DEVICE_PWID, (u8 *)&be_tmp, &wps_devicepassword_id_len);
+			wps_devicepassword_id = be16_to_cpu(be_tmp);
 
 			if (wps_devicepassword_id == WPS_DPID_USER_SPEC)
 				memcpy(pwdinfo->rx_prov_disc_info.strconfig_method_desc_of_prov_disc_req, "dis", 3);
@@ -2452,12 +2455,13 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
 		u8 ch_list_inclusioned[50] = { 0x00 };
 		u8 ch_num_inclusioned = 0;
 		u16	cap_attr;
+		__le16 le_tmp;
 
 		rtw_p2p_set_state(pwdinfo, P2P_STATE_GONEGO_ING);
 
 		/* Check P2P Capability ATTR */
-		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CAPABILITY, (u8 *)&cap_attr, (uint *)&attr_contentlen)) {
-			cap_attr = le16_to_cpu(cap_attr);
+		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CAPABILITY, (u8 *)&le_tmp, (uint *)&attr_contentlen)) {
+			cap_attr = le16_to_cpu(le_tmp);
 
 #if defined(CONFIG_WFD) && defined(CONFIG_TDLS)
 			if (!(cap_attr & P2P_GRPCAP_INTRABSS))
@@ -2613,11 +2617,12 @@ u8 process_p2p_group_negotation_resp(struct wifidirect_info *pwdinfo, u8 *pframe
 		u8 peer_ch_num = 0;
 		u8 ch_list_inclusioned[50] = { 0x00 };
 		u8 ch_num_inclusioned = 0;
+		__le16 le_tmp;
 
 		while (p2p_ie) {
 			/* Check P2P Capability ATTR */
-			if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CAPABILITY, (u8 *)&cap_attr, (uint *)&attr_contentlen)) {
-				cap_attr = le16_to_cpu(cap_attr);
+			if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CAPABILITY, (u8 *)&le_tmp, (uint *)&attr_contentlen)) {
+				cap_attr = le16_to_cpu(le_tmp);
 #if defined(CONFIG_WFD) && defined(CONFIG_TDLS)
 			if (!(cap_attr & P2P_GRPCAP_INTRABSS))
 				ptdlsinfo->ap_prohibited = true;

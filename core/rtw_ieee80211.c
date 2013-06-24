@@ -384,20 +384,20 @@ _func_enter_;
 	ie += sz;
 
 	/* beacon interval : 2bytes */
-	*(u16 *)ie = cpu_to_le16((u16)pdev_network->Configuration.BeaconPeriod);/* BCN_INTERVAL; */
+	*(__le16 *)ie = cpu_to_le16((u16)pdev_network->Configuration.BeaconPeriod);/* BCN_INTERVAL; */
 	sz += 2;
 	ie += 2;
 
 	/* capability info */
 	*(u16 *)ie = 0;
 
-	*(u16 *)ie |= cpu_to_le16(cap_IBSS);
+	*(__le16 *)ie |= cpu_to_le16(cap_IBSS);
 
 	if (pregistrypriv->preamble == PREAMBLE_SHORT)
-		*(u16 *)ie |= cpu_to_le16(cap_ShortPremble);
+		*(__le16 *)ie |= cpu_to_le16(cap_ShortPremble);
 
 	if (pdev_network->Privacy)
-		*(u16 *)ie |= cpu_to_le16(cap_Privacy);
+		*(__le16 *)ie |= cpu_to_le16(cap_Privacy);
 
 	sz += 2;
 	ie += 2;
@@ -443,6 +443,7 @@ unsigned char *rtw_get_wpa_ie(unsigned char *pie, int *wpa_ie_len, int limit)
 {
 	int len;
 	u16 val16;
+	__le16 le_tmp;
 	unsigned char wpa_oui_type[] = {0x00, 0x50, 0xf2, 0x01};
 	u8 *pbuf = pie;
 
@@ -455,9 +456,9 @@ unsigned char *rtw_get_wpa_ie(unsigned char *pie, int *wpa_ie_len, int limit)
 				goto check_next_ie;
 
 			/* check version... */
-			memcpy((u8 *)&val16, (pbuf + 6), sizeof(val16));
+			memcpy((u8 *)&le_tmp, (pbuf + 6), sizeof(val16));
 
-			val16 = le16_to_cpu(val16);
+			val16 = le16_to_cpu(le_tmp);
 			if (val16 != 0x0001)
 				goto check_next_ie;
 

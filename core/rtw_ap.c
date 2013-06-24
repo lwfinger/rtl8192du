@@ -89,7 +89,7 @@ static void update_BCNTIM(struct rtw_adapter *padapter)
 	/* update TIM IE */
 	if (true) {
 		u8 *p, *dst_ie, *premainder_ie = NULL, *pbackup_remainder_ie = NULL;
-		u16 tim_bitmap_le;
+		__le16 tim_bitmap_le;
 		uint offset, tmp_len, tim_ielen, tim_ie_offset, remainder_ielen;
 
 		tim_bitmap_le = cpu_to_le16(pstapriv->tim_bitmap);
@@ -702,11 +702,11 @@ void update_sta_info_apmode(struct rtw_adapter *padapter, struct sta_info *psta)
 		phtpriv_sta->ampdu_enable = phtpriv_ap->ampdu_enable;
 
 		/* check if sta support s Short GI */
-		if ((phtpriv_sta->ht_cap.cap_info & phtpriv_ap->ht_cap.cap_info) & cpu_to_le16(IEEE80211_HT_CAP_SGI_20|IEEE80211_HT_CAP_SGI_40))
+		if ((phtpriv_sta->ht_cap.cap_info & phtpriv_ap->ht_cap.cap_info) & (IEEE80211_HT_CAP_SGI_20|IEEE80211_HT_CAP_SGI_40))
 			phtpriv_sta->sgi = true;
 
 		/*  bwmode */
-		if ((phtpriv_sta->ht_cap.cap_info & phtpriv_ap->ht_cap.cap_info) & cpu_to_le16(IEEE80211_HT_CAP_SUP_WIDTH)) {
+		if ((phtpriv_sta->ht_cap.cap_info & phtpriv_ap->ht_cap.cap_info) & IEEE80211_HT_CAP_SUP_WIDTH) {
 			phtpriv_sta->bwmode = pmlmeext->cur_bwmode;
 			phtpriv_sta->ch_offset = pmlmeext->cur_ch_offset;
 		}
@@ -769,7 +769,7 @@ static void update_hw_ht_param(struct rtw_adapter *padapter)
 	/*  */
 	/*  Config SM Power Save setting */
 	/*  */
-	pmlmeinfo->SM_PS = (pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info & 0x0C) >> 2;
+	pmlmeinfo->SM_PS = (le16_to_cpu(pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info) & 0x0C) >> 2;
 	if (pmlmeinfo->SM_PS == WLAN_HT_CAP_SM_PS_STATIC)
 		DBG_8192D("%s(): WLAN_HT_CAP_SM_PS_STATIC\n", __func__);
 }
@@ -1825,7 +1825,7 @@ void bss_cap_update_on_sta_join(struct rtw_adapter *padapter, struct sta_info *p
 #ifdef CONFIG_80211N_HT
 
 	if (psta->flags & WLAN_STA_HT) {
-		u16 ht_capab = le16_to_cpu(psta->htpriv.ht_cap.cap_info);
+		u16 ht_capab = psta->htpriv.ht_cap.cap_info;
 
 		DBG_8192D("HT: STA %pM HT Capabilities Info: 0x%04x\n", psta->hwaddr, ht_capab);
 

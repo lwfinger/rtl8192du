@@ -1530,7 +1530,7 @@ _func_enter_;
 	snap->oui[1] = oui[1];
 	snap->oui[2] = oui[2];
 
-	*(u16 *)(data + SNAP_SIZE) = htons(h_proto);
+	*(__be16 *)(data + SNAP_SIZE) = htons(h_proto);
 
 _func_exit_;
 
@@ -2152,14 +2152,14 @@ static int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 	spin_lock_bh(&padapter->br_ext_lock);
 	if (!(skb->data[0] & 1) && br_port &&
 	    memcmp(skb->data+MACADDRLEN, padapter->br_mac, MACADDRLEN) &&
-	    *((unsigned short *)(skb->data+MACADDRLEN*2)) != __constant_htons(ETH_P_8021Q) &&
-	    *((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP) &&
+	    *((__be16 *)(skb->data+MACADDRLEN*2)) != __constant_htons(ETH_P_8021Q) &&
+	    *((__be16 *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP) &&
 	    !memcmp(padapter->scdb_mac, skb->data+MACADDRLEN, MACADDRLEN) && padapter->scdb_entry) {
 		memcpy(skb->data+MACADDRLEN, GET_MY_HWADDR(padapter), MACADDRLEN);
 		padapter->scdb_entry->ageing_timer = jiffies;
 		spin_unlock_bh(&padapter->br_ext_lock);
 	} else {
-		if (*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_8021Q)) {
+		if (*((__be16 *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_8021Q)) {
 			is_vlan_tag = 1;
 			vlan_hdr = *((unsigned short *)(skb->data+MACADDRLEN*2+2));
 			for (i = 0; i < 6; i++)
@@ -2168,10 +2168,10 @@ static int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 		}
 		/* if SA == br_mac && skb == IP  => copy SIP to br_ip ?? why */
 		if (!memcmp(skb->data+MACADDRLEN, padapter->br_mac, MACADDRLEN) &&
-		    (*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)))
+		    (*((__be16 *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)))
 			memcpy(padapter->br_ip, skb->data+WLAN_ETHHDR_LEN+12, 4);
 
-		if (*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)) {
+		if (*((__be16 *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)) {
 			if (memcmp(padapter->scdb_mac, skb->data+MACADDRLEN, MACADDRLEN)) {
 				padapter->scdb_entry = (struct nat25_network_db_entry *)
 						       scdb_findentry(padapter,
@@ -2202,7 +2202,7 @@ static int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 					skb_push(skb, 4);
 					for (i = 0; i < 6; i++)
 						*((unsigned short *)(skb->data+i*2)) = *((unsigned short *)(skb->data+4+i*2));
-					*((unsigned short *)(skb->data+MACADDRLEN*2)) = __constant_htons(ETH_P_8021Q);
+					*((__be16 *)(skb->data+MACADDRLEN*2)) = __constant_htons(ETH_P_8021Q);
 					*((unsigned short *)(skb->data+MACADDRLEN*2+2)) = vlan_hdr;
 				}
 
@@ -2252,7 +2252,7 @@ static int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 			skb_push(skb, 4);
 			for (i = 0; i < 6; i++)
 				*((unsigned short *)(skb->data+i*2)) = *((unsigned short *)(skb->data+4+i*2));
-			*((unsigned short *)(skb->data+MACADDRLEN*2)) = __constant_htons(ETH_P_8021Q);
+			*((__be16 *)(skb->data+MACADDRLEN*2)) = __constant_htons(ETH_P_8021Q);
 			*((unsigned short *)(skb->data+MACADDRLEN*2+2)) = vlan_hdr;
 		}
 	}

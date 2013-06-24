@@ -700,6 +700,7 @@ static union recv_frame *portctrl(struct rtw_adapter *adapter,
 	u16 ether_type = 0;
 	u16 eapol_type = 0x888e;	/* for Funia BD's WPA issue */
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
+	__be16 be_tmp;
 
 	_func_enter_;
 
@@ -728,8 +729,8 @@ static union recv_frame *portctrl(struct rtw_adapter *adapter,
 			ptr =
 			    ptr + pfhdr->attrib.hdrlen + pfhdr->attrib.iv_len +
 			    LLC_HEADER_SIZE;
-			memcpy(&ether_type, ptr, 2);
-			ether_type = ntohs((unsigned short)ether_type);
+			memcpy(&be_tmp, ptr, 2);
+			ether_type = ntohs(be_tmp);
 
 			if (ether_type == eapol_type) {
 				prtnframe = precv_frame;
@@ -1884,6 +1885,7 @@ static int wlanhdr_to_ethhdr(union recv_frame *precvframe)
 	u8 bsnaphdr;
 	u8 *psnap_type;
 	struct ieee80211_snap_hdr *psnap;
+	__be16 be_tmp;
 
 	int ret = _SUCCESS;
 	struct rtw_adapter *adapter = precvframe->u.hdr.adapter;
@@ -1924,8 +1926,8 @@ static int wlanhdr_to_ethhdr(union recv_frame *precvframe)
 		 ("\n===pattrib->hdrlen: %x,  pattrib->iv_len:%x ===\n\n",
 		  pattrib->hdrlen, pattrib->iv_len));
 
-	memcpy(&eth_type, ptr + rmv_len, 2);
-	eth_type = ntohs((unsigned short)eth_type);	/* pattrib->ether_type */
+	memcpy(&be_tmp, ptr + rmv_len, 2);
+	eth_type = ntohs(be_tmp);	/* pattrib->ether_type */
 	pattrib->eth_type = eth_type;
 
 	if ((check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)) {
@@ -1951,8 +1953,8 @@ static int wlanhdr_to_ethhdr(union recv_frame *precvframe)
 	memcpy(ptr + ETH_ALEN, pattrib->src, ETH_ALEN);
 
 	if (!bsnaphdr) {
-		len = htons(len);
-		memcpy(ptr + 12, &len, 2);
+		be_tmp = htons(len);
+		memcpy(ptr + 12, &be_tmp, 2);
 	}
 
 	_func_exit_;
@@ -2264,7 +2266,7 @@ static int amsdu_to_msdu(struct rtw_adapter *padapter, union recv_frame *prframe
 			memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->dst,
 			       ETH_ALEN);
 		} else {
-			u16 len;
+			__be16 len;
 			/* Leave Ethernet header part of hdr and full payload */
 			len = htons(sub_skb->len);
 			memcpy(skb_push(sub_skb, 2), &len, 2);

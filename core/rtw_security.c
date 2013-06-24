@@ -138,7 +138,7 @@ exit:
 	_func_exit_;
 }
 
-static u32 getcrc32(u8 *buf, int len)
+static __le32 getcrc32(u8 *buf, int len)
 {
 	u8 *p;
 	u32 crc;
@@ -152,7 +152,7 @@ static u32 getcrc32(u8 *buf, int len)
 	for (p = buf; len > 0; ++p, --len)
 		crc = crc32_table[(crc ^ *p) & 0xff] ^ (crc >> 8);
 	_func_exit_;
-	return ~crc;		/* transmit complement, per CRC-32 spec */
+	return cpu_to_le32(~crc);	/* transmit complement, per CRC-32 spec */
 }
 
 /*
@@ -204,8 +204,7 @@ void rtw_wep_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 				    pattrib->last_txcmdsz - pattrib->hdrlen -
 				    pattrib->iv_len - pattrib->icv_len;
 
-				*((unsigned long *)crc) =
-				    cpu_to_le32(getcrc32(payload, length));
+				*((__le32 *)crc) = getcrc32(payload, length);
 
 				arcfour_init(&mycontext, wepkey, 3 + keylength);
 				arcfour_encrypt(&mycontext, payload, payload,
@@ -216,8 +215,7 @@ void rtw_wep_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 				length =
 				    pxmitpriv->frag_len - pattrib->hdrlen -
 				    pattrib->iv_len - pattrib->icv_len;
-				*((unsigned long *)crc) =
-				    cpu_to_le32(getcrc32(payload, length));
+				*((__le32 *)crc) = getcrc32(payload, length);
 				arcfour_init(&mycontext, wepkey, 3 + keylength);
 				arcfour_encrypt(&mycontext, payload, payload,
 						length);
@@ -273,8 +271,7 @@ void rtw_wep_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 		arcfour_encrypt(&mycontext, payload, payload, length);
 
 		/* calculate icv and compare the icv */
-		*((unsigned long *)crc) =
-		    le32_to_cpu(getcrc32(payload, length - 4));
+		*((__le32 *)crc) = getcrc32(payload, length - 4);
 
 		if (crc[3] != payload[length - 1] ||
 		    crc[2] != payload[length - 2] ||
@@ -707,7 +704,7 @@ u32 rtw_tkip_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 						 ("pattrib->iv_len =%x, pattrib->icv_len =%x\n",
 						  pattrib->iv_len,
 						  pattrib->icv_len));
-					*((u32 *)crc) = cpu_to_le32(getcrc32(payload, length));	/* modified by Amy */
+					*((__le32 *)crc) = getcrc32(payload, length);	/* modified by Amy */
 
 					arcfour_init(&mycontext, rc4key, 16);
 					arcfour_encrypt(&mycontext, payload,
@@ -720,7 +717,7 @@ u32 rtw_tkip_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 					    pxmitpriv->frag_len -
 					    pattrib->hdrlen - pattrib->iv_len -
 					    pattrib->icv_len;
-					*((u32 *)crc) = cpu_to_le32(getcrc32(payload, length));	/* modified by Amy */
+					*((__le32 *)crc) = getcrc32(payload, length);	/* modified by Amy */
 					arcfour_init(&mycontext, rc4key, 16);
 					arcfour_encrypt(&mycontext, payload,
 							payload, length);
@@ -810,8 +807,7 @@ u32 rtw_tkip_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 			arcfour_init(&mycontext, rc4key, 16);
 			arcfour_encrypt(&mycontext, payload, payload, length);
 
-			*((u32 *)crc) = le32_to_cpu(getcrc32(payload,
-						    length - 4));
+			*((__le32 *)crc) = getcrc32(payload, length - 4);
 
 			if (crc[3] != payload[length - 1] ||
 			    crc[2] != payload[length - 2] ||

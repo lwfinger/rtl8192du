@@ -90,7 +90,7 @@
 /* 		4-byte pointer in litten-endian system. */
 /*  */
 #define LE_P4BYTE_TO_HOST_4BYTE(__pStart) \
-	(EF4Byte(*((u32 *)(__pStart))))
+	(EF4Byte(*((__le32 *)(__pStart))))
 
 /*  */
 /* 	Description: */
@@ -121,7 +121,7 @@
 /* 		Set subfield of little-endian 4-byte value to specified value. */
 /*  */
 #define SET_BITS_TO_LE_4BYTE(__pStart, __BitOffset, __BitLen, __Value) \
-	*((u32 *)(__pStart)) = \
+	*((__le32 *)(__pStart)) = \
 		EF4Byte(\
 			LE_BITS_CLEARED_TO_4BYTE(__pStart, __BitOffset, __BitLen) \
 			| \

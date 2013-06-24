@@ -301,11 +301,11 @@ void rtw_tdls_process_ht_cap(_adapter *adapter, struct sta_info *ptdls_sta, u8 *
 			ptdls_sta->htpriv.ampdu_enable = true;
 
 		/* check if sta support s Short GI */
-		if (ptdls_sta->htpriv.ht_cap.cap_info & cpu_to_le16(IEEE80211_HT_CAP_SGI_20|IEEE80211_HT_CAP_SGI_40))
+		if (ptdls_sta->htpriv.ht_cap.cap_info & (IEEE80211_HT_CAP_SGI_20|IEEE80211_HT_CAP_SGI_40))
 			ptdls_sta->htpriv.sgi = true;
 
 		/*  bwmode would still followed AP's setting */
-		if (ptdls_sta->htpriv.ht_cap.cap_info & cpu_to_le16(IEEE80211_HT_CAP_SUP_WIDTH)) {
+		if (ptdls_sta->htpriv.ht_cap.cap_info & IEEE80211_HT_CAP_SUP_WIDTH) {
 			ptdls_sta->htpriv.bwmode = adapter->mlmeextpriv.cur_bwmode;
 			ptdls_sta->htpriv.ch_offset = adapter->mlmeextpriv.cur_ch_offset;
 		}

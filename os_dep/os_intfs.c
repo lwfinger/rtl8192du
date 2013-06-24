@@ -867,11 +867,13 @@ u16 rtw_recv_select_queue(struct sk_buff *skb)
 	u16	eth_type;
 	u32 priority;
 	u8 *pdata = skb->data;
+	__be16 be_tmp;
 
-	memcpy(&eth_type, pdata+(ETH_ALEN<<1), 2);
+	memcpy(&be_tmp, pdata+(ETH_ALEN<<1), 2);
+	eth_type = be16_to_cpu(be_tmp);
 
 	switch (eth_type) {
-	case __constant_htons(ETH_P_IP):
+	case ETH_P_IP:
 		piphdr = (struct iphdr *)(pdata+ETH_HLEN);
 		dscp = piphdr->tos & 0xfc;
 		priority = dscp >> 5;

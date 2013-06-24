@@ -300,12 +300,12 @@ u8 rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg)
 {
 	u8	buf[5];
 	u8	res=_SUCCESS;
-
+	__le32	le_mask;
 _func_enter_;
 
 	memset(buf, 0, 5);
-	mask = cpu_to_le32(mask);
-	memcpy(buf, &mask, 4);
+	le_mask = cpu_to_le32(mask);
+	memcpy(buf, &le_mask, 4);
 	buf[4]  = arg;
 
 	FillH2CCmd92D(padapter, H2C_RA_MASK, 5, buf);

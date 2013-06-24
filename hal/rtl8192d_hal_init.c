@@ -114,7 +114,7 @@ static int _BlockWrite_92d(struct rtw_adapter *Adapter, void *buffer, u32 size)
 			remainSize=remain8%blocksize4;
 
 			for (i = 0 ; i < blockCount4 ; i++) {
-				ret = rtw_write32(Adapter, (FW_8192D_START_ADDRESS + offset+i*blocksize4), cpu_to_le32(*(pu4BytePtr+ offset/4+i)));
+				ret = rtw_write32(Adapter, (FW_8192D_START_ADDRESS + offset+i*blocksize4), le32_to_cpu(*(__le32 *)(pu4BytePtr+ offset/4+i)));
 
 				if (ret == _FAIL)
 					goto exit;
@@ -412,7 +412,7 @@ int FirmwareDownload92D(
 	}
 
 	pHalData->FirmwareVersion =  le16_to_cpu(pFwHdr->Version);
-	pHalData->FirmwareSubVersion = le16_to_cpu(pFwHdr->Subversion);
+	pHalData->FirmwareSubVersion = pFwHdr->Subversion;
 
 	DBG_8192D(" FirmwareVersion(%#x), Signature(%#x)\n", pHalData->FirmwareVersion, le16_to_cpu(pFwHdr->Signature));
 

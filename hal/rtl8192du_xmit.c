@@ -116,7 +116,7 @@ void rtl8192du_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 		ptxdesc->txdw7 &= cpu_to_le32(0xffff0000);
 
 		for (index = 0 ; index < count ; index++) {
-			checksum = checksum ^ le16_to_cpu(*(usPtr + index));
+			checksum = checksum ^ le16_to_cpu(*(__le16 *)(usPtr + index));
 		}
 
 		ptxdesc->txdw7 |= cpu_to_le32(0x0000ffff&checksum);
@@ -149,7 +149,7 @@ static void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxd
 	}
 }
 
-static void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
+static void fill_txdesc_vcs(struct pkt_attrib *pattrib, __le32 *pdw)
 {
 
 	switch (pattrib->vcs_mode)
@@ -185,7 +185,7 @@ static void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
 	}
 }
 
-static void fill_txdesc_phy(struct pkt_attrib *pattrib, u32 *pdw)
+static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
 {
 
 	if (pattrib->ht_en)

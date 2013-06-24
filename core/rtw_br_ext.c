@@ -1350,7 +1350,7 @@ struct dhcp_message {
 	u_int8_t hops;
 	u_int32_t xid;
 	u_int16_t secs;
-	u_int16_t flags;
+	__be16 flags;
 	u_int32_t ciaddr;
 	u_int32_t yiaddr;
 	u_int32_t siaddr;
@@ -1391,7 +1391,7 @@ void dhcp_flag_bcast(struct rtw_adapter *priv, struct sk_buff *skb)
 							dhcph->flags |= htons(BROADCAST_FLAG);
 							/*  recalculate checksum */
 							sum = ~(udph->check) & 0xffff;
-							sum += dhcph->flags;
+							sum += be16_to_cpu(dhcph->flags);
 							while (sum >> 16)
 								sum = (sum & 0xffff) + (sum >> 16);
 							udph->check = ~sum;

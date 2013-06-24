@@ -96,7 +96,7 @@ struct cmd_tlv {
 #endif /* PNO_SUPPORT */
 
 struct android_wifi_priv_cmd {
-	char *buf;
+	const char __user *buf;
 	int used_len;
 	int total_len;
 };

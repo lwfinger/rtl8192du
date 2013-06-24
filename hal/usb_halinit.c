@@ -2973,8 +2973,8 @@ _ReadIDs(
 
 	if (false == AutoloadFail) {
 		/*  VID, PID */
-		pHalData->EEPROMVID = le16_to_cpu(*(u16 *)&PROMContent[EEPROM_VID]);
-		pHalData->EEPROMPID = le16_to_cpu(*(u16 *)&PROMContent[EEPROM_PID]);
+		pHalData->EEPROMVID = le16_to_cpu(*(__le16 *)&PROMContent[EEPROM_VID]);
+		pHalData->EEPROMPID = le16_to_cpu(*(__le16 *)&PROMContent[EEPROM_PID]);
 
 		/*  Customer ID, 0x00 and 0xff are reserved for Realtek. */
 		pHalData->EEPROMCustomerID = *(u8 *)&PROMContent[EEPROM_CUSTOMER_ID];
@@ -3262,7 +3262,7 @@ static void _ReadPROMContent(
 		}
 
 		/* Double check 0x8192 autoload status again */
-		if (RTL8192_EEPROM_ID != le16_to_cpu(*((u16 *)PROMContent)))
+		if (RTL8192_EEPROM_ID != le16_to_cpu(*((__le16 *)PROMContent)))
 		{
 			pEEPROM->bautoload_fail_flag = true;
 			DBG_8192D("Autoload OK but EEPROM ID content is incorrect!!\n");

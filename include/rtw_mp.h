@@ -398,7 +398,7 @@ extern void mp_stop_test(struct rtw_adapter * padapter);
 
 
 
-extern u32 _read_rfreg(struct rtw_adapter * padapter, u8 rfpath, u32 addr, u32 bitmask);
+extern u32 _read_rfreg(struct rtw_adapter * padapter, enum RF_RADIO_PATH_E rfpath, u32 addr, u32 bitmask);
 extern void _write_rfreg(struct rtw_adapter * padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val);
 
 extern u32 read_macreg(struct rtw_adapter *padapter, u32 addr, u32 sz);

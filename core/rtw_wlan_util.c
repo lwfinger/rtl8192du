@@ -1252,7 +1252,7 @@ int support_short_GI(struct rtw_adapter *padapter, struct HT_caps_element *pHT_c
 
 	bit_offset = (pmlmeext->cur_bwmode & HT_CHANNEL_WIDTH_40) ? 6 : 5;
 
-	if (pHT_caps->u.HT_cap_element.HT_caps_info & (0x1 << bit_offset))
+	if (le16_to_cpu(pHT_caps->u.HT_cap_element.HT_caps_info) & (0x1 << bit_offset))
 		return _SUCCESS;
 	else
 		return _FAIL;

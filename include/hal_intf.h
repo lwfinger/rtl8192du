@@ -194,8 +194,8 @@ struct hal_ops {
 
 	u32	(*read_bbreg)(struct rtw_adapter * Adapter, u32 RegAddr, u32 BitMask);
 	void	(*write_bbreg)(struct rtw_adapter * Adapter, u32 RegAddr, u32 BitMask, u32 Data);
-	u32	(*read_rfreg)(struct rtw_adapter * Adapter, u32 eRFPath, u32 RegAddr, u32 BitMask);
-	void	(*write_rfreg)(struct rtw_adapter * Adapter, u32 eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
+	u32	(*read_rfreg)(struct rtw_adapter * Adapter, enum RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask);
+	void	(*write_rfreg)(struct rtw_adapter * Adapter, enum RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
 
 #ifdef CONFIG_HOSTAPD_MLME
 	s32	(*hostap_mgnt_xmit_entry)(struct rtw_adapter * Adapter, struct sk_buff *pkt);

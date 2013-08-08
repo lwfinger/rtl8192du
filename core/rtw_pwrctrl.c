@@ -1140,7 +1140,7 @@ static void rtw_late_resume(struct early_suspend *h)
 	struct pwrctrl_priv *pwrpriv =
 	    container_of(h, struct pwrctrl_priv, early_suspend);
 	struct rtw_adapter *adapter =
-	    container_of(pwrpriv, _adapter, pwrctrlpriv);
+	    container_of(pwrpriv, struct rtw_adapter, pwrctrlpriv);
 
 	DBG_8192D("%s\n", __func__);
 	if (pwrpriv->do_late_resume) {

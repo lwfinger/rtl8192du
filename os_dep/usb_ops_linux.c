@@ -92,12 +92,13 @@ exit:
 	return rc;
 }
 
-int usb_write_async(struct usb_device *udev, u32 addr, void *pdata, u16 len)
+int usb_write_async(struct usb_device *udev, u32 addr, u32 val, u16 len)
 {
 	u8 request;
 	u8 requesttype;
 	u16 wvalue;
 	u16 index;
+	__le32 data;
 
 	int ret;
 
@@ -106,8 +107,9 @@ int usb_write_async(struct usb_device *udev, u32 addr, void *pdata, u16 len)
 	index = REALTEK_USB_VENQT_CMD_IDX;/* n/a */
 
 	wvalue = (u16)(addr&0x0000ffff);
+	data = cpu_to_le32(val);
 
-	ret = _usbctrl_vendorreq_async_write(udev, request, wvalue, index, pdata, len, requesttype);
+	ret = _usbctrl_vendorreq_async_write(udev, request, wvalue, index, &data, len, requesttype);
 
 	return ret;
 }
@@ -136,7 +138,7 @@ int usb_async_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
 
 	_func_enter_;
 	data = val;
-	ret = usb_write_async(udev, addr, &data, 2);
+	ret = usb_write_async(udev, addr, data, 2);
 	_func_exit_;
 
 	return ret;
@@ -151,7 +153,7 @@ int usb_async_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
 
 	_func_enter_;
 	data = val;
-	ret = usb_write_async(udev, addr, &data, 4);
+	ret = usb_write_async(udev, addr, data, 4);
 	_func_exit_;
 
 	return ret;

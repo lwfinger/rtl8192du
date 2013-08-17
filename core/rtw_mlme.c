@@ -2286,12 +2286,12 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 #endif /*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
 
 #if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-	if (adapter->pnetdev->br_port)
+	if (adapter->pnetdev->br_port &&
+	    check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE)) {
 #else /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-	if (rcu_dereference(adapter->pnetdev->rx_handler_data)
+	if (rcu_dereference(adapter->pnetdev->rx_handler_data) &&
+	    check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE)) {
 #endif /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-	    && (check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE)
-		== true)) {
 		/*  expire NAT2.5 entry */
 		nat25_db_expire(adapter);
 

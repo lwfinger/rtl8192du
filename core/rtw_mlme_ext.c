@@ -10254,22 +10254,6 @@ static u8 chk_ap_is_alive(struct rtw_adapter *adapt, struct sta_info *psta)
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 
-#ifdef DBG_EXPIRATION_CHK
-	DBG_8192D(FUNC_ADPT_FMT " rx:" STA_PKTS_FMT
-		  ", beacon:%llu, probersp_to_self:%llu" ", retry:%u\n",
-		  FUNC_ADPT_ARG(adapt)
-		  , STA_RX_PKTS_DIFF_ARG(psta)
-		  ,
-		  psta->sta_stats.rx_beacon_pkts -
-		  psta->sta_stats.last_rx_beacon_pkts,
-		  psta->sta_stats.rx_probersp_pkts -
-		  psta->sta_stats.last_rx_probersp_pkts, pmlmeext->retry);
-
-	DBG_8192D(FUNC_ADPT_FMT " tx_pkts:%llu, link_count:%u\n",
-		  FUNC_ADPT_ARG(adapt)
-		  , adapt->xmitpriv.tx_pkts, pmlmeinfo->link_count);
-#endif
-
 	if ((sta_rx_data_pkts(psta) == sta_last_rx_data_pkts(psta)) &&
 	    sta_rx_beacon_pkts(psta) == sta_last_rx_beacon_pkts(psta) &&
 	    sta_rx_probersp_pkts(psta) == sta_last_rx_probersp_pkts(psta))
@@ -10373,11 +10357,6 @@ void linked_status_chk(struct rtw_adapter *adapt)
 			{
 				if (rx_chk != _SUCCESS) {
 					if (pmlmeext->retry == 0) {
-#ifdef DBG_EXPIRATION_CHK
-						DBG_8192D
-						    ("issue_probereq to trigger probersp, retry=%d\n",
-						     pmlmeext->retry);
-#endif
 						issue_probereq(adapt,
 							       &pmlmeinfo->
 							       network.Ssid,
@@ -10400,13 +10379,7 @@ void linked_status_chk(struct rtw_adapter *adapt)
 				}
 
 				if (tx_chk != _SUCCESS && pmlmeinfo->link_count++ == 0xf) {
-#ifdef DBG_EXPIRATION_CHK
-					DBG_8192D("%s issue_nulldata 0\n",
-						  __func__);
-#endif
-					tx_chk =
-					    issue_nulldata(adapt, NULL, 0, 1,
-							   0);
+					tx_chk = issue_nulldata(adapt, NULL, 0, 1, 0);
 				}
 			}
 

@@ -154,7 +154,7 @@ static inline int  __nat25_has_expired(struct rtw_adapter *priv,
 
 
 static inline void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
-				unsigned int *ipaddr)
+				__be32 *ipaddr)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
@@ -164,7 +164,7 @@ static inline void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr
 
 
 static inline void __nat25_generate_ipx_network_addr_with_node(unsigned char *networkAddr,
-				unsigned int *ipxNetAddr, unsigned char *ipxNodeAddr)
+				__be32 *ipxNetAddr, unsigned char *ipxNodeAddr)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
@@ -175,7 +175,7 @@ static inline void __nat25_generate_ipx_network_addr_with_node(unsigned char *ne
 
 
 static inline void __nat25_generate_ipx_network_addr_with_socket(unsigned char *networkAddr,
-				unsigned int *ipxNetAddr, unsigned short *ipxSocketAddr)
+				__be32 *ipxNetAddr, unsigned short *ipxSocketAddr)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
@@ -185,7 +185,7 @@ static inline void __nat25_generate_ipx_network_addr_with_socket(unsigned char *
 }
 
 static inline void __nat25_generate_apple_network_addr(unsigned char *networkAddr,
-				unsigned short *network, unsigned char *node)
+				__be16 *network, unsigned char *node)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
@@ -781,7 +781,8 @@ int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method)
 	} else if (protocol == ETH_P_ARP) {
 		struct arphdr *arp = (struct arphdr *)(skb->data + ETH_HLEN);
 		unsigned char *arp_ptr = (unsigned char *)(arp + 1);
-		unsigned int *sender, *target;
+		__be32 *target;
+		__be32 *sender;
 
 		if (arp->ar_pro != __constant_htons(ETH_P_IP)) {
 			ERR_8192D("NAT25: arp protocol unknown (%4x)!\n", htons(arp->ar_pro));
@@ -799,7 +800,7 @@ int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method)
 			memcpy(arp_ptr, GET_MY_HWADDR(priv), ETH_ALEN);
 
 			arp_ptr += arp->ar_hln;
-			sender = (unsigned int *)arp_ptr;
+			sender = (__be32 *)arp_ptr;
 
 			__nat25_generate_ipv4_network_addr(networkAddr, sender);
 
@@ -811,9 +812,9 @@ int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method)
 			DBG_8192D("NAT25: Lookup ARP\n");
 
 			arp_ptr += arp->ar_hln;
-			sender = (unsigned int *)arp_ptr;
+			sender = (__be32 *)arp_ptr;
 			arp_ptr += (arp->ar_hln + arp->ar_pln);
-			target = (unsigned int *)arp_ptr;
+			target = (__be32 *)arp_ptr;
 
 			__nat25_generate_ipv4_network_addr(networkAddr, target);
 

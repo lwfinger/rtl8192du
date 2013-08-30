@@ -1138,5 +1138,10 @@ extern unsigned char MCS_rate_1R[16];
 extern unsigned char RTW_WPA_OUI[];
 extern unsigned char WPA_TKIP_CIPHER[4];
 extern unsigned char RSN_TKIP_CIPHER[4];
+extern unsigned char WMM_OUI[];
+extern unsigned char WPS_OUI[];
+extern unsigned char P2P_OUI[];
+extern unsigned char WFD_OUI[];
+
 
 #endif /*  _WIFI_H_ */

@@ -27,12 +27,6 @@
 
 #ifdef CONFIG_AP_MODE
 
-extern unsigned char	RTW_WPA_OUI[];
-extern unsigned char	WMM_OUI[];
-extern unsigned char	WPS_OUI[];
-extern unsigned char	P2P_OUI[];
-extern unsigned char	WFD_OUI[];
-
 void init_mlme_ap_info(struct rtw_adapter *padapter)
 {
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
@@ -315,12 +309,12 @@ void	expire_timeout_chk(struct rtw_adapter *padapter)
 
 	/* check auth_queue */
 	#ifdef DBG_EXPIRATION_CHK
-	if (rtw_end_of_queue_search(phead, plist) == false) {
+	if (!rtw_end_of_queue_search(phead, plist)) {
 		DBG_8192D(FUNC_NDEV_FMT" auth_list, cnt:%u\n"
 			, FUNC_NDEV_ARG(padapter->pnetdev), pstapriv->auth_list_cnt);
 	}
 	#endif
-	while ((rtw_end_of_queue_search(phead, plist)) == false) {
+	while (!rtw_end_of_queue_search(phead, plist)) {
 		psta = LIST_CONTAINOR(plist, struct sta_info, auth_list);
 		plist = get_next(plist);
 
@@ -358,12 +352,12 @@ void	expire_timeout_chk(struct rtw_adapter *padapter)
 
 	/* check asoc_queue */
 	#ifdef DBG_EXPIRATION_CHK
-	if (rtw_end_of_queue_search(phead, plist) == false) {
+	if (!rtw_end_of_queue_search(phead, plist)) {
 		DBG_8192D(FUNC_NDEV_FMT" asoc_list, cnt:%u\n"
 			, FUNC_NDEV_ARG(padapter->pnetdev), pstapriv->asoc_list_cnt);
 	}
 	#endif
-	while ((rtw_end_of_queue_search(phead, plist)) == false) {
+	while (!rtw_end_of_queue_search(phead, plist)) {
 		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 		plist = get_next(plist);
 
@@ -569,7 +563,7 @@ static void add_RATid(struct rtw_adapter *padapter, struct sta_info *psta)
 
 		arg |= BIT(7);/* support entry 2~31 */
 
-		if (shortGIrate == true)
+		if (shortGIrate)
 			arg |= BIT(5);
 
 		tx_ra_bitmap |= ((raid<<28)&0xf0000000);
@@ -579,7 +573,7 @@ static void add_RATid(struct rtw_adapter *padapter, struct sta_info *psta)
 
 		rtw_hal_add_ra_tid(padapter, tx_ra_bitmap, arg);
 
-		if (shortGIrate == true)
+		if (shortGIrate)
 			init_rate |= BIT(6);
 
 		/* set ra_id, init_rate */
@@ -921,7 +915,7 @@ static void start_bss_network(struct rtw_adapter *padapter, u8 *pbuf)
 #ifdef CONFIG_CONCURRENT_MODE
 	if (!check_buddy_fwstate(padapter, _FW_LINKED|_FW_UNDER_LINKING|_FW_UNDER_SURVEY)) {
 		set_channel_bwmode(padapter, cur_channel, cur_ch_offset, cur_bwmode);
-	} else if (check_buddy_fwstate(padapter, _FW_LINKED) == true) {/* only second adapter can enter AP Mode */
+	} else if (check_buddy_fwstate(padapter, _FW_LINKED)) {/* only second adapter can enter AP Mode */
 		struct rtw_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
 		struct mlme_ext_priv *pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
 
@@ -995,7 +989,7 @@ static void start_bss_network(struct rtw_adapter *padapter, u8 *pbuf)
 		pmlmeext->cur_ch_offset = cur_ch_offset;
 
 		/* buddy interface band is different from current interface, update ERP, support rate, ext support rate IE */
-		if (change_band == true)
+		if (change_band)
 			change_band_update_ie(padapter, pnetwork);
 	}
 #else
@@ -1029,7 +1023,7 @@ static void start_bss_network(struct rtw_adapter *padapter, u8 *pbuf)
 	pwdinfo->p2p_group_ssid_len = pnetwork->Ssid.SsidLength;
 #endif /* CONFIG_P2P */
 
-	if (true == pmlmeext->bstart_bss) {
+	if (pmlmeext->bstart_bss) {
 		update_beacon(padapter, _TIM_IE_, NULL, false);
 
 #ifndef CONFIG_INTERRUPT_BASED_TXBCN /* other case will  tx beacon when bcn interrupt coming in. */
@@ -1079,7 +1073,7 @@ int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 
 	DBG_8192D("%s, len =%d\n", __func__, len);
 
-	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) != true)
+	if (!check_fwstate(pmlmepriv, WIFI_AP_STATE))
 		return _FAIL;
 
 	if (len > MAX_IE_SZ)
@@ -1285,7 +1279,7 @@ int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 	pmlmepriv->htpriv.ht_option = false;
 #ifdef CONFIG_80211N_HT
 	/* ht_cap */
-	if (pregistrypriv->ht_enable && ht_cap == true) {
+	if (pregistrypriv->ht_enable && ht_cap) {
 		pmlmepriv->htpriv.ht_option = true;
 		pmlmepriv->qospriv.qos_option = 1;
 
@@ -1353,12 +1347,12 @@ int rtw_acl_add_sta(struct rtw_adapter *padapter, u8 *addr)
 	phead = get_list_head(pacl_node_q);
 	plist = get_next(phead);
 
-	while ((rtw_end_of_queue_search(phead, plist)) == false) {
+	while (!rtw_end_of_queue_search(phead, plist)) {
 		paclnode = LIST_CONTAINOR(plist, struct rtw_wlan_acl_node, list);
 		plist = get_next(plist);
 
 		if (_rtw_memcmp(paclnode->addr, addr, ETH_ALEN)) {
-			if (paclnode->valid == true) {
+			if (paclnode->valid) {
 				added = true;
 				DBG_8192D("%s, sta has been added\n", __func__);
 				break;
@@ -1369,7 +1363,7 @@ int rtw_acl_add_sta(struct rtw_adapter *padapter, u8 *addr)
 	spin_unlock_bh(&(pacl_node_q->lock));
 
 
-	if (added == true)
+	if (added)
 		return ret;
 
 
@@ -1378,7 +1372,7 @@ int rtw_acl_add_sta(struct rtw_adapter *padapter, u8 *addr)
 	for (i = 0; i < NUM_ACL; i++) {
 		paclnode = &pacl_list->aclnode[i];
 
-		if (paclnode->valid == false) {
+		if (!paclnode->valid) {
 			INIT_LIST_HEAD(&paclnode->list);
 
 			memcpy(paclnode->addr, addr, ETH_ALEN);
@@ -1416,12 +1410,12 @@ int rtw_acl_remove_sta(struct rtw_adapter *padapter, u8 *addr)
 	phead = get_list_head(pacl_node_q);
 	plist = get_next(phead);
 
-	while ((rtw_end_of_queue_search(phead, plist)) == false) {
+	while (!rtw_end_of_queue_search(phead, plist)) {
 		paclnode = LIST_CONTAINOR(plist, struct rtw_wlan_acl_node, list);
 		plist = get_next(plist);
 
 		if (_rtw_memcmp(paclnode->addr, addr, ETH_ALEN)) {
-			if (paclnode->valid == true) {
+			if (paclnode->valid) {
 				paclnode->valid = false;
 
 				rtw_list_delete(&paclnode->list);
@@ -1587,7 +1581,7 @@ void update_beacon(struct rtw_adapter *padapter, u8 ie_id, u8 *oui, u8 tx)
 	pmlmepriv = &(padapter->mlmepriv);
 	pmlmeext = &(padapter->mlmeextpriv);
 
-	if (false == pmlmeext->bstart_bss)
+	if (!pmlmeext->bstart_bss)
 		return;
 
 	spin_lock_bh(&pmlmepriv->bcn_update_lock);
@@ -1649,7 +1643,7 @@ static int rtw_ht_operation_update(struct rtw_adapter *padapter)
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct ht_priv	*phtpriv_ap = &pmlmepriv->htpriv;
 
-	if (pmlmepriv->htpriv.ht_option == true)
+	if (pmlmepriv->htpriv.ht_option)
 		return 0;
 
 	DBG_8192D("%s current operation mode = 0x%X\n",
@@ -1714,7 +1708,7 @@ static int rtw_ht_operation_update(struct rtw_adapter *padapter)
 void associated_clients_update(struct rtw_adapter *padapter, u8 updated)
 {
 	/* update associcated stations cap. */
-	if (updated == true) {
+	if (updated) {
 		struct list_head *phead, *plist;
 		struct sta_info *psta = NULL;
 		struct sta_priv *pstapriv = &padapter->stapriv;
@@ -1725,7 +1719,7 @@ void associated_clients_update(struct rtw_adapter *padapter, u8 updated)
 		plist = get_next(phead);
 
 		/* check asoc_queue */
-		while ((rtw_end_of_queue_search(phead, plist)) == false) {
+		while (!rtw_end_of_queue_search(phead, plist)) {
 			psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 
 			plist = get_next(plist);
@@ -1859,7 +1853,7 @@ void bss_cap_update_on_sta_join(struct rtw_adapter *padapter, struct sta_info *p
 			psta->no_ht_set = 1;
 			pmlmepriv->num_sta_no_ht++;
 		}
-		if (pmlmepriv->htpriv.ht_option == true) {
+		if (pmlmepriv->htpriv.ht_option) {
 			DBG_8192D("%s STA %pM - no HT, num of non-HT stations %d\n",
 				  __func__, psta->hwaddr,
 				  pmlmepriv->num_sta_no_ht);
@@ -1967,7 +1961,7 @@ u8 ap_free_sta(struct rtw_adapter *padapter, struct sta_info *psta, bool active,
 	psta->htpriv.agg_enable_bitmap = 0x0;/* reset */
 	psta->htpriv.candidate_tid_bitmap = 0x0;/* reset */
 
-	if (active == true)
+	if (active)
 		issue_deauth(padapter, psta->hwaddr, reason);
 
 	/* clear cam entry / key */
@@ -2024,7 +2018,7 @@ int rtw_ap_inform_ch_switch (struct rtw_adapter *padapter, u8 new_ch, u8 ch_offs
 	plist = get_next(phead);
 
 	/* for each sta in asoc_queue */
-	while ((rtw_end_of_queue_search(phead, plist)) == false) {
+	while (!rtw_end_of_queue_search(phead, plist)) {
 		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 		plist = get_next(plist);
 
@@ -2059,7 +2053,7 @@ int rtw_sta_flush(struct rtw_adapter *padapter)
 	plist = get_next(phead);
 
 	/* free sta asoc_queue */
-	while ((rtw_end_of_queue_search(phead, plist)) == false) {
+	while (!rtw_end_of_queue_search(phead, plist)) {
 		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 
 		plist = get_next(plist);
@@ -2102,7 +2096,7 @@ void sta_info_update(struct rtw_adapter *padapter, struct sta_info *psta)
 		psta->htpriv.ht_option = false;
 	}
 
-	if (pmlmepriv->htpriv.ht_option == false)
+	if (pmlmepriv->htpriv.ht_option)
 		psta->htpriv.ht_option = false;
 #endif
 
@@ -2185,11 +2179,11 @@ void stop_ap_mode(struct rtw_adapter *padapter)
 	spin_lock_bh(&(pacl_node_q->lock));
 	phead = get_list_head(pacl_node_q);
 	plist = get_next(phead);
-	while ((rtw_end_of_queue_search(phead, plist)) == false) {
+	while (!rtw_end_of_queue_search(phead, plist)) {
 		paclnode = LIST_CONTAINOR(plist, struct rtw_wlan_acl_node, list);
 		plist = get_next(plist);
 
-		if (paclnode->valid == true) {
+		if (paclnode->valid) {
 			paclnode->valid = false;
 
 			rtw_list_delete(&paclnode->list);

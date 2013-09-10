@@ -330,9 +330,8 @@ _recv_indicatepkt_drop:
 	 if (precv_frame)
 		 rtw_free_recvframe(precv_frame, pfree_recv_queue);
 
-	 return _FAIL;
-
 _func_exit_;
+	 return _FAIL;
 }
 
 void rtw_os_read_port(struct rtw_adapter *padapter, struct recv_buf *precvbuf)

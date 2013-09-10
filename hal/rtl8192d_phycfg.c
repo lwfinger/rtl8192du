@@ -5305,9 +5305,7 @@ phy_APCalibrate(
 /*  and value will cause RF internal PA to be unpredictably disabled by HW, such that RF Tx signal */
 /*  will disappear after disable/enable card many times on 88CU. RF SD and DD have not find the */
 /*  root cause, so we remove these actions temporarily. Added by tynli and SD3 Allen. 2010.05.31. */
-#if MP_DRIVER != 1
-	return;
-#endif
+#if MP_DRIVER == 1
 
 	/* settings adjust for normal chip */
 	for (index = 0; index < PATH_NUM; index ++)
@@ -5576,7 +5574,7 @@ phy_APCalibrate(
 	}
 
 	pdmpriv->bAPKdone = true;
-
+#endif
 }
 
 static void phy_SetRFPathSwitch(
@@ -5845,25 +5843,6 @@ rtl8192d_PHY_APCalibrate(
 	char		delta
 	)
 {
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-
-#if DISABLE_BB_RF
-	return;
-#endif
-
-		return;
-
-	if (pdmpriv->bAPKdone)
-		return;
-
-	if (IS_92D_SINGLEPHY(pHalData->VersionID)) {
-		phy_APCalibrate(pAdapter, delta, true);
-	}
-	else {
-		/*  For 88C 1T1R */
-		phy_APCalibrate(pAdapter, delta, false);
-	}
 }
 
 void
@@ -6440,11 +6419,8 @@ rtl8192d_PHY_InitRxSetting(
 	struct rtw_adapter * Adapter
 	)
 {
+#if MP_DRIVER == 1
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
-
-#if MP_DRIVER != 1
-	return;
-#endif
 
 	if (pHalData->interfaceIndex == 0)
 	{
@@ -6456,6 +6432,7 @@ rtl8192d_PHY_InitRxSetting(
 		rtw_write32(Adapter, REG_MACID, 0x12345678);
 		rtw_write32(Adapter, 0x0700, 0x12345678);
 	}
+#endif
 }
 
 

@@ -1234,38 +1234,35 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 	struct usb_device	*pusbd = pdvobj->pusbdev;
 
 _func_enter_;
-
-	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)
-	{
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port:(padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
+	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||
+	    adapter->pwrctrlpriv.pnp_bstop_trx) {
+		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
+			 ("usb_read_port:(padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
 		return _FAIL;
 	}
 
+	if (!precvbuf) {
+		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port:precvbuf ==NULL\n"));
+		return _FAIL;
+	}
 #ifdef CONFIG_PREALLOC_RECV_SKB
-	if ((precvbuf->reuse == false) || (precvbuf->pskb == NULL))
-	{
+	if ((precvbuf->reuse == false) || (precvbuf->pskb == NULL)) {
 		if (NULL != (precvbuf->pskb = skb_dequeue(&precvpriv->free_recv_skb_queue)))
-		{
 			precvbuf->reuse = true;
-		}
 	}
 #endif
 
-
-	if (precvbuf !=NULL)
-	{
+	if (precvbuf != NULL) {
 		rtl8192du_init_recvbuf(adapter, precvbuf);
 
 		/* re-assign for linux based on skb */
-		if ((precvbuf->reuse == false) || (precvbuf->pskb == NULL))
-		{
+		if ((precvbuf->reuse == false) || (precvbuf->pskb == NULL)) {
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) /*  http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html */
 			precvbuf->pskb = dev_alloc_skb(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 #else
 			precvbuf->pskb = netdev_alloc_skb(adapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 #endif
-			if (precvbuf->pskb == NULL)
-			{
+			if (precvbuf->pskb == NULL) {
 				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("init_recvbuf(): alloc_skb fail!\n"));
 				return _FAIL;
 			}
@@ -1305,17 +1302,11 @@ _func_enter_;
 						precvbuf);/* context is precvbuf */
 
 		err = usb_submit_urb(purb, GFP_ATOMIC);
-		if ((err) && (err != (-EPERM)))
-		{
+		if ((err) && (err != (-EPERM))) {
 			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("cannot submit rx in-token(err=0x%.8x), URB_STATUS =0x%.8x", err, purb->status));
 			DBG_8192D("cannot submit rx in-token(err = 0x%08x),urb_status = %d\n",err,purb->status);
 			ret = _FAIL;
 		}
-	}
-	else
-	{
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port:precvbuf ==NULL\n"));
-		ret = _FAIL;
 	}
 
 _func_exit_;
@@ -1337,17 +1328,15 @@ void rtl8192du_xmit_tasklet(void *priv)
 		)
 		return;
 
-	while (1)
-	{
-		if ((padapter->bDriverStopped == true)||(padapter->bSurpriseRemoved== true))
-		{
+	while (1) {
+		if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved)) {
 			DBG_8192D("xmit_tasklet => bDriverStopped or bSurpriseRemoved\n");
 			break;
 		}
 
 		ret = rtl8192du_xmitframe_complete(padapter, pxmitpriv, NULL);
 
-		if (ret==false)
+		if (ret == false)
 			break;
 	}
 }

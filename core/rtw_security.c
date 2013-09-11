@@ -2278,7 +2278,7 @@ static void rijndaelKeySetupEnc(u32 rk[/*44 */], const u8 cipherKey[])
 		rk[5] = rk[1] ^ rk[4];
 		rk[6] = rk[2] ^ rk[5];
 		rk[7] = rk[3] ^ rk[6];
-		rk += 4;
+		rk = rk + 4;
 	}
 }
 
@@ -2327,7 +2327,7 @@ do {									\
 	r = Nr >> 1;
 	for (;;) {
 		ROUND(1, t, s);
-		rk += 8;
+		rk = rk + 8;
 		if (--r == 0)
 			break;
 		ROUND(0, s, t);
@@ -2523,63 +2523,6 @@ void wpa_tdls_generate_tpk(struct rtw_adapter *padapter, struct sta_info *psta)
 
 	sha256_prf(key_input, SHA256_MAC_LEN, "TDLS PMK", data, sizeof(data),
 		   (u8 *)&psta->tpk, sizeof(psta->tpk));
-}
-
-/**
- * wpa_tdls_ftie_mic - Calculate TDLS FTIE MIC
- * @kck: TPK-KCK
- * @lnkid: Pointer to the beginning of Link Identifier IE
- * @rsnie: Pointer to the beginning of RSN IE used for handshake
- * @timeoutie: Pointer to the beginning of Timeout IE used for handshake
- * @ftie: Pointer to the beginning of FT IE
- * @mic: Pointer for writing MIC
- *
- * Calculate MIC for TDLS frame.
- */
-int wpa_tdls_ftie_mic(u8 *kck, u8 trans_seq,
-		      u8 *lnkid, u8 *rsnie, u8 *timeoutie, u8 *ftie,
-		      u8 *mic)
-{
-	u8 *buf, *pos;
-	struct wpa_tdls_ftie *_ftie;
-	struct wpa_tdls_lnkid *_lnkid;
-	int ret;
-	int len = 2 * ETH_ALEN + 1 + 2 + lnkid[1] + 2 + rsnie[1] +
-	    2 + timeoutie[1] + 2 + ftie[1];
-	buf = rtw_zmalloc(len);
-	if (!buf) {
-		DBG_8192D("TDLS: No memory for MIC calculation\n");
-		return -1;
-	}
-
-	pos = buf;
-	_lnkid = (struct wpa_tdls_lnkid *)lnkid;
-	/* 1) TDLS initiator STA MAC address */
-	memcpy(pos, _lnkid->init_sta, ETH_ALEN);
-	pos += ETH_ALEN;
-	/* 2) TDLS responder STA MAC address */
-	memcpy(pos, _lnkid->resp_sta, ETH_ALEN);
-	pos += ETH_ALEN;
-	/* 3) Transaction Sequence number */
-	*pos++ = trans_seq;
-	/* 4) Link Identifier IE */
-	memcpy(pos, lnkid, 2 + lnkid[1]);
-	pos += 2 + lnkid[1];
-	/* 5) RSN IE */
-	memcpy(pos, rsnie, 2 + rsnie[1]);
-	pos += 2 + rsnie[1];
-	/* 6) Timeout Interval IE */
-	memcpy(pos, timeoutie, 2 + timeoutie[1]);
-	pos += 2 + timeoutie[1];
-	/* 7) FTIE, with the MIC field of the FTIE set to 0 */
-	memcpy(pos, ftie, 2 + ftie[1]);
-	_ftie = (struct wpa_tdls_ftie *)pos;
-	memset(_ftie->mic, 0, TDLS_MIC_LEN);
-	pos += 2 + ftie[1];
-
-	ret = omac1_aes_128(kck, buf, pos - buf, mic);
-	kfree(buf);
-	return ret;
 }
 
 int tdls_verify_mic(u8 *kck, u8 trans_seq,

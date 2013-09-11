@@ -2277,8 +2277,7 @@ static int amsdu_to_msdu(struct rtw_adapter *padapter, union recv_frame *prframe
 		}
 
 		/* Indicat the packets to upper layer */
-		if (sub_skb) {
-			/* memset(sub_skb->cb, 0, sizeof(sub_skb->cb)); */
+		{
 
 #ifdef CONFIG_BR_EXT
 			/*  Insert NAT2.5 RX here! */

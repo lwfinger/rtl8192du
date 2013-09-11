@@ -233,21 +233,25 @@ _func_enter_;
 
 #ifdef CONFIG_DRVEXT_MODULE
 	if (drvext_rx_handler(padapter, precv_frame->u.hdr.rx_data, precv_frame->u.hdr.len) == _SUCCESS)
-	{
 		goto _recv_indicatepkt_drop;
-	}
 #endif
 
 	skb = precv_frame->u.hdr.pkt;
-	if (skb == NULL)
-	{
+	if (skb == NULL) {
 		RT_TRACE(_module_recv_osdep_c_,_drv_err_,("rtw_recv_indicatepkt():skb==NULL something wrong!!!!\n"));
 		goto _recv_indicatepkt_drop;
 	}
 
-	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("rtw_recv_indicatepkt():skb != NULL !!!\n"));
-	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("rtw_recv_indicatepkt():precv_frame->u.hdr.rx_head=%p  precv_frame->hdr.rx_data=%p\n", precv_frame->u.hdr.rx_head, precv_frame->u.hdr.rx_data));
-	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("precv_frame->hdr.rx_tail=%p precv_frame->u.hdr.rx_end=%p precv_frame->hdr.len=%d\n", precv_frame->u.hdr.rx_tail, precv_frame->u.hdr.rx_end, precv_frame->u.hdr.len));
+	RT_TRACE(_module_recv_osdep_c_,_drv_info_,
+		 ("rtw_recv_indicatepkt():skb != NULL !!!\n"));
+	RT_TRACE(_module_recv_osdep_c_, _drv_info_,
+		 ("rtw_recv_indicatepkt():precv_frame->u.hdr.rx_head=%p  precv_frame->hdr.rx_data=%p\n",
+		 precv_frame->u.hdr.rx_head, precv_frame->u.hdr.rx_data));
+	RT_TRACE(_module_recv_osdep_c_, _drv_info_,
+		 ("precv_frame->hdr.rx_tail=%p precv_frame->u.hdr.rx_end=%p precv_frame->hdr.len=%d\n",
+		 precv_frame->u.hdr.rx_tail,
+		 precv_frame->u.hdr.rx_end,
+		 precv_frame->u.hdr.len));
 
 	skb->data = precv_frame->u.hdr.rx_data;
 
@@ -327,8 +331,7 @@ _func_exit_;
 _recv_indicatepkt_drop:
 
 	 /* enqueue back to free_recv_queue */
-	 if (precv_frame)
-		 rtw_free_recvframe(precv_frame, pfree_recv_queue);
+	 rtw_free_recvframe(precv_frame, pfree_recv_queue);
 
 _func_exit_;
 	 return _FAIL;

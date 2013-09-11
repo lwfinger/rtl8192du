@@ -1810,7 +1810,6 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 			if (pstapriv->sta_aid[pstat->aid - 1] == NULL)
 				break;
 
-		/* if (pstat->aid > NUM_STA) { */
 		if (pstat->aid > pstapriv->max_num_sta) {
 			pstat->aid = 0;
 

@@ -370,7 +370,7 @@ struct	sta_priv {
 	 * AID is in the range 1-2007, so sta_aid[0] corresponders to AID 1
 	 * and so on
 	 */
-	struct sta_info *sta_aid[NUM_STA];
+	struct sta_info *sta_aid[NUM_STA + 1];
 
 	u16 sta_dz_bitmap;/* only support 15 stations, staion aid bitmap for sleeping sta. */
 	u16 tim_bitmap;/* only support 15 stations, aid=0~15 mapping bit0~bit15 */

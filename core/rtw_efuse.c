@@ -478,7 +478,7 @@ u8 rtw_efuse_map_write(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *dat
 {
 	u8 offset, word_en;
 	u8 *map;
-	u8 newdata[PGPKT_DATA_SIZE];
+	u8 newdata[PGPKT_DATA_SIZE + 1];
 	s32	i, idx;
 	u8 ret = _SUCCESS;
 	u16 maplen = 0;

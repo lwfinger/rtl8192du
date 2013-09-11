@@ -963,12 +963,10 @@ static int rtw_set_wpa_ie(struct rtw_adapter *padapter, char *pie, unsigned shor
 			u16 cnt = 0;
 			u8 eid, wps_oui[4]={0x0, 0x50, 0xf2, 0x04};
 
-			while (cnt < ielen)
-			{
+			while (cnt < ielen) {
 				eid = buf[cnt];
 
-				if ((eid == _VENDOR_SPECIFIC_IE_)&&(!memcmp(&buf[cnt+2], wps_oui, 4) == true))
-				{
+				if ((eid == _VENDOR_SPECIFIC_IE_) && (!memcmp(&buf[cnt+2], wps_oui, 4))) {
 					DBG_8192D("SET WPS_IE\n");
 
 					padapter->securitypriv.wps_ie_len = ((buf[cnt+1]+2) < (MAX_WPA_IE_LEN<<2)) ? (buf[cnt+1]+2):(MAX_WPA_IE_LEN<<2);
@@ -976,12 +974,9 @@ static int rtw_set_wpa_ie(struct rtw_adapter *padapter, char *pie, unsigned shor
 					memcpy(padapter->securitypriv.wps_ie, &buf[cnt], padapter->securitypriv.wps_ie_len);
 
 					set_fwstate(&padapter->mlmepriv, WIFI_UNDER_WPS);
-
 #ifdef CONFIG_P2P
 					if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_OK))
-					{
 						rtw_p2p_set_state(pwdinfo, P2P_STATE_PROVISIONING_ING);
-					}
 #endif /* CONFIG_P2P */
 					cnt += buf[cnt+1]+2;
 
@@ -1246,22 +1241,16 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
         if (pPMK->cmd == IW_PMKSA_ADD)
         {
                 DBG_8192D("[rtw_wx_set_pmkid] IW_PMKSA_ADD!\n");
-                if (!memcmp(strIssueBssid, strZeroMacAddress, ETH_ALEN) == true)
-                {
+                if (!memcmp(strIssueBssid, strZeroMacAddress, ETH_ALEN))
                     return(intReturn);
-                }
                 else
-                {
                     intReturn = true;
-                }
 		blInserted = false;
 
 		/* overwrite PMKID */
-		for (j = 0 ; j<NUM_PMKID_CACHE; j++)
-		{
-			if (!memcmp(psecuritypriv->PMKIDList[j].Bssid, strIssueBssid, ETH_ALEN) == true)
-			{ /*  BSSID is matched, the same AP => rewrite with new PMKID. */
-
+		for (j = 0; j < NUM_PMKID_CACHE; j++) {
+			if (!memcmp(psecuritypriv->PMKIDList[j].Bssid, strIssueBssid, ETH_ALEN)) {
+				/*  BSSID is matched, the same AP => rewrite with new PMKID. */
                                 DBG_8192D("[rtw_wx_set_pmkid] BSSID exists in the PMKList.\n");
 
 				memcpy(psecuritypriv->PMKIDList[j].PMKID, pPMK->pmkid, IW_PMKID_LEN);
@@ -1272,8 +1261,7 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
 			}
 	        }
 
-	        if (!blInserted)
-                {
+	        if (!blInserted) {
 		    /*  Find a new entry */
                     DBG_8192D("[rtw_wx_set_pmkid] Use the new entry index = %d for this PMKID.\n",
                             psecuritypriv->PMKIDIndex);
@@ -1284,33 +1272,26 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
                     psecuritypriv->PMKIDList[psecuritypriv->PMKIDIndex].bUsed = true;
 		    psecuritypriv->PMKIDIndex++ ;
 		    if (psecuritypriv->PMKIDIndex == 16)
-                    {
 		        psecuritypriv->PMKIDIndex = 0;
-                    }
 		}
-        }
-        else if (pPMK->cmd == IW_PMKSA_REMOVE)
-        {
+        } else if (pPMK->cmd == IW_PMKSA_REMOVE) {
                 DBG_8192D("[rtw_wx_set_pmkid] IW_PMKSA_REMOVE!\n");
                 intReturn = true;
-		for (j = 0 ; j<NUM_PMKID_CACHE; j++)
-		{
-			if (!memcmp(psecuritypriv->PMKIDList[j].Bssid, strIssueBssid, ETH_ALEN) == true)
-			{ /*  BSSID is matched, the same AP => Remove this PMKID information and reset it. */
+		for (j = 0; j < NUM_PMKID_CACHE; j++) {
+			if (!memcmp(psecuritypriv->PMKIDList[j].Bssid, strIssueBssid, ETH_ALEN)) {
+				/*  BSSID is matched, the same AP => Remove this PMKID information and reset it. */
                                 memset(psecuritypriv->PMKIDList[j].Bssid, 0x00, ETH_ALEN);
                                 psecuritypriv->PMKIDList[j].bUsed = false;
 				break;
 			}
 	        }
+        } else if (pPMK->cmd == IW_PMKSA_FLUSH) {
+		DBG_8192D("[rtw_wx_set_pmkid] IW_PMKSA_FLUSH!\n");
+		memset(&psecuritypriv->PMKIDList[0], 0x00, sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
+		psecuritypriv->PMKIDIndex = 0;
+		intReturn = true;
         }
-        else if (pPMK->cmd == IW_PMKSA_FLUSH)
-        {
-            DBG_8192D("[rtw_wx_set_pmkid] IW_PMKSA_FLUSH!\n");
-            memset(&psecuritypriv->PMKIDList[0], 0x00, sizeof(struct RT_PMKID_LIST) * NUM_PMKID_CACHE);
-            psecuritypriv->PMKIDIndex = 0;
-            intReturn = true;
-        }
-    return(intReturn);
+	return(intReturn);
 }
 
 static int rtw_wx_get_sens(struct net_device *dev,
@@ -1365,7 +1346,7 @@ static int rtw_wx_get_range(struct net_device *dev,
 
 	range->avg_qual.qual = 92; /* > 8% missed beacons is 'bad' */
 	/* TODO: Find real 'good' to 'bad' threshol value for RSSI */
-	range->avg_qual.level = 20 + -98;
+	range->avg_qual.level = 178; /* -78 dBm */
 	range->avg_qual.noise = 0;
 	range->avg_qual.updated = 7; /* Updated all three */
 
@@ -1743,10 +1724,8 @@ _func_enter_;
 	else
 #endif
 
-	if (	wrqu->data.length >= WEXT_CSCAN_HEADER_SIZE
-		&& !memcmp(extra, WEXT_CSCAN_HEADER, WEXT_CSCAN_HEADER_SIZE) == true
-	)
-	{
+	if (wrqu->data.length >= WEXT_CSCAN_HEADER_SIZE &&
+	    !memcmp(extra, WEXT_CSCAN_HEADER, WEXT_CSCAN_HEADER_SIZE)) {
 		int len = wrqu->data.length -WEXT_CSCAN_HEADER_SIZE;
 		char *pos = extra+WEXT_CSCAN_HEADER_SIZE;
 		char section;
@@ -2074,14 +2053,12 @@ static int rtw_wx_set_essid(struct net_device *dev,
 				 ("rtw_wx_set_essid: dst_ssid =%s\n",
 				  pnetwork->network.Ssid.Ssid));
 
-			if ((!memcmp(dst_ssid, src_ssid, ndis_ssid.SsidLength) == true) &&
-				(pnetwork->network.Ssid.SsidLength == ndis_ssid.SsidLength))
-			{
+			if (!memcmp(dst_ssid, src_ssid, ndis_ssid.SsidLength) &&
+			    pnetwork->network.Ssid.SsidLength == ndis_ssid.SsidLength) {
 				RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_info_,
 					 ("rtw_wx_set_essid: find match, set infra mode\n"));
 
-				if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true)
-				{
+				if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)) {
 					if (pnetwork->network.InfrastructureMode != pmlmepriv->cur_network.network.InfrastructureMode)
 						continue;
 				}
@@ -3322,8 +3299,8 @@ static int rtw_get_ap_info(struct net_device *dev,
 		}
 
 
-		if (!memcmp(bssid, pnetwork->network.MacAddress, ETH_ALEN) == true)/* BSSID match, then check if supporting wpa/wpa2 */
-		{
+		if (!memcmp(bssid, pnetwork->network.MacAddress, ETH_ALEN)) {
+			/* BSSID match, then check if supporting wpa/wpa2 */
 			DBG_8192D("BSSID:%pM\n", bssid);
 
 			pbuf = rtw_get_wpa_ie(&pnetwork->network.IEs[12], &wpa_ielen, pnetwork->network.IELength-12);
@@ -4347,7 +4324,7 @@ static int rtw_p2p_get_invitation_procedure(struct net_device *dev,
 		sprintf(inv_proc_str, "\nIP =-1");
 	} else
 	{
-		if (attr_content[0] && 0x20)
+		if (attr_content[0] & 0x20)
 		{
 			sprintf(inv_proc_str, "\nIP = 1");
 		} else
@@ -5494,7 +5471,7 @@ static int rtw_p2p_get2(struct net_device *dev,
 
 	if (copy_from_user(buffer, wrqu->data.pointer, wrqu->data.length))
 	{
-		ret - EFAULT;
+		ret = -EFAULT;
 		goto bad;
 	}
 
@@ -5568,7 +5545,7 @@ static int rtw_rereg_nd_name(struct net_device *dev,
 		goto exit;
 	}
 
-	if (!memcmp(rereg_priv->old_ifname, "disable%d", 9) == true) {
+	if (!memcmp(rereg_priv->old_ifname, "disable%d", 9)) {
 		padapter->ledpriv.bRegUseLed = rereg_priv->old_bRegUseLed;
 		rtw_hal_sw_led_init(padapter);
 		rtw_ips_mode_req(&padapter->pwrctrlpriv, rereg_priv->old_ips_mode);
@@ -5577,8 +5554,7 @@ static int rtw_rereg_nd_name(struct net_device *dev,
 	strncpy(rereg_priv->old_ifname, new_ifname, IFNAMSIZ);
 	rereg_priv->old_ifname[IFNAMSIZ-1] = 0;
 
-	if (!memcmp(new_ifname, "disable%d", 9) == true) {
-
+	if (!memcmp(new_ifname, "disable%d", 9)) {
 		DBG_8192D("%s disable\n", __func__);
 		/*  free network queue for Android's timming issue */
 		rtw_free_network_queue(padapter, true);
@@ -6343,7 +6319,6 @@ static int set_group_key(struct rtw_adapter *padapter, u8 *key, u8 alg, int keyi
 		case _TKIP_:
 		case _TKIP_WTMIC_:
 		case _AES_:
-			keylen = 16;
 		default:
 			keylen = 16;
 	}
@@ -7421,8 +7396,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
 		u8 wps_oui[4]={0x0, 0x50, 0xf2, 0x04};
 
 		if ((_VENDOR_SPECIFIC_IE_ == probereq_wpsie[0]) &&
-			(!memcmp(&probereq_wpsie[2], wps_oui, 4) == true))
-		{
+		    !memcmp(&probereq_wpsie[2], wps_oui, 4)) {
 			cp_sz = probereq_wpsie_len>MAX_WPS_IE_LEN ? MAX_WPS_IE_LEN:probereq_wpsie_len;
 
 			/* memcpy(pmlmepriv->probereq_wpsie, probereq_wpsie, cp_sz); */
@@ -7455,9 +7429,8 @@ static int rtw_wx_set_priv(struct net_device *dev,
 
 	}
 
-	if (	len >= WEXT_CSCAN_HEADER_SIZE
-		&& !memcmp(ext, WEXT_CSCAN_HEADER, WEXT_CSCAN_HEADER_SIZE) == true
-	) {
+	if (len >= WEXT_CSCAN_HEADER_SIZE &&
+	    !memcmp(ext, WEXT_CSCAN_HEADER, WEXT_CSCAN_HEADER_SIZE)) {
 		ret = rtw_wx_set_scan(dev, info, awrq, ext);
 		goto FREE_EXT;
 	}

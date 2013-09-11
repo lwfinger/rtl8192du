@@ -1429,7 +1429,7 @@ void update_capinfo(struct rtw_adapter *Adapter, u16 updateCap)
 	/*  Check preamble mode, 2005.01.06, by rcnjko. */
 	/*  Mark to update preamble value forever, 2008.03.18 by lanhsin */
 	/* if (pMgntInfo->RegPreambleMode == PREAMBLE_AUTO) */
-	if (updateCap & shortpreamble) { /*  Short Preamble */
+	if (updateCap && shortpreamble) { /*  Short Preamble */
 		if (pmlmeinfo->preamble_mode != PREAMBLE_SHORT) { /*  PREAMBLE_LONG or PREAMBLE_AUTO */
 			shortpreamble = true;
 			pmlmeinfo->preamble_mode = PREAMBLE_SHORT;

@@ -251,7 +251,7 @@ void get_rate_set(struct rtw_adapter *padapter, unsigned char *pbssrate, int *bs
 }
 
 void UpdateBrateTbl(
-	struct rtw_adapter *Adapter,
+	struct rtw_adapter *adapter,
 	u8			*mBratesOS
 )
 {
@@ -560,9 +560,9 @@ unsigned int decide_wait_for_beacon_timeout(unsigned int bcn_interval)
 		return bcn_interval << 2;
 }
 
-void CAM_empty_entry(struct rtw_adapter *Adapter, u8 ucIndex)
+void CAM_empty_entry(struct rtw_adapter *adapter, u8 ucIndex)
 {
-	rtw_hal_set_hwreg(Adapter, HW_VAR_CAM_EMPTY_ENTRY, (u8 *)(&ucIndex));
+	rtw_hal_set_hwreg(adapter, HW_VAR_CAM_EMPTY_ENTRY, (u8 *)(&ucIndex));
 }
 
 void invalidate_cam_all(struct rtw_adapter *padapter)
@@ -1420,9 +1420,9 @@ void update_IOT_info(struct rtw_adapter *padapter)
 	}
 }
 
-void update_capinfo(struct rtw_adapter *Adapter, u16 updateCap)
+void update_capinfo(struct rtw_adapter *adapter, u16 updateCap)
 {
-	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
+	struct mlme_ext_priv	*pmlmeext = &adapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	bool		shortpreamble;
 
@@ -1433,13 +1433,13 @@ void update_capinfo(struct rtw_adapter *Adapter, u16 updateCap)
 		if (pmlmeinfo->preamble_mode != PREAMBLE_SHORT) { /*  PREAMBLE_LONG or PREAMBLE_AUTO */
 			shortpreamble = true;
 			pmlmeinfo->preamble_mode = PREAMBLE_SHORT;
-			rtw_hal_set_hwreg(Adapter, HW_VAR_ACK_PREAMBLE, (u8 *)&shortpreamble);
+			rtw_hal_set_hwreg(adapter, HW_VAR_ACK_PREAMBLE, (u8 *)&shortpreamble);
 		}
 	} else { /*  Long Preamble */
 		if (pmlmeinfo->preamble_mode != PREAMBLE_LONG) {  /*  PREAMBLE_SHORT or PREAMBLE_AUTO */
 			shortpreamble = false;
 			pmlmeinfo->preamble_mode = PREAMBLE_LONG;
-			rtw_hal_set_hwreg(Adapter, HW_VAR_ACK_PREAMBLE, (u8 *)&shortpreamble);
+			rtw_hal_set_hwreg(adapter, HW_VAR_ACK_PREAMBLE, (u8 *)&shortpreamble);
 		}
 	}
 
@@ -1464,7 +1464,7 @@ void update_capinfo(struct rtw_adapter *Adapter, u16 updateCap)
 		}
 	}
 
-	rtw_hal_set_hwreg(Adapter, HW_VAR_SLOT_TIME, &pmlmeinfo->slotTime);
+	rtw_hal_set_hwreg(adapter, HW_VAR_SLOT_TIME, &pmlmeinfo->slotTime);
 }
 
 void update_wireless_mode(struct rtw_adapter *padapter)

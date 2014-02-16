@@ -670,20 +670,20 @@ _func_enter_;
 		stainfo = rtw_get_stainfo(&padapter->stapriv, pbssid);
 
 		if ((stainfo != NULL) && (padapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X)) {
-			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY:(stainfo != NULL) && (Adapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X)\n"));
+			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY:(stainfo != NULL) && (adapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X)\n"));
 			encryptionalgo = stainfo->dot118021XPrivacy;
 		} else {
-			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY: stainfo == NULL)||(Adapter->securitypriv.dot11AuthAlgrthm!= dot11AuthAlgrthm_8021X)\n"));
+			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY: stainfo == NULL)||(adapter->securitypriv.dot11AuthAlgrthm!= dot11AuthAlgrthm_8021X)\n"));
 			encryptionalgo = padapter->securitypriv.dot11PrivacyAlgrthm;
 		}
 
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
 			 ("rtw_set_802_11_add_key: (encryptionalgo ==%d)!\n", encryptionalgo));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
-			 ("rtw_set_802_11_add_key: (Adapter->securitypriv.dot11PrivacyAlgrthm ==%d)!\n",
+			 ("rtw_set_802_11_add_key: (adapter->securitypriv.dot11PrivacyAlgrthm ==%d)!\n",
 			 padapter->securitypriv.dot11PrivacyAlgrthm));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
-			 ("rtw_set_802_11_add_key: (Adapter->securitypriv.dot11AuthAlgrthm ==%d)!\n",
+			 ("rtw_set_802_11_add_key: (adapter->securitypriv.dot11AuthAlgrthm ==%d)!\n",
 			 padapter->securitypriv.dot11AuthAlgrthm));
 
 		if ((stainfo != NULL))
@@ -752,7 +752,7 @@ _func_enter_;
 		if ((padapter->securitypriv.ndisauthtype <= 3) &&
 		    (padapter->securitypriv.dot118021XGrpPrivacy == 0)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
-				 ("keylen=%d(Adapter->securitypriv.dot11PrivacyAlgrthm =%x )padapter->securitypriv.dot118021XGrpPrivacy(%x)\n",
+				 ("keylen=%d(adapter->securitypriv.dot11PrivacyAlgrthm =%x )padapter->securitypriv.dot118021XGrpPrivacy(%x)\n",
 				 key->KeyLength, padapter->securitypriv.dot11PrivacyAlgrthm,
 				 padapter->securitypriv.dot118021XGrpPrivacy));
 
@@ -760,31 +760,31 @@ _func_enter_;
 			case 5:
 				padapter->securitypriv.dot11PrivacyAlgrthm = _WEP40_;
 				RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
-					 ("Adapter->securitypriv.dot11PrivacyAlgrthm = %x key->KeyLength=%u\n",
+					 ("adapter->securitypriv.dot11PrivacyAlgrthm = %x key->KeyLength=%u\n",
 					 padapter->securitypriv.dot11PrivacyAlgrthm, key->KeyLength));
 				break;
 			case 13:
 				padapter->securitypriv.dot11PrivacyAlgrthm = _WEP104_;
 				RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
-					 ("Adapter->securitypriv.dot11PrivacyAlgrthm = %x key->KeyLength=%u\n",
+					 ("adapter->securitypriv.dot11PrivacyAlgrthm = %x key->KeyLength=%u\n",
 					 padapter->securitypriv.dot11PrivacyAlgrthm, key->KeyLength));
 				break;
 			default:
 				padapter->securitypriv.dot11PrivacyAlgrthm = _NO_PRIVACY_;
 				RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
-					 ("Adapter->securitypriv.dot11PrivacyAlgrthm = %x key->KeyLength=%u\n",
+					 ("adapter->securitypriv.dot11PrivacyAlgrthm = %x key->KeyLength=%u\n",
 					 padapter->securitypriv.dot11PrivacyAlgrthm, key->KeyLength));
 				break;
 			}
 			encryptionalgo = padapter->securitypriv.dot11PrivacyAlgrthm;
 
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
-				 (" Adapter->securitypriv.dot11PrivacyAlgrthm =%x\n",
+				 (" adapter->securitypriv.dot11PrivacyAlgrthm =%x\n",
 				 padapter->securitypriv.dot11PrivacyAlgrthm));
 		} else {
 			encryptionalgo = padapter->securitypriv.dot118021XGrpPrivacy;
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
-				 ("(Adapter->securitypriv.dot11PrivacyAlgrthm =%x )encryptionalgo(%x) = padapter->securitypriv.dot118021XGrpPrivacy(%x)keylen=%d\n",
+				 ("(adapter->securitypriv.dot11PrivacyAlgrthm =%x )encryptionalgo(%x) = padapter->securitypriv.dot118021XGrpPrivacy(%x)keylen=%d\n",
 				 padapter->securitypriv.dot11PrivacyAlgrthm, encryptionalgo, padapter->securitypriv.dot118021XGrpPrivacy, key->KeyLength));
 		}
 

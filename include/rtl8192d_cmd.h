@@ -102,13 +102,13 @@ void	rtl8192d_set_FwPwrMode_cmd(struct rtw_adapter*padapter, u8 Mode);
 void	rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus);
 u8	rtl8192d_set_rssi_cmd(struct rtw_adapter*padapter, u8 *param);
 u8	rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg);
-void	rtl8192d_Add_RateATid(struct rtw_adapter * pAdapter, u32 bitmap, u8 arg);
+void	rtl8192d_Add_RateATid(struct rtw_adapter * adapter, u32 bitmap, u8 arg);
 #ifdef CONFIG_P2P
 void	rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_state);
 #endif /* CONFIG_P2P */
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
-int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port);
+int reset_tsf(struct rtw_adapter * adapter, u8 reset_port);
 #endif	/*  CONFIG_TSF_RESET_OFFLOAD */
 
 #ifdef CONFIG_WOWLAN

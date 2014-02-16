@@ -71,23 +71,23 @@
 /*  */
 /*  RF RL6052 Series API */
 /*  */
-void		rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	Adapter,
+void		rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	adapter,
 										u16		DataRate);
 void		rtl8192d_PHY_RF6052SetBandwidth(
-										struct rtw_adapter *				Adapter,
+										struct rtw_adapter *				adapter,
 					enum HT_CHANNEL_WIDTH		Bandwidth);
 void	rtl8192d_PHY_RF6052SetCckTxPower(
-										struct rtw_adapter *	Adapter,
+										struct rtw_adapter *	adapter,
 										u8*		pPowerlevel);
 void	rtl8192d_PHY_RF6052SetOFDMTxPower(
-										struct rtw_adapter *	Adapter,
+										struct rtw_adapter *	adapter,
 										u8*		pPowerLevel,
 										u8		Channel);
-int	PHY_RF6052_Config8192D(	struct rtw_adapter *		Adapter	);
+int	PHY_RF6052_Config8192D(	struct rtw_adapter *		adapter	);
 
-bool	rtl8192d_PHY_EnableAnotherPHY(struct rtw_adapter * Adapter, bool	 bMac0);
+bool	rtl8192d_PHY_EnableAnotherPHY(struct rtw_adapter * adapter, bool	 bMac0);
 
-void	rtl8192d_PHY_PowerDownAnotherPHY(struct rtw_adapter * Adapter, bool bMac0);
+void	rtl8192d_PHY_PowerDownAnotherPHY(struct rtw_adapter * adapter, bool bMac0);
 
 
 /*--------------------------Exported Function prototype---------------------*/

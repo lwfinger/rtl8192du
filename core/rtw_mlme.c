@@ -2706,9 +2706,9 @@ int rtw_restruct_wmm_ie(struct rtw_adapter *adapter, u8 *in_ie, u8 *out_ie,
 /*  */
 /*  */
 
-static int SecIsInPMKIDList(struct rtw_adapter *Adapter, u8 *bssid)
+static int SecIsInPMKIDList(struct rtw_adapter *adapter, u8 *bssid)
 {
-	struct security_priv *psecuritypriv = &Adapter->securitypriv;
+	struct security_priv *psecuritypriv = &adapter->securitypriv;
 	int i = 0;
 
 	do {
@@ -2740,10 +2740,10 @@ static int SecIsInPMKIDList(struct rtw_adapter *Adapter, u8 *bssid)
 /*  13th element in the array is the IE length */
 /*  */
 
-static int rtw_append_pmkid(struct rtw_adapter *Adapter, int iEntry, u8 *ie,
+static int rtw_append_pmkid(struct rtw_adapter *adapter, int iEntry, u8 *ie,
 			    uint ie_len)
 {
-	struct security_priv *psecuritypriv = &Adapter->securitypriv;
+	struct security_priv *psecuritypriv = &adapter->securitypriv;
 
 	if (ie[13] <= 20) {
 		/*  The RSN IE didn't include the PMK ID, append the PMK information */

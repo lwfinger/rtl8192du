@@ -389,8 +389,8 @@ enum OFDM_TX_MODE {
 
 extern s32 init_mp_priv(struct rtw_adapter * padapter);
 extern void free_mp_priv(struct mp_priv *pmp_priv);
-extern s32 MPT_InitializeAdapter(struct rtw_adapter * padapter, u8 Channel);
-extern void MPT_DeInitAdapter(struct rtw_adapter * padapter);
+extern s32 MPT_Initializeadapter(struct rtw_adapter * padapter, u8 Channel);
+extern void MPT_DeInitadapter(struct rtw_adapter * padapter);
 extern s32 mp_start_test(struct rtw_adapter * padapter);
 extern void mp_stop_test(struct rtw_adapter * padapter);
 
@@ -408,63 +408,63 @@ extern void write_bbreg(struct rtw_adapter *padapter, u32 addr, u32 bitmask, u32
 extern u32 read_rfreg(struct rtw_adapter * padapter, u8 rfpath, u32 addr);
 extern void write_rfreg(struct rtw_adapter * padapter, u8 rfpath, u32 addr, u32 val);
 
-extern void	SetChannel(struct rtw_adapter * pAdapter);
-extern void	SetBandwidth(struct rtw_adapter * pAdapter);
-extern void	SetTxPower(struct rtw_adapter * pAdapter);
-extern void	SetAntennaPathPower(struct rtw_adapter * pAdapter);
-extern void	SetDataRate(struct rtw_adapter * pAdapter);
+extern void	SetChannel(struct rtw_adapter * adapter);
+extern void	SetBandwidth(struct rtw_adapter * adapter);
+extern void	SetTxPower(struct rtw_adapter * adapter);
+extern void	SetAntennaPathPower(struct rtw_adapter * adapter);
+extern void	SetDataRate(struct rtw_adapter * adapter);
 
-extern void	SetAntenna(struct rtw_adapter * pAdapter);
+extern void	SetAntenna(struct rtw_adapter * adapter);
 
 
-extern s32	SetThermalMeter(struct rtw_adapter * pAdapter, u8 target_ther);
-extern void	GetThermalMeter(struct rtw_adapter * pAdapter, u8 *value);
+extern s32	SetThermalMeter(struct rtw_adapter * adapter, u8 target_ther);
+extern void	GetThermalMeter(struct rtw_adapter * adapter, u8 *value);
 
-extern void	SetContinuousTx(struct rtw_adapter * pAdapter, u8 bStart);
-extern void	SetSingleCarrierTx(struct rtw_adapter * pAdapter, u8 bStart);
-extern void	SetSingleToneTx(struct rtw_adapter * pAdapter, u8 bStart);
-extern void	SetCarrierSuppressionTx(struct rtw_adapter * pAdapter, u8 bStart);
+extern void	SetContinuousTx(struct rtw_adapter * adapter, u8 bStart);
+extern void	SetSingleCarrierTx(struct rtw_adapter * adapter, u8 bStart);
+extern void	SetSingleToneTx(struct rtw_adapter * adapter, u8 bStart);
+extern void	SetCarrierSuppressionTx(struct rtw_adapter * adapter, u8 bStart);
 
 extern void	fill_txdesc_for_mp(struct rtw_adapter * padapter, struct tx_desc *ptxdesc);
 extern void	SetPacketTx(struct rtw_adapter * padapter);
-extern void	SetPacketRx(struct rtw_adapter * pAdapter, u8 bStartRx);
+extern void	SetPacketRx(struct rtw_adapter * adapter, u8 bStartRx);
 
-extern void	ResetPhyRxPktCount(struct rtw_adapter * pAdapter);
-extern u32	GetPhyRxPktReceived(struct rtw_adapter * pAdapter);
-extern u32	GetPhyRxPktCRC32Error(struct rtw_adapter * pAdapter);
+extern void	ResetPhyRxPktCount(struct rtw_adapter * adapter);
+extern u32	GetPhyRxPktReceived(struct rtw_adapter * adapter);
+extern u32	GetPhyRxPktCRC32Error(struct rtw_adapter * adapter);
 
 extern s32	SetPowerTracking(struct rtw_adapter * padapter, u8 enable);
 extern void	GetPowerTracking(struct rtw_adapter * padapter, u8 *enable);
 
-extern u32	mp_query_psd(struct rtw_adapter * pAdapter, u8 *data);
+extern u32	mp_query_psd(struct rtw_adapter * adapter, u8 *data);
 
 
-extern void Hal_SetAntenna(struct rtw_adapter * pAdapter);
-extern void Hal_SetBandwidth(struct rtw_adapter * pAdapter);
+extern void Hal_SetAntenna(struct rtw_adapter * adapter);
+extern void Hal_SetBandwidth(struct rtw_adapter * adapter);
 
-extern void Hal_SetTxPower(struct rtw_adapter * pAdapter);
-extern void Hal_SetCarrierSuppressionTx(struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_SetSingleToneTx (struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_SetSingleCarrierTx (struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_SetContinuousTx (struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_SetBandwidth(struct rtw_adapter * pAdapter);
+extern void Hal_SetTxPower(struct rtw_adapter * adapter);
+extern void Hal_SetCarrierSuppressionTx(struct rtw_adapter * adapter, u8 bStart);
+extern void Hal_SetSingleToneTx (struct rtw_adapter * adapter, u8 bStart);
+extern void Hal_SetSingleCarrierTx (struct rtw_adapter * adapter, u8 bStart);
+extern void Hal_SetContinuousTx (struct rtw_adapter * adapter, u8 bStart);
+extern void Hal_SetBandwidth(struct rtw_adapter * adapter);
 
-extern void Hal_SetDataRate(struct rtw_adapter * pAdapter);
-extern void Hal_SetChannel(struct rtw_adapter * pAdapter);
-extern void Hal_SetAntennaPathPower(struct rtw_adapter * pAdapter);
-extern s32 Hal_SetThermalMeter(struct rtw_adapter * pAdapter, u8 target_ther);
+extern void Hal_SetDataRate(struct rtw_adapter * adapter);
+extern void Hal_SetChannel(struct rtw_adapter * adapter);
+extern void Hal_SetAntennaPathPower(struct rtw_adapter * adapter);
+extern s32 Hal_SetThermalMeter(struct rtw_adapter * adapter, u8 target_ther);
 extern s32 Hal_SetPowerTracking(struct rtw_adapter * padapter, u8 enable);
 extern void Hal_GetPowerTracking(struct rtw_adapter * padapter, u8 *enable);
-extern void Hal_GetThermalMeter(struct rtw_adapter * pAdapter, u8 *value);
-extern void Hal_mpt_SwitchRfSetting(struct rtw_adapter * pAdapter);
-extern void Hal_MPT_CCKTxPowerAdjust(struct rtw_adapter * Adapter, bool bInCH14);
-extern void Hal_MPT_CCKTxPowerAdjustbyIndex(struct rtw_adapter * pAdapter, bool beven);
-extern void Hal_SetCCKTxPower(struct rtw_adapter * pAdapter, u8 *TxPower);
-extern void Hal_SetOFDMTxPower(struct rtw_adapter * pAdapter, u8 *TxPower);
-extern void Hal_TriggerRFThermalMeter(struct rtw_adapter * pAdapter);
-extern u8 Hal_ReadRFThermalMeter(struct rtw_adapter * pAdapter);
-extern void Hal_SetCCKContinuousTx(struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_SetOFDMContinuousTx(struct rtw_adapter * pAdapter, u8 bStart);
-extern void Hal_ProSetCrystalCap (struct rtw_adapter * pAdapter, u32 CrystalCapVal);
+extern void Hal_GetThermalMeter(struct rtw_adapter * adapter, u8 *value);
+extern void Hal_mpt_SwitchRfSetting(struct rtw_adapter * adapter);
+extern void Hal_MPT_CCKTxPowerAdjust(struct rtw_adapter * adapter, bool bInCH14);
+extern void Hal_MPT_CCKTxPowerAdjustbyIndex(struct rtw_adapter * adapter, bool beven);
+extern void Hal_SetCCKTxPower(struct rtw_adapter * adapter, u8 *TxPower);
+extern void Hal_SetOFDMTxPower(struct rtw_adapter * adapter, u8 *TxPower);
+extern void Hal_TriggerRFThermalMeter(struct rtw_adapter * adapter);
+extern u8 Hal_ReadRFThermalMeter(struct rtw_adapter * adapter);
+extern void Hal_SetCCKContinuousTx(struct rtw_adapter * adapter, u8 bStart);
+extern void Hal_SetOFDMContinuousTx(struct rtw_adapter * adapter, u8 bStart);
+extern void Hal_ProSetCrystalCap (struct rtw_adapter * adapter, u32 CrystalCapVal);
 
 #endif /* _RTW_MP_H_ */

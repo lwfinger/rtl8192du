@@ -8619,7 +8619,7 @@ Following are some utitity fuctions for WiFi MLME
 
 *****************************************************************************/
 
-bool IsLegal5GChannel(struct rtw_adapter *Adapter, u8 channel)
+bool IsLegal5GChannel(struct rtw_adapter *adapter, u8 channel)
 {
 	int i = 0;
 	u8 Channel_5G[45] = { 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58,

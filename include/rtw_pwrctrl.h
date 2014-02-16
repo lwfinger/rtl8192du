@@ -293,7 +293,7 @@ extern void cpwm_int_hdl(struct rtw_adapter * padapter, struct reportpwrstate_pa
 
 extern void rtw_set_ps_mode(struct rtw_adapter * padapter, u8 ps_mode, u8 smart_ps);
 extern void rtw_set_rpwm(struct rtw_adapter * padapter, u8 val8);
-extern void LeaveAllPowerSaveMode(struct rtw_adapter * Adapter);
+extern void LeaveAllPowerSaveMode(struct rtw_adapter * adapter);
 #ifdef CONFIG_IPS
 void ips_enter(struct rtw_adapter * padapter);
 int ips_leave(struct rtw_adapter * padapter);
@@ -305,7 +305,7 @@ void rtw_ps_processor(struct rtw_adapter*padapter);
 int autoresume_enter(struct rtw_adapter* padapter);
 #endif
 #ifdef SUPPORT_HW_RFOFF_DETECTED
-rt_rf_power_state RfOnOffDetect(IN	struct rtw_adapter * pAdapter);
+rt_rf_power_state RfOnOffDetect(IN	struct rtw_adapter * adapter);
 #endif
 
 

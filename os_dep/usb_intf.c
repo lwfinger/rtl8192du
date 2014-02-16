@@ -1104,7 +1104,7 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 		goto free_hal_data;
 	}
 
-	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-drv_init - Adapter->bDriverStopped=%d, Adapter->bSurpriseRemoved=%d\n",padapter->bDriverStopped, padapter->bSurpriseRemoved));
+	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-drv_init - adapter->bDriverStopped=%d, adapter->bSurpriseRemoved=%d\n",padapter->bDriverStopped, padapter->bSurpriseRemoved));
 	DBG_8192D("bDriverStopped:%d, bSurpriseRemoved:%d, bup:%d, hw_init_completed:%d\n"
 		,padapter->bDriverStopped
 		,padapter->bSurpriseRemoved
@@ -1342,20 +1342,20 @@ module_exit(rtw_drv_halt);
 #ifdef CONFIG_WOWLAN
 #ifdef CONFIG_WOWLAN_MANUAL
 
-int rtw_resume_toshiba(struct rtw_adapter * Adapter)
+int rtw_resume_toshiba(struct rtw_adapter * adapter)
 {
 	struct dvobj_priv *pdvobjpriv;
-	pdvobjpriv = adapter_to_dvobj(Adapter);
+	pdvobjpriv = adapter_to_dvobj(adapter);
 
 	rtw_resume(pdvobjpriv->pusbintf);
 	return 0;
 }
 
-int rtw_suspend_toshiba(struct rtw_adapter * Adapter)
+int rtw_suspend_toshiba(struct rtw_adapter * adapter)
 {
 	pm_message_t msg;
 	struct dvobj_priv *pdvobjpriv;
-	pdvobjpriv = adapter_to_dvobj(Adapter);
+	pdvobjpriv = adapter_to_dvobj(adapter);
 	msg.event=0;
 	/* for Toshiba only, they should call rtw_suspend before suspend */
 	rtw_suspend(pdvobjpriv->pusbintf, msg);

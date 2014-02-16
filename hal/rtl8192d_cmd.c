@@ -31,14 +31,14 @@
 
 static bool
 CheckWriteH2C(
-	struct rtw_adapter *		Adapter,
+	struct rtw_adapter *		adapter,
 	u8		BoxNum
 )
 {
 	u8	valHMETFR;
 	bool	Result = false;
 
-	valHMETFR = rtw_read8(Adapter, REG_HMETFR);
+	valHMETFR = rtw_read8(adapter, REG_HMETFR);
 
 	if (((valHMETFR>>BoxNum)&BIT0) == 1)
 		Result = true;
@@ -48,14 +48,14 @@ CheckWriteH2C(
 
 static bool
 CheckFwReadLastH2C(
-	struct rtw_adapter *		Adapter,
+	struct rtw_adapter *		adapter,
 	u8		BoxNum
 )
 {
 	u8	valHMETFR;
 	bool	 Result = false;
 
-	valHMETFR = rtw_read8(Adapter, REG_HMETFR);
+	valHMETFR = rtw_read8(adapter, REG_HMETFR);
 
 	/*  Do not seperate to 91C and 88C, we use the same setting. Suggested by SD4 Filen. 2009.12.03. */
 	if (((valHMETFR>>BoxNum)&BIT0) == 0)
@@ -252,7 +252,7 @@ _func_exit_;
 
 void
 FillH2CCmd92D(
-	struct rtw_adapter *	Adapter,
+	struct rtw_adapter *	adapter,
 	u8	ElementID,
 	u32	CmdLen,
 	u8*	pCmdBuffer
@@ -260,9 +260,9 @@ FillH2CCmd92D(
 {
 	u32	tmpCmdBuf[2];
 
-	/* Adapter = ADJUST_TO_ADAPTIVE_ADAPTER(Adapter, TRUE); */
+	/* adapter = ADJUST_TO_ADAPTIVE_ADAPTER(adapter, TRUE); */
 
-	if (Adapter->bFWReady == false)
+	if (adapter->bFWReady == false)
 	{
 		DBG_8192D("FillH2CCmd92D(): return H2C cmd because of Fw download fail!!!\n");
 		return;
@@ -271,7 +271,7 @@ FillH2CCmd92D(
 	memset(tmpCmdBuf, 0, 8);
 	memcpy(tmpCmdBuf, pCmdBuffer, CmdLen);
 
-	_FillH2CCmd92D(Adapter, ElementID, CmdLen, (u8 *)&tmpCmdBuf);
+	_FillH2CCmd92D(adapter, ElementID, CmdLen, (u8 *)&tmpCmdBuf);
 
 	return;
 }
@@ -319,14 +319,14 @@ _func_exit_;
 /* bitmap[28:31]= Rate Adaptive id */
 /* arg[0:4] = macid */
 /* arg[5] = Short GI */
-void rtl8192d_Add_RateATid(struct rtw_adapter * pAdapter, u32 bitmap, u8 arg)
+void rtl8192d_Add_RateATid(struct rtw_adapter * adapter, u32 bitmap, u8 arg)
 {
 
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 
 	if (pHalData->fw_ractrl == true)
 	{
-		rtl8192d_set_raid_cmd(pAdapter, bitmap, arg);
+		rtl8192d_set_raid_cmd(adapter, bitmap, arg);
 	}
 	else
 	{
@@ -341,7 +341,7 @@ void rtl8192d_Add_RateATid(struct rtw_adapter * pAdapter, u32 bitmap, u8 arg)
 		if (shortGIrate==true)
 			init_rate |= BIT(6);
 
-		rtw_write8(pAdapter, (REG_INIDATA_RATE_SEL+macid), (u8)init_rate);
+		rtw_write8(adapter, (REG_INIDATA_RATE_SEL+macid), (u8)init_rate);
 	}
 }
 
@@ -588,13 +588,13 @@ static void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLe
 /*  */
 static void
 FillFakeTxDescriptor92D(
-	struct rtw_adapter *		Adapter,
+	struct rtw_adapter *		adapter,
 	u8*			pDesc,
 	u32			BufferLen,
 	bool		IsPsPoll
 )
 {
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	struct tx_desc	*ptxdesc = (struct tx_desc *)pDesc;
 
 	/*  Clear all status */
@@ -645,13 +645,13 @@ FillFakeTxDescriptor92D(
 /* 			      TRUE: At the second time, we should send the first packet (default:beacon) */
 /* 						to Hw again and set the lengh in descriptor to the real beacon lengh. */
 /*  2009.10.15 by tynli. */
-static void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
+static void SetFwRsvdPagePkt(struct rtw_adapter * adapter, bool dl_finish)
 {
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	struct xmit_frame	*pmgntframe;
 	struct pkt_attrib	*pattrib;
-	struct xmit_priv	*pxmitpriv = &(Adapter->xmitpriv);
-	struct mlme_ext_priv	*pmlmeext = &(Adapter->mlmeextpriv);
+	struct xmit_priv	*pxmitpriv = &(adapter->xmitpriv);
+	struct mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	u32	BeaconLength, ProbeRspLength, PSPollLength, NullFunctionDataLength;
 	u8	*reservedpagepacket;
@@ -677,7 +677,7 @@ static void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 	TxDescOffset = TxDescLen+8; /* Shift index for 8 bytes because the dummy bytes in the first descipstor. */
 
 	/* 1) beacon */
-	ConstructBeacon(Adapter,&reservedpagepacket[BufIndex],&BeaconLength);
+	ConstructBeacon(adapter,&reservedpagepacket[BufIndex],&BeaconLength);
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_,
 		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: BCN\n",
@@ -697,9 +697,9 @@ static void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 	BufIndex = (PageNum*128) + TxDescOffset;
 
 	/* 2) ps-poll */
-	ConstructPSPoll(Adapter, &reservedpagepacket[BufIndex],&PSPollLength);
+	ConstructPSPoll(adapter, &reservedpagepacket[BufIndex],&PSPollLength);
 
-	FillFakeTxDescriptor92D(Adapter, &reservedpagepacket[BufIndex-TxDescLen], PSPollLength, true);
+	FillFakeTxDescriptor92D(adapter, &reservedpagepacket[BufIndex-TxDescLen], PSPollLength, true);
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_,
 		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: PS-POLL\n",
@@ -716,13 +716,13 @@ static void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 
 	/* 3) null data */
 	ConstructNullFunctionData(
-		Adapter,
+		adapter,
 		&reservedpagepacket[BufIndex],
 		&NullFunctionDataLength,
 		get_my_bssid(&(pmlmeinfo->network)),
 		false);
 
-	FillFakeTxDescriptor92D(Adapter, &reservedpagepacket[BufIndex-TxDescLen], NullFunctionDataLength, false);
+	FillFakeTxDescriptor92D(adapter, &reservedpagepacket[BufIndex-TxDescLen], NullFunctionDataLength, false);
 
 	SET_H2CCMD_RSVDPAGE_LOC_NULL_DATA(u1RsvdPageLoc, PageNum);
 
@@ -738,13 +738,13 @@ static void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 
 	/* 4) probe response */
 	ConstructProbeRsp(
-		Adapter,
+		adapter,
 		&reservedpagepacket[BufIndex],
 		&ProbeRspLength,
 		get_my_bssid(&(pmlmeinfo->network)),
 		false);
 
-	FillFakeTxDescriptor92D(Adapter, &reservedpagepacket[BufIndex-TxDescLen], ProbeRspLength, false);
+	FillFakeTxDescriptor92D(adapter, &reservedpagepacket[BufIndex-TxDescLen], ProbeRspLength, false);
 
 	SET_H2CCMD_RSVDPAGE_LOC_PROBE_RSP(u1RsvdPageLoc, PageNum);
 
@@ -767,18 +767,18 @@ static void SetFwRsvdPagePkt(struct rtw_adapter * Adapter, bool dl_finish)
 
 	/* update attribute */
 	pattrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(Adapter, pattrib);
+	update_mgntframe_attrib(adapter, pattrib);
 	pattrib->qsel = 0x10;
 	pattrib->pktlen = pattrib->last_txcmdsz = TotalPacketLen - TxDescLen;
 	memcpy(pmgntframe->buf_addr, reservedpagepacket, TotalPacketLen);
 
-	rtw_hal_mgnt_xmit(Adapter, pmgntframe);
+	rtw_hal_mgnt_xmit(adapter, pmgntframe);
 
 	dlok = true;
 
 	if (dlok) {
 		DBG_8192D("Set RSVD page location to Fw.\n");
-		FillH2CCmd92D(Adapter, H2C_RSVDPAGE, sizeof(u1RsvdPageLoc), u1RsvdPageLoc);
+		FillH2CCmd92D(adapter, H2C_RSVDPAGE, sizeof(u1RsvdPageLoc), u1RsvdPageLoc);
 	}
 
 	kfree(reservedpagepacket);
@@ -802,7 +802,7 @@ _func_enter_;
 		/*  Suggested by filen. Added by tynli. */
 		rtw_write16(padapter, REG_BCN_PSR_RPT, (0xC000|pmlmeinfo->aid));
 		/*  Do not set TSF again here or vWiFi beacon DMA INT will not work. */
-		/* rtw_hal_set_hwreg(Adapter, HW_VAR_CORRECT_TSF, (pu1Byte)(&bTypeIbss)); */
+		/* rtw_hal_set_hwreg(adapter, HW_VAR_CORRECT_TSF, (pu1Byte)(&bTypeIbss)); */
 		/*  Hw sequende enable by dedault. 2010.06.23. by tynli. */
 
 		/* set REG_CR bit 8 */
@@ -981,20 +981,20 @@ _func_exit_;
 	return res;
 }
 
-int reset_tsf(struct rtw_adapter * Adapter, u8 reset_port)
+int reset_tsf(struct rtw_adapter * adapter, u8 reset_port)
 {
 	u8 reset_cnt_before = 0, reset_cnt_after = 0, loop_cnt = 0;
 	u32 reg_reset_tsf_cnt = (IFACE_PORT0==reset_port) ?
 				REG_FW_RESET_TSF_CNT_0:REG_FW_RESET_TSF_CNT_1;
 
-	rtw_scan_abort(Adapter->pbuddy_adapter);	/*	site survey will cause reset_tsf fail	*/
-	reset_cnt_after = reset_cnt_before = rtw_read8(Adapter,reg_reset_tsf_cnt);
-	rtl8192d_reset_tsf(Adapter, reset_port);
+	rtw_scan_abort(adapter->pbuddy_adapter);	/*	site survey will cause reset_tsf fail	*/
+	reset_cnt_after = reset_cnt_before = rtw_read8(adapter,reg_reset_tsf_cnt);
+	rtl8192d_reset_tsf(adapter, reset_port);
 
 	while ((reset_cnt_after == reset_cnt_before) && (loop_cnt < 10)) {
 		rtw_msleep_os(100);
 		loop_cnt++;
-		reset_cnt_after = rtw_read8(Adapter, reg_reset_tsf_cnt);
+		reset_cnt_after = rtw_read8(adapter, reg_reset_tsf_cnt);
 	}
 
 	return(loop_cnt >= 10) ? _FAIL : true;

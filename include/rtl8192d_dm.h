@@ -378,11 +378,11 @@ struct	dm_priv
 /*  */
 /*  function prototype */
 /*  */
-void rtl8192d_init_dm_priv(struct rtw_adapter * Adapter);
-void rtl8192d_deinit_dm_priv(struct rtw_adapter * Adapter);
-void	rtl8192d_InitHalDm(struct rtw_adapter * Adapter);
-void	rtl8192d_HalDmWatchDog(struct rtw_adapter * Adapter);
+void rtl8192d_init_dm_priv(struct rtw_adapter * adapter);
+void rtl8192d_deinit_dm_priv(struct rtw_adapter * adapter);
+void	rtl8192d_InitHalDm(struct rtw_adapter * adapter);
+void	rtl8192d_HalDmWatchDog(struct rtw_adapter * adapter);
 
-void rtl8192d_dm_CheckTXPowerTracking(struct rtw_adapter * Adapter);
+void rtl8192d_dm_CheckTXPowerTracking(struct rtw_adapter * adapter);
 
 #endif	/* __HAL8190PCIDM_H__ */

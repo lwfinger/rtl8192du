@@ -92,7 +92,7 @@ static	struct rf_shadow_compare_map RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
  *						Firmwaer support the utility later.
  *
  *---------------------------------------------------------------------------*/
-void rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	Adapter,
+void rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	adapter,
 										u16		DataRate)
 {
 /*  We do not support gain table change inACUT now !!!! Delete later !!! */
@@ -104,7 +104,7 @@ void rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	Adapter,
  *
  * Overview:    This function is called by SetBWModeCallback8190Pci() only
  *
- * Input:       struct rtw_adapter *				Adapter
+ * Input:       struct rtw_adapter *				adapter
  *			WIRELESS_BANDWIDTH_E	Bandwidth	20M or 40M
  *
  * Output:      NONE
@@ -115,11 +115,11 @@ void rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	Adapter,
  *---------------------------------------------------------------------------*/
 void
 rtl8192d_PHY_RF6052SetBandwidth(
-	struct rtw_adapter *				Adapter,
+	struct rtw_adapter *				adapter,
 	enum HT_CHANNEL_WIDTH		Bandwidth)	/* 20M or 40M */
 {
 	u8			eRFPath;
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 
 	switch (Bandwidth)
 	{
@@ -127,7 +127,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 			for (eRFPath=0;eRFPath<pHalData->NumTotalRFPath;eRFPath++)
 			{
 				pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffff3ff) | 0x0400);
-				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT10|BIT11, 0x01);
+				PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT10|BIT11, 0x01);
 
 			}
 			break;
@@ -136,7 +136,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 			for (eRFPath=0;eRFPath<pHalData->NumTotalRFPath;eRFPath++)
 			{
 				pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffff3ff));
-				PHY_SetRFReg(Adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT10|BIT11, 0x00);
+				PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, BIT10|BIT11, 0x00);
 			}
 			break;
 
@@ -165,11 +165,11 @@ rtl8192d_PHY_RF6052SetBandwidth(
 
 void
 rtl8192d_PHY_RF6052SetCckTxPower(
-	struct rtw_adapter *		Adapter,
+	struct rtw_adapter *		adapter,
 	u8*			pPowerlevel)
 {
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
-	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
+	struct mlme_ext_priv	*pmlmeext = &adapter->mlmeextpriv;
 	u32			TxAGC[2]={0, 0}, tmpval=0;
 	bool		TurboScanOff = false;
 	u8			idx1, idx2;
@@ -235,15 +235,15 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 
 	/*  rf-A cck tx power */
 	tmpval = TxAGC[RF_PATH_A]&0xff;
-	PHY_SetBBReg(Adapter, rTxAGC_A_CCK1_Mcs32, bMaskByte1, tmpval);
+	PHY_SetBBReg(adapter, rTxAGC_A_CCK1_Mcs32, bMaskByte1, tmpval);
 	tmpval = TxAGC[RF_PATH_A]>>8;
-	PHY_SetBBReg(Adapter, rTxAGC_B_CCK11_A_CCK2_11, 0xffffff00, tmpval);
+	PHY_SetBBReg(adapter, rTxAGC_B_CCK11_A_CCK2_11, 0xffffff00, tmpval);
 
 	/*  rf-B cck tx power */
 	tmpval = TxAGC[RF_PATH_B]>>24;
-	PHY_SetBBReg(Adapter, rTxAGC_B_CCK11_A_CCK2_11, bMaskByte0, tmpval);
+	PHY_SetBBReg(adapter, rTxAGC_B_CCK11_A_CCK2_11, bMaskByte0, tmpval);
 	tmpval = TxAGC[RF_PATH_B]&0x00ffffff;
-	PHY_SetBBReg(Adapter, rTxAGC_B_CCK1_55_Mcs32, 0xffffff00, tmpval);
+	PHY_SetBBReg(adapter, rTxAGC_B_CCK1_55_Mcs32, 0xffffff00, tmpval);
 }	/* PHY_RF6052SetCckTxPower */
 
 /*  */
@@ -251,14 +251,14 @@ rtl8192d_PHY_RF6052SetCckTxPower(
 /*  powerbase1 for HT MCS rates */
 /*  */
 static void getPowerBase(
-	struct rtw_adapter *	Adapter,
+	struct rtw_adapter *	adapter,
 	u8		*pPowerLevel,
 	u8		Channel,
 	u32	*OfdmBase,
 	u32	*MCSBase
 	)
 {
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	u32	powerBase0, powerBase1;
 	u8	Legacy_pwrdiff=0;
 	s8	HT20_pwrdiff=0;
@@ -313,7 +313,7 @@ static u8 getChnlGroupByPG(u8 chnlindex)
 }
 
 static void getTxPowerWriteValByRegulatory(
-		struct rtw_adapter *	Adapter,
+		struct rtw_adapter *	adapter,
 		u8*			pPowerLevel,
 		u8			Channel,
 		u8			index,
@@ -322,7 +322,7 @@ static void getTxPowerWriteValByRegulatory(
 		u32*		pOutWriteVal
 	)
 {
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	u8	i, chnlGroup=0, pwr_diff_limit[4], customer_pwr_limit;
 	s8	pwr_diff=0;
@@ -422,12 +422,12 @@ static void getTxPowerWriteValByRegulatory(
 }
 
 static void writeOFDMPowerReg(
-		struct rtw_adapter *	Adapter,
+		struct rtw_adapter *	adapter,
 		u8			index,
 		u32			*pValue
 	)
 {
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	u16	RegOffset_A[6] = {rTxAGC_A_Rate18_06, rTxAGC_A_Rate54_24,
 				  rTxAGC_A_Mcs03_Mcs00, rTxAGC_A_Mcs07_Mcs04,
 				  rTxAGC_A_Mcs11_Mcs08, rTxAGC_A_Mcs15_Mcs12};
@@ -453,7 +453,7 @@ static void writeOFDMPowerReg(
 			RegOffset = RegOffset_A[index];
 		else
 			RegOffset = RegOffset_B[index];
-		PHY_SetBBReg(Adapter, RegOffset, bMaskDWord, writeVal);
+		PHY_SetBBReg(adapter, RegOffset, bMaskDWord, writeVal);
 
 		/*  201005115 Joseph: Set Tx Power diff for Tx power training mechanism. */
 		if (((pHalData->rf_type == RF_2T2R) &&
@@ -472,7 +472,7 @@ static void writeOFDMPowerReg(
 					writeVal = (writeVal>8)?(writeVal-8):0;
 				else
 					writeVal = (writeVal>6)?(writeVal-6):0;
-				rtw_write8(Adapter, (u32)(RegOffset+i), (u8)writeVal);
+				rtw_write8(adapter, (u32)(RegOffset+i), (u8)writeVal);
 			}
 		}
 	}
@@ -501,27 +501,27 @@ static void writeOFDMPowerReg(
  *---------------------------------------------------------------------------*/
 void
 rtl8192d_PHY_RF6052SetOFDMTxPower(
-	struct rtw_adapter *	Adapter,
+	struct rtw_adapter *	adapter,
 	u8*		pPowerLevel,
 	u8		Channel)
 {
 	u32	writeVal[2], powerBase0[2], powerBase1[2];
 	u8	index = 0;
 
-	getPowerBase(Adapter, pPowerLevel, Channel, &powerBase0[0], &powerBase1[0]);
+	getPowerBase(adapter, pPowerLevel, Channel, &powerBase0[0], &powerBase1[0]);
 
 	for (index=0; index<6; index++)
 	{
-		getTxPowerWriteValByRegulatory(Adapter, pPowerLevel, Channel, index,
+		getTxPowerWriteValByRegulatory(adapter, pPowerLevel, Channel, index,
 			&powerBase0[0], &powerBase1[0], &writeVal[0]);
 
-		writeOFDMPowerReg(Adapter, index, &writeVal[0]);
+		writeOFDMPowerReg(adapter, index, &writeVal[0]);
 	}
 }
 
 bool
 rtl8192d_PHY_EnableAnotherPHY(
-	struct rtw_adapter *		Adapter,
+	struct rtw_adapter *		adapter,
 	bool			bMac0
 	)
 {
@@ -532,7 +532,7 @@ rtl8192d_PHY_EnableAnotherPHY(
 	u32			MaskForPHYSet = 0;
 
 	/* MAC0 Need PHY1 load radio_b.txt . Driver use DBI to write. */
-	u1bTmp = rtw_read8(Adapter, MAC_REG);
+	u1bTmp = rtw_read8(adapter, MAC_REG);
 
 	if (!(u1bTmp&MAC_ON_BIT))
 	{
@@ -541,8 +541,8 @@ rtl8192d_PHY_EnableAnotherPHY(
 			MaskForPHYSet = MAC0_ACCESS_PHY1;
 		else
 			MaskForPHYSet = MAC1_ACCESS_PHY0;
-		rtw_write16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet, rtw_read16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet)&0xFFFC);
-		rtw_write16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet, rtw_read16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet)|BIT13|BIT0|BIT1);
+		rtw_write16(adapter, REG_SYS_FUNC_EN|MaskForPHYSet, rtw_read16(adapter, REG_SYS_FUNC_EN|MaskForPHYSet)&0xFFFC);
+		rtw_write16(adapter, REG_SYS_FUNC_EN|MaskForPHYSet, rtw_read16(adapter, REG_SYS_FUNC_EN|MaskForPHYSet)|BIT13|BIT0|BIT1);
 	} else {
 		/*  We think if MAC1 is ON,then radio_a.txt and radio_b.txt has been load. */
 		bResult = false;
@@ -552,7 +552,7 @@ rtl8192d_PHY_EnableAnotherPHY(
 
 void
 rtl8192d_PHY_PowerDownAnotherPHY(
-	struct rtw_adapter *		Adapter,
+	struct rtw_adapter *		adapter,
 	bool			bMac0
 	)
 {
@@ -562,7 +562,7 @@ rtl8192d_PHY_PowerDownAnotherPHY(
 	u32	MaskforPhySet = 0;
 
 	/*  check MAC0 enable or not again now, if enabled, not power down radio A. */
-	u1bTmp = rtw_read8(Adapter, MAC_REG);
+	u1bTmp = rtw_read8(adapter, MAC_REG);
 
 	if (!(u1bTmp&MAC_ON_BIT)) {
 		/*  power down RF radio A according to YuNan's advice. */
@@ -570,21 +570,21 @@ rtl8192d_PHY_PowerDownAnotherPHY(
 			MaskforPhySet = MAC0_ACCESS_PHY1;
 		else
 			MaskforPhySet = MAC1_ACCESS_PHY0;
-		  rtw_write32(Adapter, rFPGA0_XA_LSSIParameter|MaskforPhySet, 0x00000000);
+		  rtw_write32(adapter, rFPGA0_XA_LSSIParameter|MaskforPhySet, 0x00000000);
 	}
 
 }
 
 static int
 phy_RF6052_Config_ParaFile(
-	struct rtw_adapter *		Adapter
+	struct rtw_adapter *		adapter
 	)
 {
 	u32	u4RegValue=0;
 	u8	eRFPath;
 	struct bb_register_def *pPhyReg;
 	int	rtStatus = _SUCCESS;
-	struct hal_data_8192du	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 #ifndef CONFIG_EMBEDDED_FWIMG
 	u8	*pszRadioAFile = NULL;
@@ -618,7 +618,7 @@ phy_RF6052_Config_ParaFile(
 		if (pHalData->CurrentBandType92D == BAND_ON_2_4G && pHalData->interfaceIndex == 0)
 		{
 			/* MAC0 Need PHY1 load radio_b.txt . Driver use DBI to write. */
-			if (rtl8192d_PHY_EnableAnotherPHY(Adapter, true))
+			if (rtl8192d_PHY_EnableAnotherPHY(adapter, true))
 			{
 				pHalData->NumTotalRFPath = 2;
 				bMac0NeedInitRadioBFirst = true;
@@ -632,7 +632,7 @@ phy_RF6052_Config_ParaFile(
 		else if (pHalData->CurrentBandType92D == BAND_ON_5G && pHalData->interfaceIndex == 1)
 		{
 			/* MAC1 Need PHY0 load radio_a.txt . Driver use DBI to write. */
-			if (rtl8192d_PHY_EnableAnotherPHY(Adapter, false))
+			if (rtl8192d_PHY_EnableAnotherPHY(adapter, false))
 			{
 				pHalData->NumTotalRFPath = 2;
 				bMac1NeedInitRadioAFirst = true;
@@ -706,27 +706,27 @@ phy_RF6052_Config_ParaFile(
 		{
 			case RF_PATH_A:
 			case RF_PATH_C:
-				u4RegValue = PHY_QueryBBReg(Adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV);
+				u4RegValue = PHY_QueryBBReg(adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV);
 				break;
 			case RF_PATH_B :
 			case RF_PATH_D:
-				u4RegValue = PHY_QueryBBReg(Adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV<<16);
+				u4RegValue = PHY_QueryBBReg(adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV<<16);
 				break;
 		}
 
 		/*----Set RF_ENV enable----*/
-		PHY_SetBBReg(Adapter, pPhyReg->rfintfe|MaskforPhySet, bRFSI_RFENV<<16, 0x1);
+		PHY_SetBBReg(adapter, pPhyReg->rfintfe|MaskforPhySet, bRFSI_RFENV<<16, 0x1);
 		rtw_udelay_os(1);/* PlatformStallExecution(1); */
 
 		/*----Set RF_ENV output high----*/
-		PHY_SetBBReg(Adapter, pPhyReg->rfintfo|MaskforPhySet, bRFSI_RFENV, 0x1);
+		PHY_SetBBReg(adapter, pPhyReg->rfintfo|MaskforPhySet, bRFSI_RFENV, 0x1);
 		rtw_udelay_os(1);/* PlatformStallExecution(1); */
 
 		/* Set bit number of Address and Data for RF register */
-		PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2|MaskforPhySet, b3WireAddressLength, 0x0);	/*  Set 1 to 4 bits for 8255 */
+		PHY_SetBBReg(adapter, pPhyReg->rfHSSIPara2|MaskforPhySet, b3WireAddressLength, 0x0);	/*  Set 1 to 4 bits for 8255 */
 		rtw_udelay_os(1);/* PlatformStallExecution(1); */
 
-		PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2|MaskforPhySet, b3WireDataLength, 0x0);	/*  Set 0 to 12  bits for 8255 */
+		PHY_SetBBReg(adapter, pPhyReg->rfHSSIPara2|MaskforPhySet, b3WireDataLength, 0x0);	/*  Set 0 to 12  bits for 8255 */
 		rtw_udelay_os(1);/* PlatformStallExecution(1); */
 
 		/*----Initialize RF fom connfiguration file----*/
@@ -736,18 +736,18 @@ phy_RF6052_Config_ParaFile(
 #ifdef CONFIG_EMBEDDED_FWIMG
 				/* vivi added this for read parameter from header, 20100908 */
 				if (bTrueBPath == true)
-					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radiob_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
+					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radiob_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
 				else
-					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radioa_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
+					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radioa_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
 #else
-				rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(Adapter, pszRadioAFile, (enum RF_RADIO_PATH_E)eRFPath);
+				rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(adapter, pszRadioAFile, (enum RF_RADIO_PATH_E)eRFPath);
 #endif
 				break;
 			case RF_PATH_B:
 #ifdef CONFIG_EMBEDDED_FWIMG
-			rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(Adapter,radiob_txt, (enum RF_RADIO_PATH_E)eRFPath);
+			rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radiob_txt, (enum RF_RADIO_PATH_E)eRFPath);
 #else
-			rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(Adapter, pszRadioBFile, (enum RF_RADIO_PATH_E)eRFPath);
+			rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(adapter, pszRadioBFile, (enum RF_RADIO_PATH_E)eRFPath);
 #endif
 				break;
 			case RF_PATH_C:
@@ -761,11 +761,11 @@ phy_RF6052_Config_ParaFile(
 		{
 			case RF_PATH_A:
 			case RF_PATH_C:
-				PHY_SetBBReg(Adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV, u4RegValue);
+				PHY_SetBBReg(adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV, u4RegValue);
 				break;
 			case RF_PATH_B :
 			case RF_PATH_D:
-				PHY_SetBBReg(Adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV<<16, u4RegValue);
+				PHY_SetBBReg(adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV<<16, u4RegValue);
 				break;
 		}
 
@@ -778,20 +778,20 @@ phy_RF6052_Config_ParaFile(
 	if (bNeedPowerDownRadioA)
 	{
 		/*  check MAC0 enable or not again now, if enabled, not power down radio A. */
-		rtl8192d_PHY_PowerDownAnotherPHY(Adapter, false);
+		rtl8192d_PHY_PowerDownAnotherPHY(adapter, false);
 	}
 	else  if (bNeedPowerDownRadioB)
 	{
 		/*  check MAC1 enable or not again now, if enabled, not power down radio B. */
-		rtl8192d_PHY_PowerDownAnotherPHY(Adapter, true);
+		rtl8192d_PHY_PowerDownAnotherPHY(adapter, true);
 	}
 
 	for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
 	{
 #if MP_DRIVER == 1
-		PHY_SetRFReg(Adapter, eRFPath, RF_RXRF_A3, bRFRegOffsetMask, 0xff456);
+		PHY_SetRFReg(adapter, eRFPath, RF_RXRF_A3, bRFRegOffsetMask, 0xff456);
 #endif
-		pdmpriv->RegRF3C[eRFPath] = PHY_QueryRFReg(Adapter, eRFPath, RF_RXRF_A3, bRFRegOffsetMask);
+		pdmpriv->RegRF3C[eRFPath] = PHY_QueryRFReg(adapter, eRFPath, RF_RXRF_A3, bRFRegOffsetMask);
 	}
 
 	return rtStatus;
@@ -802,9 +802,9 @@ phy_RF6052_Config_ParaFile_Fail:
 
 int
 PHY_RF6052_Config8192D(
-	struct rtw_adapter *		Adapter)
+	struct rtw_adapter *		adapter)
 {
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	int rtStatus = _SUCCESS;
 
 	/*  */
@@ -827,7 +827,7 @@ PHY_RF6052_Config8192D(
 	/*  */
 	/*  Config BB and RF */
 	/*  */
-	rtStatus = phy_RF6052_Config_ParaFile(Adapter);
+	rtStatus = phy_RF6052_Config_ParaFile(adapter);
 
 	return rtStatus;
 }

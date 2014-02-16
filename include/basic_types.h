@@ -30,7 +30,7 @@
 
 #define FIELD_OFFSET(s,field)	((__kernel_ssize_t)&((s*)(0))->field)
 
-#define MEM_ALIGNMENT_OFFSET	(sizeof (__kernel_size_t))
+#define MEM_ALIGNMENT_OFFSET	(sizeof(__kernel_size_t))
 #define MEM_ALIGNMENT_PADDING	(sizeof(__kernel_size_t) - 1)
 
 #define SIZE_PTR __kernel_size_t
@@ -65,12 +65,12 @@
 
 /* Write data to memory */
 #define WRITEEF1BYTE(_ptr, _val)	\
-	(*((u8 *)(_ptr))) = EF1BYTE(_val)
+	((*((u8 *)(_ptr))) = EF1BYTE(_val))
 /* Write le data to memory in host ordering */
 #define WRITEEF2BYTE(_ptr, _val)	\
-	(*((u16 *)(_ptr))) = EF2BYTE(_val)
+	((*((u16 *)(_ptr))) = EF2BYTE(_val))
 #define WRITEEF4BYTE(_ptr, _val)	\
-	(*((u32 *)(_ptr))) = EF2BYTE(_val)
+	((*((u32 *)(_ptr))) = EF4BYTE(_val))
 
 /* Create a bit mask
  * Examples:

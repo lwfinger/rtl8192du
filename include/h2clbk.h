@@ -26,10 +26,10 @@
 #include <TypeDef.h>
 
 
-void _lbk_cmd(PADAPTER Adapter);
+void _lbk_cmd(PADAPTER adapter);
 
-void _lbk_rsp(PADAPTER Adapter);
+void _lbk_rsp(PADAPTER adapter);
 
-void _lbk_evt(PADAPTER Adapter);
+void _lbk_evt(PADAPTER adapter);
 
 void h2c_event_callback(unsigned char *dev, unsigned char *pbuf);

@@ -130,7 +130,7 @@ hal_com_get_channel_plan(
 	bool		AutoLoadFail
 	);
 
-void	halsetbratecfg(struct rtw_adapter * Adapter, u8 *mBratesOS, u16 *pBrateCfg);
+void	halsetbratecfg(struct rtw_adapter * adapter, u8 *mBratesOS, u16 *pBrateCfg);
 
 u8	ratetohwrate(u8 rate);
 

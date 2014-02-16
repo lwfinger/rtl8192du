@@ -50,7 +50,7 @@
 #define TARGET_CHNL_NUM_2G_5G	59
 #define CV_CURVE_CNT			64
 
-extern atomic_t GlobalMutexForGlobalAdapterList;
+extern atomic_t GlobalMutexForGlobaladapterList;
 /* add mutex to solve the problem that reading efuse and power on/fw download do */
 /* on the same time */
 extern atomic_t GlobalMutexForMac0_2G_Mac1_5G;
@@ -721,18 +721,18 @@ struct hal_data_8192du {
 #endif /* CONFIG_P2P */
 };
 
-#define GET_HAL_DATA(__pAdapter)	((struct hal_data_8192du *)((__pAdapter)->HalData))
+#define GET_HAL_DATA(__adapter)	((struct hal_data_8192du *)((__adapter)->HalData))
 #define GET_RF_TYPE(priv)	(GET_HAL_DATA(priv)->rf_type)
 
-int FirmwareDownload92D(struct rtw_adapter * Adapter,bool  bUsedWoWLANFw);
-void rtl8192d_FirmwareSelfReset(struct rtw_adapter * Adapter);
-void rtl8192d_ReadChipVersion(struct rtw_adapter * Adapter);
-void rtl8192d_EfuseParseChnlPlan(struct rtw_adapter * Adapter, u8 *hwinfo, bool AutoLoadFail);
-void rtl8192d_ReadTxPowerInfo(struct rtw_adapter * Adapter, u8* PROMContent, bool AutoLoadFail);
-void rtl8192d_ResetDualMacSwitchVariables(struct rtw_adapter * Adapter);
-u8 GetEEPROMSize8192D(struct rtw_adapter * Adapter);
-bool PHY_CheckPowerOffFor8192D(struct rtw_adapter * Adapter);
-void PHY_SetPowerOnFor8192D(struct rtw_adapter * Adapter);
+int FirmwareDownload92D(struct rtw_adapter * adapter,bool  bUsedWoWLANFw);
+void rtl8192d_FirmwareSelfReset(struct rtw_adapter * adapter);
+void rtl8192d_ReadChipVersion(struct rtw_adapter * adapter);
+void rtl8192d_EfuseParseChnlPlan(struct rtw_adapter * adapter, u8 *hwinfo, bool AutoLoadFail);
+void rtl8192d_ReadTxPowerInfo(struct rtw_adapter * adapter, u8* PROMContent, bool AutoLoadFail);
+void rtl8192d_ResetDualMacSwitchVariables(struct rtw_adapter * adapter);
+u8 GetEEPROMSize8192D(struct rtw_adapter * adapter);
+bool PHY_CheckPowerOffFor8192D(struct rtw_adapter * adapter);
+void PHY_SetPowerOnFor8192D(struct rtw_adapter * adapter);
 void rtl8192d_free_hal_data(struct rtw_adapter *padapter);
 void rtl8192d_set_hal_ops(struct hal_ops *pHalFunc);
 

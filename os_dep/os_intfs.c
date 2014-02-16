@@ -845,7 +845,12 @@ static unsigned int rtw_classify8021d(struct sk_buff *skb)
 	return dscp >> 5;
 }
 
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(3, 12, 0))
 static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb)
+#else
+static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb,
+			    void *accel)
+#endif
 {
 	struct rtw_adapter	*padapter = rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -907,7 +912,7 @@ int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 
 #ifdef CONFIG_EASY_REPLACEMENT
 	struct net_device	*TargetNetdev = NULL;
-	struct rtw_adapter			*TargetAdapter = NULL;
+	struct rtw_adapter			*target_adapter = NULL;
 	struct net		*devnet = NULL;
 
 	if (padapter->bDongle == 1)
@@ -924,17 +929,17 @@ int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 #endif
 		if (TargetNetdev) {
 			DBG_8192D("Force onboard module driver disappear !!!\n");
-			TargetAdapter = rtw_netdev_priv(TargetNetdev);
-			TargetAdapter->DriverState = DRIVER_DISAPPEAR;
+			target_adapter = rtw_netdev_priv(TargetNetdev);
+			target_adapter->DriverState = DRIVER_DISAPPEAR;
 
-			padapter->pid[0] = TargetAdapter->pid[0];
-			padapter->pid[1] = TargetAdapter->pid[1];
-			padapter->pid[2] = TargetAdapter->pid[2];
+			padapter->pid[0] = target_adapter->pid[0];
+			padapter->pid[1] = target_adapter->pid[1];
+			padapter->pid[2] = target_adapter->pid[2];
 
 			dev_put(TargetNetdev);
 			unregister_netdev(TargetNetdev);
 
-			if (TargetAdapter->chip_type == padapter->chip_type)
+			if (target_adapter->chip_type == padapter->chip_type)
 				rtw_proc_remove_one(TargetNetdev);
 
 			padapter->DriverState = DRIVER_REPLACE_DONGLE;

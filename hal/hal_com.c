@@ -266,7 +266,7 @@ u8	ratetohwrate(u8 rate)
 	return ret;
 }
 
-void	halsetbratecfg(struct rtw_adapter * Adapter, u8 *brates, u16 *bratecfg)
+void	halsetbratecfg(struct rtw_adapter * adapter, u8 *brates, u16 *bratecfg)
 {
 	u8	i, is_brate, brate;
 

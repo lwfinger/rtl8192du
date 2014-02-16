@@ -180,8 +180,8 @@ static void usb_read_reg_rf_byfw(struct intf_hdl *pintfhdl, u16 byteCount, u32 r
 {
 	u16	wPage = 0x0000, offset;
 	u32	BufferLengthRead;
-	struct rtw_adapter *	Adapter = pintfhdl->padapter;
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(Adapter);
+	struct rtw_adapter *	adapter = pintfhdl->padapter;
+	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
 	u8	RFPath=0,nPHY=0;
 
 	RFPath =(u8) ((registerIndex&0xff0000)>>16);

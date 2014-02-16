@@ -136,77 +136,77 @@ enum HAL_INTF_PS_FUNC {
 typedef s32 (*c2h_id_filter)(u8 id);
 
 struct hal_ops {
-	u32	(*hal_init)(struct rtw_adapter * Adapter);
-	u32	(*hal_deinit)(struct rtw_adapter * Adapter);
+	u32	(*hal_init)(struct rtw_adapter * adapter);
+	u32	(*hal_deinit)(struct rtw_adapter * adapter);
 
-	void	(*free_hal_data)(struct rtw_adapter * Adapter);
+	void	(*free_hal_data)(struct rtw_adapter * adapter);
 
-	u32	(*inirp_init)(struct rtw_adapter * Adapter);
-	u32	(*inirp_deinit)(struct rtw_adapter * Adapter);
+	u32	(*inirp_init)(struct rtw_adapter * adapter);
+	u32	(*inirp_deinit)(struct rtw_adapter * adapter);
 
-	s32	(*init_xmit_priv)(struct rtw_adapter * Adapter);
-	void	(*free_xmit_priv)(struct rtw_adapter * Adapter);
+	s32	(*init_xmit_priv)(struct rtw_adapter * adapter);
+	void	(*free_xmit_priv)(struct rtw_adapter * adapter);
 
-	s32	(*init_recv_priv)(struct rtw_adapter * Adapter);
-	void	(*free_recv_priv)(struct rtw_adapter * Adapter);
+	s32	(*init_recv_priv)(struct rtw_adapter * adapter);
+	void	(*free_recv_priv)(struct rtw_adapter * adapter);
 
-	void	(*InitSwLeds)(struct rtw_adapter * Adapter);
-	void	(*DeInitSwLeds)(struct rtw_adapter * Adapter);
+	void	(*InitSwLeds)(struct rtw_adapter * adapter);
+	void	(*DeInitSwLeds)(struct rtw_adapter * adapter);
 
-	void	(*dm_init)(struct rtw_adapter * Adapter);
-	void	(*dm_deinit)(struct rtw_adapter * Adapter);
-	void	(*read_chip_version)(struct rtw_adapter * Adapter);
+	void	(*dm_init)(struct rtw_adapter * adapter);
+	void	(*dm_deinit)(struct rtw_adapter * adapter);
+	void	(*read_chip_version)(struct rtw_adapter * adapter);
 
-	void	(*init_default_value)(struct rtw_adapter * Adapter);
+	void	(*init_default_value)(struct rtw_adapter * adapter);
 
-	void	(*intf_chip_configure)(struct rtw_adapter * Adapter);
+	void	(*intf_chip_configure)(struct rtw_adapter * adapter);
 
-	void	(*read_adapter_info)(struct rtw_adapter * Adapter);
+	void	(*read_adapter_info)(struct rtw_adapter * adapter);
 
-	void	(*enable_interrupt)(struct rtw_adapter * Adapter);
-	void	(*disable_interrupt)(struct rtw_adapter * Adapter);
-	s32	(*interrupt_handler)(struct rtw_adapter * Adapter);
+	void	(*enable_interrupt)(struct rtw_adapter * adapter);
+	void	(*disable_interrupt)(struct rtw_adapter * adapter);
+	s32	(*interrupt_handler)(struct rtw_adapter * adapter);
 
-	void	(*set_bwmode_handler)(struct rtw_adapter * Adapter, enum HT_CHANNEL_WIDTH Bandwidth, u8 Offset);
-	void	(*set_channel_handler)(struct rtw_adapter * Adapter, u8 channel);
+	void	(*set_bwmode_handler)(struct rtw_adapter * adapter, enum HT_CHANNEL_WIDTH Bandwidth, u8 Offset);
+	void	(*set_channel_handler)(struct rtw_adapter * adapter, u8 channel);
 
-	void	(*hal_dm_watchdog)(struct rtw_adapter * Adapter);
+	void	(*hal_dm_watchdog)(struct rtw_adapter * adapter);
 
-	void	(*SetHwRegHandler)(struct rtw_adapter * Adapter, u8	variable,u8* val);
-	void	(*GetHwRegHandler)(struct rtw_adapter * Adapter, u8	variable,u8* val);
+	void	(*SetHwRegHandler)(struct rtw_adapter * adapter, u8	variable,u8* val);
+	void	(*GetHwRegHandler)(struct rtw_adapter * adapter, u8	variable,u8* val);
 
-	u8	(*GetHalDefVarHandler)(struct rtw_adapter * Adapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
-	u8	(*SetHalDefVarHandler)(struct rtw_adapter * Adapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
+	u8	(*GetHalDefVarHandler)(struct rtw_adapter * adapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
+	u8	(*SetHalDefVarHandler)(struct rtw_adapter * adapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
 
-	void	(*UpdateRAMaskHandler)(struct rtw_adapter * Adapter, u32 mac_id);
-	void	(*SetBeaconRelatedRegistersHandler)(struct rtw_adapter * Adapter);
+	void	(*UpdateRAMaskHandler)(struct rtw_adapter * adapter, u32 mac_id);
+	void	(*SetBeaconRelatedRegistersHandler)(struct rtw_adapter * adapter);
 
-	void	(*Add_RateATid)(struct rtw_adapter * Adapter, u32 bitmap, u8 arg);
+	void	(*Add_RateATid)(struct rtw_adapter * adapter, u32 bitmap, u8 arg);
 
 #ifdef CONFIG_ANTENNA_DIVERSITY
-	u8	(*AntDivBeforeLinkHandler)(struct rtw_adapter * Adapter);
-	void	(*AntDivCompareHandler)(struct rtw_adapter * Adapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
+	u8	(*AntDivBeforeLinkHandler)(struct rtw_adapter * adapter);
+	void	(*AntDivCompareHandler)(struct rtw_adapter * adapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
 #endif
-	u8	(*interface_ps_func)(struct rtw_adapter * Adapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val);
+	u8	(*interface_ps_func)(struct rtw_adapter * adapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val);
 
-	s32	(*hal_xmit)(struct rtw_adapter * Adapter, struct xmit_frame *pxmitframe);
-	s32	(*mgnt_xmit)(struct rtw_adapter * Adapter, struct xmit_frame *pmgntframe);
+	s32	(*hal_xmit)(struct rtw_adapter * adapter, struct xmit_frame *pxmitframe);
+	s32	(*mgnt_xmit)(struct rtw_adapter * adapter, struct xmit_frame *pmgntframe);
 
-	u32	(*read_bbreg)(struct rtw_adapter * Adapter, u32 RegAddr, u32 BitMask);
-	void	(*write_bbreg)(struct rtw_adapter * Adapter, u32 RegAddr, u32 BitMask, u32 Data);
-	u32	(*read_rfreg)(struct rtw_adapter * Adapter, enum RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask);
-	void	(*write_rfreg)(struct rtw_adapter * Adapter, enum RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
+	u32	(*read_bbreg)(struct rtw_adapter * adapter, u32 RegAddr, u32 BitMask);
+	void	(*write_bbreg)(struct rtw_adapter * adapter, u32 RegAddr, u32 BitMask, u32 Data);
+	u32	(*read_rfreg)(struct rtw_adapter * adapter, enum RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask);
+	void	(*write_rfreg)(struct rtw_adapter * adapter, enum RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
 
 #ifdef CONFIG_HOSTAPD_MLME
-	s32	(*hostap_mgnt_xmit_entry)(struct rtw_adapter * Adapter, struct sk_buff *pkt);
+	s32	(*hostap_mgnt_xmit_entry)(struct rtw_adapter * adapter, struct sk_buff *pkt);
 #endif
-	void (*EfusePowerSwitch)(struct rtw_adapter * pAdapter, u8 bWrite, u8 PwrState);
-	void (*ReadEFuse)(struct rtw_adapter * Adapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest);
-	void (*EFUSEGetEfuseDefinition)(struct rtw_adapter * pAdapter, u8 efuseType, u8 type, void * *pOut, bool bPseudoTest);
-	u16	(*EfuseGetCurrentSize)(struct rtw_adapter * pAdapter, u8 efuseType, bool bPseudoTest);
-	int	(*Efuse_PgPacketRead)(struct rtw_adapter * pAdapter, u8 offset, u8 *data, bool bPseudoTest);
-	int	(*Efuse_PgPacketWrite)(struct rtw_adapter * pAdapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
-	u8	(*Efuse_WordEnableDataWrite)(struct rtw_adapter * pAdapter, u16 efuse_addr, u8 word_en, u8 *data, bool bPseudoTest);
+	void (*EfusePowerSwitch)(struct rtw_adapter * adapter, u8 bWrite, u8 PwrState);
+	void (*ReadEFuse)(struct rtw_adapter * adapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest);
+	void (*EFUSEGetEfuseDefinition)(struct rtw_adapter * adapter, u8 efuseType, u8 type, void * *pOut, bool bPseudoTest);
+	u16	(*EfuseGetCurrentSize)(struct rtw_adapter * adapter, u8 efuseType, bool bPseudoTest);
+	int	(*Efuse_PgPacketRead)(struct rtw_adapter * adapter, u8 offset, u8 *data, bool bPseudoTest);
+	int	(*Efuse_PgPacketWrite)(struct rtw_adapter * adapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
+	u8	(*Efuse_WordEnableDataWrite)(struct rtw_adapter * adapter, u16 efuse_addr, u8 word_en, u8 *data, bool bPseudoTest);
 
 #ifdef DBG_CONFIG_ERROR_DETECT
 	void (*sreset_init_value)(struct rtw_adapter *padapter);
@@ -265,13 +265,13 @@ enum HARDWARE_TYPE {
 /*  */
 /*  RTL8192D Series */
 /*  */
-#define IS_HARDWARE_TYPE_8192DE(_Adapter)			\
-		(((struct rtw_adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DE)
-#define IS_HARDWARE_TYPE_8192DU(_Adapter)			\
-		(((struct rtw_adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DU)
-#define	IS_HARDWARE_TYPE_8192D(_Adapter)			\
-		(IS_HARDWARE_TYPE_8192DE(_Adapter) ||		\
-		 IS_HARDWARE_TYPE_8192DU(_Adapter))
+#define IS_HARDWARE_TYPE_8192DE(_adapter)			\
+		(((struct rtw_adapter *)_adapter)->HardwareType==HARDWARE_TYPE_RTL8192DE)
+#define IS_HARDWARE_TYPE_8192DU(_adapter)			\
+		(((struct rtw_adapter *)_adapter)->HardwareType==HARDWARE_TYPE_RTL8192DU)
+#define	IS_HARDWARE_TYPE_8192D(_adapter)			\
+		(IS_HARDWARE_TYPE_8192DE(_adapter) ||		\
+		 IS_HARDWARE_TYPE_8192DU(_adapter))
 
 #define GET_EEPROM_EFUSE_PRIV(priv)	(&priv->eeprompriv)
 

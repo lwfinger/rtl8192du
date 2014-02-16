@@ -513,13 +513,13 @@ void write_cam(struct rtw_adapter *padapter, u8 entry, u16 ctrl, u8 *mac, u8 *ke
 void clear_cam_entry(struct rtw_adapter *padapter, u8 entry);
 
 void invalidate_cam_all(struct rtw_adapter *padapter);
-void CAM_empty_entry(struct rtw_adapter *Adapter, u8 ucIndex);
+void CAM_empty_entry(struct rtw_adapter *adapter, u8 ucIndex);
 
 
 int allocate_fw_sta_entry(struct rtw_adapter *padapter);
 void flush_all_cam_entry(struct rtw_adapter *padapter);
 
-bool IsLegal5GChannel(struct rtw_adapter *Adapter, u8 channel);
+bool IsLegal5GChannel(struct rtw_adapter *adapter, u8 channel);
 
 void site_survey(struct rtw_adapter *padapter);
 u8 collect_bss_info(struct rtw_adapter *padapter, union recv_frame *precv_frame, struct wlan_bssid_ex *bssid);
@@ -552,7 +552,7 @@ void update_beacon_info(struct rtw_adapter *padapter, u8 *pframe, uint len, stru
 void process_csa_ie(struct rtw_adapter *padapter, u8 *pframe, uint len);
 #endif /* CONFIG_DFS */
 void update_IOT_info(struct rtw_adapter *padapter);
-void update_capinfo(struct rtw_adapter *Adapter, u16 updateCap);
+void update_capinfo(struct rtw_adapter *adapter, u16 updateCap);
 void update_wireless_mode(struct rtw_adapter *padapter);
 void update_tx_basic_rate(struct rtw_adapter *padapter, u8 modulation);
 void update_bmc_sta_support_rate(struct rtw_adapter *padapter, u32 mac_id);

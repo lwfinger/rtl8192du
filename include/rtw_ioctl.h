@@ -107,7 +107,7 @@ extern struct iw_handler_def  rtw_handlers_def;
 #endif
 
 extern	uint drv_query_info(
-		struct net_device *MiniportAdapterContext,
+		struct net_device *MiniportadapterContext,
 		uint		Oid,
 		void *InformationBuffer,
 		u32 InformationBufferLength,
@@ -116,7 +116,7 @@ extern	uint drv_query_info(
 	);
 
 extern	uint	drv_set_info(
-		struct net_device *MiniportAdapterContext,
+		struct net_device *MiniportadapterContext,
 		uint		Oid,
 		void *InformationBuffer,
 		u32	InformationBufferLength,

@@ -662,7 +662,7 @@ static uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev)
 	uint status = _SUCCESS;
 	struct registry_priv  *registry_par = &padapter->registrypriv;
 
-_func_enter_;
+
 
 	registry_par->chip_version = (u8)rtw_chip_version;
 	registry_par->rfintfs = (u8)rtw_rfintfs;
@@ -771,7 +771,7 @@ _func_enter_;
 	registry_par->ext_iface_num = (u8)rtw_ext_iface_num;
 #endif /* CONFIG_MULTI_VIR_IFACES */
 
-_func_exit_;
+
 
 	return status;
 }
@@ -1204,7 +1204,7 @@ u8 rtw_init_drv_sw(struct rtw_adapter *padapter)
 
 	u8	ret8 = _SUCCESS;
 
-_func_enter_;
+
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("+rtw_init_drv_sw\n"));
 
@@ -1317,7 +1317,7 @@ exit:
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-rtw_init_drv_sw\n"));
 
-	_func_exit_;
+
 
 	return ret8;
 }

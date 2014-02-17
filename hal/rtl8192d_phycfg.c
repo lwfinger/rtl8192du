@@ -1737,11 +1737,11 @@ rtl8192d_PHY_GetHWRegOriginalValue(
 
 
 /*  */
-/* 	Description: */
-/* 		Map dBm into Tx power index according to */
-/* 		current HW model, for example, RF and PA, and */
-/* 		current wireless mode. */
-/* 	By Bruce, 2008-01-29. */
+/*	Description: */
+/*		Map dBm into Tx power index according to */
+/*		current HW model, for example, RF and PA, and */
+/*		current wireless mode. */
+/*	By Bruce, 2008-01-29. */
 /*  */
 static	u8
 phy_DbmToTxPwrIdx(
@@ -1758,7 +1758,7 @@ phy_DbmToTxPwrIdx(
 	/*  Tested by MP, we found that CCK Index 0 equals to 8dbm, OFDM legacy equals to */
 	/*  3dbm, and OFDM HT equals to 0dbm repectively. */
 	/*  Note: */
-	/* 	The mapping may be different by different NICs. Do not use this formula for what needs accurate result. */
+	/*	The mapping may be different by different NICs. Do not use this formula for what needs accurate result. */
 	/*  By Bruce, 2008-01-29. */
 	/*  */
 	switch (WirelessMode)
@@ -1794,11 +1794,11 @@ phy_DbmToTxPwrIdx(
 
 
 /*  */
-/* 	Description: */
-/* 		Map Tx power index into dBm according to */
-/* 		current HW model, for example, RF and PA, and */
-/* 		current wireless mode. */
-/* 	By Bruce, 2008-01-29. */
+/*	Description: */
+/*		Map Tx power index into dBm according to */
+/*		current HW model, for example, RF and PA, and */
+/*		current wireless mode. */
+/*	By Bruce, 2008-01-29. */
 /*  */
 static int
 phy_TxPwrIdxToDbm(
@@ -1813,7 +1813,7 @@ phy_TxPwrIdxToDbm(
 	/*  */
 	/*  Tested by MP, we found that CCK Index 0 equals to -7dbm, OFDM legacy equals to -8dbm. */
 	/*  Note: */
-	/* 	The mapping may be different by different NICs. Do not use this formula for what needs accurate result. */
+	/*	The mapping may be different by different NICs. Do not use this formula for what needs accurate result. */
 	/*  By Bruce, 2008-01-29. */
 	/*  */
 	switch (WirelessMode)
@@ -1978,12 +1978,12 @@ PHY_SetTxPowerLevel8192D(
 }
 
 /*  */
-/* 	Description: */
-/* 		Update transmit power level of all channel supported. */
+/*	Description: */
+/*		Update transmit power level of all channel supported. */
 /*  */
-/* 	TODO: */
-/* 		A mode. */
-/* 	By Bruce, 2008-02-04. */
+/*	TODO: */
+/*		A mode. */
+/*	By Bruce, 2008-02-04. */
 /*  */
 bool
 PHY_UpdateTxPowerDbm8192D(
@@ -3194,7 +3194,7 @@ phy_FinishSwChnlNow(	/*  We should not call this function directly */
 
 /*  */
 /*  Description: */
-/* 	Switch channel synchronously. Called by SwChnlByDelayHandler. */
+/*	Switch channel synchronously. Called by SwChnlByDelayHandler. */
 /*  */
 /*  Implemented by Bruce, 2008-02-14. */
 /*  The following procedure is operted according to SwChanlCallback8190Pci(). */
@@ -3231,10 +3231,10 @@ PHY_SwChnlPhy8192D(	/*  Only called during initialize */
 
 
 /*  */
-/* 	Description: */
-/* 		Configure H/W functionality to enable/disable Monitor mode. */
-/* 		Note, because we possibly need to configure BB and RF in this function, */
-/* 		so caller should in PASSIVE_LEVEL. 080118, by rcnjko. */
+/*	Description: */
+/*		Configure H/W functionality to enable/disable Monitor mode. */
+/*		Note, because we possibly need to configure BB and RF in this function, */
+/*		so caller should in PASSIVE_LEVEL. 080118, by rcnjko. */
 /*  */
 void
 PHY_SetMonitorMode8192D(
@@ -3275,7 +3275,7 @@ PHY_CheckIsLegalRfPath8192D(
 
 /*  */
 /*  */
-/* 	IQK */
+/*	IQK */
 /*  */
 /*  */
 #define MAX_TOLERANCE		5
@@ -4128,7 +4128,7 @@ phy_IQCalibrate(
 #endif
 
 	/*  Note: IQ calibration must be performed after loading */
-	/* 		PHY_REG.txt , and radio_a, radio_b.txt */
+	/*		PHY_REG.txt , and radio_a, radio_b.txt */
 	if (t == 0) {
 		/*  Save ADDA parameters, turn Path A ADDA on */
 		phy_SaveADDARegisters(adapter, ADDA_REG, pdmpriv->ADDA_backup, IQK_ADDA_REG_NUM);
@@ -4703,7 +4703,7 @@ phy_IQCalibrate_5G_Normal(
 					};
 
 	/*  Note: IQ calibration must be performed after loading */
-	/* 		PHY_REG.txt , and radio_a, radio_b.txt */
+	/*		PHY_REG.txt , and radio_a, radio_b.txt */
 	/* 3 PathDiv */
        /* Neil Chen--2011--05--19-- */
 	u8                 rfPathDiv;   /* for Path Diversity */
@@ -6149,15 +6149,15 @@ PHY_UpdateBBRFConfiguration8192D(
 }
 
 /*  */
-/* 	Description: */
-/* 		Read HW adapter information through EEPROM 93C46. */
-/* 		Or For EFUSE 92S .And Get and Set 92D MACPHY mode and Band Type. */
-/* 		MacPhyMode:DMDP,SMSP. */
-/* 		BandType:2.4G,5G. */
+/*	Description: */
+/*		Read HW adapter information through EEPROM 93C46. */
+/*		Or For EFUSE 92S .And Get and Set 92D MACPHY mode and Band Type. */
+/*		MacPhyMode:DMDP,SMSP. */
+/*		BandType:2.4G,5G. */
 /*  */
-/* 	Assumption: */
-/* 		1. Boot from EEPROM and CR9346 regiser has verified. */
-/* 		2. PASSIVE_LEVEL (USB interface) */
+/*	Assumption: */
+/*		1. Boot from EEPROM and CR9346 regiser has verified. */
+/*		2. PASSIVE_LEVEL (USB interface) */
 /*  */
 void PHY_ReadMacPhyMode92D(
 		struct rtw_adapter *			adapter,
@@ -6192,15 +6192,15 @@ void PHY_ReadMacPhyMode92D(
 }
 
 /*  */
-/* 	Description: */
-/* 		Read HW adapter information through EEPROM 93C46. */
-/* 		Or For EFUSE 92S .And Get and Set 92D MACPHY mode and Band Type. */
-/* 		MacPhyMode:DMDP,SMSP. */
-/* 		BandType:2.4G,5G. */
+/*	Description: */
+/*		Read HW adapter information through EEPROM 93C46. */
+/*		Or For EFUSE 92S .And Get and Set 92D MACPHY mode and Band Type. */
+/*		MacPhyMode:DMDP,SMSP. */
+/*		BandType:2.4G,5G. */
 /*  */
-/* 	Assumption: */
-/* 		1. Boot from EEPROM and CR9346 regiser has verified. */
-/* 		2. PASSIVE_LEVEL (USB interface) */
+/*	Assumption: */
+/*		1. Boot from EEPROM and CR9346 regiser has verified. */
+/*		2. PASSIVE_LEVEL (USB interface) */
 /*  */
 void PHY_ConfigMacPhyMode92D(
 		struct rtw_adapter *			adapter
@@ -6228,15 +6228,15 @@ void PHY_ConfigMacPhyMode92D(
 }
 
 /*  */
-/* 	Description: */
-/* 		Read HW adapter information through EEPROM 93C46. */
-/* 		Or For EFUSE 92S .And Get and Set 92D MACPHY mode and Band Type. */
-/* 		MacPhyMode:DMDP,SMSP. */
-/* 		BandType:2.4G,5G. */
+/*	Description: */
+/*		Read HW adapter information through EEPROM 93C46. */
+/*		Or For EFUSE 92S .And Get and Set 92D MACPHY mode and Band Type. */
+/*		MacPhyMode:DMDP,SMSP. */
+/*		BandType:2.4G,5G. */
 /*  */
-/* 	Assumption: */
-/* 		1. Boot from EEPROM and CR9346 regiser has verified. */
-/* 		2. PASSIVE_LEVEL (USB interface) */
+/*	Assumption: */
+/*		1. Boot from EEPROM and CR9346 regiser has verified. */
+/*		2. PASSIVE_LEVEL (USB interface) */
 /*  */
 void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *adapter)
 {
@@ -6375,12 +6375,12 @@ void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *adapter)
 }
 
 /*  */
-/* 	Description: */
-/* 	set RX packet buffer and other setting acording to dual mac mode */
+/*	Description: */
+/*	set RX packet buffer and other setting acording to dual mac mode */
 /*  */
-/* 	Assumption: */
-/* 		1. Boot from EEPROM and CR9346 regiser has verified. */
-/* 		2. PASSIVE_LEVEL (USB interface) */
+/*	Assumption: */
+/*		1. Boot from EEPROM and CR9346 regiser has verified. */
+/*		2. PASSIVE_LEVEL (USB interface) */
 /*  */
 void PHY_ConfigMacCoexist_RFPage92D(
 		struct rtw_adapter *			adapter

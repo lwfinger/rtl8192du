@@ -19,7 +19,7 @@
 #include <rtl8192d_led.h>
 
 /*  */
-/* 	Constant. */
+/*	Constant. */
 /*  */
 
 /*  */
@@ -41,7 +41,7 @@
 
 
 /*  */
-/* 	Prototype of protected function. */
+/*	Prototype of protected function. */
 /*  */
 
 static void BlinkTimerCallback(unsigned long data);
@@ -71,8 +71,8 @@ ResetLedStatus(struct LED_871X *	pLed) {
 /*  */
 
 /*  */
-/* 	Description: */
-/* 		Initialize an struct LED_871X object. */
+/*	Description: */
+/*		Initialize an struct LED_871X object. */
 /*  */
 
 static void InitLed871x(struct rtw_adapter *padapter,
@@ -98,8 +98,8 @@ static void InitLed871x(struct rtw_adapter *padapter,
 
 
 /*  */
-/* 	Description: */
-/* 		DeInitialize an struct LED_871X object. */
+/*	Description: */
+/*		DeInitialize an struct LED_871X object. */
 /*  */
 static void DeInitLed871x(struct LED_871X *pLed)
 {
@@ -115,8 +115,8 @@ static void DeInitLed871x(struct LED_871X *pLed)
 
 
 /*  */
-/* 	Description: */
-/* 		Turn on LED according to LedPin specified. */
+/*	Description: */
+/*		Turn on LED according to LedPin specified. */
 /*  */
 
 static void SwLedOn(struct rtw_adapter *padapter, struct LED_871X *pLed)
@@ -155,8 +155,8 @@ static void SwLedOn(struct rtw_adapter *padapter, struct LED_871X *pLed)
 
 
 /*  */
-/* 	Description: */
-/* 		Turn off LED according to LedPin specified. */
+/*	Description: */
+/*		Turn off LED according to LedPin specified. */
 /*  */
 static void SwLedOff(struct rtw_adapter *padapter, struct LED_871X *pLed)
 {
@@ -195,9 +195,9 @@ static void SwLedOff(struct rtw_adapter *padapter, struct LED_871X *pLed)
 }
 
 /*  */
-/* 	Description: */
-/* 		Implementation of LED blinking behavior. */
-/* 		It toggle off LED and schedule corresponding timer if necessary. */
+/*	Description: */
+/*		Implementation of LED blinking behavior. */
+/*		It toggle off LED and schedule corresponding timer if necessary. */
 /*  */
 static void SwLedBlink(struct LED_871X *pLed)
 {
@@ -316,7 +316,7 @@ static void SwLedBlink(struct LED_871X *pLed)
 static void SwLedBlink1(struct LED_871X *pLed)
 {
 	struct rtw_adapter				*padapter = pLed->padapter;
-	struct hal_data_8192du 		*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du		*pHalData = GET_HAL_DATA(padapter);
 	struct led_priv		*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 	struct LED_871X *			pLed1 = &(ledpriv->SwLed1);
@@ -1129,9 +1129,9 @@ static void SwLedBlink5(struct LED_871X *pLed)
 }
 
 /*  */
-/* 	Description: */
-/* 		Callback function of LED BlinkTimer, */
-/* 		it just schedules to corresponding BlinkWorkItem. */
+/*	Description: */
+/*		Callback function of LED BlinkTimer, */
+/*		it just schedules to corresponding BlinkWorkItem. */
 /*  */
 static void
 BlinkTimerCallback(
@@ -1151,9 +1151,9 @@ BlinkTimerCallback(
 
 
 /*  */
-/* 	Description: */
-/* 		Callback function of LED BlinkWorkItem. */
-/* 		We dispatch acture LED blink action according to LedStrategy. */
+/*	Description: */
+/*		Callback function of LED BlinkWorkItem. */
+/*		We dispatch acture LED blink action according to LedStrategy. */
 /*  */
 static void BlinkWorkItemCallback(struct work_struct *work)
 {
@@ -1204,9 +1204,9 @@ static void BlinkWorkItemCallback(struct work_struct *work)
 /*  */
 
 /*  */
-/* 	Description: */
-/* 		Implement each led action for SW_LED_MODE0. */
-/* 		This is default strategy. */
+/*	Description: */
+/*		Implement each led action for SW_LED_MODE0. */
+/*		This is default strategy. */
 /*  */
 static void SwLedControlMode0(
 	struct rtw_adapter		*padapter,
@@ -1328,7 +1328,7 @@ static void SwLedControlMode1(
 	enum LED_CTL_MODE		LedAction
 )
 {
-	struct hal_data_8192du 		*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du		*pHalData = GET_HAL_DATA(padapter);
 	struct led_priv		*ledpriv = &(padapter->ledpriv);
 	struct LED_871X *			pLed = &(ledpriv->SwLed0);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
@@ -2271,7 +2271,7 @@ static void SwLedControlMode5(
 	enum LED_CTL_MODE		LedAction
 )
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(padapter);
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct LED_871X *		pLed = &(ledpriv->SwLed0);
@@ -2353,8 +2353,8 @@ static void SwLedControlMode5(
 
 
 /*  */
-/* 	Description: */
-/* 		Dispatch LED action according to pHalData->LedStrategy. */
+/*	Description: */
+/*		Dispatch LED action according to pHalData->LedStrategy. */
 /*  */
 static void LedControl871x(
 	struct rtw_adapter				*padapter,
@@ -2418,8 +2418,8 @@ static void LedControl871x(
 /*  */
 
 /*  */
-/* 	Description: */
-/* 		Initialize all struct LED_871X objects. */
+/*	Description: */
+/*		Initialize all struct LED_871X objects. */
 /*  */
 void rtl8192du_InitSwLeds(struct rtw_adapter	*padapter)
 {
@@ -2434,8 +2434,8 @@ void rtl8192du_InitSwLeds(struct rtw_adapter	*padapter)
 
 
 /*  */
-/* 	Description: */
-/* 		DeInitialize all LED_819xUsb objects. */
+/*	Description: */
+/*		DeInitialize all LED_819xUsb objects. */
 /*  */
 void rtl8192du_DeInitSwLeds(struct rtw_adapter *padapter)
 {

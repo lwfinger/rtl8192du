@@ -63,13 +63,13 @@ CheckFwReadLastH2C(
 
 /*  */
 /*  Description: */
-/* 	Fill H2C command */
-/* 	BOX_0-4 Format: */
-/* 	bit [31-8]	|     7		|  [6-0] */
-/* 	     RSVD	|  CMD_EXT	|  CMD_ID */
+/*	Fill H2C command */
+/*	BOX_0-4 Format: */
+/*	bit [31-8]	|     7		|  [6-0] */
+/*	     RSVD	|  CMD_EXT	|  CMD_ID */
 /*  */
-/* 	BOX Extension 0-4 format: */
-/* 	bit 15-0: RSVD */
+/*	BOX Extension 0-4 format: */
+/*	bit 15-0: RSVD */
 /*  */
 
 /*****************************************
@@ -91,7 +91,7 @@ static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLe
 	u8	WaitWriteH2cLimmit = 100;
 	u8	idx=0;
 
-_func_enter_;
+
 
 	padapter = GET_PRIMARY_ADAPTER(padapter);
 	pHalData = GET_HAL_DATA(padapter);
@@ -243,7 +243,7 @@ _func_enter_;
 
 	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex));
 
-_func_exit_;
+
 }
 
 void
@@ -297,7 +297,7 @@ u8 rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg)
 	u8	buf[5];
 	u8	res=_SUCCESS;
 	__le32	le_mask;
-_func_enter_;
+
 
 	memset(buf, 0, 5);
 	le_mask = cpu_to_le32(mask);
@@ -306,7 +306,7 @@ _func_enter_;
 
 	FillH2CCmd92D(padapter, H2C_RA_MASK, 5, buf);
 
-_func_exit_;
+
 
 	return res;
 }
@@ -348,7 +348,7 @@ void rtl8192d_set_FwPwrMode_cmd(struct rtw_adapter*padapter, u8 Mode)
 	u8	u1H2CSetPwrMode[3]={0};
 	u8	beacon_interval = 1;
 
-_func_enter_;
+
 
 	DBG_8192D("%s(): Mode = %d, SmartPS = %d\n", __func__,Mode,pwrpriv->smart_ps);
 
@@ -358,7 +358,7 @@ _func_enter_;
 
 	FillH2CCmd92D(padapter, H2C_SETPWRMODE, 3, u1H2CSetPwrMode);
 
-_func_exit_;
+
 }
 
 static void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
@@ -578,8 +578,8 @@ static void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLe
 
 /*  */
 /*  Description: In normal chip, we should send some packet to Hw which will be used by Fw */
-/* 			in FW LPS mode. The function is to fill the Tx descriptor of this packets, then */
-/* 			Fw can tell Hw to send these packet derectly. */
+/*			in FW LPS mode. The function is to fill the Tx descriptor of this packets, then */
+/*			Fw can tell Hw to send these packet derectly. */
 /*  Added by tynli. 2009.10.15. */
 /*  */
 static void
@@ -633,13 +633,13 @@ FillFakeTxDescriptor92D(
 
 /*  */
 /*  Description: Fill the reserved packets that FW will use to RSVD page. */
-/* 			Now we just send 4 types packet to rsvd page. */
-/* 			(1)Beacon, (2)Ps-poll, (3)Null data, (4)ProbeRsp. */
-/* 	Input: */
-/* 	    dl_finish - FALSE: At the first time we will send all the packets as a large packet to Hw, */
-/* 						so we need to set the packet length to total lengh. */
-/* 			      TRUE: At the second time, we should send the first packet (default:beacon) */
-/* 						to Hw again and set the lengh in descriptor to the real beacon lengh. */
+/*			Now we just send 4 types packet to rsvd page. */
+/*			(1)Beacon, (2)Ps-poll, (3)Null data, (4)ProbeRsp. */
+/*	Input: */
+/*	    dl_finish - FALSE: At the first time we will send all the packets as a large packet to Hw, */
+/*						so we need to set the packet length to total lengh. */
+/*			      TRUE: At the second time, we should send the first packet (default:beacon) */
+/*						to Hw again and set the lengh in descriptor to the real beacon lengh. */
 /*  2009.10.15 by tynli. */
 static void SetFwRsvdPagePkt(struct rtw_adapter * adapter, bool dl_finish)
 {
@@ -788,7 +788,7 @@ void rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	bool	bRecover = false;
 
-_func_enter_;
+
 
 	DBG_8192D("%s\n", __func__);
 
@@ -842,7 +842,7 @@ _func_enter_;
 
 	FillH2CCmd92D(padapter, H2C_JOINBSSRPT, 1, u1JoinBssRptParm);
 
-_func_exit_;
+
 }
 
 #ifdef CONFIG_P2P_PS
@@ -863,7 +863,7 @@ void rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_sta
 	u16	ctwindow;
 	u32	start_time, tsf_low;
 
-_func_enter_;
+
 
 	switch (p2p_ps_state)
 	{
@@ -949,7 +949,7 @@ _func_enter_;
 
 	FillH2CCmd92D(padapter, H2C_P2P_PS_OFFLOAD, 1, (u8 *)p2p_ps_offload);
 
-_func_exit_;
+
 }
 #endif /*  CONFIG_P2P_PS */
 
@@ -964,7 +964,7 @@ static u8 rtl8192d_reset_tsf(struct rtw_adapter *padapter, u8 reset_port)
 	u8	buf[2];
 	u8	res=_SUCCESS;
 
-_func_enter_;
+
 	if (IFACE_PORT0==reset_port) {
 		buf[0] = 0x1; buf[1] = 0;
 
@@ -972,7 +972,7 @@ _func_enter_;
 		buf[0] = 0x0; buf[1] = 0x1;
 	}
 	FillH2CCmd92D(padapter, H2C_92D_RESET_TSF, 2, buf);
-_func_exit_;
+
 
 	return res;
 }
@@ -1010,7 +1010,7 @@ void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter)
 	struct set_wowlan_parm pwowlan_parm;
 	struct pwrctrl_priv *pwrpriv=&padapter->pwrctrlpriv;
 
-_func_enter_;
+
 
 	pwowlan_parm.mode =0;
 	pwowlan_parm.gpio_index=0;
@@ -1093,7 +1093,7 @@ _func_enter_;
 		FillH2CCmd92D(padapter, H2C_WO_WLAN_CMD, 4, (u8 *)&pwowlan_parm);
 
 
-_func_exit_;
+
 
 	return ;
 }

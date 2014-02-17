@@ -130,7 +130,7 @@ uint rtw_hal_deinit(struct rtw_adapter *padapter)
 {
 	uint	status = _SUCCESS;
 
-_func_enter_;
+
 
 	status = padapter->HalFunc.hal_deinit(padapter);
 
@@ -138,7 +138,7 @@ _func_enter_;
 		padapter->hw_init_completed = false;
 	else
 		RT_TRACE(_module_hal_init_c_,_drv_err_,("\n rtw_hal_deinit: hal_init fail\n"));
-_func_exit_;
+
 
 	return status;
 }

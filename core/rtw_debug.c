@@ -20,7 +20,7 @@
 
 u32 GlobalDebugLevel = _drv_err_;
 
-u64 GlobalDebugComponents = 
+u64 GlobalDebugComponents =
 	_module_rtl871x_xmit_c_ |
 	_module_xmit_osdep_c_ |
 	_module_rtl871x_recv_c_ |

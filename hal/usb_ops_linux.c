@@ -51,8 +51,6 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	}
 #endif
 
-
-
 	if ((padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx)) {
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usbctrl_vendorreq:(padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
 		status = -EPERM;
@@ -68,7 +66,6 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
 	_enter_critical_mutex(&pdvobjpriv->usb_vendor_req_mutex);
 	#endif
-
 
 	/*  Acquire IO memory for vendorreq */
 #ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
@@ -130,7 +127,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 				} else {
 					#ifdef DBG_CONFIG_ERROR_DETECT
 					{
-						struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
+						struct hal_data_8192du	*pHalData = GET_HAL_DATA(padapter);
 						pHalData->srestpriv.Wifi_Error_Status = USB_VEN_REQ_CMD_FAIL;
 					}
 					#endif
@@ -177,7 +174,7 @@ static void usb_read_reg_rf_byfw(struct intf_hdl *pintfhdl, u16 byteCount, u32 r
 	u16	wPage = 0x0000, offset;
 	u32	BufferLengthRead;
 	struct rtw_adapter *	adapter = pintfhdl->padapter;
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	u8	RFPath=0,nPHY=0;
 
 	RFPath =(u8) ((registerIndex&0xff0000)>>16);
@@ -206,7 +203,7 @@ static void usb_read_reg_rf_byfw(struct intf_hdl *pintfhdl, u16 byteCount, u32 r
 static void usb_read_reg(struct intf_hdl *pintfhdl, u16 value, void *pdata, u16 len)
 {
 	struct rtw_adapter		*padapter = pintfhdl->padapter;
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(padapter);
 	u8	request;
 	u8	requesttype;
 	u16	index;
@@ -229,7 +226,7 @@ static void usb_read_reg(struct intf_hdl *pintfhdl, u16 value, void *pdata, u16 
 static int usb_write_reg(struct intf_hdl *pintfhdl, u16 value, void *pdata, u16 len)
 {
 	struct rtw_adapter		*padapter = pintfhdl->padapter;
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(padapter);
 	u8	request;
 	u8	requesttype;
 	u16	index;
@@ -255,14 +252,10 @@ static u8 usb_read8(struct intf_hdl *pintfhdl, u32 addr)
 	u16 len;
 	__le32 data;
 
-	_func_enter_;
-
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 1;
 
 	usb_read_reg(pintfhdl, wvalue, &data, len);
-
-	_func_exit_;
 
 	return (u8)(le32_to_cpu(data)&0x0ff);
 }
@@ -273,14 +266,10 @@ static u16 usb_read16(struct intf_hdl *pintfhdl, u32 addr)
 	u16 len;
 	__le32 data;
 
-	_func_enter_;
-
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 2;
 
 	usb_read_reg(pintfhdl, wvalue, &data, len);
-
-	_func_exit_;
 
 	return (u16)(le32_to_cpu(data)&0xffff);
 }
@@ -290,8 +279,6 @@ static u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 	u16 wvalue;
 	u16 len;
 	__le32 data;
-
-	_func_enter_;
 
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 4;
@@ -303,8 +290,6 @@ static u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 		usb_read_reg(pintfhdl, wvalue, &data, len);
 	}
 
-	_func_exit_;
-
 	return le32_to_cpu(data);
 }
 
@@ -315,16 +300,12 @@ static int usb_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val)
 	__le32 data;
 	int ret;
 
-	_func_enter_;
-
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 1;
 
 	data = cpu_to_le32(val & 0x000000ff);
 
 	ret = usb_write_reg(pintfhdl, wvalue, &data, len);
-
-	_func_exit_;
 
 	return ret;
 }
@@ -336,16 +317,12 @@ static int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
 	__le32 data;
 	int ret;
 
-	_func_enter_;
-
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 2;
 
 	data = cpu_to_le32(val & 0x0000ffff);
 
 	ret = usb_write_reg(pintfhdl, wvalue, &data, len);
-
-	_func_exit_;
 
 	return ret;
 }
@@ -357,15 +334,11 @@ static int usb_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
 	__le32 data;
 	int ret;
 
-	_func_enter_;
-
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 4;
 	data = cpu_to_le32(val);
 
 	ret = usb_write_reg(pintfhdl, wvalue, &data, len);
-
-	_func_exit_;
 
 	return ret;
 }
@@ -377,15 +350,11 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 	u8	buf[VENDOR_CMD_MAX_DATA_LEN]={0};
 	int	ret;
 
-	_func_enter_;
-
 	wvalue = (u16)(addr&0x0000ffff);
 	len = length;
 	 memcpy(buf, pdata, len);
 
 	ret = usb_write_reg(pintfhdl, wvalue, buf, len);
-
-	_func_exit_;
 
 	return ret;
 }
@@ -444,8 +413,6 @@ static u32 usb_read_interrupt(struct intf_hdl *pintfhdl, u32 addr)
 	struct recv_priv	*precvpriv = &adapter->recvpriv;
 	struct usb_device	*pusbd = pdvobj->pusbdev;
 
-_func_enter_;
-
 	/* translate DMA FIFO addr to pipehandle */
 	pipe = ffaddr2pipehdl(pdvobj, addr);
 
@@ -462,8 +429,6 @@ _func_enter_;
 		DBG_8192D("cannot submit interrupt in-token(err = 0x%08x),urb_status = %d\n",err, precvpriv->int_in_urb->status);
 		ret = _FAIL;
 	}
-
-_func_exit_;
 
 	return ret;
 }
@@ -496,7 +461,6 @@ static s32 pre_recv_entry(struct recv_frame_hdr *precvframe, struct recv_stat *p
 			precvframe->adapter = secondary_padapter;
 		}
 
-
 	}
 	else /*  Handle BC/MC Packets */
 	{
@@ -523,9 +487,9 @@ static s32 pre_recv_entry(struct recv_frame_hdr *precvframe, struct recv_stat *p
 
 				pattrib = &precvframe_if2->attrib;
 
-				/* 	Modified by Albert 20101213 */
-				/* 	For 8 bytes IP header alignment. */
-				if (pattrib->qos)	/* 	Qos data, wireless lan header length is 26 */
+				/*	Modified by Albert 20101213 */
+				/*	For 8 bytes IP header alignment. */
+				if (pattrib->qos)	/*	Qos data, wireless lan header length is 26 */
 				{
 					shift_sz = 6;
 				}
@@ -546,8 +510,8 @@ static s32 pre_recv_entry(struct recv_frame_hdr *precvframe, struct recv_stat *p
 				}
 				else {
 					alloc_sz = skb_len;
-					/* 	6 is for IP header 8 bytes alignment in QoS packet case. */
-					/* 	8 is for skb->data 4 bytes alignment. */
+					/*	6 is for IP header 8 bytes alignment in QoS packet case. */
+					/*	8 is for skb->data 4 bytes alignment. */
 					alloc_sz += 14;
 				}
 
@@ -603,10 +567,9 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 	struct sk_buff *pkt_copy = NULL;
 	struct recv_frame_hdr	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
-	struct hal_data_8192du 		*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du		*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
-
 
 	transfer_len = (s32)precvbuf->transfer_len;
 	pbuf = precvbuf->pbuf;
@@ -651,9 +614,9 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 			goto _exit_recvbuf2recvframe;
 		}
 
-		/* 	Modified by Albert 20101213 */
-		/* 	For 8 bytes IP header alignment. */
-		if (pattrib->qos)	/* 	Qos data, wireless lan header length is 26 */
+		/*	Modified by Albert 20101213 */
+		/*	For 8 bytes IP header alignment. */
+		if (pattrib->qos)	/*	Qos data, wireless lan header length is 26 */
 		{
 			shift_sz = 6;
 		}
@@ -674,8 +637,8 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 		}
 		else {
 			alloc_sz = skb_len;
-			/* 	6 is for IP header 8 bytes alignment in QoS packet case. */
-			/* 	8 is for skb->data 4 bytes alignment. */
+			/*	6 is for IP header 8 bytes alignment in QoS packet case. */
+			/*	8 is for skb->data 4 bytes alignment. */
 			alloc_sz += 14;
 		}
 
@@ -767,7 +730,6 @@ _exit_recvbuf2recvframe:
 	return _SUCCESS;
 }
 
-
 void rtl8192du_recv_tasklet(void *priv)
 {
 	struct recv_buf *precvbuf = NULL;
@@ -782,7 +744,6 @@ void rtl8192du_recv_tasklet(void *priv)
 
 			break;
 		}
-
 
 		recvbuf2recvframe(padapter, precvbuf);
 
@@ -857,7 +818,6 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 
 exit:
 
-_func_exit_;
 }
 
 static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
@@ -870,8 +830,6 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(adapter);
 	struct recv_priv	*precvpriv = &adapter->recvpriv;
 	struct usb_device	*pusbd = pdvobj->pusbdev;
-
-_func_enter_;
 
 	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)
 	{
@@ -918,8 +876,6 @@ _func_enter_;
 		ret = _FAIL;
 	}
 
-_func_exit_;
-
 	return ret;
 }
 #else	/*  CONFIG_USE_USB_BUFFER_ALLOC_RX */
@@ -935,7 +891,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 	struct sk_buff *pkt_copy = NULL;
 	struct recv_frame_hdr	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
 
@@ -982,9 +938,9 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 			goto _exit_recvbuf2recvframe;
 		}
 
-		/* 	Modified by Albert 20101213 */
-		/* 	For 8 bytes IP header alignment. */
-		if (pattrib->qos)	/* 	Qos data, wireless lan header length is 26 */
+		/*	Modified by Albert 20101213 */
+		/*	For 8 bytes IP header alignment. */
+		if (pattrib->qos)	/*	Qos data, wireless lan header length is 26 */
 		{
 			shift_sz = 6;
 		}
@@ -1005,8 +961,8 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 		}
 		else {
 			alloc_sz = skb_len;
-			/* 	6 is for IP header 8 bytes alignment in QoS packet case. */
-			/* 	8 is for skb->data 4 bytes alignment. */
+			/*	6 is for IP header 8 bytes alignment in QoS packet case. */
+			/*	8 is for skb->data 4 bytes alignment. */
 			alloc_sz += 14;
 		}
 
@@ -1098,7 +1054,6 @@ _exit_recvbuf2recvframe:
 	return _SUCCESS;
 }
 
-
 void rtl8192du_recv_tasklet(void *priv)
 {
 	struct sk_buff *pskb;
@@ -1130,7 +1085,6 @@ void rtl8192du_recv_tasklet(void *priv)
 	}
 }
 
-
 static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 {
 	uint isevt, *pbuf;
@@ -1155,7 +1109,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 		}
 	#endif
 
-		goto exit;
+		return;
 	}
 
 	if (purb->status==0)/* SUCCESS */
@@ -1165,9 +1119,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete: (purb->actual_length > MAX_RECVBUF_SZ) || (purb->actual_length < RXDESC_SIZE)\n"));
 			precvbuf->reuse = true;
 			rtw_read_port(padapter, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf);
-		}
-		else
-		{
+		} else {
 			precvbuf->transfer_len = purb->actual_length;
 
 			skb_put(precvbuf->pskb, purb->actual_length);
@@ -1180,40 +1132,35 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 			precvbuf->reuse = false;
 			rtw_read_port(padapter, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf);
 		}
-	}
-	else
-	{
+	} else {
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0\n", purb->status));
 
 		DBG_8192D("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
 
 		switch (purb->status) {
-			case -EINVAL:
-			case -EPIPE:
-			case -ENODEV:
-			case -ESHUTDOWN:
-				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bSurpriseRemoved=TRUE\n"));
-			case -ENOENT:
-				padapter->bDriverStopped=true;
-				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped=TRUE\n"));
-				break;
-			case -EPROTO:
-			case -EOVERFLOW:
-				precvbuf->reuse = true;
-				rtw_read_port(padapter, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf);
-				break;
-			case -EINPROGRESS:
-				DBG_8192D("ERROR: URB IS IN PROGRESS!/n");
-				break;
-			default:
-				break;
+		case -EINVAL:
+		case -EPIPE:
+		case -ENODEV:
+		case -ESHUTDOWN:
+			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bSurpriseRemoved=TRUE\n"));
+		case -ENOENT:
+			padapter->bDriverStopped=true;
+			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped=TRUE\n"));
+			break;
+		case -EPROTO:
+		case -EOVERFLOW:
+			precvbuf->reuse = true;
+			rtw_read_port(padapter, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf);
+			break;
+		case -EINPROGRESS:
+			DBG_8192D("ERROR: URB IS IN PROGRESS!/n");
+			break;
+		default:
+			break;
 		}
 
 	}
 
-exit:
-
-_func_exit_;
 }
 
 static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
@@ -1229,7 +1176,6 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 	struct recv_priv	*precvpriv = &adapter->recvpriv;
 	struct usb_device	*pusbd = pdvobj->pusbdev;
 
-_func_enter_;
 	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||
 	    adapter->pwrctrlpriv.pnp_bstop_trx) {
 		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
@@ -1305,8 +1251,6 @@ _func_enter_;
 		}
 	}
 
-_func_exit_;
-
 	return ret;
 }
 #endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_RX */
@@ -1339,7 +1283,6 @@ void rtl8192du_xmit_tasklet(void *priv)
 
 void rtl8192du_set_intf_ops(struct _io_ops	*pops)
 {
-	_func_enter_;
 
 	memset((u8 *)pops, 0, sizeof(struct _io_ops));
 
@@ -1369,5 +1312,4 @@ void rtl8192du_set_intf_ops(struct _io_ops	*pops)
 	pops->_read_interrupt = &usb_read_interrupt;
 #endif
 
-	_func_exit_;
 }

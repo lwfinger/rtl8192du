@@ -989,7 +989,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 	struct wifidirect_info* pwdinfo = &padapter->wdinfo;
 #endif /* CONFIG_P2P */
 
-_func_enter_;
+
 
 	DBG_8192C("%s\n", __func__);
 
@@ -1149,7 +1149,7 @@ exit:
 
 	DBG_8192C("%s, ret=%d\n", __func__, ret);
 
-	_func_exit_;
+
 
 	return ret;
 }
@@ -3754,45 +3754,45 @@ void rtw_cfg80211_issue_p2p_provision_request(_adapter *padapter, const u8 *buf,
 
 
 	/* build_prov_disc_request_p2p_ie */
-	/* 	P2P OUI */
+	/*	P2P OUI */
 	p2pielen = 0;
 	p2p_ie[p2pielen++] = 0x50;
 	p2p_ie[p2pielen++] = 0x6F;
 	p2p_ie[p2pielen++] = 0x9A;
-	p2p_ie[p2pielen++] = 0x09;	/* 	WFA P2P v1.0 */
+	p2p_ie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
 
-	/* 	Commented by Albert 20110301 */
-	/* 	According to the P2P Specification, the provision discovery request frame should contain 3 P2P attributes */
-	/* 	1. P2P Capability */
-	/* 	2. Device Info */
-	/* 	3. Group ID (When joining an operating P2P Group) */
+	/*	Commented by Albert 20110301 */
+	/*	According to the P2P Specification, the provision discovery request frame should contain 3 P2P attributes */
+	/*	1. P2P Capability */
+	/*	2. Device Info */
+	/*	3. Group ID (When joining an operating P2P Group) */
 
-	/* 	P2P Capability ATTR */
-	/* 	Type: */
+	/*	P2P Capability ATTR */
+	/*	Type: */
 	p2p_ie[p2pielen++] = P2P_ATTR_CAPABILITY;
 
-	/* 	Length: */
+	/*	Length: */
 	RTW_PUT_LE16(p2p_ie + p2pielen, 0x0002);
 	p2pielen += 2;
 
-	/* 	Value: */
-	/* 	Device Capability Bitmap, 1 byte */
-	/* 	Group Capability Bitmap, 1 byte */
+	/*	Value: */
+	/*	Device Capability Bitmap, 1 byte */
+	/*	Group Capability Bitmap, 1 byte */
 	memcpy(p2p_ie + p2pielen, &capability, 2);
 	p2pielen += 2;
 
 
-	/* 	Device Info ATTR */
-	/* 	Type: */
+	/*	Device Info ATTR */
+	/*	Type: */
 	p2p_ie[p2pielen++] = P2P_ATTR_DEVICE_INFO;
 
-	/* 	Length: */
-	/* 	21 -> P2P Device Address (6bytes) + Config Methods (2bytes) + Primary Device Type (8bytes) */
-	/* 	+ NumofSecondDevType (1byte) + WPS Device Name ID field (2bytes) + WPS Device Name Len field (2bytes) */
+	/*	Length: */
+	/*	21 -> P2P Device Address (6bytes) + Config Methods (2bytes) + Primary Device Type (8bytes) */
+	/*	+ NumofSecondDevType (1byte) + WPS Device Name ID field (2bytes) + WPS Device Name Len field (2bytes) */
 	RTW_PUT_LE16(p2p_ie + p2pielen, devinfo_contentlen);
 	p2pielen += 2;
 
-	/* 	Value: */
+	/*	Value: */
 	memcpy(p2p_ie + p2pielen, devinfo_content, devinfo_contentlen);
 	p2pielen += devinfo_contentlen;
 
@@ -3801,32 +3801,32 @@ void rtw_cfg80211_issue_p2p_provision_request(_adapter *padapter, const u8 *buf,
 	pattrib->pktlen += p2p_ielen;
 
 	wpsielen = 0;
-	/* 	WPS OUI */
+	/*	WPS OUI */
 	*(u32*) (wpsie) = cpu_to_be32(WPSOUI);
 	wpsielen += 4;
 
-	/* 	WPS version */
-	/* 	Type: */
+	/*	WPS version */
+	/*	Type: */
 	*(u16*) (wpsie + wpsielen) = cpu_to_be16(WPS_ATTR_VER1);
 	wpsielen += 2;
 
-	/* 	Length: */
+	/*	Length: */
 	*(u16*) (wpsie + wpsielen) = cpu_to_be16(0x0001);
 	wpsielen += 2;
 
-	/* 	Value: */
-	wpsie[wpsielen++] = WPS_VERSION_1;	/* 	Version 1.0 */
+	/*	Value: */
+	wpsie[wpsielen++] = WPS_VERSION_1;	/*	Version 1.0 */
 
-	/* 	Config Method */
-	/* 	Type: */
+	/*	Config Method */
+	/*	Type: */
 	*(u16*) (wpsie + wpsielen) = cpu_to_be16(WPS_ATTR_CONF_METHOD);
 	wpsielen += 2;
 
-	/* 	Length: */
+	/*	Length: */
 	*(u16*) (wpsie + wpsielen) = cpu_to_be16(0x0002);
 	wpsielen += 2;
 
-	/* 	Value: */
+	/*	Value: */
 	*(u16*) (wpsie + wpsielen) = cpu_to_be16(pwdinfo->tx_prov_disc_info.wps_config_method_request);
 	wpsielen += 2;
 

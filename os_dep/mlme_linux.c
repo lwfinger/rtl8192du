@@ -21,7 +21,7 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <mlme_osdep.h>
-                               
+
 void rtw_join_timeout_handler (void *FunctionContext)
 {
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
@@ -71,7 +71,7 @@ void rtw_init_mlme_timer(struct rtw_adapter *padapter)
 void rtw_os_indicate_connect(struct rtw_adapter *adapter)
 {
 
-_func_enter_;
+
 
 #ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_indicate_connect(adapter);
@@ -83,7 +83,7 @@ _func_enter_;
 	if (adapter->pid[2] !=0)
 		rtw_signal_process(adapter->pid[2], SIGALRM);
 
-_func_exit_;
+
 }
 
 void rtw_os_indicate_scan_done(struct rtw_adapter *padapter, bool aborted)
@@ -149,7 +149,7 @@ void rtw_reset_securitypriv(struct rtw_adapter *adapter)
 void rtw_os_indicate_disconnect(struct rtw_adapter *adapter)
 {
 
-_func_enter_;
+
 
 	netif_carrier_off(adapter->pnetdev); /*  Do it first for tx broadcast pkt after disconnection issue! */
 
@@ -161,7 +161,7 @@ _func_enter_;
 
 	 rtw_reset_securitypriv(adapter);
 
-_func_exit_;
+
 }
 
 void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie)
@@ -170,7 +170,7 @@ void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie)
 	u8	*buff,*p,i;
 	union iwreq_data wrqu;
 
-_func_enter_;
+
 
 	RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("+rtw_report_sec_ie, authmode=%d\n", authmode));
 
@@ -208,7 +208,7 @@ _func_enter_;
 
 	}
 
-_func_exit_;
+
 }
 
 static void _survey_timer_hdl (void *FunctionContext)

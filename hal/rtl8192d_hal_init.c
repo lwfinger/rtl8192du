@@ -279,7 +279,7 @@ static int _FWInit(struct rtw_adapter *adapter)
 	return _FAIL;
 }
 
-/* 	Description: Download 8192D firmware code. */
+/*	Description: Download 8192D firmware code. */
 int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 {
 	int rtStatus = _SUCCESS;
@@ -530,9 +530,9 @@ InitializeFirmwareVars92D(
 
 /*  */
 /*  Description: Prepare some information to Fw for WoWLAN. */
-/* 			(1) Download wowlan Fw. */
-/* 			(2) Download RSVD page packets. */
-/* 			(3) Enable AP offload if needed. */
+/*			(1) Download wowlan Fw. */
+/*			(2) Download RSVD page packets. */
+/*			(3) Enable AP offload if needed. */
 /*  */
 /*  2011.04.12 by tynli. */
 /*  */
@@ -640,7 +640,7 @@ rtl8192d_ReadChipVersion(
 
 /*  */
 /*  */
-/* 	Channel Plan */
+/*	Channel Plan */
 /*  */
 /*  */
 
@@ -664,7 +664,7 @@ rtl8192d_EfuseParseChnlPlan(
 
 /*  */
 /*  */
-/* 	EEPROM Power index mapping */
+/*	EEPROM Power index mapping */
 /*  */
 /*  */
 
@@ -984,10 +984,10 @@ rtl8192d_ReadTxPowerInfo(
 }
 
 /*  */
-/* 	Description: */
-/* 		Reset Dual Mac Mode Switch related settings */
+/*	Description: */
+/*		Reset Dual Mac Mode Switch related settings */
 /*  */
-/* 	Assumption: */
+/*	Assumption: */
 /*  */
 void rtl8192d_ResetDualMacSwitchVariables(
 		struct rtw_adapter *			adapter
@@ -1123,7 +1123,7 @@ PHY_SetPowerOnFor8192D(
 
 void rtl8192d_free_hal_data(struct rtw_adapter * padapter)
 {
-_func_enter_;
+
 
 	DBG_8192D("===== rtl8192du_free_hal_data =====\n");
 
@@ -1131,11 +1131,11 @@ _func_enter_;
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	GlobalFirstConfigurationForNormalChip = true;
 #endif
-_func_exit_;
+
 }
 
 /*  */
-/* 				Efuse related code */
+/*				Efuse related code */
 /*  */
 enum{
 		VOLTAGE_V25						= 0x03,

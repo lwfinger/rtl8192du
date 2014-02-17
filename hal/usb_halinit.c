@@ -74,7 +74,7 @@ _TwoOutEpMapping(
 
 	if (bWIFICfg) { /*  Normal chip && wmm */
 
-		/* 	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
+		/*	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
 		/*   0,		1,	0,	1,	0,	0,	0,	0,		0	}; */
 		/* 0:H(end_number=0x02), 1:L (end_number=0x03) */
 
@@ -117,7 +117,7 @@ static void _ThreeOutEpMapping(
 {
 	if (bWIFICfg) {/* for WMM */
 
-		/* 	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
+		/*	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
 		/*   1,		2,	1,	0,	0,	0,	0,	0,		0	}; */
 		/* 0:H(end_number=0x02), 1:N(end_number=0x03), 2:L (end_number=0x05) */
 
@@ -135,7 +135,7 @@ static void _ThreeOutEpMapping(
 	else {/* typical setting */
 
 
-		/* 	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
+		/*	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
 		/*   2,		2,	1,	0,	0,	0,	0,	0,		0	}; */
 		/* 0:H(end_number=0x02), 1:N(end_number=0x03), 2:L (end_number=0x05) */
 
@@ -310,7 +310,7 @@ static u8 _InitPowerOn(struct rtw_adapter *padapter)
 	u8	ret = _SUCCESS;
 	u16	value16=0;
 	u8	value8 = 0;
-/* 	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter); */
+/*	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter); */
 
 	/*  polling autoload done. */
 	u32	pollingCount = 0;
@@ -402,7 +402,7 @@ static u16 CRC16(u8 data,u16 CRC)
 
 		CRC_Result=CRC<<1;
 		/* set BIT0 */
-		/* 	printf("CRC =%x\n",CRC_Result); */
+		/*	printf("CRC =%x\n",CRC_Result); */
 		/* CRC bit 0 =shift_in, */
 		if (shift_in==0)
 		{
@@ -552,7 +552,7 @@ static int rtw_wowlan_set_pattern(struct rtw_adapter *padapter ,u8* pbuf) {
 			if (pbuf[4+(i/8)]&(0x01<<(i%8)))
 			{
 				packet[crc_idx++]=pbuf[20+i];
-		/* 		DBG_8192D("\n i=%d packet[i]=%x pbuf[20+i(%d)]=%x\n",i,packet[i],20+i,pbuf[20+i]); */
+		/*		DBG_8192D("\n i=%d packet[i]=%x pbuf[20+i(%d)]=%x\n",i,packet[i],20+i,pbuf[20+i]); */
 			}
 		}
 		crc_val=calc_crc(packet, crc_idx);
@@ -751,7 +751,7 @@ static u8 InitLLTTable(
 
 /*  */
 /*  */
-/* 	MAC init functions */
+/*	MAC init functions */
 /*  */
 /*  */
 static void
@@ -1104,7 +1104,7 @@ _InitNetworkType(
 	value32 = (value32 & ~MASK_NETTYPE) | _NETTYPE(NT_LINK_AP);
 #endif
 	rtw_write32(adapter, REG_CR, value32);
-/* 	RASSERT(pIoBase->rtw_read8(REG_CR + 2) == 0x2); */
+/*	RASSERT(pIoBase->rtw_read8(REG_CR + 2) == 0x2); */
 }
 
 static void
@@ -1504,7 +1504,7 @@ _InitBeaconParameters(
 	struct rtw_adapter * adapter
 	)
 {
-/* 	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter); */
+/*	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter); */
 
 	rtw_write16(adapter, REG_BCN_CTRL, 0x1010);
 
@@ -1523,7 +1523,7 @@ _InitRFType(
 	struct rtw_adapter * adapter
 	)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 
 #if (DISABLE_BB_RF==1)
 	pHalData->rf_chip	= RF_PSEUDO_11N;
@@ -1545,7 +1545,7 @@ _InitRFType(
 #if RTL8192CU_ADHOC_WORKAROUND_SETTING
 static void _InitAdhocWorkaroundParams(struct rtw_adapter * adapter)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	pHalData->RegBcnCtrlVal = rtw_read8(adapter, REG_BCN_CTRL);
 	pHalData->RegTxPause = rtw_read8(adapter, REG_TXPAUSE);
 	pHalData->RegFwHwTxQCtrl = rtw_read8(adapter, REG_FWHW_TXQ_CTRL+2);
@@ -1576,7 +1576,7 @@ static void _BBTurnOnBlock(
 	struct rtw_adapter *		adapter
 	)
 {
-	struct hal_data_8192du 		*pHalData	= GET_HAL_DATA(adapter);
+	struct hal_data_8192du		*pHalData	= GET_HAL_DATA(adapter);
 #if (DISABLE_BB_RF)
 	return;
 #endif
@@ -1591,7 +1591,7 @@ static void _RfPowerSave(
 	struct rtw_adapter *		adapter
 	)
 {
-	struct hal_data_8192du 	*pHalData	= GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData	= GET_HAL_DATA(adapter);
 	struct pwrctrl_priv		*pwrctrlpriv = &adapter->pwrctrlpriv;
 	u8			eRFPath;
 
@@ -1618,7 +1618,7 @@ static void _RfPowerSave(
 		pwrctrlpriv->rf_pwrstate = rf_on;
 		pwrctrlpriv->rfoff_reason = 0;
 		/* if (adapter->bInSetPower || adapter->bResetInProgress) */
-		/* 	PlatformUsbEnableInPipes(adapter); */
+		/*	PlatformUsbEnableInPipes(adapter); */
 		/* RT_TRACE((COMP_INIT|COMP_RF), DBG_LOUD, ("Initializeadapter8192CUsb(): RF is on.\n")); */
 	}
 }
@@ -1744,7 +1744,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 #else
 	#define HAL_INIT_PROFILE_TAG(stage) do {} while (0)
 #endif /* DBG_HAL_INIT_PROFILING */
-_func_enter_;
+
 
 HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
 	padapter->init_adpt_in_progress = true;
@@ -2204,7 +2204,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC31);
 		/* 3 Set Loopback mode or Normal mode */
 		/* 3 */
 		/* 2006.12.13 by emily. Note!We should not merge these two CPU_GEN register writings */
-		/* 	because setting of System_Reset bit reset MAC to default transmission mode. */
+		/*	because setting of System_Reset bit reset MAC to default transmission mode. */
 		ulRegRead = rtw_read32(padapter, 0x100);	/* CPU_GEN  0x100 */
 
 		ulRegRead |= ulRegRead;
@@ -2254,7 +2254,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 	}
 	#endif
 
-_func_exit_;
+
 
 #ifdef CONFIG_WOWLAN
 	if (padapter->pwrctrlpriv.wowlan_mode == true)
@@ -2454,7 +2454,7 @@ c.	APSD_CTRL 0x600[7:0] = 0x40
 d.	SYS_FUNC_EN 0x02[7:0] = 0x16		reset BB state machine
 e.	SYS_FUNC_EN 0x02[7:0] = 0x14		reset BB state machine
 ***************************************/
-       struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+       struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	u8	eRFPath = 0,value8 = 0;
 
 	PHY_SetBBReg(adapter, rFPGA0_AnalogParameter4, 0x00f00000,  0xf);
@@ -2624,7 +2624,7 @@ CanGotoPowerOff92D(
 	struct rtw_adapter *			adapter
 	)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	u8 u1bTmp;
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	struct rtw_adapter *	Buddyadapter = adapter->pbuddy_adapter;
@@ -2689,7 +2689,7 @@ CardDisableHWSM(/*  HW Auto state machine */
 	bool			resetMCU
 	)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	int		rtStatus = _SUCCESS;
 	u8		value;
 
@@ -2740,7 +2740,7 @@ CardDisableWithoutHWSM(/*  without HW Auto state machine */
 	struct rtw_adapter *		adapter
 	)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	int		rtStatus = _SUCCESS;
 	u8		value;
 
@@ -2807,10 +2807,10 @@ static u32 rtl8192du_hal_deinit(struct rtw_adapter *padapter)
  {
 	u8	u1bTmp;
 	u8	OpMode;
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(padapter);
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
 
-_func_enter_;
+
 
 	if (RT_IN_PS_LEVEL(pwrpriv, RT_RF_OFF_LEVL_HALT_NIC))
 	{
@@ -2849,7 +2849,7 @@ _func_enter_;
 
 	padapter->bHaltInProgress = false;
 
-_func_exit_;
+
 
 	return _SUCCESS;
  }
@@ -2866,7 +2866,7 @@ static unsigned int rtl8192du_inirp_init(struct rtw_adapter * padapter)
 	u32 (*_read_interrupt)(struct intf_hdl *pintfhdl, u32 addr);
 #endif
 
-_func_enter_;
+
 
 	_read_port = pintfhdl->io_ops._read_port;
 
@@ -2904,7 +2904,7 @@ exit:
 
 	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("<=== usb_inirp_init\n"));
 
-_func_exit_;
+
 
 	return status;
 }
@@ -2923,7 +2923,7 @@ static unsigned int rtl8192du_inirp_deinit(struct rtw_adapter * padapter)
 
 /*  */
 /*  */
-/* 	EEPROM/EFUSE Content Parsing */
+/*	EEPROM/EFUSE Content Parsing */
 /*  */
 /*  */
 
@@ -2934,7 +2934,7 @@ _ReadPROMVersion(
 	bool		AutoloadFail
 	)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 
 	if (AutoloadFail) {
 		pHalData->EEPROMVersion = EEPROM_Default_Version;
@@ -2964,7 +2964,7 @@ _ReadIDs(
 	bool		AutoloadFail
 	)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 
 
 	if (false == AutoloadFail) {
@@ -2987,7 +2987,7 @@ _ReadIDs(
 
 	}
 
-	/* 	Decide CustomerID according to VID/DID or EEPROM */
+	/*	Decide CustomerID according to VID/DID or EEPROM */
 	switch (pHalData->EEPROMCustomerID) {
 	case EEPROM_CID_WHQL:
 		break;
@@ -3009,7 +3009,7 @@ _ReadMACAddress(
 	bool		AutoloadFail
 	)
 {
-	struct hal_data_8192du 		*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du		*pHalData = GET_HAL_DATA(adapter);
 	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(adapter);
 
 	/*  Dual MAC should assign diffrent MAC address ,or, it is wil cause hang in single phy mode  zhiyuan 04/07/2010 */
@@ -3053,7 +3053,7 @@ hal_ReadMacPhyModeFromPROM92DU(
 	u8*		PROMContent
 )
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	u8	MacPhyCrValue = 0;
 
 
@@ -3097,7 +3097,7 @@ hal_ReadMacPhyMode_92D(
 )
 {
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 #endif /* CONFIG_DUALMAC_CONCURRENT */
 	u8	Mac1EnableValue = 0;
 
@@ -3146,7 +3146,7 @@ _ReadBoardType(
 	bool		AutoloadFail
 	)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	u8			boardType;
 
 	if (AutoloadFail) {
@@ -3168,7 +3168,7 @@ _ReadLEDSetting(
 	bool		AutoloadFail
 	)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	struct led_priv		*pledpriv = &(adapter->ledpriv);
 
 	/*  Led mode */
@@ -3281,7 +3281,7 @@ _InitOtherVariable(
 	struct rtw_adapter *		adapter
 	)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 
 
 	/*  2009/06/10 MH For 92S 1*1=1R/ 1*2&2*2 use 2R. We default set 1*1 use radio A */
@@ -3300,7 +3300,7 @@ _ReadRFType(
 	struct rtw_adapter *	adapter
 	)
 {
-	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 
 #if DISABLE_BB_RF
 	pHalData->rf_chip = RF_PSEUDO_11N;
@@ -4167,7 +4167,7 @@ static void SetHwReg8192DU(struct rtw_adapter * adapter, u8 variable, u8* val)
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
-_func_enter_;
+
 
 	switch (variable)
 	{
@@ -5002,14 +5002,14 @@ _func_enter_;
 			break;
 	}
 
-_func_exit_;
+
 }
 
 static void GetHwReg8192DU(struct rtw_adapter * adapter, u8 variable, u8* val)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 
-_func_enter_;
+
 
 	switch (variable)
 	{
@@ -5064,12 +5064,12 @@ _func_enter_;
 			break;
 	}
 
-_func_exit_;
+
 }
 
 /*  */
-/* 	Description: */
-/* 		Query setting of specified variable. */
+/*	Description: */
+/*		Query setting of specified variable. */
 /*  */
 static u8 GetHalDefVar8192DUsb(struct rtw_adapter * adapter, enum HAL_DEF_VARIABLE eVariable, void  *pValue)
 {
@@ -5100,8 +5100,8 @@ static u8 GetHalDefVar8192DUsb(struct rtw_adapter * adapter, enum HAL_DEF_VARIAB
 }
 
 /*  */
-/* 	Description: */
-/* 		Change default setting of specified variable. */
+/*	Description: */
+/*		Change default setting of specified variable. */
 /*  */
 static u8 SetHalDefVar8192DUsb(
 	struct rtw_adapter *				adapter,
@@ -5399,7 +5399,7 @@ void rtl8192du_set_hal_ops(struct rtw_adapter * padapter)
 {
 	struct hal_ops	*pHalFunc = &padapter->HalFunc;
 
-_func_enter_;
+
 
 	padapter->HalData = kzalloc(sizeof(struct hal_data_8192du), GFP_KERNEL);
 	if (padapter->HalData == NULL) {
@@ -5451,5 +5451,5 @@ _func_enter_;
 
 	rtl8192d_set_hal_ops(pHalFunc);
 
-_func_exit_;
+
 }

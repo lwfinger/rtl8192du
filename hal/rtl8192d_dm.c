@@ -680,9 +680,9 @@ static void odm_DIG(
 			}
 		}
 	} else {
-		/* 	There is no network interface connects to AP. */
+		/*	There is no network interface connects to AP. */
 		if (0 == dm_digtable->rx_gain_range_min_nolink) {
-			/* 	First time to enter odm_DIG function and set the default value to rx_gain_range_min_nolink */
+			/*	First time to enter odm_DIG function and set the default value to rx_gain_range_min_nolink */
 			dm_digtable->rx_gain_range_min_nolink = 0x30;
 		} else {
 			if ((falsealmcnt->Cnt_all > 1000) && (falsealmcnt->Cnt_all < 2000)) {
@@ -1528,34 +1528,34 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 	u8		OFDM_min_index = 6, OFDM_min_index_internalPA = 12, rf; /* OFDM BB Swing should be less than +3.0dB, which is required by Arthur */
 	u8		Indexforchannel = rtl8192d_GetRightChnlPlaceforIQK(pHalData->CurrentChannel);
 	u8 index_mapping[5][index_mapping_NUM] = {
-		{0, 1, 3, 6, 8, 9, 			/* 5G, path A/MAC 0, decrease power */
+		{0, 1, 3, 6, 8, 9,			/* 5G, path A/MAC 0, decrease power */
 		11, 13, 14, 16, 17, 18, 18},
-		{0, 2, 4, 5, 7, 10, 			/* 5G, path A/MAC 0, increase power */
+		{0, 2, 4, 5, 7, 10,			/* 5G, path A/MAC 0, increase power */
 		12, 14, 16, 18, 18, 18, 18},
-		{0, 2, 3, 6, 8, 9, 			/* 5G, path B/MAC 1, decrease power */
+		{0, 2, 3, 6, 8, 9,			/* 5G, path B/MAC 1, decrease power */
 		11, 13, 14, 16, 17, 18, 18},
-		{0, 2, 4, 5, 7, 10, 			/* 5G, path B/MAC 1, increase power */
+		{0, 2, 4, 5, 7, 10,			/* 5G, path B/MAC 1, increase power */
 		13, 16, 16, 18, 18, 18, 18},
-		{0, 1, 2, 3, 4, 5, 			/* 2.4G, for decreas power */
+		{0, 1, 2, 3, 4, 5,			/* 2.4G, for decreas power */
 		6, 7, 7, 8, 9, 10, 10},
 	};
 
 	u8 index_mapping_internalPA[8][index_mapping_NUM] = {
-		{0, 1, 2, 4, 6, 7, 			/* 5G, path A/MAC 0, ch36-64, decrease power */
+		{0, 1, 2, 4, 6, 7,			/* 5G, path A/MAC 0, ch36-64, decrease power */
 		9, 11, 12, 14, 15, 16, 16},
-		{0, 2, 4, 5, 7, 10, 			/* 5G, path A/MAC 0, ch36-64, increase power */
+		{0, 2, 4, 5, 7, 10,			/* 5G, path A/MAC 0, ch36-64, increase power */
 		12, 14, 16, 18, 18, 18, 18},
-		{0, 1, 2, 3, 5, 6, 			/* 5G, path A/MAC 0, ch100-165, decrease power */
+		{0, 1, 2, 3, 5, 6,			/* 5G, path A/MAC 0, ch100-165, decrease power */
 		8, 10, 11, 13, 14, 15, 15},
-		{0, 2, 4, 5, 7, 10, 			/* 5G, path A/MAC 0, ch100-165, increase power */
+		{0, 2, 4, 5, 7, 10,			/* 5G, path A/MAC 0, ch100-165, increase power */
 		12, 14, 16, 18, 18, 18, 18},
-		{0, 1, 2, 4, 6, 7, 			/* 5G, path B/MAC 1, ch36-64, decrease power */
+		{0, 1, 2, 4, 6, 7,			/* 5G, path B/MAC 1, ch36-64, decrease power */
 		9, 11, 12, 14, 15, 16, 16},
-		{0, 2, 4, 5, 7, 10, 			/* 5G, path B/MAC 1, ch36-64, increase power */
+		{0, 2, 4, 5, 7, 10,			/* 5G, path B/MAC 1, ch36-64, increase power */
 		13, 16, 16, 18, 18, 18, 18},
-		{0, 1, 2, 3, 5, 6, 			/* 5G, path B/MAC 1, ch100-165, decrease power */
+		{0, 1, 2, 3, 5, 6,			/* 5G, path B/MAC 1, ch100-165, decrease power */
 		8, 9, 10, 12, 13, 14, 14},
-		{0, 2, 4, 5, 7, 10, 			/* 5G, path B/MAC 1, ch100-165, increase power */
+		{0, 2, 4, 5, 7, 10,			/* 5G, path B/MAC 1, ch100-165, increase power */
 		13, 16, 16, 18, 18, 18, 18},
 	};
 
@@ -2007,15 +2007,15 @@ DM_InitializeTXPowerTracking(
 }
 
 /*  */
-/* 	Description: */
-/* 		- Dispatch TxPower Tracking direct call ONLY for 92s. */
-/* 		- We shall NOT schedule Workitem within PASSIVE LEVEL, which will cause system resource */
-/* 		   leakage under some platform. */
+/*	Description: */
+/*		- Dispatch TxPower Tracking direct call ONLY for 92s. */
+/*		- We shall NOT schedule Workitem within PASSIVE LEVEL, which will cause system resource */
+/*		   leakage under some platform. */
 /*  */
-/* 	Assumption: */
-/* 		PASSIVE_LEVEL when this routine is called. */
+/*	Assumption: */
+/*		PASSIVE_LEVEL when this routine is called. */
 /*  */
-/* 	Added by Roger, 2009.06.18. */
+/*	Added by Roger, 2009.06.18. */
 /*  */
 static void
 DM_TXPowerTracking92CDirectCall(
@@ -2155,7 +2155,7 @@ static void	dm_CheckPbcGPIO(struct rtw_adapter * padapter)
 
 
 		if (padapter->pid[0] == 0)
-		{	/* 	0 is the default value and it means the application monitors the HW PBC doesn't privde its pid to driver. */
+		{	/*	0 is the default value and it means the application monitors the HW PBC doesn't privde its pid to driver. */
 			return;
 		}
 

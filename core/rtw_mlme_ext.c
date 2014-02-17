@@ -1959,7 +1959,7 @@ unsigned int OnAssocRsp(struct rtw_adapter *adapt,
 	pmlmeinfo->slotTime = (pmlmeinfo->capability & BIT(10)) ? 9 : 20;
 
 	/* AID */
-	res = 
+	res =
 	    (int)(le16_to_cpu(*(__le16 *)(pframe + WLAN_HDR_A3_LEN + 4))
 		  & 0x3fff);
 	pmlmeinfo->aid = res;
@@ -9510,7 +9510,7 @@ static void process_80211d(struct rtw_adapter *adapt,
 					   chplan_ap.Channel[j]) {
 					chplan_new[k].ChannelNum =
 					    chplan_sta[i].ChannelNum;
-/* 					chplan_new[k].ScanType = chplan_sta[i].ScanType; */
+/*					chplan_new[k].ScanType = chplan_sta[i].ScanType; */
 					chplan_new[k].ScanType = SCAN_PASSIVE;
 					i++;
 					k++;
@@ -9530,7 +9530,7 @@ static void process_80211d(struct rtw_adapter *adapt,
 			       (chplan_sta[i].ChannelNum <= 14)) {
 				chplan_new[k].ChannelNum =
 				    chplan_sta[i].ChannelNum;
-/* 				chplan_new[k].ScanType = chplan_sta[i].ScanType; */
+/*				chplan_new[k].ScanType = chplan_sta[i].ScanType; */
 				chplan_new[k].ScanType = SCAN_PASSIVE;
 				i++;
 				k++;
@@ -9581,7 +9581,7 @@ static void process_80211d(struct rtw_adapter *adapt,
 					   chplan_ap.Channel[j]) {
 					chplan_new[k].ChannelNum =
 					    chplan_sta[i].ChannelNum;
-/* 					chplan_new[k].ScanType = chplan_sta[i].ScanType; */
+/*					chplan_new[k].ScanType = chplan_sta[i].ScanType; */
 					chplan_new[k].ScanType = SCAN_PASSIVE;
 					i++;
 					k++;
@@ -9599,7 +9599,7 @@ static void process_80211d(struct rtw_adapter *adapt,
 			while ((i < MAX_CHANNEL_NUM) && (chplan_sta[i].ChannelNum != 0)) {
 				chplan_new[k].ChannelNum =
 				    chplan_sta[i].ChannelNum;
-/* 				chplan_new[k].ScanType = chplan_sta[i].ScanType; */
+/*				chplan_new[k].ScanType = chplan_sta[i].ScanType; */
 				chplan_new[k].ScanType = SCAN_PASSIVE;
 				i++;
 				k++;
@@ -10730,7 +10730,7 @@ u8 join_cmd_hdl(struct rtw_adapter *adapt, u8 *pbuf)
 
 			/* spec case only for cisco's ap because cisco's ap issue assoc rsp using mcs rate @40MHz or @20MHz */
 /* if !defined(CONFIG_CONCURRENT_MODE) && !defined(CONFIG_DUALMAC_CONCURRENT) */
-/* 				if (pmlmeinfo->assoc_AP_vendor == ciscoAP) */
+/*				if (pmlmeinfo->assoc_AP_vendor == ciscoAP) */
 /* endif */
 			{
 				struct HT_info_element *pht_info =
@@ -11249,7 +11249,7 @@ u8 set_tx_beacon_cmd(struct rtw_adapter *adapt)
 	u8 res = _SUCCESS;
 	int len_diff = 0;
 
-	_func_enter_;
+
 
 	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
@@ -11280,7 +11280,7 @@ u8 set_tx_beacon_cmd(struct rtw_adapter *adapt)
 
 exit:
 
-	_func_exit_;
+
 
 	return res;
 }

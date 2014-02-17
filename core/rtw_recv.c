@@ -237,7 +237,7 @@ int rtw_free_recvframe(struct recv_frame_hdr *precvframe,
 
 	spin_lock_bh(&pfree_recv_queue->lock);
 
-	rtw_list_delete(&(precvframe->list));
+	list_del_init(&(precvframe->list));
 
 	rtw_list_insert_tail(&(precvframe->list),
 			     get_list_head(pfree_recv_queue));
@@ -262,7 +262,7 @@ int _rtw_enqueue_recvframe(struct recv_frame_hdr *precvframe, struct __queue *qu
 
 
 	/* INIT_LIST_HEAD(&(precvframe->list)); */
-	rtw_list_delete(&(precvframe->list));
+	list_del_init(&(precvframe->list));
 
 	rtw_list_insert_tail(&(precvframe->list), get_list_head(queue));
 
@@ -343,7 +343,7 @@ int rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf,
 
 	spin_lock_irqsave(&queue->lock, irqL);
 
-	rtw_list_delete(&precvbuf->list);
+	list_del_init(&precvbuf->list);
 	rtw_list_insert_head(&precvbuf->list, get_list_head(queue));
 
 	spin_unlock_irqrestore(&queue->lock, irqL);
@@ -357,7 +357,7 @@ int rtw_enqueue_recvbuf(struct recv_buf *precvbuf, struct __queue *queue)
 
 	spin_lock_irqsave(&queue->lock, irqL);
 
-	rtw_list_delete(&precvbuf->list);
+	list_del_init(&precvbuf->list);
 
 	rtw_list_insert_tail(&precvbuf->list, get_list_head(queue));
 
@@ -383,7 +383,7 @@ struct recv_buf *rtw_dequeue_recvbuf(struct __queue *queue)
 
 		precvbuf = container_of(plist, struct recv_buf, list);
 
-		rtw_list_delete(&precvbuf->list);
+		list_del_init(&precvbuf->list);
 	}
 	spin_unlock_irqrestore(&queue->lock, irqL);
 	return precvbuf;
@@ -1515,7 +1515,7 @@ static int validate_recv_ctrl_frame(struct rtw_adapter *padapter,
 
 				xmitframe_plist = xmitframe_plist->next;
 
-				rtw_list_delete(&pxmitframe->list);
+				list_del_init(&pxmitframe->list);
 
 				psta->sleepq_len--;
 
@@ -1972,7 +1972,7 @@ static struct recv_frame_hdr *recvframe_defrag(struct rtw_adapter *adapter,
 	plist = phead->next;
 	prframe = container_of(plist, struct recv_frame_hdr, list);
 	pfhdr = prframe;
-	rtw_list_delete(&(prframe->list));
+	list_del_init(&(prframe->list));
 
 	if (curfragnum != pfhdr->attrib.frag_num) {
 		/* the first fragment number must be 0 */
@@ -2402,7 +2402,7 @@ static int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl,
 		else
 			break;
 	}
-	rtw_list_delete(&(prframe->list));
+	list_del_init(&(prframe->list));
 	rtw_list_insert_tail(&(prframe->list), plist);
 	return true;
 }
@@ -2453,7 +2453,7 @@ static int recv_indicatepkts_in_order(struct rtw_adapter *padapter,
 				  pattrib->amsdu));
 
 			plist = plist->next;
-			rtw_list_delete(&(prframe->list));
+			list_del_init(&(prframe->list));
 
 			if (SN_EQUAL
 			    (preorder_ctrl->indicate_seq, pattrib->seq_num)) {

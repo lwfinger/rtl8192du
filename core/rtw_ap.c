@@ -297,7 +297,7 @@ void	expire_timeout_chk(struct rtw_adapter *padapter)
 		if (psta->expire_to > 0) {
 			psta->expire_to--;
 			if (psta->expire_to == 0) {
-				rtw_list_delete(&psta->auth_list);
+				list_del_init(&psta->auth_list);
 				pstapriv->auth_list_cnt--;
 
 				DBG_8192D("auth expire %02X%02X%02X%02X%02X%02X\n",
@@ -393,7 +393,7 @@ void	expire_timeout_chk(struct rtw_adapter *padapter)
 			}
 			#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
 
-			rtw_list_delete(&psta->asoc_list);
+			list_del_init(&psta->asoc_list);
 			pstapriv->asoc_list_cnt--;
 
 			DBG_8192D("asoc expire %pM, state = 0x%x\n", psta->hwaddr, psta->state);
@@ -451,7 +451,7 @@ void	expire_timeout_chk(struct rtw_adapter *padapter)
 
 			DBG_8192D("asoc expire %pM, state = 0x%x\n", psta->hwaddr, psta->state);
 			spin_lock_bh(&pstapriv->asoc_list_lock);
-			rtw_list_delete(&psta->asoc_list);
+			list_del_init(&psta->asoc_list);
 			pstapriv->asoc_list_cnt--;
 			updated = ap_free_sta(padapter, psta, true, WLAN_REASON_DEAUTH_LEAVING);
 			spin_unlock_bh(&pstapriv->asoc_list_lock);
@@ -1364,7 +1364,7 @@ int rtw_acl_remove_sta(struct rtw_adapter *padapter, u8 *addr)
 			if (paclnode->valid) {
 				paclnode->valid = false;
 
-				rtw_list_delete(&paclnode->list);
+				list_del_init(&paclnode->list);
 
 				pacl_list->num--;
 			}
@@ -2002,7 +2002,7 @@ int rtw_sta_flush(struct rtw_adapter *padapter)
 
 		plist = plist->next;
 
-		rtw_list_delete(&psta->asoc_list);
+		list_del_init(&psta->asoc_list);
 		pstapriv->asoc_list_cnt--;
 
 		ap_free_sta(padapter, psta, true, WLAN_REASON_DEAUTH_LEAVING);
@@ -2133,7 +2133,7 @@ void stop_ap_mode(struct rtw_adapter *padapter)
 		if (paclnode->valid) {
 			paclnode->valid = false;
 
-			rtw_list_delete(&paclnode->list);
+			list_del_init(&paclnode->list);
 
 			pacl_list->num--;
 		}

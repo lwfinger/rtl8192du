@@ -686,13 +686,13 @@ s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv 
 				}
 				else
 				{
-					rtw_list_delete(&pxmitframe->list);
+					list_del_init(&pxmitframe->list);
 					ptxservq->qcnt--;
 					phwxmit[ac_index].accnt--;
 
 					/* Remove sta node when there is no pending packets. */
 					if (_rtw_queue_empty(&ptxservq->sta_pending) == true)
-						rtw_list_delete(&ptxservq->tx_pending);
+						list_del_init(&ptxservq->tx_pending);
 				}
 			}
 			else

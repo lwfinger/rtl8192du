@@ -98,9 +98,7 @@ void rtw_list_insert_tail(struct list_head *plist, struct list_head *phead)
 	list_add_tail(plist, phead);
 }
 
-/*
-Caller must check if the list is empty before calling rtw_list_delete
-*/
+/* Caller must check if the list is empty before calling list_del_init */
 
 void _rtw_init_sema(struct  semaphore *sema, int init_val)
 {

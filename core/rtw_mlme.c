@@ -195,7 +195,7 @@ struct wlan_network *_rtw_dequeue_network(struct __queue *queue)
 		    container_of((&queue->queue)->next, struct wlan_network,
 				   list);
 
-		rtw_list_delete(&(pnetwork->list));
+		list_del_init(&(pnetwork->list));
 	}
 
 	spin_unlock_bh(&queue->lock);
@@ -219,7 +219,7 @@ struct wlan_network *_rtw_alloc_network(struct mlme_priv *pmlmepriv)
 
 	pnetwork = container_of(plist, struct wlan_network, list);
 
-	rtw_list_delete(&pnetwork->list);
+	list_del_init(&pnetwork->list);
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_,
 		 ("_rtw_alloc_network: ptr=%p\n", plist));
@@ -265,7 +265,7 @@ void _rtw_free_network(struct mlme_priv *pmlmepriv,
 
 	spin_lock_bh(&free_queue->lock);
 
-	rtw_list_delete(&(pnetwork->list));
+	list_del_init(&(pnetwork->list));
 
 	rtw_list_insert_tail(&(pnetwork->list), &(free_queue->queue));
 
@@ -285,7 +285,7 @@ void _rtw_free_network_nolock(struct mlme_priv *pmlmepriv,
 	if (pnetwork->fixed == true)
 		return;
 
-	rtw_list_delete(&(pnetwork->list));
+	list_del_init(&(pnetwork->list));
 
 	rtw_list_insert_tail(&(pnetwork->list), get_list_head(free_queue));
 
@@ -1134,7 +1134,7 @@ static void free_scanqueue(struct mlme_priv *pmlmepriv)
 
 	while (plist != phead) {
 		ptemp = plist->next;
-		rtw_list_delete(plist);
+		list_del_init(plist);
 		rtw_list_insert_tail(plist, &free_queue->queue);
 		plist = ptemp;
 		pmlmepriv->num_of_scanned--;

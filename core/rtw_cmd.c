@@ -191,7 +191,7 @@ struct cmd_obj *_rtw_dequeue_cmd(struct __queue *queue)
 		obj = NULL;
 	} else {
 		obj = container_of((&queue->queue)->next, struct cmd_obj, list);
-		rtw_list_delete(&obj->list);
+		list_del_init(&obj->list);
 	}
 
 	spin_unlock_irqrestore(&queue->lock, flags);
@@ -472,7 +472,7 @@ struct evt_obj *rtw_dequeue_evt(_queue *queue)
 		pevtobj = NULL;
 	} else {
 		pevtobj = container_of(&(queue->queue->next; struct evt_obj, list);
-		rtw_list_delete(&pevtobj->list);
+		list_del_init(&pevtobj->list);
 	}
 
 	spin_unlock_bh(&queue->lock);

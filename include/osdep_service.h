@@ -144,11 +144,6 @@ static inline void _exit_critical_mutex(_mutex *pmutex)
 #endif
 }
 
-static inline void rtw_list_delete(struct list_head *plist)
-{
-	list_del_init(plist);
-}
-
 static inline void _init_timer(struct timer_list *timer, struct net_device * nic_hdl, void *pfunc, void *cntx)
 {
 	timer->function = pfunc;
@@ -285,7 +280,6 @@ extern int	_rtw_memcmp(void *dst, void *src, u32 sz);
 extern u32	rtw_is_list_empty(struct list_head *phead);
 extern void	rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
 extern void	rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
-extern void	rtw_list_delete(struct list_head *plist);
 
 extern void	_rtw_init_sema(struct  semaphore *sema, int init_val);
 extern void	_rtw_free_sema(struct  semaphore *sema);

@@ -1139,7 +1139,7 @@ unsigned int OnAuth(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 	} else {
 		spin_lock_bh(&pstapriv->asoc_list_lock);
 		if (rtw_is_list_empty(&pstat->asoc_list) == false) {
-			rtw_list_delete(&pstat->asoc_list);
+			list_del_init(&pstat->asoc_list);
 			pstapriv->asoc_list_cnt--;
 			if (pstat->expire_to > 0) {
 				/* TODO: STA re_auth within expire_to */
@@ -1826,7 +1826,7 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 
 	spin_lock_bh(&pstapriv->auth_list_lock);
 	if (!rtw_is_list_empty(&pstat->auth_list)) {
-		rtw_list_delete(&pstat->auth_list);
+		list_del_init(&pstat->auth_list);
 		pstapriv->auth_list_cnt--;
 	}
 	spin_unlock_bh(&pstapriv->auth_list_lock);
@@ -2063,7 +2063,7 @@ unsigned int OnDeAuth(struct rtw_adapter *adapt,
 
 			spin_lock_bh(&pstapriv->asoc_list_lock);
 			if (rtw_is_list_empty(&psta->asoc_list) == false) {
-				rtw_list_delete(&psta->asoc_list);
+				list_del_init(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated =
 				    ap_free_sta(adapt, psta, false, reason);
@@ -2128,7 +2128,7 @@ unsigned int OnDisassoc(struct rtw_adapter *adapt,
 
 			spin_lock_bh(&pstapriv->asoc_list_lock);
 			if (rtw_is_list_empty(&psta->asoc_list) == false) {
-				rtw_list_delete(&psta->asoc_list);
+				list_del_init(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated =
 				    ap_free_sta(adapt, psta, false, reason);
@@ -11390,7 +11390,7 @@ u8 tx_beacon_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 
 				xmitframe_plist = xmitframe_plist->next;
 
-				rtw_list_delete(&pxmitframe->list);
+				list_del_init(&pxmitframe->list);
 
 				psta_bmc->sleepq_len--;
 				if (psta_bmc->sleepq_len > 0)

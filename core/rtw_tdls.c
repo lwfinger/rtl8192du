@@ -1557,7 +1557,7 @@ int On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_fra
 			while ((rtw_end_of_queue_search(xmitframe_phead, xmitframe_plist)) == false) {
 				pxmitframe = container_of(xmitframe_plist, struct xmit_frame, list);
 				xmitframe_plist = xmitframe_plist->next;
-				rtw_list_delete(&pxmitframe->list);
+				list_del_init(&pxmitframe->list);
 
 				ptdls_sta->sleepq_len--;
 				if (ptdls_sta->sleepq_len > 0) {

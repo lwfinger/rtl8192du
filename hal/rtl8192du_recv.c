@@ -67,7 +67,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 	if (precvpriv->int_in_urb == NULL) {
 		DBG_8192D("alloc_urb for interrupt in endpoint fail !!!!\n");
 	}
-	precvpriv->int_in_buf = rtw_malloc(sizeof(INTERRUPT_MSG_FORMAT_EX));
+	precvpriv->int_in_buf = kmalloc(sizeof(INTERRUPT_MSG_FORMAT_EX), GFP_KERNEL);
 	if (precvpriv->int_in_buf == NULL) {
 		DBG_8192D("alloc_mem for interrupt in endpoint fail !!!!\n");
 	}

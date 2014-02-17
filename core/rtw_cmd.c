@@ -2257,7 +2257,7 @@ static void c2h_wk_callback(_workitem *work)
 		if (c2h_evt != NULL) {
 			/* This C2H event is read, clear it */
 			c2h_evt_clear(adapter);
-		} else if ((c2h_evt = (struct c2h_evt_hdr *)rtw_malloc(16)) != NULL) {
+		} else if ((c2h_evt = (struct c2h_evt_hdr *)kmalloc(16, GFP_KERNEL)) != NULL) {
 			/* This C2H event is not read, read & clear now */
 			if (c2h_evt_read(adapter, (u8 *)c2h_evt) != _SUCCESS)
 				continue;

@@ -179,7 +179,7 @@ _func_enter_;
 	{
 		RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("rtw_report_sec_ie, authmode=%d\n", authmode));
 
-		buff = rtw_malloc(IW_CUSTOM_MAX);
+		buff = kmalloc(IW_CUSTOM_MAX, GFP_KERNEL);
 
 		memset(buff,0,IW_CUSTOM_MAX);
 

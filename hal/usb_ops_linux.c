@@ -75,7 +75,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	pIo_buf = pdvobjpriv->usb_vendor_req_buf;
 #else
 	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
-	tmp_buf = rtw_malloc((u32) len + ALIGNMENT_UNIT);
+	tmp_buf = kmalloc((u32) len + ALIGNMENT_UNIT, GFP_KERNEL);
 	tmp_buflen =  (u32)len + ALIGNMENT_UNIT;
 	#else /*  use stack memory */
 	tmp_buflen = MAX_USB_IO_CTL_SIZE;

@@ -1180,7 +1180,7 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, struct net_device *ndev,
 #endif	/*  (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) */
 
 	param_len = sizeof(struct ieee_param) + params->key_len;
-	param = (struct ieee_param *)rtw_malloc(param_len);
+	param = (struct ieee_param *)kmalloc(param_len, GFP_KERNEL);
 	if (param == NULL)
 		return -1;
 
@@ -1635,9 +1635,9 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(_adapter *padapter, char *buf, in
 				pmlmepriv->wps_probe_req_ie = NULL;
 			}
 
-			pmlmepriv->wps_probe_req_ie = rtw_malloc(wps_ielen);
+			pmlmepriv->wps_probe_req_ie = kmalloc(wps_ielen, GFP_KERNEL);
 			if (pmlmepriv->wps_probe_req_ie == NULL) {
-				DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 				return -EINVAL;
 
 			}
@@ -1660,10 +1660,10 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(_adapter *padapter, char *buf, in
 				pmlmepriv->p2p_probe_req_ie = NULL;
 			}
 
-			pmlmepriv->p2p_probe_req_ie = rtw_malloc(p2p_ielen);
+			pmlmepriv->p2p_probe_req_ie = kmalloc(p2p_ielen, GFP_KERNEL);
 			if (pmlmepriv->p2p_probe_req_ie == NULL) {
-				DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
-				return -EINVAL;
+				DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
+				return -ENOMEM;
 
 			}
 			memcpy(pmlmepriv->p2p_probe_req_ie, p2p_ie, p2p_ielen);
@@ -1686,9 +1686,9 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(_adapter *padapter, char *buf, in
 				pmlmepriv->wfd_probe_req_ie = NULL;
 			}
 
-			pmlmepriv->wfd_probe_req_ie = rtw_malloc(wfd_ielen);
+			pmlmepriv->wfd_probe_req_ie = kmalloc(wfd_ielen, GFP_KERNEL);
 			if (pmlmepriv->wfd_probe_req_ie == NULL) {
-				DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 				return -EINVAL;
 
 			}
@@ -2208,9 +2208,9 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 				pmlmepriv->p2p_assoc_req_ie = NULL;
 			}
 
-			pmlmepriv->p2p_assoc_req_ie = rtw_malloc(p2p_ielen);
+			pmlmepriv->p2p_assoc_req_ie = kmalloc(p2p_ielen, GFP_KERNEL);
 			if (pmlmepriv->p2p_assoc_req_ie == NULL) {
-				DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 				goto exit;
 			}
 			memcpy(pmlmepriv->p2p_assoc_req_ie, p2p_ie, p2p_ielen);
@@ -2239,9 +2239,9 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 				pmlmepriv->wfd_assoc_req_ie = NULL;
 			}
 
-			pmlmepriv->wfd_assoc_req_ie = rtw_malloc(wfd_ielen);
+			pmlmepriv->wfd_assoc_req_ie = kmalloc(wfd_ielen, GFP_KERNEL);
 			if (pmlmepriv->wfd_assoc_req_ie == NULL) {
-				DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 				goto exit;
 			}
 			rtw_get_wfd_ie(buf, ielen, pmlmepriv->wfd_assoc_req_ie, &pmlmepriv->wfd_assoc_req_ie_len);
@@ -2481,7 +2481,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		{
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
 			wep_total_len = wep_key_len + FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial);
-			pwep =(NDIS_802_11_WEP	 *) rtw_malloc(wep_total_len);
+			pwep =(NDIS_802_11_WEP	 *) kmalloc(wep_total_len, GFP_KERNEL);
 			if (pwep == NULL) {
 				DBG_871X(" wpa_set_encryption: pwep allocate fail !!!\n");
 				ret = -ENOMEM;
@@ -4348,9 +4348,9 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 				pmlmepriv->wps_beacon_ie = NULL;
 			}
 
-			pmlmepriv->wps_beacon_ie = rtw_malloc(wps_ielen);
+			pmlmepriv->wps_beacon_ie = kmalloc(wps_ielen, GFP_KERNEL);
 			if (pmlmepriv->wps_beacon_ie == NULL) {
-				DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 				return -EINVAL;
 
 			}
@@ -4377,9 +4377,9 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 				pmlmepriv->p2p_beacon_ie = NULL;
 			}
 
-			pmlmepriv->p2p_beacon_ie = rtw_malloc(p2p_ielen);
+			pmlmepriv->p2p_beacon_ie = kmalloc(p2p_ielen, GFP_KERNEL);
 			if (pmlmepriv->p2p_beacon_ie == NULL) {
-				DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 				return -EINVAL;
 
 			}
@@ -4405,9 +4405,9 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 				pmlmepriv->wfd_beacon_ie = NULL;
 			}
 
-			pmlmepriv->wfd_beacon_ie = rtw_malloc(wfd_ielen);
+			pmlmepriv->wfd_beacon_ie = kmalloc(wfd_ielen, GFP_KERNEL);
 			if (pmlmepriv->wfd_beacon_ie == NULL) {
-				DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 				return -EINVAL;
 
 			}
@@ -4457,9 +4457,9 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 				pmlmepriv->wps_probe_resp_ie = NULL;
 			}
 
-			pmlmepriv->wps_probe_resp_ie = rtw_malloc(wps_ielen);
+			pmlmepriv->wps_probe_resp_ie = kmalloc(wps_ielen, GFP_KERNEL);
 			if (pmlmepriv->wps_probe_resp_ie == NULL) {
-				DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 				return -EINVAL;
 
 			}
@@ -4513,9 +4513,9 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 					pmlmepriv->p2p_probe_resp_ie = NULL;
 				}
 
-				pmlmepriv->p2p_probe_resp_ie = rtw_malloc(p2p_ielen);
+				pmlmepriv->p2p_probe_resp_ie = kmalloc(p2p_ielen, GFP_KERNEL);
 				if (pmlmepriv->p2p_probe_resp_ie == NULL) {
-					DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+					DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 					return -EINVAL;
 
 				}
@@ -4532,9 +4532,9 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 					pmlmepriv->p2p_go_probe_resp_ie = NULL;
 				}
 
-				pmlmepriv->p2p_go_probe_resp_ie = rtw_malloc(p2p_ielen);
+				pmlmepriv->p2p_go_probe_resp_ie = kmalloc(p2p_ielen, GFP_KERNEL);
 				if (pmlmepriv->p2p_go_probe_resp_ie == NULL) {
-					DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+					DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 					return -EINVAL;
 
 				}
@@ -4560,9 +4560,9 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 				pmlmepriv->wfd_probe_resp_ie = NULL;
 			}
 
-			pmlmepriv->wfd_probe_resp_ie = rtw_malloc(wfd_ielen);
+			pmlmepriv->wfd_probe_resp_ie = kmalloc(wfd_ielen, GFP_KERNEL);
 			if (pmlmepriv->wfd_probe_resp_ie == NULL) {
-				DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 				return -EINVAL;
 
 			}
@@ -4593,9 +4593,9 @@ static int rtw_cfg80211_set_assoc_resp_wpsp2pie(struct net_device *net, char *bu
 			pmlmepriv->wps_assoc_resp_ie = NULL;
 		}
 
-		pmlmepriv->wps_assoc_resp_ie = rtw_malloc(len);
+		pmlmepriv->wps_assoc_resp_ie = kmalloc(len, GFP_KERNEL, GFP_KERNEL);
 		if (pmlmepriv->wps_assoc_resp_ie == NULL) {
-			DBG_8192C("%s()-%d: rtw_malloc() ERROR!\n", __func__, __LINE__);
+			DBG_8192C("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
 			return -EINVAL;
 
 		}

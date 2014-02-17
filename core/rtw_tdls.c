@@ -1551,12 +1551,12 @@ int On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_fra
 			spin_lock_bh(&ptdls_sta->sleep_q.lock);
 
 			xmitframe_phead = get_list_head(&ptdls_sta->sleep_q);
-			xmitframe_plist = get_next(xmitframe_phead);
+			xmitframe_plist = xmitframe_phead->next;
 
 			/* transmit buffered frames */
 			while ((rtw_end_of_queue_search(xmitframe_phead, xmitframe_plist)) == false) {
 				pxmitframe = container_of(xmitframe_plist, struct xmit_frame, list);
-				xmitframe_plist = get_next(xmitframe_plist);
+				xmitframe_plist = xmitframe_plist->next;
 				rtw_list_delete(&pxmitframe->list);
 
 				ptdls_sta->sleepq_len--;

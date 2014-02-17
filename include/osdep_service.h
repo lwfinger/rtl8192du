@@ -120,11 +120,6 @@ static inline unsigned char *skb_end_pointer(const struct sk_buff *skb)
 }
 #endif
 
-static inline struct list_head *get_next(struct list_head *list)
-{
-	return list->next;
-}
-
 static inline struct list_head *get_list_head(struct __queue *queue)
 {
 	return (&(queue->queue));

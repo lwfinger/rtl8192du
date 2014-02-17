@@ -190,7 +190,7 @@ struct cmd_obj *_rtw_dequeue_cmd(struct __queue *queue)
 	if (rtw_is_list_empty(&(queue->queue))) {
 		obj = NULL;
 	} else {
-		obj = container_of(get_next(&(queue->queue)), struct cmd_obj, list);
+		obj = container_of((&queue->queue)->next, struct cmd_obj, list);
 		rtw_list_delete(&obj->list);
 	}
 
@@ -471,7 +471,7 @@ struct evt_obj *rtw_dequeue_evt(_queue *queue)
 	if (rtw_is_list_empty(&(queue->queue))) {
 		pevtobj = NULL;
 	} else {
-		pevtobj = container_of(get_next(&(queue->queue)), struct evt_obj, list);
+		pevtobj = container_of(&(queue->queue->next; struct evt_obj, list);
 		rtw_list_delete(&pevtobj->list);
 	}
 

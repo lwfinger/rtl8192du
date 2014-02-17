@@ -586,11 +586,11 @@ static void UpdateEarlyModeInfo8192D(struct rtw_adapter *padapter,
 	spin_lock_bh(&pxmitpriv->lock);
 
 	xmitframe_phead = get_list_head(&ptxservq->sta_pending);
-	xmitframe_plist = get_next(xmitframe_phead);
+	xmitframe_plist = xmitframe_phead->next;
 	while ((rtw_end_of_queue_search(xmitframe_phead, xmitframe_plist) == false)&&(pxmitframe->EMPktNum < 5))
 	{
 		pxmitframe = container_of(xmitframe_plist, struct xmit_frame, list);
-		xmitframe_plist = get_next(xmitframe_plist);
+		xmitframe_plist = xmitframe_plist->next;
 
 		len = xmitframe_need_length(pxmitframe);
 		pxmitframe->EMPktLen[pxmitframe->EMPktNum] = len;
@@ -674,7 +674,7 @@ s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv 
 			if (_rtw_queue_empty(&ptxservq->sta_pending) == false)
 			{
 				xmitframe_phead = get_list_head(&ptxservq->sta_pending);
-				xmitframe_plist = get_next(xmitframe_phead);
+				xmitframe_plist = xmitframe_phead->next;
 
 				pxmitframe = container_of(xmitframe_plist, struct xmit_frame, list);
 

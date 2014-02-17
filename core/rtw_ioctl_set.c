@@ -73,7 +73,7 @@ u8 rtw_do_join(struct rtw_adapter *padapter)
 
 	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
 	phead = get_list_head(queue);
-	plist = get_next(phead);
+	plist = phead->next;
 
 	RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_info_, ("\n rtw_do_join: phead = %p; plist = %p\n\n\n", phead, plist));
 

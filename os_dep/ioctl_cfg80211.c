@@ -1574,7 +1574,7 @@ void rtw_cfg80211_surveydone_event_callback(_adapter *padapter)
 	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
 
 	phead = get_list_head(queue);
-	plist = get_next(phead);
+	plist = phead->next;
 
 	while (1)
 	{
@@ -1594,7 +1594,7 @@ void rtw_cfg80211_surveydone_event_callback(_adapter *padapter)
 			rtw_cfg80211_inform_bss(padapter, pnetwork);
 		}
 
-		plist = get_next(plist);
+		plist = plist->next;
 
 	}
 
@@ -2354,7 +2354,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	spin_lock_bh(&queue->lock);
 
 	phead = get_list_head(queue);
-	pmlmepriv->pscanned = get_next(phead);
+	pmlmepriv->pscanned = phead->next;
 
 	while (1)
 	{
@@ -2364,7 +2364,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		}
 
 		pnetwork = container_of(pmlmepriv->pscanned, struct wlan_network, list);
-		pmlmepriv->pscanned = get_next(pmlmepriv->pscanned);
+		pmlmepriv->pscanned = pmlmepriv->pscanned->next;
 
 		dst_ssid = pnetwork->network.Ssid.Ssid;
 		dst_bssid = pnetwork->network.MacAddress;
@@ -3432,14 +3432,14 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 	spin_lock_bh(&pstapriv->asoc_list_lock);
 
 	phead = &pstapriv->asoc_list;
-	plist = get_next(phead);
+	plist = phead->next;
 
 	/* check asoc_queue */
 	while ((rtw_end_of_queue_search(phead, plist)) == false)
 	{
 		psta = container_of(plist, struct sta_info, asoc_list);
 
-		plist = get_next(plist);
+		plist = plist->next;
 
 		if (_rtw_memcmp(mac, psta->hwaddr, ETH_ALEN))
 		{

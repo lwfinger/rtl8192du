@@ -421,7 +421,7 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 
 			for (i = 0; i < NUM_STA; i++) {
 				phead = &(pstapriv->sta_hash[i]);
-				plist = get_next(phead);
+				plist = phead->next;
 
 				while ((rtw_end_of_queue_search(phead, plist))
 				       == false) {
@@ -434,7 +434,7 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 					    tdls_sta_state & TDLS_LINKED_STATE)
 						issue_nulldata_to_TDLS_peer_STA
 						    (padapter, ptdls_sta, 0);
-					plist = get_next(plist);
+					plist = plist->next;
 				}
 			}
 
@@ -482,7 +482,7 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 
 			for (i = 0; i < NUM_STA; i++) {
 				phead = &(pstapriv->sta_hash[i]);
-				plist = get_next(phead);
+				plist = phead->next;
 
 				while ((rtw_end_of_queue_search(phead, plist))
 				       == false) {
@@ -495,7 +495,7 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 					    tdls_sta_state & TDLS_LINKED_STATE)
 						issue_nulldata_to_TDLS_peer_STA
 						    (padapter, ptdls_sta, 1);
-					plist = get_next(plist);
+					plist = plist->next;
 				}
 			}
 

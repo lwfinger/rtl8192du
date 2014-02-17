@@ -190,11 +190,11 @@ static void rtw_mfree_all_stainfo(struct sta_priv *pstapriv)
 	spin_lock_bh(&pstapriv->sta_hash_lock);
 
 	phead = get_list_head(&pstapriv->free_sta_queue);
-	plist = get_next(phead);
+	plist = phead->next;
 
 	while ((rtw_end_of_queue_search(phead, plist)) == false) {
 		psta = container_of(plist, struct sta_info, list);
-		plist = get_next(plist);
+		plist = plist->next;
 
 		rtw_mfree_stainfo(psta);
 	}
@@ -236,12 +236,12 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 		spin_lock_bh(&pstapriv->sta_hash_lock);
 		for (index = 0; index < NUM_STA; index++) {
 			phead = &(pstapriv->sta_hash[index]);
-			plist = get_next(phead);
+			plist = phead->next;
 
 			while ((rtw_end_of_queue_search(phead, plist)) == false) {
 				int i;
 				psta = container_of(plist, struct sta_info, hash_list);
-				plist = get_next(plist);
+				plist = plist->next;
 
 				for (i = 0; i < 16; i++) {
 					reorder = &psta->recvreorder_ctrl[i];
@@ -279,8 +279,8 @@ struct	sta_info *rtw_alloc_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 		spin_unlock_bh(&(pfree_sta_queue->lock));
 		psta = NULL;
 	} else {
-		psta = container_of(get_next(&pfree_sta_queue->queue),
-				      struct sta_info, list);
+		psta = container_of((&pfree_sta_queue->queue)->next,
+				    struct sta_info, list);
 
 		rtw_list_delete(&(psta->list));
 
@@ -449,12 +449,12 @@ u32	rtw_free_stainfo(struct rtw_adapter *padapter, struct sta_info *psta)
 		spin_lock_bh(&ppending_recvframe_queue->lock);
 
 		phead =		get_list_head(ppending_recvframe_queue);
-		plist = get_next(phead);
+		plist = phead->next;
 
 		while (!rtw_is_list_empty(phead)) {
 			prframe = container_of(plist, struct recv_frame_hdr, list);
 
-			plist = get_next(plist);
+			plist = plist->next;
 
 			rtw_list_delete(&(prframe->list));
 
@@ -526,13 +526,13 @@ void rtw_free_all_stainfo(struct rtw_adapter *padapter)
 
 	for (index = 0; index < NUM_STA; index++) {
 		phead = &(pstapriv->sta_hash[index]);
-		plist = get_next(phead);
+		plist = phead->next;
 
 		while ((rtw_end_of_queue_search(phead, plist)) == false) {
 			psta = container_of(plist, struct sta_info,
 					      hash_list);
 
-			plist = get_next(plist);
+			plist = plist->next;
 
 			if (pbcmc_stainfo != psta)
 				rtw_free_stainfo(padapter, psta);
@@ -564,7 +564,7 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 	spin_lock_bh(&pstapriv->sta_hash_lock);
 
 	phead = &(pstapriv->sta_hash[index]);
-	plist = get_next(phead);
+	plist = phead->next;
 
 	while ((rtw_end_of_queue_search(phead, plist)) == false) {
 		psta = container_of(plist, struct sta_info, hash_list);
@@ -574,7 +574,7 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 			break;
 		}
 		psta = NULL;
-		plist = get_next(plist);
+		plist = plist->next;
 	}
 
 	spin_unlock_bh(&pstapriv->sta_hash_lock);
@@ -631,11 +631,11 @@ u8 rtw_access_ctrl(struct rtw_adapter *padapter, u8 *mac_addr)
 
 	spin_lock_bh(&(pacl_node_q->lock));
 	phead = get_list_head(pacl_node_q);
-	plist = get_next(phead);
+	plist = phead->next;
 	while ((rtw_end_of_queue_search(phead, plist)) == false) {
 		paclnode = container_of(plist, struct rtw_wlan_acl_node,
 					  list);
-		plist = get_next(plist);
+		plist = plist->next;
 
 		if (_rtw_memcmp(paclnode->addr, mac_addr, ETH_ALEN)) {
 			if (paclnode->valid == true) {

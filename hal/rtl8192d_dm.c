@@ -1236,13 +1236,13 @@ static void PWDB_Monitor(
 		for (i=0; i< NUM_STA; i++)
 		{
 			phead = &(pstapriv->sta_hash[i]);
-			plist = get_next(phead);
+			plist = phead->next;
 
 			while ((rtw_end_of_queue_search(phead, plist)) == false)
 			{
 				psta = container_of(plist, struct sta_info, hash_list);
 
-				plist = get_next(plist);
+				plist = plist->next;
 
 				if (_rtw_memcmp(psta	->hwaddr, bcast_addr, ETH_ALEN) ||
 					_rtw_memcmp(psta->hwaddr, myid(&adapter->eeprompriv), ETH_ALEN))

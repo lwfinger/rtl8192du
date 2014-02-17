@@ -504,7 +504,7 @@ Exit:
 	rtStatus =_FWInit(adapter);
 
 	if (pFirmware) {
-		rtw_vmfree((u8*)pFirmware, sizeof(struct RT_FIRMWARE_92D));
+		vfree(pFirmware);
 	}
 
 	return rtStatus;

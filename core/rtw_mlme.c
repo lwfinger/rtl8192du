@@ -33,6 +33,7 @@
 #include <mlme_osdep.h>
 #include <usb_osintf.h>
 #include <rtw_mlme.h>
+#include <linux/vmalloc.h>
 
 #ifdef CONFIG_DISABLE_MCS13TO15
 extern unsigned char MCS_rate_2R_MCS13TO15_OFF[16];
@@ -167,10 +168,8 @@ void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
 	if (pmlmepriv) {
 		rtw_mfree_mlme_priv_lock(pmlmepriv);
 
-		if (pmlmepriv->free_bss_buf) {
-			rtw_vmfree(pmlmepriv->free_bss_buf,
-				   MAX_BSS_CNT * sizeof(struct wlan_network));
-		}
+		if (pmlmepriv->free_bss_buf)
+			vfree(pmlmepriv->free_bss_buf);
 	}
 	_func_exit_;
 }

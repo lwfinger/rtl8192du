@@ -25,11 +25,10 @@
 #include <rtw_mlme_ext.h>
 #include <rtw_ioctl.h>
 #include <rtw_ioctl_set.h>
-
 #include <rtw_mp_ioctl.h>
 #include <usb_osintf.h>
-
 #include <usb_ops.h>
+#include <linux/vmalloc.h>
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 27))
 #define  iwe_stream_add_event(a, b, c, d, e)  iwe_stream_add_event(b, c, d, e)
@@ -7053,13 +7052,13 @@ static int rtw_wx_set_priv(struct net_device *dev,
 		return -ENOMEM;
 
 	if (copy_from_user(ext, dwrq->pointer, len)) {
-		rtw_vmfree(ext, len);
+		vfree(ext);
 		return -EFAULT;
 	}
 
 	#ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
 	if (!(ext_dbg = rtw_vmalloc(len))) {
-		rtw_vmfree(ext, len);
+		vfree(ext);
 		return -ENOMEM;
 	}
 
@@ -7176,9 +7175,9 @@ static int rtw_wx_set_priv(struct net_device *dev,
 
 FREE_EXT:
 
-	rtw_vmfree(ext, len);
+	vfree(ext);
 	#ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
-	rtw_vmfree(ext_dbg, len);
+	vfree(ext_dbg);
 	#endif
 
 	/* DBG_8192D("rtw_wx_set_priv: (SIOCSIWPRIV) %s ret =%d\n", */

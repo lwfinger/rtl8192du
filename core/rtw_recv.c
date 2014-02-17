@@ -29,6 +29,7 @@
 #include <usb_ops.h>
 #include <wifi.h>
 #include <usb_osintf.h>
+#include <linux/vmalloc.h>
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS);
@@ -155,11 +156,8 @@ void _rtw_free_recv_priv(struct recv_priv *precvpriv)
 
 	rtw_os_recv_resource_free(precvpriv);
 
-	if (precvpriv->pallocated_frame_buf) {
-		rtw_vmfree(precvpriv->pallocated_frame_buf,
-			   NR_RECVFRAME * sizeof(union recv_frame) +
-			   RXFRAME_ALIGN_SZ);
-	}
+	if (precvpriv->pallocated_frame_buf)
+		vfree(precvpriv->pallocated_frame_buf);
 
 	rtw_hal_free_recv_priv(padapter);
 

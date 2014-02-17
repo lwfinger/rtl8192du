@@ -29,6 +29,7 @@
 #include <usb_ops.h>
 #include <usb_osintf.h>
 #include <usb_hal.h>
+#include <linux/vmalloc.h>
 
 static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
 static int rtw_resume(struct usb_interface *intf);
@@ -1132,7 +1133,7 @@ free_adapter:
 		if (pnetdev)
 			rtw_free_netdev(pnetdev);
 		else if (padapter)
-			rtw_vmfree((u8*)padapter, sizeof(*padapter));
+			vfree(padapter);
 		padapter = NULL;
 	}
 exit:

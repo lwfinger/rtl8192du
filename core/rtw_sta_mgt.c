@@ -26,6 +26,7 @@
 #include <xmit_osdep.h>
 #include <mlme_osdep.h>
 #include <sta_info.h>
+#include <linux/vmalloc.h>
 
 static void _rtw_init_stainfo(struct sta_info *psta)
 {
@@ -273,10 +274,8 @@ _func_enter_;
 
 		rtw_mfree_sta_priv_lock(pstapriv);
 
-		if (pstapriv->pallocated_stainfo_buf) {
-			rtw_vmfree(pstapriv->pallocated_stainfo_buf,
-				   sizeof(struct sta_info)*NUM_STA+4);
-		}
+		if (pstapriv->pallocated_stainfo_buf)
+			vfree(pstapriv->pallocated_stainfo_buf);
 	}
 
 _func_exit_;

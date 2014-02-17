@@ -335,7 +335,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		goto exit;
 	}
 
-	command = rtw_zmalloc(priv_cmd.total_len);
+	command = kzalloc(priv_cmd.total_len, GFP_KERNEL);
 	if (!command)
 	{
 		DBG_8192D("%s: failed to allocate memory\n", __func__);

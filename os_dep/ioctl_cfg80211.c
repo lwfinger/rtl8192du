@@ -163,6 +163,7 @@ struct ieee80211_supported_band *rtw_spt_band_alloc(
 {
 	struct ieee80211_supported_band *spt_band = NULL;
 	int n_channels, n_bitrates;
+	int len;
 
 	if (band == IEEE80211_BAND_2GHZ)
 	{
@@ -179,11 +180,10 @@ struct ieee80211_supported_band *rtw_spt_band_alloc(
 		goto exit;
 	}
 
-	spt_band = (struct ieee80211_supported_band *)rtw_zmalloc(
-		sizeof(struct ieee80211_supported_band)
-		+ sizeof(struct ieee80211_channel)*n_channels
-		+ sizeof(struct ieee80211_rate)*n_bitrates
-	);
+	len = sizeof(struct ieee80211_supported_ban, GFP_KERNEL) +
+	      sizeof(struct ieee80211_channel) * n_channels +
+	      sizeof(struct ieee80211_rate) * n_bitrates;
+	spt_band = (struct ieee80211_supported_band *)kzalloc(len, GFP_KERNEL);
 	if (!spt_band)
 		goto exit;
 
@@ -581,13 +581,13 @@ static u8 set_pairwise_key(_adapter *padapter, struct sta_info *psta)
 	struct cmd_priv				*pcmdpriv=&padapter->cmdpriv;
 	u8	res=_SUCCESS;
 
-	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj*)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res= _FAIL;
 		goto exit;
 	}
 
-	psetstakey_para = (struct set_stakey_parm*)rtw_zmalloc(sizeof(struct set_stakey_parm));
+	psetstakey_para = (struct set_stakey_parm*)kzalloc(sizeof(struct set_stakey_parm), GFP_KERNEL);
 	if (psetstakey_para==NULL) {
 		kfree(ph2c);
 		res=_FAIL;
@@ -621,12 +621,12 @@ static int set_group_key(_adapter *padapter, u8 *key, u8 alg, int keyid)
 
 	DBG_8192C("%s\n", __func__);
 
-	pcmd = (struct cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
+	pcmd = (struct cmd_obj*)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd==NULL) {
 		res= _FAIL;
 		goto exit;
 	}
-	psetkeyparm=(struct setkey_parm*)rtw_zmalloc(sizeof(struct setkey_parm));
+	psetkeyparm=(struct setkey_parm*)kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
 	if (psetkeyparm==NULL) {
 		kfree(pcmd);
 		res= _FAIL;
@@ -2067,7 +2067,7 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 		goto exit;
 	}
 
-	buf = rtw_zmalloc(ielen);
+	buf = kzalloc(ielen, GFP_KERNEL);
 	if (buf == NULL) {
 		ret =  -ENOMEM;
 		goto exit;
@@ -3077,7 +3077,7 @@ static int rtw_cfg80211_add_monitor_if (_adapter *padapter, char *name, struct n
 	pnpi->sizeof_priv = sizeof(_adapter);
 
 	/*  wdev */
-	mon_wdev = (struct wireless_dev *)rtw_zmalloc(sizeof(struct wireless_dev));
+	mon_wdev = (struct wireless_dev *)kzalloc(sizeof(struct wireless_dev), GFP_KERNEL);
 	if (!mon_wdev) {
 		DBG_871X(FUNC_ADPT_FMT" allocate mon_wdev fail\n", FUNC_ADPT_ARG(padapter));
 		ret = -ENOMEM;
@@ -3224,7 +3224,7 @@ static int rtw_add_beacon(_adapter *adapter, const u8 *head, size_t head_len, co
 		return -EINVAL;
 
 
-	pbuf = rtw_zmalloc(head_len+tail_len);
+	pbuf = kzalloc(head_len+tail_len, GFP_KERNEL);
 	if (!pbuf)
 		return -ENOMEM;
 
@@ -4892,7 +4892,7 @@ int rtw_wdev_alloc(_adapter *padapter, struct device *dev)
 	}
 
 	/*  wdev */
-	wdev = (struct wireless_dev *)rtw_zmalloc(sizeof(struct wireless_dev));
+	wdev = (struct wireless_dev *)kzalloc(sizeof(struct wireless_dev), GFP_KERNEL);
 	if (!wdev) {
 		DBG_8192C("Couldn't allocate wireless device\n");
 		ret = -ENOMEM;

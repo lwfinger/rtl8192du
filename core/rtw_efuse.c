@@ -484,7 +484,7 @@ u8 rtw_efuse_map_write(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *dat
 	if ((addr + cnts) > maplen)
 		return _FAIL;
 
-	map = rtw_zmalloc(maplen);
+	map = kzalloc(maplen, GFP_KERNEL);
 	if (map == NULL)
 		return _FAIL;
 

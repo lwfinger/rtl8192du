@@ -45,7 +45,7 @@ _func_enter_;
 
 	pcmdpriv->cmd_seq = 1;
 
-	pcmdpriv->cmd_allocated_buf = rtw_zmalloc(MAX_CMDSZ + CMDBUFF_ALIGN_SZ);
+	pcmdpriv->cmd_allocated_buf = kzalloc(MAX_CMDSZ + CMDBUFF_ALIGN_SZ, GFP_KERNEL);
 
 	if (pcmdpriv->cmd_allocated_buf == NULL) {
 		res = _FAIL;
@@ -54,7 +54,7 @@ _func_enter_;
 
 	pcmdpriv->cmd_buf = pcmdpriv->cmd_allocated_buf  +  CMDBUFF_ALIGN_SZ - ((SIZE_PTR)(pcmdpriv->cmd_allocated_buf) & (CMDBUFF_ALIGN_SZ-1));
 
-	pcmdpriv->rsp_allocated_buf = rtw_zmalloc(MAX_RSPSZ + 4);
+	pcmdpriv->rsp_allocated_buf = kzalloc(MAX_RSPSZ + 4, GFP_KERNEL);
 
 	if (pcmdpriv->rsp_allocated_buf == NULL) {
 		res = _FAIL;
@@ -99,7 +99,7 @@ _func_enter_;
 	_rtw_init_sema(&(pevtpriv->evt_notify), 0);
 	_rtw_init_sema(&(pevtpriv->terminate_evtthread_sema), 0);
 
-	pevtpriv->evt_allocated_buf = rtw_zmalloc(MAX_EVTSZ + 4);
+	pevtpriv->evt_allocated_buf = kzalloc(MAX_EVTSZ + 4, GFP_KERNEL);
 	if (pevtpriv->evt_allocated_buf == NULL) {
 		res = _FAIL;
 		goto exit;
@@ -554,13 +554,13 @@ u8 rtw_setstandby_cmd(struct rtw_adapter *padapter, uint action)
 
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		ret = _FAIL;
 		goto exit;
 	}
 
-	psetusbsuspend = (struct usb_suspend_parm *)rtw_zmalloc(sizeof(struct usb_suspend_parm));
+	psetusbsuspend = (struct usb_suspend_parm *)kzalloc(sizeof(struct usb_suspend_parm), GFP_KERNEL);
 	if (psetusbsuspend == NULL) {
 		kfree(ph2c);
 		ret = _FAIL;
@@ -608,11 +608,11 @@ _func_enter_;
 	}
 #endif /*  CONFIG_P2P_PS */
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL)
 		return _FAIL;
 
-	psurveyPara = (struct sitesurvey_parm *)rtw_zmalloc(sizeof(struct sitesurvey_parm));
+	psurveyPara = (struct sitesurvey_parm *)kzalloc(sizeof(struct sitesurvey_parm), GFP_KERNEL);
 	if (psurveyPara == NULL) {
 		kfree(ph2c);
 		return _FAIL;
@@ -684,13 +684,13 @@ u8 rtw_setdatarate_cmd(struct rtw_adapter *padapter, u8 *rateset)
 
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	pbsetdataratepara = (struct setdatarate_parm *)rtw_zmalloc(sizeof(struct setdatarate_parm));
+	pbsetdataratepara = (struct setdatarate_parm *)kzalloc(sizeof(struct setdatarate_parm), GFP_KERNEL);
 	if (pbsetdataratepara == NULL) {
 		kfree(ph2c);
 		res = _FAIL;
@@ -721,12 +721,12 @@ u8 rtw_setbasicrate_cmd(struct rtw_adapter *padapter, u8 *rateset)
 
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
-	pssetbasicratepara = (struct setbasicrate_parm *)rtw_zmalloc(sizeof(struct setbasicrate_parm));
+	pssetbasicratepara = (struct setbasicrate_parm *)kzalloc(sizeof(struct setbasicrate_parm), GFP_KERNEL);
 
 	if (pssetbasicratepara == NULL) {
 		kfree(ph2c);
@@ -763,12 +763,12 @@ u8 rtw_setphy_cmd(struct rtw_adapter *padapter, u8 modem, u8 ch)
 
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
-	psetphypara = (struct setphy_parm *)rtw_zmalloc(sizeof(struct setphy_parm));
+	psetphypara = (struct setphy_parm *)kzalloc(sizeof(struct setphy_parm), GFP_KERNEL);
 
 	if (psetphypara == NULL) {
 		kfree(ph2c);
@@ -796,12 +796,12 @@ u8 rtw_setbbreg_cmd(struct rtw_adapter *padapter, u8 offset, u8 val)
 	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
 	u8 res = _SUCCESS;
 _func_enter_;
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 		}
-	pwritebbparm = (struct writeBB_parm *)rtw_zmalloc(sizeof(struct writeBB_parm));
+	pwritebbparm = (struct writeBB_parm *)kzalloc(sizeof(struct writeBB_parm), GFP_KERNEL);
 
 	if (pwritebbparm == NULL) {
 		kfree(ph2c);
@@ -828,12 +828,12 @@ u8 rtw_getbbreg_cmd(struct rtw_adapter *padapter, u8 offset, u8 *pval)
 	u8 res = _SUCCESS;
 
 _func_enter_;
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
-	prdbbparm = (struct readBB_parm *)rtw_zmalloc(sizeof(struct readBB_parm));
+	prdbbparm = (struct readBB_parm *)kzalloc(sizeof(struct readBB_parm), GFP_KERNEL);
 
 	if (prdbbparm == NULL) {
 		kfree(ph2c);
@@ -862,12 +862,12 @@ u8 rtw_setrfreg_cmd(struct rtw_adapter *padapter, u8 offset, u32 val)
 	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
 	u8 res = _SUCCESS;
 _func_enter_;
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
-	pwriterfparm = (struct writeRF_parm *)rtw_zmalloc(sizeof(struct writeRF_parm));
+	pwriterfparm = (struct writeRF_parm *)kzalloc(sizeof(struct writeRF_parm), GFP_KERNEL);
 
 	if (pwriterfparm == NULL) {
 		kfree(ph2c);
@@ -895,13 +895,13 @@ u8 rtw_getrfreg_cmd(struct rtw_adapter *padapter, u8 offset, u8 *pval)
 
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	prdrfparm = (struct readRF_parm *)rtw_zmalloc(sizeof(struct readRF_parm));
+	prdrfparm = (struct readRF_parm *)kzalloc(sizeof(struct readRF_parm), GFP_KERNEL);
 	if (prdrfparm == NULL) {
 		kfree(ph2c);
 		res = _FAIL;
@@ -964,7 +964,7 @@ _func_enter_;
 		RT_TRACE(_module_rtl871x_cmd_c_, _drv_info_, (" createbss for SSid:%s\n", pmlmepriv->assoc_ssid.Ssid));
 	}
 
-	pcmd = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	pcmd = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
 		res = _FAIL;
 		goto exit;
@@ -993,7 +993,7 @@ u8 rtw_createbss_cmd_ex(struct rtw_adapter *padapter, unsigned char *pbss, unsig
 
 _func_enter_;
 
-	pcmd = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	pcmd = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
 		res = _FAIL;
 		goto exit;
@@ -1041,7 +1041,7 @@ _func_enter_;
 		RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+Join cmd: SSid =[%s]\n", pmlmepriv->assoc_ssid.Ssid));
 	}
 
-	pcmd = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	pcmd = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
 		res = _FAIL;
 		RT_TRACE(_module_rtl871x_cmd_c_, _drv_err_, ("rtw_joinbss_cmd: memory allocate for cmd_obj fail!!!\n"));
@@ -1165,7 +1165,7 @@ _func_enter_;
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_disassoc_cmd\n"));
 
 	/* prepare cmd parameter */
-	param = (struct disconnect_parm *)rtw_zmalloc(sizeof(*param));
+	param = (struct disconnect_parm *)kzalloc(sizeof(*param), GFP_KERNEL);
 	if (param == NULL) {
 		res = _FAIL;
 		goto exit;
@@ -1174,7 +1174,7 @@ _func_enter_;
 
 	if (enqueue) {
 		/* need enqueue, prepare cmd_obj and enqueue */
-		cmdobj = (struct cmd_obj *)rtw_zmalloc(sizeof(*cmdobj));
+		cmdobj = (struct cmd_obj *)kzalloc(sizeof(*cmdobj), GFP_KERNEL);
 		if (cmdobj == NULL) {
 			res = _FAIL;
 			kfree(param);
@@ -1206,12 +1206,12 @@ u8 rtw_setopmode_cmd(struct rtw_adapter *padapter, enum NDIS_802_11_NETWORK_INFR
 
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = false;
 		goto exit;
 	}
-	psetop = (struct setopmode_parm *)rtw_zmalloc(sizeof(struct setopmode_parm));
+	psetop = (struct setopmode_parm *)kzalloc(sizeof(struct setopmode_parm), GFP_KERNEL);
 	if (psetop == NULL) {
 		kfree(ph2c);
 		res = false;
@@ -1244,20 +1244,20 @@ u8 rtw_setstakey_cmd(struct rtw_adapter *padapter, u8 *psta, u8 unicast_key)
 
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	psetstakey_para = (struct set_stakey_parm *)rtw_zmalloc(sizeof(struct set_stakey_parm));
+	psetstakey_para = (struct set_stakey_parm *)kzalloc(sizeof(struct set_stakey_parm), GFP_KERNEL);
 	if (psetstakey_para == NULL) {
 		kfree(ph2c);
 		res = _FAIL;
 		goto exit;
 	}
 
-	psetstakey_rsp = (struct set_stakey_rsp *)rtw_zmalloc(sizeof(struct set_stakey_rsp));
+	psetstakey_rsp = (struct set_stakey_rsp *)kzalloc(sizeof(struct set_stakey_rsp), GFP_KERNEL);
 	if (psetstakey_rsp == NULL) {
 		kfree(ph2c);
 		kfree(psetstakey_para);
@@ -1321,20 +1321,20 @@ _func_enter_;
 	if (!enqueue) {
 		clear_cam_entry(padapter, entry);
 	} else {
-		ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+		ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 		if (ph2c == NULL) {
 			res = _FAIL;
 			goto exit;
 		}
 
-		psetstakey_para = (struct set_stakey_parm *)rtw_zmalloc(sizeof(struct set_stakey_parm));
+		psetstakey_para = (struct set_stakey_parm *)kzalloc(sizeof(struct set_stakey_parm), GFP_KERNEL);
 		if (psetstakey_para == NULL) {
 			kfree(ph2c);
 			res = _FAIL;
 			goto exit;
 		}
 
-		psetstakey_rsp = (struct set_stakey_rsp *)rtw_zmalloc(sizeof(struct set_stakey_rsp));
+		psetstakey_rsp = (struct set_stakey_rsp *)kzalloc(sizeof(struct set_stakey_rsp), GFP_KERNEL);
 		if (psetstakey_rsp == NULL) {
 			kfree(ph2c);
 			kfree(psetstakey_para);
@@ -1367,12 +1367,12 @@ u8 rtw_setrttbl_cmd(struct rtw_adapter *padapter, struct setratable_parm *prate_
 	u8 res = _SUCCESS;
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 		}
-	psetrttblparm = (struct setratable_parm *)rtw_zmalloc(sizeof(struct setratable_parm));
+	psetrttblparm = (struct setratable_parm *)kzalloc(sizeof(struct setratable_parm), GFP_KERNEL);
 
 	if (psetrttblparm == NULL) {
 		kfree(ph2c);
@@ -1398,12 +1398,12 @@ u8 rtw_getrttbl_cmd(struct rtw_adapter *padapter, struct getratable_rsp *pval)
 	u8 res = _SUCCESS;
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
-	pgetrttblparm = (struct getratable_parm *)rtw_zmalloc(sizeof(struct getratable_parm));
+	pgetrttblparm = (struct getratable_parm *)kzalloc(sizeof(struct getratable_parm), GFP_KERNEL);
 
 	if (pgetrttblparm == NULL) {
 		kfree(ph2c);
@@ -1437,20 +1437,20 @@ u8 rtw_setassocsta_cmd(struct rtw_adapter *padapter, u8 *mac_addr)
 
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	psetassocsta_para = (struct set_assocsta_parm *)rtw_zmalloc(sizeof(struct set_assocsta_parm));
+	psetassocsta_para = (struct set_assocsta_parm *)kzalloc(sizeof(struct set_assocsta_parm), GFP_KERNEL);
 	if (psetassocsta_para == NULL) {
 		kfree(ph2c);
 		res = _FAIL;
 		goto exit;
 	}
 
-	psetassocsta_rsp = (struct set_stakey_rsp *)rtw_zmalloc(sizeof(struct set_assocsta_rsp));
+	psetassocsta_rsp = (struct set_stakey_rsp *)kzalloc(sizeof(struct set_assocsta_rsp), GFP_KERNEL);
 	if (psetassocsta_rsp == NULL) {
 		kfree(ph2c);
 		kfree(psetassocsta_para);
@@ -1482,13 +1482,13 @@ u8 rtw_addbareq_cmd(struct rtw_adapter *padapter, u8 tid, u8 *addr)
 
 _func_enter_;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	paddbareq_parm = (struct addBaReq_parm *)rtw_zmalloc(sizeof(struct addBaReq_parm));
+	paddbareq_parm = (struct addBaReq_parm *)kzalloc(sizeof(struct addBaReq_parm), GFP_KERNEL);
 	if (paddbareq_parm == NULL) {
 		kfree(ph2c);
 		res = _FAIL;
@@ -1528,13 +1528,13 @@ _func_enter_;
 		pcmdpriv = &(padapter->pbuddy_adapter->cmdpriv);
 #endif
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
+	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)kzalloc(sizeof(struct drvextra_cmd_parm), GFP_KERNEL);
 	if (pdrvextra_cmd_parm == NULL) {
 		kfree(ph2c);
 		res = _FAIL;
@@ -1571,7 +1571,7 @@ _func_enter_;
 	/* check input parameter */
 
 	/* prepare cmd parameter */
-	set_ch_parm = (struct set_ch_parm *)rtw_zmalloc(sizeof(*set_ch_parm));
+	set_ch_parm = (struct set_ch_parm *)kzalloc(sizeof(*set_ch_parm), GFP_KERNEL);
 	if (set_ch_parm == NULL) {
 		res = _FAIL;
 		goto exit;
@@ -1582,7 +1582,7 @@ _func_enter_;
 
 	if (enqueue) {
 		/* need enqueue, prepare cmd_obj and enqueue */
-		pcmdobj = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+		pcmdobj = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 		if (pcmdobj == NULL) {
 			kfree(set_ch_parm);
 			res = _FAIL;
@@ -1629,7 +1629,7 @@ _func_enter_;
 	}
 
 	/* prepare cmd parameter */
-	setchannelplan_param = (struct setchannelplan_param *)rtw_zmalloc(sizeof(struct setchannelplan_param));
+	setchannelplan_param = (struct setchannelplan_param *)kzalloc(sizeof(struct setchannelplan_param), GFP_KERNEL);
 	if (setchannelplan_param == NULL) {
 		res = _FAIL;
 		goto exit;
@@ -1638,7 +1638,7 @@ _func_enter_;
 
 	if (enqueue) {
 		/* need enqueue, prepare cmd_obj and enqueue */
-		pcmdobj = (struct cmd_obj *)rtw_zmalloc(sizeof(struct	cmd_obj));
+		pcmdobj = (struct cmd_obj *)kzalloc(sizeof(struct	cmd_obj), GFP_KERNEL);
 		if (pcmdobj == NULL) {
 			kfree(setchannelplan_param);
 			res = _FAIL;
@@ -1678,13 +1678,13 @@ _func_enter_;
 
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_led_blink_cmd\n"));
 
-	pcmdobj = (struct cmd_obj *)rtw_zmalloc(sizeof(struct	cmd_obj));
+	pcmdobj = (struct cmd_obj *)kzalloc(sizeof(struct	cmd_obj), GFP_KERNEL);
 	if (pcmdobj == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	ledBlink_param = (struct ledblink_param *)rtw_zmalloc(sizeof(struct	ledblink_param));
+	ledBlink_param = (struct ledblink_param *)kzalloc(sizeof(struct	ledblink_param), GFP_KERNEL);
 	if (ledBlink_param == NULL) {
 		kfree(pcmdobj);
 		res = _FAIL;
@@ -1716,13 +1716,13 @@ _func_enter_;
 
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_set_csa_cmd\n"));
 
-	pcmdobj = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	pcmdobj = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmdobj == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	setchannelswitch_param = (struct setchannelswitch_param *)rtw_zmalloc(sizeof(struct setchannelswitch_param));
+	setchannelswitch_param = (struct setchannelswitch_param *)kzalloc(sizeof(struct setchannelswitch_param), GFP_KERNEL);
 	if (setchannelswitch_param == NULL) {
 		kfree(pcmdobj);
 		res = _FAIL;
@@ -1756,13 +1756,13 @@ _func_enter_;
 
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_set_tdls_cmd\n"));
 
-	pcmdobj = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	pcmdobj = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmdobj == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	TDLSoption = (struct TDLSoption_param *)rtw_zmalloc(sizeof(struct TDLSoption_param));
+	TDLSoption = (struct TDLSoption_param *)kzalloc(sizeof(struct TDLSoption_param), GFP_KERNEL);
 	if (TDLSoption == NULL) {
 		kfree(pcmdobj);
 		res = _FAIL;
@@ -1959,13 +1959,13 @@ _func_enter_;
 #endif
 
 	if (enqueue) {
-		ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+		ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 		if (ph2c == NULL) {
 			res = _FAIL;
 			goto exit;
 		}
 
-		pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
+		pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)kzalloc(sizeof(struct drvextra_cmd_parm), GFP_KERNEL);
 		if (pdrvextra_cmd_parm == NULL) {
 			kfree(ph2c);
 			res = _FAIL;
@@ -2012,13 +2012,13 @@ _func_enter_;
 		return res;
 
 	if (true == enqueue) {
-		ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+		ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 		if (ph2c == NULL) {
 			res = _FAIL;
 			goto exit;
 		}
 
-		pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
+		pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)kzalloc(sizeof(struct drvextra_cmd_parm), GFP_KERNEL);
 		if (pdrvextra_cmd_parm == NULL) {
 			kfree(ph2c);
 			res = _FAIL;
@@ -2059,13 +2059,13 @@ _func_enter_;
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 		return res;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
+	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)kzalloc(sizeof(struct drvextra_cmd_parm), GFP_KERNEL);
 	if (pdrvextra_cmd_parm == NULL) {
 		kfree(ph2c);
 		res = _FAIL;
@@ -2099,13 +2099,13 @@ _func_enter_;
 		goto exit;
 #endif
 
-	ppscmd = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ppscmd = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ppscmd == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
+	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)kzalloc(sizeof(struct drvextra_cmd_parm), GFP_KERNEL);
 	if (pdrvextra_cmd_parm == NULL) {
 		kfree(ppscmd);
 		res = _FAIL;
@@ -2161,12 +2161,12 @@ u8 rtw_chk_hi_queue_cmd(struct rtw_adapter *padapter)
 	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
 	u8 res = _SUCCESS;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
-	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
+	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)kzalloc(sizeof(struct drvextra_cmd_parm), GFP_KERNEL);
 	if (pdrvextra_cmd_parm == NULL) {
 		kfree(ph2c);
 		res = _FAIL;
@@ -2192,13 +2192,13 @@ u8 rtw_c2h_wk_cmd(struct rtw_adapter *padapter, u8 *c2h_evt)
 	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
 	u8 res = _SUCCESS;
 
-	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
+	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)kzalloc(sizeof(struct drvextra_cmd_parm), GFP_KERNEL);
 	if (pdrvextra_cmd_parm == NULL) {
 		kfree(ph2c);
 		res = _FAIL;

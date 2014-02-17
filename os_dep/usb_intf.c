@@ -254,7 +254,7 @@ static u8 rtw_init_intf_priv(struct dvobj_priv *dvobj)
 
 
 	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
-	dvobj->usb_alloc_vendor_req_buf = rtw_zmalloc(MAX_USB_IO_CTL_SIZE);
+	dvobj->usb_alloc_vendor_req_buf = kzalloc(MAX_USB_IO_CTL_SIZE, GFP_KERNEL);
 	if (dvobj->usb_alloc_vendor_req_buf == NULL) {
 		DBG_8192D("alloc usb_vendor_req_buf failed... /n");
 		rst = _FAIL;
@@ -299,9 +299,9 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 
 _func_enter_;
 
-	if ((pdvobjpriv = (struct dvobj_priv*)rtw_zmalloc(sizeof(*pdvobjpriv))) == NULL) {
+	pdvobjpriv = (struct dvobj_priv*)kzalloc(sizeof(*pdvobjpriv), GFP_KERNEL);
+	if (!pdvobjpriv)
 		goto exit;
-	}
 
 	_rtw_mutex_init(&pdvobjpriv->hw_init_mutex);
 	_rtw_mutex_init(&pdvobjpriv->h2c_fwcmd_mutex);

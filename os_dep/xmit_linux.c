@@ -122,7 +122,7 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 		return _FAIL;
 #else /*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 
-	pxmitbuf->pallocated_buf = rtw_zmalloc(alloc_sz);
+	pxmitbuf->pallocated_buf = kzalloc(alloc_sz, GFP_KERNEL);
 	if (pxmitbuf->pallocated_buf == NULL)
 	{
 		return _FAIL;

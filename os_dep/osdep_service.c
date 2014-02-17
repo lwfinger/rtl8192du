@@ -66,16 +66,6 @@ inline u8* _rtw_vmalloc(u32 sz)
 	return pbuf;
 }
 
-u8* _rtw_zmalloc(u32 sz)
-{
-	u8	*pbuf = kmalloc(sz, GFP_KERNEL);
-
-	if (pbuf != NULL) {
-		memset(pbuf, 0, sz);
-	}
-	return pbuf;
-}
-
 int	_rtw_memcmp(void *dst, void *src, u32 sz)
 {
 /* under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0 */

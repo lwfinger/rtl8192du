@@ -1877,7 +1877,7 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 			spin_lock_bh(&psta->lock);
 			if (psta->passoc_req && psta->assoc_req_len > 0) {
-				passoc_req = rtw_zmalloc(psta->assoc_req_len);
+				passoc_req = kzalloc(psta->assoc_req_len, GFP_KERNEL);
 				if (passoc_req) {
 					assoc_req_len = psta->assoc_req_len;
 					memcpy(passoc_req, psta->passoc_req,
@@ -2517,14 +2517,14 @@ int rtw_set_auth(struct rtw_adapter *adapter,
 
 	_func_enter_;
 
-	pcmd = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	pcmd = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
 		res = _FAIL;	/* try again */
 		goto exit;
 	}
 
 	psetauthparm =
-	    (struct setauth_parm *)rtw_zmalloc(sizeof(struct setauth_parm));
+	    (struct setauth_parm *)kzalloc(sizeof(struct setauth_parm), GFP_KERNEL);
 	if (psetauthparm == NULL) {
 		kfree(pcmd);
 		res = _FAIL;
@@ -2567,13 +2567,13 @@ int rtw_set_key(struct rtw_adapter *adapter,
 
 	_func_enter_;
 
-	pcmd = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
+	pcmd = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
 		res = _FAIL;	/* try again */
 		goto exit;
 	}
 	psetkeyparm =
-	    (struct setkey_parm *)rtw_zmalloc(sizeof(struct setkey_parm));
+	    (struct setkey_parm *)kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
 	if (psetkeyparm == NULL) {
 		kfree(pcmd);
 		res = _FAIL;

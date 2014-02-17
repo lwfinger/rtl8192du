@@ -2536,7 +2536,7 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 	len = 2 * ETH_ALEN + 1 + 2 + 18 + 2 + *(rsnie + 1) + 2 +
 	      *(timeoutie + 1) + 2 + *(ftie + 1);
 
-	buf = rtw_zmalloc(len);
+	buf = kzalloc(len, GFP_KERNEL);
 	if (buf == NULL)
 		return 0;
 

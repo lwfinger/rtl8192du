@@ -5401,7 +5401,7 @@ void rtl8192du_set_hal_ops(struct rtw_adapter * padapter)
 
 _func_enter_;
 
-	padapter->HalData = rtw_zmalloc(sizeof(struct hal_data_8192du));
+	padapter->HalData = kzalloc(sizeof(struct hal_data_8192du), GFP_KERNEL);
 	if (padapter->HalData == NULL) {
 		DBG_8192D("cant not alloc memory for HAL DATA\n");
 	}

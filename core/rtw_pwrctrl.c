@@ -426,7 +426,7 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 				while ((rtw_end_of_queue_search(phead, plist))
 				       == false) {
 					ptdls_sta =
-					    LIST_CONTAINOR(plist,
+					    container_of(plist,
 							   struct sta_info,
 							   hash_list);
 
@@ -487,7 +487,7 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 				while ((rtw_end_of_queue_search(phead, plist))
 				       == false) {
 					ptdls_sta =
-					    LIST_CONTAINOR(plist,
+					    container_of(plist,
 							   struct sta_info,
 							   hash_list);
 

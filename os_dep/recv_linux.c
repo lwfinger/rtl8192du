@@ -35,17 +35,17 @@ int rtw_os_recv_resource_init(struct recv_priv *precvpriv, struct rtw_adapter *p
 	return res;
 }
 
-/* alloc os related resource in union recv_frame */
-int rtw_os_recv_resource_alloc(struct rtw_adapter *padapter, union recv_frame *precvframe)
+/* alloc os related resource in struct recv_frame_hdr */
+int rtw_os_recv_resource_alloc(struct rtw_adapter *padapter, struct recv_frame_hdr *precvframe)
 {
 	int	res=_SUCCESS;
 
-	precvframe->u.hdr.pkt_newalloc = precvframe->u.hdr.pkt = NULL;
+	precvframe->pkt_newalloc = precvframe->pkt = NULL;
 
 	return res;
 }
 
-/* free os related resource in union recv_frame */
+/* free os related resource in struct recv_frame_hdr */
 void rtw_os_recv_resource_free(struct recv_priv *precvpriv)
 {
 }
@@ -178,7 +178,7 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 	wireless_send_event(padapter->pnetdev, IWEVMICHAELMICFAILURE, &wrqu, (char*) &ev);
 }
 
-void rtw_hostapd_mlme_rx(struct rtw_adapter *padapter, union recv_frame *precv_frame)
+void rtw_hostapd_mlme_rx(struct rtw_adapter *padapter, struct recv_frame_hdr *precv_frame)
 {
 #ifdef CONFIG_HOSTAPD_MLME
 	struct sk_buff *skb;
@@ -187,14 +187,14 @@ void rtw_hostapd_mlme_rx(struct rtw_adapter *padapter, union recv_frame *precv_f
 
 	RT_TRACE(_module_recv_osdep_c_, _drv_info_, ("+rtw_hostapd_mlme_rx\n"));
 
-	skb = precv_frame->u.hdr.pkt;
+	skb = precv_frame->pkt;
 
 	if (skb == NULL)
 		return;
 
-	skb->data = precv_frame->u.hdr.rx_data;
-	skb->tail = precv_frame->u.hdr.rx_tail;
-	skb->len = precv_frame->u.hdr.len;
+	skb->data = precv_frame->rx_data;
+	skb->tail = precv_frame->rx_tail;
+	skb->len = precv_frame->len;
 
 	skb->dev = pmgnt_netdev;
 	skb->ip_summed = CHECKSUM_NONE;
@@ -208,18 +208,18 @@ void rtw_hostapd_mlme_rx(struct rtw_adapter *padapter, union recv_frame *precv_f
 
 	netif_rx(skb);
 
-	precv_frame->u.hdr.pkt = NULL; /*  set pointer to NULL before rtw_free_recvframe() if call netif_rx() */
+	precv_frame->pkt = NULL; /*  set pointer to NULL before rtw_free_recvframe() if call netif_rx() */
 #endif
 }
 
-int rtw_recv_indicatepkt(struct rtw_adapter *padapter, union recv_frame *precv_frame)
+int rtw_recv_indicatepkt(struct rtw_adapter *padapter, struct recv_frame_hdr *precv_frame)
 {
 	struct recv_priv *precvpriv;
 	struct __queue *pfree_recv_queue;
 	struct sk_buff *skb;
 	struct mlme_priv*pmlmepriv = &padapter->mlmepriv;
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
+	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
 #endif
 
 _func_enter_;
@@ -228,11 +228,11 @@ _func_enter_;
 	pfree_recv_queue = &(precvpriv->free_recv_queue);
 
 #ifdef CONFIG_DRVEXT_MODULE
-	if (drvext_rx_handler(padapter, precv_frame->u.hdr.rx_data, precv_frame->u.hdr.len) == _SUCCESS)
+	if (drvext_rx_handler(padapter, precv_frame->rx_data, precv_frame->len) == _SUCCESS)
 		goto _recv_indicatepkt_drop;
 #endif
 
-	skb = precv_frame->u.hdr.pkt;
+	skb = precv_frame->pkt;
 	if (skb == NULL) {
 		RT_TRACE(_module_recv_osdep_c_,_drv_err_,("rtw_recv_indicatepkt():skb==NULL something wrong!!!!\n"));
 		goto _recv_indicatepkt_drop;
@@ -241,19 +241,19 @@ _func_enter_;
 	RT_TRACE(_module_recv_osdep_c_,_drv_info_,
 		 ("rtw_recv_indicatepkt():skb != NULL !!!\n"));
 	RT_TRACE(_module_recv_osdep_c_, _drv_info_,
-		 ("rtw_recv_indicatepkt():precv_frame->u.hdr.rx_head=%p  precv_frame->hdr.rx_data=%p\n",
-		 precv_frame->u.hdr.rx_head, precv_frame->u.hdr.rx_data));
+		 ("rtw_recv_indicatepkt():precv_frame->rx_head=%p  precv_frame->hdr.rx_data=%p\n",
+		 precv_frame->rx_head, precv_frame->rx_data));
 	RT_TRACE(_module_recv_osdep_c_, _drv_info_,
-		 ("precv_frame->hdr.rx_tail=%p precv_frame->u.hdr.rx_end=%p precv_frame->hdr.len=%d\n",
-		 precv_frame->u.hdr.rx_tail,
-		 precv_frame->u.hdr.rx_end,
-		 precv_frame->u.hdr.len));
+		 ("precv_frame->hdr.rx_tail=%p precv_frame->rx_end=%p precv_frame->hdr.len=%d\n",
+		 precv_frame->rx_tail,
+		 precv_frame->rx_end,
+		 precv_frame->len));
 
-	skb->data = precv_frame->u.hdr.rx_data;
+	skb->data = precv_frame->rx_data;
 
-	skb_set_tail_pointer(skb, precv_frame->u.hdr.len);
+	skb_set_tail_pointer(skb, precv_frame->len);
 
-	skb->len = precv_frame->u.hdr.len;
+	skb->len = precv_frame->len;
 
 	RT_TRACE(_module_recv_osdep_c_, _drv_info_,
 		 ("\n skb->head=%p skb->data=%p skb->tail=%p skb->end=%p skb->len=%d\n",
@@ -264,7 +264,7 @@ _func_enter_;
 		struct sk_buff *pskb2 = NULL;
 		struct sta_info *psta = NULL;
 		struct sta_priv *pstapriv = &padapter->stapriv;
-		struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
+		struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
 		int bmcast = IS_MCAST(pattrib->dst);
 
 		if (_rtw_memcmp(pattrib->dst, myid(&padapter->eeprompriv), ETH_ALEN)==false) {
@@ -314,7 +314,7 @@ _func_enter_;
 
 _recv_indicatepkt_end:
 
-	precv_frame->u.hdr.pkt = NULL; /*  pointers to NULL before rtw_free_recvframe() */
+	precv_frame->pkt = NULL; /*  pointers to NULL before rtw_free_recvframe() */
 
 	rtw_free_recvframe(precv_frame, pfree_recv_queue);
 

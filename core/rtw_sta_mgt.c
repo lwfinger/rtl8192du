@@ -208,7 +208,7 @@ _func_enter_;
 	plist = get_next(phead);
 
 	while ((rtw_end_of_queue_search(phead, plist)) == false) {
-		psta = LIST_CONTAINOR(plist, struct sta_info, list);
+		psta = container_of(plist, struct sta_info, list);
 		plist = get_next(plist);
 
 		rtw_mfree_stainfo(psta);
@@ -257,7 +257,7 @@ _func_enter_;
 
 			while ((rtw_end_of_queue_search(phead, plist)) == false) {
 				int i;
-				psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
+				psta = container_of(plist, struct sta_info, hash_list);
 				plist = get_next(plist);
 
 				for (i = 0; i < 16; i++) {
@@ -299,7 +299,7 @@ _func_enter_;
 		spin_unlock_bh(&(pfree_sta_queue->lock));
 		psta = NULL;
 	} else {
-		psta = LIST_CONTAINOR(get_next(&pfree_sta_queue->queue),
+		psta = container_of(get_next(&pfree_sta_queue->queue),
 				      struct sta_info, list);
 
 		rtw_list_delete(&(psta->list));
@@ -463,7 +463,7 @@ _func_enter_;
 	/* for A-MPDU Rx reordering buffer control, cancel reorder_ctrl_timer */
 	for (i = 0; i < 16; i++) {
 		struct list_head *phead, *plist;
-		union recv_frame *prframe;
+		struct recv_frame_hdr *prframe;
 		struct __queue *ppending_recvframe_queue;
 		struct __queue *free_recv_q = &padapter->recvpriv.free_recv_queue;
 
@@ -479,11 +479,11 @@ _func_enter_;
 		plist = get_next(phead);
 
 		while (!rtw_is_list_empty(phead)) {
-			prframe = LIST_CONTAINOR(plist, union recv_frame, u);
+			prframe = container_of(plist, struct recv_frame_hdr, list);
 
 			plist = get_next(plist);
 
-			rtw_list_delete(&(prframe->u.hdr.list));
+			rtw_list_delete(&(prframe->list));
 
 			rtw_free_recvframe(prframe, free_recv_q);
 		}
@@ -561,7 +561,7 @@ _func_enter_;
 		plist = get_next(phead);
 
 		while ((rtw_end_of_queue_search(phead, plist)) == false) {
-			psta = LIST_CONTAINOR(plist, struct sta_info,
+			psta = container_of(plist, struct sta_info,
 					      hash_list);
 
 			plist = get_next(plist);
@@ -606,7 +606,7 @@ _func_enter_;
 
 
 	while ((rtw_end_of_queue_search(phead, plist)) == false) {
-		psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
+		psta = container_of(plist, struct sta_info, hash_list);
 
 		if (_rtw_memcmp(psta->hwaddr, addr, ETH_ALEN) == true) {
 			/*  if found the matched address */
@@ -676,7 +676,7 @@ u8 rtw_access_ctrl(struct rtw_adapter *padapter, u8 *mac_addr)
 	phead = get_list_head(pacl_node_q);
 	plist = get_next(phead);
 	while ((rtw_end_of_queue_search(phead, plist)) == false) {
-		paclnode = LIST_CONTAINOR(plist, struct rtw_wlan_acl_node,
+		paclnode = container_of(plist, struct rtw_wlan_acl_node,
 					  list);
 		plist = get_next(plist);
 

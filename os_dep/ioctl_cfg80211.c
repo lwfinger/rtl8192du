@@ -1581,7 +1581,7 @@ void rtw_cfg80211_surveydone_event_callback(_adapter *padapter)
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 
 		/* report network only if the current channel set contains the channel to which this network belongs */
 		if (rtw_ch_set_search_ch(padapter->mlmeextpriv.channel_set, pnetwork->network.Configuration.DSConfig) >= 0
@@ -2363,7 +2363,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 			break;
 		}
 
-		pnetwork = LIST_CONTAINOR(pmlmepriv->pscanned, struct wlan_network, list);
+		pnetwork = container_of(pmlmepriv->pscanned, struct wlan_network, list);
 		pmlmepriv->pscanned = get_next(pmlmepriv->pscanned);
 
 		dst_ssid = pnetwork->network.Ssid.Ssid;
@@ -3437,7 +3437,7 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 	/* check asoc_queue */
 	while ((rtw_end_of_queue_search(phead, plist)) == false)
 	{
-		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
+		psta = container_of(plist, struct sta_info, asoc_list);
 
 		plist = get_next(plist);
 

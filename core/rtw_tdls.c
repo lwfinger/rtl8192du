@@ -444,13 +444,13 @@ exit:
 	return;
 }
 
-void issue_tunneled_probe_rsp(_adapter *padapter, union recv_frame *precv_frame)
+void issue_tunneled_probe_rsp(_adapter *padapter, struct recv_frame_hdr *precv_frame)
 {
 	struct xmit_frame			*pmgntframe;
 	struct pkt_attrib			*pattrib;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
-	struct rx_pkt_attrib	*rx_pkt_pattrib = &precv_frame->u.hdr.attrib;
+	struct rx_pkt_attrib	*rx_pkt_pattrib = &precv_frame->attrib;
 
 	DBG_871X("[%s]\n", __func__);
 
@@ -665,14 +665,14 @@ exit:
 	return;
 }
 
-void issue_tdls_setup_rsp(_adapter *padapter, union recv_frame *precv_frame)
+void issue_tdls_setup_rsp(_adapter *padapter, struct recv_frame_hdr *precv_frame)
 {
 	struct xmit_frame			*pmgntframe;
 	struct pkt_attrib			*pattrib;
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	struct rx_pkt_attrib	*rx_pkt_pattrib = &precv_frame->u.hdr.attrib;
+	struct rx_pkt_attrib	*rx_pkt_pattrib = &precv_frame->attrib;
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL)
@@ -705,7 +705,7 @@ exit:
 	return;
 }
 
-void issue_tdls_setup_cfm(_adapter *padapter, union recv_frame *precv_frame)
+void issue_tdls_setup_cfm(_adapter *padapter, struct recv_frame_hdr *precv_frame)
 {
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 	struct xmit_frame			*pmgntframe;
@@ -713,7 +713,7 @@ void issue_tdls_setup_cfm(_adapter *padapter, union recv_frame *precv_frame)
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct sta_info		*ptdls_sta = NULL;
 
-	struct rx_pkt_attrib	*rx_pkt_pattrib = &precv_frame->u.hdr.attrib;
+	struct rx_pkt_attrib	*rx_pkt_pattrib = &precv_frame->attrib;
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL)
@@ -748,7 +748,7 @@ exit:
 }
 
 /* TDLS Discovery Response frame is a management action frame */
-void issue_tdls_dis_rsp(_adapter *padapter, union recv_frame *precv_frame, u8 dialog)
+void issue_tdls_dis_rsp(_adapter *padapter, struct recv_frame_hdr *precv_frame, u8 dialog)
 {
 	struct xmit_frame		*pmgntframe;
 	struct pkt_attrib		*pattrib;
@@ -758,7 +758,7 @@ void issue_tdls_dis_rsp(_adapter *padapter, union recv_frame *precv_frame, u8 di
 	struct xmit_priv		*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 
-	struct rx_pkt_attrib	*rx_pkt_pattrib = &precv_frame->u.hdr.attrib;
+	struct rx_pkt_attrib	*rx_pkt_pattrib = &precv_frame->attrib;
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL)
@@ -928,12 +928,12 @@ exit:
 	return;
 }
 
-int On_TDLS_Dis_Rsp(_adapter *adapter, union recv_frame *precv_frame)
+int On_TDLS_Dis_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 {
 	struct sta_info *ptdls_sta = NULL, *psta = rtw_get_stainfo(&(adapter->stapriv), get_bssid(&(adapter->mlmepriv)));
 	struct recv_priv *precvpriv = &(adapter->recvpriv);
-	u8 *ptr = precv_frame->u.hdr.rx_data, *psa;
-	struct rx_pkt_attrib *pattrib = &(precv_frame->u.hdr.attrib);
+	u8 *ptr = precv_frame->rx_data, *psa;
+	struct rx_pkt_attrib *pattrib = &(precv_frame->attrib);
 	struct tdls_info *ptdlsinfo = &(adapter->tdlsinfo);
 	u8 empty_addr[ETH_ALEN] = { 0x00 };
 	int UndecoratedSmoothedPWDB;
@@ -988,16 +988,16 @@ int On_TDLS_Dis_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 	return _SUCCESS;
 }
 
-int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
+int On_TDLS_Setup_Req(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 {
 	struct tdls_info *ptdlsinfo = &adapter->tdlsinfo;
 	u8 *psa, *pmyid;
 	struct sta_info *ptdls_sta = NULL;
 	struct sta_priv *pstapriv = &adapter->stapriv;
-	u8 *ptr = precv_frame->u.hdr.rx_data;
+	u8 *ptr = precv_frame->rx_data;
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 	struct security_priv *psecuritypriv = &adapter->securitypriv;
-	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->u.hdr.attrib;
+	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->attrib;
 	u8 *prsnie, *ppairwise_cipher;
 	u8 i, k, pairwise_count;
 	u8 ccmp_have = 0, rsnie_have = 0;
@@ -1015,7 +1015,7 @@ int On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 
 	pmyid = myid(&(adapter->eeprompriv));
 	ptr += prx_pkt_attrib->hdrlen + prx_pkt_attrib->iv_len+LLC_HEADER_SIZE+TYPE_LENGTH_FIELD_SIZE+1;
-	parsing_length = ((union recv_frame *)precv_frame)->u.hdr.len
+	parsing_length = ((struct recv_frame_hdr *)precv_frame)->len
 			-prx_pkt_attrib->hdrlen
 			-prx_pkt_attrib->iv_len
 			-prx_pkt_attrib->icv_len
@@ -1184,13 +1184,13 @@ exit:
 	return _FAIL;
 }
 
-int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
+int On_TDLS_Setup_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 {
 	struct tdls_info *ptdlsinfo = &adapter->tdlsinfo;
 	struct sta_info *ptdls_sta = NULL;
 	struct sta_priv *pstapriv = &adapter->stapriv;
-	u8 *ptr = precv_frame->u.hdr.rx_data;
-	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->u.hdr.attrib;
+	u8 *ptr = precv_frame->rx_data;
+	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->attrib;
 	u8 *psa;
 	u16 stat_code;
 	int parsing_length;	/* frame body length, without icv_len */
@@ -1209,7 +1209,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 		return _FAIL;
 
 	ptr += prx_pkt_attrib->hdrlen + prx_pkt_attrib->iv_len+LLC_HEADER_SIZE+TYPE_LENGTH_FIELD_SIZE+1;
-	parsing_length = ((union recv_frame *)precv_frame)->u.hdr.len
+	parsing_length = ((struct recv_frame_hdr *)precv_frame)->len
 			-prx_pkt_attrib->hdrlen
 			-prx_pkt_attrib->iv_len
 			-prx_pkt_attrib->icv_len
@@ -1337,13 +1337,13 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 	return _FAIL;
 }
 
-int On_TDLS_Setup_Cfm(_adapter *adapter, union recv_frame *precv_frame)
+int On_TDLS_Setup_Cfm(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 {
 	struct tdls_info *ptdlsinfo = &adapter->tdlsinfo;
 	struct sta_info *ptdls_sta = NULL;
 	struct sta_priv *pstapriv = &adapter->stapriv;
-	u8 *ptr = precv_frame->u.hdr.rx_data;
-	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->u.hdr.attrib;
+	u8 *ptr = precv_frame->rx_data;
+	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->attrib;
 	u8 *psa;
 	u16 stat_code;
 	int parsing_length;
@@ -1356,7 +1356,7 @@ int On_TDLS_Setup_Cfm(_adapter *adapter, union recv_frame *precv_frame)
 	ptdls_sta = rtw_get_stainfo(pstapriv, psa);
 
 	ptr += prx_pkt_attrib->hdrlen + prx_pkt_attrib->iv_len+LLC_HEADER_SIZE+TYPE_LENGTH_FIELD_SIZE+1;
-	parsing_length = ((union recv_frame *)precv_frame)->u.hdr.len
+	parsing_length = ((struct recv_frame_hdr *)precv_frame)->len
 			-prx_pkt_attrib->hdrlen
 			-prx_pkt_attrib->iv_len
 			-prx_pkt_attrib->icv_len
@@ -1424,12 +1424,12 @@ int On_TDLS_Setup_Cfm(_adapter *adapter, union recv_frame *precv_frame)
 	return _FAIL;
 }
 
-int On_TDLS_Dis_Req(_adapter *adapter, union recv_frame *precv_frame)
+int On_TDLS_Dis_Req(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 {
-	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->u.hdr.attrib;
+	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->attrib;
 	struct sta_priv *pstapriv = &adapter->stapriv;
 	struct sta_info *psta_ap;
-	u8 *ptr = precv_frame->u.hdr.rx_data;
+	u8 *ptr = precv_frame->rx_data;
 	int parsing_length;	/* frame body length, without icv_len */
 	PNDIS_802_11_VARIABLE_IEs	pIE;
 	u8 FIXED_IE = 3, *dst, *pdialog = NULL;
@@ -1438,7 +1438,7 @@ int On_TDLS_Dis_Req(_adapter *adapter, union recv_frame *precv_frame)
 	ptr += prx_pkt_attrib->hdrlen + prx_pkt_attrib->iv_len + LLC_HEADER_SIZE+TYPE_LENGTH_FIELD_SIZE + 1;
 	pdialog = ptr+2;
 
-	parsing_length = ((union recv_frame *)precv_frame)->u.hdr.len
+	parsing_length = ((struct recv_frame_hdr *)precv_frame)->len
 			-prx_pkt_attrib->hdrlen
 			-prx_pkt_attrib->iv_len
 			-prx_pkt_attrib->icv_len
@@ -1475,11 +1475,11 @@ exit:
 	return _FAIL;
 }
 
-int On_TDLS_Teardown(_adapter *adapter, union recv_frame *precv_frame)
+int On_TDLS_Teardown(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 {
 	u8 *psa;
-	u8 *ptr = precv_frame->u.hdr.rx_data;
-	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->u.hdr.attrib;
+	u8 *ptr = precv_frame->rx_data;
+	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->attrib;
 	struct mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct sta_priv		*pstapriv = &adapter->stapriv;
@@ -1513,11 +1513,11 @@ u8 TDLS_check_ch_state(uint state)
 }
 
 /* we process buffered data for 1. U-APSD, 2. ch. switch, 3. U-APSD + ch. switch here */
-int On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, union recv_frame *precv_frame)
+int On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 {
 	struct tdls_info *ptdlsinfo = &adapter->tdlsinfo;
 	struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
-	struct rx_pkt_attrib	*pattrib = &precv_frame->u.hdr.attrib;
+	struct rx_pkt_attrib	*pattrib = &precv_frame->attrib;
 	struct sta_priv *pstapriv = &adapter->stapriv;
 	/* get peer sta infomation */
 	struct sta_info *ptdls_sta = rtw_get_stainfo(pstapriv, pattrib->src);
@@ -1555,7 +1555,7 @@ int On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 
 			/* transmit buffered frames */
 			while ((rtw_end_of_queue_search(xmitframe_phead, xmitframe_plist)) == false) {
-				pxmitframe = LIST_CONTAINOR(xmitframe_plist, struct xmit_frame, list);
+				pxmitframe = container_of(xmitframe_plist, struct xmit_frame, list);
 				xmitframe_plist = get_next(xmitframe_plist);
 				rtw_list_delete(&pxmitframe->list);
 
@@ -1595,12 +1595,12 @@ int On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 	return _FAIL;
 }
 
-int On_TDLS_Ch_Switch_Req(_adapter *adapter, union recv_frame *precv_frame)
+int On_TDLS_Ch_Switch_Req(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 {
 	struct sta_info *ptdls_sta = NULL;
 	struct sta_priv *pstapriv = &adapter->stapriv;
-	u8 *ptr = precv_frame->u.hdr.rx_data;
-	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->u.hdr.attrib;
+	u8 *ptr = precv_frame->rx_data;
+	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->attrib;
 	u8 *psa;
 	int parsing_length;
 	PNDIS_802_11_VARIABLE_IEs	pIE;
@@ -1612,7 +1612,7 @@ int On_TDLS_Ch_Switch_Req(_adapter *adapter, union recv_frame *precv_frame)
 	ptdls_sta = rtw_get_stainfo(pstapriv, psa);
 
 	ptr += prx_pkt_attrib->hdrlen + prx_pkt_attrib->iv_len+LLC_HEADER_SIZE+TYPE_LENGTH_FIELD_SIZE+1;
-	parsing_length = ((union recv_frame *)precv_frame)->u.hdr.len
+	parsing_length = ((struct recv_frame_hdr *)precv_frame)->len
 			-prx_pkt_attrib->hdrlen
 			-prx_pkt_attrib->iv_len
 			-prx_pkt_attrib->icv_len
@@ -1664,12 +1664,12 @@ int On_TDLS_Ch_Switch_Req(_adapter *adapter, union recv_frame *precv_frame)
 	return _FAIL;
 }
 
-int On_TDLS_Ch_Switch_Rsp(_adapter *adapter, union recv_frame *precv_frame)
+int On_TDLS_Ch_Switch_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 {
 	struct sta_info *ptdls_sta = NULL;
 	struct sta_priv *pstapriv = &adapter->stapriv;
-	u8 *ptr = precv_frame->u.hdr.rx_data;
-	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->u.hdr.attrib;
+	u8 *ptr = precv_frame->rx_data;
+	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->attrib;
 	u8 *psa;
 	int parsing_length;
 	PNDIS_802_11_VARIABLE_IEs	pIE;
@@ -1699,7 +1699,7 @@ int On_TDLS_Ch_Switch_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 		return _FAIL;
 
 	ptr += prx_pkt_attrib->hdrlen + prx_pkt_attrib->iv_len+LLC_HEADER_SIZE+TYPE_LENGTH_FIELD_SIZE+1;
-	parsing_length = ((union recv_frame *)precv_frame)->u.hdr.len
+	parsing_length = ((struct recv_frame_hdr *)precv_frame)->len
 			-prx_pkt_attrib->hdrlen
 			-prx_pkt_attrib->iv_len
 			-prx_pkt_attrib->icv_len

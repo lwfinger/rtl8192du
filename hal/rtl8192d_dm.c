@@ -1240,7 +1240,7 @@ static void PWDB_Monitor(
 
 			while ((rtw_end_of_queue_search(phead, plist)) == false)
 			{
-				psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
+				psta = container_of(plist, struct sta_info, hash_list);
 
 				plist = get_next(plist);
 

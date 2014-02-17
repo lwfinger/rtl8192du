@@ -130,10 +130,6 @@ static inline struct list_head *get_list_head(struct __queue *queue)
 	return (&(queue->queue));
 }
 
-
-#define LIST_CONTAINOR(ptr, type, member) \
-        ((type *)((char *)(ptr)-(__kernel_size_t)(&((type *)0)->member)))
-
 static inline void _enter_critical_mutex(_mutex *pmutex)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))

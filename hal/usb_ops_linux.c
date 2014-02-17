@@ -469,22 +469,22 @@ _func_exit_;
 }
 #endif
 
-static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxstat, struct phy_stat *pphy_info)
+static s32 pre_recv_entry(struct recv_frame_hdr *precvframe, struct recv_stat *prxstat, struct phy_stat *pphy_info)
 {
 	s32 ret=_SUCCESS;
 #ifdef CONFIG_CONCURRENT_MODE
 	u8 *primary_myid, *secondary_myid, *paddr1;
-	union recv_frame	*precvframe_if2 = NULL;
-	struct rtw_adapter *primary_padapter = precvframe->u.hdr.adapter;
+	struct recv_frame_hdr	*precvframe_if2 = NULL;
+	struct rtw_adapter *primary_padapter = precvframe->adapter;
 	struct rtw_adapter *secondary_padapter = primary_padapter->pbuddy_adapter;
 	struct recv_priv *precvpriv = &primary_padapter->recvpriv;
 	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
-	u8	*pbuf = precvframe->u.hdr.rx_data;
+	u8	*pbuf = precvframe->rx_data;
 
 	if (!secondary_padapter)
 		return ret;
 
-	paddr1 = GetAddr1Ptr(precvframe->u.hdr.rx_data);
+	paddr1 = GetAddr1Ptr(precvframe->rx_data);
 
 	if (IS_MCAST(paddr1) == false)/* unicast packets */
 	{
@@ -493,7 +493,7 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 		if (_rtw_memcmp(paddr1, secondary_myid, ETH_ALEN))
 		{
 			/* change to secondary interface */
-			precvframe->u.hdr.adapter = secondary_padapter;
+			precvframe->adapter = secondary_padapter;
 		}
 
 
@@ -513,15 +513,15 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 			precvframe_if2 = rtw_alloc_recvframe(pfree_recv_queue);
 			if (precvframe_if2)
 			{
-				precvframe_if2->u.hdr.adapter = secondary_padapter;
+				precvframe_if2->adapter = secondary_padapter;
 
-				INIT_LIST_HEAD(&precvframe_if2->u.hdr.list);
-				precvframe_if2->u.hdr.precvbuf = NULL;	/* can't access the precvbuf for new arch. */
-				precvframe_if2->u.hdr.len=0;
+				INIT_LIST_HEAD(&precvframe_if2->list);
+				precvframe_if2->precvbuf = NULL;	/* can't access the precvbuf for new arch. */
+				precvframe_if2->len=0;
 
-				memcpy(&precvframe_if2->u.hdr.attrib, &precvframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib));
+				memcpy(&precvframe_if2->attrib, &precvframe->attrib, sizeof(struct rx_pkt_attrib));
 
-				pattrib = &precvframe_if2->u.hdr.attrib;
+				pattrib = &precvframe_if2->attrib;
 
 				/* 	Modified by Albert 20101213 */
 				/* 	For 8 bytes IP header alignment. */
@@ -559,13 +559,13 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 				if (pkt_copy)
 				{
 					pkt_copy->dev = secondary_padapter->pnetdev;
-					precvframe_if2->u.hdr.pkt = pkt_copy;
-					precvframe_if2->u.hdr.rx_head = pkt_copy->data;
-					precvframe_if2->u.hdr.rx_end = pkt_copy->data + alloc_sz;
+					precvframe_if2->pkt = pkt_copy;
+					precvframe_if2->rx_head = pkt_copy->data;
+					precvframe_if2->rx_end = pkt_copy->data + alloc_sz;
 					skb_reserve(pkt_copy, 8 - ((SIZE_PTR)(pkt_copy->data) & 7));/* force pkt_copy->data at 8-byte alignment address */
 					skb_reserve(pkt_copy, shift_sz);/* force ip_hdr at 8-byte alignment address according to shift_sz. */
 					memcpy(pkt_copy->data, pbuf, skb_len);
-					precvframe_if2->u.hdr.rx_data = precvframe_if2->u.hdr.rx_tail = pkt_copy->data;
+					precvframe_if2->rx_data = precvframe_if2->rx_tail = pkt_copy->data;
 				}
 
 				recvframe_put(precvframe_if2, skb_len);
@@ -601,7 +601,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 	struct recv_stat	*prxstat;
 	struct phy_stat	*pphy_info = NULL;
 	struct sk_buff *pkt_copy = NULL;
-	union recv_frame	*precvframe = NULL;
+	struct recv_frame_hdr	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
 	struct hal_data_8192du 		*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
@@ -629,13 +629,13 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 			goto _exit_recvbuf2recvframe;
 		}
 
-		INIT_LIST_HEAD(&precvframe->u.hdr.list);
-		precvframe->u.hdr.precvbuf = NULL;	/* can't access the precvbuf for new arch. */
-		precvframe->u.hdr.len=0;
+		INIT_LIST_HEAD(&precvframe->list);
+		precvframe->precvbuf = NULL;	/* can't access the precvbuf for new arch. */
+		precvframe->len=0;
 
 		rtl8192d_query_rx_desc_status(precvframe, prxstat);
 
-		pattrib = &precvframe->u.hdr.attrib;
+		pattrib = &precvframe->attrib;
 		if (pattrib->physt)
 		{
 			pphy_info = (struct phy_stat *)(pbuf + RXDESC_OFFSET);
@@ -686,22 +686,22 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct recv_buf *prec
 #endif
 		if (pkt_copy)
 		{
-			precvframe->u.hdr.pkt = pkt_copy;
-			precvframe->u.hdr.rx_head = pkt_copy->data;
-			precvframe->u.hdr.rx_end = pkt_copy->data + alloc_sz;
+			precvframe->pkt = pkt_copy;
+			precvframe->rx_head = pkt_copy->data;
+			precvframe->rx_end = pkt_copy->data + alloc_sz;
 			skb_reserve(pkt_copy, 8 - ((SIZE_PTR)(pkt_copy->data) & 7));/* force pkt_copy->data at 8-byte alignment address */
 			skb_reserve(pkt_copy, shift_sz);/* force ip_hdr at 8-byte alignment address according to shift_sz. */
 			memcpy(pkt_copy->data, (pbuf + pattrib->shift_sz + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
-			precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pkt_copy->data;
+			precvframe->rx_data = precvframe->rx_tail = pkt_copy->data;
 		}
 		else
 		{
 			DBG_8192D("recvbuf2recvframe:can not allocate memory for skb copy\n");
-			/* precvframe->u.hdr.pkt = skb_clone(pskb, GFP_ATOMIC); */
-			/* precvframe->u.hdr.rx_head = precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pbuf; */
-			/* precvframe->u.hdr.rx_end = pbuf + (pkt_offset>1612?pkt_offset:1612); */
+			/* precvframe->pkt = skb_clone(pskb, GFP_ATOMIC); */
+			/* precvframe->rx_head = precvframe->rx_data = precvframe->rx_tail = pbuf; */
+			/* precvframe->rx_end = pbuf + (pkt_offset>1612?pkt_offset:1612); */
 
-			precvframe->u.hdr.pkt = NULL;
+			precvframe->pkt = NULL;
 			rtw_free_recvframe(precvframe, pfree_recv_queue);
 
 			goto _exit_recvbuf2recvframe;
@@ -933,7 +933,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 	struct recv_stat	*prxstat;
 	struct phy_stat	*pphy_info = NULL;
 	struct sk_buff *pkt_copy = NULL;
-	union recv_frame	*precvframe = NULL;
+	struct recv_frame_hdr	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
 	struct hal_data_8192du 	*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
@@ -960,13 +960,13 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 			goto _exit_recvbuf2recvframe;
 		}
 
-		INIT_LIST_HEAD(&precvframe->u.hdr.list);
-		precvframe->u.hdr.precvbuf = NULL;	/* can't access the precvbuf for new arch. */
-		precvframe->u.hdr.len=0;
+		INIT_LIST_HEAD(&precvframe->list);
+		precvframe->precvbuf = NULL;	/* can't access the precvbuf for new arch. */
+		precvframe->len=0;
 
 		rtl8192d_query_rx_desc_status(precvframe, prxstat);
 
-		pattrib = &precvframe->u.hdr.attrib;
+		pattrib = &precvframe->attrib;
 		if (pattrib->physt)
 		{
 			pphy_info = (struct phy_stat *)(pbuf + RXDESC_OFFSET);
@@ -1017,21 +1017,21 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 #endif
 		if (pkt_copy)
 		{
-			precvframe->u.hdr.pkt = pkt_copy;
-			precvframe->u.hdr.rx_head = pkt_copy->data;
-			precvframe->u.hdr.rx_end = pkt_copy->data + alloc_sz;
+			precvframe->pkt = pkt_copy;
+			precvframe->rx_head = pkt_copy->data;
+			precvframe->rx_end = pkt_copy->data + alloc_sz;
 			skb_reserve(pkt_copy, 8 - ((SIZE_PTR)(pkt_copy->data) & 7));/* force pkt_copy->data at 8-byte alignment address */
 			skb_reserve(pkt_copy, shift_sz);/* force ip_hdr at 8-byte alignment address according to shift_sz. */
 			memcpy(pkt_copy->data, (pbuf + pattrib->shift_sz + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
-			precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pkt_copy->data;
+			precvframe->rx_data = precvframe->rx_tail = pkt_copy->data;
 		}
 		else
 		{
-			precvframe->u.hdr.pkt = skb_clone(pskb, GFP_ATOMIC);
+			precvframe->pkt = skb_clone(pskb, GFP_ATOMIC);
 			if (pkt_copy)
 			{
-				precvframe->u.hdr.rx_head = precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pbuf;
-				precvframe->u.hdr.rx_end = pbuf + alloc_sz;
+				precvframe->rx_head = precvframe->rx_data = precvframe->rx_tail = pbuf;
+				precvframe->rx_end = pbuf + alloc_sz;
 			}
 			else
 			{

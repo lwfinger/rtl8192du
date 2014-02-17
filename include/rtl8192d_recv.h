@@ -97,7 +97,7 @@ void rtl8192du_init_recvbuf(struct rtw_adapter *padapter, struct recv_buf *precv
 int	rtl8192du_init_recv_priv(struct rtw_adapter * padapter);
 void	rtl8192du_free_recv_priv(struct rtw_adapter * padapter);
 
-void rtl8192d_translate_rx_signal_stuff(union recv_frame *precvframe, struct phy_stat *pphy_info);
-void rtl8192d_query_rx_desc_status(union recv_frame *precvframe, struct recv_stat *pdesc);
+void rtl8192d_translate_rx_signal_stuff(struct recv_frame_hdr *precvframe, struct phy_stat *pphy_info);
+void rtl8192d_query_rx_desc_status(struct recv_frame_hdr *precvframe, struct recv_stat *pdesc);
 
 #endif

@@ -1348,7 +1348,7 @@ static int rtw_wx_set_wap(struct net_device *dev,
 		if ((rtw_end_of_queue_search(phead, pmlmepriv->pscanned)) == true)
 			break;
 
-		pnetwork = LIST_CONTAINOR(pmlmepriv->pscanned, struct wlan_network, list);
+		pnetwork = container_of(pmlmepriv->pscanned, struct wlan_network, list);
 
 		pmlmepriv->pscanned = get_next(pmlmepriv->pscanned);
 
@@ -1738,7 +1738,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 			break;
 		}
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 
 		/* report network only if the current channel set contains the channel to which this network belongs */
 		if (rtw_ch_set_search_ch(padapter->mlmeextpriv.channel_set, pnetwork->network.Configuration.DSConfig) >= 0
@@ -1895,7 +1895,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 				break;
 			}
 
-			pnetwork = LIST_CONTAINOR(pmlmepriv->pscanned, struct wlan_network, list);
+			pnetwork = container_of(pmlmepriv->pscanned, struct wlan_network, list);
 
 			pmlmepriv->pscanned = get_next(pmlmepriv->pscanned);
 
@@ -3105,7 +3105,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 		if (rtw_end_of_queue_search(phead, plist) == true)
 			break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 
 		if (hwaddr_aton_i(data, bssid)) {
 			DBG_8192D("Invalid BSSID '%s'.\n", (u8 *)data);
@@ -3714,7 +3714,7 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 	{
 		if (rtw_end_of_queue_search(phead, plist) == true) break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN))
 		{
 			u8 *wpsie;
@@ -3844,7 +3844,7 @@ static int rtw_p2p_get_go_device_address(struct net_device *dev,
 	{
 		if (rtw_end_of_queue_search(phead, plist) == true) break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN))
 		{
 			/*	Commented by Albert 2011/05/18 */
@@ -3934,7 +3934,7 @@ static int rtw_p2p_get_device_type(struct net_device *dev,
 	{
 		if (rtw_end_of_queue_search(phead, plist) == true) break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN))
 		{
 			u8 *wpsie;
@@ -4009,7 +4009,7 @@ static int rtw_p2p_get_device_name(struct net_device *dev,
 	{
 		if (rtw_end_of_queue_search(phead, plist) == true) break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN))
 		{
 			u8 *wpsie;
@@ -4081,7 +4081,7 @@ static int rtw_p2p_get_invitation_procedure(struct net_device *dev,
 	{
 		if (rtw_end_of_queue_search(phead, plist) == true) break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN))
 		{
 			/*	Commented by Albert 20121226 */
@@ -4187,7 +4187,7 @@ static int rtw_p2p_connect(struct net_device *dev,
 		if (rtw_end_of_queue_search(phead, plist) == true)
 			break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN)) {
 			uintPeerChannel = pnetwork->network.Configuration.DSConfig;
 			break;
@@ -4337,7 +4337,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 		if (rtw_end_of_queue_search(phead, plist) == true)
 			break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 
 		/*	Commented by Albert 2011/05/18 */
 		/*	Match the device address located in the P2P IE */
@@ -4596,7 +4596,7 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 		if (rtw_end_of_queue_search(phead, plist) == true)
 			break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 
 		/*	Commented by Albert 2011/05/18 */
 		/*	Match the device address located in the P2P IE */
@@ -4873,7 +4873,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 		if (uintPeerChannel != 0)
 			break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 
 		/*	Commented by Albert 2011/05/18 */
 		/*	Match the device address located in the P2P IE */
@@ -5606,7 +5606,7 @@ static int rtw_dbg_port(struct net_device *dev,
 
 							while ((rtw_end_of_queue_search(phead, plist)) == false)
 							{
-								psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
+								psta = container_of(plist, struct sta_info, hash_list);
 
 								plist = get_next(plist);
 
@@ -7608,7 +7608,7 @@ static int rtw_tdls_enable(struct net_device *dev,
 			plist = get_next(phead);
 
 			while ((rtw_end_of_queue_search(phead, plist)) == false) {
-				psta = LIST_CONTAINOR(plist, struct sta_info , hash_list);
+				psta = container_of(plist, struct sta_info , hash_list);
 
 				plist = get_next(plist);
 

@@ -202,7 +202,7 @@ struct wlan_network *_rtw_dequeue_network(struct __queue *queue)
 		pnetwork = NULL;
 	} else {
 		pnetwork =
-		    LIST_CONTAINOR(get_next(&queue->queue), struct wlan_network,
+		    container_of(get_next(&queue->queue), struct wlan_network,
 				   list);
 
 		rtw_list_delete(&(pnetwork->list));
@@ -231,7 +231,7 @@ struct wlan_network *_rtw_alloc_network(struct mlme_priv *pmlmepriv)
 	}
 	plist = get_next(&(free_queue->queue));
 
-	pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+	pnetwork = container_of(plist, struct wlan_network, list);
 
 	rtw_list_delete(&pnetwork->list);
 
@@ -345,7 +345,7 @@ struct wlan_network *_rtw_find_network(struct __queue *scanned_queue, u8 *addr)
 	plist = get_next(phead);
 
 	while (plist != phead) {
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 
 		if (_rtw_memcmp(addr, pnetwork->network.MacAddress, ETH_ALEN) ==
 		    true)
@@ -381,7 +381,7 @@ void _rtw_free_network_queue(struct rtw_adapter *padapter, u8 isfreeall)
 	plist = get_next(phead);
 
 	while (rtw_end_of_queue_search(phead, plist) == false) {
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 
 		plist = get_next(plist);
 
@@ -605,7 +605,7 @@ struct wlan_network *rtw_get_oldest_wlan_network(struct __queue *scanned_queue)
 		if (rtw_end_of_queue_search(phead, plist) == true)
 			break;
 
-		pwlan = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pwlan = container_of(plist, struct wlan_network, list);
 
 		if (pwlan->fixed != true) {
 			if (oldest == NULL ||
@@ -752,7 +752,7 @@ void rtw_update_scanned_network(struct rtw_adapter *adapter,
 		if (rtw_end_of_queue_search(phead, plist) == true)
 			break;
 
-		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
+		pnetwork = container_of(plist, struct wlan_network, list);
 
 		if ((unsigned long)(pnetwork) < 0x7ffffff) {
 		}
@@ -2447,7 +2447,7 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv)
 
 	while (!rtw_end_of_queue_search(phead, pmlmepriv->pscanned)) {
 		pnetwork =
-		    LIST_CONTAINOR(pmlmepriv->pscanned, struct wlan_network,
+		    container_of(pmlmepriv->pscanned, struct wlan_network,
 				   list);
 		if (pnetwork == NULL) {
 			RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_,

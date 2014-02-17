@@ -48,7 +48,7 @@ u8 str_2char2num(u8 hch, u8 lch);
 u8 str_2char2num(u8 hch, u8 lch);
 u8 key_2char2num(u8 hch, u8 lch);
 u8 convert_ip_addr(u8 hch, u8 mch, u8 lch);
-void process_wmmps_data(struct rtw_adapter *padapter, union recv_frame *precv_frame);
+void process_wmmps_data(struct rtw_adapter *padapter, struct recv_frame_hdr *precv_frame);
 
 #ifdef CONFIG_XMIT_ACK_POLLING
 s32 c2h_evt_hdl(struct rtw_adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter);

@@ -45,7 +45,6 @@ static u8 evm_db2percentage(s8 value)
 	return(ret_val);
 }
 
-
 static s32 signal_scale_mapping(struct rtw_adapter *padapter, s32 cur_sig)
 {
 	s32 ret_sig;
@@ -73,14 +72,12 @@ static s32  translate2dbm(u8 signal_strength_idx)
 {
 	s32	signal_power; /*  in dBm. */
 
-
 	/*  Translate to dBm (x=0.5y-95). */
 	signal_power = (s32)((signal_strength_idx + 1) >> 1);
 	signal_power -= 95;
 
 	return signal_power;
 }
-
 
 static void query_rx_phy_status(struct recv_frame_hdr *prframe, struct phy_stat *pphy_stat, bool bPacketMatchBSSID)
 {
@@ -97,7 +94,6 @@ static void query_rx_phy_status(struct recv_frame_hdr *prframe, struct phy_stat 
 	u8	tmp_rxsnr;
 	s8	rx_snrX;
 	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-
 
 	bcck_rate=(pattrib->mcs_rate<=3? 1:0);
 
@@ -301,7 +297,6 @@ static void query_rx_phy_status(struct recv_frame_hdr *prframe, struct phy_stat 
 			}
 		}
 
-
 		/*  */
 		/*  (2)PWDB, Average PWDB cacluated by hardware (for rate adaptive) */
 		/*  */
@@ -352,7 +347,6 @@ static void query_rx_phy_status(struct recv_frame_hdr *prframe, struct phy_stat 
 
 	}
 
-
 	/* UI BSS List signal strength(in percentage), make it good looking, from 0~100. */
 	/* It is assigned to the BSS List in GetValueFromBeaconOrProbeRsp(). */
 	if (bcck_rate)
@@ -367,7 +361,6 @@ static void query_rx_phy_status(struct recv_frame_hdr *prframe, struct phy_stat 
 		}
 	}
 }
-
 
 static void process_rssi(struct rtw_adapter *padapter,struct recv_frame_hdr *prframe)
 {
@@ -402,7 +395,6 @@ static void process_rssi(struct rtw_adapter *padapter,struct recv_frame_hdr *prf
 		if (padapter->recvpriv.signal_strength_data.index >= PHY_RSSI_SLID_WIN_MAX)
 			padapter->recvpriv.signal_strength_data.index = 0;
 
-
 		tmp_val = padapter->recvpriv.signal_strength_data.total_val/padapter->recvpriv.signal_strength_data.total_num;
 		padapter->recvpriv.signal_strength= tmp_val;
 		padapter->recvpriv.rssi=(s8)translate2dbm((u8)tmp_val);
@@ -411,7 +403,6 @@ static void process_rssi(struct rtw_adapter *padapter,struct recv_frame_hdr *prf
 	#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 	}
 }/*  Process_UI_RSSI_8192S */
-
 
 static void process_PWDB(struct rtw_adapter *padapter, struct recv_frame_hdr *prframe)
 {
@@ -462,7 +453,6 @@ static void process_PWDB(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 		}
 	}
 }
-
 
 static void process_link_qual(struct rtw_adapter *padapter,struct recv_frame_hdr *prframe)
 {
@@ -523,7 +513,6 @@ static void process_link_qual(struct rtw_adapter *padapter,struct recv_frame_hdr
 #endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 }/*  Process_UiLinkQuality8192S */
 
-
 static void process_phy_info(struct rtw_adapter *padapter, struct recv_frame_hdr *prframe)
 {
 	struct recv_frame_hdr *precvframe = (struct recv_frame_hdr *)prframe;
@@ -554,7 +543,6 @@ void rtl8192d_translate_rx_signal_stuff(struct recv_frame_hdr *precvframe, struc
 	{
 		bPacketMatchBSSID = ((!IsFrameTypeCtrl(precvframe->rx_data)) && !(pattrib->icv_err) && !(pattrib->crc_err) &&
 			_rtw_memcmp(get_hdr_bssid(precvframe->rx_data), get_my_bssid(&padapter->mlmeextpriv.mlmext_info.network), ETH_ALEN));
-
 
 		bPacketToSelf = bPacketMatchBSSID &&  (_rtw_memcmp(get_da(precvframe->rx_data), myid(&padapter->eeprompriv), ETH_ALEN));
 

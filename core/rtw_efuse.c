@@ -564,7 +564,6 @@ exit:
 	return ret;
 }
 
-
 /*-----------------------------------------------------------------------------
  * Function:	Efuse_ReadAllMap
  *
@@ -635,7 +634,6 @@ static void efuse_ShadowRead4Byte(struct rtw_adapter *adapter, u16 Offset, u32 *
 	*value |= pEEPROM->efuse_eeprom_data[Offset+2]<<16;
 	*value |= pEEPROM->efuse_eeprom_data[Offset+3]<<24;
 }	/*  efuse_ShadowRead4Byte */
-
 
 /*-----------------------------------------------------------------------------
  * Function:	efuse_ShadowWrite1Byte

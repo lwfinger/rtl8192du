@@ -50,7 +50,6 @@ void rtw_os_recv_resource_free(struct recv_priv *precvpriv)
 {
 }
 
-
 /* alloc os related resource in struct recv_buf */
 int rtw_os_recvbuf_resource_alloc(struct rtw_adapter *padapter, struct recv_buf *precvbuf)
 {
@@ -109,7 +108,6 @@ int rtw_os_recvbuf_resource_free(struct rtw_adapter *padapter, struct recv_buf *
 
 	if (precvbuf->pskb)
 		dev_kfree_skb_any(precvbuf->pskb);
-
 
 	return ret;
 }
@@ -201,7 +199,6 @@ void rtw_hostapd_mlme_rx(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 	skb->pkt_type = PACKET_OTHERHOST;
 	skb->protocol = __constant_htons(0x0003); /*ETH_P_80211_RAW*/
 
-
 	skb_reset_mac_header(skb);
 
        memset(skb->cb, 0, sizeof(skb->cb));
@@ -221,8 +218,6 @@ int rtw_recv_indicatepkt(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
 	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
 #endif
-
-
 
 	precvpriv = &(padapter->recvpriv);
 	pfree_recv_queue = &(precvpriv->free_recv_queue);
@@ -291,7 +286,6 @@ int rtw_recv_indicatepkt(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 					goto _recv_indicatepkt_end;
 			}
 
-
 		}
 	}
 
@@ -320,15 +314,12 @@ _recv_indicatepkt_end:
 
 	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("\n rtw_recv_indicatepkt :after netif_rx!!!!\n"));
 
-
-
         return _SUCCESS;
 
 _recv_indicatepkt_drop:
 
 	 /* enqueue back to free_recv_queue */
 	 rtw_free_recvframe(precv_frame, pfree_recv_queue);
-
 
 	 return _FAIL;
 }

@@ -60,16 +60,13 @@ struct rf_shadow_compare_map {
 };
 /*---------------------------Define Local Constant---------------------------*/
 
-
 /*------------------------Define global variable-----------------------------*/
 /*------------------------Define global variable-----------------------------*/
-
 
 /*------------------------Define local variable------------------------------*/
 /*  2008/11/20 MH For Debug only, RF */
 static	struct rf_shadow_compare_map RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
 /*------------------------Define local variable------------------------------*/
-
 
 /*-----------------------------------------------------------------------------
  * Function:	RF_ChangeTxPath
@@ -93,7 +90,6 @@ void rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	adapter,
 {
 /*  We do not support gain table change inACUT now !!!! Delete later !!! */
 }	/* RF_ChangeTxPath */
-
 
 /*-----------------------------------------------------------------------------
  * Function:    PHY_RF6052SetBandwidth()
@@ -140,7 +136,6 @@ rtl8192d_PHY_RF6052SetBandwidth(
 			break;
 	}
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:	PHY_RF6052SetCckTxPower
@@ -362,18 +357,15 @@ static void getTxPowerWriteValByRegulatory(
 					/*  increase power diff defined by customer. */
 				chnlGroup = 0;
 
-
 				if (index < 2)
 					pwr_diff = pHalData->TxPwrLegacyHtDiff[rf][Channel-1];
 				else if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
 					pwr_diff = pHalData->TxPwrHt20Diff[rf][Channel-1];
 
-
 				if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_40)
 					customer_pwr_limit = pHalData->PwrGroupHT40[rf][Channel-1];
 				else
 					customer_pwr_limit = pHalData->PwrGroupHT20[rf][Channel-1];
-
 
 				if (pwr_diff >= customer_pwr_limit)
 					pwr_diff = 0;
@@ -595,7 +587,6 @@ phy_RF6052_Config_ParaFile(
 	bool		bTrueBPath = false;/* vivi added this for read parameter from header, 20100908 */
 	u32	MaskforPhySet = 0; /* For 92d PHY cross access, 88c must set value 0. */
 
-
 #ifndef CONFIG_EMBEDDED_FWIMG
 	pszRadioAFile = sz92DRadioAFile;
 	pszRadioBFile = sz92DRadioBFile;
@@ -648,7 +639,6 @@ phy_RF6052_Config_ParaFile(
 			bTrueBPath = true;  /* vivi added this for read parameter from header, 20100909 */
 		}
 	}
-
 
 	/* 3----------------------------------------------------------------- */
 	/* 3 <2> Initialize RF */

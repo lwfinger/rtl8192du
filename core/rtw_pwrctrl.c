@@ -300,8 +300,6 @@ void rtw_set_rpwm(struct rtw_adapter *padapter, u8 pslv)
 	u8 rpwm;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 
-
-
 	pslv = PS_STATE(pslv);
 
 	if (pwrpriv->rpwm == pslv) {
@@ -336,7 +334,6 @@ void rtw_set_rpwm(struct rtw_adapter *padapter, u8 pslv)
 
 	if (!(rpwm & PS_ACK))
 		pwrpriv->cpwm = pslv;
-
 
 }
 
@@ -387,8 +384,6 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 	_list *plist, *phead;
 	struct sta_info *ptdls_sta;
 #endif /* CONFIG_TDLS */
-
-
 
 	RT_TRACE(_module_rtl871x_pwrctrl_c_, _drv_notice_,
 		 ("%s: PowerMode=%d Smart_PS=%d\n",
@@ -527,7 +522,6 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 		/*  */
 	}
 
-
 }
 
 /*  */
@@ -539,8 +533,6 @@ void rtw_lps_enter(struct rtw_adapter *padapter)
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct rtw_adapter *buddy = padapter->pbuddy_adapter;
-
-
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (padapter->iface_type != IFACE_PORT0)
@@ -594,7 +586,6 @@ void rtw_lps_enter(struct rtw_adapter *padapter)
 		}
 	}
 
-
 }
 
 /*  */
@@ -608,8 +599,6 @@ void rtw_lps_leave(struct rtw_adapter *padapter)
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	u32 start_time;
 	bool bAwake = false;
-
-
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (padapter->iface_type != IFACE_PORT0)
@@ -654,8 +643,6 @@ void LeaveAllPowerSaveMode(struct rtw_adapter *adapter)
 {
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 
-
-
 	/* DBG_8192D("%s.....\n",__func__); */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {	/* connect */
 #ifdef CONFIG_P2P_PS
@@ -682,7 +669,6 @@ void LeaveAllPowerSaveMode(struct rtw_adapter *adapter)
 		}
 	}
 
-
 }
 
 #ifdef CONFIG_LPS_LCLK
@@ -697,8 +683,6 @@ void cpwm_int_hdl(struct rtw_adapter *padapter,
 		  struct reportpwrstate_parm *preportpwrstate)
 {
 	struct pwrctrl_priv *pwrpriv;
-
-
 
 	pwrpriv = &padapter->pwrctrlpriv;
 	pwrpriv->cpwm = PS_STATE(preportpwrstate->state);
@@ -715,7 +699,6 @@ void cpwm_int_hdl(struct rtw_adapter *padapter,
 exit:
 	RT_TRACE(_module_rtl871x_pwrctrl_c_, _drv_notice_,
 		 ("cpwm_int_hdl: cpwm=0x%02x\n", pwrpriv->cpwm));
-
 
 }
 
@@ -748,8 +731,6 @@ s32 rtw_register_tx_alive(struct rtw_adapter *padapter)
 	s32 res;
 	struct pwrctrl_priv *pwrctrl;
 
-
-
 	res = _SUCCESS;
 	pwrctrl = &padapter->pwrctrlpriv;
 
@@ -770,8 +751,6 @@ s32 rtw_register_tx_alive(struct rtw_adapter *padapter)
 	}
 
 	_exit_pwrlock(&pwrctrl->lock);
-
-
 
 	return res;
 }
@@ -794,8 +773,6 @@ s32 rtw_register_cmd_alive(struct rtw_adapter *padapter)
 	s32 res;
 	struct pwrctrl_priv *pwrctrl;
 
-
-
 	res = _SUCCESS;
 	pwrctrl = &padapter->pwrctrlpriv;
 
@@ -817,8 +794,6 @@ s32 rtw_register_cmd_alive(struct rtw_adapter *padapter)
 
 	_exit_pwrlock(&pwrctrl->lock);
 
-
-
 	return res;
 }
 
@@ -835,8 +810,6 @@ s32 rtw_register_rx_alive(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
 
-
-
 	pwrctrl = &padapter->pwrctrlpriv;
 
 	_enter_pwrlock(&pwrctrl->lock);
@@ -847,8 +820,6 @@ s32 rtw_register_rx_alive(struct rtw_adapter *padapter)
 		  pwrctrl->cpwm, pwrctrl->alives));
 
 	_exit_pwrlock(&pwrctrl->lock);
-
-
 
 	return _SUCCESS;
 }
@@ -866,8 +837,6 @@ s32 rtw_register_evt_alive(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
 
-
-
 	pwrctrl = &padapter->pwrctrlpriv;
 
 	_enter_pwrlock(&pwrctrl->lock);
@@ -878,8 +847,6 @@ s32 rtw_register_evt_alive(struct rtw_adapter *padapter)
 		  pwrctrl->cpwm, pwrctrl->alives));
 
 	_exit_pwrlock(&pwrctrl->lock);
-
-
 
 	return _SUCCESS;
 }
@@ -894,8 +861,6 @@ s32 rtw_register_evt_alive(struct rtw_adapter *padapter)
 void rtw_unregister_tx_alive(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
-
-
 
 	pwrctrl = &padapter->pwrctrlpriv;
 
@@ -915,7 +880,6 @@ void rtw_unregister_tx_alive(struct rtw_adapter *padapter)
 
 	_exit_pwrlock(&pwrctrl->lock);
 
-
 }
 
 /*
@@ -928,8 +892,6 @@ void rtw_unregister_tx_alive(struct rtw_adapter *padapter)
 void rtw_unregister_cmd_alive(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
-
-
 
 	pwrctrl = &padapter->pwrctrlpriv;
 
@@ -949,7 +911,6 @@ void rtw_unregister_cmd_alive(struct rtw_adapter *padapter)
 
 	_exit_pwrlock(&pwrctrl->lock);
 
-
 }
 
 /*
@@ -958,8 +919,6 @@ void rtw_unregister_cmd_alive(struct rtw_adapter *padapter)
 void rtw_unregister_rx_alive(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
-
-
 
 	pwrctrl = &padapter->pwrctrlpriv;
 
@@ -973,14 +932,11 @@ void rtw_unregister_rx_alive(struct rtw_adapter *padapter)
 
 	_exit_pwrlock(&pwrctrl->lock);
 
-
 }
 
 void rtw_unregister_evt_alive(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
-
-
 
 	pwrctrl = &padapter->pwrctrlpriv;
 
@@ -992,7 +948,6 @@ void rtw_unregister_evt_alive(struct rtw_adapter *padapter)
 
 	_exit_pwrlock(&pwrctrl->lock);
 
-
 }
 #endif /* CONFIG_LPS_LCLK */
 
@@ -1003,8 +958,6 @@ static void resume_workitem_callback(struct work_struct *work);
 void rtw_init_pwrctrl_priv(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrlpriv = &padapter->pwrctrlpriv;
-
-
 
 	_init_pwrlock(&pwrctrlpriv->lock);
 	pwrctrlpriv->rf_pwrstate = rf_on;
@@ -1057,13 +1010,11 @@ void rtw_init_pwrctrl_priv(struct rtw_adapter *padapter)
 	rtw_register_early_suspend(pwrctrlpriv);
 #endif /* CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER */
 
-
 }
 
 void rtw_free_pwrctrl_priv(struct rtw_adapter *adapter)
 {
 	struct pwrctrl_priv *pwrctrlpriv = &adapter->pwrctrlpriv;
-
 
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 	if (pwrctrlpriv->rtw_workqueue) {
@@ -1077,7 +1028,6 @@ void rtw_free_pwrctrl_priv(struct rtw_adapter *adapter)
 #endif /* CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER */
 
 	_free_pwrlock(&pwrctrlpriv->lock);
-
 
 }
 

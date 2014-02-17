@@ -615,7 +615,6 @@ void issue_tdls_teardown(_adapter *padapter, u8 *mac_addr)
 		rtw_tdls_cmd(padapter, mac_addr, TDLS_FREE_STA);
 	}
 
-
 exit:
 
 	return;
@@ -895,7 +894,6 @@ void issue_tdls_ch_switch_rsp(_adapter *padapter, u8 *mac_addr)
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 
-
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL)
 		return;
@@ -937,7 +935,6 @@ int On_TDLS_Dis_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 	struct tdls_info *ptdlsinfo = &(adapter->tdlsinfo);
 	u8 empty_addr[ETH_ALEN] = { 0x00 };
 	int UndecoratedSmoothedPWDB;
-
 
 	/* WFDTDLS: for sigma test, not to setup direct link automatically */
 	ptdlsinfo->dev_discovered = 1;
@@ -1909,7 +1906,6 @@ void rtw_build_tdls_setup_req_ies(_adapter *padapter, struct xmit_frame *pxmitfr
 
 	/* QoS capability(WMM_IE) */
 	pframe = rtw_set_ie(pframe, _VENDOR_SPECIFIC_IE_, 7, TDLS_WMMIE,  &(pattrib->pktlen));
-
 
 	if (pattrib->encrypt) {
 		/* FTIE */

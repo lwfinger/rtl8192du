@@ -11249,8 +11249,6 @@ u8 set_tx_beacon_cmd(struct rtw_adapter *adapt)
 	u8 res = _SUCCESS;
 	int len_diff = 0;
 
-
-
 	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
@@ -11279,8 +11277,6 @@ u8 set_tx_beacon_cmd(struct rtw_adapter *adapt)
 	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
 
 exit:
-
-
 
 	return res;
 }

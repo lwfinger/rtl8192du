@@ -34,7 +34,6 @@ atomic_t GlobalCounterForMutex = ATOMIC_INIT(0);
 bool GlobalFirstConfigurationForNormalChip = true;
 #endif
 
-
 static bool
 _IsFWDownloaded(
 	struct rtw_adapter *			adapter
@@ -525,7 +524,6 @@ InitializeFirmwareVars92D(
 	pHalData->LastHMEBoxNum = 0;
 }
 
-
 /*  */
 
 /*  */
@@ -566,7 +564,6 @@ SetFwRelatedForWoWLAN8192DU(
 		/*  2. Re-Init the variables about Fw related setting. */
 		/*  */
 		InitializeFirmwareVars92D(padapter);
-
 
 	}
 }
@@ -1053,7 +1050,6 @@ PHY_CheckPowerOffFor8192D(
 	return true;
 }
 
-
 /************************************************************
 Function: Synchrosize for power off/on with dual mac
 *************************************************************/
@@ -1123,7 +1119,6 @@ PHY_SetPowerOnFor8192D(
 
 void rtl8192d_free_hal_data(struct rtw_adapter * padapter)
 {
-
 
 	DBG_8192D("===== rtl8192du_free_hal_data =====\n");
 
@@ -1224,7 +1219,6 @@ ReadEFuse_RTL8192D(
 		for (j = 0; j < EFUSE_MAX_WORD_UNIT; j++)
 			eFuseWord[i][j] = 0xFFFF;
 
-
 	/*  */
 	/*  1. Read the first byte to check if efuse is empty!!! */
 	/*  */
@@ -1290,7 +1284,6 @@ ReadEFuse_RTL8192D(
 					eFuse_Addr++;
 					efuse_utilized++;
 					eFuseWord[offset][i] = (*rtemp8 & 0xff);
-
 
 					if (eFuse_Addr >= EFUSE_REAL_CONTENT_LEN)
 						break;
@@ -1568,7 +1561,6 @@ rtl8192d_Efuse_PgPacketRead(	struct rtw_adapter *	adapter,
 	if (data==NULL)	return false;
 	if (offset>=EFUSE_MAX_SECTION)		return false;
 
-
 	memset((void *)data, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
 	memset((void *)tmpdata, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
 
@@ -1706,7 +1698,6 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	adapter,
 
 	efuse_WordEnableDataRead(word_en, data, target_pkt.data);
 	target_word_cnts = Efuse_CalculateWordCnts(target_pkt.word_en);
-
 
 	/*  */
 	/*  <Roger_Notes> Efuse has been pre-programmed dummy 5Bytes at the end of Efuse by CP. */

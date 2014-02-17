@@ -587,8 +587,6 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 	struct wifidirect_info* pwdinfo = &padapter->wdinfo;
 #endif /* CONFIG_P2P */
 
-
-
 	param->u.crypt.err = 0;
 	param->u.crypt.alg[IEEE_CRYPT_ALG_NAME_LEN - 1] = '\0';
 
@@ -743,8 +741,6 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 exit:
 
 	kfree(pwep);
-
-
 
 	return ret;
 }
@@ -918,8 +914,6 @@ static int rtw_wx_get_name(struct net_device *dev,
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("cmd_code =%x\n", info->cmd));
 
-
-
 	if (check_fwstate(pmlmepriv, _FW_LINKED|WIFI_ADHOC_MASTER_STATE)) {
 		/* parsing HT_CAP_IE */
 		p = rtw_get_ie(&pcur_bss->IEs[12], _HT_CAPABILITY_IE_, &ht_ielen, pcur_bss->IELength-12);
@@ -955,8 +949,6 @@ static int rtw_wx_get_name(struct net_device *dev,
 		snprintf(wrqu->name, IFNAMSIZ, "unassociated");
 	}
 
-
-
 	return 0;
 }
 
@@ -965,10 +957,7 @@ static int rtw_wx_set_freq(struct net_device *dev,
 			   union iwreq_data *wrqu, char *extra)
 {
 
-
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_notice_, ("+rtw_wx_set_freq\n"));
-
-
 
 	return 0;
 }
@@ -1002,7 +991,6 @@ static int rtw_wx_set_mode(struct net_device *dev, struct iw_request_info *a,
 	int ret = 0;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct __queue *queue = &pmlmepriv->scanned_queue;
-
 
 	if (_FAIL == rtw_pwr_wakeup(padapter)) {
 		ret = -EPERM;
@@ -1055,8 +1043,6 @@ static int rtw_wx_set_mode(struct net_device *dev, struct iw_request_info *a,
 
 exit:
 
-
-
 	return ret;
 }
 
@@ -1068,8 +1054,6 @@ static int rtw_wx_get_mode(struct net_device *dev, struct iw_request_info *a,
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, (" rtw_wx_get_mode\n"));
 
-
-
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) == true)
 		wrqu->mode = IW_MODE_INFRA;
 	else if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true) ||
@@ -1079,8 +1063,6 @@ static int rtw_wx_get_mode(struct net_device *dev, struct iw_request_info *a,
 		wrqu->mode = IW_MODE_MASTER;
 	else
 		wrqu->mode = IW_MODE_AUTO;
-
-
 
 	return 0;
 }
@@ -1175,8 +1157,6 @@ static int rtw_wx_get_range(struct net_device *dev,
 	u16 val;
 	int i;
 
-
-
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_get_range. cmd_code =%x\n", info->cmd));
 
 	wrqu->data.length = sizeof(*range);
@@ -1266,8 +1246,6 @@ static int rtw_wx_get_range(struct net_device *dev,
 					IW_SCAN_CAPA_CHANNEL|IW_SCAN_CAPA_MODE|IW_SCAN_CAPA_RATE;
 #endif
 
-
-
 	return 0;
 }
 
@@ -1290,7 +1268,6 @@ static int rtw_wx_set_wap(struct net_device *dev,
 	struct __queue *queue = &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;
 	enum NDIS_802_11_AUTHENTICATION_MODE	authmode;
-
 
 /*
 #ifdef CONFIG_CONCURRENT_MODE
@@ -1378,8 +1355,6 @@ static int rtw_wx_set_wap(struct net_device *dev,
 
 exit:
 
-
-
 	return ret;
 }
 
@@ -1398,8 +1373,6 @@ static int rtw_wx_get_wap(struct net_device *dev,
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_get_wap\n"));
 
-
-
 	if  (((check_fwstate(pmlmepriv, _FW_LINKED)) == true) ||
 			((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)) == true) ||
 			((check_fwstate(pmlmepriv, WIFI_AP_STATE)) == true))
@@ -1411,8 +1384,6 @@ static int rtw_wx_get_wap(struct net_device *dev,
 	{
 		memset(wrqu->ap_addr.sa_data, 0, ETH_ALEN);
 	}
-
-
 
 	return 0;
 }
@@ -1462,8 +1433,6 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
 #endif /* CONFIG_P2P */
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_set_scan\n"));
-
-
 
 	#ifdef DBG_IOCTL
 	DBG_8192D("DBG_IOCTL %s:%d\n", __func__, __LINE__);
@@ -1640,8 +1609,6 @@ exit:
 	DBG_8192D("DBG_IOCTL %s:%d return %d\n", __func__, __LINE__, ret);
 	#endif
 
-
-
 	return ret;
 }
 
@@ -1666,8 +1633,6 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 #endif /* CONFIG_P2P */
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_get_scan\n"));
 	RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_info_, (" Start of Query SIOCGIWSCAN .\n"));
-
-
 
 	#ifdef DBG_IOCTL
 	DBG_8192D("DBG_IOCTL %s:%d\n", __func__, __LINE__);
@@ -1761,8 +1726,6 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 
 exit:
 
-
-
 	#ifdef DBG_IOCTL
 	DBG_8192D("DBG_IOCTL %s:%d return %d\n", __func__, __LINE__, ret);
 	#endif
@@ -1791,8 +1754,6 @@ static int rtw_wx_set_essid(struct net_device *dev,
 	u8 *dst_ssid, *src_ssid;
 
 	uint ret = 0, len;
-
-
 
 	#ifdef DBG_IOCTL
 	DBG_8192D("DBG_IOCTL %s:%d\n", __func__, __LINE__);
@@ -1945,8 +1906,6 @@ exit:
 	DBG_8192D("DBG_IOCTL %s:%d return %d\n", __func__, __LINE__, ret);
 	#endif
 
-
-
 	return ret;
 }
 
@@ -1960,8 +1919,6 @@ static int rtw_wx_get_essid(struct net_device *dev,
 	struct wlan_bssid_ex *pcur_bss = &pmlmepriv->cur_network.network;
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_get_essid\n"));
-
-
 
 	if ((check_fwstate(pmlmepriv, _FW_LINKED) == true) ||
 	      (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true))
@@ -1982,8 +1939,6 @@ static int rtw_wx_get_essid(struct net_device *dev,
 
 exit:
 
-
-
 	return ret;
 }
 
@@ -1998,8 +1953,6 @@ static int rtw_wx_set_rate(struct net_device *dev,
 	u32	fixed = wrqu->bitrate.fixed;
 	u32	ratevalue = 0;
 	 u8 mpdatarate[NUMRATES]={11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0xff};
-
-
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, (" rtw_wx_set_rate\n"));
 	RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_info_, ("target_rate = %d, fixed = %d\n", target_rate, fixed));
@@ -2071,8 +2024,6 @@ set_rate:
 		ret = -1;
 	}
 
-
-
 	return ret;
 }
 
@@ -2099,8 +2050,6 @@ static int rtw_wx_set_rts(struct net_device *dev,
 {
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 
-
-
 	if (wrqu->rts.disabled)
 		padapter->registrypriv.rts_thresh = 2347;
 	else {
@@ -2113,8 +2062,6 @@ static int rtw_wx_set_rts(struct net_device *dev,
 
 	DBG_8192D("%s, rts_thresh =%d\n", __func__, padapter->registrypriv.rts_thresh);
 
-
-
 	return 0;
 }
 
@@ -2124,14 +2071,10 @@ static int rtw_wx_get_rts(struct net_device *dev,
 {
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 
-
-
 	DBG_8192D("%s, rts_thresh =%d\n", __func__, padapter->registrypriv.rts_thresh);
 
 	wrqu->rts.value = padapter->registrypriv.rts_thresh;
 	wrqu->rts.fixed = 0;	/* no auto select */
-
-
 
 	return 0;
 }
@@ -2141,8 +2084,6 @@ static int rtw_wx_set_frag(struct net_device *dev,
 			     union iwreq_data *wrqu, char *extra)
 {
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-
-
 
 	if (wrqu->frag.disabled)
 		padapter->xmitpriv.frag_len = MAX_FRAG_THRESHOLD;
@@ -2156,8 +2097,6 @@ static int rtw_wx_set_frag(struct net_device *dev,
 
 	DBG_8192D("%s, frag_len =%d\n", __func__, padapter->xmitpriv.frag_len);
 
-
-
 	return 0;
 }
 
@@ -2167,14 +2106,10 @@ static int rtw_wx_get_frag(struct net_device *dev,
 {
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 
-
-
 	DBG_8192D("%s, frag_len =%d\n", __func__, padapter->xmitpriv.frag_len);
 
 	wrqu->frag.value = padapter->xmitpriv.frag_len;
 	wrqu->frag.fixed = 0;	/* no auto select */
-
-
 
 	return 0;
 }
@@ -2207,8 +2142,6 @@ static int rtw_wx_set_enc(struct net_device *dev,
 	memset(&wep, 0, sizeof(struct ndis_802_11_wep));
 
 	key = erq->flags & IW_ENCODE_INDEX;
-
-
 
 	if (erq->flags & IW_ENCODE_DISABLED)
 	{
@@ -2321,8 +2254,6 @@ static int rtw_wx_set_enc(struct net_device *dev,
 
 exit:
 
-
-
 	return ret;
 }
 
@@ -2334,8 +2265,6 @@ static int rtw_wx_get_enc(struct net_device *dev,
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct iw_point *erq = &(wrqu->encoding);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-
-
 
 	if (check_fwstate(pmlmepriv, _FW_LINKED) != true)
 	{
@@ -2412,8 +2341,6 @@ static int rtw_wx_get_enc(struct net_device *dev,
 		break;
 
 	}
-
-
 
 	return ret;
 }
@@ -5629,7 +5556,6 @@ static int rtw_dbg_port(struct net_device *dev,
 #endif
 									DBG_8192D("dot118021XPrivacy = 0x%x\n", psta->dot118021XPrivacy);
 
-
 									for (j = 0;j<16;j++)
 									{
 										preorder_ctrl = &psta->recvreorder_ctrl[j];
@@ -5908,7 +5834,6 @@ static int wpa_set_param(struct net_device *dev, u8 name, u32 value)
 		break;
 
 	default:
-
 
 		ret = -EOPNOTSUPP;
 

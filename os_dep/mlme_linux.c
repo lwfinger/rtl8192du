@@ -14,7 +14,6 @@
  *
  ******************************************************************************/
 
-
 #define _MLME_OSDEP_C_
 
 #include <drv_conf.h>
@@ -28,13 +27,11 @@ void rtw_join_timeout_handler (void *FunctionContext)
 	_rtw_join_timeout_handler(adapter);
 }
 
-
 void _rtw_scan_timeout_handler (void *FunctionContext)
 {
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
 	rtw_scan_timeout_handler(adapter);
 }
-
 
 static void _dynamic_check_timer_handlder (void *FunctionContext)
 {
@@ -53,7 +50,6 @@ void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
 }
 #endif
 
-
 void rtw_init_mlme_timer(struct rtw_adapter *padapter)
 {
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -71,8 +67,6 @@ void rtw_init_mlme_timer(struct rtw_adapter *padapter)
 void rtw_os_indicate_connect(struct rtw_adapter *adapter)
 {
 
-
-
 #ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_indicate_connect(adapter);
 #endif /* CONFIG_IOCTL_CFG80211 */
@@ -82,7 +76,6 @@ void rtw_os_indicate_connect(struct rtw_adapter *adapter)
 
 	if (adapter->pid[2] !=0)
 		rtw_signal_process(adapter->pid[2], SIGALRM);
-
 
 }
 
@@ -149,8 +142,6 @@ void rtw_reset_securitypriv(struct rtw_adapter *adapter)
 void rtw_os_indicate_disconnect(struct rtw_adapter *adapter)
 {
 
-
-
 	netif_carrier_off(adapter->pnetdev); /*  Do it first for tx broadcast pkt after disconnection issue! */
 
 #ifdef CONFIG_IOCTL_CFG80211
@@ -161,7 +152,6 @@ void rtw_os_indicate_disconnect(struct rtw_adapter *adapter)
 
 	 rtw_reset_securitypriv(adapter);
 
-
 }
 
 void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie)
@@ -170,13 +160,10 @@ void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie)
 	u8	*buff,*p,i;
 	union iwreq_data wrqu;
 
-
-
 	RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("+rtw_report_sec_ie, authmode=%d\n", authmode));
 
 	buff = NULL;
-	if (authmode==_WPA_IE_ID_)
-	{
+	if (authmode==_WPA_IE_ID_) {
 		RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("rtw_report_sec_ie, authmode=%d\n", authmode));
 
 		buff = kmalloc(IW_CUSTOM_MAX, GFP_KERNEL);
@@ -207,7 +194,6 @@ void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie)
 		kfree(buff);
 
 	}
-
 
 }
 
@@ -274,7 +260,6 @@ void rtw_indicate_sta_assoc_event(struct rtw_adapter *padapter, struct sta_info 
 	if (pstapriv->sta_aid[psta->aid - 1] != psta)
 		return;
 
-
 	wrqu.addr.sa_family = ARPHRD_ETHER;
 
 	memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
@@ -298,7 +283,6 @@ void rtw_indicate_sta_disassoc_event(struct rtw_adapter *padapter, struct sta_in
 	if (pstapriv->sta_aid[psta->aid - 1] != psta)
 		return;
 
-
 	wrqu.addr.sa_family = ARPHRD_ETHER;
 
 	memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
@@ -307,7 +291,6 @@ void rtw_indicate_sta_disassoc_event(struct rtw_adapter *padapter, struct sta_in
 
 	wireless_send_event(padapter->pnetdev, IWEVEXPIRED, &wrqu, NULL);
 }
-
 
 #ifdef CONFIG_HOSTAPD_MLME
 
@@ -325,14 +308,12 @@ static int mgnt_netdev_open(struct net_device *pnetdev)
 
 	DBG_8192D("mgnt_netdev_open: MAC Address:%pM\n", pnetdev->dev_addr);
 
-
 	init_usb_anchor(&phostapdpriv->anchored);
 
 	if (!netif_queue_stopped(pnetdev))
 		netif_start_queue(pnetdev);
 	else
 		netif_wake_queue(pnetdev);
-
 
 	netif_carrier_on(pnetdev);
 
@@ -350,7 +331,6 @@ static int mgnt_netdev_close(struct net_device *pnetdev)
 
 	if (!rtw_netif_queue_stopped(pnetdev))
 		rtw_netif_stop_queue(pnetdev);
-
 
 	return 0;
 }
@@ -375,12 +355,10 @@ int hostapd_mode_init(struct rtw_adapter *padapter)
 
        ether_setup(pnetdev);
 
-
 	phostapdpriv = rtw_netdev_priv(pnetdev);
 	phostapdpriv->pmgnt_netdev = pnetdev;
 	phostapdpriv->padapter= padapter;
 	padapter->phostapdpriv = phostapdpriv;
-
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
 
@@ -406,7 +384,6 @@ int hostapd_mode_init(struct rtw_adapter *padapter)
 	if (dev_alloc_name(pnetdev,"mgnt.wlan%d") < 0)
 		DBG_8192D("hostapd_mode_init(): dev_alloc_name, fail!\n");
 
-
 	mac[0]=0x00;
 	mac[1]=0xe0;
 	mac[2]=0x4c;
@@ -416,9 +393,7 @@ int hostapd_mode_init(struct rtw_adapter *padapter)
 
 	memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
 
-
 	netif_carrier_off(pnetdev);
-
 
 	/* Tell the network stack we exist */
 	if (register_netdev(pnetdev) != 0)

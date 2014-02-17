@@ -31,7 +31,6 @@ static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
 static int rtw_resume(struct usb_interface *intf);
 int rtw_resume_process(struct rtw_adapter *padapter);
 
-
 static int rtw_drv_init(struct usb_interface *pusb_intf,const struct usb_device_id *pdid);
 static void rtw_dev_remove(struct usb_interface *pusb_intf);
 
@@ -252,7 +251,6 @@ static u8 rtw_init_intf_priv(struct dvobj_priv *dvobj)
 	_rtw_mutex_init(&dvobj->usb_vendor_req_mutex);
 	#endif
 
-
 	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
 	dvobj->usb_alloc_vendor_req_buf = kzalloc(MAX_USB_IO_CTL_SIZE, GFP_KERNEL);
 	if (dvobj->usb_alloc_vendor_req_buf == NULL) {
@@ -297,8 +295,6 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 	struct usb_host_endpoint		*phost_endp;
 	struct usb_endpoint_descriptor	*pendp_desc;
 
-
-
 	pdvobjpriv = (struct dvobj_priv*)kzalloc(sizeof(*pdvobjpriv), GFP_KERNEL);
 	if (!pdvobjpriv)
 		goto exit;
@@ -307,7 +303,6 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 	_rtw_mutex_init(&pdvobjpriv->h2c_fwcmd_mutex);
 	_rtw_mutex_init(&pdvobjpriv->setch_mutex);
 	_rtw_mutex_init(&pdvobjpriv->setbw_mutex);
-
 
 	pdvobjpriv->pusbintf = usb_intf ;
 	pusbd = pdvobjpriv->pusbdev = interface_to_usbdev(usb_intf);
@@ -395,8 +390,6 @@ static void usb_dvobj_deinit(struct usb_interface *usb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(usb_intf);
 
-
-
 	usb_set_intfdata(usb_intf, NULL);
 	if (dvobj) {
 		/* Modify condition for 92DU DMDP 2010.11.18, by Thomas */
@@ -409,7 +402,6 @@ static void usb_dvobj_deinit(struct usb_interface *usb_intf)
 	}
 
 	usb_put_dev(interface_to_usbdev(usb_intf));
-
 
 }
 
@@ -478,7 +470,6 @@ static void rtw_dev_unload(struct rtw_adapter *padapter)
 		if (!padapter->pwrctrlpriv.bInternalAutoSuspend)
 		rtw_stop_drv_threads(padapter);
 
-
 		/* s5. */
 		if (padapter->bSurpriseRemoved == false)
 		{
@@ -541,8 +532,6 @@ int rtw_hw_suspend(struct rtw_adapter *padapter)
 	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
 	struct net_device *pnetdev = padapter->pnetdev;
 
-
-
 	if ((!padapter->bup) || (padapter->bDriverStopped)||(padapter->bSurpriseRemoved))
 	{
 		DBG_8192D("padapter->bup=%d bDriverStopped=%d bSurpriseRemoved = %d\n",
@@ -602,7 +591,6 @@ int rtw_hw_suspend(struct rtw_adapter *padapter)
 	else
 		goto error_exit;
 
-
 	return 0;
 
 error_exit:
@@ -615,8 +603,6 @@ int rtw_hw_resume(struct rtw_adapter *padapter)
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
 	struct net_device *pnetdev = padapter->pnetdev;
-
-
 
 	if (padapter)/* system resume */
 	{
@@ -652,8 +638,6 @@ int rtw_hw_resume(struct rtw_adapter *padapter)
 		goto error_exit;
 	}
 
-
-
 	return 0;
 error_exit:
 	DBG_8192D("%s, Open net dev failed\n",__func__);
@@ -674,7 +658,6 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 #endif /*  CONFIG_WOWLAN */
 	int ret = 0;
 	u32 start_time = rtw_get_current_time();
-
 
 	DBG_8192D("==> %s (%s:%d)\n",__func__, current->comm, current->pid);
 
@@ -761,7 +744,6 @@ exit:
 	DBG_8192D("<===  %s return %d.............. in %dms\n", __func__
 		, ret, rtw_get_passing_time_ms(start_time));
 
-
 	return ret;
 }
 
@@ -801,7 +783,6 @@ int rtw_resume_process(struct rtw_adapter *padapter)
 	struct pwrctrl_priv *pwrpriv = NULL;
 	int ret = -1;
 	u32 start_time = rtw_get_current_time();
-
 
 	DBG_8192D("==> %s (%s:%d)\n",__func__, current->comm, current->pid);
 
@@ -881,8 +862,6 @@ exit:
 	DBG_8192D("<===  %s return %d.............. in %dms\n", __func__
 		, ret, rtw_get_passing_time_ms(start_time));
 
-
-
 	return ret;
 }
 
@@ -928,7 +907,6 @@ int autoresume_enter(struct rtw_adapter* padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
-
 
 	DBG_8192D("====> autoresume_enter\n");
 
@@ -1144,7 +1122,6 @@ static void rtw_usb_if1_deinit(struct rtw_adapter *if1)
 	if (check_fwstate(pmlmepriv, _FW_LINKED))
 		rtw_disassoc_cmd(if1, 0, false);
 
-
 #ifdef CONFIG_AP_MODE
 	free_mlme_ap_info(if1);
 	#ifdef CONFIG_HOSTAPD_MLME
@@ -1202,7 +1179,6 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 
 	RT_TRACE(_module_hci_intfs_c_, _drv_err_, ("+rtw_drv_init\n"));
 
-
 	/* step 0. */
 	process_spec_devid(did);
 
@@ -1258,8 +1234,6 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
 	struct rtw_adapter *padapter = dvobj->if1;
-
-
 
 	DBG_8192D("+rtw_dev_remove\n");
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+dev_remove()\n"));
@@ -1331,7 +1305,6 @@ static void __exit rtw_drv_halt(void)
 
 	DBG_8192D("-rtw_drv_halt\n");
 }
-
 
 module_init(rtw_drv_entry);
 module_exit(rtw_drv_halt);

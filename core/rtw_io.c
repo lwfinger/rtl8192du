@@ -23,7 +23,6 @@ b. provides the protocol engine
 
 c. provides the software interface between caller and the hardware interface
 
-
 Compiler Flag Option:
 
 1. default USB configuration
@@ -96,7 +95,6 @@ int _rtw_write8(struct rtw_adapter *adapter, u32 addr, u8 val)
 
 	ret = _write8(pintfhdl, addr, val);
 
-
 	return RTW_STATUS_CODE(ret);
 }
 
@@ -111,7 +109,6 @@ int _rtw_write16(struct rtw_adapter *adapter, u32 addr, u16 val)
 
 	ret = _write16(pintfhdl, addr, val);
 
-
 	return RTW_STATUS_CODE(ret);
 }
 int _rtw_write32(struct rtw_adapter *adapter, u32 addr, u32 val)
@@ -124,7 +121,6 @@ int _rtw_write32(struct rtw_adapter *adapter, u32 addr, u32 val)
 	_write32 = pintfhdl->io_ops._write32;
 
 	ret = _write32(pintfhdl, addr, val);
-
 
 	return RTW_STATUS_CODE(ret);
 }
@@ -141,7 +137,6 @@ int _rtw_writeN(struct rtw_adapter *adapter, u32 addr, u32 length, u8 *pdata)
 
 	ret = _writeN(pintfhdl, addr, length, pdata);
 
-
 	return RTW_STATUS_CODE(ret);
 }
 int _rtw_write8_async(struct rtw_adapter *adapter, u32 addr, u8 val)
@@ -154,7 +149,6 @@ int _rtw_write8_async(struct rtw_adapter *adapter, u32 addr, u8 val)
 	_write8_async = pintfhdl->io_ops._write8_async;
 
 	ret = _write8_async(pintfhdl, addr, val);
-
 
 	return RTW_STATUS_CODE(ret);
 }
@@ -169,7 +163,6 @@ int _rtw_write16_async(struct rtw_adapter *adapter, u32 addr, u16 val)
 
 	ret = _write16_async(pintfhdl, addr, val);
 
-
 	return RTW_STATUS_CODE(ret);
 }
 int _rtw_write32_async(struct rtw_adapter *adapter, u32 addr, u32 val)
@@ -183,7 +176,6 @@ int _rtw_write32_async(struct rtw_adapter *adapter, u32 addr, u32 val)
 
 	ret = _write32_async(pintfhdl, addr, val);
 
-
 	return RTW_STATUS_CODE(ret);
 }
 
@@ -193,8 +185,6 @@ void _rtw_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 			  u32 cnt, u8 *pmem);
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
-
-
 
 	if ((adapter->bDriverStopped == true) ||
 	    (adapter->bSurpriseRemoved == true)) {
@@ -208,7 +198,6 @@ void _rtw_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 	_read_mem(pintfhdl, addr, cnt, pmem);
 
-
 }
 
 void _rtw_write_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
@@ -218,12 +207,9 @@ void _rtw_write_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl *pintfhdl = &(pio_priv->intf);
 
-
-
 	_write_mem = pintfhdl->io_ops._write_mem;
 
 	_write_mem(pintfhdl, addr, cnt, pmem);
-
 
 }
 
@@ -233,8 +219,6 @@ void _rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 			  u32 cnt, u8 *pmem);
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl *pintfhdl = &(pio_priv->intf);
-
-
 
 	if ((adapter->bDriverStopped == true) ||
 	    (adapter->bSurpriseRemoved == true)) {
@@ -247,7 +231,6 @@ void _rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	_read_port = pintfhdl->io_ops._read_port;
 
 	_read_port(pintfhdl, addr, cnt, pmem);
-
 
 }
 
@@ -271,13 +254,9 @@ u32 _rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
 	u32 ret = _SUCCESS;
 
-
-
 	_write_port = pintfhdl->io_ops._write_port;
 
 	ret = _write_port(pintfhdl, addr, cnt, pmem);
-
-
 
 	return ret;
 }

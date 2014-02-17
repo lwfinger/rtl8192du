@@ -15,7 +15,6 @@
  ******************************************************************************/
 /******************************************************************************
 
-
  Module:	rtl8192d_phycfg.c
 
  Note:		Merge 92DE/SDU PHY config as below
@@ -58,13 +57,11 @@
 
 /*---------------------------Define Local Constant---------------------------*/
 
-
 /*------------------------Define global variable-----------------------------*/
 #ifdef CONFIG_DUALMAC_CONCURRENT
 extern atomic_t GlobalCounterForMutex;
 #endif
 /*------------------------Define local variable------------------------------*/
-
 
 /*--------------------Define export function prototype-----------------------*/
 /*  Please refer to header file */
@@ -140,7 +137,6 @@ u8 rtl8192d_GetRightChnlPlaceforIQK(u8 chnl)
 	u8	channel_all[TARGET_CHNL_NUM_2G_5G] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,100,102,104,106,108,110,112,114,116,118,120,122,124,126,128,130,132,134,136,138,140,149,151,153,155,157,159,161,163,165};
 	u8	place = chnl;
 
-
 	if (chnl > 14)
 	{
 		for (place = 14; place<sizeof(channel_all); place++)
@@ -154,7 +150,6 @@ u8 rtl8192d_GetRightChnlPlaceforIQK(u8 chnl)
 
 	return 0;
 }
-
 
 /*  */
 /*  1. BB register R/W API */
@@ -319,7 +314,6 @@ phy_FwRFSerialRead(
 	return	(retValue);
 }	/* phy_FwRFSerialRead */
 
-
 /*-----------------------------------------------------------------------------
  * Function:	phy_FwRFSerialWrite()
  *
@@ -431,8 +425,6 @@ phy_RFSerialRead(
 	return retValue;
 }
 
-
-
 /**
 * Function:	phy_RFSerialWrite
 *
@@ -489,7 +481,6 @@ phy_RFSerialWrite(
 	struct bb_register_def *pPhyReg = &pHalData->PHYRegDef[eRFPath];
 	u32	NewOffset,MaskforPhySet=0;
 
-
 	/*  2009/06/17 MH We can not execute IO for power save or other accident mode. */
 
 	if (Offset & MAC1_ACCESS_PHY0)
@@ -521,7 +512,6 @@ phy_RFSerialWrite(
 	/*  */
 	PHY_SetBBReg(adapter, pPhyReg->rf3wireOffset|MaskforPhySet, bMaskDWord, DataAndAddr);
 }
-
 
 /**
 * Function:	PHY_QueryRFReg
@@ -749,7 +739,6 @@ int PHY_MACConfig8192D(struct rtw_adapter *adapter)
 	return rtStatus;
 }
 
-
 /**
 * Function:	phy_InitBBRFRegisterDefinition
 *
@@ -895,7 +884,6 @@ phy_ConfigBBWithHeaderFile(
 	u16	PHY_REGArrayLen=0, AGCTAB_ArrayLen=0, AGCTAB_5GArrayLen=0;
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-
 
 	/* Normal chip,Mac0 use AGC_TAB.txt for 2G and 5G band. */
 	if (pHalData->interfaceIndex == 0) {
@@ -1118,7 +1106,6 @@ phy_ConfigBBWithPgParaFile(
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 
 	int		rtStatus = _SUCCESS;
-
 
 	return rtStatus;
 }	/* phy_ConfigBBWithPgParaFile */
@@ -1423,7 +1410,6 @@ PHY_BBConfig8192D(
 	return rtStatus;
 }
 
-
 int
 PHY_RFConfig8192D(
 	struct rtw_adapter *	adapter
@@ -1442,7 +1428,6 @@ PHY_RFConfig8192D(
 	rtStatus = PHY_RF6052_Config8192D(adapter);
 	return rtStatus;
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:    PHY_ConfigRFWithParaFile()
@@ -1467,7 +1452,6 @@ rtl8192d_PHY_ConfigRFWithParaFile(
 )
 {
 	int	rtStatus = _SUCCESS;
-
 
 	return rtStatus;
 }
@@ -1628,7 +1612,6 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 	return rtStatus;
 }
 
-
 /*-----------------------------------------------------------------------------
  * Function:    PHY_CheckBBAndRFOK()
  *
@@ -1702,7 +1685,6 @@ rtl8192d_PHY_CheckBBAndRFOK(
 			break;
 		}
 
-
 		/*  */
 		/*  Check whether readback data is correct */
 		/*  */
@@ -1715,7 +1697,6 @@ rtl8192d_PHY_CheckBBAndRFOK(
 
 	return rtStatus;
 }
-
 
 void
 rtl8192d_PHY_GetHWRegOriginalValue(
@@ -1735,7 +1716,6 @@ rtl8192d_PHY_GetHWRegOriginalValue(
 	pHalData->framesyncC34 = PHY_QueryBBReg(adapter, rOFDM0_RxDetector2, bMaskDWord);
 }
 
-
 /*  */
 /*	Description: */
 /*		Map dBm into Tx power index according to */
@@ -1752,7 +1732,6 @@ phy_DbmToTxPwrIdx(
 {
 	u8				TxPwrIdx = 0;
 	int				Offset = 0;
-
 
 	/*  */
 	/*  Tested by MP, we found that CCK Index 0 equals to 8dbm, OFDM legacy equals to */
@@ -1791,7 +1770,6 @@ phy_DbmToTxPwrIdx(
 
 	return TxPwrIdx;
 }
-
 
 /*  */
 /*	Description: */
@@ -1835,7 +1813,6 @@ phy_TxPwrIdxToDbm(
 
 	return PwrOutDbm;
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:    GetTxPowerLevel8190()
@@ -1885,7 +1862,6 @@ PHY_GetTxPowerLevel8192D(
 
 	*powerlevel = TxPwrDbm;
 }
-
 
 static void getTxPowerIndex(
 	struct rtw_adapter *		adapter,
@@ -2004,7 +1980,6 @@ PHY_UpdateTxPowerDbm8192D(
 	else
 		OfdmTxPwrIdx = 0;
 
-
 	for (idx = 0; idx < CHANNEL_MAX_NUMBER; idx++)
 	{
 		for (rf_path = 0; rf_path < 2; rf_path++)
@@ -2016,10 +1991,8 @@ PHY_UpdateTxPowerDbm8192D(
 		}
 	}
 
-
 	return true;
 }
-
 
 /*
 	Description:
@@ -2029,7 +2002,6 @@ PHY_UpdateTxPowerDbm8192D(
 
 */
 
-
 void
 rtl8192d_PHY_SetBeaconHwReg(
 	struct rtw_adapter *		adapter,
@@ -2037,7 +2009,6 @@ rtl8192d_PHY_SetBeaconHwReg(
 	)
 {
 }
-
 
 void
 PHY_ScanOperationBackup8192D(
@@ -2077,7 +2048,6 @@ _PHY_SetBWMode92D(
 	struct hal_data_8192du *pHalDataBuddyadapter;
 #endif
 
-
 	if (pHalData->rf_chip == RF_PSEUDO_11N)
 		return;
 
@@ -2087,7 +2057,6 @@ _PHY_SetBWMode92D(
 
 	if (adapter->bDriverStopped)
 		return;
-
 
 	/* 3 */
 	/* 3<1>Set MAC register */
@@ -2187,7 +2156,6 @@ _PHY_SetBWMode92D(
 			break;
 	}
 
-
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (adapter->DualMacConcurrent == true && Buddyadapter != NULL)
 	{
@@ -2229,7 +2197,6 @@ PHY_SetBWMode8192D(
 	struct rtw_adapter *	Buddyadapter = adapter->pbuddy_adapter;
 #endif
 
-
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bInModeSwitchProcess)
 	{
@@ -2237,7 +2204,6 @@ PHY_SetBWMode8192D(
 		return;
 	}
 #endif
-
 
 	pHalData->CurrentChannelBW = Bandwidth;
 
@@ -2264,7 +2230,6 @@ PHY_SetBWMode8192D(
 		pHalData->CurrentChannelBW = tmpBW;
 	}
 }
-
 
 /*******************************************************************
 Descriptor:
@@ -2392,7 +2357,6 @@ static void PHY_SwitchWirelessBand(struct rtw_adapter *adapter, u8 Band)
 	}
 #endif
 
-
 	pdmpriv->bReloadtxpowerindex = true;
 
 	/*  notice fw know band status  0x81[1]/0x53[1] = 0: 5G, 1: 2G */
@@ -2409,12 +2373,10 @@ static void PHY_SwitchWirelessBand(struct rtw_adapter *adapter, u8 Band)
 		rtw_write8(adapter, (pHalData->interfaceIndex==0?REG_MAC0:REG_MAC1),value8);
 	}
 
-
 	for (i=0;i<20;i++)
 			rtw_udelay_os(MAX_STALL_TIME);
 
 }
-
 
 static void
 PHY_EnableRFENV(
@@ -2426,7 +2388,6 @@ PHY_EnableRFENV(
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	struct bb_register_def *pPhyReg = &pHalData->PHYRegDef[eRFPath];
-
 
 	/*----Store original RFENV control type----*/
 	switch (eRFPath)
@@ -2483,7 +2444,6 @@ PHY_RestoreRFENV(
 	}
 }
 
-
 /*-----------------------------------------------------------------------------
  * Function:	phy_SwitchRfSetting
  *
@@ -2514,7 +2474,6 @@ PHY_RestoreRFENV(
 	u32			u4RegValue, mask = 0x1C000, value = 0, u4tmp, u4tmp2,MaskforPhySet=0;
 	/* Query regB30 bit27 */
 	u32			Regb30 = PHY_QueryBBReg(adapter, 0xb30, BIT27);
-
 
 	/* only for 92D C-cut SMSP */
 
@@ -2671,7 +2630,6 @@ PHY_RestoreRFENV(
 			}
 		}
 
-
 		for (i = 0; i < RF_REG_NUM_for_C_CUT_2G; i++)
 		{
 #if SWLCK == 1
@@ -2702,7 +2660,6 @@ PHY_RestoreRFENV(
 		}
 	}
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:	phy_ReloadLCKSetting
@@ -2780,10 +2737,7 @@ static  void
 		}
 	}
 
-
-
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:	phy_ReloadIMRSetting
@@ -2855,7 +2809,6 @@ static  void
 	}
 
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:	phy_ReloadIQKSetting
@@ -2932,7 +2885,6 @@ static  void
 	}
 	pHalData->bNeedIQK = false;
 }
-
 
 static void _PHY_SwChnl8192D(struct rtw_adapter * adapter, u8 channel)
 {
@@ -3034,7 +2986,6 @@ static void _PHY_SwChnl8192D(struct rtw_adapter * adapter, u8 channel)
 #endif
 }
 
-
 void
 PHY_SwChnl8192D(	/*  Call after initialization */
 	struct rtw_adapter *adapter,
@@ -3058,8 +3009,6 @@ PHY_SwChnl8192D(	/*  Call after initialization */
 
 	if (adapter->mlmeextpriv.sitesurvey_res.state == SCAN_COMPLETE)
 		pHalData->bLoadIMRandIQKSettingFor2G = false;
-
-
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bInModeSwitchProcess)
@@ -3121,7 +3070,6 @@ PHY_SwChnl8192D(	/*  Call after initialization */
 
 	pHalData->CurrentChannel=channel;
 
-
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if ((Buddyadapter !=NULL) && (pHalData->bSlaveOfDMSP))
 	{
@@ -3154,7 +3102,6 @@ phy_SwChnlStepByStep(
 {
 	return true;
 }
-
 
 static	bool
 phy_SetSwChnlCmdArray(
@@ -3191,7 +3138,6 @@ phy_FinishSwChnlNow(	/*  We should not call this function directly */
 {
 }
 
-
 /*  */
 /*  Description: */
 /*	Switch channel synchronously. Called by SwChnlByDelayHandler. */
@@ -3208,7 +3154,6 @@ PHY_SwChnlPhy8192D(	/*  Only called during initialize */
 	)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-
 
 	/*  Cannot IO. */
 
@@ -3229,7 +3174,6 @@ PHY_SwChnlPhy8192D(	/*  Only called during initialize */
 
 }
 
-
 /*  */
 /*	Description: */
 /*		Configure H/W functionality to enable/disable Monitor mode. */
@@ -3243,7 +3187,6 @@ PHY_SetMonitorMode8192D(
 	)
 {
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:	PHYCheckIsLegalRfPath8190Pci()
@@ -3384,7 +3327,6 @@ phy_PathA_IQK_5G_Normal(
 		RxOKBit = BIT30;
 	}
 
-
 	/* path-A IQK setting */
 
 	PHY_SetBBReg(adapter, rTx_IQK_Tone_A, bMaskDWord, 0x18008c1f);
@@ -3430,7 +3372,6 @@ phy_PathA_IQK_5G_Normal(
 			rtw_udelay_os(IQK_DELAY_TIME*1000*2);
 			timecount++;
 		}
-
 
 		/*  Check failed */
 		regEAC = PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord);
@@ -3514,7 +3455,6 @@ phy_PathB_IQK(
 	else
 		DBG_8192D("Path B Rx IQK fail!!\n");
 
-
 	return result;
 }
 
@@ -3534,7 +3474,6 @@ phy_PathB_IQK_5G_Normal(
 	u8	retryCount = 2;
 #endif
 	u8	timeout = 20, timecount = 0;
-
 
 	/* path-A IQK setting */
 	PHY_SetBBReg(adapter, rTx_IQK_Tone_A, bMaskDWord, 0x18008c1f);
@@ -3562,7 +3501,6 @@ phy_PathB_IQK_5G_Normal(
 		PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xfa000000);
 		PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf8000000);
 
-
 		/*  delay x ms */
 		rtw_mdelay_os(IQK_DELAY_TIME*10);
 
@@ -3576,7 +3514,6 @@ phy_PathB_IQK_5G_Normal(
 			rtw_udelay_os(IQK_DELAY_TIME*1000*2);
 			timecount++;
 		}
-
 
 		/*  Check failed */
 		regEAC = PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord);
@@ -3631,7 +3568,6 @@ phy_PathAFillIQKMatrix(
 	u32	Oldval_0, X, TX0_A, reg;
 	int	Y, TX0_C;
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-
 
 	if (final_candidate == 0xFF)
 		return;
@@ -3714,7 +3650,6 @@ phy_PathAFillIQKMatrix_5G_Normal(
 
 		PHY_SetBBReg(adapter, rTx_IQK_Tone_A, 0x003FF, Y);
 		PHY_SetBBReg(adapter, rOFDM0_ECCAThreshold, BIT26, 0);
-
 
 		if (bTxOnly)
 		{
@@ -3923,7 +3858,6 @@ phy_PathADDAOn(
 	u32	pathOn;
 	u32	i;
 
-
 	pathOn = isPathAOn ? 0x04db25a4 : 0x0b1b25a4;
 	/*  Modified by Neil Chen */
 	/*  for Path diversity and original IQK */
@@ -3943,7 +3877,6 @@ phy_MACSettingCalibration(
 	)
 {
 	u32	i = 0;
-
 
 	rtw_write8(adapter, MACReg[i], 0x3F);
 
@@ -3971,7 +3904,6 @@ phy_PIModeSwitch(
 	)
 {
 	u32	mode;
-
 
 	mode = PIMode ? 0x01000100 : 0x01000000;
 	PHY_SetBBReg(adapter, 0x820, bMaskDWord, mode);
@@ -4292,7 +4224,6 @@ phy_IQCalibrate(
 	}
 }
 
-
 static void
 phy_IQCalibrate_5G(
 	struct rtw_adapter *	adapter,
@@ -4402,7 +4333,6 @@ phy_IQCalibrate_5G(
 
 	/* LO calibration setting */
 	PHY_SetBBReg(adapter, rIQK_AGC_Rsp, bMaskDWord, 0x00462911);
-
 
 	/* One shot, path A LOK & IQK */
 	PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf9000000);
@@ -4660,7 +4590,6 @@ Exit_IQK:
 	PHY_SetBBReg(adapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x01900000);
 	PHY_SetBBReg(adapter, rFPGA0_XA_LSSIParameter, bMaskDWord, 0x00032fff);
 	PHY_SetBBReg(adapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x00032fff);
-
 
 	/* reload MAC default value */
 	phy_ReloadMACRegisters(adapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
@@ -5165,7 +5094,6 @@ phy_LCCalibrate92DSW(
 	phy_ReloadLCKSetting(adapter, pHalData->CurrentChannel);
 }
 
-
 static void
 phy_LCCalibrate(
 	struct rtw_adapter *	adapter,
@@ -5178,7 +5106,6 @@ phy_LCCalibrate(
 	phy_LCCalibrate92D(adapter, is2T);
 #endif
 }
-
 
 /* Analog Pre-distortion calibration */
 #define		APK_BB_REG_NUM	8
@@ -5340,7 +5267,6 @@ phy_APCalibrate(
 	for (path = 0; path < pathbound; path++)
 	{
 
-
 		if (path == RF_PATH_A)
 		{
 			/* path A APK */
@@ -5449,7 +5375,6 @@ phy_APCalibrate(
 
 		}
 
-
 		/* MAC settings */
 		phy_MACSettingCalibration(adapter, MAC_REG, MAC_backup);
 
@@ -5486,7 +5411,6 @@ phy_APCalibrate(
 
 				BB_offset += delta_V;
 
-
 				if (BB_offset < 0) {
 					tmpReg = tmpReg & (~BIT15);
 					BB_offset = -BB_offset;
@@ -5515,7 +5439,6 @@ phy_APCalibrate(
 				tmpReg = PHY_QueryBBReg(adapter, rAPK, 0x03E00000);
 				else
 					tmpReg = PHY_QueryBBReg(adapter, rAPK, 0xF8000000);
-
 
 				i++;
 			}
@@ -5554,7 +5477,6 @@ phy_APCalibrate(
 		if (APK_result[path][1] > 6)
 			APK_result[path][1] = 6;
 	}
-
 
 	for (path = 0; path < pathbound; path++)
 	{
@@ -5607,7 +5529,6 @@ rtl8192d_PHY_IQCalibrate(
 	bool		is12simular, is13simular, is23simular;
 	bool		bStartContTx = false, bSingleTone = false, bCarrierSuppression = false;
 
-
 #if (MP_DRIVER == 1)
 	bStartContTx = adapter->mppriv.MptCtx.bStartContTx;
 	bSingleTone = adapter->mppriv.MptCtx.bSingleTone;
@@ -5626,7 +5547,6 @@ rtl8192d_PHY_IQCalibrate(
 	if (pHalData->bSlaveOfDMSP)
 		return;
 #endif
-
 
 	for (i = 0; i < 8; i++)
 	{
@@ -5771,7 +5691,6 @@ rtl8192d_PHY_IQCalibrate(
 	}
 }
 
-
 void
 rtl8192d_PHY_LCCalibrate(
 	struct rtw_adapter *	adapter
@@ -5818,7 +5737,6 @@ rtl8192d_PHY_LCCalibrate(
 		return;
 
 	pHalData->bLCKInProgress = true;
-
 
 	if (IS_92D_SINGLEPHY(pHalData->VersionID))
 	{
@@ -5883,7 +5801,6 @@ PHY_UpdateBBRFConfiguration8192D(
 			PHY_SetBBReg(adapter, rCCK0_AFESetting, bMaskByte3, 0x80);
 		else if (pregistrypriv->special_rf_path == 2)
 			PHY_SetBBReg(adapter, rCCK0_AFESetting, bMaskByte3, 0x45);
-
 
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
 		{
@@ -6144,7 +6061,6 @@ PHY_UpdateBBRFConfiguration8192D(
 		pHalData->RfRegChnlVal[eRFPath] = PHY_QueryRFReg(adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_CHNLBW, bRFRegOffsetMask);
 		pdmpriv->RegRF3C[eRFPath] = PHY_QueryRFReg(adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_RXRF_A3, bRFRegOffsetMask);
 	}
-
 
 }
 
@@ -6431,7 +6347,6 @@ rtl8192d_PHY_InitRxSetting(
 #endif
 }
 
-
 void rtl8192d_PHY_ResetIQKResult(struct rtw_adapter *adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
@@ -6477,7 +6392,6 @@ HalChangeCCKStatus8192D(
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	u8	i;
-
 
 	if (pHalData->BandSet92D != BAND_ON_BOTH)
 	{

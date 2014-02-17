@@ -14,7 +14,6 @@
  *
  ******************************************************************************/
 
-
 #define _OSDEP_SERVICE_C_
 
 #include <drv_conf.h>
@@ -180,7 +179,6 @@ u32	  _rtw_queue_empty(struct __queue *pqueue)
 	return (rtw_is_list_empty(&(pqueue->queue)));
 }
 
-
 u32 rtw_end_of_queue_search(struct list_head *head, struct list_head *plist)
 {
 	if (head == plist)
@@ -188,7 +186,6 @@ u32 rtw_end_of_queue_search(struct list_head *head, struct list_head *plist)
 	else
 		return false;
 }
-
 
 u32	rtw_get_current_time(void)
 {
@@ -318,7 +315,6 @@ inline void rtw_unlock_suspend(void)
 	android_unlock_suspend(&rtw_suspend_lock);
 	#endif
 }
-
 
 inline void ATOMIC_SET(ATOMIC_T *v, int i)
 {
@@ -768,7 +764,6 @@ keep_ori:
 	if (ori && ori_len > 0)
 		kfree(ori);
 }
-
 
 /**
  * rtw_cbuf_full - test if cbuf is full

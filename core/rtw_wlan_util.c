@@ -20,7 +20,6 @@
 #include <drv_types.h>
 #include <wifi.h>
 
-
 static unsigned char ARTHEROS_OUI1[] = {0x00, 0x03, 0x7f};
 static unsigned char ARTHEROS_OUI2[] = {0x00, 0x13, 0x74};
 
@@ -58,7 +57,6 @@ static u8 rtw_basic_rate_mix[7] = {
 	IEEE80211_OFDM_RATE_6MB|IEEE80211_BASIC_RATE_MASK, IEEE80211_OFDM_RATE_12MB|IEEE80211_BASIC_RATE_MASK,
 	IEEE80211_OFDM_RATE_24MB|IEEE80211_BASIC_RATE_MASK
 };
-
 
 int cckrates_included(unsigned char *rate, int ratelen)
 {
@@ -125,7 +123,6 @@ int judge_network_type(struct rtw_adapter *padapter, unsigned char *rate, int ra
 	int network_type = 0;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-
 
 	if (pmlmeext->cur_channel > 14) {
 		if (pmlmeinfo->HT_enable)
@@ -235,7 +232,6 @@ static unsigned int ratetbl2rateset(struct rtw_adapter *padapter, unsigned char 
 	}
 	return len;
 }
-
 
 void get_rate_set(struct rtw_adapter *padapter, unsigned char *pbssrate, int *bssrate_len)
 {
@@ -476,7 +472,6 @@ void set_channel_bwmode(struct rtw_adapter *padapter, unsigned char channel, uns
 		_exit_critical_mutex(&(adapter_to_dvobj(padapter)->setch_mutex));
 
 #endif /*  CONFIG_DUALMAC_CONCURRENT */
-
 
 	/* set BandWidth */
 	SetBWMode(padapter, bwmode, channel_offset);
@@ -825,7 +820,6 @@ static void bwmode_update_check(struct rtw_adapter *padapter, struct ndis_802_11
 		new_ch_offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
 	}
 
-
 	if ((new_bwmode != pmlmeext->cur_bwmode) ||
 	    (new_ch_offset != pmlmeext->cur_ch_offset)) {
 		pmlmeinfo->bwmode_updated = true;
@@ -838,7 +832,6 @@ static void bwmode_update_check(struct rtw_adapter *padapter, struct ndis_802_11
 	} else {
 		pmlmeinfo->bwmode_updated = false;
 	}
-
 
 	if (true == pmlmeinfo->bwmode_updated) {
 		struct sta_info *psta;
@@ -948,7 +941,6 @@ void HT_info_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_i
 
 	if (phtpriv->ht_option == false)
 		return;
-
 
 	if (pIE->Length > sizeof(struct HT_info_element))
 		return;

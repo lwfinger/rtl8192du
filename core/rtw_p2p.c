@@ -87,7 +87,6 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 		plist = plist->next;
 
-
 		if (psta->is_p2p_device) {
 			tmplen = 0;
 
@@ -126,7 +125,6 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 				memcpy(pcur, psta->dev_name, psta->dev_name_len);
 				pcur += psta->dev_name_len;
 			}
-
 
 			tmplen = (u8)(pcur-pstart);
 
@@ -258,7 +256,6 @@ static void issue_p2p_devdisc_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 s
 	pframe = rtw_set_fixed_ie(pframe, 1, &(oui_subtype), &(pattrib->pktlen));
 	pframe = rtw_set_fixed_ie(pframe, 1, &(dialogToken), &(pattrib->pktlen));
 
-
 	/* Build P2P IE */
 	/*	P2P OUI */
 	p2pielen = 0;
@@ -299,7 +296,6 @@ static void issue_p2p_provision_resp(struct wifidirect_info *pwdinfo, u8 *raddr,
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL)
@@ -419,7 +415,6 @@ static void issue_p2p_presence_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 
 	pframe = rtw_set_fixed_ie(pframe, 1, &(oui_subtype), &(pattrib->pktlen));
 	pframe = rtw_set_fixed_ie(pframe, 1, &(dialogToken), &(pattrib->pktlen));
 
-
 	/* Add P2P IE header */
 	/*	P2P OUI */
 	p2pielen = 0;
@@ -439,10 +434,7 @@ static void issue_p2p_presence_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 
 
 	p2pielen += rtw_set_p2p_attr_content(&p2pie[p2pielen], P2P_ATTR_NOA, 2, noa_attr_content);
 
-
-
 	pframe = rtw_set_ie(pframe, _VENDOR_SPECIFIC_IE_, p2pielen, p2pie, &(pattrib->pktlen));
-
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
@@ -462,7 +454,6 @@ u32 build_beacon_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	p2pie[p2pielen++] = 0x6F;
 	p2pie[p2pielen++] = 0x9A;
 	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
-
 
 	/*	According to the P2P Specification, the beacon frame should contain 3 P2P attributes */
 	/*	1. P2P Capability */
@@ -486,10 +477,8 @@ u32 build_beacon_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	p2pielen += rtw_set_p2p_attr_content(&p2pie[p2pielen], P2P_ATTR_CAPABILITY, 2, (u8 *)&le_tmp);
 
-
 	/*  P2P Device ID ATTR */
 	p2pielen += rtw_set_p2p_attr_content(&p2pie[p2pielen], P2P_ATTR_DEVICE_ID, ETH_ALEN, pwdinfo->device_addr);
-
 
 	/*  Notice of Absence ATTR */
 	/*	Type: */
@@ -498,9 +487,7 @@ u32 build_beacon_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 	/* go_add_noa_attr(pwdinfo); */
 
-
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, p2pielen, (unsigned char *)p2pie, &len);
-
 
 	return len;
 }
@@ -526,7 +513,6 @@ u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	1. WFD Device Information */
 	/*	2. Associated BSSID */
 	/*	3. Coupled Sink Information */
-
 
 	/*	WFD Device Information ATTR */
 	/*	Type: */
@@ -633,7 +619,6 @@ u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	2. Associated BSSID */
 	/*	3. Coupled Sink Information */
 
-
 	/*	WFD Device Information ATTR */
 	/*	Type: */
 	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
@@ -738,7 +723,6 @@ u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunnel
 	/*	2. Associated BSSID */
 	/*	3. Coupled Sink Information */
 	/*	4. WFD Session Information */
-
 
 	/*	WFD Device Information ATTR */
 	/*	Type: */
@@ -911,7 +895,6 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	2. Associated BSSID */
 	/*	3. Coupled Sink Information */
 
-
 	/*	WFD Device Information ATTR */
 	/*	Type: */
 	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
@@ -1003,7 +986,6 @@ u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	1. WFD Device Information */
 	/*	2. Associated BSSID */
 	/*	3. Coupled Sink Information */
-
 
 	/*	WFD Device Information ATTR */
 	/*	Type: */
@@ -1097,7 +1079,6 @@ u32 build_nego_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	2. Associated BSSID (Optional) */
 	/*	3. Local IP Adress (Optional) */
 
-
 	/*	WFD Device Information ATTR */
 	/*	Type: */
 	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
@@ -1190,7 +1171,6 @@ u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	2. Associated BSSID (Optional) */
 	/*	3. Local IP Adress (Optional) */
 
-
 	/*	WFD Device Information ATTR */
 	/*	Type: */
 	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
@@ -1257,7 +1237,6 @@ u32 build_nego_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	wfdie[wfdielen++] = 0;
 	wfdie[wfdielen++] = 0;
 
-
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *)wfdie, &len);
 
 	return len;
@@ -1283,7 +1262,6 @@ u32 build_nego_confirm_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	1. WFD Device Information */
 	/*	2. Associated BSSID (Optional) */
 	/*	3. Local IP Adress (Optional) */
-
 
 	/*	WFD Device Information ATTR */
 	/*	Type: */
@@ -1374,7 +1352,6 @@ u32 build_invitation_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	1. WFD Device Information */
 	/*	2. Associated BSSID (Optional) */
 	/*	3. Local IP Adress (Optional) */
-
 
 	/*	WFD Device Information ATTR */
 	/*	Type: */
@@ -1479,7 +1456,6 @@ u32 build_invitation_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	2. Associated BSSID (Optional) */
 	/*	3. Local IP Adress (Optional) */
 
-
 	/*	WFD Device Information ATTR */
 	/*	Type: */
 	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
@@ -1582,7 +1558,6 @@ u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	2. Associated BSSID (Optional) */
 	/*	3. Local IP Adress (Optional) */
 
-
 	/*	WFD Device Information ATTR */
 	/*	Type: */
 	wfdie[wfdielen++] = WFD_ATTR_DEVICE_INFO;
@@ -1672,7 +1647,6 @@ u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	/*	1. WFD Device Information */
 	/*	2. Associated BSSID (Optional) */
 	/*	3. Local IP Adress (Optional) */
-
 
 	/*	WFD Device Information ATTR */
 	/*	Type: */
@@ -1812,7 +1786,6 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	RTW_PUT_LE16(p2pie + p2pielen, 0xFFFF);
 	p2pielen += 2;
 
-
 	/*  Notice of Absence ATTR */
 	/*	Type: */
 	/*	Length: */
@@ -1893,9 +1866,7 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO))
 		p2pielen += go_add_group_info_attr(pwdinfo, p2pie + p2pielen);
 
-
 	pbuf = rtw_set_ie(pbuf, _VENDOR_SPECIFIC_IE_, p2pielen, (unsigned char *)p2pie, &len);
-
 
 	return len;
 }
@@ -1935,7 +1906,6 @@ u32 build_prov_disc_request_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8
 		p2pie[p2pielen++] = P2P_GRPCAP_PERSISTENT_GROUP | DMP_P2P_GRPCAP_SUPPORT;
 	else
 		p2pie[p2pielen++] = DMP_P2P_GRPCAP_SUPPORT;
-
 
 	/*	Device Info ATTR */
 	/*	Type: */
@@ -2013,7 +1983,6 @@ u32 build_prov_disc_request_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8
 	return len;
 }
 
-
 u32 build_assoc_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 status_code)
 {
 	u8 p2pie[MAX_P2P_IE_LEN] = { 0x00 };
@@ -2030,10 +1999,8 @@ u32 build_assoc_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 status
 	/*	1. Status */
 	/*	2. Extended Listen Timing (optional) */
 
-
 	/*	Status ATTR */
 	p2pielen += rtw_set_p2p_attr_content(&p2pie[p2pielen], P2P_ATTR_STATUS, 1, &status_code);
-
 
 	/*  Extended Listen Timing ATTR */
 	/*	Type: */
@@ -2160,7 +2127,6 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 
 		/* Check Extended Listen Timing ATTR */
 
-
 		/* Check P2P Device Info ATTR */
 		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_DEVICE_INFO, NULL, (uint *)&attr_contentlen)) {
 			DBG_8192D("[%s] Got P2P DEVICE INFO Attr!!\n", __func__);
@@ -2169,7 +2135,6 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 			if (pattr_content) {
 				u8 num_of_secdev_type;
 				u16 dev_name_len;
-
 
 				rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_DEVICE_INFO, pattr_content, (uint *)&attr_contentlen);
 
@@ -2492,7 +2457,6 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
 				memcpy(pwdinfo->groupid_info.ssid, pwdinfo->nego_ssid, pwdinfo->nego_ssidlen);
 			}
 		}
-
 
 		attr_contentlen = 0;
 		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_INTENTED_IF_ADDR, pwdinfo->p2p_peer_interface_addr, &attr_contentlen)) {
@@ -2877,8 +2841,6 @@ static void find_phase_handler(struct rtw_adapter *padapter)
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct ndis_802_11_ssid	ssid;
 
-
-
 	memset((unsigned char *)&ssid, 0, sizeof(struct ndis_802_11_ssid));
 	memcpy(ssid.Ssid, pwdinfo->p2p_wildcard_ssid, P2P_WILDCARD_SSID_LEN);
 	ssid.SsidLength = P2P_WILDCARD_SSID_LEN;
@@ -2889,8 +2851,6 @@ static void find_phase_handler(struct rtw_adapter *padapter)
 	rtw_sitesurvey_cmd(padapter, &ssid, 1, NULL, 0);
 	spin_unlock_bh(&pmlmepriv->lock);
 
-
-
 }
 
 void p2p_concurrent_handler(struct rtw_adapter *padapter);
@@ -2899,8 +2859,6 @@ static void restore_p2p_state_handler(struct rtw_adapter *padapter)
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-
-
 
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_ING) ||
 	    rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_FAIL))
@@ -2939,12 +2897,10 @@ static void pre_tx_invitereq_handler(struct rtw_adapter *padapter)
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	u8 val8 = 1;
 
-
 	set_channel_bwmode(padapter, pwdinfo->invitereq_info.peer_ch, HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
 	rtw_hal_set_hwreg(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
 	issue_probereq_p2p(padapter, NULL);
 	_set_timer(&pwdinfo->pre_tx_scan_timer, P2P_TX_PRESCAN_TIMEOUT);
-
 
 }
 
@@ -2953,12 +2909,10 @@ static void pre_tx_provdisc_handler(struct rtw_adapter *padapter)
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	u8 val8 = 1;
 
-
 	set_channel_bwmode(padapter, pwdinfo->tx_prov_disc_info.peer_channel_num[0], HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
 	rtw_hal_set_hwreg(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
 	issue_probereq_p2p(padapter, NULL);
 	_set_timer(&pwdinfo->pre_tx_scan_timer, P2P_TX_PRESCAN_TIMEOUT);
-
 
 }
 
@@ -2967,12 +2921,10 @@ static void pre_tx_negoreq_handler(struct rtw_adapter *padapter)
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	u8 val8 = 1;
 
-
 	set_channel_bwmode(padapter, pwdinfo->nego_req_info.peer_channel_num[0], HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
 	rtw_hal_set_hwreg(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
 	issue_probereq_p2p(padapter, NULL);
 	_set_timer(&pwdinfo->pre_tx_scan_timer, P2P_TX_PRESCAN_TIMEOUT);
-
 
 }
 
@@ -2985,7 +2937,6 @@ void p2p_concurrent_handler(struct rtw_adapter *padapter)
 	/* struct mlme_priv		*pbuddy_mlmepriv = &pbuddy_adapter->mlmepriv; */
 	/* struct mlme_ext_priv	*pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv; */
 	u8 val8;
-
 
 	if (check_buddy_fwstate(padapter, _FW_LINKED)) {
 		struct rtw_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
@@ -3067,7 +3018,6 @@ void p2p_concurrent_handler(struct rtw_adapter *padapter)
 		set_channel_bwmode(padapter, pwdinfo->listen_channel, HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
 	}
 
-
 }
 #endif
 
@@ -3078,7 +3028,6 @@ static void ro_ch_handler(struct rtw_adapter *padapter)
 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (check_buddy_fwstate(padapter, _FW_LINKED)) {
@@ -3114,7 +3063,6 @@ static void ro_ch_handler(struct rtw_adapter *padapter)
 		pcfg80211_wdinfo->remain_on_ch_cookie,
 		&pcfg80211_wdinfo->remain_on_ch_channel,
 		pcfg80211_wdinfo->remain_on_ch_type, GFP_KERNEL);
-
 
 }
 
@@ -3497,8 +3445,6 @@ void p2p_protocol_wk_hdl(struct rtw_adapter *padapter, int intCmdType)
 {
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 
-
-
 	switch (intCmdType) {
 	case P2P_FIND_PHASE_WK:
 		find_phase_handler(padapter);
@@ -3550,7 +3496,6 @@ void p2p_protocol_wk_hdl(struct rtw_adapter *padapter, int intCmdType)
 #endif /* CONFIG_IOCTL_CFG80211 */
 	}
 
-
 }
 
 #ifdef CONFIG_P2P_PS
@@ -3566,8 +3511,6 @@ void process_p2p_ps_ie(struct rtw_adapter *padapter, u8 *IEs, u32 IELength)
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 	u8 find_p2p = false, find_p2p_ps = false;
 	u8 noa_offset, noa_num, noa_index;
-
-
 
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 		return;
@@ -3645,15 +3588,12 @@ void process_p2p_ps_ie(struct rtw_adapter *padapter, u8 *IEs, u32 IELength)
 			p2p_ps_wk_cmd(padapter, P2P_PS_DISABLE, 1);
 	}
 
-
 }
 
 void p2p_ps_wk_hdl(struct rtw_adapter *padapter, u8 p2p_ps_state)
 {
 	struct pwrctrl_priv		*pwrpriv = &padapter->pwrctrlpriv;
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-
-
 
 	switch (p2p_ps_state) {
 	case P2P_PS_DISABLE:
@@ -3699,7 +3639,6 @@ void p2p_ps_wk_hdl(struct rtw_adapter *padapter, u8 p2p_ps_state)
 		break;
 	}
 
-
 }
 
 u8 p2p_ps_wk_cmd(struct rtw_adapter *padapter, u8 p2p_ps_state, u8 enqueue)
@@ -3709,8 +3648,6 @@ u8 p2p_ps_wk_cmd(struct rtw_adapter *padapter, u8 p2p_ps_state, u8 enqueue)
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
 	u8 res = _SUCCESS;
-
-
 
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)
 #ifdef CONFIG_CONCURRENT_MODE
@@ -3745,8 +3682,6 @@ u8 p2p_ps_wk_cmd(struct rtw_adapter *padapter, u8 p2p_ps_state, u8 enqueue)
 	}
 
 exit:
-
-
 
 	return res;
 }
@@ -4131,7 +4066,6 @@ void dbg_rtw_p2p_set_role(struct wifidirect_info *wdinfo, enum P2P_ROLE role, co
 }
 #endif /* CONFIG_DBG_P2P */
 
-
 int rtw_p2p_enable(struct rtw_adapter *padapter, enum P2P_ROLE role)
 {
 	int ret = _SUCCESS;
@@ -4160,7 +4094,6 @@ int rtw_p2p_enable(struct rtw_adapter *padapter, enum P2P_ROLE role)
 			ret = _FAIL;
 			goto exit;
 		}
-
 
 		/*	Added by Albert 2011/03/22 */
 		/*	In the P2P mode, the driver should not support the b mode. */

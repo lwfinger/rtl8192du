@@ -39,7 +39,6 @@ static void arcfour_init(struct arc4context *parc4ctx, u8 *key, u32 key_len)
 	u8 *state;
 	u32 counter;
 
-
 	state = parc4ctx->state;
 	parc4ctx->x = 0;
 	parc4ctx->y = 0;
@@ -66,7 +65,6 @@ static u32 arcfour_byte(struct arc4context *parc4ctx)
 	u32 sx, sy;
 	u8 *state;
 
-
 	state = parc4ctx->state;
 	x = (parc4ctx->x + 1) & 0xff;
 	sx = state[x];
@@ -84,7 +82,6 @@ static void arcfour_encrypt(struct arc4context *parc4ctx, u8 *dest,
 			    u8 *src, u32 len)
 {
 	u32 i;
-
 
 	for (i = 0; i < len; i++)
 		dest[i] = src[i] ^ (unsigned char)arcfour_byte(parc4ctx);
@@ -137,7 +134,6 @@ static __le32 getcrc32(u8 *buf, int len)
 	u8 *p;
 	u32 crc;
 
-
 	if (bcrc32initialized == 0)
 		crc32_init();
 
@@ -164,7 +160,6 @@ void rtw_wep_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 	struct pkt_attrib *pattrib = &((struct xmit_frame *)pxmitframe)->attrib;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-
 
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
 		return;
@@ -222,7 +217,6 @@ void rtw_wep_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 		}
 	}
 
-
 }
 
 void rtw_wep_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
@@ -237,8 +231,6 @@ void rtw_wep_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 	struct rx_pkt_attrib *prxattrib =
 	    &(((struct recv_frame_hdr *)precvframe)->attrib);
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
-
-
 
 	pframe =
 	    (unsigned char *)((struct recv_frame_hdr *)precvframe)->rx_data;
@@ -639,7 +631,6 @@ u32 rtw_tkip_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	u32 res = _SUCCESS;
 
-
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
 		return _FAIL;
 
@@ -751,7 +742,6 @@ u32 rtw_tkip_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 	    &((struct recv_frame_hdr *)precvframe)->attrib;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	u32 res = _SUCCESS;
-
 
 	pframe =
 	    (unsigned char *)((struct recv_frame_hdr *)precvframe)->rx_data;
@@ -1173,7 +1163,6 @@ static void construct_mic_header2(u8 *mic_header2,
 		mic_header2[15] = mpdu[31] & 0x00;
 	}
 
-
 }
 
 /************************************************/
@@ -1243,7 +1232,6 @@ static int aes_cipher(u8 *key, uint hdrlen, u8 *pframe, uint plen)
 	u8 mic[8];
 	uint frtype = GetFrameType(pframe);
 	uint frsubtype = GetFrameSubType(pframe);
-
 
 	frsubtype = frsubtype >> 4;
 
@@ -1383,8 +1371,6 @@ u32 rtw_aes_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	u32 res = _SUCCESS;
-
-
 
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
 		return _FAIL;
@@ -1683,7 +1669,6 @@ static int aes_decipher(u8 *key, uint hdrlen, u8 *pframe, uint plen)
 			DBG_8192D(" [%d]=%02x ", gg, pframe[gg]);
 		DBG_8192D("error packet header\n");
 	}
-
 
 	return res;
 }
@@ -2584,8 +2569,6 @@ void rtw_use_tkipkey_handler(void *FunctionContext)
 {
 	struct rtw_adapter *padapter = (struct rtw_adapter *)FunctionContext;
 
-
-
 	RT_TRACE(_module_rtl871x_security_c_, _drv_err_,
 		 ("^^^rtw_use_tkipkey_handler ^^^\n"));
 
@@ -2594,6 +2577,5 @@ void rtw_use_tkipkey_handler(void *FunctionContext)
 	RT_TRACE(_module_rtl871x_security_c_, _drv_err_,
 		 ("^^^rtw_use_tkipkey_handler padapter->securitypriv.busetkipkey =%d^^^\n",
 		  padapter->securitypriv.busetkipkey));
-
 
 }

@@ -60,7 +60,6 @@ CheckFwReadLastH2C(
 	return Result;
 }
 
-
 /*  */
 /*  Description: */
 /*	Fill H2C command */
@@ -91,13 +90,10 @@ static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLe
 	u8	WaitWriteH2cLimmit = 100;
 	u8	idx=0;
 
-
-
 	padapter = GET_PRIMARY_ADAPTER(padapter);
 	pHalData = GET_HAL_DATA(padapter);
 
 	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex));
-
 
 	while (!bWriteSucess)
 	{
@@ -159,7 +155,6 @@ static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLe
 		memset(BoxExtContent, 0, sizeof(BoxExtContent));
 
 		BoxContent[0] = ElementID; /*  Fill element ID */
-
 
 		switch (CmdLen)
 		{
@@ -228,7 +223,6 @@ static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLe
 				break;
 		}
 
-
 		/*  5. Normal chip does not need to check if the H2C cmd has be written successfully. */
 		/*  92D test chip does not need to check, */
 		bWriteSucess = true;
@@ -238,11 +232,9 @@ static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLe
 		if (pHalData->LastHMEBoxNum == 4) /*  loop to 0 */
 			pHalData->LastHMEBoxNum = 0;
 
-
 	}
 
 	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex));
-
 
 }
 
@@ -291,13 +283,11 @@ static u8 rtl8192d_h2c_msg_hdl(struct rtw_adapter *padapter, unsigned char *pbuf
 	return H2C_SUCCESS;
 }
 
-
 u8 rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg)
 {
 	u8	buf[5];
 	u8	res=_SUCCESS;
 	__le32	le_mask;
-
 
 	memset(buf, 0, 5);
 	le_mask = cpu_to_le32(mask);
@@ -305,8 +295,6 @@ u8 rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg)
 	buf[4]  = arg;
 
 	FillH2CCmd92D(padapter, H2C_RA_MASK, 5, buf);
-
-
 
 	return res;
 }
@@ -341,14 +329,11 @@ void rtl8192d_Add_RateATid(struct rtw_adapter * adapter, u32 bitmap, u8 arg)
 	}
 }
 
-
 void rtl8192d_set_FwPwrMode_cmd(struct rtw_adapter*padapter, u8 Mode)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	u8	u1H2CSetPwrMode[3]={0};
 	u8	beacon_interval = 1;
-
-
 
 	DBG_8192D("%s(): Mode = %d, SmartPS = %d\n", __func__,Mode,pwrpriv->smart_ps);
 
@@ -357,7 +342,6 @@ void rtl8192d_set_FwPwrMode_cmd(struct rtw_adapter*padapter, u8 Mode)
 	SET_H2CCMD_PWRMODE_PARM_BCN_PASS_TIME(u1H2CSetPwrMode, beacon_interval);
 
 	FillH2CCmd92D(padapter, H2C_SETPWRMODE, 3, u1H2CSetPwrMode);
-
 
 }
 
@@ -403,7 +387,6 @@ static void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLeng
 	pframe += 2;
 	pktlen += 2;
 
-
 	if ((pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
 	{
 		DBG_8192D("ie len=%u\n", cur_network->IELength);
@@ -433,16 +416,13 @@ static void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLeng
 		pframe = rtw_set_ie(pframe, _IBSS_PARA_IE_, 2, (unsigned char *)(&ATIMWindow), &pktlen);
 	}
 
-
 	/* todo: ERP IE */
-
 
 	/*  EXTERNDED SUPPORTED RATE */
 	if (rate_len > 8)
 	{
 		pframe = rtw_set_ie(pframe, _EXT_SUPPORTEDRATES_IE_, (rate_len - 8), (cur_network->SupportedRates + 8), &pktlen);
 	}
-
 
 	/* todo:HT for adhoc */
 
@@ -464,7 +444,6 @@ static void ConstructPSPoll(struct rtw_adapter *padapter, u8 *pframe, u32 *pLeng
 	u16					*fctrl;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -495,7 +474,6 @@ static void ConstructNullFunctionData(struct rtw_adapter *padapter, u8 *pframe, 
 	struct wlan_network	*cur_network = &pmlmepriv->cur_network;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -547,7 +525,6 @@ static void ConstructProbeRsp(struct rtw_adapter *padapter, u8 *pframe, u32 *pLe
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex	*cur_network = &(pmlmeinfo->network);
-
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -629,7 +606,6 @@ FillFakeTxDescriptor92D(
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_, "FillFakeTxDescriptor92D(): H2C Tx Desc Content ----->\n", pDesc, TXDESC_SIZE);
 }
-
 
 /*  */
 /*  Description: Fill the reserved packets that FW will use to RSVD page. */
@@ -788,8 +764,6 @@ void rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	bool	bRecover = false;
 
-
-
 	DBG_8192D("%s\n", __func__);
 
 	if (mstatus == 1)
@@ -842,7 +816,6 @@ void rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus)
 
 	FillH2CCmd92D(padapter, H2C_JOINBSSRPT, 1, u1JoinBssRptParm);
 
-
 }
 
 #ifdef CONFIG_P2P_PS
@@ -862,8 +835,6 @@ void rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_sta
 	u8	i;
 	u16	ctwindow;
 	u32	start_time, tsf_low;
-
-
 
 	switch (p2p_ps_state)
 	{
@@ -949,11 +920,8 @@ void rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_sta
 
 	FillH2CCmd92D(padapter, H2C_P2P_PS_OFFLOAD, 1, (u8 *)p2p_ps_offload);
 
-
 }
 #endif /*  CONFIG_P2P_PS */
-
-
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
 /*
@@ -964,7 +932,6 @@ static u8 rtl8192d_reset_tsf(struct rtw_adapter *padapter, u8 reset_port)
 	u8	buf[2];
 	u8	res=_SUCCESS;
 
-
 	if (IFACE_PORT0==reset_port) {
 		buf[0] = 0x1; buf[1] = 0;
 
@@ -972,7 +939,6 @@ static u8 rtl8192d_reset_tsf(struct rtw_adapter *padapter, u8 reset_port)
 		buf[0] = 0x0; buf[1] = 0x1;
 	}
 	FillH2CCmd92D(padapter, H2C_92D_RESET_TSF, 2, buf);
-
 
 	return res;
 }
@@ -996,7 +962,6 @@ int reset_tsf(struct rtw_adapter * adapter, u8 reset_port)
 	return(loop_cnt >= 10) ? _FAIL : true;
 }
 
-
 #endif	/*  CONFIG_TSF_RESET_OFFLOAD */
 
 #ifdef CONFIG_WOWLAN
@@ -1010,15 +975,11 @@ void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter)
 	struct set_wowlan_parm pwowlan_parm;
 	struct pwrctrl_priv *pwrpriv=&padapter->pwrctrlpriv;
 
-
-
 	pwowlan_parm.mode =0;
 	pwowlan_parm.gpio_index=0;
 	pwowlan_parm.gpio_duration=0;
 	pwowlan_parm.second_mode =0;
 	pwowlan_parm.reserve=0;
-
-
 
 	if (pwrpriv->wowlan_mode ==true) {
 		/* pause RX DMA */
@@ -1068,7 +1029,6 @@ void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter)
 		}
 		FillH2CCmd92D(padapter, H2C_WO_WLAN_CMD, 4, (u8 *)&pwowlan_parm);
 
-
 		/* keep alive period = 3 * 10 BCN interval */
 		pwowlan_parm.mode =3;
 		pwowlan_parm.gpio_index=3;
@@ -1091,9 +1051,6 @@ void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter)
 	}
 	else
 		FillH2CCmd92D(padapter, H2C_WO_WLAN_CMD, 4, (u8 *)&pwowlan_parm);
-
-
-
 
 	return ;
 }

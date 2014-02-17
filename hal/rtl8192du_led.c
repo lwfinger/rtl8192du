@@ -39,7 +39,6 @@
 /*  LED object. */
 /*  */
 
-
 /*  */
 /*	Prototype of protected function. */
 /*  */
@@ -96,7 +95,6 @@ static void InitLed871x(struct rtw_adapter *padapter,
 	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback, pLed);
 }
 
-
 /*  */
 /*	Description: */
 /*		DeInitialize an struct LED_871X object. */
@@ -113,7 +111,6 @@ static void DeInitLed871x(struct LED_871X *pLed)
 	ResetLedStatus(pLed);
 }
 
-
 /*  */
 /*	Description: */
 /*		Turn on LED according to LedPin specified. */
@@ -127,7 +124,6 @@ static void SwLedOn(struct rtw_adapter *padapter, struct LED_871X *pLed)
 	{
 		return;
 	}
-
 
 	switch (pLed->LedPin)
 	{
@@ -153,7 +149,6 @@ static void SwLedOn(struct rtw_adapter *padapter, struct LED_871X *pLed)
 	pLed->bLedOn = true;
 }
 
-
 /*  */
 /*	Description: */
 /*		Turn off LED according to LedPin specified. */
@@ -166,7 +161,6 @@ static void SwLedOff(struct rtw_adapter *padapter, struct LED_871X *pLed)
 	{
              return;
 	}
-
 
 	switch (pLed->LedPin)
 	{
@@ -252,7 +246,6 @@ static void SwLedBlink(struct LED_871X *pLed)
 		}
 		break;
 
-
 	default:
 		bStopBlinking = true;
 		break;
@@ -336,7 +329,6 @@ static void SwLedBlink1(struct LED_871X *pLed)
 		SwLedOff(padapter, pLed);
 		RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Blinktimes (%d): turn off\n", pLed->BlinkTimes));
 	}
-
 
 	if (pHalData->CustomerID == RT_CID_DEFAULT)
 	{
@@ -756,7 +748,6 @@ static void SwLedBlink3(struct LED_871X *pLed)
 					if (pLed->bLedOn)
 						SwLedOff(padapter, pLed);
 
-
 					RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("CurrLedState %d\n", pLed->CurrLedState));
 				}
 				pLed->bLedBlinkInProgress = false;
@@ -814,7 +805,6 @@ static void SwLedBlink3(struct LED_871X *pLed)
 				pLed->bLedWPSBlinkInProgress = false;
 			}
 			break;
-
 
 		default:
 			break;
@@ -1006,7 +996,6 @@ static void SwLedBlink4(struct LED_871X *pLed)
 			}
 			break;
 
-
 		default:
 			break;
 	}
@@ -1075,7 +1064,6 @@ static void SwLedBlink5(struct LED_871X *pLed)
 				}
 			}
 			break;
-
 
 		case LED_TXRX_BLINK:
 			pLed->BlinkTimes--;
@@ -1149,7 +1137,6 @@ BlinkTimerCallback(
 	_set_workitem(&(pLed->BlinkWorkItem));
 }
 
-
 /*  */
 /*	Description: */
 /*		Callback function of LED BlinkWorkItem. */
@@ -1197,7 +1184,6 @@ static void BlinkWorkItemCallback(struct work_struct *work)
 			break;
 	}
 }
-
 
 /*  */
 /*  Default LED behavior. */
@@ -1313,7 +1299,6 @@ static void SwLedControlMode0(
 			pLed->bLedBlinkInProgress = false;
 		}
 		break;
-
 
 	default:
 		break;
@@ -1490,7 +1475,6 @@ static void SwLedControlMode1(
 				_set_timer(&(pLed->BlinkTimer), LED_BLINK_SCAN_INTERVAL_ALPHA);
 			 }
 			break;
-
 
 		case LED_CTL_STOP_WPS:
 			if (pLed->bLedNoLinkBlinkInProgress == true)
@@ -1933,7 +1917,6 @@ static void SwLedControlMode3(
 	RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("CurrLedState %d\n", pLed->CurrLedState));
 }
 
-
  /* Edimax-Belkin, added by chiyoko, 20090413 */
 static void SwLedControlMode4(
 	struct rtw_adapter				*padapter,
@@ -2263,9 +2246,7 @@ static void SwLedControlMode4(
 	RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Led %d\n", pLed->CurrLedState));
 }
 
-
-
- /* Sercomm-Belkin, added by chiyoko, 20090415 */
+/* Sercomm-Belkin, added by chiyoko, 20090415 */
 static void SwLedControlMode5(
 	struct rtw_adapter				*padapter,
 	enum LED_CTL_MODE		LedAction
@@ -2351,7 +2332,6 @@ static void SwLedControlMode5(
 	RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Led %d\n", pLed->CurrLedState));
 }
 
-
 /*  */
 /*	Description: */
 /*		Dispatch LED action according to pHalData->LedStrategy. */
@@ -2431,7 +2411,6 @@ void rtl8192du_InitSwLeds(struct rtw_adapter	*padapter)
 
 	InitLed871x(padapter,&(pledpriv->SwLed1), LED_PIN_LED1);
 }
-
 
 /*  */
 /*	Description: */

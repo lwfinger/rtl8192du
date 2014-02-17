@@ -67,7 +67,6 @@ static void dm_DIGInit(
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
 
-
 	dm_digtable->dig_enable_flag = true;
 	dm_digtable->dig_ext_port_stage = DIG_EXT_PORT_STAGE_MAX;
 
@@ -82,7 +81,6 @@ static void dm_DIGInit(
 
 	dm_digtable->falowthresh	= DM_FALSEALARM_THRESH_LOW;
 	dm_digtable->fahighthresh	= DM_FALSEALARM_THRESH_HIGH;
-
 
 	dm_digtable->rx_gain_range_max = DM_DIG_MAX;
 	dm_digtable->rx_gain_range_min = DM_DIG_MIN;
@@ -162,7 +160,6 @@ odm_FalseAlarmCounterStatistics_ForSlaveOfDMSP(
 								falsealmcnt->Cnt_Crc8_fail + falsealmcnt->Cnt_Mcs_fail +
 								falsealmcnt->Cnt_Fast_Fsync + falsealmcnt->Cnt_SB_Search_fail;
 
-
 	/* hold cck counter */
 	falsealmcnt->Cnt_Cck_fail = FlaseAlmCntBuddyadapter->Cnt_Cck_fail;
 
@@ -226,7 +223,6 @@ odm_FalseAlarmCounterStatistics(
 	{
 		falsealmcnt->Cnt_Cck_fail = 0;
 	}
-
 
 	falsealmcnt->Cnt_all = (	falsealmcnt->Cnt_Fast_Fsync +
 						falsealmcnt->Cnt_SB_Search_fail +
@@ -507,7 +503,6 @@ static void odm_DIG(
 	struct mlme_priv	*pbuddy_pmlmepriv = &(pbuddy_adapter->mlmepriv);
 	struct dm_priv	*pbuddy_pdmpriv = &pbuddy_pHalData->dmpriv;
 #endif /* CONFIG_CONCURRENT_MODE */
-
 
 	if (IS_HARDWARE_TYPE_8192D(adapter))
 	{
@@ -816,7 +811,6 @@ static void odm_DIG(
 
 	}
 
-
 }
 
 static u8
@@ -828,7 +822,6 @@ dm_initial_gain_MinPWDB(
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	s32	rssi_val_min = 0;
 	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
-
 
 	if ((dm_digtable->curmultistaconnectstate == DIG_MultiSTA_CONNECT) &&
 	   (dm_digtable->curstaconnectstate == DIG_STA_CONNECT)) {
@@ -1211,7 +1204,6 @@ static void odm_DynamicTxPower_92D(struct rtw_adapter *	adapter)
 	pdmpriv->LastDTPLvl = pdmpriv->DynamicTxHighPowerLvl;
 }
 
-
 static void PWDB_Monitor(
 	struct rtw_adapter *	adapter
 	)
@@ -1222,7 +1214,6 @@ static void PWDB_Monitor(
 	int	tmpEntryMaxPWDB=0, tmpEntryMinPWDB=0xff;
 	u8	sta_cnt=0;
 	u32	PWDB_rssi[NUM_STA]={0};/* 0~15]:MACID, [16~31]:PWDB_rssi */
-
 
 	if (check_fwstate(&adapter->mlmepriv, WIFI_AP_STATE|WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == true)
 	{
@@ -1273,7 +1264,6 @@ static void PWDB_Monitor(
 			}
 		}
 	}
-
 
 	if (tmpEntryMaxPWDB != 0)	/*  If associated entry is found */
 	{
@@ -1567,9 +1557,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 	else if (pHalData->CurrentChannel != 14 && pdmpriv->bCCKinCH14)
 		pdmpriv->bCCKinCH14 = false;
 
-
 	ThermalValue = (u8)PHY_QueryRFReg(adapter, RF_PATH_A, RF_T_METER, 0xf800);	/* 0x42: RF Reg[15:11] 92D */
-
 
 	rtl8192d_PHY_APCalibrate(adapter, (ThermalValue - pHalData->EEPROMThermalMeter));/* notes:EEPROMThermalMeter is a fixed value from efuse/eeprom */
 
@@ -1972,10 +1960,8 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 
 	}
 
-
 	pdmpriv->TXPowercount = 0;
 }
-
 
 static	void
 dm_InitializeTXPowerTracking_ThermalMeter(
@@ -1994,7 +1980,6 @@ dm_InitializeTXPowerTracking_ThermalMeter(
 	}
 	MSG_8192D("pdmpriv->TxPowerTrackControl = %d\n", pdmpriv->TxPowerTrackControl);
 }
-
 
 static void
 DM_InitializeTXPowerTracking(
@@ -2055,7 +2040,6 @@ dm_CheckTXPowerTracking_ThermalMeter(
 	}
 }
 
-
 void
 rtl8192d_dm_CheckTXPowerTracking(
 	struct rtw_adapter *		adapter)
@@ -2066,7 +2050,6 @@ rtl8192d_dm_CheckTXPowerTracking(
 #endif
 	dm_CheckTXPowerTracking_ThermalMeter(adapter);
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:	dm_CheckRfCtrlGPIO()
@@ -2153,7 +2136,6 @@ static void	dm_CheckPbcGPIO(struct rtw_adapter * padapter)
 		/*  After trigger PBC, the variable will be set to false */
 		DBG_8192D("CheckPbcGPIO - PBC is pressed, try_cnt=%d\n", i-1);
 
-
 		if (padapter->pid[0] == 0)
 		{	/*	0 is the default value and it means the application monitors the HW PBC doesn't privde its pid to driver. */
 			return;
@@ -2177,7 +2159,6 @@ static void dm_InitRateAdaptiveMask(struct rtw_adapter *	adapter)
 	else
 		pdmpriv->bUseRAMask = false;
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:	dm_RefreshRateAdaptiveMask()

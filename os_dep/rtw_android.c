@@ -107,7 +107,6 @@ struct android_wifi_priv_cmd {
  */
 static int g_wifi_on = true;
 
-
 #ifdef PNO_SUPPORT
 static int wl_android_set_pno_setup(struct net_device *dev, char *command, int total_len)
 {
@@ -539,7 +538,6 @@ exit:
 
 	return ret;
 }
-
 
 /**
  * Functions for Android WiFi card detection

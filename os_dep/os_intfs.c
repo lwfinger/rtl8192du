@@ -1279,8 +1279,9 @@ _func_enter_;
 		goto exit;
 	}
 
-	/*  We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc(). */
-
+	/* We don't need to memset padapter->XXX to zero, because adapter
+	 * is allocated by vzalloc().
+	 */
 	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL)
 	{
 		DBG_8192D("Can't _rtw_init_sta_priv\n");

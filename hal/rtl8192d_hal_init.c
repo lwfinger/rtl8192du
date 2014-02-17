@@ -26,6 +26,7 @@
 #include <hal_intf.h>
 #include <usb_hal.h>
 #include <rtl8192d_hal.h>
+#include <linux/vmalloc.h>
 
 atomic_t GlobalMutexForGlobaladapterList = ATOMIC_INIT(0);
 atomic_t GlobalMutexForMac0_2G_Mac1_5G = ATOMIC_INIT(0);
@@ -307,7 +308,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 	if (adapter->bSurpriseRemoved)
 		return _FAIL;
 
-	pFirmware = (struct RT_FIRMWARE_92D *)rtw_zvmalloc(sizeof(struct RT_FIRMWARE_92D));
+	pFirmware = (struct RT_FIRMWARE_92D *)vzalloc(sizeof(struct RT_FIRMWARE_92D));
 	if (!pFirmware) {
 		rtStatus = _FAIL;
 		goto Exit;

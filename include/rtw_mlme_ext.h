@@ -454,7 +454,7 @@ struct mlme_ext_priv
 
 	u64 TSFValue;
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	unsigned char bstart_bss;
 #endif
 

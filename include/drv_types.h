@@ -317,7 +317,7 @@ struct rtw_adapter {
 	struct	drvext_priv	drvextpriv;
 #endif
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	struct	hostapd_priv	*phostapdpriv;
 #endif
 

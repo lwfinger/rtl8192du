@@ -238,22 +238,21 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	/*  channel 1~14 */
 #define DRVINFO_SZ	4 /*  unit is 8bytes */
 #define PageNum_128(_Len)		(u32)(((_Len)>>7) + ((_Len)&0x7F ? 1:0))
 
-/*  */
-/*  Check if FW header exists. We do not consider the lower 4 bits in this case. */
-/*  By tynli. 2009.12.04. */
-/*  */
-#define IS_FW_HEADER_EXIST(_pFwHdr)	((le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x92C0 ||\
-					(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x88C0 ||\
-					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D0 ||\
-					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D1 ||\
-					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D2 ||\
-					(le16_to_cpu(_pFwHdr->Signature)&0xFFFF) == 0x92D3)
+/*  Check if FW header exists. Ignore the lower 4 bits in this case. */
+#define IS_FW_HEADER_EXIST(_fwhdr)				\
+	((le16_to_cpu(_fwhdr->Signature)&0xFFF0) == 0x92C0 ||	\
+	(le16_to_cpu(_fwhdr->Signature)&0xFFF0) == 0x88C0 ||	\
+	(le16_to_cpu(_fwhdr->Signature)&0xFFFF) == 0x92D0 ||	\
+	(le16_to_cpu(_fwhdr->Signature)&0xFFFF) == 0x92D1 ||	\
+	(le16_to_cpu(_fwhdr->Signature)&0xFFFF) == 0x92D2 ||	\
+	(le16_to_cpu(_fwhdr->Signature)&0xFFFF) == 0x92D3)
 
-#define FW_8192D_SIZE				0x8020 /*  Max FW len = 32k + 32(FW header length). */
+/* Max FW len = 32k + 32(FW header length). */
+#define FW_8192D_SIZE		0x8020
 #define FW_8192D_START_ADDRESS	0x1000
-#define FW_8192D_END_ADDRESS		0x1FFF
+#define FW_8192D_END_ADDRESS	0x1FFF
 
-#define MAX_PAGE_SIZE				4096	/*  @ page : 4k bytes */
+#define MAX_PAGE_SIZE		4096	/*  @ page : 4k bytes */
 
 struct rt_firmware_92d {
 	u8 *buffer;
@@ -264,16 +263,19 @@ struct rt_firmware_92d {
 #endif /* CONFIG_WOWLAN */
 };
 
-/*  */
-/*  This structure must be cared byte-ordering */
-/*  */
-/*  Added by tynli. 2009.12.04. */
+/*  This structure must be careful with le byte-ordering */
 struct rt_8192d_firmware_hdr { /* 8-byte alinment required */
-
 	/*  LONG WORD 0 ---- */
-	__le16		Signature;	/*  92C0: test chip; 92C, 88C0: test chip; 88C1: MP A-cut; 92C1: MP A-cut */
+
+	/*  92C0: test chip; 92C, 88C0: test chip; 88C1: MP A-cut;
+	 * 92C1: MP A-cut
+	 */
+	__le16		Signature;
 	u8		Category;	/*  AP/NIC and USB/PCI */
-	u8		Function;	/*  Reserved for different FW function indcation, for further use when driver needs to download different FW in different conditions */
+	/* Reserved for different FW function indication, for further use when
+	 * driver needs to download different FW in different conditions
+	 */
+	u8		Function;
 	__le16		Version;		/*  FW Version */
 	u8		Subversion;	/*  FW Subversion, default 0x00 */
 	u8		Rsvd1;
@@ -305,8 +307,6 @@ struct iqk_matrix_regs_setting {
 	int		Value[1][IQK_Matrix_REG_NUM];
 };
 
-#ifdef CONFIG_USB_RX_AGGREGATION
-
 enum USB_RX_AGG_MODE {
 	USB_RX_AGG_DISABLE,
 	USB_RX_AGG_DMA,
@@ -314,20 +314,19 @@ enum USB_RX_AGG_MODE {
 	USB_RX_AGG_DMA_USB
 };
 
-#define MAX_RX_DMA_BUFFER_SIZE	10240		/*  10K for 8192C RX DMA buffer */
+#define MAX_RX_DMA_BUFFER_SIZE	10240		/*  10K for 8192C RX DMA buf */
 
-#endif
-
-
-#define TX_SELE_HQ			BIT(0)		/*  High Queue */
-#define TX_SELE_LQ			BIT(1)		/*  Low Queue */
-#define TX_SELE_NQ			BIT(2)		/*  Normal Queue */
+#define TX_SELE_HQ		BIT(0)		/*  High Queue */
+#define TX_SELE_LQ		BIT(1)		/*  Low Queue */
+#define TX_SELE_NQ		BIT(2)		/*  Normal Queue */
 
 
-/*  Note: We will divide number of page equally for each queue other than public queue! */
+/* Note: We will divide number of page equally for each queue
+ * other than public queue!
+ */
 
 #define TX_TOTAL_PAGE_NUMBER		0xF8
-#define TX_PAGE_BOUNDARY			(TX_TOTAL_PAGE_NUMBER + 1)
+#define TX_PAGE_BOUNDARY		(TX_TOTAL_PAGE_NUMBER + 1)
 
 /*  For Normal Chip Setting */
 /*  (HPQ + LPQ + NPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER */
@@ -685,11 +684,8 @@ struct hal_data_8192du {
 
 	u8	Queue2EPNum[8];/* for out endpoint number mapping */
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	u8	UsbTxAggMode;
 	u8	UsbTxAggDescNum;
-#endif
-#ifdef CONFIG_USB_RX_AGGREGATION
 	u16	HwRxPageSize;				/*  Hardware setting */
 	u32	MaxUsbRxAggBlock;
 
@@ -698,7 +694,6 @@ struct hal_data_8192du {
 	u8	UsbRxAggBlockTimeout;
 	u8	UsbRxAggPageCount;			/*  8192C DMA page count */
 	u8	UsbRxAggPageTimeout;
-#endif
 
 	u16	RegRRSR;
 

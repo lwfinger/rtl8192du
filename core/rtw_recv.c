@@ -754,7 +754,7 @@ static int recv_decache(struct recv_frame_hdr *precv_frame, u8 bretry,
 static void process_pwrbit_data(struct rtw_adapter *padapter,
 			        struct recv_frame_hdr *precv_frame)
 {
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	unsigned char pwrbit;
 	u8 *ptr = precv_frame->rx_data;
 	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
@@ -780,7 +780,7 @@ static void process_pwrbit_data(struct rtw_adapter *padapter,
 void process_wmmps_data(struct rtw_adapter *padapter,
 			struct recv_frame_hdr *precv_frame)
 {
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct sta_info *psta = NULL;
@@ -1374,7 +1374,7 @@ exit:
 static int validate_recv_ctrl_frame(struct rtw_adapter *padapter,
 			     struct recv_frame_hdr *precv_frame)
 {
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	u8 *pframe = precv_frame->rx_data;
@@ -2116,15 +2116,12 @@ static int amsdu_to_msdu(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 		a_len -= ETH_HLEN;
 
 		/* Allocate new skb for releasing to upper layer */
-#ifdef CONFIG_SKB_COPY
 		sub_skb = dev_alloc_skb(nSubframe_Length + 12);
 		if (sub_skb) {
 			skb_reserve(sub_skb, 12);
 			data_ptr = (u8 *)skb_put(sub_skb, nSubframe_Length);
 			memcpy(data_ptr, pdata, nSubframe_Length);
-		} else
-#endif /*  CONFIG_SKB_COPY */
-		{
+		} else {
 			sub_skb = skb_clone(prframe->pkt, GFP_ATOMIC);
 			if (sub_skb) {
 				sub_skb->data = pdata;

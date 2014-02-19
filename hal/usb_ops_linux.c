@@ -599,43 +599,31 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 
 		recvframe_put(precvframe, skb_len);
 
-#ifdef CONFIG_USB_RX_AGGREGATION
-		switch (pHalData->UsbRxAggMode)
-		{
-			case USB_RX_AGG_DMA:
-			case USB_RX_AGG_DMA_USB:
-				pkt_offset = (u16)_RND128(pkt_offset);
-				break;
-				case USB_RX_AGG_USB:
-				pkt_offset = (u16)_RND4(pkt_offset);
-				break;
-			case USB_RX_AGG_DISABLE:
-			default:
-				break;
+		switch (pHalData->UsbRxAggMode) {
+		case USB_RX_AGG_DMA:
+		case USB_RX_AGG_DMA_USB:
+			pkt_offset = (u16)_RND128(pkt_offset);
+			break;
+			case USB_RX_AGG_USB:
+			pkt_offset = (u16)_RND4(pkt_offset);
+			break;
+		case USB_RX_AGG_DISABLE:
+		default:
+			break;
 		}
-#endif
 #ifdef CONFIG_CONCURRENT_MODE
-		if (rtw_buddy_adapter_up(padapter))
-		{
+		if (rtw_buddy_adapter_up(padapter)) {
 			if (pre_recv_entry(precvframe, prxstat, pphy_info) != _SUCCESS)
-			{
 				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: recv_entry(precvframe) != _SUCCESS\n"));
-			}
-		}
-		else
-		{
+		} else {
 			rtl8192d_translate_rx_signal_stuff(precvframe, pphy_info);
 			if (rtw_recv_entry(precvframe) != _SUCCESS)
-			{
 				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: rtw_recv_entry(precvframe) != _SUCCESS\n"));
-			}
 		}
 #else
 		rtl8192d_translate_rx_signal_stuff(precvframe, pphy_info);
 		if (rtw_recv_entry(precvframe) != _SUCCESS)
-		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: rtw_recv_entry(precvframe) != _SUCCESS\n"));
-		}
 #endif /* CONFIG_CONCURRENT_MODE */
 		pkt_cnt--;
 
@@ -644,7 +632,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 		precvframe = NULL;
 		pkt_copy = NULL;
 
-		if (transfer_len>0 && pkt_cnt==0)
+		if (transfer_len > 0 && pkt_cnt == 0)
 			pkt_cnt = (le32_to_cpu(prxstat->rxdw2)>>16) & 0xff;
 
 	}while ((transfer_len>0) && (pkt_cnt>0));

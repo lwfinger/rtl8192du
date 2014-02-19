@@ -164,12 +164,9 @@ void rtw_wep_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
 		return;
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	pframe = ((struct xmit_frame *)pxmitframe)->buf_addr + TXDESC_SIZE +
-	    (((struct xmit_frame *)pxmitframe)->pkt_offset * PACKET_OFFSET_SZ);
-#else
-	pframe = ((struct xmit_frame *)pxmitframe)->buf_addr + TXDESC_OFFSET;
-#endif
+		 (((struct xmit_frame *)pxmitframe)->pkt_offset *
+		  PACKET_OFFSET_SZ);
 
 	/* start to encrypt each fragment */
 	if ((pattrib->encrypt == _WEP40_) || (pattrib->encrypt == _WEP104_)) {
@@ -634,12 +631,8 @@ u32 rtw_tkip_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
 		return _FAIL;
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	pframe = ((struct xmit_frame *)pxmitframe)->buf_addr + TXDESC_SIZE +
 	    (((struct xmit_frame *)pxmitframe)->pkt_offset * PACKET_OFFSET_SZ);
-#else
-	pframe = ((struct xmit_frame *)pxmitframe)->buf_addr + TXDESC_OFFSET;
-#endif
 
 	/* 4 start to encrypt each fragment */
 	if (pattrib->encrypt == _TKIP_) {
@@ -1375,12 +1368,9 @@ u32 rtw_aes_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
 		return _FAIL;
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	pframe = ((struct xmit_frame *)pxmitframe)->buf_addr + TXDESC_SIZE +
-	    (((struct xmit_frame *)pxmitframe)->pkt_offset * PACKET_OFFSET_SZ);
-#else
-	pframe = ((struct xmit_frame *)pxmitframe)->buf_addr + TXDESC_OFFSET;
-#endif
+		 (((struct xmit_frame *)pxmitframe)->pkt_offset *
+		  PACKET_OFFSET_SZ);
 
 	/* 4 start to encrypt each fragment */
 	if ((pattrib->encrypt == _AES_)) {

@@ -39,7 +39,7 @@ static void _rtw_init_stainfo(struct sta_info *psta)
 	_rtw_init_sta_xmit_priv(&psta->sta_xmitpriv);
 	_rtw_init_sta_recv_priv(&psta->sta_recvpriv);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 
 	INIT_LIST_HEAD(&psta->asoc_list);
 
@@ -64,7 +64,7 @@ static void _rtw_init_stainfo(struct sta_info *psta)
 
 	psta->under_exist_checking = 0;
 	psta->keep_alive_trycnt = 0;
-#endif	/*  CONFIG_AP_MODE */
+#endif	/*  CONFIG_92D_AP_MODE */
 
 }
 
@@ -102,7 +102,7 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 		psta++;
 	}
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 
 	pstapriv->sta_dz_bitmap = 0;
 	pstapriv->tim_bitmap = 0;
@@ -205,7 +205,7 @@ static void rtw_mfree_all_stainfo(struct sta_priv *pstapriv)
 
 static void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
 {
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
 #endif
 
@@ -217,7 +217,7 @@ static void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
 	_rtw_spinlock_free(&pstapriv->wakeup_q.lock);
 	_rtw_spinlock_free(&pstapriv->sleep_q.lock);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	_rtw_spinlock_free(&pstapriv->asoc_list_lock);
 	_rtw_spinlock_free(&pstapriv->auth_list_lock);
 	_rtw_spinlock_free(&pacl_list->acl_node_q.lock);
@@ -463,7 +463,7 @@ u32	rtw_free_stainfo(struct rtw_adapter *padapter, struct sta_info *psta)
 		spin_unlock_bh(&ppending_recvframe_queue->lock);
 	}
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 
 	spin_lock_bh(&pstapriv->auth_list_lock);
 	if (!rtw_is_list_empty(&psta->auth_list)) {
@@ -499,7 +499,7 @@ u32	rtw_free_stainfo(struct rtw_adapter *padapter, struct sta_info *psta)
 
 	psta->under_exist_checking = 0;
 
-#endif	/*  CONFIG_AP_MODE */
+#endif	/*  CONFIG_92D_AP_MODE */
 
 	spin_lock_bh(&(pfree_sta_queue->lock));
 	rtw_list_insert_tail(&psta->list, get_list_head(pfree_sta_queue));
@@ -621,7 +621,7 @@ struct sta_info *rtw_get_bcmc_stainfo(struct rtw_adapter *padapter)
 u8 rtw_access_ctrl(struct rtw_adapter *padapter, u8 *mac_addr)
 {
 	u8 res = true;
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	struct list_head *plist, *phead;
 	struct rtw_wlan_acl_node *paclnode;
 	u8 match = false;

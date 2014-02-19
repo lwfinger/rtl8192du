@@ -118,20 +118,17 @@ struct led_priv{
 	struct LED_871X			SwLed0;
 	struct LED_871X			SwLed1;
 	enum LED_STRATEGY_871X	LedStrategy;
-	u8					bRegUseLed;
-	void (*LedControlHandler)(struct rtw_adapter *padapter, enum LED_CTL_MODE LedAction);
+	u8	bRegUseLed;
+	void (*LedControlHandler)(struct rtw_adapter *padapter, enum LED_CTL_MODE _ledaction);
 	/* add for led controll */
 };
 
-#ifdef CONFIG_SW_LED
-#define rtw_led_control(adapter, LedAction) \
+#define rtw_led_control(adapter, _ledaction) \
 	do { \
 		if ((adapter)->ledpriv.LedControlHandler) \
-			(adapter)->ledpriv.LedControlHandler((adapter), (LedAction)); \
+			(adapter)->ledpriv.LedControlHandler((adapter),	\
+							     (_ledaction)); \
 	} while (0)
-#else /* CONFIG_SW_LED */
-#define rtw_led_control(adapter, LedAction)
-#endif /* CONFIG_SW_LED */
 
 extern void BlinkHandler(struct LED_871X *pLed);
 

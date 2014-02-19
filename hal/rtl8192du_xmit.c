@@ -224,9 +224,9 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 	struct rtw_adapter				*padapter = pxmitframe->padapter;
 	struct hal_data_8192du		*pHalData = GET_HAL_DATA(padapter);
 	struct dm_priv		*pdmpriv = &pHalData->dmpriv;
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-#endif /* CONFIG_AP_MODE */
+#endif /* CONFIG_92D_AP_MODE */
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct pkt_attrib		*pattrib = &pxmitframe->attrib;
@@ -353,7 +353,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		ptxdesc->txdw1 |= cpu_to_le32((pattrib->raid<< 16) & 0x000f0000);
 
 		/* offset 8 */
-#ifdef CONFIG_XMIT_ACK
+
 		/* CCX-TXRPT ack for xmit mgmt frames. */
 		if (pxmitframe->ack_report) {
 			ptxdesc->txdw2 |= cpu_to_le32(BIT(19));
@@ -361,7 +361,6 @@ if (padapter->registrypriv.mp_mode == 0)
 			DBG_8192D("%s set ccx\n", __func__);
 			#endif
 		}
-#endif /* CONFIG_XMIT_ACK */
 
 		/* offset 12 */
 		ptxdesc->txdw3 |= cpu_to_le32((pattrib->seqnum<<16)&0xffff0000);
@@ -370,7 +369,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		ptxdesc->txdw4 |= cpu_to_le32(BIT(8));/* driver uses rate */
 
 		/* offset 20 */
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 			ptxdesc->txdw5 |= cpu_to_le32(BIT(17));/* retry limit enable */
 #ifdef CONFIG_P2P
@@ -434,12 +433,12 @@ if (padapter->registrypriv.mp_mode == 0)
 	/* offset 4 */
 	/*  pkt_offset, unit:8 bytes padding */
 	if (pxmitframe->pkt_offset > 0)
-		ptxdesc->txdw1 |= cpu_to_le32((pxmitframe->pkt_offset << 26) & 0x7c000000);
+		ptxdesc->txdw1 |= cpu_to_le32((pxmitframe->pkt_offset << 26) &
+					      0x7c000000);
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	if (pxmitframe->agg_num > 1)
-		ptxdesc->txdw5 |= cpu_to_le32((pxmitframe->agg_num << 24) & 0xff000000);
-#endif
+		ptxdesc->txdw5 |= cpu_to_le32((pxmitframe->agg_num << 24) &
+					      0xff000000);
 
 	rtl8192du_cal_txdesc_chksum(ptxdesc);
 
@@ -542,7 +541,6 @@ s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 	return ret;
 }
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 static u32 xmitframe_need_length(struct xmit_frame *pxmitframe)
 {
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
@@ -796,81 +794,6 @@ s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv 
 	return true;
 }
 
-#else
-
-s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
-{
-
-	struct hw_xmit *phwxmits;
-	int hwentry;
-	struct xmit_frame *pxmitframe=NULL;
-	int res=_SUCCESS, xcnt = 0;
-
-	phwxmits = pxmitpriv->hwxmits;
-	hwentry = pxmitpriv->hwxmit_entry;
-
-	RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("xmitframe_complete()\n"));
-
-	if (pxmitbuf==NULL)
-	{
-		pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
-		if (!pxmitbuf)
-		{
-			return false;
-		}
-	}
-
-	do
-	{
-		pxmitframe =  rtw_dequeue_xframe(pxmitpriv, phwxmits, hwentry);
-
-		if (pxmitframe)
-		{
-			pxmitframe->pxmitbuf = pxmitbuf;
-
-			pxmitframe->buf_addr = pxmitbuf->pbuf;
-
-			pxmitbuf->priv_data = pxmitframe;
-
-			if ((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG)
-			{
-				if (pxmitframe->attrib.priority<=15)/* TID0~15 */
-				{
-					res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
-				}
-
-				rtw_os_xmit_complete(padapter, pxmitframe);/* always return ndis_packet after rtw_xmitframe_coalesce */
-			}
-
-			RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("xmitframe_complete(): rtw_dump_xframe\n"));
-
-			if (res == _SUCCESS)
-			{
-				rtw_dump_xframe(padapter, pxmitframe);
-			}
-			else
-			{
-				rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
-				rtw_free_xmitframe(pxmitpriv, pxmitframe);
-			}
-
-			xcnt++;
-
-		}
-		else
-		{
-			rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
-			return false;
-		}
-
-		break;
-
-	}while (0/*xcnt < (NR_XMITFRAME >> 3)*/);
-
-	return true;
-}
-#endif
-
 static s32 xmitframe_direct(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 res = _SUCCESS;
@@ -883,8 +806,7 @@ static s32 xmitframe_direct(struct rtw_adapter *padapter, struct xmit_frame *pxm
 	return res;
 }
 
-/*
- * Return
+/*	Return
  *	true	dump packet directly
  *	false	enqueue packet
  */

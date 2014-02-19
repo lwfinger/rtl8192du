@@ -925,7 +925,7 @@ extern  u8 rtw_antenna_select_cmd(struct rtw_adapter*padapter, u8 antenna,u8 enq
 extern u8 rtw_ps_cmd(struct rtw_adapter*padapter);
 
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 u8 rtw_chk_hi_queue_cmd(struct rtw_adapter*padapter);
 #endif
 

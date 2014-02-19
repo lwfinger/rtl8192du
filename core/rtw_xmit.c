@@ -209,14 +209,11 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct rtw_adapter *padapte
 	pxmitpriv->viq_cnt = 0;
 	pxmitpriv->voq_cnt = 0;
 
-#ifdef CONFIG_XMIT_ACK
 	pxmitpriv->ack_tx = false;
 	_rtw_mutex_init(&pxmitpriv->ack_tx_mutex);
 	rtw_sctx_init(&pxmitpriv->ack_tx_ops, 0);
-#endif
 	rtw_hal_init_xmit_priv(padapter);
 exit:
-
 	return res;
 }
 
@@ -277,9 +274,7 @@ void _rtw_free_xmit_priv(struct xmit_priv *pxmitpriv)
 
 	rtw_free_hwxmits(padapter);
 
-#ifdef CONFIG_XMIT_ACK
 	_rtw_mutex_free(&pxmitpriv->ack_tx_mutex);
-#endif
 }
 
 static void update_attrib_vcs_info(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
@@ -644,16 +639,17 @@ exit:
 	return res;
 }
 
-static s32 xmitframe_addmic(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
+static s32 xmitframe_addmic(struct rtw_adapter *padapter,
+			    struct xmit_frame *pxmitframe)
 {
-	int			curfragnum, length;
-	u8	*pframe, *payload, mic[8];
-	struct	mic_data		micdata;
-	struct	sta_info		*stainfo;
-	struct	qos_priv   *pqospriv = &(padapter->mlmepriv.qospriv);
-	struct	pkt_attrib	 *pattrib = &pxmitframe->attrib;
-	struct	security_priv	*psecuritypriv = &padapter->securitypriv;
-	struct	xmit_priv		*pxmitpriv = &padapter->xmitpriv;
+	int curfragnum, length;
+	u8 *pframe, *payload, mic[8];
+	struct	mic_data micdata;
+	struct	sta_info *stainfo;
+	struct	qos_priv *pqospriv = &(padapter->mlmepriv.qospriv);
+	struct	pkt_attrib *pattrib = &pxmitframe->attrib;
+	struct	security_priv *psecuritypriv = &padapter->securitypriv;
+	struct	xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	u8 priority[4] = {0x0, 0x0, 0x0, 0x0};
 	int bmcst = IS_MCAST(pattrib->ra);
 
@@ -667,16 +663,11 @@ static s32 xmitframe_addmic(struct rtw_adapter *padapter, struct xmit_frame *pxm
 		if (stainfo != NULL) {
 			u8 null_key[16] = {0};
 
-#ifdef CONFIG_USB_TX_AGGREGATION
-			pframe = pxmitframe->buf_addr + TXDESC_SIZE + (pxmitframe->pkt_offset * PACKET_OFFSET_SZ);
-#else
-			pframe = pxmitframe->buf_addr + TXDESC_OFFSET;
-#endif
+			pframe = pxmitframe->buf_addr + TXDESC_SIZE +
+				 (pxmitframe->pkt_offset * PACKET_OFFSET_SZ);
 
 			if (bmcst) {
 				if (_rtw_memcmp(psecuritypriv->dot118021XGrptxmickey[psecuritypriv->dot118021XGrpKeyid].skey, null_key, 16) == true) {
-					/* DbgPrint("\nxmitframe_addmic:stainfo->dot11tkiptxmickey == 0\n"); */
-					/* rtw_msleep_os(10); */
 					return _FAIL;
 				}
 				/* start to calculate the mic code */
@@ -1327,11 +1318,7 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, st
 
 	pbuf_start = pxmitframe->buf_addr;
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	mem_start = pbuf_start + TXDESC_SIZE + (pxmitframe->pkt_offset * PACKET_OFFSET_SZ);
-#else
-	mem_start = pbuf_start + TXDESC_OFFSET;
-#endif
 
 	if (rtw_make_wlanhdr(padapter, mem_start, pattrib) == _FAIL) {
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("rtw_xmitframe_coalesce: rtw_make_wlanhdr fail; drop pkt\n"));
@@ -1528,21 +1515,13 @@ void rtw_count_tx_stats(struct rtw_adapter *padapter, struct xmit_frame *pxmitfr
 
 	if ((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG) {
 		pxmitpriv->tx_bytes += sz;
-#ifdef CONFIG_USB_TX_AGGREGATION
 		pmlmepriv->LinkDetectInfo.NumTxOkInPeriod += pxmitframe->agg_num;
-#else
-		pmlmepriv->LinkDetectInfo.NumTxOkInPeriod++;
-#endif
 
 		psta = pxmitframe->attrib.psta;
 
 		if (psta) {
 			pstats = &psta->sta_stats;
-#ifdef CONFIG_USB_TX_AGGREGATION
 			pstats->tx_pkts += pxmitframe->agg_num;
-#else
-			pstats->tx_pkts++;
-#endif
 			pstats->tx_bytes += sz;
 		}
 	}
@@ -1743,9 +1722,7 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)
 		pxframe->pkt = NULL;
 		pxframe->pkt_offset = 1;/* default use pkt_offset to fill tx desc */
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 		pxframe->agg_num = 1;
-#endif
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 35))
 		if (pxmitpriv->free_xmitframe_cnt == 1) {
@@ -1753,10 +1730,7 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)
 				rtw_netif_stop_queue(padapter->pnetdev);
 		}
 #endif
-
-#ifdef CONFIG_XMIT_ACK
 		pxframe->ack_report = 0;
-#endif
 	}
 	spin_unlock_bh(&pfree_xmit_queue->lock);
 
@@ -2244,7 +2218,7 @@ s32 rtw_xmit(struct rtw_adapter *padapter, struct sk_buff **ppkt)
 
 	do_queue_select(padapter, &pxmitframe->attrib);
 
-#if defined(CONFIG_AP_MODE) || defined(CONFIG_TDLS)
+#if defined(CONFIG_92D_AP_MODE) || defined(CONFIG_TDLS)
 	spin_lock_bh(&pxmitpriv->lock);
 	if (xmitframe_enqueue_for_sleeping_sta(padapter, pxmitframe) == true) {
 		spin_unlock_bh(&pxmitpriv->lock);
@@ -2320,7 +2294,7 @@ int xmitframe_enqueue_for_tdls_sleeping_sta(struct rtw_adapter *padapter, struct
 }
 #endif /* CONFIG_TDLS */
 
-#if defined(CONFIG_AP_MODE) || defined(CONFIG_TDLS)
+#if defined(CONFIG_92D_AP_MODE) || defined(CONFIG_TDLS)
 
 int xmitframe_enqueue_for_sleeping_sta(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 {
@@ -2754,10 +2728,6 @@ void rtw_sctx_done(struct submit_ctx **sctx)
 	rtw_sctx_done_err(sctx, RTW_SCTX_DONE_SUCCESS);
 }
 
-#ifdef CONFIG_XMIT_ACK
-
-#ifdef CONFIG_XMIT_ACK_POLLING
-
 /**
  * rtw_ack_tx_polling -
  * @pxmitpriv: xmit_priv to address ack_tx_ops
@@ -2803,21 +2773,10 @@ static int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 
 	return ret;
 }
-#endif
 
 int rtw_ack_tx_wait(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 {
-#ifdef CONFIG_XMIT_ACK_POLLING
 	return rtw_ack_tx_polling(pxmitpriv, timeout_ms);
-#else
-	struct submit_ctx *pack_tx_ops = &pxmitpriv->ack_tx_ops;
-
-	pack_tx_ops->submit_time = rtw_get_current_time();
-	pack_tx_ops->timeout_ms = timeout_ms;
-	pack_tx_ops->status = RTW_SCTX_SUBMITTED;
-
-	return rtw_sctx_wait(pack_tx_ops);
-#endif
 }
 
 void rtw_ack_tx_done(struct xmit_priv *pxmitpriv, int status)
@@ -2829,4 +2788,3 @@ void rtw_ack_tx_done(struct xmit_priv *pxmitpriv, int status)
 	else
 		DBG_8192D("%s ack_tx not set\n", __func__);
 }
-#endif /* CONFIG_XMIT_ACK */

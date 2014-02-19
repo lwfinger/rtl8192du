@@ -566,7 +566,7 @@ void rtw_cfg80211_indicate_disconnect(_adapter *padapter)
 	}
 }
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 static u8 set_pairwise_key(_adapter *padapter, struct sta_info *psta)
 {
 	struct cmd_obj*			ph2c;
@@ -1219,7 +1219,7 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, struct net_device *ndev,
 	}
 	else if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 	{
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 		if (mac_addr)
 			memcpy(param->sta_addr, (void*)mac_addr, ETH_ALEN);
 
@@ -2688,7 +2688,7 @@ static int cfg80211_rtw_flush_pmksa(struct wiphy *wiphy,
 	return 0;
 }
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 void rtw_cfg80211_indicate_sta_assoc(_adapter *padapter, u8 *pmgmt_frame, uint frame_len)
 {
 	s32 freq;
@@ -3485,7 +3485,7 @@ static int	cfg80211_rtw_assoc(struct wiphy *wiphy, struct net_device *ndev,
 
 	return 0;
 }
-#endif /* CONFIG_AP_MODE */
+#endif /* CONFIG_92D_AP_MODE */
 
 void rtw_cfg80211_rx_action_p2p(_adapter *padapter, u8 *pmgmt_frame, uint frame_len)
 {
@@ -4606,7 +4606,7 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 	.del_pmksa = cfg80211_rtw_del_pmksa,
 	.flush_pmksa = cfg80211_rtw_flush_pmksa,
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	.add_virtual_intf = cfg80211_rtw_add_virtual_intf,
 	.del_virtual_intf = cfg80211_rtw_del_virtual_intf,
 
@@ -4628,7 +4628,7 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 	#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 6, 0))
 	.set_channel = cfg80211_rtw_set_channel,
 	#endif
-#endif /* CONFIG_AP_MODE */
+#endif /* CONFIG_92D_AP_MODE */
 
 #ifdef CONFIG_P2P
 	.remain_on_channel = cfg80211_rtw_remain_on_channel,
@@ -4728,7 +4728,7 @@ void rtw_cfg80211_init_wiphy(_adapter *padapter)
 struct ieee80211_iface_limit rtw_limits[] = {
 	{ .max = 1, .types = BIT(NL80211_IFTYPE_STATION)
 					| BIT(NL80211_IFTYPE_ADHOC)
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 					| BIT(NL80211_IFTYPE_AP)
 #endif
 #if defined(CONFIG_P2P) && ((LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE))
@@ -4762,7 +4762,7 @@ static void rtw_cfg80211_preinit_wiphy(_adapter *padapter, struct wiphy *wiphy)
 
 	wiphy->interface_modes =	BIT(NL80211_IFTYPE_STATION)
 								| BIT(NL80211_IFTYPE_ADHOC)
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 								| BIT(NL80211_IFTYPE_AP)
 								| BIT(NL80211_IFTYPE_MONITOR)
 #endif
@@ -4773,9 +4773,9 @@ static void rtw_cfg80211_preinit_wiphy(_adapter *padapter, struct wiphy *wiphy)
 								;
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	wiphy->mgmt_stypes = rtw_cfg80211_default_mgmt_stypes;
-#endif /* CONFIG_AP_MODE */
+#endif /* CONFIG_92D_AP_MODE */
 #endif
 
 	wiphy->software_iftypes |= BIT(NL80211_IFTYPE_MONITOR);

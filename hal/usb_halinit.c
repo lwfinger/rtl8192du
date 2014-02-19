@@ -281,19 +281,14 @@ static void rtl8192du_interface_configure(struct rtw_adapter *padapter)
 	pHalData->RtBulkOutPipe[1] = pdvobjpriv->ep_num[2];
 	pHalData->RtIntInPipe = pdvobjpriv->ep_num[3];
 	pHalData->RtBulkOutPipe[2] = pdvobjpriv->ep_num[4];
-	/* DBG_8192D("Bulk In = %x, Bulk Out = %x %x %x\n",pHalData->RtBulkInPipe, pHalData->RtBulkOutPipe[0],pHalData->RtBulkOutPipe[1],pHalData->RtBulkOutPipe[2]); */
-#ifdef CONFIG_USB_TX_AGGREGATION
-	pHalData->UsbTxAggMode		= 1;
-	pHalData->UsbTxAggDescNum	= 0x4;	/*  only 4 bits */
-#endif
+	pHalData->UsbTxAggMode = 1;
+	pHalData->UsbTxAggDescNum = 0x4;	/*  only 4 bits */
 
-#ifdef CONFIG_USB_RX_AGGREGATION
 	pHalData->UsbRxAggMode = USB_RX_AGG_DMA;/*  USB_RX_AGG_DMA; */
 	pHalData->UsbRxAggBlockCount	= 8; /* unit : 512b */
 	pHalData->UsbRxAggBlockTimeout = 0x6;
 	pHalData->UsbRxAggPageCount	= 48; /* uint :128 b 0x0A;	10 = MAX_RX_DMA_BUFFER_SIZE/2/pHalData->UsbBulkOutSize */
 	pHalData->UsbRxAggPageTimeout = 0x6; /* 6, absolute time = 34ms/(2^6) */
-#endif
 
 	HalUsbSetQueuePipeMapping8192DUsb(padapter,
 				pdvobjpriv->RtNumInPipes, pdvobjpriv->RtNumOutPipes);
@@ -304,7 +299,6 @@ static u8 _InitPowerOn(struct rtw_adapter *padapter)
 	u8	ret = _SUCCESS;
 	u16	value16=0;
 	u8	value8 = 0;
-/*	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter); */
 
 	/*  polling autoload done. */
 	u32	pollingCount = 0;
@@ -1305,15 +1299,12 @@ _InitRetryFunction(
 	rtw_write8(adapter, REG_ACKTO, 0x40);
 }
 
-static void
-_InitUsbAggregationSetting(
-	struct rtw_adapter * adapter
-	)
-{
-#ifdef CONFIG_USB_TX_AGGREGATION
+static void _InitUsbAggregationSetting(struct rtw_adapter * adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	u32			value32;
+	u8 valuedma;
+	u8 valueusb;
+	u32 value32;
 
 	if (adapter->registrypriv.wifi_spec)
 		pHalData->UsbTxAggMode = false;
@@ -1328,46 +1319,37 @@ _InitUsbAggregationSetting(
 
 		rtw_write32(adapter, REG_TDECTRL, value32);
 	}
-}
-#endif
 
 	/*  Rx aggregation setting */
-#ifdef CONFIG_USB_RX_AGGREGATION
-{
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	u8		valueDMA;
-	u8		valueUSB;
-
 	if (pHalData->MacPhyMode92D!=SINGLEMAC_SINGLEPHY) {
 		pHalData->UsbRxAggPageCount	= 24;
 		pHalData->UsbRxAggPageTimeout = 0x6;
 	}
-
-	valueDMA = rtw_read8(adapter, REG_TRXDMA_CTRL);
-	valueUSB = rtw_read8(adapter, REG_USB_SPECIAL_OPTION);
+	valuedma = rtw_read8(adapter, REG_TRXDMA_CTRL);
+	valueusb = rtw_read8(adapter, REG_USB_SPECIAL_OPTION);
 
 	switch (pHalData->UsbRxAggMode) {
 	case USB_RX_AGG_DMA:
-		valueDMA |= RXDMA_AGG_EN;
-		valueUSB &= ~USB_AGG_EN;
+		valuedma |= RXDMA_AGG_EN;
+		valueusb &= ~USB_AGG_EN;
 		break;
 	case USB_RX_AGG_USB:
-		valueDMA &= ~RXDMA_AGG_EN;
-		valueUSB |= USB_AGG_EN;
+		valuedma &= ~RXDMA_AGG_EN;
+		valueusb |= USB_AGG_EN;
 		break;
 	case USB_RX_AGG_DMA_USB:
-		valueDMA |= RXDMA_AGG_EN;
-		valueUSB |= USB_AGG_EN;
+		valuedma |= RXDMA_AGG_EN;
+		valueusb |= USB_AGG_EN;
 		break;
 	case USB_RX_AGG_DISABLE:
 	default:
-		valueDMA &= ~RXDMA_AGG_EN;
-		valueUSB &= ~USB_AGG_EN;
+		valuedma &= ~RXDMA_AGG_EN;
+		valueusb &= ~USB_AGG_EN;
 		break;
 	}
 
-	rtw_write8(adapter, REG_TRXDMA_CTRL, valueDMA);
-	rtw_write8(adapter, REG_USB_SPECIAL_OPTION, valueUSB);
+	rtw_write8(adapter, REG_TRXDMA_CTRL, valuedma);
+	rtw_write8(adapter, REG_USB_SPECIAL_OPTION, valueusb);
 	switch (pHalData->UsbRxAggMode) {
 		case USB_RX_AGG_DMA:
 			rtw_write8(adapter, REG_RXDMA_AGG_PG_TH, pHalData->UsbRxAggPageCount);
@@ -1388,35 +1370,28 @@ _InitUsbAggregationSetting(
 			/*  TODO: */
 			break;
 	}
-	switch (PBP_128)
-	{
-		case PBP_128:
-			pHalData->HwRxPageSize = 128;
-			break;
-		case PBP_64:
-			pHalData->HwRxPageSize = 64;
-			break;
-		case PBP_256:
-			pHalData->HwRxPageSize = 256;
-			break;
-		case PBP_512:
-			pHalData->HwRxPageSize = 512;
-			break;
-		case PBP_1024:
-			pHalData->HwRxPageSize = 1024;
-			break;
-		default:
-			/* RT_ASSERT(FALSE, ("RX_PAGE_SIZE_REG_VALUE definition is incorrect!\n")); */
-			break;
+	switch (PBP_128) {
+	case PBP_128:
+		pHalData->HwRxPageSize = 128;
+		break;
+	case PBP_64:
+		pHalData->HwRxPageSize = 64;
+		break;
+	case PBP_256:
+		pHalData->HwRxPageSize = 256;
+		break;
+	case PBP_512:
+		pHalData->HwRxPageSize = 512;
+		break;
+	case PBP_1024:
+		pHalData->HwRxPageSize = 1024;
+		break;
+	default:
+		break;
 	}
 }
-#endif
-}
 
-static void
-_InitOperationMode(
-	struct rtw_adapter *			adapter
-	)
+static void _InitOperationMode(struct rtw_adapter *adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	u8 regBwOpMode = 0, MinSpaceCfg = 0;
@@ -1599,19 +1574,13 @@ static void _RfPowerSave(
 	}
 }
 
-#ifdef CONFIG_LED
-static void _InitHWLed(struct rtw_adapter * adapter)
+static void init_hwled(struct rtw_adapter * adapter)
 {
 	struct led_priv *pledpriv = &(adapter->ledpriv);
 
 	if (pledpriv->LedStrategy != HW_LED)
 			return;
-
-/*  HW led control */
-/*  to do .... */
-/* must consider the cases of antenna diversity/ commbo card/solo card/mini card */
 }
-#endif /* CONFIG_LED */
 
 #ifdef CONFIG_WOWLAN
 static void dump_wakup_reason(struct rtw_adapter *padapter)
@@ -1925,9 +1894,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 	rtw_write16(padapter, REG_PKT_BE_BK_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
 #endif	/*  CONFIG_CONCURRENT_MODE */
 
-	#ifdef CONFIG_LED
-	_InitHWLed(padapter);
-	#endif
+	init_hwled(padapter);
 
 #if ENABLE_USB_DROP_INCORRECT_OUT
 	_InitHardwareDropIncorrectBulkOut(padapter);
@@ -2200,11 +2167,8 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC31);
 		rtw_write32(padapter, 0xC8C, 0xa0e40000);
 	}
 
-#ifdef CONFIG_XMIT_ACK
 	/* ack for xmit mgmt frames. */
 	rtw_write32(padapter, REG_FWHW_TXQ_CTRL, rtw_read32(padapter, REG_FWHW_TXQ_CTRL)|BIT(12));
-#endif /* CONFIG_XMIT_ACK */
-
 exit:
 	padapter->init_adpt_in_progress = false;
 
@@ -4629,7 +4593,6 @@ static void SetHwReg8192DU(struct rtw_adapter * adapter, u8 variable, u8* val)
 			}
 			break;
 		case HW_VAR_RXDMA_AGG_PG_TH:
-			#ifdef CONFIG_USB_RX_AGGREGATION
 			{
 				u8	threshold = *((u8 *)val);
 				if (threshold == 0)
@@ -4638,7 +4601,6 @@ static void SetHwReg8192DU(struct rtw_adapter * adapter, u8 variable, u8* val)
 				}
 				rtw_write8(adapter, REG_RXDMA_AGG_PG_TH, threshold);
 			}
-			#endif
 			break;
 		case HW_VAR_SET_RPWM:
 			{
@@ -5319,13 +5281,8 @@ void rtl8192du_set_hal_ops(struct rtw_adapter * padapter)
 
 	pHalFunc->init_recv_priv = &rtl8192du_init_recv_priv;
 	pHalFunc->free_recv_priv = &rtl8192du_free_recv_priv;
-#ifdef CONFIG_SW_LED
 	pHalFunc->InitSwLeds = &rtl8192du_InitSwLeds;
 	pHalFunc->DeInitSwLeds = &rtl8192du_DeInitSwLeds;
-#else /*  case of hw led or no led */
-	pHalFunc->InitSwLeds = NULL;
-	pHalFunc->DeInitSwLeds = NULL;
-#endif /* CONFIG_SW_LED */
 
 	pHalFunc->init_default_value = &rtl8192du_init_default_value;
 	pHalFunc->intf_chip_configure = &rtl8192du_interface_configure;

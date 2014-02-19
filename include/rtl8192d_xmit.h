@@ -80,17 +80,10 @@ struct txrpt_ccx_8192d {
 
 #define txrpt_ccx_qtime_8192d(txrpt_ccx) ((txrpt_ccx)->ccx_qtime0+((txrpt_ccx)->ccx_qtime1<<8))
 
-#ifdef CONFIG_XMIT_ACK
 void dump_txrpt_ccx_8192d(void *buf);
 void handle_txrpt_ccx_8192d(struct rtw_adapter *adapter, void *buf);
-#else
-#define dump_txrpt_ccx_8192d(buf) do {} while (0)
-#define handle_txrpt_ccx_8192d(adapter, buf) do {} while (0)
-#endif
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 #define MAX_TX_AGG_PACKET_NUMBER 0xFF
-#endif
 
 s32	rtl8192du_init_xmit_priv(struct rtw_adapter * padapter);
 
@@ -98,11 +91,15 @@ void	rtl8192du_free_xmit_priv(struct rtw_adapter * padapter);
 
 void rtl8192du_cal_txdesc_chksum(struct tx_desc	*ptxdesc);
 
-s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
+s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter,
+				 struct xmit_priv *pxmitpriv,
+				 struct xmit_buf *pxmitbuf);
 
-s32 rtl8192du_mgnt_xmit(struct rtw_adapter *padapter, struct xmit_frame *pmgntframe);
+s32 rtl8192du_mgnt_xmit(struct rtw_adapter *padapter,
+			struct xmit_frame *pmgntframe);
 
-s32 rtl8192du_hal_xmit(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe);
+s32 rtl8192du_hal_xmit(struct rtw_adapter *padapter,
+		       struct xmit_frame *pxmitframe);
 
 #ifdef CONFIG_HOSTAPD_MLME
 s32	rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt);

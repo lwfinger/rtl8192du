@@ -1744,7 +1744,7 @@ static void dynamic_chk_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
 	pmlmepriv = &(padapter->mlmepriv);
 
 #ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 		expire_timeout_chk(padapter);
 #endif
@@ -1972,7 +1972,7 @@ exit:
 	return res;
 }
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 
 static void rtw_chk_hi_queue_hdl(struct rtw_adapter *padapter)
 {
@@ -2168,11 +2168,11 @@ u8 rtw_drvextra_cmd_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 		/*	I used the type_size as the type command */
 		p2p_protocol_wk_hdl(padapter, pdrvextra_cmd->type_size);
 		break;
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	case CHECK_HIQ_WK_CID:
 		rtw_chk_hi_queue_hdl(padapter);
 		break;
-#endif /* CONFIG_AP_MODE */
+#endif /* CONFIG_92D_AP_MODE */
 #ifdef CONFIG_INTEL_WIDI
 	case INTEl_WIDI_WK_CID:
 		intel_widi_wk_hdl(padapter, pdrvextra_cmd->type_size, pdrvextra_cmd->pbuf);

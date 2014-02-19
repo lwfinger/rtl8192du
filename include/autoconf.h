@@ -42,12 +42,7 @@
 #endif /* CONFIG_WAKE_ON_WLAN */
 #define CONFIG_R871X_TEST	1
 
-#define CONFIG_XMIT_ACK
-#ifdef CONFIG_XMIT_ACK
-	#define CONFIG_XMIT_ACK_POLLING
-	#define CONFIG_ACTIVE_KEEP_ALIVE_CHECK
-#endif
-
+#define CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 
 #define CONFIG_80211N_HT	1
 
@@ -56,14 +51,12 @@
 #define CONFIG_IPS	1
 #define CONFIG_LPS	1
 
-#define CONFIG_AP_MODE 1
-#ifdef CONFIG_AP_MODE
-	#define CONFIG_NATIVEAP_MLME 1
-	#ifndef CONFIG_NATIVEAP_MLME
-		#define CONFIG_HOSTAPD_MLME	1
-	#endif
-	#define CONFIG_FIND_BEST_CHANNEL	1
+#define CONFIG_92D_AP_MODE 1
+#define CONFIG_NATIVEAP_MLME 1
+#ifndef CONFIG_NATIVEAP_MLME
+	#define CONFIG_HOSTAPD_MLME	1
 #endif
+#define CONFIG_FIND_BEST_CHANNEL	1
 
 /* 	Added by Albert 20110314 */
 #define CONFIG_P2P	1
@@ -77,15 +70,7 @@
 	#endif
 #endif
 
-#define CONFIG_SKB_COPY	1/* for amsdu */
-
 #define CONFIG_DFS	1
-
-#define CONFIG_LED
-#ifdef CONFIG_LED
-	#define CONFIG_SW_LED
-#endif /* CONFIG_LED */
-
 
 #define CONFIG_LAYER2_ROAMING
 #define CONFIG_LAYER2_ROAMING_RESUME
@@ -106,11 +91,6 @@
 #define CONFIG_80211D
 
 /* Interface  Related Config */
-
-#ifndef CONFIG_MINIMAL_MEMORY_USAGE
-	#define CONFIG_USB_TX_AGGREGATION	1
-	#define CONFIG_USB_RX_AGGREGATION	1
-#endif
 
 #define CONFIG_PREALLOC_RECV_SKB	1
 

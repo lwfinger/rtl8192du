@@ -519,7 +519,7 @@ int init_mlme_ext_priv(struct rtw_adapter *adapt)
 
 	init_mlme_ext_timer(adapt);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	init_mlme_ap_info(adapt);
 #endif
 
@@ -592,9 +592,9 @@ void mgt_dispatcher(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 {
 	int index;
 	struct mlme_handler *ptable;
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
-#endif /* CONFIG_AP_MODE */
+#endif /* CONFIG_92D_AP_MODE */
 	u8 bc_addr[ETH_ALEN] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 	u8 *pframe = precv_frame->rx_data;
 	struct sta_info *psta =
@@ -653,7 +653,7 @@ void mgt_dispatcher(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 		}
 		psta->RxMgmtFrameSeqNum = precv_frame->attrib.seq_num;
 	}
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	switch (GetFrameSubType(pframe)) {
 	case WIFI_AUTH:
 		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
@@ -1065,7 +1065,7 @@ _END_ONBEACON_:
 
 unsigned int OnAuth(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_frame)
 {
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	unsigned int auth_mode, seq, ie_len;
 	unsigned char *sa, *p;
 	u16 algorithm;
@@ -1346,7 +1346,7 @@ authclnt_fail:
 unsigned int OnAssocReq(struct rtw_adapter *adapt,
 			struct recv_frame_hdr *precv_frame)
 {
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	u16 capab_info;
 	struct rtw_ieee802_11_elems elems;
 	struct sta_info *pstat;
@@ -1908,7 +1908,7 @@ OnAssocReqFail:
 		issue_asocrsp(adapt, status, pstat, WIFI_REASSOCRSP);
 #endif
 
-#endif /* CONFIG_AP_MODE */
+#endif /* CONFIG_92D_AP_MODE */
 
 	return _FAIL;
 }
@@ -2050,7 +2050,7 @@ unsigned int OnDeAuth(struct rtw_adapter *adapt,
 
 	DBG_8192D("%s Reason code(%d)\n", __func__, reason);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 		struct sta_info *psta;
 		struct sta_priv *pstapriv = &adapt->stapriv;
@@ -2115,7 +2115,7 @@ unsigned int OnDisassoc(struct rtw_adapter *adapt,
 
 	DBG_8192D("%s Reason code(%d)\n", __func__, reason);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 		struct sta_info *psta;
 		struct sta_priv *pstapriv = &adapt->stapriv;
@@ -6028,10 +6028,10 @@ s32 dump_mgntframe_and_wait(struct rtw_adapter *adapt,
 s32 dump_mgntframe_and_wait_ack(struct rtw_adapter *adapt,
 				struct xmit_frame *pmgntframe)
 {
-#ifdef CONFIG_XMIT_ACK
+	struct xmit_priv *pxmitpriv = &adapt->xmitpriv;
 	s32 ret = _FAIL;
 	u32 timeout_ms = 500;	/*   500ms */
-	struct xmit_priv *pxmitpriv = &adapt->xmitpriv;
+
 #ifdef CONFIG_CONCURRENT_MODE
 	if (adapt->pbuddy_adapter && !adapt->isprimary)
 		pxmitpriv = &(adapt->pbuddy_adapter->xmitpriv);
@@ -6053,11 +6053,6 @@ s32 dump_mgntframe_and_wait_ack(struct rtw_adapter *adapt,
 	_exit_critical_mutex(&pxmitpriv->ack_tx_mutex);
 
 	return ret;
-#else /* CONFIG_XMIT_ACK */
-	dump_mgntframe(adapt, pmgntframe);
-	rtw_msleep_os(50);
-	return _SUCCESS;
-#endif /* CONFIG_XMIT_ACK */
 }
 
 static int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)
@@ -6105,9 +6100,9 @@ void issue_beacon(struct rtw_adapter *adapt)
 	unsigned short *fctrl;
 	unsigned int rate_len;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
-#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
-#endif /* if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex *cur_network = &(pmlmeinfo->network);
@@ -6121,9 +6116,9 @@ void issue_beacon(struct rtw_adapter *adapt)
 		DBG_8192D("%s, alloc mgnt frame fail\n", __func__);
 		return;
 	}
-#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 	spin_lock_bh(&pmlmepriv->bcn_update_lock);
-#endif /* if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 
 	/* update attribute */
 	pattrib = &pmgntframe->attrib;
@@ -6419,11 +6414,11 @@ void issue_beacon(struct rtw_adapter *adapt)
 
 _issue_bcn:
 
-#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 	pmlmepriv->update_bcn = false;
 
 	spin_unlock_bh(&pmlmepriv->bcn_update_lock);
-#endif /* if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 
 	if ((pattrib->pktlen + TXDESC_SIZE) > 512) {
 		DBG_8192D("beacon frame too large\n");
@@ -6447,11 +6442,11 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 	unsigned short *fctrl;
 	unsigned char *mac, *bssid;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
-#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 	u8 *pwps_ie;
 	uint wps_ielen;
 	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
-#endif /* if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex *cur_network = &(pmlmeinfo->network);
@@ -6500,7 +6495,7 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 	if (cur_network->IELength > MAX_IE_SZ)
 		return;
 
-#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 	if ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE) {
 		pwps_ie =
 		    rtw_get_wps_ie(cur_network->IEs + _FIXED_IE_LENGTH_,
@@ -7041,7 +7036,7 @@ void issue_auth(struct rtw_adapter *adapt, struct sta_info *psta,
 void issue_asocrsp(struct rtw_adapter *adapt, unsigned short status,
 		   struct sta_info *pstat, int pkt_type)
 {
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	struct xmit_frame *pmgntframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
 	struct pkt_attrib *pattrib;
@@ -10591,7 +10586,7 @@ u8 createbss_hdl(struct rtw_adapter *adapt, u8 *pbuf)
 	u32 initialgain;
 
 	if (pparm->network.InfrastructureMode == NDIS802_11APMODE) {
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 
 		if (pmlmeinfo->state == WIFI_FW_AP_STATE) {
 			/* todo: */
@@ -11358,7 +11353,7 @@ u8 tx_beacon_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 		DBG_8192D("issue_beacon, fail!\n");
 		return H2C_PARAMETERS_ERROR;
 	}
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	else {			/* tx bc/mc frames after update TIM */
 
 		struct sta_info *psta_bmc;

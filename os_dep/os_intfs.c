@@ -475,7 +475,7 @@ void rtw_proc_init_one(struct net_device *dev)
 		}
 	}
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 
 	entry = create_proc_read_entry("all_sta_info", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_all_sta_info, dev);
@@ -596,7 +596,7 @@ void rtw_proc_remove_one(struct net_device *dev)
 			remove_proc_entry("rf_reg_dump3", dir_dev);
 			remove_proc_entry("rf_reg_dump4", dir_dev);
 		}
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 		remove_proc_entry("all_sta_info", dir_dev);
 #endif
 
@@ -1662,27 +1662,21 @@ void rtw_drv_stop_vir_if (struct rtw_adapter *padapter)
 
 	pnetdev = padapter->pnetdev;
 
-	if (pnetdev)
-	{
+	if (pnetdev) {
 		unregister_netdev(pnetdev); /* will call netdev_close() */
 		rtw_proc_remove_one(pnetdev);
 	}
 
 	rtw_cancel_all_timer(padapter);
 
-	if (padapter->bup == true)
-	{
+	if (padapter->bup == true) {
 		padapter->bDriverStopped = true;
 
-		#ifdef CONFIG_XMIT_ACK
 		if (padapter->xmitpriv.ack_tx)
 			rtw_ack_tx_done(&padapter->xmitpriv, RTW_SCTX_DONE_DRV_STOP);
-		#endif
 
 		if (padapter->intf_stop)
-		{
 			padapter->intf_stop(padapter);
-		}
 
 		rtw_stop_drv_threads(padapter);
 
@@ -2053,15 +2047,11 @@ void rtw_drv_if2_stop(struct rtw_adapter *if2)
 
 	if (padapter->bup == true) {
 		padapter->bDriverStopped = true;
-		#ifdef CONFIG_XMIT_ACK
 		if (padapter->xmitpriv.ack_tx)
 			rtw_ack_tx_done(&padapter->xmitpriv, RTW_SCTX_DONE_DRV_STOP);
-		#endif
 
 		if (padapter->intf_stop)
-		{
 			padapter->intf_stop(padapter);
-		}
 
 		rtw_stop_drv_threads(padapter);
 

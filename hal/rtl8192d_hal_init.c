@@ -294,9 +294,10 @@ static int get_fw_from_file(struct rtw_adapter *adapter)
 		pr_err("Firmware %s not available\n", fw_name);
 		return _FAIL;
 	}
-	if (fw->size > 0x8000) {
+	if (fw->size > FW_8192D_SIZE) {
 		rtstatus = _FAIL;
-		pr_err("Firmware size exceeds 0x8000. Check it.\n");
+		pr_err("Firmware size exceeds 0x%x. Check it.\n",
+		       FW_8192D_SIZE);
 		goto exit;
 	}
 

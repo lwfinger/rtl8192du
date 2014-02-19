@@ -5521,7 +5521,7 @@ static int rtw_dbg_port(struct net_device *dev,
 						struct list_head *plist, *phead;
 						struct recv_reorder_ctrl *preorder_ctrl;
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 						DBG_8192D("sta_dz_bitmap = 0x%x, tim_bitmap = 0x%x\n", pstapriv->sta_dz_bitmap, pstapriv->tim_bitmap);
 #endif
 						spin_lock_bh(&pstapriv->sta_hash_lock);
@@ -5546,7 +5546,7 @@ static int rtw_dbg_port(struct net_device *dev,
 									DBG_8192D("bwmode =%d, ch_offset =%d, sgi =%d\n", psta->htpriv.bwmode, psta->htpriv.ch_offset, psta->htpriv.sgi);
 									DBG_8192D("ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
 									DBG_8192D("agg_enable_bitmap =%x, candidate_tid_bitmap =%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 									DBG_8192D("capability = 0x%x\n", psta->capability);
 									DBG_8192D("flags = 0x%x\n", psta->flags);
 									DBG_8192D("wpa_psk = 0x%x\n", psta->wpa_psk);
@@ -5937,7 +5937,7 @@ out:
 	return ret;
 }
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 static u8 set_pairwise_key(struct rtw_adapter *padapter, struct sta_info *psta)
 {
 	struct cmd_obj*			ph2c;
@@ -8138,7 +8138,7 @@ int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 	case RTL_IOCTL_WPA_SUPPLICANT:
 		ret = wpa_supplicant_ioctl(dev, &wrq->u.data);
 		break;
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	case RTL_IOCTL_HOSTAPD:
 		ret = rtw_hostapd_ioctl(dev, &wrq->u.data);
 		break;

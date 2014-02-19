@@ -313,7 +313,7 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 
 	int proc_get_all_sta_info(char *page, char **start,
 			  off_t offset, int count,

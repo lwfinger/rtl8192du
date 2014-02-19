@@ -455,24 +455,19 @@ static void rtw_dev_unload(struct rtw_adapter *padapter)
 		DBG_8192D("===> rtw_dev_unload\n");
 
 		padapter->bDriverStopped = true;
-		#ifdef CONFIG_XMIT_ACK
 		if (padapter->xmitpriv.ack_tx)
 			rtw_ack_tx_done(&padapter->xmitpriv, RTW_SCTX_DONE_DRV_STOP);
-		#endif
 
 		/* s3. */
 		if (padapter->intf_stop)
-		{
 			padapter->intf_stop(padapter);
-		}
 
 		/* s4. */
 		if (!padapter->pwrctrlpriv.bInternalAutoSuspend)
 		rtw_stop_drv_threads(padapter);
 
 		/* s5. */
-		if (padapter->bSurpriseRemoved == false)
-		{
+		if (padapter->bSurpriseRemoved == false) {
 #ifdef CONFIG_WOWLAN
 			if ((padapter->pwrctrlpriv.bSupportRemoteWakeup==true)&&(padapter->pwrctrlpriv.wowlan_mode==true)) {
 				DBG_8192D("%s bSupportWakeOnWlan==true  do not run rtw_hal_deinit()\n",__func__);
@@ -1122,7 +1117,7 @@ static void rtw_usb_if1_deinit(struct rtw_adapter *if1)
 	if (check_fwstate(pmlmepriv, _FW_LINKED))
 		rtw_disassoc_cmd(if1, 0, false);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	free_mlme_ap_info(if1);
 	#ifdef CONFIG_HOSTAPD_MLME
 	hostapd_mode_unload(if1);

@@ -244,7 +244,7 @@ void init_mlme_ext_timer(struct rtw_adapter *padapter)
 	_init_timer(&pmlmeext->link_timer, padapter->pnetdev, _link_timer_hdl, padapter);
 }
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 
 void rtw_indicate_sta_assoc_event(struct rtw_adapter *padapter, struct sta_info *psta)
 {

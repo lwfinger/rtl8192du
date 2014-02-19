@@ -20,7 +20,7 @@
 #include <drv_types.h>
 #include <wifi.h>
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 
 void init_mlme_ap_info(struct rtw_adapter *padapter)
 {
@@ -2159,4 +2159,4 @@ void stop_ap_mode(struct rtw_adapter *padapter)
 }
 
 #endif /* CONFIG_NATIVEAP_MLME */
-#endif /* CONFIG_AP_MODE */
+#endif /* CONFIG_92D_AP_MODE */

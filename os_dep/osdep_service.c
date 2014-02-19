@@ -745,7 +745,7 @@ void rtw_buf_update(u8 **buf, u32 *buf_len, u8 *src, u32 src_len)
 		goto keep_ori;
 
 	/* duplicate src */
-	dup = kmalloc(src_len, GFP_KERNEL);
+	dup = kmalloc(src_len, GFP_ATOMIC);
 	if (dup) {
 		dup_len = src_len;
 		memcpy(dup, src, dup_len);

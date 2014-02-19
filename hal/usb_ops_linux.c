@@ -68,21 +68,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	#endif
 
 	/*  Acquire IO memory for vendorreq */
-#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
 	pIo_buf = pdvobjpriv->usb_vendor_req_buf;
-#else
-	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
-	tmp_buf = kmalloc((u32) len + ALIGNMENT_UNIT, GFP_KERNEL);
-	tmp_buflen =  (u32)len + ALIGNMENT_UNIT;
-	#else /*  use stack memory */
-	tmp_buflen = MAX_USB_IO_CTL_SIZE;
-	#endif
-
-	/*  Added by Albert 2010/02/09 */
-	/*  For mstar platform, mstar suggests the address for USB IO should be 16 bytes alignment. */
-	/*  Trying to fix it here. */
-	pIo_buf = (tmp_buf==NULL)?NULL:tmp_buf + ALIGNMENT_UNIT -((SIZE_PTR)(tmp_buf) & 0x0f);
-#endif
 
 	if (pIo_buf== NULL) {
 		DBG_8192D("[%s] pIo_buf == NULL\n", __func__);
@@ -884,11 +870,6 @@ void rtl8192du_set_intf_ops(struct _io_ops	*pops)
 	pops->_write32 = &usb_write32;
 	pops->_writeN = &usb_writeN;
 
-#ifdef CONFIG_USB_SUPPORT_ASYNC_VDN_REQ
-	pops->_write8_async= &usb_async_write8;
-	pops->_write16_async = &usb_async_write16;
-	pops->_write32_async = &usb_async_write32;
-#endif
 	pops->_write_mem = &usb_write_mem;
 	pops->_write_port = &usb_write_port;
 

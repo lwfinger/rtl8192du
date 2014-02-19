@@ -243,23 +243,13 @@ struct dvobj_priv {
 	u8	RtNumInPipes;
 	u8	RtNumOutPipes;
 	int	ep_num[5]; /* endpoint number */
-
 	int	RegUsbSS;
-
 	struct  semaphore usb_suspend_sema;
-
-#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
 	_mutex  usb_vendor_req_mutex;
-#endif
-
-#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
 	u8 *usb_alloc_vendor_req_buf;
 	u8 *usb_vendor_req_buf;
-#endif
-
 	struct usb_interface *pusbintf;
 	struct usb_device *pusbdev;
-
 	ATOMIC_T continual_urb_error;
 };
 

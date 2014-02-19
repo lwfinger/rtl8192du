@@ -9040,7 +9040,7 @@ u8 collect_bss_info(struct rtw_adapter *adapt,
 	/* get the signal strength */
 	bssid->PhyInfo.SignalQuality = precv_frame->attrib.signal_qual;	/* in percentage */
 	bssid->PhyInfo.SignalStrength = precv_frame->attrib.signal_strength;	/* in percentage */
-	bssid->Rssi = precv_frame->attrib.RecvSignalPower;	/*  in dBM.raw data */
+	bssid->Rssi = precv_frame->attrib.recvsignalpower;	/*  in dBM.raw data */
 
 #ifdef CONFIG_ANTENNA_DIVERSITY
 	/* rtw_hal_get_hwreg(adapt, HW_VAR_CURRENT_ANTENNA, (u8 *)(&bssid->PhyInfo.Optimum_antenna)); */

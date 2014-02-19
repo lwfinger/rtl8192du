@@ -76,12 +76,6 @@ int rtw_os_recvbuf_resource_alloc(struct rtw_adapter *padapter, struct recv_buf 
 
 	precvbuf->len = 0;
 
-	#ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
-	precvbuf->pallocated_buf = rtw_usb_buffer_alloc(pusbd, (size_t)precvbuf->alloc_sz, GFP_ATOMIC, &precvbuf->dma_transfer_addr);
-	precvbuf->pbuf = precvbuf->pallocated_buf;
-	if (precvbuf->pallocated_buf == NULL)
-		return _FAIL;
-	#endif /* CONFIG_USE_USB_BUFFER_ALLOC_RX */
 	return res;
 }
 
@@ -90,21 +84,8 @@ int rtw_os_recvbuf_resource_free(struct rtw_adapter *padapter, struct recv_buf *
 {
 	int ret = _SUCCESS;
 
-#ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
-
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
-	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
-
-	rtw_usb_buffer_free(pusbd, (size_t)precvbuf->alloc_sz, precvbuf->pallocated_buf, precvbuf->dma_transfer_addr);
-	precvbuf->pallocated_buf =  NULL;
-	precvbuf->dma_transfer_addr = 0;
-
-#endif /* CONFIG_USE_USB_BUFFER_ALLOC_RX */
-
 	if (precvbuf->purb)
-	{
 		usb_free_urb(precvbuf->purb);
-	}
 
 	if (precvbuf->pskb)
 		dev_kfree_skb_any(precvbuf->pskb);

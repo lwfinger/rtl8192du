@@ -1004,12 +1004,6 @@ u32 rtw_start_drv_threads(struct rtw_adapter *padapter)
 		_status = _FAIL;
 #endif
 
-#ifdef CONFIG_RECV_THREAD_MODE
-	padapter->recvThread = kthread_run(rtw_recv_thread, padapter, "RTW_RECV_THREAD");
-	if (IS_ERR(padapter->recvThread))
-		_status = _FAIL;
-#endif
-
 #ifdef CONFIG_CONCURRENT_MODE
 	if (padapter->isprimary == true)
 #endif /* CONFIG_CONCURRENT_MODE */
@@ -1058,17 +1052,8 @@ void rtw_stop_drv_threads (struct rtw_adapter *padapter)
 	_rtw_down_sema(&padapter->xmitpriv.terminate_xmitthread_sema);
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("\n drv_halt: rtw_xmit_thread can be terminated !\n"));
 #endif
-
-#ifdef CONFIG_RECV_THREAD_MODE
-	/*  Below is to termindate rx_thread... */
-	_rtw_up_sema(&padapter->recvpriv.recv_sema);
-	_rtw_down_sema(&padapter->recvpriv.terminate_recvthread_sema);
-	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("\n drv_halt:recv_thread can be terminated!\n"));
-#endif
-
 }
 
-u8 rtw_init_default_value(struct rtw_adapter *padapter);
 u8 rtw_init_default_value(struct rtw_adapter *padapter)
 {
 	u8 ret  = _SUCCESS;
@@ -1170,10 +1155,7 @@ u8 rtw_reset_drv_sw(struct rtw_adapter *padapter)
 	/* mlmeextpriv */
 	padapter->mlmeextpriv.sitesurvey_res.state = SCAN_DISABLE;
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&padapter->recvpriv);
-#endif
-
 	return ret8;
 }
 
@@ -1326,9 +1308,7 @@ void rtw_cancel_all_timer(struct rtw_adapter *padapter)
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("rtw_cancel_all_timer:cancel set_scan_deny_timer!\n"));
 #endif
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	_cancel_timer_ex(&padapter->recvpriv.signal_stat_timer);
-#endif
 
 	/*  cancel dm  timer */
 	rtw_hal_dm_deinit(padapter);

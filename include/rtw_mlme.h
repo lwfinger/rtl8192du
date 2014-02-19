@@ -331,7 +331,7 @@ struct wifidirect_info{
 
 struct tdls_ss_record{	/* signal strength record; recording the tdls sta with lowerest ss */
 	u8		macaddr[ETH_ALEN];
-	u8		RxPWDBAll;
+	u8		rxpwdb_all;
 	u8		is_tdls_sta;	/*  true: direct link sta, false: else */
 };
 

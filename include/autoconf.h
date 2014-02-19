@@ -90,7 +90,6 @@
 #define CONFIG_LAYER2_ROAMING
 #define CONFIG_LAYER2_ROAMING_RESUME
 /* define CONFIG_SET_SCAN_DENY_TIMER */
-#define CONFIG_NEW_SIGNAL_STAT_PROCESS
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable,*/
 
 #define CONFIG_BR_EXT	1	/*  Enable NAT2.5 support for STA mode interface with a L2 Bridge */
@@ -106,10 +105,7 @@
 
 #define CONFIG_80211D
 
-/*
- * Interface  Related Config
- */
-/* define CONFIG_USB_INTERRUPT_IN_PIPE	1 */
+/* Interface  Related Config */
 
 #ifndef CONFIG_MINIMAL_MEMORY_USAGE
 	#define CONFIG_USB_TX_AGGREGATION	1
@@ -118,30 +114,15 @@
 
 #define CONFIG_PREALLOC_RECV_SKB	1
 
-
-
-/*
- * CONFIG_USE_USB_BUFFER_ALLOC_XX uses Linux USB Buffer alloc API and is for Linux platform only now!
- */
-#ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
-#undef CONFIG_PREALLOC_RECV_SKB
-#endif
-
 /*
  * USB VENDOR REQ BUFFER ALLOCATION METHOD
  * if not set we'll use function local variable (stack memory)
  */
-/* define CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE */
 #define CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
 
 #define CONFIG_USB_VENDOR_REQ_MUTEX
 
-/* define CONFIG_USB_SUPPORT_ASYNC_VDN_REQ 1 */
-
-
-/*
- * HAL  Related Config
- */
+/* HAL  Related Config */
 
 #define RTL8192C_RX_PACKET_NO_INCLUDE_CRC	1
 

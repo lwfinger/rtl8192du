@@ -48,30 +48,9 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 	int	i, res = _SUCCESS;
 	struct recv_buf *precvbuf;
 
-#ifdef CONFIG_RECV_THREAD_MODE
-	_rtw_init_sema(&precvpriv->recv_sema, 0);/* will be removed */
-	_rtw_init_sema(&precvpriv->terminate_recvthread_sema, 0);/* will be removed */
-#endif /* CONFIG_RECV_THREAD_MODE */
-
 	tasklet_init(&precvpriv->recv_tasklet,
 	     (void(*)(unsigned long))rtl8192du_recv_tasklet,
 	     (unsigned long)padapter);
-
-#ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
-	_rtw_init_queue(&precvpriv->recv_buf_pending_queue);
-#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_RX */
-
-#ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-
-	precvpriv->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-	if (precvpriv->int_in_urb == NULL) {
-		DBG_8192D("alloc_urb for interrupt in endpoint fail !!!!\n");
-	}
-	precvpriv->int_in_buf = kmalloc(sizeof(INTERRUPT_MSG_FORMAT_EX), GFP_KERNEL);
-	if (precvpriv->int_in_buf == NULL) {
-		DBG_8192D("alloc_mem for interrupt in endpoint fail !!!!\n");
-	}
-#endif /* CONFIG_USB_INTERRUPT_IN_PIPE */
 
 	/* init recv_buf */
 	_rtw_init_queue(&precvpriv->free_recv_buf_queue);
@@ -107,11 +86,6 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 
 	precvpriv->free_recv_buf_queue_cnt = NR_RECVBUFF;
 	skb_queue_head_init(&precvpriv->rx_skb_queue);
-
-#ifdef CONFIG_RX_INDICATE_QUEUE
-	memset(&precvpriv->rx_indicate_queue, 0, sizeof(struct ifqueue));
-	mtx_init(&precvpriv->rx_indicate_queue.ifq_mtx, "rx_indicate_queue", NULL, MTX_DEF);
-#endif	/*  CONFIG_RX_INDICATE_QUEUE */
 
 #ifdef CONFIG_PREALLOC_RECV_SKB
 	{
@@ -167,15 +141,8 @@ void rtl8192du_free_recv_priv (struct rtw_adapter *padapter)
 
 	kfree(precvpriv->pallocated_recv_buf);
 
-#ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	if (precvpriv->int_in_urb)
-		usb_free_urb(precvpriv->int_in_urb);
-	kfree(precvpriv->int_in_buf);
-#endif
-
-	if (skb_queue_len(&precvpriv->rx_skb_queue)) {
+	if (skb_queue_len(&precvpriv->rx_skb_queue))
 		DBG_8192D(KERN_WARNING "rx_skb_queue not empty\n");
-	}
 
 	skb_queue_purge(&precvpriv->rx_skb_queue);
 

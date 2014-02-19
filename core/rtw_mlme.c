@@ -964,10 +964,7 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 			 ("nic status =%x, survey done event comes too late!\n",
 			  get_fwstate(pmlmepriv)));
 	}
-
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&adapter->recvpriv);
-#endif
 
 	if (pmlmepriv->to_join == true) {
 		if ((check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true)) {
@@ -1470,14 +1467,14 @@ static void rtw_joinbss_update_network(struct rtw_adapter *padapter,
 
 	cur_network->aid = pnetwork->join_res;
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&padapter->recvpriv);
-#endif
 	padapter->recvpriv.signal_strength =
 	    ptarget_wlan->network.PhyInfo.SignalStrength;
 	padapter->recvpriv.signal_qual =
 	    ptarget_wlan->network.PhyInfo.SignalQuality;
-	/* the ptarget_wlan->network.Rssi is raw data, we use ptarget_wlan->network.PhyInfo.SignalStrength instead (has scaled) */
+	/* the ptarget_wlan->network.Rssi is raw data,
+	 * we use scaled ptarget_wlan->network.PhyInfo.SignalStrength instead
+	 */
 	padapter->recvpriv.rssi =
 	    translate_percentage_to_dbm(ptarget_wlan->network.PhyInfo.
 					SignalStrength);
@@ -1486,9 +1483,7 @@ static void rtw_joinbss_update_network(struct rtw_adapter *padapter,
 		  "\n", __func__, adapter->recvpriv.signal_strength,
 		  adapter->recvpriv.rssi, adapter->recvpriv.signal_qual);
 #endif
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&padapter->recvpriv);
-#endif
 
 	/* update fw_state will clr _FW_UNDER_LINKING here indirectly */
 	switch (pnetwork->network.InfrastructureMode) {

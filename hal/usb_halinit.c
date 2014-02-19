@@ -2822,9 +2822,6 @@ static unsigned int rtl8192du_inirp_init(struct rtw_adapter * padapter)
 	struct intf_hdl * pintfhdl=&padapter->iopriv.intf;
 	struct recv_priv *precvpriv = &(padapter->recvpriv);
 	u32 (*_read_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
-#ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	u32 (*_read_interrupt)(struct intf_hdl *pintfhdl, u32 addr);
-#endif
 
 	_read_port = pintfhdl->io_ops._read_port;
 
@@ -2849,19 +2846,9 @@ static unsigned int rtl8192du_inirp_init(struct rtw_adapter * padapter)
 		precvpriv->free_recv_buf_queue_cnt--;
 	}
 
-#ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	_read_interrupt = pintfhdl->io_ops._read_interrupt;
-	if (_read_interrupt(pintfhdl, RECV_INT_IN_ADDR) == false)
-	{
-		RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_interrupt error\n"));
-		status = _FAIL;
-	}
-#endif
-
 exit:
 
 	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("<=== usb_inirp_init\n"));
-
 	return status;
 }
 

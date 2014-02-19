@@ -180,8 +180,8 @@ static void query_rx_phy_status(struct recv_frame_hdr *prframe, struct phy_stat 
 				pwdb_all -= 4;
 		}
 
-		pattrib->RxPWDBAll = pwdb_all;
-		pattrib->RecvSignalPower = rx_pwr_all;
+		pattrib->rxpwdb_all = pwdb_all;
+		pattrib->recvsignalpower = rx_pwr_all;
 		padapter->recvpriv.rxpwdb = rx_pwr_all;
 
 		/*  */
@@ -305,8 +305,8 @@ static void query_rx_phy_status(struct recv_frame_hdr *prframe, struct phy_stat 
 
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("PWDB_ALL=%d\n",	pwdb_all));
 
-		pattrib->RxPWDBAll = pwdb_all;	/* for DIG/rate adaptive */
-		pattrib->RecvSignalPower = rx_pwr_all;
+		pattrib->rxpwdb_all = pwdb_all;	/* for DIG/rate adaptive */
+		pattrib->recvsignalpower = rx_pwr_all;
 		padapter->recvpriv.rxpwdb = rx_pwr_all;
 
 		/*  */
@@ -366,12 +366,9 @@ static void process_rssi(struct rtw_adapter *padapter,struct recv_frame_hdr *prf
 {
 	u32	last_rssi, tmp_val;
 	struct rx_pkt_attrib *pattrib = &prframe->attrib;
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	struct signal_stat * signal_stat = &padapter->recvpriv.signal_strength_data;
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 	{
-	#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 		if (signal_stat->update_req) {
 			signal_stat->total_num = 0;
 			signal_stat->total_val = 0;
@@ -381,26 +378,6 @@ static void process_rssi(struct rtw_adapter *padapter,struct recv_frame_hdr *prf
 		signal_stat->total_num++;
 		signal_stat->total_val  += pattrib->signal_strength;
 		signal_stat->avg_val = signal_stat->total_val / signal_stat->total_num;
-	#else /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
-
-		if (padapter->recvpriv.signal_strength_data.total_num++ >= PHY_RSSI_SLID_WIN_MAX)
-		{
-			padapter->recvpriv.signal_strength_data.total_num = PHY_RSSI_SLID_WIN_MAX;
-			last_rssi = padapter->recvpriv.signal_strength_data.elements[padapter->recvpriv.signal_strength_data.index];
-			padapter->recvpriv.signal_strength_data.total_val -= last_rssi;
-		}
-		padapter->recvpriv.signal_strength_data.total_val  +=pattrib->signal_strength;
-
-		padapter->recvpriv.signal_strength_data.elements[padapter->recvpriv.signal_strength_data.index++] = pattrib->signal_strength;
-		if (padapter->recvpriv.signal_strength_data.index >= PHY_RSSI_SLID_WIN_MAX)
-			padapter->recvpriv.signal_strength_data.index = 0;
-
-		tmp_val = padapter->recvpriv.signal_strength_data.total_val/padapter->recvpriv.signal_strength_data.total_num;
-		padapter->recvpriv.signal_strength= tmp_val;
-		padapter->recvpriv.rssi=(s8)translate2dbm((u8)tmp_val);
-
-		RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("UI RSSI = %d, ui_rssi.TotalVal = %d, ui_rssi.TotalNum = %d\n", tmp_val, padapter->recvpriv.signal_strength_data.total_val,padapter->recvpriv.signal_strength_data.total_num));
-	#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 	}
 }/*  Process_UI_RSSI_8192S */
 
@@ -424,14 +401,14 @@ static void process_PWDB(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 	{
 		if (UndecoratedSmoothedPWDB == 0) /*  initialize */
 		{
-			UndecoratedSmoothedPWDB = pattrib->RxPWDBAll;
+			UndecoratedSmoothedPWDB = pattrib->rxpwdb_all;
 		}
 
-		if (pattrib->RxPWDBAll > (u32)UndecoratedSmoothedPWDB)
+		if (pattrib->rxpwdb_all > (u32)UndecoratedSmoothedPWDB)
 		{
 			UndecoratedSmoothedPWDB =
 					(((UndecoratedSmoothedPWDB)*(Rx_Smooth_Factor-1)) +
-					(pattrib->RxPWDBAll)) /(Rx_Smooth_Factor);
+					(pattrib->rxpwdb_all)) /(Rx_Smooth_Factor);
 
 			UndecoratedSmoothedPWDB = UndecoratedSmoothedPWDB + 1;
 		}
@@ -439,7 +416,7 @@ static void process_PWDB(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 		{
 			UndecoratedSmoothedPWDB =
 					(((UndecoratedSmoothedPWDB)*(Rx_Smooth_Factor-1)) +
-					(pattrib->RxPWDBAll)) /(Rx_Smooth_Factor);
+					(pattrib->rxpwdb_all)) /(Rx_Smooth_Factor);
 		}
 
 		if (psta)
@@ -458,20 +435,15 @@ static void process_link_qual(struct rtw_adapter *padapter,struct recv_frame_hdr
 {
 	u32	last_evm=0,  tmpVal;
 	struct rx_pkt_attrib *pattrib;
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	struct signal_stat * signal_stat;
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 	if (prframe == NULL || padapter==NULL) {
 		return;
 	}
 
 	pattrib = &prframe->attrib;
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	signal_stat = &padapter->recvpriv.signal_qual_data;
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	if (signal_stat->update_req) {
 		signal_stat->total_num = 0;
 		signal_stat->total_val = 0;
@@ -482,35 +454,6 @@ static void process_link_qual(struct rtw_adapter *padapter,struct recv_frame_hdr
 	signal_stat->total_val  += pattrib->signal_qual;
 	signal_stat->avg_val = signal_stat->total_val / signal_stat->total_num;
 
-#else /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
-	if (pattrib->signal_qual != 0)
-	{
-			/*  */
-			/*  1. Record the general EVM to the sliding window. */
-			/*  */
-			if (padapter->recvpriv.signal_qual_data.total_num++ >= PHY_LINKQUALITY_SLID_WIN_MAX)
-			{
-				padapter->recvpriv.signal_qual_data.total_num = PHY_LINKQUALITY_SLID_WIN_MAX;
-				last_evm = padapter->recvpriv.signal_qual_data.elements[padapter->recvpriv.signal_qual_data.index];
-				padapter->recvpriv.signal_qual_data.total_val -= last_evm;
-			}
-			padapter->recvpriv.signal_qual_data.total_val += pattrib->signal_qual;
-
-			padapter->recvpriv.signal_qual_data.elements[padapter->recvpriv.signal_qual_data.index++] = pattrib->signal_qual;
-			if (padapter->recvpriv.signal_qual_data.index >= PHY_LINKQUALITY_SLID_WIN_MAX)
-				padapter->recvpriv.signal_qual_data.index = 0;
-
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("Total SQ=%d  pattrib->signal_qual= %d\n", padapter->recvpriv.signal_qual_data.total_val, pattrib->signal_qual));
-
-			/*  <1> Showed on UI for user, in percentage. */
-			tmpVal = padapter->recvpriv.signal_qual_data.total_val/padapter->recvpriv.signal_qual_data.total_num;
-			padapter->recvpriv.signal_qual=(u8)tmpVal;
-	}
-	else
-	{
-		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" pattrib->signal_qual =%d\n", pattrib->signal_qual));
-	}
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 }/*  Process_UiLinkQuality8192S */
 
 static void process_phy_info(struct rtw_adapter *padapter, struct recv_frame_hdr *prframe)

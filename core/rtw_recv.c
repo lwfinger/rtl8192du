@@ -27,9 +27,7 @@
 #include <usb_osintf.h>
 #include <linux/vmalloc.h>
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS);
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
 {
@@ -99,36 +97,23 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv,
 	precvpriv->read_port_complete_EINPROGRESS_cnt = 0;
 	precvpriv->read_port_complete_other_urb_err_cnt = 0;
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	_init_timer(&precvpriv->signal_stat_timer, padapter->pnetdev,
 		    RTW_TIMER_HDL_NAME(signal_stat), padapter);
 
 	precvpriv->signal_stat_sampling_interval = 1000;	/* ms */
 
 	rtw_set_signal_stat_timer(precvpriv);
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 exit:
-
 	return res;
 }
 
 static void rtw_mfree_recv_priv_lock(struct recv_priv *precvpriv)
 {
 	_rtw_spinlock_free(&precvpriv->lock);
-#ifdef CONFIG_RECV_THREAD_MODE
-	_rtw_free_sema(&precvpriv->recv_sema);
-	_rtw_free_sema(&precvpriv->terminate_recvthread_sema);
-#endif
-
 	_rtw_spinlock_free(&precvpriv->free_recv_queue.lock);
 	_rtw_spinlock_free(&precvpriv->recv_pending_queue.lock);
-
 	_rtw_spinlock_free(&precvpriv->free_recv_buf_queue.lock);
-
-#ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
-	_rtw_spinlock_free(&precvpriv->recv_buf_pending_queue.lock);
-#endif /*  CONFIG_USE_USB_BUFFER_ALLOC_RX */
 }
 
 void _rtw_free_recv_priv(struct recv_priv *precvpriv)
@@ -213,11 +198,7 @@ int rtw_free_recvframe(struct recv_frame_hdr *precvframe,
 	}
 #endif
 	if (precvframe->pkt) {
-#ifdef CONFIG_BSD_RX_USE_MBUF
-		m_freem(precvframe->pkt);
-#else /*  CONFIG_BSD_RX_USE_MBUF */
 		dev_kfree_skb_any(precvframe->pkt);	/* free skb by driver */
-#endif /*  CONFIG_BSD_RX_USE_MBUF */
 		precvframe->pkt = NULL;
 	}
 
@@ -957,7 +938,7 @@ static void count_rx_stats(struct rtw_adapter *padapter, struct recv_frame_hdr *
 	struct rx_pkt_attrib *pattrib = &prframe->attrib;
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 
-	sz = get_recvframe_len(prframe);
+	sz = prframe->len;
 	precvpriv->rx_bytes += sz;
 
 	padapter->mlmepriv.LinkDetectInfo.NumRxOkInPeriod++;
@@ -2911,7 +2892,6 @@ _recv_entry_drop:
 	return ret;
 }
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS)
 {
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
@@ -2992,4 +2972,3 @@ void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS)
 	}
 	rtw_set_signal_stat_timer(recvpriv);
 }
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */

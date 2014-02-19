@@ -950,11 +950,11 @@ int On_TDLS_Dis_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 		if ((ptdlsinfo->sta_maximum == true) && (ptdls_sta->alive_count >= 1)) {
 			if (_rtw_memcmp(ptdlsinfo->ss_record.macaddr, empty_addr, ETH_ALEN)) {
 				memcpy(ptdlsinfo->ss_record.macaddr, psa, ETH_ALEN);
-				ptdlsinfo->ss_record.RxPWDBAll = pattrib->RxPWDBAll;
+				ptdlsinfo->ss_record.rxpwdb_all = pattrib->rxpwdb_all;
 			} else {
-				if (ptdlsinfo->ss_record.RxPWDBAll < pattrib->RxPWDBAll) {
+				if (ptdlsinfo->ss_record.rxpwdb_all < pattrib->rxpwdb_all) {
 					memcpy(ptdlsinfo->ss_record.macaddr, psa, ETH_ALEN);
-					ptdlsinfo->ss_record.RxPWDBAll = pattrib->RxPWDBAll;
+					ptdlsinfo->ss_record.rxpwdb_all = pattrib->rxpwdb_all;
 				}
 			}
 	}
@@ -965,7 +965,7 @@ int On_TDLS_Dis_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 				/* All traffics are busy, do not set up another direct link. */
 				return _FAIL;
 			} else {
-				if (pattrib->RxPWDBAll > ptdlsinfo->ss_record.RxPWDBAll)
+				if (pattrib->rxpwdb_all > ptdlsinfo->ss_record.rxpwdb_all)
 					issue_tdls_teardown(adapter, ptdlsinfo->ss_record.macaddr);
 				else
 					return _FAIL;
@@ -974,9 +974,9 @@ int On_TDLS_Dis_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 
 		rtw_hal_get_def_var(adapter, HAL_DEF_UNDERCORATEDSMOOTHEDPWDB, &UndecoratedSmoothedPWDB);
 
-		if (pattrib->RxPWDBAll + TDLS_SIGNAL_THRESH >= UndecoratedSmoothedPWDB) {
-			DBG_871X("pattrib->RxPWDBAll =%d, pdmpriv->UndecoratedSmoothedPWDB =%d\n",
-				 pattrib->RxPWDBAll, UndecoratedSmoothedPWDB);
+		if (pattrib->rxpwdb_all + TDLS_SIGNAL_THRESH >= UndecoratedSmoothedPWDB) {
+			DBG_871X("pattrib->rxpwdb_all =%d, pdmpriv->UndecoratedSmoothedPWDB =%d\n",
+				 pattrib->rxpwdb_all, UndecoratedSmoothedPWDB);
 			issue_tdls_setup_req(adapter, psa);
 		}
 	}

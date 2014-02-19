@@ -260,18 +260,13 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 
 	padapter->bReadPortCancel = true;
 
-	for (i=0; i < NR_RECVBUFF ; i++) {
+	for (i = 0; i < NR_RECVBUFF; i++) {
 
 		precvbuf->reuse = true;
-		if (precvbuf->purb)	 {
+		if (precvbuf->purb)
 			usb_kill_urb(precvbuf->purb);
-		}
 		precvbuf++;
 	}
-
-#ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	usb_kill_urb(padapter->recvpriv.int_in_urb);
-#endif
 }
 
 static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)

@@ -63,24 +63,6 @@ struct recv_reorder_ctrl
 
 struct	stainfo_rxcache	{
 	u16	tid_rxseq[16];
-/*
-	unsigned short	tid0_rxseq;
-	unsigned short	tid1_rxseq;
-	unsigned short	tid2_rxseq;
-	unsigned short	tid3_rxseq;
-	unsigned short	tid4_rxseq;
-	unsigned short	tid5_rxseq;
-	unsigned short	tid6_rxseq;
-	unsigned short	tid7_rxseq;
-	unsigned short	tid8_rxseq;
-	unsigned short	tid9_rxseq;
-	unsigned short	tid10_rxseq;
-	unsigned short	tid11_rxseq;
-	unsigned short	tid12_rxseq;
-	unsigned short	tid13_rxseq;
-	unsigned short	tid14_rxseq;
-	unsigned short	tid15_rxseq;
-*/
 };
 
 
@@ -522,37 +504,6 @@ static inline struct recv_frame_hdr *rxmem_to_recvframe(u8 *rxmem)
 	return (struct recv_frame_hdr*)(((SIZE_PTR)rxmem >> RXFRAME_ALIGN) << RXFRAME_ALIGN);
 
 }
-
-static inline struct recv_frame_hdr *pkt_to_recvframe(struct sk_buff *pkt)
-{
-
-	u8 * buf_star;
-	struct recv_frame_hdr * precv_frame;
-	precv_frame = rxmem_to_recvframe((unsigned char*)buf_star);
-
-	return precv_frame;
-}
-
-static inline u8 *pkt_to_recvmem(struct sk_buff *pkt)
-{
-	/*  return the rx_head */
-
-	struct recv_frame_hdr * precv_frame = pkt_to_recvframe(pkt);
-
-	return	precv_frame->rx_head;
-
-}
-
-static inline u8 *pkt_to_recvdata(struct sk_buff *pkt)
-{
-	/*  return the rx_data */
-
-	struct recv_frame_hdr * precv_frame =pkt_to_recvframe(pkt);
-
-	return	precv_frame->rx_data;
-
-}
-
 
 static inline int get_recvframe_len(struct recv_frame_hdr *precvframe)
 {

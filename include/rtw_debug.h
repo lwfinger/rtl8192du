@@ -30,6 +30,7 @@
 #define _drv_info_			6
 #define	_drv_debug_			7
 
+#define RTL871X_MODULE_NAME "r8192du"
 
 #define _module_rtl871x_xmit_c_		BIT(0)
 #define _module_xmit_osdep_c_		BIT(1)

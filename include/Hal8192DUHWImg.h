@@ -21,7 +21,6 @@
 /*Created on  2011/11/11,  8: 8*/
 
 #define Rtl8192DUImgArrayLength 32302
-extern const u8 Rtl8192DUFwImgArray[Rtl8192DUImgArrayLength];
 #define Rtl8192DUMainArrayLength 1
 extern const u8 Rtl8192DUFwMainArray[Rtl8192DUMainArrayLength];
 #define Rtl8192DUDataArrayLength 1

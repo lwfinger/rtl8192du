@@ -1177,8 +1177,6 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 	int i;
 #endif /* CONFIG_MULTI_VIR_IFACES */
 
-	RT_TRACE(_module_hci_intfs_c_, _drv_err_, ("+rtw_drv_init\n"));
-
 	/* step 0. */
 	process_spec_devid(did);
 
@@ -1200,10 +1198,8 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 		goto free_if1;
 	}
 #ifdef CONFIG_MULTI_VIR_IFACES
-	for (i=0; i<if1->registrypriv.ext_iface_num;i++)
-	{
-		if (rtw_drv_add_vir_if (if1, "wlan%d", usb_set_intf_ops) == NULL)
-		{
+	for (i=0; i<if1->registrypriv.ext_iface_num;i++) {
+		if (rtw_drv_add_vir_if (if1, "wlan%d", usb_set_intf_ops) == NULL) {
 			DBG_8192D("rtw_drv_add_iface failed! (%d)\n", i);
 			break;
 		}
@@ -1211,19 +1207,16 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 #endif /* CONFIG_MULTI_VIR_IFACES */
 #endif
 
-	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-871x_drv - drv_init, success!\n"));
-
 	status = _SUCCESS;
 
 free_if1:
-	if (status != _SUCCESS && if1) {
+	if (status != _SUCCESS && if1)
 		rtw_usb_if1_deinit(if1);
-	}
 free_dvobj:
 	if (status != _SUCCESS)
 		usb_dvobj_deinit(pusb_intf);
 exit:
-	return status == _SUCCESS?0:-ENODEV;
+	return status == _SUCCESS ? 0 : -ENODEV;
 }
 
 /*
@@ -1236,12 +1229,9 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 	struct rtw_adapter *padapter = dvobj->if1;
 
 	DBG_8192D("+rtw_dev_remove\n");
-	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+dev_remove()\n"));
 
-	if (usb_drv->drv_registered == true)
-	{
+	if (usb_drv->drv_registered )
 		padapter->bSurpriseRemoved = true;
-	}
 
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 	rtw_unregister_early_suspend(&padapter->pwrctrlpriv);
@@ -1282,13 +1272,7 @@ extern int console_suspend_enabled;
 
 static int __init rtw_drv_entry(void)
 {
-	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+rtw_drv_entry\n"));
-
-	DBG_8192D(DRV_NAME " driver version=%s\n", DRIVERVERSION);
-	DBG_8192D("build time: %s %s\n", __DATE__, __TIME__);
-
 	rtw_suspend_lock_init();
-
 	usb_drv->drv_registered = true;
 	return usb_register(&usb_drv->usbdrv);
 }

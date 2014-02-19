@@ -37,14 +37,9 @@ ccflags-y += -D__CHECK_ENDIAN__
 RTL871X = rtl8192d
 
 MODULE_NAME = 8192du
-FW_FILES := hal/Hal8192DUHWImg.o
-ifneq ($(CONFIG_WAKE_ON_WLAN), n)
-FW_FILES += hal/Hal8192DUHWImg_wowlan.o
-endif
 
 CHIP_FILES := \
 	hal/$(RTL871X)_xmit.o
-CHIP_FILES += $(FW_FILES)
 
 HCI_NAME = usb
 
@@ -71,7 +66,8 @@ _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/$(HCI_NAME)_halinit.o \
 			hal/rtl$(MODULE_NAME)_led.o \
 			hal/rtl$(MODULE_NAME)_xmit.o \
-			hal/rtl$(MODULE_NAME)_recv.o
+			hal/rtl$(MODULE_NAME)_recv.o \
+			hal/Hal8192DUHWImg.o
 
 _HAL_INTFS_FILES += hal/$(HCI_NAME)_ops_linux.o
 

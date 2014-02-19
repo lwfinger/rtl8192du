@@ -18,8 +18,7 @@
  * Public  General Config
  */
 #define AUTOCONF_INCLUDED
-#define RTL871X_MODULE_NAME "92DU"
-#define DRV_NAME "rtl8192du"
+#define DRV_NAME "r8192du"
 #define DRIVERVERSION	"v4.2.1_7122.20130408"
 
 /* define CONFIG_IOCTL_CFG80211 1 */

@@ -195,8 +195,6 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	/*  channel 1~14 */
 /* 		RTL8192DU From header */
 /*  */
 
-	/*  Fw Array */
-	#define Rtl8192D_FwImageArray					Rtl8192DUFwImgArray
 #ifdef CONFIG_WOWLAN
 	#define Rtl8192D_FwWWImageArray				Rtl8192DUFwWWImgArray
 #endif /* CONFIG_WOWLAN */
@@ -257,18 +255,12 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	/*  channel 1~14 */
 
 #define MAX_PAGE_SIZE				4096	/*  @ page : 4k bytes */
 
-enum FIRMWARE_SOURCE {
-	FW_SOURCE_IMG_FILE = 0,
-	FW_SOURCE_HEADER_FILE = 1,              /* from header file */
-};
-
-struct RT_FIRMWARE_92D {
-	enum FIRMWARE_SOURCE	eFWSource;
-	u8*			szFwBuffer;
-	u32			ulFwLength;
+struct rt_firmware_92d {
+	u8 *buffer;
+	u32 length;
 #ifdef CONFIG_WOWLAN
-	u8*			szWoWLANFwBuffer;
-	u32			ulWoWLANFwLength;
+	u8 *wowbuffer;
+	u32 wowlength;
 #endif /* CONFIG_WOWLAN */
 };
 

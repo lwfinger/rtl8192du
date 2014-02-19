@@ -6128,18 +6128,18 @@ void PHY_ConfigMacPhyMode92D(
 	temp = rtw_read8(adapter, offset);
 	temp &= ~(BIT(0)|BIT(1)|BIT(2));
 	switch (pHalData->MacPhyMode92D) {
-		case DUALMAC_DUALPHY:
-			MSG_8192D("MacPhyMode: DUALMAC_DUALPHY\n");
-			rtw_write8(adapter, offset, temp | BIT(0)|BIT(1));
-			break;
-		case SINGLEMAC_SINGLEPHY:
-			MSG_8192D("MacPhyMode: SINGLEMAC_SINGLEPHY\n");
-			rtw_write8(adapter, offset, temp | BIT(2));
-			break;
-		case DUALMAC_SINGLEPHY:
-			MSG_8192D("MacPhyMode: DUALMAC_SINGLEPHY\n");
-			rtw_write8(adapter, offset, temp | BIT(0));
-			break;
+	case DUALMAC_DUALPHY:
+		pr_info("r8192du: MacPhyMode: DUALMAC_DUALPHY\n");
+		rtw_write8(adapter, offset, temp | BIT(0)|BIT(1));
+		break;
+	case SINGLEMAC_SINGLEPHY:
+		pr_info("r8192du: MacPhyMode: SINGLEMAC_SINGLEPHY\n");
+		rtw_write8(adapter, offset, temp | BIT(2));
+		break;
+	case DUALMAC_SINGLEPHY:
+		pr_info("r8192du: MacPhyMode: DUALMAC_SINGLEPHY\n");
+		rtw_write8(adapter, offset, temp | BIT(0));
+		break;
 	}
 }
 

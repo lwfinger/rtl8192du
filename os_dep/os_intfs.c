@@ -23,8 +23,9 @@
 #include <recv_osdep.h>
 #include <hal_intf.h>
 #include <rtw_ioctl.h>
-
 #include <usb_osintf.h>
+#include <rtl8192d_hal.h>
+#include <linux/vmalloc.h>
 
 #ifdef CONFIG_BR_EXT
 #include <rtw_br_ext.h>
@@ -2355,8 +2356,7 @@ static int netdev_close(struct net_device *pnetdev)
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("+871x_drv - drv_close\n"));
 
-	if (padapter->pwrctrlpriv.bInternalAutoSuspend == true)
-	{
+	if (padapter->pwrctrlpriv.bInternalAutoSuspend) {
 		if (padapter->pwrctrlpriv.rf_pwrstate == rf_off)
 			padapter->pwrctrlpriv.ps_flag = true;
 	}
@@ -2366,8 +2366,7 @@ static int netdev_close(struct net_device *pnetdev)
 		DBG_8192D("(2)871x_drv - drv_close, bup =%d, hw_init_completed =%d\n", padapter->bup, padapter->hw_init_completed);
 
 		/* s1. */
-		if (pnetdev)
-		{
+		if (pnetdev) {
 			if (!rtw_netif_queue_stopped(pnetdev))
 				rtw_netif_stop_queue(pnetdev);
 		}
@@ -2408,6 +2407,11 @@ static int netdev_close(struct net_device *pnetdev)
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-871x_drv - drv_close\n"));
 	DBG_8192D("-871x_drv - drv_close, bup =%d\n", padapter->bup);
 
+	if (padapter->firmware) {
+		vfree(padapter->firmware->buffer);
+		kfree(padapter->firmware);
+		padapter->firmware = NULL;
+	}
 	return 0;
 }
 

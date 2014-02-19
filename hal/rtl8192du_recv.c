@@ -96,16 +96,10 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 
 		skb_queue_head_init(&precvpriv->free_recv_skb_queue);
 
-		for (i=0; i<NR_PREALLOC_RECV_SKB; i++)
-		{
-	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) /*  http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html */
-			pskb = dev_alloc_skb(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
-	#else
+		for (i = 0; i < NR_PREALLOC_RECV_SKB; i++) {
 			pskb = netdev_alloc_skb(padapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
-	#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) */
 
-			if (pskb)
-			{
+			if (pskb) {
 				pskb->dev = padapter->pnetdev;
 
 				tmpaddr = (SIZE_PTR)pskb->data;

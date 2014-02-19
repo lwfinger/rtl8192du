@@ -123,18 +123,12 @@ u32 _rtw_down_sema(struct  semaphore *sema)
 
 void	_rtw_mutex_init(_mutex *pmutex)
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 	mutex_init(pmutex);
-#else
-	init_MUTEX(pmutex);
-#endif
 }
 
 void	_rtw_mutex_free(_mutex *pmutex)
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 	mutex_destroy(pmutex);
-#endif
 }
 
 void	_rtw_spinlock_init(spinlock_t *plock)
@@ -580,11 +574,7 @@ struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_p
 	struct net_device *pnetdev;
 	struct rtw_netdev_priv_indicator *pnpi;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
 	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator), 4);
-#else
-	pnetdev = alloc_etherdev(sizeof(struct rtw_netdev_priv_indicator));
-#endif
 	if (!pnetdev)
 		goto RETURN;
 
@@ -601,11 +591,7 @@ struct net_device *rtw_alloc_etherdev(int sizeof_priv)
 	struct net_device *pnetdev;
 	struct rtw_netdev_priv_indicator *pnpi;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
 	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator), 4);
-#else
-	pnetdev = alloc_etherdev(sizeof(struct rtw_netdev_priv_indicator));
-#endif
 	if (!pnetdev)
 		goto RETURN;
 
@@ -642,10 +628,6 @@ RETURN:
 	return;
 }
 
-/*
-* Jeff: this function should be called under ioctl (rtnl_lock is accquired) while
-* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26)
-*/
 int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname)
 {
 	struct net_device *pnetdev;
@@ -665,11 +647,9 @@ int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname)
 		rereg_priv->old_pnetdev = NULL;
 	}
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
 	if (!rtnl_is_locked())
 		unregister_netdev(cur_pnetdev);
 	else
-#endif
 		unregister_netdevice(cur_pnetdev);
 
 	rtw_proc_remove_one(cur_pnetdev);
@@ -688,11 +668,9 @@ int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname)
 
 	memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
 	if (!rtnl_is_locked())
 		ret = register_netdev(pnetdev);
 	else
-#endif
 		ret = register_netdevice(pnetdev);
 
 	if (ret != 0) {

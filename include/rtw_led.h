@@ -92,15 +92,11 @@ struct LED_871X {
 	enum LED_STATE_871X		BlinkingLedState; /*  Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are. */
 
 	struct timer_list		BlinkTimer; /*  Timer object for led blinking. */
-#if LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0)
 	struct work_struct BlinkWorkItem; /*  Workitem used by BlinkTimer to manipulate H/W to blink LED. */
-#endif
 };
 
 
-/*  */
 /*  LED customization. */
-/*  */
 
 enum LED_STRATEGY_871X {
 	SW_LED_MODE0, /*  SW control 1 LED via GPIO0. It is default option. */

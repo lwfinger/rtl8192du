@@ -1919,7 +1919,7 @@ u8 ap_free_sta(struct rtw_adapter *padapter, struct sta_info *psta,
 	if (1) {
 		#ifdef COMPAT_KERNEL_RELEASE
 		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr, reason);
-		#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
+		#elif !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
 		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr,
 						   reason);
 		#endif

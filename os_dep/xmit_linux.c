@@ -162,7 +162,6 @@ void rtw_os_xmit_resource_free(struct rtw_adapter *padapter, struct xmit_buf *px
 
 void rtw_os_pkt_complete(struct rtw_adapter *padapter, struct sk_buff *pkt)
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
 	u16	queue;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 
@@ -172,10 +171,6 @@ void rtw_os_pkt_complete(struct rtw_adapter *padapter, struct sk_buff *pkt)
 	{
 		netif_wake_subqueue(padapter->pnetdev, queue);
 	}
-#else
-	if (netif_queue_stopped(padapter->pnetdev))
-		netif_wake_queue(padapter->pnetdev);
-#endif
 
 	dev_kfree_skb_any(pkt);
 }
@@ -266,9 +261,7 @@ int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	s32 res = 0;
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 	u16 queue;
-#endif
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("+xmit_enry\n"));
 
@@ -280,14 +273,12 @@ int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
 		goto drop_packet;
 	}
 
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 	queue = skb_get_queue_mapping(pkt);
 	/* No free space for Tx, tx_worker is too slow */
 	if (pxmitpriv->hwxmits[queue].accnt > NR_XMITFRAME/2) {
 		netif_stop_subqueue(padapter->pnetdev, queue);
 		return NETDEV_TX_BUSY;
 	}
-#endif
 
 	if (!rtw_mc2u_disable
 		&& check_fwstate(pmlmepriv, WIFI_AP_STATE) == true

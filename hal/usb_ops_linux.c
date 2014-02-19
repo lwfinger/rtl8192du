@@ -426,13 +426,8 @@ static s32 pre_recv_entry(struct recv_frame_hdr *precvframe, struct recv_stat *p
 					alloc_sz += 14;
 				}
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) /*  http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html */
-				pkt_copy = dev_alloc_skb(alloc_sz);
-#else
 				pkt_copy = netdev_alloc_skb(secondary_padapter->pnetdev, alloc_sz);
-#endif
-				if (pkt_copy)
-				{
+				if (pkt_copy) {
 					pkt_copy->dev = secondary_padapter->pnetdev;
 					precvframe_if2->pkt = pkt_copy;
 					precvframe_if2->rx_head = pkt_copy->data;
@@ -552,13 +547,8 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 			alloc_sz += 14;
 		}
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) /*  http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html */
-		pkt_copy = dev_alloc_skb(alloc_sz);
-#else
 		pkt_copy = netdev_alloc_skb(padapter->pnetdev, alloc_sz);
-#endif
-		if (pkt_copy)
-		{
+		if (pkt_copy) {
 			precvframe->pkt = pkt_copy;
 			precvframe->rx_head = pkt_copy->data;
 			precvframe->rx_end = pkt_copy->data + alloc_sz;
@@ -566,17 +556,12 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 			skb_reserve(pkt_copy, shift_sz);/* force ip_hdr at 8-byte alignment address according to shift_sz. */
 			memcpy(pkt_copy->data, (pbuf + pattrib->shift_sz + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
 			precvframe->rx_data = precvframe->rx_tail = pkt_copy->data;
-		}
-		else
-		{
+		} else {
 			precvframe->pkt = skb_clone(pskb, GFP_ATOMIC);
-			if (pkt_copy)
-			{
+			if (pkt_copy) {
 				precvframe->rx_head = precvframe->rx_data = precvframe->rx_tail = pbuf;
 				precvframe->rx_end = pbuf + alloc_sz;
-			}
-			else
-			{
+			} else {
 				DBG_8192D("recvbuf2recvframe: skb_clone fail\n");
 				rtw_free_recvframe(precvframe, pfree_recv_queue);
 				goto _exit_recvbuf2recvframe;
@@ -773,11 +758,7 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 
 		/* re-assign for linux based on skb */
 		if ((precvbuf->reuse == false) || (precvbuf->pskb == NULL)) {
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) /*  http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html */
-			precvbuf->pskb = dev_alloc_skb(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
-#else
 			precvbuf->pskb = netdev_alloc_skb(adapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
-#endif
 			if (precvbuf->pskb == NULL) {
 				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("init_recvbuf(): alloc_skb fail!\n"));
 				return _FAIL;

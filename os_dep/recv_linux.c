@@ -255,9 +255,7 @@ int rtw_recv_indicatepkt(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 				struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
 
 				skb->dev = pnetdev;
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 				skb_set_queue_mapping(skb, rtw_recv_select_queue(skb));
-#endif /* LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35) */
 
 				rtw_xmit_entry(skb, pnetdev);
 

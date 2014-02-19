@@ -1782,7 +1782,7 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 #ifdef CONFIG_IOCTL_CFG80211
 #ifdef COMPAT_KERNEL_RELEASE
 
-#elif (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
+#elif defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
 			u8 *passoc_req = NULL;
 			u32 assoc_req_len;
 
@@ -1808,7 +1808,7 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 				kfree(passoc_req);
 			}
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
+#endif /* defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
 #endif /* CONFIG_IOCTL_CFG80211 */
 
 			ap_sta_info_defer_update(adapter, psta);
@@ -1882,10 +1882,10 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 #ifdef CONFIG_IOCTL_CFG80211
 #ifdef COMPAT_KERNEL_RELEASE
 
-#elif (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
+#elif defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
 		rtw_cfg80211_indicate_sta_disassoc(adapter, pstadel->macaddr,
 						   *(u16 *)pstadel->rsvd);
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
+#endif /* defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
 #endif /* CONFIG_IOCTL_CFG80211 */
 
 		return;
@@ -2176,17 +2176,10 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 
 #ifdef CONFIG_BR_EXT
 
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
 	rcu_read_lock();
-#endif /*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
 
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-	if (adapter->pnetdev->br_port &&
-	    check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE)) {
-#else /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 	if (rcu_dereference(adapter->pnetdev->rx_handler_data) &&
 	    check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE)) {
-#endif /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 		/*  expire NAT2.5 entry */
 		nat25_db_expire(adapter);
 
@@ -2199,10 +2192,7 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 			adapter->pppoe_connection_in_progress--;
 		}
 	}
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
 	rcu_read_unlock();
-#endif /*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
-
 #endif /*  CONFIG_BR_EXT */
 }
 

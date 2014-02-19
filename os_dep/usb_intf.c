@@ -194,9 +194,7 @@ static struct rtw_usb_drv rtl8192d_usb_drv = {
 	.usbdrv.id_table = rtl8192d_usb_id_tbl,
 	.usbdrv.suspend =  rtw_suspend,
 	.usbdrv.resume = rtw_resume,
-	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
 	.usbdrv.reset_resume   = rtw_resume,
-	#endif
 	#ifdef CONFIG_AUTOSUSPEND
 	.usbdrv.supports_autosuspend = 1,
 	#endif
@@ -860,27 +858,12 @@ void autosuspend_enter(struct rtw_adapter* padapter)
 
 	DBG_8192D("==>autosuspend_enter...........\n");
 
-	if (rf_off == pwrpriv->change_rfpwrstate)
-	{
-		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
+	if (rf_off == pwrpriv->change_rfpwrstate) {
 		usb_enable_autosuspend(dvobj->pusbdev);
-		#else
-		dvobj->pusbdev->autosuspend_disabled = 0;/* autosuspend disabled by the user */
-		#endif
 
-		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,33))
-			usb_autopm_put_interface(dvobj->pusbintf);
-		#elif (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,20))
-			usb_autopm_enable(dvobj->pusbintf);
-		#else
-			usb_autosuspend_device(dvobj->pusbdev, 1);
-		#endif
+		usb_autopm_put_interface(dvobj->pusbintf);
 	}
-	#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
 	DBG_8192D("...pm_usage_cnt(%d).....\n", atomic_read(&(dvobj->pusbintf->pm_usage_cnt)));
-	#else
-	DBG_8192D("...pm_usage_cnt(%d).....\n", dvobj->pusbintf->pm_usage_cnt);
-	#endif
 }
 
 int autoresume_enter(struct rtw_adapter* padapter)
@@ -894,27 +877,14 @@ int autoresume_enter(struct rtw_adapter* padapter)
 
 	DBG_8192D("====> autoresume_enter\n");
 
-	if (rf_off == pwrpriv->rf_pwrstate)
-	{
+	if (rf_off == pwrpriv->rf_pwrstate) {
 		pwrpriv->ps_flag = false;
-		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,33))
-			if (usb_autopm_get_interface(dvobj->pusbintf) < 0)
-			{
-				DBG_8192D("can't get autopm: %d\n", result);
-				result = _FAIL;
-				goto error_exit;
-			}
-		#elif (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,20))
-			usb_autopm_disable(dvobj->pusbintf);
-		#else
-			usb_autoresume_device(dvobj->pusbdev, 1);
-		#endif
-
-		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
+		if (usb_autopm_get_interface(dvobj->pusbintf) < 0) {
+			DBG_8192D("can't get autopm: %d\n", result);
+			result = _FAIL;
+			goto error_exit;
+		}
 		DBG_8192D("...pm_usage_cnt(%d).....\n", atomic_read(&(dvobj->pusbintf->pm_usage_cnt)));
-		#else
-		DBG_8192D("...pm_usage_cnt(%d).....\n", dvobj->pusbintf->pm_usage_cnt);
-		#endif
 	}
 	DBG_8192D("<==== autoresume_enter\n");
 error_exit:
@@ -1006,9 +976,7 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	}
 
 #ifdef CONFIG_PM
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,18))
-	if (padapter->pwrctrlpriv.bSupportRemoteWakeup)
-	{
+	if (padapter->pwrctrlpriv.bSupportRemoteWakeup) {
 		dvobj->pusbdev->do_remote_wakeup=1;
 		pusb_intf->needs_remote_wakeup = 1;
 		device_init_wakeup(&pusb_intf->dev, 1);
@@ -1016,32 +984,18 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 		DBG_8192D("\n  padapter->pwrctrlpriv.bSupportRemoteWakeup~~~[%d]~~~\n",device_may_wakeup(&pusb_intf->dev));
 	}
 #endif
-#endif
 
 #ifdef CONFIG_AUTOSUSPEND
 	if (padapter->registrypriv.power_mgnt != PS_MODE_ACTIVE)
 	{
 		if (padapter->registrypriv.usbss_enable) {	/* autosuspend (2s delay) */
-			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,38))
 			dvobj->pusbdev->dev.power.autosuspend_delay = 0 * HZ;/* 15 * HZ; idle-delay time */
-			#else
-			dvobj->pusbdev->autosuspend_delay = 0 * HZ;/* 15 * HZ; idle-delay time */
-			#endif
 
-			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 			usb_enable_autosuspend(dvobj->pusbdev);
-			#elif  (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22) && LINUX_VERSION_CODE<=KERNEL_VERSION(2,6,34))
-			padapter->bDisableAutosuspend = dvobj->pusbdev->autosuspend_disabled ;
-			dvobj->pusbdev->autosuspend_disabled = 0;/* autosuspend disabled by the user */
-			#endif
 
 			usb_autopm_get_interface(dvobj->pusbintf);/* init pm_usage_cnt ,let it start from 1 */
 
-			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
 			DBG_8192D("%s...pm_usage_cnt(%d).....\n",__func__, atomic_read(&(dvobj->pusbintf ->pm_usage_cnt)));
-			#else
-			DBG_8192D("%s...pm_usage_cnt(%d).....\n",__func__, dvobj->pusbintf ->pm_usage_cnt);
-			#endif
 		}
 	}
 #endif
@@ -1250,9 +1204,7 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 	return;
 }
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24))
 extern int console_suspend_enabled;
-#endif
 
 static int __init rtw_drv_entry(void)
 {

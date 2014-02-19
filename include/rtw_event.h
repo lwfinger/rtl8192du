@@ -19,11 +19,7 @@
 #include <osdep_service.h>
 
 #include <wlan_bssdef.h>
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26))
-#include <asm/semaphore.h>
-#else
 #include <linux/semaphore.h>
-#endif
 #include <linux/sem.h>
 
 #ifdef CONFIG_H2CLBK

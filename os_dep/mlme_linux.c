@@ -335,13 +335,11 @@ static int mgnt_netdev_close(struct net_device *pnetdev)
 	return 0;
 }
 
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
 static const struct net_device_ops rtl871x_mgnt_netdev_ops = {
 	.ndo_open = mgnt_netdev_open,
        .ndo_stop = mgnt_netdev_close,
        .ndo_start_xmit = mgnt_xmit_entry,
 };
-#endif
 
 int hostapd_mode_init(struct rtw_adapter *padapter)
 {
@@ -360,21 +358,9 @@ int hostapd_mode_init(struct rtw_adapter *padapter)
 	phostapdpriv->padapter= padapter;
 	padapter->phostapdpriv = phostapdpriv;
 
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
-
 	DBG_8192D("register rtl871x_mgnt_netdev_ops to netdev_ops\n");
 
 	pnetdev->netdev_ops = &rtl871x_mgnt_netdev_ops;
-
-#else
-
-	pnetdev->open = mgnt_netdev_open;
-
-	pnetdev->stop = mgnt_netdev_close;
-
-	pnetdev->hard_start_xmit = mgnt_xmit_entry;
-
-#endif
 
 	pnetdev->watchdog_timeo = HZ; /* 1 second timeout */
 

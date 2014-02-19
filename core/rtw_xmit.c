@@ -1724,12 +1724,6 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)
 
 		pxframe->agg_num = 1;
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 35))
-		if (pxmitpriv->free_xmitframe_cnt == 1) {
-			if (!rtw_netif_queue_stopped(padapter->pnetdev))
-				rtw_netif_stop_queue(padapter->pnetdev);
-		}
-#endif
 		pxframe->ack_report = 0;
 	}
 	spin_unlock_bh(&pfree_xmit_queue->lock);
@@ -2022,13 +2016,9 @@ static int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 	unsigned short vlan_hdr = 0;
 	void *br_port = NULL;
 
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-	br_port = padapter->pnetdev->br_port;
-#else   /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 	rcu_read_lock();
 	br_port = rcu_dereference(padapter->pnetdev->rx_handler_data);
 	rcu_read_unlock();
-#endif  /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 	spin_lock_bh(&padapter->br_ext_lock);
 	if (!(skb->data[0] & 1) && br_port &&
 	    memcmp(skb->data+MACADDRLEN, padapter->br_mac, MACADDRLEN) &&
@@ -2105,11 +2095,7 @@ static int rtw_br_client_tx(struct rtw_adapter *padapter, struct sk_buff **pskb)
 			if (skb_is_nonlinear(skb))
 				ERR_8192D("%s(): skb_is_nonlinear!!\n", __func__);
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 18))
-			res = skb_linearize(skb, GFP_ATOMIC);
-#else	/*  (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 18)) */
 			res = skb_linearize(skb);
-#endif	/*  (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 18)) */
 			if (res < 0) {
 				ERR_8192D("TX DROP: skb_linearize fail!\n");
 				return -1;
@@ -2185,13 +2171,9 @@ s32 rtw_xmit(struct rtw_adapter *padapter, struct sk_buff **ppkt)
 
 #ifdef CONFIG_BR_EXT
 
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-	br_port = padapter->pnetdev->br_port;
-#else   /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 	rcu_read_lock();
 	br_port = rcu_dereference(padapter->pnetdev->rx_handler_data);
 	rcu_read_unlock();
-#endif  /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 
 	if (br_port && check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true) {
 		res = rtw_br_client_tx(padapter, ppkt);

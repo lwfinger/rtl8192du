@@ -656,12 +656,8 @@ void LeaveAllPowerSaveMode(struct rtw_adapter *adapter)
 		if (adapter->pwrctrlpriv.rf_pwrstate == rf_off) {
 #ifdef CONFIG_AUTOSUSPEND
 			if (adapter->registrypriv.usbss_enable) {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
 				usb_disable_autosuspend(adapter_to_dvobj
 							(adapter)->pusbdev);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 22) && LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 34))
-				adapter_to_dvobj(adapter)->pusbdev->autosuspend_disabled = adapter->bDisableAutosuspend;	/* autosuspend disabled by the user */
-#endif
 			} else
 #endif
 			{

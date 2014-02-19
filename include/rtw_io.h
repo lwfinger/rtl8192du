@@ -22,29 +22,16 @@
 #include <osdep_intf.h>
 
 #include <asm/byteorder.h>
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26))
-#include <asm/semaphore.h>
-#else
 #include <linux/semaphore.h>
-#endif
 #include <linux/list.h>
 #include <linux/spinlock.h>
 #include <asm/atomic.h>
 
 #include <linux/usb.h>
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,21))
-#include <linux/usb_ch9.h>
-#else
 #include <linux/usb/ch9.h>
-#endif
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
 #define rtw_usb_buffer_alloc(dev, size, mem_flags, dma) usb_alloc_coherent((dev), (size), (mem_flags), (dma))
 #define rtw_usb_buffer_free(dev, size, addr, dma) usb_free_coherent((dev), (size), (addr), (dma))
-#else
-#define rtw_usb_buffer_alloc(dev, size, mem_flags, dma) usb_buffer_alloc((dev), (size), (mem_flags), (dma))
-#define rtw_usb_buffer_free(dev, size, addr, dma) usb_buffer_free((dev), (size), (addr), (dma))
-#endif
 
 #define NUM_IOREQ		8
 

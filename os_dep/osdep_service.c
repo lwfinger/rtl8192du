@@ -281,14 +281,14 @@ inline void rtw_unlock_suspend(void)
 	#endif
 }
 
-/*
-* Open a file with the specific @param path, @param flag, @param mode
-* @param fpp the pointer of struct file pointer to get struct file pointer while file opening is success
-* @param path the path of the file to open
-* @param flag file operation flags, please refer to linux document
-* @param mode please refer to linux document
-* @return Linux specific error code
-*/
+/* Open a file with the specific @param path, @param flag, @param mode
+ * @param fpp the pointer of struct file pointer to get struct file pointer
+ *   while file opening is success
+ * @param path the path of the file to open
+ * @param flag file operation flags, please refer to linux document
+ * @param mode please refer to linux document
+ * @return Linux specific error code
+ */
 static int openFile(struct file **fpp, char *path, int flag, int mode)
 {
 	struct file *fp;

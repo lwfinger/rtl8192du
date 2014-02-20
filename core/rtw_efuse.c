@@ -703,66 +703,8 @@ void EFUSE_ShadowMapUpdate(struct rtw_adapter *adapter, u8 efusetype, bool test)
 
 	EFUSE_GetEfuseDefinition(adapter, efusetype, TYPE_EFUSE_MAP_LEN, (void *)&maplen, test);
 
-	if (pEEPROM->bautoload_fail_flag == true) {
+	if (pEEPROM->bautoload_fail_flag == true)
 		memset(pEEPROM->efuse_eeprom_data, 0xFF, maplen);
-	} else {
-		#ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
-		if (_SUCCESS != retriveAdaptorInfoFile(adapter->registrypriv.adaptor_info_caching_file_path, pEEPROM)) {
-		#endif
-
-			Efuse_ReadAllMap(adapter, efusetype, pEEPROM->efuse_eeprom_data, test);
-
-		#ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
-			storeAdaptorInfoFile(adapter->registrypriv.adaptor_info_caching_file_path, pEEPROM);
-		}
-		#endif
-	}
-} /*  EFUSE_ShadowMapUpdate */
-
-#ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
-
-int isAdaptorInfoFileValid(void)
-{
-	return true;
+	else
+		Efuse_ReadAllMap(adapter, efusetype, pEEPROM->efuse_eeprom_data, test);
 }
-
-int storeAdaptorInfoFile(char *path, struct eeprom_priv *eeprom_priv)
-{
-	int ret = _SUCCESS;
-
-	if (path && eeprom_priv) {
-		ret = rtw_store_to_file(path, eeprom_priv->efuse_eeprom_data,
-					EEPROM_MAX_SIZE);
-		if (ret == EEPROM_MAX_SIZE)
-			ret = _SUCCESS;
-		else
-			ret = _FAIL;
-	} else {
-		DBG_8192D("%s NULL pointer\n", __func__);
-		ret =  _FAIL;
-	}
-	return ret;
-}
-
-int retriveAdaptorInfoFile(char *path, struct eeprom_priv *eeprom_priv)
-{
-	int ret = _SUCCESS;
-	mm_segment_t oldfs;
-	struct file *fp;
-
-	if (path && eeprom_priv) {
-		ret = rtw_retrive_from_file(path,
-					    eeprom_priv->efuse_eeprom_data,
-					    EEPROM_MAX_SIZE);
-
-		if (ret == EEPROM_MAX_SIZE)
-			ret = _SUCCESS;
-		else
-			ret = _FAIL;
-	} else {
-		DBG_8192D("%s NULL pointer\n", __func__);
-		ret = _FAIL;
-	}
-	return ret;
-}
-#endif /* CONFIG_ADAPTOR_INFO_CACHING_FILE */

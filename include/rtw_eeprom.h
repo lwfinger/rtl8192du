@@ -98,8 +98,7 @@ enum RT_CUSTOMER_ID {
 	RT_CID_819x_CAMEO_NETGEAR = 36,
 };
 
-struct eeprom_priv
-{
+struct eeprom_priv {
 	u8		bautoload_fail_flag;
 	u8		mac_addr[6];	/* PermanentAddress */
 	u16		channel_plan;
@@ -107,18 +106,11 @@ struct eeprom_priv
 	u8		efuse_eeprom_data[EEPROM_MAX_SIZE];
 };
 
+void eeprom_write16(struct rtw_adapter *padapter, u16 reg, u16 data);
+u16 eeprom_read16(struct rtw_adapter *padapter, u16 reg);
+void read_eeprom_content(struct rtw_adapter *padapter);
+void eeprom_read_sz(struct rtw_adapter *padapter, u16 reg,u8 *data, u32 sz);
 
-extern void eeprom_write16(struct rtw_adapter *padapter, u16 reg, u16 data);
-extern u16 eeprom_read16(struct rtw_adapter *padapter, u16 reg);
-extern void read_eeprom_content(struct rtw_adapter *padapter);
-extern void eeprom_read_sz(struct rtw_adapter * padapter, u16 reg,u8* data, u32 sz);
-
-extern void read_eeprom_content_by_attrib(struct rtw_adapter *	padapter	);
-
-#ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
-extern int isAdaptorInfoFileValid(void);
-extern int storeAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv);
-extern int retriveAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv);
-#endif /* CONFIG_ADAPTOR_INFO_CACHING_FILE */
+void read_eeprom_content_by_attrib(struct rtw_adapter *padapter);
 
 #endif  /* __RTL871X_EEPROM_H__ */

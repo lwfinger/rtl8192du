@@ -23,11 +23,9 @@
 
 #define USBD_HALTED(Status) ((u32)(Status) >> 30 == 3)
 
-#ifdef CONFIG_80211N_HT
 extern int rtw_ht_enable;
 extern int rtw_cbw40_enable;
 extern int rtw_ampdu_enable;/* for enable tx_ampdu */
-#endif
 
 extern int rtw_mc2u_disable;
 extern char *rtw_initmac;

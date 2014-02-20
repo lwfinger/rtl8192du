@@ -1023,7 +1023,6 @@ u8 rtw_joinbss_cmd(struct rtw_adapter *padapter, struct wlan_network *pnetwork)
 		}
 	}
 
-#ifdef CONFIG_80211N_HT
 	phtpriv->ht_option = false;
 	if (pregistrypriv->ht_enable) {
 		/*	Added by Albert 2010/06/23 */
@@ -1040,8 +1039,6 @@ u8 rtw_joinbss_cmd(struct rtw_adapter *padapter, struct wlan_network *pnetwork)
 					      (u8)psecnetwork->Configuration.DSConfig);
 		}
 	}
-
-#endif
 
 	pmlmeinfo->assoc_AP_vendor = check_assoc_AP(pnetwork->network.IEs, pnetwork->network.IELength);
 

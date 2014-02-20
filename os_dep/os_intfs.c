@@ -89,13 +89,11 @@ static int rtw_uapsd_acbe_en;
 static int rtw_uapsd_acvi_en;
 static int rtw_uapsd_acvo_en;
 
-#ifdef CONFIG_80211N_HT
 int rtw_ht_enable = 1;
 int rtw_cbw40_enable = 3; /*  0 :diable, bit(0): enable 2.4g, bit(1): enable 5g */
 int rtw_ampdu_enable = 1;/* for enable tx_ampdu */
 static int rtw_rx_stbc = 1;/*  0: disable, bit(0):enable 2.4g, bit(1):enable 5g, default is set to enable 2.4GHZ for IOT issue with bufflao's AP at 5GHZ */
 static int rtw_ampdu_amsdu;/*  0: disabled, 1:enabled, 2:auto */
-#endif
 
 static int rtw_lowrate_two_xmit = 1;/* Use 2 path Tx to transmit MCS0~7 and legacy mode */
 
@@ -172,13 +170,11 @@ module_param(rtw_wmm_enable, int, 0644);
 module_param(rtw_vrtl_carrier_sense, int, 0644);
 module_param(rtw_vcs_type, int, 0644);
 module_param(rtw_busy_thresh, int, 0644);
-#ifdef CONFIG_80211N_HT
 module_param(rtw_ht_enable, int, 0644);
 module_param(rtw_cbw40_enable, int, 0644);
 module_param(rtw_ampdu_enable, int, 0644);
 module_param(rtw_rx_stbc, int, 0644);
 module_param(rtw_ampdu_amsdu, int, 0644);
-#endif
 
 module_param(rtw_lowrate_two_xmit, int, 0644);
 
@@ -673,13 +669,11 @@ static uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev)
 	registry_par->uapsd_acvi_en = (u8)rtw_uapsd_acvi_en;
 	registry_par->uapsd_acvo_en = (u8)rtw_uapsd_acvo_en;
 
-#ifdef CONFIG_80211N_HT
 	registry_par->ht_enable = (u8)rtw_ht_enable;
 	registry_par->cbw40_enable = (u8)rtw_cbw40_enable;
 	registry_par->ampdu_enable = (u8)rtw_ampdu_enable;
 	registry_par->rx_stbc = (u8)rtw_rx_stbc;
 	registry_par->ampdu_amsdu = (u8)rtw_ampdu_amsdu;
-#endif
 
 	registry_par->lowrate_two_xmit = (u8)rtw_lowrate_two_xmit;
 	registry_par->rf_config = (u8)rtw_rf_config;
@@ -1016,9 +1010,7 @@ u8 rtw_init_default_value(struct rtw_adapter *padapter)
 	/* qos_priv */
 
 	/* ht_priv */
-#ifdef CONFIG_80211N_HT
 	pmlmepriv->htpriv.ampdu_enable = false;/* set to disabled */
-#endif
 
 	/* security_priv */
 	psecuritypriv->binstallGrpkey = _FAIL;

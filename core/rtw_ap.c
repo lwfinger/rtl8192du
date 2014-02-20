@@ -1202,7 +1202,6 @@ int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 	pmlmepriv->cur_network.network_type = network_type;
 
 	pmlmepriv->htpriv.ht_option = false;
-#ifdef CONFIG_80211N_HT
 	/* ht_cap */
 	if (pregistrypriv->ht_enable && ht_cap) {
 		pmlmepriv->htpriv.ht_option = true;
@@ -1215,7 +1214,6 @@ int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 
 		HT_info_handler(padapter, (struct ndis_802_11_variable_ies *)pHT_info_ie);
 	}
-#endif
 
 	pbss_network->Length = get_wlan_bssid_ex_sz((struct wlan_bssid_ex  *)pbss_network);
 
@@ -1539,8 +1537,6 @@ void update_beacon(struct rtw_adapter *padapter, u8 ie_id, u8 *oui, u8 tx)
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 }
 
-#ifdef CONFIG_80211N_HT
-
 /*
 op_mode
 Set to 0 (HT pure) under the followign conditions
@@ -1619,8 +1615,6 @@ static int rtw_ht_operation_update(struct rtw_adapter *padapter)
 
 	return op_mode_changes;
 }
-
-#endif /* CONFIG_80211N_HT */
 
 void associated_clients_update(struct rtw_adapter *padapter, u8 updated)
 {
@@ -1732,8 +1726,6 @@ void bss_cap_update_on_sta_join(struct rtw_adapter *padapter, struct sta_info *p
 		}
 	}
 
-#ifdef CONFIG_80211N_HT
-
 	if (psta->flags & WLAN_STA_HT) {
 		u16 ht_capab = psta->htpriv.ht_cap.cap_info;
 
@@ -1782,8 +1774,6 @@ void bss_cap_update_on_sta_join(struct rtw_adapter *padapter, struct sta_info *p
 		update_beacon(padapter, _HT_ADD_INFO_IE_, NULL, true);
 	}
 
-#endif /* CONFIG_80211N_HT */
-
 	/* update associcated stations cap. */
 	associated_clients_update(padapter,  beacon_updated);
 
@@ -1829,8 +1819,6 @@ u8 bss_cap_update_on_sta_leave(struct rtw_adapter *padapter,
 		}
 	}
 
-#ifdef CONFIG_80211N_HT
-
 	if (psta->no_ht_gf_set) {
 		psta->no_ht_gf_set = 0;
 		pmlmepriv->num_sta_ht_no_gf--;
@@ -1850,8 +1838,6 @@ u8 bss_cap_update_on_sta_leave(struct rtw_adapter *padapter,
 		update_beacon(padapter, _HT_CAPABILITY_IE_, NULL, false);
 		update_beacon(padapter, _HT_ADD_INFO_IE_, NULL, true);
 	}
-
-#endif /* CONFIG_80211N_HT */
 
 	/* update associcated stations cap. */
 
@@ -2005,7 +1991,6 @@ void sta_info_update(struct rtw_adapter *padapter, struct sta_info *psta)
 	if (pmlmepriv->qospriv.qos_option == 0)
 		psta->qos_option = 0;
 
-#ifdef CONFIG_80211N_HT
 	/* update 802.11n ht cap. */
 	if (WLAN_STA_HT&flags) {
 		psta->htpriv.ht_option = true;
@@ -2016,8 +2001,6 @@ void sta_info_update(struct rtw_adapter *padapter, struct sta_info *psta)
 
 	if (pmlmepriv->htpriv.ht_option)
 		psta->htpriv.ht_option = false;
-#endif
-
 	update_sta_info_apmode(padapter, psta);
 }
 
@@ -2050,9 +2033,7 @@ void start_ap_mode(struct rtw_adapter *padapter)
 	pmlmepriv->olbc = false;
 	pmlmepriv->olbc_ht = false;
 
-#ifdef CONFIG_80211N_HT
 	pmlmepriv->ht_op_mode = 0;
-#endif
 
 	for (i = 0; i < NUM_STA; i++)
 		pstapriv->sta_aid[i] = NULL;

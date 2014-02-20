@@ -39,8 +39,6 @@
 #endif /* CONFIG_WAKE_ON_WLAN */
 #define CONFIG_R871X_TEST	1
 
-#define CONFIG_80211N_HT	1
-
 #define CONFIG_RECV_REORDERING_CTRL	1
 
 #define CONFIG_IPS	1

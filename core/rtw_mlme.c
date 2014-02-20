@@ -1508,11 +1508,9 @@ static void rtw_joinbss_update_network(struct rtw_adapter *padapter,
 			      sizeof(struct ndis_802_11_fixed_ies),
 			      (cur_network->network.IELength));
 
-#ifdef CONFIG_80211N_HT
 	rtw_update_ht_cap(padapter, cur_network->network.IEs,
 			  cur_network->network.IELength,
 			  (u8) cur_network->network.Configuration.DSConfig);
-#endif
 }
 
 /* Notes: the fucntion could be > passive_level (the same context as Rx tasklet) */
@@ -2775,16 +2773,11 @@ void rtw_get_encrypt_decrypt_from_registrypriv(struct rtw_adapter *adapter)
 /* the fucntion is at passive_level */
 void rtw_joinbss_reset(struct rtw_adapter *padapter)
 {
-	u8 threshold;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
-#ifdef CONFIG_80211N_HT
 	struct ht_priv *phtpriv = &pmlmepriv->htpriv;
-#endif
+	u8 threshold;
 
 	/* todo: if you want to do something io/reg/hw setting before join_bss, please add code here */
-
-#ifdef CONFIG_80211N_HT
 
 	pmlmepriv->num_FortyMHzIntolerant = 0;
 
@@ -2806,10 +2799,7 @@ void rtw_joinbss_reset(struct rtw_adapter *padapter)
 		rtw_hal_set_hwreg(padapter, HW_VAR_RXDMA_AGG_PG_TH,
 				  (u8 *)(&threshold));
 	}
-#endif
 }
-
-#ifdef CONFIG_80211N_HT
 
 /* the fucntion is >= passive_level */
 unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
@@ -3053,8 +3043,6 @@ void rtw_issue_addbareq_cmd(struct rtw_adapter *padapter,
 		}
 	}
 }
-
-#endif
 
 #ifdef CONFIG_LAYER2_ROAMING
 inline void rtw_set_roaming(struct rtw_adapter *adapter, u8 to_roaming)

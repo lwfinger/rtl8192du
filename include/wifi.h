@@ -624,8 +624,6 @@ __inline static int IsFrameTypeCtrl(unsigned char *pframe)
 #define IEEE80211_DELBA_PARAM_TID_MASK 0xF000
 #define IEEE80211_DELBA_PARAM_INITIATOR_MASK 0x0800
 
-/* ifdef CONFIG_80211N_HT */
-
 #define SetOrderBit(pbuf)	\
 	do	{	\
 		*(unsigned short *)(pbuf) |= cpu_to_le16(_ORDER_); \

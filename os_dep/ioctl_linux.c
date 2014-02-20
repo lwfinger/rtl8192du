@@ -6462,7 +6462,6 @@ static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 		if (pmlmepriv->qospriv.qos_option == 0)
 			psta->qos_option = 0;
 
-#ifdef CONFIG_80211N_HT
 		/* chec 802.11n ht cap. */
 		if (WLAN_STA_HT&flags)
 		{
@@ -6477,16 +6476,11 @@ static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 
 		if (pmlmepriv->htpriv.ht_option == false)
 			psta->htpriv.ht_option = false;
-#endif
-
 		update_sta_info_apmode(padapter, psta);
 
-	}
-	else
-	{
+	} else {
 		ret = -ENOMEM;
 	}
-
 	return ret;
 }
 

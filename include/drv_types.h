@@ -26,16 +26,7 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <wlan_bssdef.h>
-
-enum {
-	UP_LINK,
-	DOWN_LINK,
-};
-
-#ifdef CONFIG_80211N_HT
 #include <rtw_ht.h>
-#endif
-
 #include <rtw_cmd.h>
 #include <wlan_bssdef.h>
 #include <rtw_xmit.h>
@@ -76,6 +67,11 @@ enum {
 #define SPEC_DEV_ID_RF_CONFIG_1T1R BIT(3)
 #define SPEC_DEV_ID_RF_CONFIG_2T2R BIT(4)
 #define SPEC_DEV_ID_ASSIGN_IFNAME BIT(5)
+
+enum {
+	UP_LINK,
+	DOWN_LINK,
+};
 
 struct specific_device_id{
 
@@ -125,13 +121,11 @@ struct registry_priv {
 
 	struct wlan_bssid_ex dev_network;
 
-#ifdef CONFIG_80211N_HT
 	u8	ht_enable;
 	u8	cbw40_enable;
 	u8	ampdu_enable;/* for tx */
 	u8	rx_stbc;
 	u8	ampdu_amsdu;/* A-MPDU Supports A-MSDU is permitted */
-#endif
 	u8	lowrate_two_xmit;
 
 	u8	rf_config ;

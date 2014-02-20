@@ -1702,7 +1702,6 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 		}
 	}
 
-#ifdef CONFIG_80211N_HT
 	/* save HT capabilities in the sta object */
 	memset(&pstat->htpriv.ht_cap, 0, sizeof(struct rtw_ieee80211_ht_cap));
 	if (elems.ht_capabilities &&
@@ -1732,7 +1731,6 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 		/* status = WLAN_STATUS_CIPHER_REJECTED_PER_POLICY; */
 		/* goto OnAssocReqFail; */
 	}
-#endif /* CONFIG_80211N_HT */
 
 	pstat->flags |= WLAN_STA_NONERP;
 	for (i = 0; i < pstat->bssratelen; i++) {
@@ -7120,7 +7118,6 @@ void issue_asocrsp(struct rtw_adapter *adapt, unsigned short status,
 			       &(pattrib->pktlen));
 	}
 
-#ifdef CONFIG_80211N_HT
 	if ((pstat->flags & WLAN_STA_HT) && (pmlmepriv->htpriv.ht_option)) {
 		uint ie_len = 0;
 
@@ -7148,7 +7145,6 @@ void issue_asocrsp(struct rtw_adapter *adapt, unsigned short status,
 			pattrib->pktlen += (ie_len + 2);
 		}
 	}
-#endif
 
 	/* FILL WMM IE */
 	if ((pstat->flags & WLAN_STA_WME) && (pmlmepriv->qospriv.qos_option)) {
@@ -7414,7 +7410,6 @@ void issue_assocreq(struct rtw_adapter *adapt)
 		    rtw_set_ie(pframe, _RSN_IE_2_, ie_len, (p + 2),
 			       &(pattrib->pktlen));
 	}
-#ifdef CONFIG_80211N_HT
 	/* HT caps */
 	if (adapt->mlmepriv.htpriv.ht_option == true) {
 		p = rtw_get_ie((pmlmeinfo->network.IEs +
@@ -7508,7 +7503,6 @@ void issue_assocreq(struct rtw_adapter *adapt)
 				       &(pattrib->pktlen));
 		}
 	}
-#endif
 
 	/* vendor specific IE, such as WPA, WMM, WPS */
 	for (i = sizeof(struct ndis_802_11_fixed_ies);

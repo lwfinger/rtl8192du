@@ -348,20 +348,6 @@ void rtw_suspend_lock_uninit(void);
 void rtw_lock_suspend(void);
 void rtw_unlock_suspend(void);
 
-
-/* Atomic integer operations */
-
-void ATOMIC_SET(atomic_t *v, int i);
-int ATOMIC_READ(atomic_t *v);
-void ATOMIC_ADD(atomic_t *v, int i);
-void ATOMIC_SUB(atomic_t *v, int i);
-void ATOMIC_INC(atomic_t *v);
-void ATOMIC_DEC(atomic_t *v);
-int ATOMIC_ADD_RETURN(atomic_t *v, int i);
-int ATOMIC_SUB_RETURN(atomic_t *v, int i);
-int ATOMIC_INC_RETURN(atomic_t *v);
-int ATOMIC_DEC_RETURN(atomic_t *v);
-
 /* File operation APIs, just for linux now */
 int rtw_is_file_readable(char *path);
 int rtw_retrive_from_file(char *path, u8 __user *buf, u32 sz);

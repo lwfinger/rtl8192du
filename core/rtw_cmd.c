@@ -84,7 +84,7 @@ int _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 #endif
 
 	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
-	ATOMIC_SET(&pevtpriv->event_seq, 0);
+	atomic_set(&pevtpriv->event_seq, 0);
 	pevtpriv->evt_done_cnt = 0;
 
 #ifdef CONFIG_EVENT_THREAD_MODE

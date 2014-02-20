@@ -310,56 +310,6 @@ inline void rtw_unlock_suspend(void)
 	#endif
 }
 
-inline void ATOMIC_SET(atomic_t *v, int i)
-{
-	atomic_set(v,i);
-}
-
-inline int ATOMIC_READ(atomic_t *v)
-{
-	return atomic_read(v);
-}
-
-inline void ATOMIC_ADD(atomic_t *v, int i)
-{
-	atomic_add(i,v);
-}
-
-inline void ATOMIC_SUB(atomic_t *v, int i)
-{
-	atomic_sub(i,v);
-}
-
-inline void ATOMIC_INC(atomic_t *v)
-{
-	atomic_inc(v);
-}
-
-inline void ATOMIC_DEC(atomic_t *v)
-{
-	atomic_dec(v);
-}
-
-inline int ATOMIC_ADD_RETURN(atomic_t *v, int i)
-{
-	return atomic_add_return(i,v);
-}
-
-inline int ATOMIC_SUB_RETURN(atomic_t *v, int i)
-{
-	return atomic_sub_return(i,v);
-}
-
-inline int ATOMIC_INC_RETURN(atomic_t *v)
-{
-	return atomic_inc_return(v);
-}
-
-inline int ATOMIC_DEC_RETURN(atomic_t *v)
-{
-	return atomic_dec_return(v);
-}
-
 /*
 * Open a file with the specific @param path, @param flag, @param mode
 * @param fpp the pointer of struct file pointer to get struct file pointer while file opening is success

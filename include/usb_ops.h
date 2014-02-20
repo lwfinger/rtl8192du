@@ -56,7 +56,7 @@ static inline int rtw_inc_and_chk_continual_urb_error(struct dvobj_priv *dvobj)
 {
 	int ret = false;
 	int value;
-	if ((value=ATOMIC_INC_RETURN(&dvobj->continual_urb_error)) > MAX_CONTINUAL_URB_ERR) {
+	if ((value=atomic_inc_return(&dvobj->continual_urb_error)) > MAX_CONTINUAL_URB_ERR) {
 		DBG_8192D("[dvobj:%p][ERROR] continual_urb_error:%d > %d\n", dvobj, value, MAX_CONTINUAL_URB_ERR);
 		ret = true;
 	}
@@ -68,7 +68,7 @@ static inline int rtw_inc_and_chk_continual_urb_error(struct dvobj_priv *dvobj)
 */
 static inline void rtw_reset_continual_urb_error(struct dvobj_priv *dvobj)
 {
-	ATOMIC_SET(&dvobj->continual_urb_error, 0);
+	atomic_set(&dvobj->continual_urb_error, 0);
 }
 
 #endif /* __USB_OPS_H_ */

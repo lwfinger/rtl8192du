@@ -2163,13 +2163,6 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 			rtw_auto_scan_handler(adapter);
 		}
 	}
-#ifndef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
-#ifdef CONFIG_92D_AP_MODE
-	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
-		expire_timeout_chk(adapter);
-	}
-#endif
-#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
 
 #ifdef CONFIG_BR_EXT
 

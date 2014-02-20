@@ -1297,14 +1297,10 @@ void rtw_indicate_disconnect(struct rtw_adapter *padapter)
 	p2p_ps_wk_cmd(padapter, P2P_PS_DISABLE, 1);
 #endif /*  CONFIG_P2P_PS */
 
-#ifdef CONFIG_LPS
 #ifdef CONFIG_WOWLAN
 	if (padapter->pwrctrlpriv.wowlan_mode == false)
 #endif /* CONFIG_WOWLAN */
 		rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_DISCONNECT, 1);
-
-#endif
-
 }
 
 inline void rtw_indicate_scan_done(struct rtw_adapter *padapter, bool aborted)
@@ -1983,18 +1979,8 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 void rtw_cpwm_event_callback(struct rtw_adapter *padapter, u8 *pbuf)
 {
-#ifdef CONFIG_LPS_LCLK
-	struct reportpwrstate_parm *preportpwrstate;
-#endif
-
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_,
 		 ("rtw_cpwm_event_callback !!!\n"));
-#ifdef CONFIG_LPS_LCLK
-	preportpwrstate = (struct reportpwrstate_parm *)pbuf;
-	preportpwrstate->state |= (u8) (padapter->pwrctrlpriv.cpwm_tog + 0x80);
-	cpwm_int_hdl(padapter, preportpwrstate);
-#endif
-
 }
 
 /*

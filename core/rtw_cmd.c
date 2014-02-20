@@ -346,12 +346,6 @@ int rtw_cmd_thread(void *context)
 	while (1) {
 		if ((_rtw_down_sema(&(pcmdpriv->cmd_queue_sema))) == _FAIL)
 			break;
-
-#ifdef CONFIG_LPS_LCLK
-		if (rtw_register_cmd_alive(padapter) != _SUCCESS)
-			continue;
-#endif
-
 _next:
 		if ((padapter->bDriverStopped == true) ||
 		    (padapter->bSurpriseRemoved == true)) {
@@ -364,12 +358,8 @@ _next:
 		}
 
 		pcmd = rtw_dequeue_cmd(pcmdpriv);
-		if (!pcmd) {
-#ifdef CONFIG_LPS_LCLK
-			rtw_unregister_cmd_alive(padapter);
-#endif
+		if (!pcmd)
 			continue;
-		}
 
 		if (_FAIL == rtw_cmd_filter(pcmdpriv, pcmd)) {
 			pcmd->res = H2C_DROPPED;
@@ -417,7 +407,6 @@ post_process:
 		}
 
 		flush_signals_thread();
-
 		goto _next;
 	}
 	pcmdpriv->cmdthd_running = false;
@@ -539,11 +528,9 @@ u8 rtw_sitesurvey_cmd(struct rtw_adapter *padapter, struct ndis_802_11_ssid *ssi
 	struct cmd_priv		*pcmdpriv = &padapter->cmdpriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 
-#ifdef CONFIG_LPS
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
 		rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_SCAN, 1);
 	}
-#endif
 
 #ifdef CONFIG_P2P_PS
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
@@ -1642,9 +1629,7 @@ exit:
 
 static void traffic_status_watchdog(struct rtw_adapter *padapter)
 {
-#ifdef CONFIG_LPS
 	u8 enterps;
-#endif
 	u8 bBusyTraffic = false, bTxBusyTraffic = false, bRxBusyTraffic = false;
 	u8 bHigherBusyTraffic = false, bHigherBusyRxTraffic = false, bHigherBusyTxTraffic = false;
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
@@ -1687,7 +1672,6 @@ static void traffic_status_watchdog(struct rtw_adapter *padapter)
 #endif /* CONFIG_TDLS_AUTOSETUP */
 #endif /* CONFIG_TDLS */
 
-#ifdef CONFIG_LPS
 		/*  check traffic for  powersaving. */
 		if (((pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod + pmlmepriv->LinkDetectInfo.NumTxOkInPeriod) > 8) ||
 		    (pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod > 2))
@@ -1700,11 +1684,8 @@ static void traffic_status_watchdog(struct rtw_adapter *padapter)
 			rtw_lps_enter(padapter);
 		else
 			rtw_lps_leave(padapter);
-#endif
 	} else {
-#ifdef CONFIG_LPS
 		rtw_lps_leave(padapter);
-#endif
 	}
 
 	pmlmepriv->LinkDetectInfo.NumRxOkInPeriod = 0;
@@ -1751,8 +1732,6 @@ static void dynamic_chk_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
 
 	rtw_hal_dm_watchdog(padapter);
 }
-
-#ifdef CONFIG_LPS
 
 static void lps_ctrl_wk_hdl(struct rtw_adapter *padapter, u8 lps_ctrl_type)
 {
@@ -1835,7 +1814,6 @@ exit:
 	return res;
 }
 
-#endif
 #ifdef CONFIG_ANTENNA_DIVERSITY
 
 void antenna_select_wk_hdl(struct rtw_adapter *padapter, u8 antenna)
@@ -2140,11 +2118,9 @@ u8 rtw_drvextra_cmd_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 	case POWER_SAVING_CTRL_WK_CID:
 		power_saving_wk_hdl(padapter, pdrvextra_cmd->pbuf, pdrvextra_cmd->type_size);
 		break;
-#ifdef CONFIG_LPS
 	case LPS_CTRL_WK_CID:
 		lps_ctrl_wk_hdl(padapter, (u8)pdrvextra_cmd->type_size);
 		break;
-#endif
 #ifdef CONFIG_ANTENNA_DIVERSITY
 	case ANT_SELECT_WK_CID:
 		antenna_select_wk_hdl(padapter, pdrvextra_cmd->type_size);

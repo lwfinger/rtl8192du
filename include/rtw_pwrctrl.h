@@ -272,28 +272,13 @@ struct pwrctrl_priv
 #define rtw_set_pwr_state_check_timer(pwrctrlpriv) \
 	_rtw_set_pwr_state_check_timer((pwrctrlpriv), (pwrctrlpriv)->pwr_state_check_interval)
 
-extern void rtw_init_pwrctrl_priv(struct rtw_adapter *adapter);
-extern void rtw_free_pwrctrl_priv(struct rtw_adapter * adapter);
-
-#ifdef CONFIG_LPS_LCLK
-extern s32 rtw_register_tx_alive(struct rtw_adapter * padapter);
-extern void rtw_unregister_tx_alive(struct rtw_adapter * padapter);
-extern s32 rtw_register_rx_alive(struct rtw_adapter * padapter);
-extern void rtw_unregister_rx_alive(struct rtw_adapter * padapter);
-extern s32 rtw_register_cmd_alive(struct rtw_adapter * padapter);
-extern void rtw_unregister_cmd_alive(struct rtw_adapter * padapter);
-extern s32 rtw_register_evt_alive(struct rtw_adapter * padapter);
-extern void rtw_unregister_evt_alive(struct rtw_adapter * padapter);
-extern void cpwm_int_hdl(struct rtw_adapter * padapter, struct reportpwrstate_parm *preportpwrstate);
-#endif
-
-extern void rtw_set_ps_mode(struct rtw_adapter * padapter, u8 ps_mode, u8 smart_ps);
-extern void rtw_set_rpwm(struct rtw_adapter * padapter, u8 val8);
-extern void LeaveAllPowerSaveMode(struct rtw_adapter * adapter);
-#ifdef CONFIG_IPS
+void rtw_init_pwrctrl_priv(struct rtw_adapter *adapter);
+void rtw_free_pwrctrl_priv(struct rtw_adapter * adapter);
+void rtw_set_ps_mode(struct rtw_adapter * padapter, u8 ps_mode, u8 smart_ps);
+void rtw_set_rpwm(struct rtw_adapter * padapter, u8 val8);
+void LeaveAllPowerSaveMode(struct rtw_adapter * adapter);
 void ips_enter(struct rtw_adapter * padapter);
 int ips_leave(struct rtw_adapter * padapter);
-#endif
 
 void rtw_ps_processor(struct rtw_adapter*padapter);
 
@@ -305,10 +290,8 @@ rt_rf_power_state RfOnOffDetect(IN	struct rtw_adapter * adapter);
 #endif
 
 
-#ifdef CONFIG_LPS
 void rtw_lps_enter(struct rtw_adapter * padapter);
 void rtw_lps_leave(struct rtw_adapter * padapter);
-#endif
 
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 void rtw_resume_in_workqueue(struct pwrctrl_priv *pwrpriv);

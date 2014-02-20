@@ -2371,7 +2371,6 @@ rtl8192d_HalDmWatchDog(
 	if (hw_init_completed == false)
 		goto skip_dm;
 
-#ifdef CONFIG_LPS
 	#if defined(CONFIG_CONCURRENT_MODE)
 	if (adapter->iface_type != IFACE_PORT0 && pbuddy_adapter) {
 		bFwCurrentInPSMode = pbuddy_adapter->pwrctrlpriv.bFwCurrentInPSMode;
@@ -2382,7 +2381,6 @@ rtl8192d_HalDmWatchDog(
 		bFwCurrentInPSMode = adapter->pwrctrlpriv.bFwCurrentInPSMode;
 		rtw_hal_get_hwreg(adapter, HW_VAR_FWLPS_RF_ON, (u8 *)(&bFwPSAwake));
 	}
-#endif
 
 #ifdef CONFIG_P2P_PS
 	/*  Fw is under p2p powersaving mode, driver should stop dynamic mechanism. */

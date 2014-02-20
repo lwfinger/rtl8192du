@@ -547,10 +547,8 @@ int rtw_hw_suspend(struct rtw_adapter *padapter)
 
 				rtw_os_indicate_disconnect(padapter);
 
-				#ifdef CONFIG_LPS
-				/* donnot enqueue cmd */
+				/* do not enqueue cmd */
 				rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_DISCONNECT, 0);
-				#endif
 			}
 
 		}
@@ -559,17 +557,14 @@ int rtw_hw_suspend(struct rtw_adapter *padapter)
 
 		/* s2-4. */
 		rtw_free_network_queue(padapter,true);
-		#ifdef CONFIG_IPS
 		rtw_ips_dev_unload(padapter);
-		#endif
 		pwrpriv->rf_pwrstate = rf_off;
 		pwrpriv->bips_processing = false;
 
 		_exit_pwrlock(&pwrpriv->lock);
-	}
-	else
+	} else {
 		goto error_exit;
-
+	}
 	return 0;
 
 error_exit:

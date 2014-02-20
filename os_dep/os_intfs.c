@@ -56,11 +56,7 @@ static int debug = 1;
 /* int smart_ps = 1; */
 #ifdef CONFIG_POWER_SAVING
 static int rtw_power_mgnt = 1;
-#ifdef CONFIG_IPS_LEVEL_2
-static int rtw_ips_mode = IPS_LEVEL_2;
-#else
 static int rtw_ips_mode = IPS_NORMAL;
-#endif
 #else
 int rtw_power_mgnt = PS_MODE_ACTIVE;
 int rtw_ips_mode = IPS_NONE;
@@ -2111,7 +2107,6 @@ int netdev_open(struct net_device *pnetdev)
 	return ret;
 }
 
-#ifdef CONFIG_IPS
 static int  ips_netdrv_open(struct rtw_adapter *padapter)
 {
 	int status = _SUCCESS;
@@ -2123,16 +2118,13 @@ static int  ips_netdrv_open(struct rtw_adapter *padapter)
 	padapter->bCardDisableWOHSM = false;
 
 	status = rtw_hal_init(padapter);
-	if (status == _FAIL)
-	{
+	if (status == _FAIL) {
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("ips_netdrv_open(): Can't init h/w!\n"));
 		goto netdev_open_error;
 	}
 
 	if (padapter->intf_start)
-	{
 		padapter->intf_start(padapter);
-	}
 
 	rtw_set_pwr_state_check_timer(&padapter->pwrctrlpriv);
 	_set_timer(&padapter->mlmepriv.dynamic_chk_timer, 5000);
@@ -2174,7 +2166,7 @@ void rtw_ips_pwr_down(struct rtw_adapter *padapter)
 	padapter->bCardDisableWOHSM = false;
 	DBG_8192D("<=== rtw_ips_pwr_down..................... in %dms\n", rtw_get_passing_time_ms(start_time));
 }
-#endif
+
 void rtw_ips_dev_unload(struct rtw_adapter *padapter)
 {
 	struct net_device *pnetdev = (struct net_device*)padapter->pnetdev;
@@ -2196,10 +2188,8 @@ int pm_netdev_open(struct net_device *pnetdev, u8 bnormal)
 	int status;
 	if (bnormal)
 		status = netdev_open(pnetdev);
-#ifdef CONFIG_IPS
 	else
 		status =  (_SUCCESS == ips_netdrv_open((struct rtw_adapter *)rtw_netdev_priv(pnetdev)))?(0):(-1);
-#endif
 
 	return status;
 }

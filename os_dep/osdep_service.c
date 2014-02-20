@@ -237,22 +237,6 @@ void rtw_yield_os(void)
 
 #define RTW_SUSPEND_LOCK_NAME "rtw_wifi"
 
-inline void rtw_suspend_lock_init(void)
-{
-}
-
-inline void rtw_suspend_lock_uninit(void)
-{
-}
-
-inline void rtw_lock_suspend(void)
-{
-}
-
-inline void rtw_unlock_suspend(void)
-{
-}
-
 struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv)
 {
 	struct net_device *pnetdev;
@@ -260,13 +244,13 @@ struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_p
 
 	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator), 4);
 	if (!pnetdev)
-		goto RETURN;
+		goto exit;
 
 	pnpi = netdev_priv(pnetdev);
 	pnpi->priv=old_priv;
 	pnpi->sizeof_priv=sizeof_priv;
 
-RETURN:
+exit:
 	return pnetdev;
 }
 
@@ -277,7 +261,7 @@ struct net_device *rtw_alloc_etherdev(int sizeof_priv)
 
 	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator), 4);
 	if (!pnetdev)
-		goto RETURN;
+		goto exit;
 
 	pnpi = netdev_priv(pnetdev);
 
@@ -285,11 +269,11 @@ struct net_device *rtw_alloc_etherdev(int sizeof_priv)
 	if (!pnpi->priv) {
 		free_netdev(pnetdev);
 		pnetdev = NULL;
-		goto RETURN;
+		goto exit;
 	}
 
 	pnpi->sizeof_priv=sizeof_priv;
-RETURN:
+exit:
 	return pnetdev;
 }
 
@@ -298,17 +282,17 @@ void rtw_free_netdev(struct net_device * netdev)
 	struct rtw_netdev_priv_indicator *pnpi;
 
 	if (!netdev)
-		goto RETURN;
+		goto exit;
 
 	pnpi = netdev_priv(netdev);
 
 	if (!pnpi->priv)
-		goto RETURN;
+		goto exit;
 
 	vfree(pnpi->priv);
 	free_netdev(netdev);
 
-RETURN:
+exit:
 	return;
 }
 

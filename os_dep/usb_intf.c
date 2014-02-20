@@ -938,7 +938,6 @@ extern int console_suspend_enabled;
 
 static int __init rtw_drv_entry(void)
 {
-	rtw_suspend_lock_init();
 	usb_drv->drv_registered = true;
 	return usb_register(&usb_drv->usbdrv);
 }
@@ -947,8 +946,6 @@ static void __exit rtw_drv_halt(void)
 {
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+rtw_drv_halt\n"));
 	DBG_8192D("+rtw_drv_halt\n");
-
-	rtw_suspend_lock_uninit();
 
 	usb_drv->drv_registered = false;
 	usb_deregister(&usb_drv->usbdrv);

@@ -319,8 +319,6 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	int bytes_written = 0;
 	struct android_wifi_priv_cmd priv_cmd;
 
-	rtw_lock_suspend();
-
 	if (!ifr->ifr_data) {
 		ret = -EINVAL;
 		goto exit;
@@ -331,8 +329,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	}
 
 	command = kzalloc(priv_cmd.total_len, GFP_KERNEL);
-	if (!command)
-	{
+	if (!command) {
 		DBG_8192D("%s: failed to allocate memory\n", __func__);
 		ret = -ENOMEM;
 		goto exit;
@@ -464,16 +461,12 @@ response:
 			DBG_8192D("%s: failed to copy data to user buffer\n", __func__);
 			ret = -EFAULT;
 		}
-	}
-	else {
+	} else {
 		ret = bytes_written;
 	}
 
 exit:
-	rtw_unlock_suspend();
-	if (command) {
-		kfree(command);
-	}
+	kfree(command);
 
 	return ret;
 }

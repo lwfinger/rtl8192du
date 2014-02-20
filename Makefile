@@ -25,7 +25,6 @@ CONFIG_USB_AUTOSUSPEND = n
 CONFIG_HW_PWRP_DETECTION = n
 CONFIG_WIFI_TEST = n
 CONFIG_BT_COEXISTENCE = n
-CONFIG_INTEL_WIDI = n
 CONFIG_WAKE_ON_WLAN = n
 
 CONFIG_DRVEXT_MODULE = n
@@ -103,10 +102,6 @@ ifeq ($(CONFIG_WAKE_ON_WLAN), y)
 EXTRA_CFLAGS += -DCONFIG_WAKE_ON_WLAN
 endif
 
-ifeq ($(CONFIG_INTEL_WIDI), y)
-EXTRA_CFLAGS += -DCONFIG_INTEL_WIDI
-endif
-
 SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/)
 ARCH ?= $(SUBARCH)
 CROSS_COMPILE ?=
@@ -142,8 +137,6 @@ rtk_core :=	core/rtw_cmd.o \
 		core/rtw_sreset.o
 
 $(MODULE_NAME)-y += $(rtk_core)
-
-$(MODULE_NAME)-$(CONFIG_INTEL_WIDI) += core/rtw_intel_widi.o
 
 $(MODULE_NAME)-y += core/rtw_efuse.o
 

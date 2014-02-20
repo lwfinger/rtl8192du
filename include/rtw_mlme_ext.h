@@ -503,9 +503,7 @@ void ERP_IE_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_ie
 void VCS_update(struct rtw_adapter *padapter, struct sta_info *psta);
 
 void update_beacon_info(struct rtw_adapter *padapter, u8 *pframe, uint len, struct sta_info *psta);
-#ifdef CONFIG_DFS
 void process_csa_ie(struct rtw_adapter *padapter, u8 *pframe, uint len);
-#endif /* CONFIG_DFS */
 void update_IOT_info(struct rtw_adapter *padapter);
 void update_capinfo(struct rtw_adapter *adapter, u16 updateCap);
 void update_wireless_mode(struct rtw_adapter *padapter);

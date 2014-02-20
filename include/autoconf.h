@@ -53,8 +53,6 @@
 	#endif
 #endif
 
-#define CONFIG_DFS	1
-
 #define CONFIG_LAYER2_ROAMING
 #define CONFIG_LAYER2_ROAMING_RESUME
 /* define CONFIG_IOCTL_CFG80211 */

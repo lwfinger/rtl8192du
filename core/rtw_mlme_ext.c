@@ -464,7 +464,6 @@ static u8 init_channel_set(struct rtw_adapter *adapt, u8 ChannelPlan,
 
 	if (b5GBand) {
 		for (index = 0; index < RTW_ChannelPlan5G[Index5G].Len; index++) {
-#ifdef CONFIG_DFS
 			channel_set[chanset_size].ChannelNum =
 			    RTW_ChannelPlan5G[Index5G].Channel[index];
 			if (channel_set[chanset_size].ChannelNum <= 48 ||
@@ -480,27 +479,8 @@ static u8 init_channel_set(struct rtw_adapter *adapt, u8 ChannelPlan,
 				    SCAN_PASSIVE;
 			}
 			chanset_size++;
-#else /* CONFIG_DFS */
-			if (RTW_ChannelPlan5G[Index5G].Channel[index] <= 48 ||
-			    RTW_ChannelPlan5G[Index5G].Channel[index] >= 149) {
-				channel_set[chanset_size].ChannelNum =
-				    RTW_ChannelPlan5G[Index5G].Channel[index];
-				if (RT_CHANNEL_DOMAIN_WORLD_WIDE_5G == ChannelPlan)	/*passive scan for all 5G channels */
-					channel_set[chanset_size].ScanType =
-					    SCAN_PASSIVE;
-				else
-					channel_set[chanset_size].ScanType =
-					    SCAN_ACTIVE;
-				DBG_8192D
-				    ("%s(): channel_set[%d].ChannelNum = %d\n",
-				     __func__, chanset_size,
-				     channel_set[chanset_size].ChannelNum);
-				chanset_size++;
-			}
-#endif /* CONFIG_DFS */
 		}
 	}
-
 	return chanset_size;
 }
 
@@ -996,10 +976,6 @@ unsigned int OnBeacon(struct rtw_adapter *adapt,
 					update_beacon_info(adapt, pframe,
 							   len, psta);
 				}
-#ifdef CONFIG_DFS
-				process_csa_ie(adapt, pframe, len);	/* channel switch announcement */
-#endif /* CONFIG_DFS */
-
 #ifdef CONFIG_P2P_PS
 				process_p2p_ps_ie(adapt,
 						  (pframe + WLAN_HDR_A3_LEN),
@@ -6922,11 +6898,9 @@ void issue_assocreq(struct rtw_adapter *adapt)
 	u16 p2pielen = 0;
 #endif /* CONFIG_P2P */
 
-#ifdef CONFIG_DFS
 	u16 cap;
-	u8 pow_cap_ele[2] = { 0x00 };
-	u8 sup_ch[30 * 2] = { 0x00 }, sup_ch_idx = 0, idx_5g = 2;	/* For supported channel */
-#endif /* CONFIG_DFS */
+	u8 pow_cap_ele[2] = {0x00};
+	u8 sup_ch[30 * 2] = {0x00}, sup_ch_idx = 0, idx_5g = 2;	/* For supported channel */
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL)
@@ -6956,14 +6930,10 @@ void issue_assocreq(struct rtw_adapter *adapt)
 
 	/* caps */
 
-#ifdef CONFIG_DFS
 	memcpy(&cap, rtw_get_capability_from_ie(pmlmeinfo->network.IEs), 2);
 	if (pmlmeext->cur_channel > 14)
 		cap |= BIT(8);	/* Spectrum Mgmt. Enabled */
 	memcpy(pframe, &cap, 2);
-#else
-	memcpy(pframe, rtw_get_capability_from_ie(pmlmeinfo->network.IEs), 2);
-#endif /* CONFIG_DFS */
 
 	pframe += 2;
 	pattrib->pktlen += 2;
@@ -7050,7 +7020,6 @@ void issue_assocreq(struct rtw_adapter *adapt)
 			       bssrate, &(pattrib->pktlen));
 	}
 
-#ifdef CONFIG_DFS
 	if (pmlmeext->cur_channel > 14) {
 		pow_cap_ele[0] = 13;	/*  Minimum transmit power capability */
 		pow_cap_ele[1] = 21;	/*  Maximum transmit power capability */
@@ -7073,7 +7042,6 @@ void issue_assocreq(struct rtw_adapter *adapt)
 		} while (pmlmeext->channel_set[sup_ch_idx].ChannelNum != 0);
 		pframe = rtw_set_ie(pframe, _SUPPORTED_CH_IE_, idx_5g, sup_ch, &(pattrib->pktlen));
 	}
-#endif /* CONFIG_DFS */
 
 	/* RSN */
 	p = rtw_get_ie((pmlmeinfo->network.IEs +
@@ -12020,7 +11988,6 @@ u8 led_blink_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 
 u8 set_csa_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 {
-#ifdef CONFIG_DFS
 	struct setchannelswitch_param *setchannelswitch_param;
 	struct setchannelplan_param *setchannelplan_param;
 	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
@@ -12052,11 +12019,7 @@ u8 set_csa_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 		DBG_8192D("Switched to DFS band (ch %02x) again!!\n",
 			  new_ch_no);
 	}
-
 	return H2C_SUCCESS;
-#else
-	return H2C_REJECTED;
-#endif /* CONFIG_DFS */
 }
 
 u8 tdls_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)

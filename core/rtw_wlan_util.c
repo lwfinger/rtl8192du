@@ -1021,7 +1021,6 @@ void update_beacon_info(struct rtw_adapter *padapter, u8 *pframe, uint pkt_len, 
 	}
 }
 
-#ifdef CONFIG_DFS
 void process_csa_ie(struct rtw_adapter *padapter, u8 *pframe, uint pkt_len)
 {
 	unsigned int i;
@@ -1045,7 +1044,6 @@ void process_csa_ie(struct rtw_adapter *padapter, u8 *pframe, uint pkt_len)
 		i += (pIE->Length + 2);
 	}
 }
-#endif /* CONFIG_DFS */
 
 unsigned int is_ap_in_tkip(struct rtw_adapter *padapter)
 {

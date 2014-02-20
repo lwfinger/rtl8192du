@@ -87,24 +87,6 @@ int _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 	atomic_set(&pevtpriv->event_seq, 0);
 	pevtpriv->evt_done_cnt = 0;
 
-#ifdef CONFIG_EVENT_THREAD_MODE
-
-	_rtw_init_sema(&(pevtpriv->evt_notify), 0);
-	_rtw_init_sema(&(pevtpriv->terminate_evtthread_sema), 0);
-
-	pevtpriv->evt_allocated_buf = kzalloc(MAX_EVTSZ + 4, GFP_ATOMIC);
-	if (pevtpriv->evt_allocated_buf == NULL) {
-		res = _FAIL;
-		goto exit;
-		}
-	pevtpriv->evt_buf = pevtpriv->evt_allocated_buf  +  4 - ((unsigned int)(pevtpriv->evt_allocated_buf) & 3);
-
-	_rtw_init_queue(&(pevtpriv->evt_queue));
-
-exit:
-
-#endif /* end of CONFIG_EVENT_THREAD_MODE */
-
 #ifdef CONFIG_C2H_WK
 	_init_workitem(&pevtpriv->c2h_wk, c2h_wk_callback, NULL);
 	pevtpriv->c2h_wk_alive = false;
@@ -117,13 +99,6 @@ void _rtw_free_evt_priv(struct evt_priv *pevtpriv)
 {
 
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_info_, ("+_rtw_free_evt_priv\n"));
-
-#ifdef CONFIG_EVENT_THREAD_MODE
-	_rtw_free_sema(&(pevtpriv->evt_notify));
-	_rtw_free_sema(&(pevtpriv->terminate_evtthread_sema));
-
-	kfree(pevtpriv->evt_allocated_buf);
-#endif
 
 #ifdef CONFIG_C2H_WK
 	_cancel_workitem_sync(&pevtpriv->c2h_wk);
@@ -424,64 +399,6 @@ post_process:
 
 	thread_exit();
 }
-
-#ifdef CONFIG_EVENT_THREAD_MODE
-u32 rtw_enqueue_evt(struct evt_priv *pevtpriv, struct evt_obj *obj)
-{
-	int	res;
-	struct __queue *queue = &pevtpriv->evt_queue;
-
-	res = _SUCCESS;
-
-	if (obj == NULL) {
-		res = _FAIL;
-		goto exit;
-	}
-
-	spin_lock_bh(&queue->lock);
-
-	rtw_list_insert_tail(&obj->list, &queue->queue);
-
-	spin_unlock_bh(&queue->lock);
-
-exit:
-	return res;
-}
-
-struct evt_obj *rtw_dequeue_evt(_queue *queue)
-{
-	struct evt_obj *pevtobj;
-
-	spin_lock_bh(&queue->lock);
-
-	if (rtw_is_list_empty(&(queue->queue))) {
-		pevtobj = NULL;
-	} else {
-		pevtobj = container_of(&(queue->queue->next; struct evt_obj, list);
-		list_del_init(&pevtobj->list);
-	}
-
-	spin_unlock_bh(&queue->lock);
-
-	return pevtobj;
-}
-
-void rtw_free_evt_obj(struct evt_obj *pevtobj)
-{
-
-	kfree(pevtobj->parmbuf);
-	kfree(pevtobj);
-
-}
-
-void rtw_evt_notify_isr(struct evt_priv *pevtpriv)
-{
-
-	pevtpriv->evt_done_cnt++;
-	_rtw_up_sema(&(pevtpriv->evt_notify));
-
-}
-#endif
 
 u8 rtw_setstandby_cmd(struct rtw_adapter *padapter, uint action)
 {

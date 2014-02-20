@@ -2339,13 +2339,6 @@ int rtw_set_key(struct rtw_adapter *adapter,
 	psetkeyparm->keyid = (u8) keyid;	/* 0~3 */
 	psetkeyparm->set_tx = set_tx;
 	pmlmepriv->key_mask |= BIT(psetkeyparm->keyid);
-#ifdef CONFIG_AUTOSUSPEND
-	if (true == adapter->pwrctrlpriv.bInternalAutoSuspend) {
-		adapter->pwrctrlpriv.wepkeymask = pmlmepriv->key_mask;
-		DBG_8192D("....AutoSuspend pwrctrlpriv.wepkeymask(%x)\n",
-			  adapter->pwrctrlpriv.wepkeymask);
-	}
-#endif
 	DBG_8192D("==> rtw_set_key algorithm(%x),keyid(%x),key_mask(%x)\n",
 		  psetkeyparm->algorithm, psetkeyparm->keyid,
 		  pmlmepriv->key_mask);

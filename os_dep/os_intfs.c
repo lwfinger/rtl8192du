@@ -688,9 +688,6 @@ static uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev)
 
 	registry_par->antdiv_cfg = (u8)rtw_antdiv_cfg;
 
-#ifdef CONFIG_AUTOSUSPEND
-	registry_par->usbss_enable = (u8)rtw_enusbss;/* 0:disable, 1:enable */
-#endif
 #ifdef SUPPORT_HW_RFOFF_DETECTED
 	registry_par->hwpdn_mode = (u8)rtw_hwpdn_mode;/* 0:disable, 1:enable, 2:by EFUSE config */
 	registry_par->hwpwrp_detect = (u8)rtw_hwpwrp_detect;/* 0:disable, 1:enable */

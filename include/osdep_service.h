@@ -65,10 +65,6 @@
 	#include <linux/usb.h>
 	#include <linux/usb/ch9.h>
 
-#ifdef CONFIG_USB_SUSPEND
-#define CONFIG_AUTOSUSPEND	1
-#endif
-
 #define _mutex	struct mutex
 struct	__queue	{
 	struct	list_head	queue;

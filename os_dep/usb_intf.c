@@ -735,16 +735,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 		rtw_resume_in_workqueue(pwrpriv);
 #else
-		if (rtw_is_earlysuspend_registered(pwrpriv)
-			#ifdef CONFIG_WOWLAN
-			&& !padapter->pwrctrlpriv.wowlan_mode
-			#endif /* CONFIG_WOWLAN */
-		) {
-			/* jeff: bypass resume here, do in late_resume */
-			rtw_set_do_late_resume(pwrpriv, true);
-		} else {
-			ret = rtw_resume_process(padapter);
-		}
+		ret = rtw_resume_process(padapter);
 #endif /* CONFIG_RESUME_IN_WORKQUEUE */
 	}
 
@@ -1163,10 +1154,6 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 
 	if (usb_drv->drv_registered )
 		padapter->bSurpriseRemoved = true;
-
-#if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
-	rtw_unregister_early_suspend(&padapter->pwrctrlpriv);
-#endif
 
 	rtw_pm_set_ips(padapter, IPS_NONE);
 	rtw_pm_set_lps(padapter, PS_MODE_ACTIVE);

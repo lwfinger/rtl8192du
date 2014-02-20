@@ -239,18 +239,12 @@ void rtw_yield_os(void)
 
 #ifdef CONFIG_WAKELOCK
 static struct wake_lock rtw_suspend_lock;
-#elif defined(CONFIG_ANDROID_POWER)
-static android_suspend_lock_t rtw_suspend_lock ={
-	.name = RTW_SUSPEND_LOCK_NAME
-};
 #endif
 
 inline void rtw_suspend_lock_init(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock_init(&rtw_suspend_lock, WAKE_LOCK_SUSPEND, RTW_SUSPEND_LOCK_NAME);
-	#elif defined(CONFIG_ANDROID_POWER)
-	android_init_suspend_lock(&rtw_suspend_lock);
 	#endif
 }
 
@@ -258,8 +252,6 @@ inline void rtw_suspend_lock_uninit(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock_destroy(&rtw_suspend_lock);
-	#elif defined(CONFIG_ANDROID_POWER)
-	android_uninit_suspend_lock(&rtw_suspend_lock);
 	#endif
 }
 
@@ -267,8 +259,6 @@ inline void rtw_lock_suspend(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock(&rtw_suspend_lock);
-	#elif defined(CONFIG_ANDROID_POWER)
-	android_lock_suspend(&rtw_suspend_lock);
 	#endif
 }
 
@@ -276,8 +266,6 @@ inline void rtw_unlock_suspend(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_unlock(&rtw_suspend_lock);
-	#elif defined(CONFIG_ANDROID_POWER)
-	android_unlock_suspend(&rtw_suspend_lock);
 	#endif
 }
 

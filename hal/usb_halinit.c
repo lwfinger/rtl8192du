@@ -4590,37 +4590,6 @@ static void SetHwReg8192DU(struct rtw_adapter *adapter, u8 variable, u8 *val)
 						}
 						break;
 					case WOWLAN_DEBUG_2:
-						{
-							u16 GPIO_val;
-							u8 reg = 0;
-#ifdef CONFIG_WOWLAN_MANUAL
-							if (poidparam->subcode_value == 1)
-							{
-
-								/* prevent 8051 to be reset by PERST# wake on wlan by Alex & Baron */
-								reg = rtw_read8(adapter, REG_RSV_CTRL);
-								rtw_write8(adapter, REG_RSV_CTRL, reg| BIT(5));
-								rtw_write8(adapter, REG_RSV_CTRL, reg| BIT(6)|BIT(5));
-								/* for Toshiba only, they should call rtw_suspend before suspend */
-								rtw_suspend_toshiba(adapter);
-							}
-							else
-							{
-								/* unmask usb se0 reset by Alex and DD */
-								reg = rtw_read8(adapter, 0xf8);
-								reg |= BIT(3)|BIT(4);
-								rtw_write8(adapter, 0xf8, reg);
-
-								/* for Toshiba only, they should call rtw_resume before resume */
-								rtw_resume_toshiba(adapter);
-								/* suggest by Scott */
-								reg = rtw_read8(adapter, REG_RSV_CTRL);
-								reg &= ~(BIT(5)|BIT(6));
-								rtw_write8(adapter, REG_RSV_CTRL, reg);
-
-							}
-#endif /* CONFIG_WOWLAN_MANUAL */
-						}
 						break;
 					default:
 						break;

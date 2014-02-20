@@ -29,6 +29,8 @@
 /* define CONFIG_PWRCTRL	1 */
 /* define CONFIG_H2CLBK	1 */
 
+//#define CONFIG_WAKE_ON_WLAN
+
 #ifdef CONFIG_WAKE_ON_WLAN
 #define CONFIG_WOWLAN 1
 #endif /* CONFIG_WAKE_ON_WLAN */

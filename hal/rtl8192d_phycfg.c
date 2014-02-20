@@ -688,7 +688,6 @@ phy_ConfigMACWithHeaderFile(
 int PHY_MACConfig8192D(struct rtw_adapter *adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	char		sz92DMACRegFile[] = RTL8192D_PHY_MACREG;
 	int		rtStatus = _SUCCESS;
 
 	if (adapter->bSurpriseRemoved) {
@@ -1083,22 +1082,13 @@ phy_ConfigBBWithMpHeaderFile(
 }	/* phy_ConfigBBWithPgHeaderFile */
 #endif
 
-static	int
-phy_BB8192D_Config_ParaFile(
-	struct rtw_adapter *	adapter
-	)
+static	int phy_BB8192D_Config_ParaFile(struct rtw_adapter *adapter)
 {
 #if MP_DRIVER != 1
 	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(adapter);
 #endif
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	int		rtStatus = _SUCCESS;
-	s8		sz92DBBRegFile[] = RTL8192D_PHY_REG;
-	s8		sz92DBBRegPgFile[] = RTL8192D_PHY_REG_PG;
-	s8		sz92DBBRegMpFile[] = RTL8192D_PHY_REG_MP;
-	s8		sz92DAGCTableFile[] = RTL8192D_AGC_TAB;
-	s8		sz92D2GAGCTableFile[] = RTL8192D_AGC_TAB_2G;
-	s8		sz92D5GAGCTableFile[] = RTL8192D_AGC_TAB_5G;
 
 	/*  1. Read PHY_REG.TXT BB INIT!! */
 	/*  We will seperate as 88C / 92C according to chip version */

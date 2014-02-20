@@ -574,60 +574,42 @@ phy_RF6052_Config_ParaFile(
 	int	rtStatus = _SUCCESS;
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	static s8		sz92DRadioAFile[] = RTL8192D_PHY_RADIO_A;
-	static s8		sz92DRadioBFile[] = RTL8192D_PHY_RADIO_B;
-	static s8		sz92DRadioAintPAFile[] = RTL8192D_PHY_RADIO_A_intPA;
-	static s8		sz92DRadioBintPAFile[] = RTL8192D_PHY_RADIO_B_intPA;
 	bool		bMac1NeedInitRadioAFirst = false,bMac0NeedInitRadioBFirst = false;
 	bool		bNeedPowerDownRadioA = false,bNeedPowerDownRadioB = false;
-	bool		bTrueBPath = false;/* vivi added this for read parameter from header, 20100908 */
+	bool		bTrueBPath = false;
 	u32	MaskforPhySet = 0; /* For 92d PHY cross access, 88c must set value 0. */
 
 	/* DMDP,MAC0 on G band,MAC1 on A band. */
-	if (pHalData->MacPhyMode92D==DUALMAC_DUALPHY)
-	{
-		if (pHalData->CurrentBandType92D == BAND_ON_2_4G && pHalData->interfaceIndex == 0)
-		{
+	if (pHalData->MacPhyMode92D==DUALMAC_DUALPHY) {
+		if (pHalData->CurrentBandType92D == BAND_ON_2_4G && pHalData->interfaceIndex == 0) {
 			/* MAC0 Need PHY1 load radio_b.txt . Driver use DBI to write. */
-			if (rtl8192d_PHY_EnableAnotherPHY(adapter, true))
-			{
+			if (rtl8192d_PHY_EnableAnotherPHY(adapter, true)) {
 				pHalData->NumTotalRFPath = 2;
 				bMac0NeedInitRadioBFirst = true;
-			}
-			else
-			{
+			} else {
 				/*  We think if MAC1 is ON,then radio_a.txt and radio_b.txt has been load. */
 				return rtStatus;
 			}
-		}
-		else if (pHalData->CurrentBandType92D == BAND_ON_5G && pHalData->interfaceIndex == 1)
-		{
+		} else if (pHalData->CurrentBandType92D == BAND_ON_5G && pHalData->interfaceIndex == 1) {
 			/* MAC1 Need PHY0 load radio_a.txt . Driver use DBI to write. */
-			if (rtl8192d_PHY_EnableAnotherPHY(adapter, false))
-			{
+			if (rtl8192d_PHY_EnableAnotherPHY(adapter, false)) {
 				pHalData->NumTotalRFPath = 2;
 				bMac1NeedInitRadioAFirst = true;
-			}
-			else
-			{
+			} else {
 				/*  We think if MAC0 is ON,then radio_a.txt and radio_b.txt has been load. */
 				return rtStatus;
 			}
-		}
-		else if (pHalData->interfaceIndex == 1)
-		{
+		} else if (pHalData->interfaceIndex == 1) {
 			/*  MAC0 enabled, only init radia B. */
-			bTrueBPath = true;  /* vivi added this for read parameter from header, 20100909 */
+			bTrueBPath = true;
 		}
 	}
 
 	/* 3----------------------------------------------------------------- */
 	/* 3 <2> Initialize RF */
 	/* 3----------------------------------------------------------------- */
-	for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
-	{
-		if (bMac1NeedInitRadioAFirst) /* Mac1 use PHY0 write */
-		{
+	for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++) {
+		if (bMac1NeedInitRadioAFirst) { /* Mac1 use PHY0 write */
 			if (eRFPath == RF_PATH_A) {
 				bNeedPowerDownRadioA = true;
 				MaskforPhySet = MAC1_ACCESS_PHY0;
@@ -638,9 +620,7 @@ phy_RF6052_Config_ParaFile(
 				bTrueBPath = true;
 				pHalData->NumTotalRFPath = 1;
 			}
-		}
-		else  if (bMac0NeedInitRadioBFirst) /* Mac0 use PHY1 write */
-		{
+		} else  if (bMac0NeedInitRadioBFirst) { /* Mac0 use PHY1 write*/
 			if (eRFPath == RF_PATH_A)
 				MaskforPhySet = 0;
 
@@ -657,16 +637,15 @@ phy_RF6052_Config_ParaFile(
 		pPhyReg = &pHalData->PHYRegDef[eRFPath];
 
 		/*----Store original RFENV control type----*/
-		switch (eRFPath)
-		{
-			case RF_PATH_A:
-			case RF_PATH_C:
-				u4RegValue = PHY_QueryBBReg(adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV);
-				break;
-			case RF_PATH_B :
-			case RF_PATH_D:
-				u4RegValue = PHY_QueryBBReg(adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV<<16);
-				break;
+		switch (eRFPath) {
+		case RF_PATH_A:
+		case RF_PATH_C:
+			u4RegValue = PHY_QueryBBReg(adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV);
+			break;
+		case RF_PATH_B :
+		case RF_PATH_D:
+			u4RegValue = PHY_QueryBBReg(adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV<<16);
+			break;
 		}
 
 		/*----Set RF_ENV enable----*/

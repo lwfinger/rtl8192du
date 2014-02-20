@@ -1149,10 +1149,11 @@ exit:
 	return status == _SUCCESS ? 0 : -ENODEV;
 }
 
-/*
- * dev_remove() - our device is being removed
-*/
-/* rmmod module & unplug(SurpriseRemoved) will call r871xu_dev_remove() => how to recognize both */
+/* dev_remove() - our device is being removed
+ *
+ * rmmod module & unplug(SurpriseRemoved) will call r871xu_dev_remove()
+ *  => how to recognize both
+ */
 static void rtw_dev_remove(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
@@ -1220,30 +1221,3 @@ static void __exit rtw_drv_halt(void)
 
 module_init(rtw_drv_entry);
 module_exit(rtw_drv_halt);
-
-#ifdef CONFIG_WOWLAN
-#ifdef CONFIG_WOWLAN_MANUAL
-
-int rtw_resume_toshiba(struct rtw_adapter * adapter)
-{
-	struct dvobj_priv *pdvobjpriv;
-	pdvobjpriv = adapter_to_dvobj(adapter);
-
-	rtw_resume(pdvobjpriv->pusbintf);
-	return 0;
-}
-
-int rtw_suspend_toshiba(struct rtw_adapter * adapter)
-{
-	pm_message_t msg;
-	struct dvobj_priv *pdvobjpriv;
-	pdvobjpriv = adapter_to_dvobj(adapter);
-	msg.event=0;
-	/* for Toshiba only, they should call rtw_suspend before suspend */
-	rtw_suspend(pdvobjpriv->pusbintf, msg);
-	return 0;
-}
-EXPORT_SYMBOL(rtw_suspend_toshiba);
-EXPORT_SYMBOL(rtw_resume_toshiba);
-#endif /* CONFIG_WOWLAN_MANUAL */
-#endif /* CONFIG_WOWLAN */

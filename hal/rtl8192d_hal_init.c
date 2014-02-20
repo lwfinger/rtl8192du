@@ -329,7 +329,6 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 	u8 writeFW_retry = 0;
 	u32 fwdl_start_time;
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	s8 R92DFwImageFileName[] ={RTL8192D_FW_IMG};
 	u8 *FwImage;
 	u32 FwImageLen;
 #ifdef CONFIG_WOWLAN

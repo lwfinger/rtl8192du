@@ -541,12 +541,8 @@ u8 rtw_setdatarate_cmd(struct rtw_adapter *padapter, u8 *rateset)
 	}
 
 	init_h2fwcmd_w_parm_no_rsp(ph2c, pbsetdataratepara, GEN_CMD_CODE(_SETDATARATE));
-#ifdef MP_FIRMWARE_OFFLOAD
-	pbsetdataratepara->curr_rateidx = *(u32 *)rateset;
-#else
 	pbsetdataratepara->mac_id = 5;
 	memcpy(pbsetdataratepara->datarates, rateset, NUMRATES);
-#endif
 	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
 exit:
 	return res;

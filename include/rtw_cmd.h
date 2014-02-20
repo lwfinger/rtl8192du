@@ -372,12 +372,8 @@ Command Mode
 
 */
 struct setdatarate_parm {
-#ifdef MP_FIRMWARE_OFFLOAD
-	u32	curr_rateidx;
-#else
 	u8	mac_id;
 	u8	datarates[NUMRATES];
-#endif
 };
 
 /*
@@ -757,64 +753,6 @@ struct set_ch_parm {
 	u8 bw;
 	u8 ch_offset;
 };
-
-#ifdef MP_FIRMWARE_OFFLOAD
-/*H2C Handler index: 47 */
-struct SetTXPOWER_parm
-{
-	u8 TXPOWER;
-};
-
-/*H2C Handler index: 48 */
-struct SWITCHANTENNA_parm
-{
-	u16 antenna_tx;
-	u16 antenna_rx;
-/* 	R_ANTENNA_SELECT_CCK cck_txrx; */
-	u8 cck_txrx;
-};
-
-/*H2C Handler index: 49 */
-struct setcrystalcap_parm
-{
-	u32 curr_crystalcap;
-};
-
-/*H2C Handler index: 50 */
-struct setsinglecarriertx_parm
-{
-	u8 start;
-};
-
-/*H2C Handler index: 51 */
-struct setsingletonetx_parm
-{
-	u8 start;
-	u8 curr_rfpath;
-};
-
-/*H2C Handler index: 52 */
-struct setcarriersuppressiontx_parm
-{
-	u8 start;
-	u32 curr_rateidx;
-};
-
-/*H2C Handler index: 53 */
-struct setcontinuoustx_parm
-{
-	u8 start;
-	u8 cck_flag; /*1:CCK 2:OFDM*/
-	u32 curr_rateidx;
-};
-
-/*H2C Handler index: 54 */
-struct switchbandwidth_parm
-{
-	u8 curr_bandwidth;
-};
-
-#endif	/* MP_FIRMWARE_OFFLOAD */
 
 /*H2C Handler index: 59 */
 struct setchannelplan_param

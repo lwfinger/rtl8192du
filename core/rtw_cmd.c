@@ -1676,54 +1676,6 @@ exit:
 	return res;
 }
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
-
-void antenna_select_wk_hdl(struct rtw_adapter *padapter, u8 antenna)
-{
-	rtw_hal_set_hwreg(padapter, HW_VAR_ANTENNA_DIVERSITY_SELECT, (u8 *)(&antenna));
-}
-
-u8 rtw_antenna_select_cmd(struct rtw_adapter *padapter, u8 antenna, u8 enqueue)
-{
-	struct cmd_obj *ph2c;
-	struct drvextra_cmd_parm *pdrvextra_cmd_parm;
-	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
-	u8 support_ant_div = false;
-	u8 res = _SUCCESS;
-
-	rtw_hal_get_def_var(padapter, HAL_DEF_IS_SUPPORT_ANT_DIV, &(support_ant_div));
-	if (false == support_ant_div)
-		return res;
-
-	if (true == enqueue) {
-		ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
-		if (ph2c == NULL) {
-			res = _FAIL;
-			goto exit;
-		}
-
-		pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)kzalloc(sizeof(struct drvextra_cmd_parm), GFP_ATOMIC);
-		if (pdrvextra_cmd_parm == NULL) {
-			kfree(ph2c);
-			res = _FAIL;
-			goto exit;
-		}
-
-		pdrvextra_cmd_parm->ec_id = ANT_SELECT_WK_CID;
-		pdrvextra_cmd_parm->type_size = antenna;
-		pdrvextra_cmd_parm->pbuf = NULL;
-		init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_SET_DRV_EXTRA));
-
-		res = rtw_enqueue_cmd(pcmdpriv, ph2c);
-	} else {
-		antenna_select_wk_hdl(padapter, antenna);
-	}
-exit:
-
-	return res;
-}
-#endif
-
 static void power_saving_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
 {
 	 rtw_ps_processor(padapter);
@@ -1983,11 +1935,6 @@ u8 rtw_drvextra_cmd_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 	case LPS_CTRL_WK_CID:
 		lps_ctrl_wk_hdl(padapter, (u8)pdrvextra_cmd->type_size);
 		break;
-#ifdef CONFIG_ANTENNA_DIVERSITY
-	case ANT_SELECT_WK_CID:
-		antenna_select_wk_hdl(padapter, pdrvextra_cmd->type_size);
-		break;
-#endif
 #ifdef CONFIG_P2P_PS
 	case P2P_PS_WK_CID:
 		p2p_ps_wk_hdl(padapter, pdrvextra_cmd->type_size);

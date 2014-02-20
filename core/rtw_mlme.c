@@ -574,10 +574,6 @@ static void update_network(struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src,
 	u8 sq_final;
 	long rssi_final;
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
-	rtw_hal_antdiv_rssi_compared(padapter, dst, src);	/* this will update src.Rssi, need consider again */
-#endif
-
 #if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
 	if (strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
 		DBG_8192D
@@ -705,10 +701,6 @@ void rtw_update_scanned_network(struct rtw_adapter *adapter,
 			/* list_del_init(&oldest->list); */
 			pnetwork = oldest;
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
-			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA,
-					    &(target->PhyInfo.Optimum_antenna));
-#endif
 			memcpy(&(pnetwork->network), target,
 			       get_wlan_bssid_ex_sz(target));
 			/*  variable initialize */
@@ -735,11 +727,6 @@ void rtw_update_scanned_network(struct rtw_adapter *adapter,
 
 			bssid_ex_sz = get_wlan_bssid_ex_sz(target);
 			target->Length = bssid_ex_sz;
-#ifdef CONFIG_ANTENNA_DIVERSITY
-			/* target->PhyInfo.Optimum_antenna = pHalData->CurAntenna; */
-			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA,
-					    &(target->PhyInfo.Optimum_antenna));
-#endif
 			memcpy(&(pnetwork->network), target, bssid_ex_sz);
 
 			pnetwork->last_scanned = rtw_get_current_time();
@@ -2267,20 +2254,6 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv)
 		rtw_indicate_disconnect(adapter);
 		rtw_free_assoc_resources(adapter, 0);
 	}
-#ifdef CONFIG_ANTENNA_DIVERSITY
-	rtw_hal_get_def_var(adapter, HAL_DEF_IS_SUPPORT_ANT_DIV,
-			    &(bSupportAntDiv));
-	if (true == bSupportAntDiv) {
-		u8 CurrentAntenna;
-		rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA,
-				    &(CurrentAntenna));
-		DBG_8192D("#### Opt_Ant_(%s) , cur_Ant(%s)\n",
-			  (2 ==
-			   candidate->network.PhyInfo.
-			   Optimum_antenna) ? "A" : "B",
-			  (2 == CurrentAntenna) ? "A" : "B");
-	}
-#endif
 	set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
 	ret = rtw_joinbss_cmd(adapter, candidate);
 

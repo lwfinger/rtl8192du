@@ -8490,20 +8490,6 @@ void site_survey(struct rtw_adapter *adapt)
 			pmlmeinfo->scan_cnt = 0;
 #endif /* CONFIG_DMP_STA_NODE_SCAN_UNDER_AP_MODE */
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
-			/*  20100721:Interrupt scan operation here. */
-			/*  For SW antenna diversity before link, it needs to switch to another antenna and scan again. */
-			/*  It compares the scan result and select beter one to do connection. */
-			if (rtw_hal_antdiv_before_linked(adapt)) {
-				pmlmeext->sitesurvey_res.bss_cnt = 0;
-				pmlmeext->sitesurvey_res.channel_idx = -1;
-				pmlmeext->chan_scan_time = SURVEY_TO / 2;
-				set_survey_timer(pmlmeext,
-						 pmlmeext->chan_scan_time);
-				return;
-			}
-#endif
-
 #ifdef CONFIG_P2P
 			if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_SCAN) || rtw_p2p_chk_state(pwdinfo,
 			    P2P_STATE_FIND_PHASE_SEARCH)) {
@@ -8669,12 +8655,6 @@ u8 collect_bss_info(struct rtw_adapter *adapt,
 	bssid->PhyInfo.SignalQuality = precv_frame->attrib.signal_qual;	/* in percentage */
 	bssid->PhyInfo.SignalStrength = precv_frame->attrib.signal_strength;	/* in percentage */
 	bssid->Rssi = precv_frame->attrib.recvsignalpower;	/*  in dBM.raw data */
-
-#ifdef CONFIG_ANTENNA_DIVERSITY
-	/* rtw_hal_get_hwreg(adapt, HW_VAR_CURRENT_ANTENNA, (u8 *)(&bssid->PhyInfo.Optimum_antenna)); */
-	rtw_hal_get_def_var(adapt, HAL_DEF_CURRENT_ANTENNA,
-			    &bssid->PhyInfo.Optimum_antenna);
-#endif
 
 	/*  checking SSID */
 	p = rtw_get_ie(bssid->IEs + _FIXED_IE_LENGTH_, _SSID_IE_, &len, bssid->IELength - _FIXED_IE_LENGTH_);
@@ -10258,9 +10238,6 @@ u8 join_cmd_hdl(struct rtw_adapter *adapt, u8 *pbuf)
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex *pnetwork =
 	    (struct wlan_bssid_ex *)(&(pmlmeinfo->network));
-#ifdef CONFIG_ANTENNA_DIVERSITY
-	struct joinbss_parm *pparm = (struct joinbss_parm *)pbuf;
-#endif /* CONFIG_ANTENNA_DIVERSITY */
 	u32 initialgain, i;
 	u8 cbw40_enable = 0;
 	/* u32  acparm; */
@@ -10285,10 +10262,6 @@ u8 join_cmd_hdl(struct rtw_adapter *adapt, u8 *pbuf)
 
 		rtw_hal_set_hwreg(adapt, HW_VAR_MLME_DISCONNECT, NULL);
 	}
-#ifdef CONFIG_ANTENNA_DIVERSITY
-	rtw_antenna_select_cmd(adapt, pparm->network.PhyInfo.Optimum_antenna,
-			       false);
-#endif
 
 	rtw_joinbss_reset(adapt);
 

@@ -323,9 +323,6 @@ static inline u32 bitshift(u32 bitmask)
 	#define PATH_LENGTH_MAX PATH_MAX
 
 /*  Suspend lock prevent system from going suspend */
-#ifdef CONFIG_WAKELOCK
-#include <linux/wakelock.h>
-#endif
 
 void rtw_suspend_lock_init(void);
 void rtw_suspend_lock_uninit(void);

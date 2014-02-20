@@ -237,36 +237,20 @@ void rtw_yield_os(void)
 
 #define RTW_SUSPEND_LOCK_NAME "rtw_wifi"
 
-#ifdef CONFIG_WAKELOCK
-static struct wake_lock rtw_suspend_lock;
-#endif
-
 inline void rtw_suspend_lock_init(void)
 {
-	#ifdef CONFIG_WAKELOCK
-	wake_lock_init(&rtw_suspend_lock, WAKE_LOCK_SUSPEND, RTW_SUSPEND_LOCK_NAME);
-	#endif
 }
 
 inline void rtw_suspend_lock_uninit(void)
 {
-	#ifdef CONFIG_WAKELOCK
-	wake_lock_destroy(&rtw_suspend_lock);
-	#endif
 }
 
 inline void rtw_lock_suspend(void)
 {
-	#ifdef CONFIG_WAKELOCK
-	wake_lock(&rtw_suspend_lock);
-	#endif
 }
 
 inline void rtw_unlock_suspend(void)
 {
-	#ifdef CONFIG_WAKELOCK
-	wake_unlock(&rtw_suspend_lock);
-	#endif
 }
 
 struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv)

@@ -393,7 +393,7 @@ struct mlme_priv {
 	struct timer_list scan_to_timer; /*  driver itself handles scan_timeout status. */
 	u32 scan_start_time; /*  used to evaluate the time spent in scanning */
 
-	#ifdef CONFIG_SET_SCAN_DENY_TIMER
+	#ifdef CONFIG_IOCTL_CFG80211
 	struct timer_list set_scan_deny_timer;
 	atomic_t set_scan_deny; /* 0: allowed, 1: deny */
 	#endif
@@ -652,7 +652,7 @@ extern void _rtw_join_timeout_handler(struct rtw_adapter *adapter);
 extern void rtw_scan_timeout_handler(struct rtw_adapter *adapter);
 
 extern void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter);
-#ifdef CONFIG_SET_SCAN_DENY_TIMER
+#ifdef CONFIG_IOCTL_CFG80211
 bool rtw_is_scan_deny(struct rtw_adapter *adapter);
 void rtw_clear_scan_deny(struct rtw_adapter *adapter);
 void rtw_set_scan_deny_timer_hdl(struct rtw_adapter *adapter);

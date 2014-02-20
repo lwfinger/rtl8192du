@@ -42,7 +42,7 @@ static void _dynamic_check_timer_handlder (void *FunctionContext)
 	_set_timer(&adapter->mlmepriv.dynamic_chk_timer, 2000);
 }
 
-#ifdef CONFIG_SET_SCAN_DENY_TIMER
+#ifdef CONFIG_IOCTL_CFG80211
 void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
 {
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
@@ -59,7 +59,7 @@ void rtw_init_mlme_timer(struct rtw_adapter *padapter)
 
 	_init_timer(&(pmlmepriv->dynamic_chk_timer), padapter->pnetdev, _dynamic_check_timer_handlder, padapter);
 
-	#ifdef CONFIG_SET_SCAN_DENY_TIMER
+	#ifdef CONFIG_IOCTL_CFG80211
 	_init_timer(&(pmlmepriv->set_scan_deny_timer), padapter->pnetdev, _rtw_set_scan_deny_timer_hdl, padapter);
 	#endif
 }

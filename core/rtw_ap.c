@@ -1879,7 +1879,7 @@ u8 ap_free_sta(struct rtw_adapter *padapter, struct sta_info *psta,
 	if (1) {
 		#ifdef COMPAT_KERNEL_RELEASE
 		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr, reason);
-		#elif !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
+		#elif !defined(CONFIG_IOCTL_CFG80211)
 		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr,
 						   reason);
 		#endif

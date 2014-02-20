@@ -1855,10 +1855,10 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 #ifdef COMPAT_KERNEL_RELEASE
 			rtw_cfg80211_indicate_sta_assoc(adapt, pframe,
 							pkt_len);
-#elif !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
+#elif !defined(CONFIG_IOCTL_CFG80211)
 			rtw_cfg80211_indicate_sta_assoc(adapt, pframe,
 							pkt_len);
-#else /* !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
+#else /* !defined(CONFIG_IOCTL_CFG80211) */
 			spin_lock_bh(&pstat->lock);
 			kfree(pstat->passoc_req);
 			pstat->passoc_req = NULL;
@@ -1870,7 +1870,7 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 				pstat->assoc_req_len = pkt_len;
 			}
 			spin_unlock_bh(&pstat->lock);
-#endif /* !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
+#endif /* !defined(CONFIG_IOCTL_CFG80211) */
 		} else
 #endif /* CONFIG_IOCTL_CFG80211 */
 		{

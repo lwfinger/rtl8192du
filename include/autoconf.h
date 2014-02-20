@@ -21,12 +21,7 @@
 #define DRV_NAME "r8192du"
 #define DRIVERVERSION	"v4.2.1_7122.20130408"
 
-/* define CONFIG_IOCTL_CFG80211 1 */
-
-#ifdef CONFIG_IOCTL_CFG80211
-	#define CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER
-	#define CONFIG_SET_SCAN_DENY_TIMER
-#endif
+//#define CONFIG_IOCTL_CFG80211 1
 
 /*
  * Internal  General Config
@@ -64,7 +59,7 @@
 
 #define CONFIG_LAYER2_ROAMING
 #define CONFIG_LAYER2_ROAMING_RESUME
-/* define CONFIG_SET_SCAN_DENY_TIMER */
+/* define CONFIG_IOCTL_CFG80211 */
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable,*/
 
 #define CONFIG_BR_EXT	1	/*  Enable NAT2.5 support for STA mode interface with a L2 Bridge */

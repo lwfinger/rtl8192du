@@ -3383,7 +3383,7 @@ int rtw_p2p_check_frames(struct rtw_adapter *padapter, const u8 *buf, u32 len, u
 						pwdev_priv->provdisc_req_issued = true;/* case: p2p_devices connection before Nego req. */
 					}
 				}
-				break;
+				break; }
 			case P2P_PROVISION_DISC_RESP:
 				DBG_8192D("RTW_%s:P2P_PROVISION_DISC_RESP, dialogToken =%d\n",
 					  tx ? "Tx" : "Rx", dialogToken);

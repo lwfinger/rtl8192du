@@ -21,7 +21,7 @@
 #endif
 
 #if defined(RTW_USE_CFG80211_STA_EVENT)
-	#undef CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER
+	#undef CONFIG_IOCTL_CFG80211
 #endif
 
 struct rtw_wdev_invit_info {

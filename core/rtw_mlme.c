@@ -1773,7 +1773,7 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 #ifdef CONFIG_IOCTL_CFG80211
 #ifdef COMPAT_KERNEL_RELEASE
 
-#elif defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
+#elif defined(CONFIG_IOCTL_CFG80211)
 			u8 *passoc_req = NULL;
 			u32 assoc_req_len;
 
@@ -1799,7 +1799,7 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 				kfree(passoc_req);
 			}
-#endif /* defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
+#endif /* defined(CONFIG_IOCTL_CFG80211) */
 #endif /* CONFIG_IOCTL_CFG80211 */
 
 			ap_sta_info_defer_update(adapter, psta);
@@ -1873,10 +1873,10 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 #ifdef CONFIG_IOCTL_CFG80211
 #ifdef COMPAT_KERNEL_RELEASE
 
-#elif defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
+#elif defined(CONFIG_IOCTL_CFG80211)
 		rtw_cfg80211_indicate_sta_disassoc(adapter, pstadel->macaddr,
 						   *(u16 *)pstadel->rsvd);
-#endif /* defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
+#endif /* defined(CONFIG_IOCTL_CFG80211) */
 #endif /* CONFIG_IOCTL_CFG80211 */
 
 		return;
@@ -2170,7 +2170,7 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 #endif /*  CONFIG_BR_EXT */
 }
 
-#ifdef CONFIG_SET_SCAN_DENY_TIMER
+#ifdef CONFIG_IOCTL_CFG80211
 inline bool rtw_is_scan_deny(struct rtw_adapter *adapter)
 {
 	struct mlme_priv *mlmepriv = &adapter->mlmepriv;

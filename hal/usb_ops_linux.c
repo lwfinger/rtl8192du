@@ -63,9 +63,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 		goto exit;
 	}
 
-	#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
 	_enter_critical_mutex(&pdvobjpriv->usb_vendor_req_mutex);
-	#endif
 
 	/*  Acquire IO memory for vendorreq */
 	pIo_buf = pdvobjpriv->usb_vendor_req_buf;
@@ -76,17 +74,13 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 		goto release_mutex;
 	}
 
-	while (++vendorreq_times<= MAX_USBCTRL_VENDORREQ_TIMES)
-	{
+	while (++vendorreq_times<= MAX_USBCTRL_VENDORREQ_TIMES) {
 		memset(pIo_buf, 0, len);
 
-		if (requesttype == 0x01)
-		{
+		if (requesttype == 0x01) {
 			pipe = usb_rcvctrlpipe(udev, 0);/* read_in */
 			reqtype =  REALTEK_USB_VENQT_READ;
-		}
-		else
-		{
+		} else {
 			pipe = usb_sndctrlpipe(udev, 0);/* write_out */
 			reqtype =  REALTEK_USB_VENQT_WRITE;
 			memcpy(pIo_buf, pdata, len);
@@ -94,36 +88,36 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 
 		status = rtw_usb_control_msg(udev, pipe, request, reqtype, value, index, pIo_buf, len, RTW_USB_CONTROL_MSG_TIMEOUT);
 
-		if (status == len)   /*  Success this control transfer. */
-		{
+		if (status == len) {   /*  Success this control transfer. */
 			rtw_reset_continual_urb_error(pdvobjpriv);
-			if (requesttype == 0x01)
-			{   /*  For Control read transfer, we have to copy the read data from pIo_buf to pdata. */
+			if (requesttype == 0x01) {
+				/* For Control read transfer, we have to copy
+				 * the read data from pIo_buf to pdata.
+				 */
 				memcpy(pdata, pIo_buf,  len);
 			}
-		}
-		else { /*  error cases */
-			DBG_8192D("reg 0x%x, usb %s %u fail, status:%d value=0x%x, vendorreq_times:%d\n"
-				, value,(requesttype == 0x01)?"read":"write" , len, status, *(u32*)pdata, vendorreq_times);
+		} else { /*  error cases */
+			DBG_8192D("reg 0x%x, usb %s %u fail, status:%d value=0x%x, vendorreq_times:%d\n",
+				  value,(requesttype == 0x01) ? "read" : "write",
+				  len, status, *(u32 *)pdata, vendorreq_times);
 
 			if (status < 0) {
-				if (status == (-ESHUTDOWN)	|| status == -ENODEV	)
-				{
+				if (status == (-ESHUTDOWN) ||
+				    status == -ENODEV) {
 					padapter->bSurpriseRemoved = true;
 				} else {
 					#ifdef DBG_CONFIG_ERROR_DETECT
-					{
-						struct hal_data_8192du	*pHalData = GET_HAL_DATA(padapter);
-						pHalData->srestpriv.Wifi_Error_Status = USB_VEN_REQ_CMD_FAIL;
-					}
+					struct hal_data_8192du	*pHalData = GET_HAL_DATA(padapter);
+					pHalData->srestpriv.Wifi_Error_Status = USB_VEN_REQ_CMD_FAIL;
 					#endif
 				}
-			}
-			else /*  status != len && status >= 0 */
-			{
+			} else { /*  status != len && status >= 0 */
 				if (status > 0) {
-					if (requesttype == 0x01)
-					{   /*  For Control read transfer, we have to copy the read data from pIo_buf to pdata. */
+					if (requesttype == 0x01) {
+						/* For Control read transfer,
+						 * we have to copy the read data
+						 * from pIo_buf to pdata.
+						 */
 						memcpy(pdata, pIo_buf,  len);
 					}
 				}
@@ -148,9 +142,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	#endif
 
 release_mutex:
-	#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
 	_exit_critical_mutex(&pdvobjpriv->usb_vendor_req_mutex);
-	#endif
 exit:
 	return status;
 }

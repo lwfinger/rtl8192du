@@ -93,7 +93,7 @@ static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLe
 	padapter = GET_PRIMARY_ADAPTER(padapter);
 	pHalData = GET_HAL_DATA(padapter);
 
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex));
+	mutex_lock(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex));
 
 	while (!bWriteSucess)
 	{
@@ -234,7 +234,7 @@ static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLe
 
 	}
 
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex));
+	mutex_unlock(&(adapter_to_dvobj(padapter)->h2c_fwcmd_mutex));
 
 }
 

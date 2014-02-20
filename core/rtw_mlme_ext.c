@@ -6041,7 +6041,7 @@ s32 dump_mgntframe_and_wait_ack(struct rtw_adapter *adapt,
 	    adapt->bDriverStopped == true)
 		return -1;
 
-	_enter_critical_mutex(&pxmitpriv->ack_tx_mutex);
+	mutex_lock(&pxmitpriv->ack_tx_mutex);
 	pxmitpriv->ack_tx = true;
 
 	pmgntframe->ack_report = 1;
@@ -6050,7 +6050,7 @@ s32 dump_mgntframe_and_wait_ack(struct rtw_adapter *adapt,
 	}
 
 	pxmitpriv->ack_tx = false;
-	_exit_critical_mutex(&pxmitpriv->ack_tx_mutex);
+	mutex_unlock(&pxmitpriv->ack_tx_mutex);
 
 	return ret;
 }
@@ -11471,12 +11471,12 @@ void dc_SelectChannel(struct rtw_adapter *adapt, unsigned char channel)
 		ptarget_adapter = adapt;
 	}
 
-	_enter_critical_mutex(&
+	mutex_lock(&
 			      (adapter_to_dvobj(ptarget_adapter)->setch_mutex));
 
 	rtw_hal_set_chan(ptarget_adapter, channel);
 
-	_exit_critical_mutex(&(adapter_to_dvobj(ptarget_adapter)->setch_mutex));
+	mutex_unlock(&(adapter_to_dvobj(ptarget_adapter)->setch_mutex));
 }
 
 void dc_SetBWMode(struct rtw_adapter *adapt, unsigned short bwmode,
@@ -11493,13 +11493,13 @@ void dc_SetBWMode(struct rtw_adapter *adapt, unsigned short bwmode,
 		ptarget_adapter = adapt;
 	}
 
-	_enter_critical_mutex(&
+	mutex_lock(&
 			      (adapter_to_dvobj(ptarget_adapter)->setbw_mutex));
 
 	rtw_hal_set_bwmode(ptarget_adapter, (HT_CHANNEL_WIDTH) bwmode,
 			   channel_offset);
 
-	_exit_critical_mutex(&(adapter_to_dvobj(ptarget_adapter)->setbw_mutex));
+	mutex_unlock(&(adapter_to_dvobj(ptarget_adapter)->setbw_mutex));
 }
 
 void dc_set_channel_bwmode_disconnect(struct rtw_adapter *adapt)

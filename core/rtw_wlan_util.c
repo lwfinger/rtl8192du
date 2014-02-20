@@ -390,14 +390,14 @@ void SelectChannel(struct rtw_adapter *padapter, unsigned char channel)
 	dc_SelectChannel(padapter, channel);
 #else /* CONFIG_DUALMAC_CONCURRENT */
 
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->setch_mutex));
+	mutex_lock(&(adapter_to_dvobj(padapter)->setch_mutex));
 
 	/* saved channel info */
 	rtw_set_oper_ch(padapter, channel);
 
 	rtw_hal_set_chan(padapter, channel);
 
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->setch_mutex));
+	mutex_unlock(&(adapter_to_dvobj(padapter)->setch_mutex));
 
 #endif /*  CONFIG_DUALMAC_CONCURRENT */
 }
@@ -413,7 +413,7 @@ void SetBWMode(struct rtw_adapter *padapter, unsigned short bwmode, unsigned cha
 	dc_SetBWMode(padapter, bwmode, channel_offset);
 #else /* CONFIG_DUALMAC_CONCURRENT */
 
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->setbw_mutex));
+	mutex_lock(&(adapter_to_dvobj(padapter)->setbw_mutex));
 
 	/* saved bw info */
 	rtw_set_oper_bw(padapter, bwmode);
@@ -421,7 +421,7 @@ void SetBWMode(struct rtw_adapter *padapter, unsigned short bwmode, unsigned cha
 
 	rtw_hal_set_bwmode(padapter, (enum HT_CHANNEL_WIDTH)bwmode, channel_offset);
 
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->setbw_mutex));
+	mutex_unlock(&(adapter_to_dvobj(padapter)->setbw_mutex));
 
 #endif /*  CONFIG_DUALMAC_CONCURRENT */
 }
@@ -459,7 +459,7 @@ void set_channel_bwmode(struct rtw_adapter *padapter, unsigned char channel, uns
 #else /* CONFIG_DUALMAC_CONCURRENT */
 
 	if (!mutex_is_locked(&(adapter_to_dvobj(padapter)->hw_init_mutex)))
-		_enter_critical_mutex(&(adapter_to_dvobj(padapter)->setch_mutex));
+		mutex_lock(&(adapter_to_dvobj(padapter)->setch_mutex));
 
 	/* saved channel/bw info */
 	rtw_set_oper_ch(padapter, channel);
@@ -469,7 +469,7 @@ void set_channel_bwmode(struct rtw_adapter *padapter, unsigned char channel, uns
 	rtw_hal_set_chan(padapter, center_ch);
 
 	if (!mutex_is_locked(&(adapter_to_dvobj(padapter)->hw_init_mutex)))
-		_exit_critical_mutex(&(adapter_to_dvobj(padapter)->setch_mutex));
+		mutex_unlock(&(adapter_to_dvobj(padapter)->setch_mutex));
 
 #endif /*  CONFIG_DUALMAC_CONCURRENT */
 

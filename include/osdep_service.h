@@ -82,17 +82,6 @@ static inline struct list_head *get_list_head(struct __queue *queue)
 	return (&(queue->queue));
 }
 
-static inline void _enter_critical_mutex(_mutex *pmutex)
-{
-	mutex_lock(pmutex);
-}
-
-
-static inline void _exit_critical_mutex(_mutex *pmutex)
-{
-	mutex_unlock(pmutex);
-}
-
 static inline void _init_timer(struct timer_list *timer, struct net_device * nic_hdl, void *pfunc, void *cntx)
 {
 	timer->function = pfunc;

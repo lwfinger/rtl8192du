@@ -311,10 +311,6 @@ struct rtw_adapter {
 	struct wifidirect_info	wdinfo;
 #endif /* CONFIG_P2P */
 
-#ifdef CONFIG_TDLS
-	struct tdls_info	tdlsinfo;
-#endif /* CONFIG_TDLS */
-
 	void *HalData;
 	u32 hal_data_sz;
 	struct hal_ops	HalFunc;

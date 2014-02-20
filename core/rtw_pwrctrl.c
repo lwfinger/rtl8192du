@@ -368,12 +368,6 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
 #endif /* CONFIG_P2P */
-#ifdef CONFIG_TDLS
-	struct sta_priv *pstapriv = &padapter->stapriv;
-	int i, j;
-	_list *plist, *phead;
-	struct sta_info *ptdls_sta;
-#endif /* CONFIG_TDLS */
 
 	RT_TRACE(_module_rtl871x_pwrctrl_c_, _drv_notice_,
 		 ("%s: PowerMode=%d Smart_PS=%d\n",
@@ -398,31 +392,6 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 			DBG_8192D
 			    ("rtw_set_ps_mode(): Busy Traffic , Leave 802.11 power save..\n");
 
-#ifdef CONFIG_TDLS
-			spin_lock_bh(&pstapriv->sta_hash_lock);
-
-			for (i = 0; i < NUM_STA; i++) {
-				phead = &(pstapriv->sta_hash[i]);
-				plist = phead->next;
-
-				while ((rtw_end_of_queue_search(phead, plist))
-				       == false) {
-					ptdls_sta =
-					    container_of(plist,
-							   struct sta_info,
-							   hash_list);
-
-					if (ptdls_sta->
-					    tdls_sta_state & TDLS_LINKED_STATE)
-						issue_nulldata_to_TDLS_peer_STA
-						    (padapter, ptdls_sta, 0);
-					plist = plist->next;
-				}
-			}
-
-			spin_unlock_bh(&pstapriv->sta_hash_lock);
-#endif /* CONFIG_TDLS */
-
 			pwrpriv->smart_ps = smart_ps;
 			pwrpriv->pwr_mode = ps_mode;
 
@@ -436,31 +405,6 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 			DBG_8192D
 			    ("rtw_set_ps_mode(): Enter 802.11 power save mode...\n");
 
-#ifdef CONFIG_TDLS
-			spin_lock_bh(&pstapriv->sta_hash_lock);
-
-			for (i = 0; i < NUM_STA; i++) {
-				phead = &(pstapriv->sta_hash[i]);
-				plist = phead->next;
-
-				while ((rtw_end_of_queue_search(phead, plist))
-				       == false) {
-					ptdls_sta =
-					    container_of(plist,
-							   struct sta_info,
-							   hash_list);
-
-					if (ptdls_sta->
-					    tdls_sta_state & TDLS_LINKED_STATE)
-						issue_nulldata_to_TDLS_peer_STA
-						    (padapter, ptdls_sta, 1);
-					plist = plist->next;
-				}
-			}
-
-			spin_unlock_bh(&pstapriv->sta_hash_lock);
-#endif /* CONFIG_TDLS */
-
 			pwrpriv->smart_ps = smart_ps;
 			pwrpriv->pwr_mode = ps_mode;
 			pwrpriv->bFwCurrentInPSMode = true;
@@ -473,7 +417,6 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 			rtw_set_rpwm(padapter, PS_STATE_S2);
 		}
 	}
-
 }
 
 /*	Description: */

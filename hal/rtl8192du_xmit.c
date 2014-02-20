@@ -456,66 +456,39 @@ s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
-#ifdef CONFIG_TDLS
-	struct sta_priv		*pstapriv = &padapter->stapriv;
-	struct sta_info *ptdls_sta=NULL, *psta_backup=NULL;
-	u8 ra_backup[6];
-#endif /* CONFIG_TDLS */
 
 	if ((pxmitframe->frame_tag == DATA_FRAMETAG) &&
 	    (pxmitframe->attrib.ether_type != 0x0806) &&
 	    (pxmitframe->attrib.ether_type != 0x888e) &&
 	    (pxmitframe->attrib.dhcp_pkt != 1))
-	{
-#ifdef CONFIG_TDLS
-		ptdls_sta = rtw_get_stainfo(pstapriv, pattrib->dst);
-		if ((ptdls_sta!=NULL)&&(ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE))
-		{
-			psta_backup = pattrib->psta;
-			pattrib->psta = ptdls_sta;
-			memcpy(ra_backup, pattrib->ra, ETH_ALEN);
-			memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
-			rtw_issue_addbareq_cmd(padapter, pxmitframe);
-			pattrib->psta = psta_backup;
-			memcpy(pattrib->ra, ra_backup, ETH_ALEN);
-		}
-#endif /* CONFIG_TDLS */
 		rtw_issue_addbareq_cmd(padapter, pxmitframe);
-	}
 
 	mem_addr = pxmitframe->buf_addr;
 
-       RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_dump_xframe()\n"));
+	RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_dump_xframe()\n"));
 
-	for (t = 0; t < pattrib->nr_frags; t++)
-	{
+	for (t = 0; t < pattrib->nr_frags; t++) {
 		if (inner_ret != _SUCCESS && ret == _SUCCESS)
 			ret = _FAIL;
 
-		if (t != (pattrib->nr_frags - 1))
-		{
+		if (t != (pattrib->nr_frags - 1)) {
 			RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("pattrib->nr_frags=%d\n", pattrib->nr_frags));
 
 			sz = pxmitpriv->frag_len;
 			sz = sz - 4 - (psecuritypriv->sw_encrypt ? 0 : pattrib->icv_len);
-		}
-		else /* no frag */
-		{
+		} else { /* no frag */
 			sz = pattrib->last_txcmdsz;
 		}
 
 		pull = update_txdesc(pxmitframe, mem_addr, sz, false);
 
-		if (pull)
-		{
+		if (pull) {
 			mem_addr += PACKET_OFFSET_SZ; /* pull txdesc head */
 
 			pxmitframe->buf_addr = mem_addr;
 
 			w_sz = sz + TXDESC_SIZE;
-		}
-		else
-		{
+		} else {
 			w_sz = sz + TXDESC_SIZE + PACKET_OFFSET_SZ;
 		}
 

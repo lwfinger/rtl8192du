@@ -1119,31 +1119,19 @@ u8 rtw_init_drv_sw(struct rtw_adapter *padapter)
 	#endif
 #endif /* CONFIG_P2P */
 
-	if (init_mlme_ext_priv(padapter) == _FAIL)
-	{
+	if (init_mlme_ext_priv(padapter) == _FAIL) {
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("\n Can't init mlme_ext_priv\n"));
 		ret8 = _FAIL;
 		goto exit;
 	}
 
-#ifdef CONFIG_TDLS
-	if (rtw_init_tdls_info(padapter) == _FAIL)
-	{
-		DBG_8192D("Can't rtw_init_tdls_info\n");
-		ret8 = _FAIL;
-		goto exit;
-	}
-#endif /* CONFIG_TDLS */
-
-	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL)
-	{
+	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL) {
 		DBG_8192D("Can't _rtw_init_xmit_priv\n");
 		ret8 = _FAIL;
 		goto exit;
 	}
 
-	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL)
-	{
+	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL) {
 		DBG_8192D("Can't _rtw_init_recv_priv\n");
 		ret8 = _FAIL;
 		goto exit;

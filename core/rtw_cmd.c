@@ -1152,27 +1152,15 @@ u8 rtw_setstakey_cmd(struct rtw_adapter *padapter, u8 *psta, u8 unicast_key)
 
 	memcpy(psetstakey_para->addr, sta->hwaddr, ETH_ALEN);
 
-	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE)) {
-#ifdef CONFIG_TDLS
-		if (sta->tdls_sta_state&TDLS_LINKED_STATE)
-			psetstakey_para->algorithm = (u8)sta->dot118021XPrivacy;
-		else
-#endif /* CONFIG_TDLS */
+	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE))
 		psetstakey_para->algorithm = (unsigned char) psecuritypriv->dot11PrivacyAlgrthm;
-	} else {
+	else
 		GET_ENCRY_ALGO(psecuritypriv, sta, psetstakey_para->algorithm, false);
-	}
 
-	if (unicast_key == true) {
-#ifdef CONFIG_TDLS
-		if (sta->tdls_sta_state&TDLS_LINKED_STATE)
-			memcpy(&psetstakey_para->key, sta->tpk.tk, 16);
-		else
-#endif /* CONFIG_TDLS */
-			memcpy(&psetstakey_para->key, &sta->dot118021x_UncstKey, 16);
-	} else {
+	if (unicast_key)
+		memcpy(&psetstakey_para->key, &sta->dot118021x_UncstKey, 16);
+	else
 		memcpy(&psetstakey_para->key, &psecuritypriv->dot118021XGrpKey[psecuritypriv->dot118021XGrpKeyid].skey, 16);
-	}
 
 	/* jeff: set this becasue at least sw key is ready */
 	padapter->securitypriv.busetkipkey = true;
@@ -1596,34 +1584,6 @@ u8 rtw_tdls_cmd(struct rtw_adapter *padapter, u8 *addr, u8 option)
 
 	u8 res = _SUCCESS;
 
-#ifdef CONFIG_TDLS
-
-	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_set_tdls_cmd\n"));
-
-	pcmdobj = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
-	if (pcmdobj == NULL) {
-		res = _FAIL;
-		goto exit;
-	}
-
-	TDLSoption = (struct TDLSoption_param *)kzalloc(sizeof(struct TDLSoption_param), GFP_ATOMIC);
-	if (TDLSoption == NULL) {
-		kfree(pcmdobj);
-		res = _FAIL;
-		goto exit;
-	}
-
-	spin_lock(&(padapter->tdlsinfo.cmd_lock));
-	memcpy(TDLSoption->addr, addr, 6);
-	TDLSoption->option = option;
-	spin_unlock(&(padapter->tdlsinfo.cmd_lock));
-	init_h2fwcmd_w_parm_no_rsp(pcmdobj, TDLSoption, GEN_CMD_CODE(_TDLS));
-	res = rtw_enqueue_cmd(pcmdpriv, pcmdobj);
-
-#endif	/* CONFIG_TDLS */
-
-exit:
-
 	return res;
 }
 
@@ -1633,9 +1593,6 @@ static void traffic_status_watchdog(struct rtw_adapter *padapter)
 	u8 bBusyTraffic = false, bTxBusyTraffic = false, bRxBusyTraffic = false;
 	u8 bHigherBusyTraffic = false, bHigherBusyRxTraffic = false, bHigherBusyTxTraffic = false;
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
-#ifdef CONFIG_TDLS
-	struct tdls_info *ptdlsinfo = &(padapter->tdlsinfo);
-#endif /* CONFIG_TDLS */
 
 	/*  Determine if our traffic is busy now */
 	if ((check_fwstate(pmlmepriv, _FW_LINKED) == true)) {
@@ -1663,14 +1620,6 @@ static void traffic_status_watchdog(struct rtw_adapter *padapter)
 			if (pmlmepriv->LinkDetectInfo.NumTxOkInPeriod > 5000)
 				bHigherBusyTxTraffic = true;
 		}
-
-#ifdef CONFIG_TDLS
-#ifdef CONFIG_TDLS_AUTOSETUP
-		if ((ptdlsinfo->watchdog_count % TDLS_WATCHDOG_PERIOD) == 0)	/* TDLS_WATCHDOG_PERIOD * 2sec, periodically sending */
-			issue_tdls_dis_req(padapter, NULL);
-		ptdlsinfo->watchdog_count++;
-#endif /* CONFIG_TDLS_AUTOSETUP */
-#endif /* CONFIG_TDLS */
 
 		/*  check traffic for  powersaving. */
 		if (((pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod + pmlmepriv->LinkDetectInfo.NumTxOkInPeriod) > 8) ||

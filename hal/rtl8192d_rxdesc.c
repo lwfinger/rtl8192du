@@ -554,25 +554,6 @@ void rtl8192d_query_rx_desc_status(struct recv_frame_hdr *precvframe, struct rec
 	pattrib->frag_num = (u8)((le32_to_cpu(pdesc->rxdw2) >> 12) & 0xf);/* fragmentation number */
 
 	/* Offset 12 */
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-	if (le32_to_cpu(pdesc->rxdw3) & BIT(13)) {
-		pattrib->tcpchk_valid = 1; /*  valid */
-		if (le32_to_cpu(pdesc->rxdw3) & BIT(11)) {
-			pattrib->tcp_chkrpt = 1; /*  correct */
-		}
-		else
-			pattrib->tcp_chkrpt = 0; /*  incorrect */
-
-		if (le32_to_cpu(pdesc->rxdw3) & BIT(12))
-			pattrib->ip_chkrpt = 1; /*  correct */
-		else
-			pattrib->ip_chkrpt = 0; /*  incorrect */
-	}
-	else {
-		pattrib->tcpchk_valid = 0; /*  invalid */
-	}
-#endif
-
 	pattrib->mcs_rate=(u8)((le32_to_cpu(pdesc->rxdw3))&0x3f);
 	pattrib->rxht=(u8)((le32_to_cpu(pdesc->rxdw3) >>6)&0x1);
 

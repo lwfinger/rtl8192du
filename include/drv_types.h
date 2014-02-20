@@ -315,10 +315,6 @@ struct rtw_adapter {
 	struct tdls_info	tdlsinfo;
 #endif /* CONFIG_TDLS */
 
-#ifdef CONFIG_WFD
-	struct wifi_display_info wfd_info;
-#endif /* CONFIG_WFD */
-
 	void *HalData;
 	u32 hal_data_sz;
 	struct hal_ops	HalFunc;

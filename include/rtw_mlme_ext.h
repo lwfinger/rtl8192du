@@ -527,9 +527,6 @@ int is_IBSS_empty(struct rtw_adapter *padapter);
 unsigned char check_assoc_AP(u8 *pframe, uint len);
 
 int WMM_param_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_ies *pIE);
-#ifdef CONFIG_WFD
-int WFD_info_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_ies *pIE);
-#endif
 void WMMOnAssocRsp(struct rtw_adapter *padapter);
 
 void HT_caps_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_ies *pIE);

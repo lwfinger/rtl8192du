@@ -169,31 +169,6 @@ struct tx_invite_resp_info{
 	u8					token;	/* 	Used to record the dialog token of p2p invitation request frame. */
 };
 
-#ifdef CONFIG_WFD
-
-struct wifi_display_info{
-	u16							wfd_enable;			/* 	Eanble/Disable the WFD function. */
-	u16							rtsp_ctrlport;		/* 	TCP port number at which the this WFD device listens for RTSP messages */
-	u16							peer_rtsp_ctrlport;	/* 	TCP port number at which the peer WFD device listens for RTSP messages */
-													/* 	This filed should be filled when receiving the gropu negotiation request */
-
-	u8							peer_session_avail;	/* 	WFD session is available or not for the peer wfd device. */
-													/* 	This variable will be set when sending the provisioning discovery request to peer WFD device. */
-													/* 	And this variable will be reset when it is read by using the iwpriv p2p_get wfd_sa command. */
-
-	u8							ip_address[4];
-	u8							peer_ip_address[4];
-	u8							wfd_pc;				/* 	WFD preferred connection */
-													/* 	0 -> Prefer to use the P2P for WFD connection on peer side. */
-													/* 	1 -> Prefer to use the TDLS for WFD connection on peer side. */
-
-	u8							wfd_device_type;	/* 	WFD Device Type */
-													/* 	0 -> WFD Source Device */
-													/* 	1 -> WFD Primary Sink Device */
-	enum	SCAN_RESULT_TYPE	scan_result_type;	/* 	Used when P2P is enable. This parameter will impact the scan result. */
-};
-#endif /* CONFIG_WFD */
-
 struct tx_provdisc_req_info{
 	u16					wps_config_method_request;	/* 	Used when sending the provisioning request frame */
 	u16					peer_channel_num[2];		/* 	The channel number which the receiver stands. */
@@ -258,47 +233,44 @@ struct wifidirect_info{
 	struct group_id_info		groupid_info;	/* 	Store the group id information when doing the group negotiation handshake. */
 	struct scan_limit_info		rx_invitereq_info;	/* 	Used for get the limit scan channel from the Invitation procedure */
 	struct scan_limit_info		p2p_info;		/* 	Used for get the limit scan channel from the P2P negotiation handshake */
-#ifdef CONFIG_WFD
-	struct wifi_display_info		*wfd_info;
-#endif
 	enum P2P_ROLE			role;
 	enum P2P_STATE			pre_p2p_state;
 	enum P2P_STATE			p2p_state;
-	u8						device_addr[ETH_ALEN];	/* 	The device address should be the mac address of this device. */
-	u8						interface_addr[ETH_ALEN];
-	u8						social_chan[4];
-	u8						listen_channel;
-	u8						operating_channel;
-	u8						listen_dwell;		/* 	This value should be between 1 and 3 */
-	u8						support_rate[8];
-	u8						p2p_wildcard_ssid[P2P_WILDCARD_SSID_LEN];
-	u8						intent;		/* 	should only include the intent value. */
-	u8						p2p_peer_interface_addr[ETH_ALEN];
-	u8						p2p_peer_device_addr[ETH_ALEN];
-	u8						peer_intent;	/* 	Included the intent value and tie breaker value. */
-	u8						device_name[WPS_MAX_DEVICE_NAME_LEN];	/* 	Device name for displaying on searching device screen */
-	u8						device_name_len;
-	u8						profileindex;	/* 	Used to point to the index of profileinfo array */
-	u8						peer_operating_ch;
-	u8						find_phase_state_exchange_cnt;
-	u16						device_password_id_for_nego;	/* 	The device password ID for group negotation */
-	u8						negotiation_dialog_token;
-	u8						nego_ssid[WLAN_SSID_MAXLEN];	/* 	SSID information for group negotitation */
-	u8						nego_ssidlen;
-	u8						p2p_group_ssid[WLAN_SSID_MAXLEN];
-	u8						p2p_group_ssid_len;
-	u8						persistent_supported;		/* 	Flag to know the persistent function should be supported or not. */
-														/* 	In the Sigma test, the Sigma will provide this enable from the sta_set_p2p CAPI. */
+	u8				device_addr[ETH_ALEN];	/* 	The device address should be the mac address of this device. */
+	u8				interface_addr[ETH_ALEN];
+	u8				social_chan[4];
+	u8				listen_channel;
+	u8				operating_channel;
+	u8				listen_dwell;		/* 	This value should be between 1 and 3 */
+	u8				support_rate[8];
+	u8				p2p_wildcard_ssid[P2P_WILDCARD_SSID_LEN];
+	u8				intent;		/* 	should only include the intent value. */
+	u8				p2p_peer_interface_addr[ETH_ALEN];
+	u8				p2p_peer_device_addr[ETH_ALEN];
+	u8				peer_intent;	/* 	Included the intent value and tie breaker value. */
+	u8				device_name[WPS_MAX_DEVICE_NAME_LEN];	/* 	Device name for displaying on searching device screen */
+	u8				device_name_len;
+	u8				profileindex;	/* 	Used to point to the index of profileinfo array */
+	u8				peer_operating_ch;
+	u8				find_phase_state_exchange_cnt;
+	u16				device_password_id_for_nego;	/* 	The device password ID for group negotation */
+	u8				negotiation_dialog_token;
+	u8				nego_ssid[WLAN_SSID_MAXLEN];	/* 	SSID information for group negotitation */
+	u8				nego_ssidlen;
+	u8				p2p_group_ssid[WLAN_SSID_MAXLEN];
+	u8				p2p_group_ssid_len;
+	u8				persistent_supported;		/* 	Flag to know the persistent function should be supported or not. */
+									/* 	In the Sigma test, the Sigma will provide this enable from the sta_set_p2p CAPI. */
+									/* 	0: disable */
+									/* 	1: enable */
+	u8				session_available;		/* 	Flag to set the WFD session available to enable or disable "by Sigma" */
+									/* 	In the Sigma test, the Sigma will disable the session available by using the sta_preset CAPI. */
+									/* 	0: disable */
+									/* 	1: enable */
+	u8				wfd_tdls_enable;			/* 	Flag to enable or disable the TDLS by WFD Sigma */
 														/* 	0: disable */
 														/* 	1: enable */
-	u8						session_available;			/* 	Flag to set the WFD session available to enable or disable "by Sigma" */
-														/* 	In the Sigma test, the Sigma will disable the session available by using the sta_preset CAPI. */
-														/* 	0: disable */
-														/* 	1: enable */
-	u8						wfd_tdls_enable;			/* 	Flag to enable or disable the TDLS by WFD Sigma */
-														/* 	0: disable */
-														/* 	1: enable */
-	u8						wfd_tdls_weaksec;			/* 	Flag to enable or disable the weak security function for TDLS by WFD Sigma */
+	u8				wfd_tdls_weaksec;			/* 	Flag to enable or disable the weak security function for TDLS by WFD Sigma */
 														/* 	0: disable */
 														/* 	In this case, the driver can't issue the tdsl setup request frame. */
 														/* 	1: enable */
@@ -306,13 +278,13 @@ struct wifidirect_info{
 														/* 	even the current security is weak security. */
 
 	enum	P2P_WPSINFO		ui_got_wps_info;			/* 	This field will store the WPS value (PIN value or PBC) that UI had got from the user. */
-	u16						supported_wps_cm;			/* 	This field describes the WPS config method which this driver supported. */
+	u16				supported_wps_cm;			/* 	This field describes the WPS config method which this driver supported. */
 														/* 	The value should be the combination of config method defined in page104 of WPS v2.0 spec. */
-	uint						channel_list_attr_len;		/* 	This field will contain the length of body of P2P Channel List attribute of group negotitation response frame. */
-	u8						channel_list_attr[100];		/* 	This field will contain the body of P2P Channel List attribute of group negotitation response frame. */
-														/* 	We will use the channel_cnt and channel_list fields when constructing the group negotitation confirm frame. */
+	uint				channel_list_attr_len;		/* 	This field will contain the length of body of P2P Channel List attribute of group negotitation response frame. */
+	u8				channel_list_attr[100];		/* 	This field will contain the body of P2P Channel List attribute of group negotitation response frame. */
+									/* 	We will use the channel_cnt and channel_list fields when constructing the group negotitation confirm frame. */
 #ifdef CONFIG_CONCURRENT_MODE
-	u16						ext_listen_interval;	/* 	The interval to be available with legacy AP (ms) */
+	u16				ext_listen_interval;	/* 	The interval to be available with legacy AP (ms) */
 	u16						ext_listen_period;	/* 	The time period to be available for P2P listen state (ms) */
 #endif
 #ifdef CONFIG_P2P_PS
@@ -352,9 +324,6 @@ struct tdls_info{
 	u8					watchdog_count;
 	u8					dev_discovered;		/* WFD_TDLS: for sigma test */
 	u8					enable;
-#ifdef CONFIG_WFD
-	struct wifi_display_info		*wfd_info;
-#endif
 };
 
 struct mlme_priv {
@@ -476,22 +445,6 @@ struct mlme_priv {
 
 
 #endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
-
-#if defined(CONFIG_WFD) && defined(CONFIG_IOCTL_CFG80211)
-
-	u8 *wfd_beacon_ie;
-	u8 *wfd_probe_req_ie;
-	u8 *wfd_probe_resp_ie;
-	u8 *wfd_go_probe_resp_ie; /* for GO */
-	u8 *wfd_assoc_req_ie;
-
-	u32 wfd_beacon_ie_len;
-	u32 wfd_probe_req_ie_len;
-	u32 wfd_probe_resp_ie_len;
-	u32 wfd_go_probe_resp_ie_len; /* for GO */
-	u32 wfd_assoc_req_ie_len;
-
-#endif
 
 #ifdef CONFIG_INTEL_WIDI
 	int	widi_state;

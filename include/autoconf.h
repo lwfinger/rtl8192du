@@ -48,10 +48,6 @@
 /* 	Added by Albert 20110314 */
 #define CONFIG_P2P	1
 #ifdef CONFIG_P2P
-	/* Added by Albert 20110812 */
-	/* The CONFIG_WFD is for supporting the Wi-Fi display */
-	/* define CONFIG_WFD	1 */
-
 	#ifndef CONFIG_WIFI_TEST
 		#define CONFIG_P2P_REMOVE_GROUP_INFO
 	#endif

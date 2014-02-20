@@ -233,10 +233,6 @@ struct pwrctrl_priv
 	u8		brfoffbyhw;
 	unsigned long PS_BBRegBackup[PSBBREG_TOTALCNT];
 
-	#ifdef CONFIG_RESUME_IN_WORKQUEUE
-	struct workqueue_struct *rtw_workqueue;
-	struct work_struct resume_work;
-	#endif
 };
 
 #define rtw_get_ips_mode_req(pwrctrlpriv) \
@@ -276,10 +272,6 @@ rt_rf_power_state RfOnOffDetect(IN	struct rtw_adapter * adapter);
 
 void rtw_lps_enter(struct rtw_adapter * padapter);
 void rtw_lps_leave(struct rtw_adapter * padapter);
-
-#ifdef CONFIG_RESUME_IN_WORKQUEUE
-void rtw_resume_in_workqueue(struct pwrctrl_priv *pwrpriv);
-#endif /* CONFIG_RESUME_IN_WORKQUEUE */
 
 u8 rtw_interface_ps_func(struct rtw_adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id,u8* val);
 void rtw_set_ips_deny(struct rtw_adapter *padapter, u32 ms);

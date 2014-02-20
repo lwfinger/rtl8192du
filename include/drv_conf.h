@@ -28,11 +28,4 @@
 #define CONFIG_SIGNAL_DISPLAY_DBM
 #endif
 
-#ifdef CONFIG_RESUME_IN_WORKQUEUE /* this can be removed, because there is no case for this... */
-	#if !defined(CONFIG_WAKELOCK)
-	#error "enable CONFIG_RESUME_IN_WORKQUEUE without CONFIG_WAKELOCK will suffer from the danger of wifi's unfunctionality..."
-	#error "If you still want to enable CONFIG_RESUME_IN_WORKQUEUE in this case, mask this preprossor checking and GOOD LUCK..."
-	#endif
-#endif
-
 #endif /*  __DRV_CONF_H__ */

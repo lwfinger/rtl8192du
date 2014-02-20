@@ -27,7 +27,6 @@
  * Internal  General Config
  */
 /* define CONFIG_PWRCTRL	1 */
-/* define CONFIG_H2CLBK	1 */
 
 //#define CONFIG_WAKE_ON_WLAN
 

@@ -76,13 +76,6 @@ int _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 {
 	int res = _SUCCESS;
 
-#ifdef CONFIG_H2CLBK
-	_rtw_init_sema(&(pevtpriv->lbkevt_done), 0);
-	pevtpriv->lbkevt_limit = 0;
-	pevtpriv->lbkevt_num = 0;
-	pevtpriv->cmdevt_parm = NULL;
-#endif
-
 	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
 	atomic_set(&pevtpriv->event_seq, 0);
 	pevtpriv->evt_done_cnt = 0;

@@ -35,7 +35,6 @@
 /* define CONFIG_H2CLBK	1 */
 
 #define CONFIG_EMBEDDED_FWIMG	1
-/* define CONFIG_FILE_FWIMG */
 
 #ifdef CONFIG_WAKE_ON_WLAN
 #define CONFIG_WOWLAN 1

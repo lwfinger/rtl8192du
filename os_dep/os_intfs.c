@@ -203,12 +203,6 @@ module_param(rtw_max_roaming_times, uint, 0644);
 MODULE_PARM_DESC(rtw_max_roaming_times,"The max roaming times to try");
 #endif /* CONFIG_LAYER2_ROAMING */
 
-#ifdef CONFIG_FILE_FWIMG
-char *rtw_fw_file_path = "";
-module_param(rtw_fw_file_path, charp, 0644);
-MODULE_PARM_DESC(rtw_fw_file_path, "The path of fw image");
-#endif /* CONFIG_FILE_FWIMG */
-
 module_param(rtw_mc2u_disable, int, 0644);
 
 module_param(rtw_mac_phy_mode, int, 0644);

@@ -201,12 +201,6 @@ void	_rtw_up_sema(struct  semaphore *sema);
 u32	_rtw_down_sema(struct  semaphore *sema);
 void	_rtw_mutex_init(_mutex *pmutex);
 void	_rtw_mutex_free(_mutex *pmutex);
-void	_rtw_spinlock_init(spinlock_t *plock);
-void	_rtw_spinlock_free(spinlock_t *plock);
-void	_rtw_spinlock(spinlock_t	*plock);
-void	_rtw_spinunlock(spinlock_t	*plock);
-void	_rtw_spinlock_ex(spinlock_t	*plock);
-void	_rtw_spinunlock_ex(spinlock_t	*plock);
 
 void	_rtw_init_queue(struct __queue *pqueue);
 u32	_rtw_queue_empty(struct __queue *pqueue);

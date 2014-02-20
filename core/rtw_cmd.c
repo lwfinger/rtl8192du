@@ -143,15 +143,12 @@ void _rtw_free_evt_priv(struct evt_priv *pevtpriv)
 
 void _rtw_free_cmd_priv(struct cmd_priv *pcmdpriv)
 {
-
 	if (pcmdpriv) {
-		_rtw_spinlock_free(&(pcmdpriv->cmd_queue.lock));
 		_rtw_free_sema(&(pcmdpriv->cmd_queue_sema));
 		_rtw_free_sema(&(pcmdpriv->terminate_cmdthread_sema));
 		kfree(pcmdpriv->cmd_allocated_buf);
 		kfree(pcmdpriv->rsp_allocated_buf);
 	}
-
 }
 
 /*
@@ -1632,10 +1629,10 @@ u8 rtw_tdls_cmd(struct rtw_adapter *padapter, u8 *addr, u8 option)
 		goto exit;
 	}
 
-	_rtw_spinlock(&(padapter->tdlsinfo.cmd_lock));
+	spin_lock(&(padapter->tdlsinfo.cmd_lock));
 	memcpy(TDLSoption->addr, addr, 6);
 	TDLSoption->option = option;
-	_rtw_spinunlock(&(padapter->tdlsinfo.cmd_lock));
+	spin_unlock(&(padapter->tdlsinfo.cmd_lock));
 	init_h2fwcmd_w_parm_no_rsp(pcmdobj, TDLSoption, GEN_CMD_CODE(_TDLS));
 	res = rtw_enqueue_cmd(pcmdpriv, pcmdobj);
 

@@ -29,7 +29,7 @@ void init_mlme_ap_info(struct rtw_adapter *padapter)
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
 
-	_rtw_spinlock_init(&pmlmepriv->bcn_update_lock);
+	spin_lock_init(&pmlmepriv->bcn_update_lock);
 
 	/* for ACL */
 	_rtw_init_queue(&pacl_list->acl_node_q);
@@ -60,8 +60,6 @@ void free_mlme_ap_info(struct rtw_adapter *padapter)
 	spin_lock_bh(&(pstapriv->sta_hash_lock));
 	rtw_free_stainfo(padapter, psta);
 	spin_unlock_bh(&(pstapriv->sta_hash_lock));
-
-	_rtw_spinlock_free(&pmlmepriv->bcn_update_lock);
 }
 
 static void update_BCNTIM(struct rtw_adapter *padapter)

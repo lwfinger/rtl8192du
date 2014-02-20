@@ -34,7 +34,7 @@ void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
 
 	memset((u8 *)psta_recvpriv, 0, sizeof(struct sta_recv_priv));
 
-	_rtw_spinlock_init(&psta_recvpriv->lock);
+	spin_lock_init(&psta_recvpriv->lock);
 
 	/* for (i=0; i<MAX_RX_NUMBLKS; i++) */
 	/*      _rtw_init_queue(&psta_recvpriv->blk_strms[i]); */
@@ -52,7 +52,7 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv,
 
 	int res = _SUCCESS;
 
-	_rtw_spinlock_init(&precvpriv->lock);
+	spin_lock_init(&precvpriv->lock);
 
 	_rtw_init_queue(&precvpriv->free_recv_queue);
 	_rtw_init_queue(&precvpriv->recv_pending_queue);
@@ -110,10 +110,6 @@ exit:
 
 static void rtw_mfree_recv_priv_lock(struct recv_priv *precvpriv)
 {
-	_rtw_spinlock_free(&precvpriv->lock);
-	_rtw_spinlock_free(&precvpriv->free_recv_queue.lock);
-	_rtw_spinlock_free(&precvpriv->recv_pending_queue.lock);
-	_rtw_spinlock_free(&precvpriv->free_recv_buf_queue.lock);
 }
 
 void _rtw_free_recv_priv(struct recv_priv *precvpriv)
@@ -262,7 +258,7 @@ void rtw_free_recvframe_queue(struct __queue *pframequeue,
 	struct recv_frame_hdr *precvframe;
 	struct list_head *plist, *phead;
 
-	_rtw_spinlock(&pframequeue->lock);
+	spin_lock(&pframequeue->lock);
 
 	phead = get_list_head(pframequeue);
 	plist = phead->next;
@@ -275,7 +271,7 @@ void rtw_free_recvframe_queue(struct __queue *pframequeue,
 		rtw_free_recvframe(precvframe, pfree_recv_queue);
 	}
 
-	_rtw_spinunlock(&pframequeue->lock);
+	spin_unlock(&pframequeue->lock);
 
 }
 
@@ -2013,10 +2009,10 @@ struct recv_frame_hdr *recvframe_chk_defrag(struct rtw_adapter *padapter,
 
 			/* Then enqueue the 0~(n-1) fragment into the defrag_q */
 
-			/* _rtw_spinlock(&pdefrag_q->lock); */
+			/* spin_lock(&pdefrag_q->lock); */
 			phead = get_list_head(pdefrag_q);
 			rtw_list_insert_tail(&pfhdr->list, phead);
-			/* _rtw_spinunlock(&pdefrag_q->lock); */
+			/* spin_unlock(&pdefrag_q->lock); */
 
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
 				 ("Enqueuq: ismfrag = %d, fragnum= %d\n",
@@ -2038,10 +2034,10 @@ struct recv_frame_hdr *recvframe_chk_defrag(struct rtw_adapter *padapter,
 		/* the last fragment frame */
 		/* enqueue the last fragment */
 		if (pdefrag_q != NULL) {
-			/* _rtw_spinlock(&pdefrag_q->lock); */
+			/* spin_lock(&pdefrag_q->lock); */
 			phead = get_list_head(pdefrag_q);
 			rtw_list_insert_tail(&pfhdr->list, phead);
-			/* _rtw_spinunlock(&pdefrag_q->lock); */
+			/* spin_unlock(&pdefrag_q->lock); */
 
 			/* call recvframe_defrag to defrag */
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
@@ -2336,7 +2332,7 @@ static int recv_indicatepkts_in_order(struct rtw_adapter *padapter,
 	if (bforced == true) {
 		if (rtw_is_list_empty(phead)) {
 			/*  spin_unlock_irqrestore(&ppending_recvframe_queue->lock, &irql); */
-			/* _rtw_spinunlock_ex(&ppending_recvframe_queue->lock); */
+			/* spin_unlock(&ppending_recvframe_queue->lock); */
 			return true;
 		}
 

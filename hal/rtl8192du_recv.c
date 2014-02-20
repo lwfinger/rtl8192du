@@ -70,7 +70,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 	{
 		INIT_LIST_HEAD(&precvbuf->list);
 
-		_rtw_spinlock_init(&precvbuf->recvbuf_lock);
+		spin_lock_init(&precvbuf->recvbuf_lock);
 
 		precvbuf->alloc_sz = MAX_RECVBUF_SZ;
 

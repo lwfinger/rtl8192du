@@ -425,7 +425,6 @@ void rtw_cfg80211_indicate_connect(struct rtw_adapter *padapter)
 	}
 #endif /* CONFIG_P2P */
 
-	#ifdef CONFIG_LAYER2_ROAMING
 	if (rtw_to_roaming(padapter) > 0) {
 		struct wiphy *wiphy = pwdev->wiphy;
 		struct ieee80211_channel *notify_channel;
@@ -451,9 +450,7 @@ void rtw_cfg80211_indicate_connect(struct rtw_adapter *padapter)
 				pmlmepriv->assoc_rsp_len -
 				sizeof(struct rtw_ieee80211_hdr_3addr) - 6,
 				GFP_ATOMIC);
-	} else
-	#endif
-	{
+	} else {
 		DBG_8192D("pwdev->sme_state(b)=%d\n", pwdev->sme_state);
 		cfg80211_connect_result(padapter->pnetdev, cur_network->network.MacAddress
 			, pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2

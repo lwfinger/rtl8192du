@@ -549,7 +549,6 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 		rtw_disassoc_cmd(padapter, 0, false);
 	}
 
-#ifdef CONFIG_LAYER2_ROAMING_RESUME
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED))
 	{
 		DBG_8192D("%s:%d %s(%pM), length:%d assoc_ssid.length:%d\n",__func__, __LINE__,
@@ -558,8 +557,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 				pmlmepriv->cur_network.network.Ssid.SsidLength,
 				pmlmepriv->assoc_ssid.SsidLength);
 		rtw_set_roaming(padapter, 1);
-		}
-#endif
+	}
 	/* s2-2.  indicate disconnect to os */
 	rtw_indicate_disconnect(padapter);
 	/* s2-3. */
@@ -633,10 +631,7 @@ int rtw_resume_process(struct rtw_adapter *padapter)
 		rtw_signal_process(padapter->pid[1], SIGUSR2);
 	}
 
-	#ifdef CONFIG_LAYER2_ROAMING_RESUME
 	rtw_roaming(padapter, NULL);
-	#endif
-
 	ret = 0;
 exit:
 	if (pwrpriv)

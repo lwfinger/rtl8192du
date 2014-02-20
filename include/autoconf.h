@@ -45,17 +45,16 @@
 #endif
 #define CONFIG_FIND_BEST_CHANNEL	1
 
-/* 	Added by Albert 20110314 */
 #define CONFIG_P2P	1
+
 #ifdef CONFIG_P2P
 	#ifndef CONFIG_WIFI_TEST
 		#define CONFIG_P2P_REMOVE_GROUP_INFO
 	#endif
 #endif
 
-#define CONFIG_LAYER2_ROAMING
-#define CONFIG_LAYER2_ROAMING_RESUME
 /* define CONFIG_IOCTL_CFG80211 */
+
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable,*/
 
 #define CONFIG_BR_EXT	1	/*  Enable NAT2.5 support for STA mode interface with a L2 Bridge */

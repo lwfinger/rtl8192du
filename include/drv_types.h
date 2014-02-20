@@ -149,9 +149,7 @@ struct registry_priv {
 
 	u8	hw_wps_pbc;/* 0:disable,1:enable */
 
-#ifdef CONFIG_LAYER2_ROAMING
 	u8	max_roaming_times; /*  the max number driver will try to roaming */
-#endif
 
 	u8  special_rf_path; /* 0: 2T2R ,1: only turn on path A 1T1R, 2: only turn on path B 1T1R */
 	u8	mac_phy_mode; /* 0:by efuse, 1:smsp, 2:dmdp, 3:dmsp. */

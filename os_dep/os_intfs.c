@@ -189,11 +189,9 @@ module_param(rtw_hwpwrp_detect, int, 0644);
 
 module_param(rtw_hw_wps_pbc, int, 0644);
 
-#ifdef CONFIG_LAYER2_ROAMING
 static uint rtw_max_roaming_times = 2;
 module_param(rtw_max_roaming_times, uint, 0644);
 MODULE_PARM_DESC(rtw_max_roaming_times,"The max roaming times to try");
-#endif /* CONFIG_LAYER2_ROAMING */
 
 module_param(rtw_mc2u_disable, int, 0644);
 
@@ -690,9 +688,7 @@ static uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev)
 
 	registry_par->hw_wps_pbc = (u8)rtw_hw_wps_pbc;
 
-#ifdef CONFIG_LAYER2_ROAMING
 	registry_par->max_roaming_times = (u8)rtw_max_roaming_times;
-#endif
 
 	registry_par->mac_phy_mode = rtw_mac_phy_mode;
 	GlobalDebugLevel = debug;

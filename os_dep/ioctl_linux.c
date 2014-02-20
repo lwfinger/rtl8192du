@@ -2773,91 +2773,84 @@ static void rtw_dbg_mode_hdl(struct rtw_adapter *padapter, u32 id, u8 *pdata, u3
 
 	DBG_8192D("%s\n", __func__);
 
-	switch (id)
-	{
-		case GEN_MP_IOCTL_SUBCODE(MP_START):
-			DBG_8192D("871x_driver is only for normal mode, can't enter mp mode\n");
-			break;
-		case GEN_MP_IOCTL_SUBCODE(READ_REG):
-			RegRWStruct = (struct mp_rw_reg *)pdata;
-			switch (RegRWStruct->width)
-			{
-				case 1:
-					RegRWStruct->value = rtw_read8(padapter, RegRWStruct->offset);
-					break;
-				case 2:
-					RegRWStruct->value = rtw_read16(padapter, RegRWStruct->offset);
-					break;
-				case 4:
-					RegRWStruct->value = rtw_read32(padapter, RegRWStruct->offset);
-					break;
-				default:
-					break;
-			}
-
-			break;
-		case GEN_MP_IOCTL_SUBCODE(WRITE_REG):
-			RegRWStruct = (struct mp_rw_reg *)pdata;
-			switch (RegRWStruct->width)
-			{
-				case 1:
-					rtw_write8(padapter, RegRWStruct->offset, (u8)RegRWStruct->value);
-					break;
-				case 2:
-					rtw_write16(padapter, RegRWStruct->offset, (u16)RegRWStruct->value);
-					break;
-				case 4:
-					rtw_write32(padapter, RegRWStruct->offset, (u32)RegRWStruct->value);
-					break;
-				default:
+	switch (id) {
+	case GEN_MP_IOCTL_SUBCODE(MP_START):
+		DBG_8192D("871x_driver is only for normal mode, can't enter mp mode\n");
+		break;
+	case GEN_MP_IOCTL_SUBCODE(READ_REG):
+		RegRWStruct = (struct mp_rw_reg *)pdata;
+		switch (RegRWStruct->width)
+		{
+			case 1:
+				RegRWStruct->value = rtw_read8(padapter, RegRWStruct->offset);
 				break;
-			}
+			case 2:
+				RegRWStruct->value = rtw_read16(padapter, RegRWStruct->offset);
+				break;
+			case 4:
+				RegRWStruct->value = rtw_read32(padapter, RegRWStruct->offset);
+				break;
+			default:
+				break;
+		}
 
+		break;
+	case GEN_MP_IOCTL_SUBCODE(WRITE_REG):
+		RegRWStruct = (struct mp_rw_reg *)pdata;
+		switch (RegRWStruct->width)
+		{
+			case 1:
+				rtw_write8(padapter, RegRWStruct->offset, (u8)RegRWStruct->value);
+				break;
+			case 2:
+				rtw_write16(padapter, RegRWStruct->offset, (u16)RegRWStruct->value);
+				break;
+			case 4:
+				rtw_write32(padapter, RegRWStruct->offset, (u32)RegRWStruct->value);
+				break;
+			default:
 			break;
-		case GEN_MP_IOCTL_SUBCODE(READ_RF_REG):
+		}
 
-			prfreg = (struct rf_reg_param *)pdata;
+		break;
+	case GEN_MP_IOCTL_SUBCODE(READ_RF_REG):
 
-			path = (u8)prfreg->path;
-			offset = (u8)prfreg->offset;
+		prfreg = (struct rf_reg_param *)pdata;
 
-			value = rtw_hal_read_rfreg(padapter, path, offset, 0xffffffff);
+		path = (u8)prfreg->path;
+		offset = (u8)prfreg->offset;
 
-			prfreg->value = value;
+		value = rtw_hal_read_rfreg(padapter, path, offset, 0xffffffff);
 
-			break;
-		case GEN_MP_IOCTL_SUBCODE(WRITE_RF_REG):
+		prfreg->value = value;
 
-			prfreg = (struct rf_reg_param *)pdata;
+		break;
+	case GEN_MP_IOCTL_SUBCODE(WRITE_RF_REG):
 
-			path = (u8)prfreg->path;
-			offset = (u8)prfreg->offset;
-			value = prfreg->value;
+		prfreg = (struct rf_reg_param *)pdata;
 
-			rtw_hal_write_rfreg(padapter, path, offset, 0xffffffff, value);
-			break;
-		case GEN_MP_IOCTL_SUBCODE(TRIGGER_GPIO):
-			DBG_8192D("==> trigger gpio 0\n");
-			rtw_hal_set_hwreg(padapter, HW_VAR_TRIGGER_GPIO_0, NULL);
-			break;
+		path = (u8)prfreg->path;
+		offset = (u8)prfreg->offset;
+		value = prfreg->value;
+
+		rtw_hal_write_rfreg(padapter, path, offset, 0xffffffff, value);
+		break;
+	case GEN_MP_IOCTL_SUBCODE(TRIGGER_GPIO):
+		DBG_8192D("==> trigger gpio 0\n");
+		rtw_hal_set_hwreg(padapter, HW_VAR_TRIGGER_GPIO_0, NULL);
+		break;
 #ifdef CONFIG_BT_COEXIST
-		case GEN_MP_IOCTL_SUBCODE(SET_DM_BT):
-			DBG_8192D("==> set dm_bt_coexist:%x\n",*(u8 *)pdata);
-			rtw_hal_set_hwreg(padapter, HW_VAR_BT_SET_COEXIST, pdata);
-			break;
-		case GEN_MP_IOCTL_SUBCODE(DEL_BA):
-			DBG_8192D("==> delete ba:%x\n",*(u8 *)pdata);
-			rtw_hal_set_hwreg(padapter, HW_VAR_BT_ISSUE_DELBA, pdata);
-			break;
+	case GEN_MP_IOCTL_SUBCODE(SET_DM_BT):
+		DBG_8192D("==> set dm_bt_coexist:%x\n",*(u8 *)pdata);
+		rtw_hal_set_hwreg(padapter, HW_VAR_BT_SET_COEXIST, pdata);
+		break;
+	case GEN_MP_IOCTL_SUBCODE(DEL_BA):
+		DBG_8192D("==> delete ba:%x\n",*(u8 *)pdata);
+		rtw_hal_set_hwreg(padapter, HW_VAR_BT_ISSUE_DELBA, pdata);
+		break;
 #endif
-#ifdef DBG_CONFIG_ERROR_DETECT
-		case GEN_MP_IOCTL_SUBCODE(GET_WIFI_STATUS):
-			*pdata = rtw_hal_sreset_get_wifi_status(padapter);
-			break;
-#endif
-
-		default:
-			break;
+	default:
+		break;
 	}
 }
 
@@ -4947,314 +4940,280 @@ static int rtw_dbg_port(struct net_device *dev,
 			break;
 
 		case 0x7F:
-			switch (minor_cmd)
-			{
-				case 0x0:
-					DBG_8192D("fwstate = 0x%x\n", get_fwstate(pmlmepriv));
-					break;
-				case 0x01:
-					DBG_8192D("auth_alg = 0x%x, enc_alg = 0x%x, auth_type = 0x%x, enc_type = 0x%x\n",
-						psecuritypriv->dot11AuthAlgrthm, psecuritypriv->dot11PrivacyAlgrthm,
-						psecuritypriv->ndisauthtype, psecuritypriv->ndisencryptstatus);
-					break;
-				case 0x02:
-					DBG_8192D("pmlmeinfo->state = 0x%x\n", pmlmeinfo->state);
-					break;
-				case 0x03:
-					DBG_8192D("qos_option =%d\n", pmlmepriv->qospriv.qos_option);
-					DBG_8192D("ht_option =%d\n", pmlmepriv->htpriv.ht_option);
-					break;
-				case 0x04:
-					DBG_8192D("cur_ch =%d\n", pmlmeext->cur_channel);
-					DBG_8192D("cur_bw =%d\n", pmlmeext->cur_bwmode);
-					DBG_8192D("cur_ch_off =%d\n", pmlmeext->cur_ch_offset);
-					break;
-				case 0x05:
-					psta = rtw_get_stainfo(pstapriv, cur_network->network.MacAddress);
-					if (psta)
+			switch (minor_cmd) {
+			case 0x0:
+				DBG_8192D("fwstate = 0x%x\n", get_fwstate(pmlmepriv));
+				break;
+			case 0x01:
+				DBG_8192D("auth_alg = 0x%x, enc_alg = 0x%x, auth_type = 0x%x, enc_type = 0x%x\n",
+					psecuritypriv->dot11AuthAlgrthm, psecuritypriv->dot11PrivacyAlgrthm,
+					psecuritypriv->ndisauthtype, psecuritypriv->ndisencryptstatus);
+				break;
+			case 0x02:
+				DBG_8192D("pmlmeinfo->state = 0x%x\n", pmlmeinfo->state);
+				break;
+			case 0x03:
+				DBG_8192D("qos_option =%d\n", pmlmepriv->qospriv.qos_option);
+				DBG_8192D("ht_option =%d\n", pmlmepriv->htpriv.ht_option);
+				break;
+			case 0x04:
+				DBG_8192D("cur_ch =%d\n", pmlmeext->cur_channel);
+				DBG_8192D("cur_bw =%d\n", pmlmeext->cur_bwmode);
+				DBG_8192D("cur_ch_off =%d\n", pmlmeext->cur_ch_offset);
+				break;
+			case 0x05:
+				psta = rtw_get_stainfo(pstapriv, cur_network->network.MacAddress);
+				if (psta)
+				{
+					int i;
+					struct recv_reorder_ctrl *preorder_ctrl;
+
+					DBG_8192D("SSID =%s\n", cur_network->network.Ssid.Ssid);
+					DBG_8192D("sta's macaddr:%pM\n", psta->hwaddr);
+					DBG_8192D("cur_channel =%d, cur_bwmode =%d, cur_ch_offset =%d\n", pmlmeext->cur_channel, pmlmeext->cur_bwmode, pmlmeext->cur_ch_offset);
+					DBG_8192D("rtsen =%d, cts2slef =%d\n", psta->rtsen, psta->cts2self);
+					DBG_8192D("qos_en =%d, ht_en =%d, init_rate =%d\n", psta->qos_option, psta->htpriv.ht_option, psta->init_rate);
+					DBG_8192D("state = 0x%x, aid =%d, macid =%d, raid =%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);
+					DBG_8192D("bwmode =%d, ch_offset =%d, sgi =%d\n", psta->htpriv.bwmode, psta->htpriv.ch_offset, psta->htpriv.sgi);
+					DBG_8192D("ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
+					DBG_8192D("agg_enable_bitmap =%x, candidate_tid_bitmap =%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
+
+					for (i = 0;i<16;i++)
 					{
-						int i;
-						struct recv_reorder_ctrl *preorder_ctrl;
-
-						DBG_8192D("SSID =%s\n", cur_network->network.Ssid.Ssid);
-						DBG_8192D("sta's macaddr:%pM\n", psta->hwaddr);
-						DBG_8192D("cur_channel =%d, cur_bwmode =%d, cur_ch_offset =%d\n", pmlmeext->cur_channel, pmlmeext->cur_bwmode, pmlmeext->cur_ch_offset);
-						DBG_8192D("rtsen =%d, cts2slef =%d\n", psta->rtsen, psta->cts2self);
-						DBG_8192D("qos_en =%d, ht_en =%d, init_rate =%d\n", psta->qos_option, psta->htpriv.ht_option, psta->init_rate);
-						DBG_8192D("state = 0x%x, aid =%d, macid =%d, raid =%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);
-						DBG_8192D("bwmode =%d, ch_offset =%d, sgi =%d\n", psta->htpriv.bwmode, psta->htpriv.ch_offset, psta->htpriv.sgi);
-						DBG_8192D("ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
-						DBG_8192D("agg_enable_bitmap =%x, candidate_tid_bitmap =%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
-
-						for (i = 0;i<16;i++)
+						preorder_ctrl = &psta->recvreorder_ctrl[i];
+						if (preorder_ctrl->enable)
 						{
-							preorder_ctrl = &psta->recvreorder_ctrl[i];
-							if (preorder_ctrl->enable)
-							{
-								DBG_8192D("tid =%d, indicate_seq =%d\n", i, preorder_ctrl->indicate_seq);
-							}
+							DBG_8192D("tid =%d, indicate_seq =%d\n", i, preorder_ctrl->indicate_seq);
 						}
+					}
 
-					}
-					else
-					{
-						DBG_8192D("can't get sta's macaddr, cur_network's macaddr:%pM\n", cur_network->network.MacAddress);
-					}
-					break;
-				case 0x06:
-					{
-						u8	DMFlag;
-						rtw_hal_get_hwreg(padapter, HW_VAR_DM_FLAG, (u8 *)(&DMFlag));
-						DBG_8192D("(B)DMFlag = 0x%x, arg = 0x%x\n", DMFlag, arg);
-						DMFlag = (u8)(0x0f&arg);
-						DBG_8192D("(A)DMFlag = 0x%x\n", DMFlag);
-						rtw_hal_set_hwreg(padapter, HW_VAR_DM_FLAG, (u8 *)(&DMFlag));
-					}
-					break;
-				case 0x07:
-					DBG_8192D("bSurpriseRemoved =%d, bDriverStopped =%d\n",
-						padapter->bSurpriseRemoved, padapter->bDriverStopped);
-					break;
-				case 0x08: {
-					struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-					struct recv_priv  *precvpriv = &padapter->recvpriv;
+				}
+				else
+				{
+					DBG_8192D("can't get sta's macaddr, cur_network's macaddr:%pM\n", cur_network->network.MacAddress);
+				}
+				break;
+			case 0x06:
+				{
+					u8	DMFlag;
+					rtw_hal_get_hwreg(padapter, HW_VAR_DM_FLAG, (u8 *)(&DMFlag));
+					DBG_8192D("(B)DMFlag = 0x%x, arg = 0x%x\n", DMFlag, arg);
+					DMFlag = (u8)(0x0f&arg);
+					DBG_8192D("(A)DMFlag = 0x%x\n", DMFlag);
+					rtw_hal_set_hwreg(padapter, HW_VAR_DM_FLAG, (u8 *)(&DMFlag));
+				}
+				break;
+			case 0x07:
+				DBG_8192D("bSurpriseRemoved =%d, bDriverStopped =%d\n",
+					padapter->bSurpriseRemoved, padapter->bDriverStopped);
+				break;
+			case 0x08: {
+				struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
+				struct recv_priv  *precvpriv = &padapter->recvpriv;
 
-					DBG_8192D("free_xmitbuf_cnt =%d, free_xmitframe_cnt =%d, free_xmit_extbuf_cnt =%d\n",
-						pxmitpriv->free_xmitbuf_cnt, pxmitpriv->free_xmitframe_cnt, pxmitpriv->free_xmit_extbuf_cnt);
-					DBG_8192D("rx_urb_pending_cn =%d\n", precvpriv->rx_pending_cnt);
-					break; }
-				case 0x09:
-					{
-						int i, j;
-						struct list_head *plist, *phead;
-						struct recv_reorder_ctrl *preorder_ctrl;
+				DBG_8192D("free_xmitbuf_cnt =%d, free_xmitframe_cnt =%d, free_xmit_extbuf_cnt =%d\n",
+					pxmitpriv->free_xmitbuf_cnt, pxmitpriv->free_xmitframe_cnt, pxmitpriv->free_xmit_extbuf_cnt);
+				DBG_8192D("rx_urb_pending_cn =%d\n", precvpriv->rx_pending_cnt);
+				break; }
+			case 0x09:
+				{
+					int i, j;
+					struct list_head *plist, *phead;
+					struct recv_reorder_ctrl *preorder_ctrl;
 
 #ifdef CONFIG_92D_AP_MODE
-						DBG_8192D("sta_dz_bitmap = 0x%x, tim_bitmap = 0x%x\n", pstapriv->sta_dz_bitmap, pstapriv->tim_bitmap);
+					DBG_8192D("sta_dz_bitmap = 0x%x, tim_bitmap = 0x%x\n", pstapriv->sta_dz_bitmap, pstapriv->tim_bitmap);
 #endif
-						spin_lock_bh(&pstapriv->sta_hash_lock);
+					spin_lock_bh(&pstapriv->sta_hash_lock);
 
-						for (i = 0; i< NUM_STA; i++)
+					for (i = 0; i< NUM_STA; i++)
+					{
+						phead = &(pstapriv->sta_hash[i]);
+						plist = phead->next;
+
+						while ((rtw_end_of_queue_search(phead, plist)) == false)
 						{
-							phead = &(pstapriv->sta_hash[i]);
-							plist = phead->next;
+							psta = container_of(plist, struct sta_info, hash_list);
 
-							while ((rtw_end_of_queue_search(phead, plist)) == false)
+							plist = plist->next;
+
+							if (extra_arg == psta->aid)
 							{
-								psta = container_of(plist, struct sta_info, hash_list);
-
-								plist = plist->next;
-
-								if (extra_arg == psta->aid)
-								{
-									DBG_8192D("sta's macaddr:%pM\n", psta->hwaddr);
-									DBG_8192D("rtsen =%d, cts2slef =%d\n", psta->rtsen, psta->cts2self);
-									DBG_8192D("qos_en =%d, ht_en =%d, init_rate =%d\n", psta->qos_option, psta->htpriv.ht_option, psta->init_rate);
-									DBG_8192D("state = 0x%x, aid =%d, macid =%d, raid =%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);
-									DBG_8192D("bwmode =%d, ch_offset =%d, sgi =%d\n", psta->htpriv.bwmode, psta->htpriv.ch_offset, psta->htpriv.sgi);
-									DBG_8192D("ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
-									DBG_8192D("agg_enable_bitmap =%x, candidate_tid_bitmap =%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
+								DBG_8192D("sta's macaddr:%pM\n", psta->hwaddr);
+								DBG_8192D("rtsen =%d, cts2slef =%d\n", psta->rtsen, psta->cts2self);
+								DBG_8192D("qos_en =%d, ht_en =%d, init_rate =%d\n", psta->qos_option, psta->htpriv.ht_option, psta->init_rate);
+								DBG_8192D("state = 0x%x, aid =%d, macid =%d, raid =%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);
+								DBG_8192D("bwmode =%d, ch_offset =%d, sgi =%d\n", psta->htpriv.bwmode, psta->htpriv.ch_offset, psta->htpriv.sgi);
+								DBG_8192D("ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
+								DBG_8192D("agg_enable_bitmap =%x, candidate_tid_bitmap =%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
 #ifdef CONFIG_92D_AP_MODE
-									DBG_8192D("capability = 0x%x\n", psta->capability);
-									DBG_8192D("flags = 0x%x\n", psta->flags);
-									DBG_8192D("wpa_psk = 0x%x\n", psta->wpa_psk);
-									DBG_8192D("wpa2_group_cipher = 0x%x\n", psta->wpa2_group_cipher);
-									DBG_8192D("wpa2_pairwise_cipher = 0x%x\n", psta->wpa2_pairwise_cipher);
-									DBG_8192D("qos_info = 0x%x\n", psta->qos_info);
+								DBG_8192D("capability = 0x%x\n", psta->capability);
+								DBG_8192D("flags = 0x%x\n", psta->flags);
+								DBG_8192D("wpa_psk = 0x%x\n", psta->wpa_psk);
+								DBG_8192D("wpa2_group_cipher = 0x%x\n", psta->wpa2_group_cipher);
+								DBG_8192D("wpa2_pairwise_cipher = 0x%x\n", psta->wpa2_pairwise_cipher);
+								DBG_8192D("qos_info = 0x%x\n", psta->qos_info);
 #endif
-									DBG_8192D("dot118021XPrivacy = 0x%x\n", psta->dot118021XPrivacy);
+								DBG_8192D("dot118021XPrivacy = 0x%x\n", psta->dot118021XPrivacy);
 
-									for (j = 0;j<16;j++)
+								for (j = 0;j<16;j++)
+								{
+									preorder_ctrl = &psta->recvreorder_ctrl[j];
+									if (preorder_ctrl->enable)
 									{
-										preorder_ctrl = &psta->recvreorder_ctrl[j];
-										if (preorder_ctrl->enable)
-										{
-											DBG_8192D("tid =%d, indicate_seq =%d\n", j, preorder_ctrl->indicate_seq);
-										}
+										DBG_8192D("tid =%d, indicate_seq =%d\n", j, preorder_ctrl->indicate_seq);
 									}
-
 								}
 
 							}
-						}
-
-						spin_unlock_bh(&pstapriv->sta_hash_lock);
-
-					}
-					break;
-
-				case 0x0c:/* dump rx packet */
-					DBG_8192D("dump rx packet (%d)\n", extra_arg);
-					/* pHalData->bDumpRxPkt = extra_arg; */
-					rtw_hal_set_def_var(padapter, HAL_DEF_DBG_DUMP_RXPKT, &(extra_arg));
-					break;
-		#ifdef DBG_CONFIG_ERROR_DETECT
-				case 0x0f:
-						{
-							if (extra_arg == 0) {
-								DBG_8192D("###### silent reset test.......#####\n");
-								rtw_hal_sreset_reset(padapter);
-							}
 
 						}
-				break;
-				case 0x15:
-					{
-						struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-						DBG_8192D("==>silent resete cnts:%d\n", pwrpriv->ips_enter_cnts);
 					}
-					break;
 
-		#endif
-
-				case 0x10:/*  driver version display */
-					DBG_8192D("rtw driver version =%s\n", DRIVERVERSION);
-					break;
-				case 0x11:
-					{
-						DBG_8192D("turn %s Rx RSSI display function\n", (extra_arg == 1)?"on":"off");
-						padapter->bRxRSSIDisplay = extra_arg ;
-					}
-					break;
-				case 0x12: /* set rx_stbc */
-				{
-					struct registry_priv	*pregpriv = &padapter->registrypriv;
-					/*  0: disable, bit(0):enable 2.4g, bit(1):enable 5g, 0x3: enable both 2.4g and 5g */
-					/* default is set to enable 2.4GHZ for IOT issue with bufflao's AP at 5GHZ */
-					if (pregpriv && (extra_arg == 0 || extra_arg == 1|| extra_arg == 2 || extra_arg == 3))
-					{
-						pregpriv->rx_stbc = extra_arg;
-						DBG_8192D("set rx_stbc =%d\n", pregpriv->rx_stbc);
-					}
-					else
-						DBG_8192D("get rx_stbc =%d\n", pregpriv->rx_stbc);
-
+					spin_unlock_bh(&pstapriv->sta_hash_lock);
 				}
 				break;
-				case 0x13: /* set ampdu_enable */
+			case 0x0c:/* dump rx packet */
+				DBG_8192D("dump rx packet (%d)\n", extra_arg);
+				/* pHalData->bDumpRxPkt = extra_arg; */
+				rtw_hal_set_def_var(padapter, HAL_DEF_DBG_DUMP_RXPKT, &(extra_arg));
+				break;
+			case 0x10:/*  driver version display */
+				DBG_8192D("rtw driver version =%s\n", DRIVERVERSION);
+				break;
+			case 0x11:
 				{
-					struct registry_priv	*pregpriv = &padapter->registrypriv;
-					/*  0: disable, 0x1:enable (but wifi_spec should be 0), 0x2: force enable (don't care wifi_spec) */
-					if (pregpriv && extra_arg >= 0 && extra_arg < 3)
-					{
-						pregpriv->ampdu_enable = extra_arg;
-						DBG_8192D("set ampdu_enable =%d\n", pregpriv->ampdu_enable);
-					}
-					else
-						DBG_8192D("get ampdu_enable =%d\n", pregpriv->ampdu_enable);
-
+					DBG_8192D("turn %s Rx RSSI display function\n", (extra_arg == 1)?"on":"off");
+					padapter->bRxRSSIDisplay = extra_arg ;
 				}
 				break;
-				case 0x14: /* get wifi_spec */
+			case 0x12: /* set rx_stbc */
+			{
+				struct registry_priv	*pregpriv = &padapter->registrypriv;
+				/*  0: disable, bit(0):enable 2.4g, bit(1):enable 5g, 0x3: enable both 2.4g and 5g */
+				/* default is set to enable 2.4GHZ for IOT issue with bufflao's AP at 5GHZ */
+				if (pregpriv && (extra_arg == 0 || extra_arg == 1|| extra_arg == 2 || extra_arg == 3))
 				{
-					struct registry_priv	*pregpriv = &padapter->registrypriv;
-					DBG_8192D("get wifi_spec =%d\n", pregpriv->wifi_spec);
-
+					pregpriv->rx_stbc = extra_arg;
+					DBG_8192D("set rx_stbc =%d\n", pregpriv->rx_stbc);
 				}
-				break;
-				case 0x22:
-					{
-						DBG_8192D("turn %s the ForceWriteInitGain Variable\n", (extra_arg == 1)?"on":"off");
-						padapter->bForceWriteInitGain = extra_arg;
-						break;
-					}
-				case 0x23:
-					{
-						DBG_8192D("turn %s the bNotifyChannelChange Variable\n", (extra_arg == 1)?"on":"off");
-						padapter->bNotifyChannelChange = extra_arg;
-						break;
-					}
-				case 0x24:
-					{
-#ifdef CONFIG_P2P
-						DBG_8192D("turn %s the bShowGetP2PState Variable\n", (extra_arg == 1)?"on":"off");
-						padapter->bShowGetP2PState = extra_arg;
-#endif /*  CONFIG_P2P */
-						break;
-					}
-				case 0xdd:/* registers dump , 0 for mac reg, 1 for bb reg, 2 for rf reg */
-					if (extra_arg == 0) {
-						mac_reg_dump(padapter);
-					}
-					else if (extra_arg == 1) {
-						bb_reg_dump(padapter);
-					}
-					else if (extra_arg == 2) {
-						rf_reg_dump(padapter);
-					}
+				else
+					DBG_8192D("get rx_stbc =%d\n", pregpriv->rx_stbc);
 
-					break;
-				case 0xee:/* turn on/off dynamic funcs */
-					{
-						u8 dm_flag;
-
-						if (0xf == extra_arg) {
-							rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DM_FUNC,&dm_flag);
-							DBG_8192D(" === DMFlag(0x%02x) ===\n", dm_flag);
-							DBG_8192D("extra_arg = 0  - disable all dynamic func\n");
-							DBG_8192D("extra_arg = 1  - disable DIG- BIT(0)\n");
-							DBG_8192D("extra_arg = 2  - disable High power - BIT(1)\n");
-							DBG_8192D("extra_arg = 3  - disable tx power tracking - BIT(2)\n");
-							DBG_8192D("extra_arg = 4  - disable BT coexistence - BIT(3)\n");
-							DBG_8192D("extra_arg = 5  - disable antenna diversity - BIT(4)\n");
-							DBG_8192D("extra_arg = 6  - enable all dynamic func\n");
-						}
-						else {
-							/*	extra_arg = 0  - disable all dynamic func
-								extra_arg = 1  - disable DIG
-								extra_arg = 2  - disable tx power tracking
-								extra_arg = 3  - turn on all dynamic func
-							*/
-							rtw_hal_set_def_var(padapter, HAL_DEF_DBG_DM_FUNC, &(extra_arg));
-							rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DM_FUNC,&dm_flag);
-							DBG_8192D(" === DMFlag(0x%02x) ===\n", dm_flag);
-						}
-					}
-					break;
-
-				case 0xfd:
-					rtw_write8(padapter, 0xc50, arg);
-					DBG_8192D("wr(0xc50) = 0x%x\n", rtw_read8(padapter, 0xc50));
-					rtw_write8(padapter, 0xc58, arg);
-					DBG_8192D("wr(0xc58) = 0x%x\n", rtw_read8(padapter, 0xc58));
-					break;
-				case 0xfe:
-					DBG_8192D("rd(0xc50) = 0x%x\n", rtw_read8(padapter, 0xc50));
-					DBG_8192D("rd(0xc58) = 0x%x\n", rtw_read8(padapter, 0xc58));
-					break;
-				case 0xff:
-					{
-						DBG_8192D("dbg(0x210) = 0x%x\n", rtw_read32(padapter, 0x210));
-						DBG_8192D("dbg(0x608) = 0x%x\n", rtw_read32(padapter, 0x608));
-						DBG_8192D("dbg(0x280) = 0x%x\n", rtw_read32(padapter, 0x280));
-						DBG_8192D("dbg(0x284) = 0x%x\n", rtw_read32(padapter, 0x284));
-						DBG_8192D("dbg(0x288) = 0x%x\n", rtw_read32(padapter, 0x288));
-
-						DBG_8192D("dbg(0x664) = 0x%x\n", rtw_read32(padapter, 0x664));
-
-						DBG_8192D("\n");
-
-						DBG_8192D("dbg(0x430) = 0x%x\n", rtw_read32(padapter, 0x430));
-						DBG_8192D("dbg(0x438) = 0x%x\n", rtw_read32(padapter, 0x438));
-
-						DBG_8192D("dbg(0x440) = 0x%x\n", rtw_read32(padapter, 0x440));
-
-						DBG_8192D("dbg(0x458) = 0x%x\n", rtw_read32(padapter, 0x458));
-
-						DBG_8192D("dbg(0x484) = 0x%x\n", rtw_read32(padapter, 0x484));
-						DBG_8192D("dbg(0x488) = 0x%x\n", rtw_read32(padapter, 0x488));
-
-						DBG_8192D("dbg(0x444) = 0x%x\n", rtw_read32(padapter, 0x444));
-						DBG_8192D("dbg(0x448) = 0x%x\n", rtw_read32(padapter, 0x448));
-						DBG_8192D("dbg(0x44c) = 0x%x\n", rtw_read32(padapter, 0x44c));
-						DBG_8192D("dbg(0x450) = 0x%x\n", rtw_read32(padapter, 0x450));
-					}
-					break;
 			}
 			break;
-		default:
-			DBG_8192D("error dbg cmd!\n");
+			case 0x13: /* set ampdu_enable */
+			{
+				struct registry_priv	*pregpriv = &padapter->registrypriv;
+				/*  0: disable, 0x1:enable (but wifi_spec should be 0), 0x2: force enable (don't care wifi_spec) */
+				if (pregpriv && extra_arg >= 0 && extra_arg < 3)
+				{
+					pregpriv->ampdu_enable = extra_arg;
+					DBG_8192D("set ampdu_enable =%d\n", pregpriv->ampdu_enable);
+				}
+				else
+					DBG_8192D("get ampdu_enable =%d\n", pregpriv->ampdu_enable);
+
+			}
 			break;
+			case 0x14: /* get wifi_spec */
+			{
+				struct registry_priv	*pregpriv = &padapter->registrypriv;
+				DBG_8192D("get wifi_spec =%d\n", pregpriv->wifi_spec);
+
+			}
+			break;
+			case 0x22:
+				DBG_8192D("turn %s the ForceWriteInitGain Variable\n", (extra_arg == 1)?"on":"off");
+				padapter->bForceWriteInitGain = extra_arg;
+				break;
+			case 0x23:
+				DBG_8192D("turn %s the bNotifyChannelChange Variable\n", (extra_arg == 1)?"on":"off");
+				padapter->bNotifyChannelChange = extra_arg;
+				break;
+			case 0x24:
+#ifdef CONFIG_P2P
+				DBG_8192D("turn %s the bShowGetP2PState Variable\n", (extra_arg == 1)?"on":"off");
+				padapter->bShowGetP2PState = extra_arg;
+#endif /*  CONFIG_P2P */
+				break;
+			case 0xdd:/* registers dump , 0 for mac reg, 1 for bb reg, 2 for rf reg */
+				if (extra_arg == 0)
+					mac_reg_dump(padapter);
+				else if (extra_arg == 1)
+					bb_reg_dump(padapter);
+				else if (extra_arg == 2)
+					rf_reg_dump(padapter);
+				break;
+			case 0xee:/* turn on/off dynamic funcs */
+				{
+					u8 dm_flag;
+
+					if (0xf == extra_arg) {
+						rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DM_FUNC,&dm_flag);
+						DBG_8192D(" === DMFlag(0x%02x) ===\n", dm_flag);
+						DBG_8192D("extra_arg = 0  - disable all dynamic func\n");
+						DBG_8192D("extra_arg = 1  - disable DIG- BIT(0)\n");
+						DBG_8192D("extra_arg = 2  - disable High power - BIT(1)\n");
+						DBG_8192D("extra_arg = 3  - disable tx power tracking - BIT(2)\n");
+						DBG_8192D("extra_arg = 4  - disable BT coexistence - BIT(3)\n");
+						DBG_8192D("extra_arg = 5  - disable antenna diversity - BIT(4)\n");
+						DBG_8192D("extra_arg = 6  - enable all dynamic func\n");
+					}
+					else {
+						/*	extra_arg = 0  - disable all dynamic func
+							extra_arg = 1  - disable DIG
+							extra_arg = 2  - disable tx power tracking
+							extra_arg = 3  - turn on all dynamic func
+						*/
+						rtw_hal_set_def_var(padapter, HAL_DEF_DBG_DM_FUNC, &(extra_arg));
+						rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DM_FUNC,&dm_flag);
+						DBG_8192D(" === DMFlag(0x%02x) ===\n", dm_flag);
+					}
+				}
+				break;
+
+			case 0xfd:
+				rtw_write8(padapter, 0xc50, arg);
+				DBG_8192D("wr(0xc50) = 0x%x\n", rtw_read8(padapter, 0xc50));
+				rtw_write8(padapter, 0xc58, arg);
+				DBG_8192D("wr(0xc58) = 0x%x\n", rtw_read8(padapter, 0xc58));
+				break;
+			case 0xfe:
+				DBG_8192D("rd(0xc50) = 0x%x\n", rtw_read8(padapter, 0xc50));
+				DBG_8192D("rd(0xc58) = 0x%x\n", rtw_read8(padapter, 0xc58));
+				break;
+			case 0xff:
+				DBG_8192D("dbg(0x210) = 0x%x\n", rtw_read32(padapter, 0x210));
+				DBG_8192D("dbg(0x608) = 0x%x\n", rtw_read32(padapter, 0x608));
+				DBG_8192D("dbg(0x280) = 0x%x\n", rtw_read32(padapter, 0x280));
+				DBG_8192D("dbg(0x284) = 0x%x\n", rtw_read32(padapter, 0x284));
+				DBG_8192D("dbg(0x288) = 0x%x\n", rtw_read32(padapter, 0x288));
+
+				DBG_8192D("dbg(0x664) = 0x%x\n", rtw_read32(padapter, 0x664));
+
+				DBG_8192D("\n");
+
+				DBG_8192D("dbg(0x430) = 0x%x\n", rtw_read32(padapter, 0x430));
+				DBG_8192D("dbg(0x438) = 0x%x\n", rtw_read32(padapter, 0x438));
+
+				DBG_8192D("dbg(0x440) = 0x%x\n", rtw_read32(padapter, 0x440));
+
+				DBG_8192D("dbg(0x458) = 0x%x\n", rtw_read32(padapter, 0x458));
+
+				DBG_8192D("dbg(0x484) = 0x%x\n", rtw_read32(padapter, 0x484));
+				DBG_8192D("dbg(0x488) = 0x%x\n", rtw_read32(padapter, 0x488));
+
+				DBG_8192D("dbg(0x444) = 0x%x\n", rtw_read32(padapter, 0x444));
+				DBG_8192D("dbg(0x448) = 0x%x\n", rtw_read32(padapter, 0x448));
+				DBG_8192D("dbg(0x44c) = 0x%x\n", rtw_read32(padapter, 0x44c));
+				DBG_8192D("dbg(0x450) = 0x%x\n", rtw_read32(padapter, 0x450));
+				break;
+		}
+		break;
+	default:
+		DBG_8192D("error dbg cmd!\n");
+		break;
 	}
 
 	return ret;

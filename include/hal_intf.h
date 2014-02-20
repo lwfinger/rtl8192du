@@ -200,15 +200,6 @@ struct hal_ops {
 	int	(*Efuse_PgPacketWrite)(struct rtw_adapter * adapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
 	u8	(*Efuse_WordEnableDataWrite)(struct rtw_adapter * adapter, u16 efuse_addr, u8 word_en, u8 *data, bool bPseudoTest);
 
-#ifdef DBG_CONFIG_ERROR_DETECT
-	void (*sreset_init_value)(struct rtw_adapter *padapter);
-	void (*sreset_reset_value)(struct rtw_adapter *padapter);
-	void (*silentreset)(struct rtw_adapter *padapter);
-	void (*sreset_xmit_status_check)(struct rtw_adapter *padapter);
-	void (*sreset_linked_status_check) (struct rtw_adapter *padapter);
-	u8 (*sreset_get_wifi_status)(struct rtw_adapter *padapter);
-#endif
-
 	void (*hal_notch_filter)(struct rtw_adapter *adapter, bool enable);
 	void (*hal_reset_security_engine)(struct rtw_adapter *adapter);
 
@@ -360,15 +351,6 @@ void rtw_hal_dm_watchdog(struct rtw_adapter *padapter);
 
 #ifdef CONFIG_HOSTAPD_MLME
 s32 rtw_hal_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, struct sk_buff *pkt);
-#endif
-
-#ifdef DBG_CONFIG_ERROR_DETECT
-void rtw_hal_sreset_init(struct rtw_adapter *padapter);
-void rtw_hal_sreset_reset(struct rtw_adapter *padapter);
-void rtw_hal_sreset_reset_value(struct rtw_adapter *padapter);
-void rtw_hal_sreset_xmit_status_check(struct rtw_adapter *padapter);
-void rtw_hal_sreset_linked_status_check(struct rtw_adapter *padapter);
-u8 rtw_hal_sreset_get_wifi_status(struct rtw_adapter *padapter);
 #endif
 
 void rtw_hal_notch_filter(struct rtw_adapter *adapter, bool enable);

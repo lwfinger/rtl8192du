@@ -330,50 +330,6 @@ s32	rtw_hal_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
 }
 #endif /* CONFIG_HOSTAPD_MLME */
 
-#ifdef DBG_CONFIG_ERROR_DETECT
-void rtw_hal_sreset_init(struct rtw_adapter *padapter)
-{
-	if (padapter->HalFunc.sreset_init_value)
-		padapter->HalFunc.sreset_init_value(padapter);
-}
-
-void rtw_hal_sreset_reset(struct rtw_adapter *padapter)
-{
-	if (padapter->HalFunc.silentreset)
-		padapter->HalFunc.silentreset(padapter);
-}
-
-void rtw_hal_sreset_reset_value(struct rtw_adapter *padapter)
-{
-	if (padapter->HalFunc.sreset_reset_value)
-		padapter->HalFunc.sreset_reset_value(padapter);
-}
-
-void rtw_hal_sreset_xmit_status_check(struct rtw_adapter *padapter)
-{
-#ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->adapter_type != PRIMARY_ADAPTER)
-		return;
-#endif
-	if (padapter->HalFunc.sreset_xmit_status_check)
-		padapter->HalFunc.sreset_xmit_status_check(padapter);
-}
-
-void rtw_hal_sreset_linked_status_check(struct rtw_adapter *padapter)
-{
-	if (padapter->HalFunc.sreset_linked_status_check)
-		padapter->HalFunc.sreset_linked_status_check(padapter);
-}
-
-u8 rtw_hal_sreset_get_wifi_status(struct rtw_adapter *padapter)
-{
-	u8 status = 0;
-	if (padapter->HalFunc.sreset_get_wifi_status)
-		status = padapter->HalFunc.sreset_get_wifi_status(padapter);
-	return status;
-}
-#endif /* DBG_CONFIG_ERROR_DETECT */
-
 void rtw_hal_notch_filter(struct rtw_adapter *adapter, bool enable)
 {
 	if (adapter->HalFunc.hal_notch_filter)

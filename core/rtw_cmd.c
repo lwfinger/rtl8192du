@@ -1584,11 +1584,6 @@ static void dynamic_chk_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 		expire_timeout_chk(padapter);
 #endif
-
-	#ifdef DBG_CONFIG_ERROR_DETECT
-	rtw_hal_sreset_xmit_status_check(padapter);
-	#endif
-
 	linked_status_chk(padapter);
 	traffic_status_watchdog(padapter);
 

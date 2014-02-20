@@ -113,10 +113,6 @@ extern u8 CCKSwingTable_Ch1_Ch13[CCK_TABLE_SIZE][8];
 
 extern u8 CCKSwingTable_Ch14 [CCK_TABLE_SIZE][8];
 
-#ifdef CONFIG_CHIP_VER_INTEGRATION
-void dump_chip_info(HAL_VERSION	ChipVersion);
-#endif
-
 u8	/* return the final channel plan decision */
 hal_com_get_channel_plan(
 	struct rtw_adapter * padapter,

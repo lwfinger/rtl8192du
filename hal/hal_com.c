@@ -143,41 +143,6 @@ u8 CCKSwingTable_Ch14[CCK_TABLE_SIZE][8] = {
 	{0x09, 0x08, 0x07, 0x04, 0x00, 0x00, 0x00, 0x00} /*  32, -16.0dB */
 };
 
-#ifdef CONFIG_CHIP_VER_INTEGRATION
-void dump_chip_info(HAL_VERSION	chip_ver)
-{
-	if (IS_92D(chip_ver))
-		DBG_871X("Chip Version Info: CHIP_8192D_");
-
-	DBG_871X("%s_", IS_NORMAL_CHIP(chip_ver) ? "Normal_Chip" :
-		 "Test_Chip");
-	DBG_871X("%s_", IS_CHIP_VENDOR_TSMC(chip_ver) ? "TSMC" : "UMC");
-	if (IS_A_CUT(chip_ver))
-		DBG_871X("A_CUT_");
-	else if (IS_B_CUT(chip_ver))
-		DBG_871X("B_CUT_");
-	else if (IS_C_CUT(chip_ver))
-		DBG_871X("C_CUT_");
-	else if (IS_D_CUT(chip_ver))
-		DBG_871X("D_CUT_");
-	else if (IS_E_CUT(chip_ver))
-		DBG_871X("E_CUT_");
-	else
-		DBG_871X("UNKNOWN_CUT(%d)_", chip_ver.CUTVersion);
-
-	if (IS_1T1R(chip_ver))
-		DBG_871X("1T1R_");
-	else if (IS_1T2R(chip_ver))
-		DBG_871X("1T2R_");
-	else if (IS_2T2R(chip_ver))
-		DBG_871X("2T2R_");
-	else
-		DBG_871X("UNKNOWN_RFTYPE(%d)_", chip_ver.RFType);
-
-	DBG_871X("RomVer(%d)\n", chip_ver.ROMVer);
-}
-#endif
-
 #define	EEPROM_CHANNEL_PLAN_BY_HW_MASK	0x80
 
 u8	/* return the final channel plan decision */

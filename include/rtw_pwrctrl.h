@@ -262,11 +262,6 @@ int ips_leave(struct rtw_adapter * padapter);
 
 void rtw_ps_processor(struct rtw_adapter*padapter);
 
-#ifdef SUPPORT_HW_RFOFF_DETECTED
-rt_rf_power_state RfOnOffDetect(IN	struct rtw_adapter * adapter);
-#endif
-
-
 void rtw_lps_enter(struct rtw_adapter * padapter);
 void rtw_lps_leave(struct rtw_adapter * padapter);
 

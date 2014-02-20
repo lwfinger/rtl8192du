@@ -100,11 +100,6 @@ int ips_leave(struct rtw_adapter *padapter)
 	return result;
 }
 
-#ifdef SUPPORT_HW_RFOFF_DETECTED
-int rtw_hw_suspend(struct rtw_adapter *padapter);
-int rtw_hw_resume(struct rtw_adapter *padapter);
-#endif
-
 static bool rtw_pwr_unassociated_idle(struct rtw_adapter *adapter)
 {
 	struct rtw_adapter *buddy = adapter->pbuddy_adapter;
@@ -171,44 +166,10 @@ void rtw_ps_processor(struct rtw_adapter *padapter)
 #endif /* CONFIG_P2P */
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-#ifdef SUPPORT_HW_RFOFF_DETECTED
-	rt_rf_power_state rfpwrstate;
-#endif /* SUPPORT_HW_RFOFF_DETECTED */
 
 	pwrpriv->ps_processing = true;
 
-#ifdef SUPPORT_HW_RFOFF_DETECTED
-	if (pwrpriv->bips_processing == true)
-		goto exit;
-
-	if (padapter->pwrctrlpriv.bHWPwrPindetect) {
-		rfpwrstate = RfOnOffDetect(padapter);
-		DBG_8192D("@@@@- #2  %s==> rfstate:%s\n", __func__,
-			  (rfpwrstate == rf_on) ? "rf_on" : "rf_off");
-
-		if (rfpwrstate != pwrpriv->rf_pwrstate) {
-			if (rfpwrstate == rf_off) {
-				pwrpriv->change_rfpwrstate = rf_off;
-				pwrpriv->brfoffbyhw = true;
-				padapter->bCardDisableWOHSM = true;
-				rtw_hw_suspend(padapter);
-			} else {
-				pwrpriv->change_rfpwrstate = rf_on;
-				rtw_hw_resume(padapter);
-			}
-			DBG_8192D("current rf_pwrstate(%s)\n",
-				  (pwrpriv->rf_pwrstate ==
-				   rf_off) ? "rf_off" : "rf_on");
-		}
-		pwrpriv->pwr_state_check_cnts++;
-	}
-#endif /* SUPPORT_HW_RFOFF_DETECTED */
-
-	if (pwrpriv->ips_mode_req == IPS_NONE
-#ifdef CONFIG_CONCURRENT_MODE
-	    || padapter->pbuddy_adapter->pwrctrlpriv.ips_mode_req == IPS_NONE
-#endif
-	    )
+	if (pwrpriv->ips_mode_req == IPS_NONE)
 		goto exit;
 
 	if (rtw_pwr_unassociated_idle(padapter) == false)

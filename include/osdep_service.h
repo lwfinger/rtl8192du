@@ -167,7 +167,7 @@ static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 	#define BIT(x)	(1 << (x))
 #endif
 
-extern int RTW_STATUS_CODE(int error_code);
+int RTW_STATUS_CODE(int error_code);
 
 /* flags used for rtw_update_mem_stat() */
 enum {
@@ -189,53 +189,53 @@ enum {
 
 #define rtw_update_mem_stat(flag, sz) do {} while (0)
 
-extern int	_rtw_memcmp(void *dst, void *src, u32 sz);
+int	_rtw_memcmp(void *dst, void *src, u32 sz);
 
-extern u32	rtw_is_list_empty(struct list_head *phead);
-extern void	rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
-extern void	rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
+u32	rtw_is_list_empty(struct list_head *phead);
+void	rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
+void	rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
 
-extern void	_rtw_init_sema(struct  semaphore *sema, int init_val);
-extern void	_rtw_free_sema(struct  semaphore *sema);
-extern void	_rtw_up_sema(struct  semaphore *sema);
-extern u32	_rtw_down_sema(struct  semaphore *sema);
-extern void	_rtw_mutex_init(_mutex *pmutex);
-extern void	_rtw_mutex_free(_mutex *pmutex);
-extern void	_rtw_spinlock_init(spinlock_t *plock);
-extern void	_rtw_spinlock_free(spinlock_t *plock);
-extern void	_rtw_spinlock(spinlock_t	*plock);
-extern void	_rtw_spinunlock(spinlock_t	*plock);
-extern void	_rtw_spinlock_ex(spinlock_t	*plock);
-extern void	_rtw_spinunlock_ex(spinlock_t	*plock);
+void	_rtw_init_sema(struct  semaphore *sema, int init_val);
+void	_rtw_free_sema(struct  semaphore *sema);
+void	_rtw_up_sema(struct  semaphore *sema);
+u32	_rtw_down_sema(struct  semaphore *sema);
+void	_rtw_mutex_init(_mutex *pmutex);
+void	_rtw_mutex_free(_mutex *pmutex);
+void	_rtw_spinlock_init(spinlock_t *plock);
+void	_rtw_spinlock_free(spinlock_t *plock);
+void	_rtw_spinlock(spinlock_t	*plock);
+void	_rtw_spinunlock(spinlock_t	*plock);
+void	_rtw_spinlock_ex(spinlock_t	*plock);
+void	_rtw_spinunlock_ex(spinlock_t	*plock);
 
-extern void	_rtw_init_queue(struct __queue *pqueue);
-extern u32	_rtw_queue_empty(struct __queue *pqueue);
-extern u32	rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement);
+void	_rtw_init_queue(struct __queue *pqueue);
+u32	_rtw_queue_empty(struct __queue *pqueue);
+u32	rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement);
 
-extern u32	rtw_get_current_time(void);
-extern u32	rtw_systime_to_ms(u32 systime);
-extern u32	rtw_ms_to_systime(u32 ms);
-extern s32	rtw_get_passing_time_ms(u32 start);
-extern s32	rtw_get_time_interval_ms(u32 start, u32 end);
+u32	rtw_get_current_time(void);
+u32	rtw_systime_to_ms(u32 systime);
+u32	rtw_ms_to_systime(u32 ms);
+s32	rtw_get_passing_time_ms(u32 start);
+s32	rtw_get_time_interval_ms(u32 start, u32 end);
 
-extern void	rtw_sleep_schedulable(int ms);
+void	rtw_sleep_schedulable(int ms);
 
-extern void	rtw_msleep_os(int ms);
-extern void	rtw_usleep_os(int us);
+void	rtw_msleep_os(int ms);
+void	rtw_usleep_os(int us);
 
-extern u32	rtw_atoi(u8* s);
+u32	rtw_atoi(u8* s);
 
 #ifdef DBG_DELAY_OS
 #define rtw_mdelay_os(ms) _rtw_mdelay_os((ms), __func__, __LINE__)
 #define rtw_udelay_os(ms) _rtw_udelay_os((ms), __func__, __LINE__)
-extern void _rtw_mdelay_os(int ms, const char *func, const int line);
-extern void _rtw_udelay_os(int us, const char *func, const int line);
+void _rtw_mdelay_os(int ms, const char *func, const int line);
+void _rtw_udelay_os(int us, const char *func, const int line);
 #else
-extern void	rtw_mdelay_os(int ms);
-extern void	rtw_udelay_os(int us);
+void	rtw_mdelay_os(int ms);
+void	rtw_udelay_os(int us);
 #endif
 
-extern void rtw_yield_os(void);
+void rtw_yield_os(void);
 
 
 static inline unsigned char _cancel_timer_ex(struct timer_list *timer)
@@ -343,42 +343,41 @@ static inline u32 bitshift(u32 bitmask)
 #include <linux/android_power.h>
 #endif
 
-extern void rtw_suspend_lock_init(void);
-extern void rtw_suspend_lock_uninit(void);
-extern void rtw_lock_suspend(void);
-extern void rtw_unlock_suspend(void);
+void rtw_suspend_lock_init(void);
+void rtw_suspend_lock_uninit(void);
+void rtw_lock_suspend(void);
+void rtw_unlock_suspend(void);
 
 
 /* Atomic integer operations */
-	#define ATOMIC_T atomic_t
 
-extern void ATOMIC_SET(ATOMIC_T *v, int i);
-extern int ATOMIC_READ(ATOMIC_T *v);
-extern void ATOMIC_ADD(ATOMIC_T *v, int i);
-extern void ATOMIC_SUB(ATOMIC_T *v, int i);
-extern void ATOMIC_INC(ATOMIC_T *v);
-extern void ATOMIC_DEC(ATOMIC_T *v);
-extern int ATOMIC_ADD_RETURN(ATOMIC_T *v, int i);
-extern int ATOMIC_SUB_RETURN(ATOMIC_T *v, int i);
-extern int ATOMIC_INC_RETURN(ATOMIC_T *v);
-extern int ATOMIC_DEC_RETURN(ATOMIC_T *v);
+void ATOMIC_SET(atomic_t *v, int i);
+int ATOMIC_READ(atomic_t *v);
+void ATOMIC_ADD(atomic_t *v, int i);
+void ATOMIC_SUB(atomic_t *v, int i);
+void ATOMIC_INC(atomic_t *v);
+void ATOMIC_DEC(atomic_t *v);
+int ATOMIC_ADD_RETURN(atomic_t *v, int i);
+int ATOMIC_SUB_RETURN(atomic_t *v, int i);
+int ATOMIC_INC_RETURN(atomic_t *v);
+int ATOMIC_DEC_RETURN(atomic_t *v);
 
 /* File operation APIs, just for linux now */
 int rtw_is_file_readable(char *path);
 int rtw_retrive_from_file(char *path, u8 __user *buf, u32 sz);
 int rtw_store_to_file(char *path, u8 __user *buf, u32 sz);
 
-
 struct rtw_netdev_priv_indicator {
 	void *priv;
 	u32 sizeof_priv;
 };
+
 struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv);
-extern struct net_device * rtw_alloc_etherdev(int sizeof_priv);
+struct net_device *rtw_alloc_etherdev(int sizeof_priv);
 
 #define rtw_netdev_priv(netdev) (((struct rtw_netdev_priv_indicator *)netdev_priv(netdev))->priv)
 
-extern void rtw_free_netdev(struct net_device * netdev);
+void rtw_free_netdev(struct net_device * netdev);
 
 #define NDEV_FMT "%s"
 #define NDEV_ARG(ndev) ndev->name
@@ -391,8 +390,8 @@ extern void rtw_free_netdev(struct net_device * netdev);
 
 #define rtw_signal_process(pid, sig) kill_pid(find_vpid((pid)),(sig), 1)
 
-extern u64 rtw_modular64(u64 x, u64 y);
-extern u64 rtw_division64(u64 x, u64 y);
+u64 rtw_modular64(u64 x, u64 y);
+u64 rtw_division64(u64 x, u64 y);
 
 
 /* Macros for handling unaligned memory accesses */

@@ -250,7 +250,7 @@ struct dvobj_priv {
 	u8 *usb_vendor_req_buf;
 	struct usb_interface *pusbintf;
 	struct usb_device *pusbdev;
-	ATOMIC_T continual_urb_error;
+	atomic_t continual_urb_error;
 };
 
 static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)

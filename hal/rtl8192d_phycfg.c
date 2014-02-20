@@ -630,20 +630,7 @@ rtl8192d_PHY_SetRFReg(
  * Note:		The format of MACPHY_REG.txt is different from PHY and RF.
  *			[Register][Mask][Value]
  *---------------------------------------------------------------------------*/
-#ifndef CONFIG_EMBEDDED_FWIMG
-static	int
-phy_ConfigMACWithParaFile(
-	struct rtw_adapter *		adapter,
-	u8*			pFileName
-)
-{
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 
-	int		rtStatus = _SUCCESS;
-
-	return rtStatus;
-}
-#endif /* CONFIG_EMBEDDED_FWIMG */
 /*-----------------------------------------------------------------------------
  * Function:    phy_ConfigMACWithHeaderFile()
  *
@@ -701,9 +688,6 @@ phy_ConfigMACWithHeaderFile(
 int PHY_MACConfig8192D(struct rtw_adapter *adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-#ifndef CONFIG_EMBEDDED_FWIMG
-	char		*pszMACRegFile;
-#endif
 	char		sz92DMACRegFile[] = RTL8192D_PHY_MACREG;
 	int		rtStatus = _SUCCESS;
 
@@ -712,20 +696,8 @@ int PHY_MACConfig8192D(struct rtw_adapter *adapter)
 		return rtStatus;
 	}
 
-#ifndef CONFIG_EMBEDDED_FWIMG
-	pszMACRegFile = sz92DMACRegFile;
-#endif
-
-	/*  */
 	/*  Config MAC */
-	/*  */
-#ifdef CONFIG_EMBEDDED_FWIMG
 	rtStatus = phy_ConfigMACWithHeaderFile(adapter);
-#else
-
-	/*  Not make sure EEPROM, add later */
-	rtStatus = phy_ConfigMACWithParaFile(adapter, pszMACRegFile);
-#endif
 
 	if (pHalData->MacPhyMode92D == SINGLEMAC_SINGLEPHY)
 	{
@@ -963,36 +935,6 @@ phy_ConfigBBWithHeaderFile(
 	return _SUCCESS;
 }
 
-/*-----------------------------------------------------------------------------
- * Function:    phy_ConfigBBWithParaFile()
- *
- * Overview:    This function read BB parameters from general file format, and do register
- *			  Read/Write
- *
- * Input:	struct rtw_adapter *		adapter
- *			ps1Byte				pFileName
- *
- * Output:      NONE
- *
- * Return:      RT_STATUS_SUCCESS: configuration file exist
- *	2008/11/06	MH	For 92S we do not support silent reset now. Disable
- *					parameter file compare!!!!!!??
- *
- *---------------------------------------------------------------------------*/
-#ifndef CONFIG_EMBEDDED_FWIMG
-static	int
-phy_ConfigBBWithParaFile(
-	struct rtw_adapter *		adapter,
-	u8*			pFileName
-)
-{
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-
-	int		rtStatus = _SUCCESS;
-
-	return rtStatus;
-}
-#endif /* CONFIG_EMBEDDED_FWIMG */
 #if MP_DRIVER != 1
 static void
 storePwrIndexDiffRateOffset(
@@ -1081,65 +1023,7 @@ phy_ConfigBBWithPgHeaderFile(
 }	/* phy_ConfigBBWithPgHeaderFile */
 #endif
 
-/*-----------------------------------------------------------------------------
- * Function:	phy_ConfigBBWithPgParaFile
- *
- * Overview:
- *
- * Input:       NONE
- *
- * Output:      NONE
- *
- * Return:      NONE
- *
- * Revised History:
- * When			Who		Remark
- * 11/06/2008	MHC		Create Version 0.
- * 2009/07/29	tynli		(porting from 92SE branch)2009/03/11 Add copy parameter file to buffer for silent reset
- *---------------------------------------------------------------------------*/
-#ifndef CONFIG_EMBEDDED_FWIMG
-static	int
-phy_ConfigBBWithPgParaFile(
-	struct rtw_adapter *		adapter,
-	u8*			pFileName)
-{
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-
-	int		rtStatus = _SUCCESS;
-
-	return rtStatus;
-}	/* phy_ConfigBBWithPgParaFile */
-#endif /* CONFIG_EMBEDDED_FWIMG */
 #if MP_DRIVER == 1
-#ifndef CONFIG_EMBEDDED_FWIMG
-/*-----------------------------------------------------------------------------
- * Function:    phy_ConfigBBWithMpParaFile()
- *
- * Overview:    This function read BB parameters from general file format, and do register
- *			  Read/Write
- *
- * Input:	struct rtw_adapter *		adapter
- *			ps1Byte				pFileName
- *
- * Output:      NONE
- *
- * Return:      RT_STATUS_SUCCESS: configuration file exist
- *	2008/11/06	MH	For 92S we do not support silent reset now. Disable
- *					parameter file compare!!!!!!??
- *
- *---------------------------------------------------------------------------*/
-static	int
-phy_ConfigBBWithMpParaFile(
-	struct rtw_adapter *	adapter,
-	s8			*pFileName
-)
-{
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	int	rtStatus = _SUCCESS;
-
-	return rtStatus;
-}
-#else
 /*-----------------------------------------------------------------------------
  * Function:	phy_ConfigBBWithMpHeaderFile
  *
@@ -1197,8 +1081,6 @@ phy_ConfigBBWithMpHeaderFile(
 	}
 	return _SUCCESS;
 }	/* phy_ConfigBBWithPgHeaderFile */
-
-#endif
 #endif
 
 static	int
@@ -1217,40 +1099,11 @@ phy_BB8192D_Config_ParaFile(
 	s8		sz92DAGCTableFile[] = RTL8192D_AGC_TAB;
 	s8		sz92D2GAGCTableFile[] = RTL8192D_AGC_TAB_2G;
 	s8		sz92D5GAGCTableFile[] = RTL8192D_AGC_TAB_5G;
-#ifndef CONFIG_EMBEDDED_FWIMG
-	char		*pszBBRegFile;
-	char *pszAGCTableFile;
-	char *pszBBRegPgFile;
-	char *pszBBRegMpFile;
-#endif
-
-#ifndef CONFIG_EMBEDDED_FWIMG
-	pszBBRegFile = sz92DBBRegFile;
-	pszBBRegPgFile = sz92DBBRegPgFile;
-
-	/* Normal chip,Mac0 use AGC_TAB.txt for 2G and 5G band. */
-	if (pHalData->interfaceIndex == 0) {
-		pszAGCTableFile = sz92DAGCTableFile;
-	} else {
-		if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
-			pszAGCTableFile = sz92D2GAGCTableFile;
-		else
-			pszAGCTableFile = sz92D5GAGCTableFile;
-	}
-	pszBBRegMpFile = sz92DBBRegMpFile;
-#endif
 
 	/*  1. Read PHY_REG.TXT BB INIT!! */
 	/*  We will seperate as 88C / 92C according to chip version */
 	/*  */
-#ifdef CONFIG_EMBEDDED_FWIMG
 	rtStatus = phy_ConfigBBWithHeaderFile(adapter, BaseBand_Config_PHY_REG);
-#else
-	/*  No matter what kind of CHIP we always read PHY_REG.txt. We must copy different */
-	/*  type of parameter files to phy_reg.txt at first. */
-	rtStatus = phy_ConfigBBWithParaFile(adapter,pszBBRegFile);
-#endif
-
 	if (rtStatus != _SUCCESS)
 		goto phy_BB8190_Config_ParaFile_Fail;
 
@@ -1259,13 +1112,7 @@ phy_BB8192D_Config_ParaFile(
 	/*  1.1 Read PHY_REG_MP.TXT BB INIT!! */
 	/*  We will seperate as 88C / 92C according to chip version */
 	/*  */
-#ifdef CONFIG_EMBEDDED_FWIMG
 	rtStatus = phy_ConfigBBWithMpHeaderFile(adapter, BaseBand_Config_PHY_REG);
-#else
-	/*  No matter what kind of CHIP we always read PHY_REG.txt. We must copy different */
-	/*  type of parameter files to phy_reg.txt at first. */
-	rtStatus = phy_ConfigBBWithMpParaFile(adapter,pszBBRegMpFile);
-#endif
 
 	if (rtStatus != _SUCCESS)
 		goto phy_BB8190_Config_ParaFile_Fail;
@@ -1275,15 +1122,10 @@ phy_BB8192D_Config_ParaFile(
 	/*  */
 	/*  2. If EEPROM or EFUSE autoload OK, We must config by PHY_REG_PG.txt */
 	/*  */
-	if (pEEPROM->bautoload_fail_flag == false)
-	{
+	if (pEEPROM->bautoload_fail_flag == false) {
 		pHalData->pwrGroupCnt = 0;
 
-#ifdef CONFIG_EMBEDDED_FWIMG
 		rtStatus = phy_ConfigBBWithPgHeaderFile(adapter, BaseBand_Config_PHY_REG);
-#else
-		rtStatus = phy_ConfigBBWithPgParaFile(adapter, pszBBRegPgFile);
-#endif
 	}
 
 	if (rtStatus != _SUCCESS)
@@ -1293,7 +1135,6 @@ phy_BB8192D_Config_ParaFile(
 	/*  */
 	/*  3. BB AGC table Initialization */
 	/*  */
-#ifdef CONFIG_EMBEDDED_FWIMG
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bSlaveOfDMSP)
 	{
@@ -1304,9 +1145,6 @@ phy_BB8192D_Config_ParaFile(
 	{
 		rtStatus = phy_ConfigBBWithHeaderFile(adapter, BaseBand_Config_AGC_TAB);
 	}
-#else
-	rtStatus = phy_ConfigBBWithParaFile(adapter, pszAGCTableFile);
-#endif
 
 	if (rtStatus != _SUCCESS)
 		goto phy_BB8190_Config_ParaFile_Fail;
@@ -2306,24 +2144,12 @@ static void PHY_SwitchWirelessBand(struct rtw_adapter *adapter, u8 Band)
 	{
 		/* BB & RF Config */
 		if (pHalData->interfaceIndex == 1)
-		{
-#ifdef CONFIG_EMBEDDED_FWIMG
 			phy_ConfigBBWithHeaderFile(adapter, BaseBand_Config_AGC_TAB);
-#else
-			PHY_SetAGCTab8192D(adapter);
-#endif
-		}
 	}
 	else	/* 5G band */
 	{
 		if (pHalData->interfaceIndex == 1)
-		{
-#ifdef CONFIG_EMBEDDED_FWIMG
 			phy_ConfigBBWithHeaderFile(adapter, BaseBand_Config_AGC_TAB);
-#else
-			PHY_SetAGCTab8192D(adapter);
-#endif
-		}
 	}
 
 	PHY_UpdateBBRFConfiguration8192D(adapter, true);

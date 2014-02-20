@@ -574,10 +574,6 @@ phy_RF6052_Config_ParaFile(
 	int	rtStatus = _SUCCESS;
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-#ifndef CONFIG_EMBEDDED_FWIMG
-	u8	*pszRadioAFile = NULL;
-	u8	*pszRadioBFile = NULL;
-#endif
 	static s8		sz92DRadioAFile[] = RTL8192D_PHY_RADIO_A;
 	static s8		sz92DRadioBFile[] = RTL8192D_PHY_RADIO_B;
 	static s8		sz92DRadioAintPAFile[] = RTL8192D_PHY_RADIO_A_intPA;
@@ -586,18 +582,6 @@ phy_RF6052_Config_ParaFile(
 	bool		bNeedPowerDownRadioA = false,bNeedPowerDownRadioB = false;
 	bool		bTrueBPath = false;/* vivi added this for read parameter from header, 20100908 */
 	u32	MaskforPhySet = 0; /* For 92d PHY cross access, 88c must set value 0. */
-
-#ifndef CONFIG_EMBEDDED_FWIMG
-	pszRadioAFile = sz92DRadioAFile;
-	pszRadioBFile = sz92DRadioBFile;
-#endif
-
-#ifndef CONFIG_EMBEDDED_FWIMG
-	if (pHalData->InternalPA5G[0])
-		pszRadioAFile = sz92DRadioAintPAFile;
-	if (pHalData->InternalPA5G[1])
-		pszRadioBFile = sz92DRadioBintPAFile;
-#endif
 
 	/* DMDP,MAC0 on G band,MAC1 on A band. */
 	if (pHalData->MacPhyMode92D==DUALMAC_DUALPHY)
@@ -633,9 +617,6 @@ phy_RF6052_Config_ParaFile(
 		else if (pHalData->interfaceIndex == 1)
 		{
 			/*  MAC0 enabled, only init radia B. */
-#ifndef CONFIG_EMBEDDED_FWIMG
-			pszRadioAFile = pszRadioBFile;
-#endif
 			bTrueBPath = true;  /* vivi added this for read parameter from header, 20100909 */
 		}
 	}
@@ -647,40 +628,28 @@ phy_RF6052_Config_ParaFile(
 	{
 		if (bMac1NeedInitRadioAFirst) /* Mac1 use PHY0 write */
 		{
-			if (eRFPath == RF_PATH_A)
-			{
+			if (eRFPath == RF_PATH_A) {
 				bNeedPowerDownRadioA = true;
 				MaskforPhySet = MAC1_ACCESS_PHY0;
-			}
-			else if (eRFPath == RF_PATH_B)
-			{
+			} else if (eRFPath == RF_PATH_B) {
 				MaskforPhySet = 0;
 				bMac1NeedInitRadioAFirst = false;
 				eRFPath = RF_PATH_A;
 				bTrueBPath = true;
-#ifndef CONFIG_EMBEDDED_FWIMG
-				pszRadioAFile = pszRadioBFile;
-#endif
 				pHalData->NumTotalRFPath = 1;
 			}
 		}
 		else  if (bMac0NeedInitRadioBFirst) /* Mac0 use PHY1 write */
 		{
 			if (eRFPath == RF_PATH_A)
-			{
 				MaskforPhySet = 0;
-			}
 
-			if (eRFPath == RF_PATH_B)
-			{
+			if (eRFPath == RF_PATH_B) {
 				MaskforPhySet = MAC0_ACCESS_PHY1;
 				bMac0NeedInitRadioBFirst = false;
 				bNeedPowerDownRadioB = true;
 				eRFPath = RF_PATH_A;
 				bTrueBPath = true;
-#ifndef CONFIG_EMBEDDED_FWIMG
-				pszRadioAFile = pszRadioBFile;
-#endif
 				pHalData->NumTotalRFPath = 1;
 			}
 		}
@@ -716,30 +685,21 @@ phy_RF6052_Config_ParaFile(
 		rtw_udelay_os(1);/* PlatformStallExecution(1); */
 
 		/*----Initialize RF fom connfiguration file----*/
-		switch (eRFPath)
-		{
-			case RF_PATH_A:
-#ifdef CONFIG_EMBEDDED_FWIMG
-				/* vivi added this for read parameter from header, 20100908 */
-				if (bTrueBPath == true)
-					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radiob_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
-				else
-					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radioa_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
-#else
-				rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(adapter, pszRadioAFile, (enum RF_RADIO_PATH_E)eRFPath);
-#endif
-				break;
-			case RF_PATH_B:
-#ifdef CONFIG_EMBEDDED_FWIMG
-			rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radiob_txt, (enum RF_RADIO_PATH_E)eRFPath);
-#else
-			rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(adapter, pszRadioBFile, (enum RF_RADIO_PATH_E)eRFPath);
-#endif
-				break;
-			case RF_PATH_C:
-				break;
-			case RF_PATH_D:
-				break;
+		switch (eRFPath) {
+		case RF_PATH_A:
+			/* vivi added this for read parameter from header, 20100908 */
+			if (bTrueBPath == true)
+				rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radiob_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
+			else
+				rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radioa_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
+			break;
+		case RF_PATH_B:
+		rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radiob_txt, (enum RF_RADIO_PATH_E)eRFPath);
+			break;
+		case RF_PATH_C:
+			break;
+		case RF_PATH_D:
+			break;
 		}
 
 		/*----Restore RFENV control type----*/;

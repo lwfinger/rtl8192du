@@ -34,8 +34,6 @@
 /* define CONFIG_PWRCTRL	1 */
 /* define CONFIG_H2CLBK	1 */
 
-#define CONFIG_EMBEDDED_FWIMG	1
-
 #ifdef CONFIG_WAKE_ON_WLAN
 #define CONFIG_WOWLAN 1
 #endif /* CONFIG_WAKE_ON_WLAN */

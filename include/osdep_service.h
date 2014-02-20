@@ -57,15 +57,11 @@
 	#include <net/cfg80211.h>
 #endif /* CONFIG_IOCTL_CFG80211 */
 
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
-	#include <linux/in.h>
-	#include <linux/udp.h>
-#endif
-
 	#include <linux/usb.h>
 	#include <linux/usb/ch9.h>
 
 #define _mutex	struct mutex
+
 struct	__queue	{
 	struct	list_head	queue;
 	spinlock_t	lock;

@@ -331,18 +331,7 @@ if (padapter->registrypriv.mp_mode == 0)
 			ptxdesc->txdw5 |= cpu_to_le32(BIT(2));/*  use OFDM 6Mbps */
 		}
 #endif /* CONFIG_P2P */
-
-		/* offset 24 */
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
-		if (pattrib->hw_tcp_csum == 1) {
-			u8 ip_hdr_offset = 32 + pattrib->hdrlen + pattrib->iv_len + 8;
-			ptxdesc->txdw7 = (1 << 31) | (ip_hdr_offset << 16);
-			DBG_8192D("ptxdesc->txdw7 = %08x\n", ptxdesc->txdw7);
-		}
-#endif
-	}
-	else if ((pxmitframe->frame_tag&0x0f)== MGNT_FRAMETAG)
-	{
+	} else if ((pxmitframe->frame_tag&0x0f)== MGNT_FRAMETAG) {
 
 		/* offset 4 */
 		ptxdesc->txdw1 |= cpu_to_le32(pattrib->mac_id&0x1f);

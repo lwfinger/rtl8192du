@@ -69,9 +69,6 @@ exit:
 	return res;
 }
 
-#ifdef CONFIG_C2H_WK
-static void c2h_wk_callback(_workitem *work);
-#endif
 int _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 {
 	int res = _SUCCESS;
@@ -79,12 +76,6 @@ int _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
 	atomic_set(&pevtpriv->event_seq, 0);
 	pevtpriv->evt_done_cnt = 0;
-
-#ifdef CONFIG_C2H_WK
-	_init_workitem(&pevtpriv->c2h_wk, c2h_wk_callback, NULL);
-	pevtpriv->c2h_wk_alive = false;
-	pevtpriv->c2h_queue = rtw_cbuf_alloc(C2H_QUEUE_MAX_LEN+1);
-#endif
 	return res;
 }
 
@@ -93,20 +84,7 @@ void _rtw_free_evt_priv(struct evt_priv *pevtpriv)
 
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_info_, ("+_rtw_free_evt_priv\n"));
 
-#ifdef CONFIG_C2H_WK
-	_cancel_workitem_sync(&pevtpriv->c2h_wk);
-	while (pevtpriv->c2h_wk_alive)
-		rtw_msleep_os(10);
-
-	while (!rtw_cbuf_empty(pevtpriv->c2h_queue)) {
-		void *c2h = rtw_cbuf_pop(pevtpriv->c2h_queue);
-		if (c2h != NULL && c2h != (void *)pevtpriv)
-			kfree(c2h);
-	}
-#endif
-
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_info_, ("-_rtw_free_evt_priv\n"));
-
 }
 
 void _rtw_free_cmd_priv(struct cmd_priv *pcmdpriv)
@@ -1847,50 +1825,6 @@ s32 c2h_evt_hdl(struct rtw_adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id
 exit:
 	return ret;
 }
-
-#ifdef CONFIG_C2H_WK
-static void c2h_wk_callback(_workitem *work)
-{
-	struct evt_priv *evtpriv = container_of(work, struct evt_priv, c2h_wk);
-	struct rtw_adapter *adapter = container_of(evtpriv, struct rtw_adapter, evtpriv);
-	struct c2h_evt_hdr *c2h_evt;
-	c2h_id_filter ccx_id_filter = rtw_hal_c2h_id_filter_ccx(adapter);
-
-	evtpriv->c2h_wk_alive = true;
-
-	while (!rtw_cbuf_empty(evtpriv->c2h_queue)) {
-		c2h_evt = (struct c2h_evt_hdr *)rtw_cbuf_pop(evtpriv->c2h_queue);
-		if (c2h_evt != NULL) {
-			/* This C2H event is read, clear it */
-			c2h_evt_clear(adapter);
-		} else if ((c2h_evt = (struct c2h_evt_hdr *)kmalloc(16, GFP_ATOMIC)) != NULL) {
-			/* This C2H event is not read, read & clear now */
-			if (c2h_evt_read(adapter, (u8 *)c2h_evt) != _SUCCESS)
-				continue;
-		}
-
-		/* Special pointer to trigger c2h_evt_clear only */
-		if ((void *)c2h_evt == (void *)evtpriv)
-			continue;
-
-		if (!c2h_evt_exist(c2h_evt)) {
-			kfree(c2h_evt);
-			continue;
-		}
-
-		if (ccx_id_filter(c2h_evt->id) == true) {
-			/* Handle CCX report here */
-			rtw_hal_c2h_handler(adapter, c2h_evt);
-			kfree(c2h_evt);
-		} else {
-			/* Enqueue into cmd_thread for others */
-			rtw_c2h_wk_cmd(adapter, (u8 *)c2h_evt);
-		}
-	}
-
-	evtpriv->c2h_wk_alive = false;
-}
-#endif
 
 u8 rtw_drvextra_cmd_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 {

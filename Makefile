@@ -168,6 +168,8 @@ strip:
 
 install:
 	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
+	mkdir -p /lib/firmware/rtlwifi
+	cp -n rtl8192dufw*.bin /lib/firmware/rtlwifi/.
 	/sbin/depmod -a ${KVER}
 
 uninstall:

@@ -774,7 +774,7 @@ static unsigned int rtw_classify8021d(struct sk_buff *skb)
 }
 
 static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb,
-			    void *accel)
+			    void *accel, select_queue_fallback_t fallback)
 {
 	struct rtw_adapter	*padapter = rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -1361,14 +1361,6 @@ _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,
 	struct dvobj_priv *pdvobjpriv;
 	u8 mac[ETH_ALEN];
 
-/*
-	if ((primary_padapter->bup == false) ||
-		(rtw_buddy_adapter_up(primary_padapter) == false))
-	{
-		goto error_rtw_drv_add_iface;
-	}
-
-*/
 	/****** init netdev ******/
 	pnetdev = rtw_init_netdev(NULL);
 	if (!pnetdev)

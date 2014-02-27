@@ -276,12 +276,12 @@ static int _FWInit(struct rtw_adapter *adapter)
 	return _FAIL;
 }
 
-static int get_fw_from_file(struct rtw_adapter *adapter)
+static bool get_fw_from_file(struct rtw_adapter *adapter)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct device *device = dvobj_to_dev(dvobj);
 	const struct firmware *fw;
-	int rtstatus = _SUCCESS;
+	bool rtstatus = false;
 #ifdef CONFIG_WOWLAN
 	const char *fw_name = "rtlwifi/rtl8192dufw_wol.bin";
 #else
@@ -289,34 +289,31 @@ static int get_fw_from_file(struct rtw_adapter *adapter)
 #endif /* CONFIG_WOWLAN */
 
 	if (request_firmware(&fw, fw_name, device))
-		return _FAIL;
+		return false;
 	if (!fw) {
 		pr_err("Firmware %s not available\n", fw_name);
-		return _FAIL;
+		return false;
 	}
 	if (fw->size > FW_8192D_SIZE) {
-		rtstatus = _FAIL;
 		pr_err("Firmware size exceeds 0x%x. Check it.\n",
 		       FW_8192D_SIZE);
 		goto exit;
 	}
 
 	adapter->firmware = kmalloc(sizeof(struct rt_firmware_92d), GFP_KERNEL);
-	if (!adapter->firmware) {
-		rtstatus = _FAIL;
+	if (!adapter->firmware)
 		goto exit;
-	}
 	adapter->firmware->buffer = vzalloc(fw->size);
 	if (!adapter->firmware->buffer) {
 		kfree(adapter->firmware);
 		adapter->firmware = NULL;
-		rtstatus = _FAIL;
 		goto exit;
 	}
 	memcpy(adapter->firmware->buffer, fw->data, fw->size);
 	adapter->firmware->length = fw->size;
 	pr_info("r8192du: Loaded firmware file %s of %d bytes\n",
 		fw_name, adapter->firmware->length);
+	rtstatus = true;
 exit:
 	release_firmware(fw);
 	return rtstatus;
@@ -346,7 +343,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 		return _FAIL;
 
 	if (!adapter->firmware) {
-		if (get_fw_from_file(adapter)) {
+		if (!get_fw_from_file(adapter)) {
 			rtStatus = _FAIL;
 			adapter->firmware = NULL;
 			goto Exit;

@@ -1740,11 +1740,10 @@ static void ro_ch_handler(struct rtw_adapter *padapter)
 
 	DBG_8192D("cfg80211_remain_on_channel_expired\n");
 
-	rtw_cfg80211_remain_on_channel_expired(padapter,
+	cfg80211_remain_on_channel_expired(padapter->rtw_wdev,
 		pcfg80211_wdinfo->remain_on_ch_cookie,
 		&pcfg80211_wdinfo->remain_on_ch_channel,
-		pcfg80211_wdinfo->remain_on_ch_type, GFP_KERNEL);
-
+		GFP_KERNEL);
 }
 
 static void ro_ch_timer_process (void *FunctionContext)

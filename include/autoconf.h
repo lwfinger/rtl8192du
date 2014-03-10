@@ -52,7 +52,7 @@
 	#endif
 #endif
 
-/* define CONFIG_IOCTL_CFG80211 */
+//#define CONFIG_IOCTL_CFG80211
 
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable,*/
 

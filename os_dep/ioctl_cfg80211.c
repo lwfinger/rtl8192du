@@ -2268,7 +2268,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	)
 	{
 		u32 wep_key_idx, wep_key_len,wep_total_len;
-		NDIS_802_11_WEP	 *pwep = NULL;
+		struct ndis_802_11_wep *pwep = NULL;
 		DBG_8192D("%s(): Shared/Auto WEP\n",__func__);
 
 		wep_key_idx = sme->key_idx;
@@ -2282,8 +2282,8 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		if (wep_key_len > 0)
 		{
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
-			wep_total_len = wep_key_len + FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial);
-			pwep =(NDIS_802_11_WEP	 *) kmalloc(wep_total_len, GFP_KERNEL);
+			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
+			pwep =(struct ndis_802_11_wep *) kmalloc(wep_total_len, GFP_KERNEL);
 			if (pwep == NULL) {
 				DBG_8192D(" wpa_set_encryption: pwep allocate fail !!!\n");
 				ret = -ENOMEM;
@@ -2547,9 +2547,9 @@ void rtw_cfg80211_indicate_sta_assoc(struct rtw_adapter *padapter, u8 *pmgmt_fra
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
 	#ifdef COMPAT_KERNEL_RELEASE
-	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
+	cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
 	#elif !defined(CONFIG_IOCTL_CFG80211)
-	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
+	cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
 	#else /* COMPAT_KERNEL_RELEASE */
 	{
 		/* to avoid WARN_ON(wdev->iftype != NL80211_IFTYPE_STATION)  when calling cfg80211_send_rx_assoc() */
@@ -2579,9 +2579,9 @@ void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned c
 	DBG_8192D("%s(padapter=%p,%s)\n", __func__, padapter, ndev->name);
 
 #if defined(RTW_USE_CFG80211_STA_EVENT) || defined(COMPAT_KERNEL_RELEASE)
-	xcfg80211_del_sta(ndev, da, GFP_ATOMIC);
+	cfg80211_del_sta(ndev, da, GFP_ATOMIC);
 #else /* defined(RTW_USE_CFG80211_STA_EVENT) */
-	ychannel = pmlmeext->cur_channel;
+	channel = pmlmeext->cur_channel;
 	if (channel <= RTW_CH_MAX_2G_CHANNEL)
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
 	else
@@ -2608,9 +2608,9 @@ void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned c
 	pmgmt_frame = rtw_set_fixed_ie(pmgmt_frame, _RSON_CODE_ , (unsigned char *)&reason, &frame_len);
 
 	#ifdef COMPAT_KERNEL_RELEASE
-	rtw_cfg80211_rx_mgmt(padapter, freq, 0, mgmt_buf, frame_len, GFP_ATOMIC);
+	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, mgmt_buf, frame_len, flags, GFP_ATOMIC);
 	#elif !defined(CONFIG_IOCTL_CFG80211)
-	rtw_cfg80211_rx_mgmt(padapter, freq, 0, mgmt_buf, frame_len, GFP_ATOMIC);
+	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, mgmt_buf, frame_len, flags, GFP_ATOMIC);
 	#else /* COMPAT_KERNEL_RELEASE */
 	cfg80211_send_disassoc(padapter->pnetdev, mgmt_buf, frame_len);
 	#endif /* COMPAT_KERNEL_RELEASE */
@@ -3220,6 +3220,7 @@ void rtw_cfg80211_rx_action_p2p(struct rtw_adapter *padapter, u8 *pmgmt_frame, u
 	int channel;
 	struct mlme_ext_priv *pmlmeext = &(padapter->mlmeextpriv);
 	u8 category, action;
+	u32 flags = 0;		/* FIX ME */
 
 	channel = rtw_get_oper_ch(padapter);
 
@@ -3238,7 +3239,7 @@ indicate:
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
+	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags, GFP_ATOMIC);
 }
 
 void rtw_cfg80211_rx_p2p_action_public(struct rtw_adapter *padapter, u8 *pmgmt_frame, uint frame_len)
@@ -3248,6 +3249,7 @@ void rtw_cfg80211_rx_p2p_action_public(struct rtw_adapter *padapter, u8 *pmgmt_f
 	int channel;
 	struct mlme_ext_priv *pmlmeext = &(padapter->mlmeextpriv);
 	u8 category, action;
+	u32 flags = 0; /*FIX ME */
 
 	channel = rtw_get_oper_ch(padapter);
 
@@ -3272,7 +3274,7 @@ indicate:
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
+	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags, GFP_ATOMIC);
 }
 
 void rtw_cfg80211_rx_action(struct rtw_adapter *adapter, u8 *frame, uint frame_len, const char*msg)
@@ -3282,6 +3284,7 @@ void rtw_cfg80211_rx_action(struct rtw_adapter *adapter, u8 *frame, uint frame_l
 	struct mlme_ext_priv *pmlmeext = &(adapter->mlmeextpriv);
 	struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(adapter->rtw_wdev);
 	u8 category, action;
+	u32 flags = 0;		/* FIX ME */
 
 	channel = rtw_get_oper_ch(adapter);
 
@@ -3298,7 +3301,7 @@ void rtw_cfg80211_rx_action(struct rtw_adapter *adapter, u8 *frame, uint frame_l
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-	rtw_cfg80211_rx_mgmt(adapter, freq, 0, frame, frame_len, GFP_ATOMIC);
+	cfg80211_rx_mgmt(adapter->rtw_wdev, freq, 0, frame, frame_len, flags, GFP_ATOMIC);
 }
 
 #ifdef CONFIG_P2P
@@ -3627,7 +3630,7 @@ static s32 cfg80211_rtw_remain_on_channel(struct wiphy *wiphy,
 	}
 #endif
 
-	rtw_cfg80211_ready_on_channel(padapter, *cookie, channel, channel_type, duration, GFP_KERNEL);
+	cfg80211_ready_on_channel(padapter->rtw_wdev, *cookie, channel, duration, GFP_KERNEL);
 
 	pwdinfo->listen_channel = pmlmeext->cur_channel;
 
@@ -3824,7 +3827,7 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy,
 #endif /* CONFIG_DEBUG_CFG80211 */
 
 	/* indicate ack before issue frame to avoid racing with rsp frame */
-	rtw_cfg80211_mgmt_tx_status(padapter, *cookie, buf, len, ack, GFP_KERNEL);
+	cfg80211_mgmt_tx_status(padapter->rtw_wdev, *cookie, buf, len, ack, GFP_KERNEL);
 
 	if (rtw_action_frame_parse(buf, len, &category, &action) == false) {
 		DBG_8192D(FUNC_ADPT_FMT" frame_control:0x%x\n", FUNC_ADPT_ARG(padapter),

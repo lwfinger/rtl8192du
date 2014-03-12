@@ -21,12 +21,12 @@
 #define DRV_NAME "r8192du"
 #define DRIVERVERSION	"v4.2.1_7122.20130408"
 
-//#define CONFIG_IOCTL_CFG80211 1
+#define CONFIG_IOCTL_CFG80211 1
 
 /*
  * Internal  General Config
  */
-/* define CONFIG_PWRCTRL	1 */
+#define CONFIG_PWRCTRL	1
 
 //#define CONFIG_WAKE_ON_WLAN
 

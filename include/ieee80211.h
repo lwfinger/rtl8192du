@@ -20,7 +20,7 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include "wifi.h"
-
+#include <linux/ieee80211.h>
 #include <linux/wireless.h>
 #define MGMT_QUEUE_NUM 5
 

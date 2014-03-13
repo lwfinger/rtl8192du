@@ -419,11 +419,7 @@ struct mlme_ext_priv
 	u32	retry; /* retry for issue probereq */
 
 	u64 TSFValue;
-
-#ifdef CONFIG_92D_AP_MODE
 	unsigned char bstart_bss;
-#endif
-
 	/* recv_decache check for Action_public frame */
         u8 action_public_dialog_token;
 	u16	 action_public_rxseq;
@@ -625,8 +621,8 @@ extern void update_TSF(struct mlme_ext_priv *pmlmeext, u8 *pframe, uint len);
 extern void correct_TSF(struct rtw_adapter *padapter, struct mlme_ext_priv *pmlmeext);
 
 
-#ifdef CONFIG_CONCURRENT_MODE
 int check_buddy_mlmeinfo_state(struct rtw_adapter *padapter, u32 state);
+#ifdef CONFIG_CONCURRENT_MODE
 int concurrent_chk_start_clnt_join(struct rtw_adapter *padapter);
 void concurrent_chk_joinbss_done(struct rtw_adapter *padapter, int join_res);
 #endif /* CONFIG_CONCURRENT_MODE */

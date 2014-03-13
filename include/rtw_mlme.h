@@ -384,7 +384,6 @@ struct mlme_priv {
 	u8 *wps_probe_req_ie;
 	u32 wps_probe_req_ie_len;
 
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 	/* Number of associated Non-ERP stations (i.e., stations using 802.11b
 	 * in 802.11g BSS) */
 	int num_sta_non_erp;
@@ -436,9 +435,6 @@ struct mlme_priv {
 	u32 p2p_assoc_req_ie_len;
 	spinlock_t	bcn_update_lock;
 	u8		update_bcn;
-
-
-#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 
 #ifdef CONFIG_CONCURRENT_MODE
 	u8	scanning_via_buddy_intf;
@@ -546,8 +542,8 @@ __inline static void up_scanned_network(struct mlme_priv *pmlmepriv)
 
 #ifdef CONFIG_CONCURRENT_MODE
 int rtw_buddy_adapter_up(struct rtw_adapter *padapter);
-int check_buddy_fwstate(struct rtw_adapter *padapter, int state);
 #endif /* CONFIG_CONCURRENT_MODE */
+int check_buddy_fwstate(struct rtw_adapter *padapter, int state);
 
 __inline static void down_scanned_network(struct mlme_priv *pmlmepriv)
 {

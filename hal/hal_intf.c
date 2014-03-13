@@ -322,7 +322,7 @@ void rtw_hal_bcn_related_reg_setting(struct rtw_adapter *padapter)
 }
 
 #ifdef CONFIG_HOSTAPD_MLME
-s32	rtw_hal_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
+s32	rtw_hal_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, struct sk_buff *pkt)
 {
 	if (padapter->HalFunc.hostap_mgnt_xmit_entry)
 		return padapter->HalFunc.hostap_mgnt_xmit_entry(padapter, pkt);

@@ -138,8 +138,6 @@ struct sta_info {
 	/* curr_network(mlme_priv/security_priv/qos/ht) : AP CAP/INFO */
 	/* sta_info: (AP & STA) CAP/INFO */
 
-#ifdef CONFIG_92D_AP_MODE
-
 	struct list_head asoc_list;
 	struct list_head auth_list;
 
@@ -160,7 +158,6 @@ struct sta_info {
 
 	u8 bpairwise_key_installed;
 
-#ifdef CONFIG_NATIVEAP_MLME
 	u8 wpa_ie[32];
 
 	u8 nonerp_set;
@@ -169,7 +166,6 @@ struct sta_info {
 	u8 no_ht_gf_set;
 	u8 no_ht_set;
 	u8 ht_20mhz_set;
-#endif	/*  CONFIG_NATIVEAP_MLME */
 
 	unsigned int tx_ra_bitmap;
 	u8 qos_info;
@@ -202,8 +198,6 @@ struct sta_info {
 	u8 under_exist_checking;
 
 	u8 keep_alive_trycnt;
-
-#endif	/*  CONFIG_92D_AP_MODE */
 
 #ifdef CONFIG_IOCTL_CFG80211
 	u8 *passoc_req;
@@ -299,7 +293,6 @@ struct sta_info {
 #define STA_PKTS_FMT "(m:%llu, c:%llu, d:%llu)"
 
 struct	sta_priv {
-
 	u8 *pallocated_stainfo_buf;
 	u8 *pstainfo_buf;
 	struct __queue free_sta_queue;
@@ -312,8 +305,6 @@ struct	sta_priv {
 
 	struct rtw_adapter *padapter;
 
-
-#ifdef CONFIG_92D_AP_MODE
 	struct list_head asoc_list;
 	struct list_head auth_list;
 	spinlock_t asoc_list_lock;
@@ -337,8 +328,6 @@ struct	sta_priv {
 	u16 max_num_sta;
 
 	struct wlan_acl_pool acl_list;
-#endif
-
 };
 
 

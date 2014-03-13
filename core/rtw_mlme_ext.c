@@ -45,7 +45,6 @@ static struct mlme_handler mlme_sta_tbl[] = {
 	{WIFI_ACTION, "OnAction", &OnAction},
 };
 
-#ifdef _CONFIG_NATIVEAP_MLME_
 static struct mlme_handler mlme_ap_tbl[] = {
 	{WIFI_ASSOCREQ, "OnAssocReq", &OnAssocReq},
 	{WIFI_ASSOCRSP, "OnAssocRsp", &OnAssocRsp},
@@ -66,7 +65,6 @@ static struct mlme_handler mlme_ap_tbl[] = {
 	{WIFI_DEAUTH, "OnDeAuth", &OnDeAuth},
 	{WIFI_ACTION, "OnAction", &OnAction},
 };
-#endif
 
 static struct action_handler OnAction_tbl[] = {
 	{RTW_WLAN_CATEGORY_SPECTRUM_MGMT, "ACTION_SPECTRUM_MGMT",
@@ -1193,9 +1191,7 @@ unsigned int OnAuth(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 	/*  Now, we are going to issue_auth... */
 	pstat->auth_seq = seq + 1;
 
-#ifdef CONFIG_NATIVEAP_MLME
 	issue_auth(adapt, pstat, (unsigned short)(_STATS_SUCCESSFUL_));
-#endif
 
 	if (pstat->state & WIFI_FW_AUTH_SUCCESS)
 		pstat->auth_seq = 0;
@@ -1212,9 +1208,7 @@ auth_fail:
 	pstat->auth_seq = 2;
 	memcpy(pstat->hwaddr, sa, 6);
 
-#ifdef CONFIG_NATIVEAP_MLME
 	issue_auth(adapt, pstat, (unsigned short)status);
-#endif
 
 #endif
 	return _FAIL;
@@ -1776,7 +1770,6 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 	/*  now the station is qualified to join our BSS... */
 	if (pstat && (pstat->state & WIFI_FW_ASSOC_SUCCESS) &&
 	    (_STATS_SUCCESSFUL_ == status)) {
-#ifdef CONFIG_NATIVEAP_MLME
 		/* 1 bss_cap_update & sta_info_update */
 		bss_cap_update_on_sta_join(adapt, pstat);
 		sta_info_update(adapt, pstat);
@@ -1791,10 +1784,6 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 		DBG_8192D("indicate_sta_join_event to upper layer - hostapd\n");
 #ifdef CONFIG_IOCTL_CFG80211
 		if (1) {
-#ifdef COMPAT_KERNEL_RELEASE
-			rtw_cfg80211_indicate_sta_assoc(adapt, pframe,
-							pkt_len);
-#elif !defined(CONFIG_IOCTL_CFG80211)
 			rtw_cfg80211_indicate_sta_assoc(adapt, pframe,
 							pkt_len);
 #else /* !defined(CONFIG_IOCTL_CFG80211) */
@@ -1818,32 +1807,22 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 
 		/* 3-(1) report sta add event */
 		report_add_sta_event(adapt, pstat->hwaddr, pstat->aid);
-
-#endif
 	}
 
 	return _SUCCESS;
 
 asoc_class2_error:
 
-#ifdef CONFIG_NATIVEAP_MLME
 	issue_deauth(adapt, (void *)GetAddr2Ptr(pframe), status);
-#endif
-
 	return _FAIL;
 
 OnAssocReqFail:
 
-#ifdef CONFIG_NATIVEAP_MLME
 	pstat->aid = 0;
 	if (frame_type == WIFI_ASSOCREQ)
 		issue_asocrsp(adapt, status, pstat, WIFI_ASSOCRSP);
 	else
 		issue_asocrsp(adapt, status, pstat, WIFI_REASSOCRSP);
-#endif
-
-#endif /* CONFIG_92D_AP_MODE */
-
 	return _FAIL;
 }
 
@@ -5810,9 +5789,9 @@ void issue_beacon(struct rtw_adapter *adapt)
 	unsigned short *fctrl;
 	unsigned int rate_len;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#ifdef CONFIG_IOCTL_CFG80211
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
-#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex *cur_network = &(pmlmeinfo->network);
@@ -5826,9 +5805,9 @@ void issue_beacon(struct rtw_adapter *adapt)
 		DBG_8192D("%s, alloc mgnt frame fail\n", __func__);
 		return;
 	}
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE)
 	spin_lock_bh(&pmlmepriv->bcn_update_lock);
-#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif /* if defined (CONFIG_92D_AP_MODE) */
 
 	/* update attribute */
 	pattrib = &pmgntframe->attrib;
@@ -6103,11 +6082,11 @@ void issue_beacon(struct rtw_adapter *adapt)
 
 _issue_bcn:
 
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE)
 	pmlmepriv->update_bcn = false;
 
 	spin_unlock_bh(&pmlmepriv->bcn_update_lock);
-#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif /* if defined (CONFIG_92D_AP_MODE) */
 
 	if ((pattrib->pktlen + TXDESC_SIZE) > 512) {
 		DBG_8192D("beacon frame too large\n");
@@ -6131,11 +6110,13 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 	unsigned short *fctrl;
 	unsigned char *mac, *bssid;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE)
 	u8 *pwps_ie;
 	uint wps_ielen;
+#endif /* if defined (CONFIG_92D_AP_MODE) */
+#ifdef CONFIG_IOCTL_CFG80211
 	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
-#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex *cur_network = &(pmlmeinfo->network);
@@ -6181,7 +6162,7 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 	if (cur_network->IELength > MAX_IE_SZ)
 		return;
 
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE)
 	if ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE) {
 		pwps_ie =
 		    rtw_get_wps_ie(cur_network->IEs + _FIXED_IE_LENGTH_,
@@ -6569,7 +6550,6 @@ void issue_auth(struct rtw_adapter *adapt, struct sta_info *psta,
 	pattrib->pktlen = sizeof(struct ieee80211_hdr_3addr);
 
 	if (psta) {		/*  for AP mode */
-#ifdef CONFIG_NATIVEAP_MLME
 		__le16 le_tmp16;
 
 		memcpy(pwlanhdr->addr1, psta->hwaddr, ETH_ALEN);
@@ -6584,9 +6564,8 @@ void issue_auth(struct rtw_adapter *adapt, struct sta_info *psta,
 		if (status != _STATS_SUCCESSFUL_)
 			val16 = 0;
 
-		if (val16) {
+		if (val16)
 			use_shared_key = 1;
-		}
 
 		le_tmp16 = cpu_to_le16(val16);
 		pframe =
@@ -6617,7 +6596,6 @@ void issue_auth(struct rtw_adapter *adapt, struct sta_info *psta,
 			    rtw_set_ie(pframe, _CHLGETXT_IE_, 128,
 				       psta->chg_txt, &(pattrib->pktlen));
 		}
-#endif
 	} else {
 		__le32 le_tmp32;
 		__le16 le_tmp16;
@@ -8237,12 +8215,11 @@ void site_survey(struct rtw_adapter *adapt)
 
 #ifdef CONFIG_P2P
 
-#ifdef CONFIG_CONCURRENT_MODE
-
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 	u8 stay_buddy_ch = 0;
-#endif /* CONFIG_STA_MODE_SCAN_UNDER_AP_MODE */
+#endif
 
+#ifdef CONFIG_CONCURRENT_MODE
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
 	struct rtw_adapter *pbuddy_adapter = adapt->pbuddy_adapter;
 	struct mlme_ext_priv *pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
@@ -8298,7 +8275,7 @@ void site_survey(struct rtw_adapter *adapt)
 	if (survey_channel != 0) {
 		/* PAUSE 4-AC Queue when site_survey */
 #ifdef CONFIG_CONCURRENT_MODE
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 		if ((adapt->pbuddy_adapter->mlmeextpriv.mlmext_info.
 		     state & 0x03) == WIFI_FW_AP_STATE) {
 			if (pmlmeinfo->scan_cnt == RTW_SCAN_NUM_OF_CH) {
@@ -8322,7 +8299,7 @@ void site_survey(struct rtw_adapter *adapt)
 			SelectChannel(adapt, survey_channel);
 		}
 
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
+#ifdef CONFIG_92D_AP_MODE
 		if (stay_buddy_ch == 1) {
 			val8 = 0;	/* survey done */
 			rtw_hal_set_hwreg(adapt, HW_VAR_MLME_SITESURVEY,
@@ -8338,7 +8315,7 @@ void site_survey(struct rtw_adapter *adapt)
 			rtw_hal_set_hwreg(adapt, HW_VAR_MLME_SITESURVEY,
 					  (u8 *)(&val8));
 		}
-#endif /* CONFIG_STA_MODE_SCAN_UNDER_AP_MODE */
+#endif
 
 		if (ScanType == SCAN_ACTIVE) {	/* obey the channel plan setting... */
 #ifdef CONFIG_P2P
@@ -10111,9 +10088,6 @@ u8 setopmode_hdl(struct rtw_adapter *adapt, u8 *pbuf)
 	if (psetop->mode == NDIS802_11APMODE) {
 		pmlmeinfo->state = WIFI_FW_AP_STATE;
 		type = _HW_STATE_AP_;
-#ifdef CONFIG_NATIVEAP_MLME
-		/* start_ap_mode(adapt); */
-#endif
 	} else if (psetop->mode == NDIS802_11INFRA) {
 		pmlmeinfo->state &= ~(BIT(0) | BIT(1));	/*  clear state */
 		pmlmeinfo->state |= WIFI_FW_STATION_STATE;	/* set to     STATION_STATE */
@@ -10930,13 +10904,17 @@ void change_band_update_ie(struct rtw_adapter *adapt,
 		network_type = WIRELESS_11A;
 		total_rate_len = IEEE80211_NUM_OFDM_RATESLEN;
 		DBG_8192D("%s(): change to 5G Band\n", __func__);
+#ifdef CONFIG_92D_AP_MODE
 		rtw_remove_bcn_ie(adapt, pnetwork, _ERPINFO_IE_);
+#endif
 	} else {
 		network_type = WIRELESS_11BG;
 		total_rate_len =
 		    IEEE80211_CCK_RATE_LEN + IEEE80211_NUM_OFDM_RATESLEN;
 		DBG_8192D("%s(): change to 2.4G Band\n", __func__);
+#ifdef CONFIG_92D_AP_MODE
 		rtw_add_bcn_ie(adapt, pnetwork, _ERPINFO_IE_, &erpinfo, 1);
+#endif
 	}
 
 	rtw_set_supported_rate(pnetwork->SupportedRates, network_type);
@@ -10953,9 +10931,9 @@ void change_band_update_ie(struct rtw_adapter *adapt,
 		remainder_rate_len = 0;
 	}
 
+#ifdef CONFIG_92D_AP_MODE
 	rtw_add_bcn_ie(adapt, pnetwork, _SUPPORTEDRATES_IE_,
 		       pnetwork->SupportedRates, rate_len);
-
 	if (remainder_rate_len) {
 		rtw_add_bcn_ie(adapt, pnetwork, _EXT_SUPPORTEDRATES_IE_,
 			       (pnetwork->SupportedRates + 8),
@@ -10963,6 +10941,7 @@ void change_band_update_ie(struct rtw_adapter *adapt,
 	} else {
 		rtw_remove_bcn_ie(adapt, pnetwork, _EXT_SUPPORTEDRATES_IE_);
 	}
+#endif
 }
 
 #ifdef CONFIG_DUALMAC_CONCURRENT

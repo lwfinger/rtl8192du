@@ -1350,8 +1350,6 @@ int rtw_acl_remove_sta(struct rtw_adapter *padapter, u8 *addr)
 	return ret;
 }
 
-#ifdef CONFIG_NATIVEAP_MLME
-
 static void update_bcn_fixed_ie(struct rtw_adapter *padapter)
 {
 	DBG_8192D("%s\n", __func__);
@@ -1875,19 +1873,9 @@ u8 ap_free_sta(struct rtw_adapter *padapter, struct sta_info *psta,
 	psta->state &= ~_FW_LINKED;
 	spin_unlock_bh(&psta->lock);
 
-	#ifdef CONFIG_IOCTL_CFG80211
-	if (1) {
-		#ifdef COMPAT_KERNEL_RELEASE
-		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr, reason);
-		#elif !defined(CONFIG_IOCTL_CFG80211)
-		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr,
-						   reason);
-		#endif
-	} else
-	#endif /* CONFIG_IOCTL_CFG80211 */
-	{
-		rtw_indicate_sta_disassoc_event(padapter, psta);
-	}
+#ifdef CONFIG_92D_AP_MODE
+	rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr, reason);
+#endif /* CONFIG_IOCTL_CFG80211 */
 
 	report_del_sta_event(padapter, psta->hwaddr, reason);
 
@@ -2113,5 +2101,4 @@ void stop_ap_mode(struct rtw_adapter *padapter)
 	rtw_free_mlme_priv_ie_data(pmlmepriv);
 }
 
-#endif /* CONFIG_NATIVEAP_MLME */
 #endif /* CONFIG_92D_AP_MODE */

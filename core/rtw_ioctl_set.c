@@ -374,7 +374,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct rtw_adapter *padapter,
 			/* change to other mode from Ndis802_11APMode */
 			cur_network->join_res = -1;
 
-#ifdef CONFIG_NATIVEAP_MLME
+#ifdef CONFIG_92D_AP_MODE
 			stop_ap_mode(padapter);
 #endif
 		}
@@ -404,7 +404,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct rtw_adapter *padapter,
 			break;
 		case NDIS802_11APMODE:
 			set_fwstate(pmlmepriv, WIFI_AP_STATE);
-#ifdef CONFIG_NATIVEAP_MLME
+#ifdef CONFIG_92D_AP_MODE
 			start_ap_mode(padapter);
 #endif
 			break;

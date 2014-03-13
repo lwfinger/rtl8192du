@@ -855,7 +855,7 @@ static void rtl8192du_hostap_mgnt_xmit_cb(struct urb *urb)
 	dev_kfree_skb_any(skb);
 }
 
-s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
+s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, struct sk_buff *pkt)
 {
 	u16 fc;
 	int rc, len, pipe;
@@ -872,8 +872,8 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
 
 	skb = pkt;
 	len = skb->len;
-	tx_hdr = (struct ieee80211_hdr *)(skb->data);
-	fc = le16_to_cpu(tx_hdr->frame_ctl);
+	tx_hdr = (struct ieee80211_3ddr_hdr *)(skb->data);
+	fc = le16_to_cpu(tx_hdr->frame_control);
 	bmcst = IS_MCAST(tx_hdr->addr1);
 
 	if ((fc & RTW_IEEE80211_FCTL_FTYPE) != RTW_IEEE80211_FTYPE_MGMT)

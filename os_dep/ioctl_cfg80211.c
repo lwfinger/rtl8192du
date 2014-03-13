@@ -3877,8 +3877,9 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 			memcpy(pmlmepriv->wps_beacon_ie, wps_ie, wps_ielen);
 			pmlmepriv->wps_beacon_ie_len = wps_ielen;
 
+#ifdef CONFIG_92D_AP_MODE
 			update_beacon(padapter, _VENDOR_SPECIFIC_IE_, wps_oui, true);
-
+#endif
 		}
 
 		#ifdef CONFIG_P2P

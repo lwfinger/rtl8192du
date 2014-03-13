@@ -110,7 +110,7 @@ static void rtw_free_mlme_ie_data(u8 **ppie, u32 *plen)
 
 void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv)
 {
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE)
 	rtw_buf_free(&pmlmepriv->assoc_req, &pmlmepriv->assoc_req_len);
 	rtw_buf_free(&pmlmepriv->assoc_rsp, &pmlmepriv->assoc_rsp_len);
 	rtw_free_mlme_ie_data(&pmlmepriv->wps_beacon_ie,
@@ -1685,7 +1685,7 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	if (rtw_access_ctrl(adapter, pstassoc->macaddr) == false)
 		return;
 
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_92D_AP_MODE)
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 		psta = rtw_get_stainfo(&adapter->stapriv, pstassoc->macaddr);
 		if (psta) {
@@ -1789,15 +1789,10 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	struct wlan_network *tgt_network = &(pmlmepriv->cur_network);
 
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
-#ifdef CONFIG_IOCTL_CFG80211
-#ifdef COMPAT_KERNEL_RELEASE
-
-#elif defined(CONFIG_IOCTL_CFG80211)
+#if defined(CONFIG_92D_AP_MODE)
 		rtw_cfg80211_indicate_sta_disassoc(adapter, pstadel->macaddr,
 						   *(u16 *)pstadel->rsvd);
 #endif /* defined(CONFIG_IOCTL_CFG80211) */
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 		return;
 	}
 
@@ -1999,9 +1994,9 @@ static void rtw_auto_scan_handler(struct rtw_adapter *padapter)
 
 void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 {
-#ifdef CONFIG_92D_AP_MODE
+#ifdef CONFIG_BR_EXT
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
-#endif /* CONFIG_92D_AP_MODE */
+#endif
 	struct registry_priv *pregistrypriv = &adapter->registrypriv;
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter *pbuddy_adapter = adapter->pbuddy_adapter;

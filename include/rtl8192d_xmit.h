@@ -102,7 +102,7 @@ s32 rtl8192du_hal_xmit(struct rtw_adapter *padapter,
 		       struct xmit_frame *pxmitframe);
 
 #ifdef CONFIG_HOSTAPD_MLME
-s32	rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt);
+s32	rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, struct sk_buff *pkt);
 #endif
 
 #endif

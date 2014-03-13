@@ -53,14 +53,12 @@ static void _rtw_init_stainfo(struct sta_info *psta)
 
 	psta->bpairwise_key_installed = false;
 
-#ifdef CONFIG_NATIVEAP_MLME
 	psta->nonerp_set = 0;
 	psta->no_short_slot_time_set = 0;
 	psta->no_short_preamble_set = 0;
 	psta->no_ht_gf_set = 0;
 	psta->no_ht_set = 0;
 	psta->ht_20mhz_set = 0;
-#endif
 
 	psta->under_exist_checking = 0;
 	psta->keep_alive_trycnt = 0;
@@ -433,8 +431,6 @@ u32	rtw_free_stainfo(struct rtw_adapter *padapter, struct sta_info *psta)
 
 	psta->has_legacy_ac = 0;
 
-#ifdef CONFIG_NATIVEAP_MLME
-
 	pstapriv->sta_dz_bitmap &= ~BIT(psta->aid);
 	pstapriv->tim_bitmap &= ~BIT(psta->aid);
 
@@ -442,8 +438,6 @@ u32	rtw_free_stainfo(struct rtw_adapter *padapter, struct sta_info *psta)
 		pstapriv->sta_aid[psta->aid - 1] = NULL;
 		psta->aid = 0;
 	}
-
-#endif	/*  CONFIG_NATIVEAP_MLME */
 
 	psta->under_exist_checking = 0;
 

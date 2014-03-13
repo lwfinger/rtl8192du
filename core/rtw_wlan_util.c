@@ -1526,7 +1526,7 @@ void update_TSF(struct mlme_ext_priv *pmlmeext, u8 *pframe, uint len)
 	u8 *pIE;
 	__le32 *pbuf;
 
-	pIE = pframe + sizeof(struct rtw_ieee80211_hdr_3addr);
+	pIE = pframe + sizeof(struct ieee80211_hdr_3addr);
 	pbuf = (__le32 *)pIE;
 	pmlmeext->TSFValue = le32_to_cpu(*(pbuf+1));
 	pmlmeext->TSFValue = pmlmeext->TSFValue << 32;

@@ -129,54 +129,43 @@ static struct ieee80211_channel rtw_5ghz_a_channels[] = {
 	CHAN5G(216, 0),
 };
 
-void rtw_2g_channels_init(struct ieee80211_channel *channels)
+static void rtw_2g_channels_init(struct ieee80211_channel *channels)
 {
 	memcpy((void*)channels, (void*)rtw_2ghz_channels,
-		sizeof(struct ieee80211_channel)*RTW_2G_CHANNELS_NUM
-	);
+		sizeof(struct ieee80211_channel)*RTW_2G_CHANNELS_NUM);
 }
 
-void rtw_5g_channels_init(struct ieee80211_channel *channels)
+static void rtw_5g_channels_init(struct ieee80211_channel *channels)
 {
 	memcpy((void*)channels, (void*)rtw_5ghz_a_channels,
-		sizeof(struct ieee80211_channel)*RTW_5G_CHANNELS_NUM
-	);
+		sizeof(struct ieee80211_channel)*RTW_5G_CHANNELS_NUM);
 }
 
-void rtw_2g_rates_init(struct ieee80211_rate *rates)
+static void rtw_2g_rates_init(struct ieee80211_rate *rates)
 {
 	memcpy(rates, rtw_g_rates,
-		sizeof(struct ieee80211_rate)*RTW_G_RATES_NUM
-	);
+		sizeof(struct ieee80211_rate)*RTW_G_RATES_NUM);
 }
 
-void rtw_5g_rates_init(struct ieee80211_rate *rates)
+static void rtw_5g_rates_init(struct ieee80211_rate *rates)
 {
 	memcpy(rates, rtw_a_rates,
-		sizeof(struct ieee80211_rate)*RTW_A_RATES_NUM
-	);
+		sizeof(struct ieee80211_rate)*RTW_A_RATES_NUM);
 }
 
-struct ieee80211_supported_band *rtw_spt_band_alloc(
-	enum ieee80211_band band
-	)
+static struct ieee80211_supported_band *rtw_spt_band_alloc(enum ieee80211_band band)
 {
 	struct ieee80211_supported_band *spt_band = NULL;
 	int n_channels, n_bitrates;
 	int len;
 
-	if (band == IEEE80211_BAND_2GHZ)
-	{
+	if (band == IEEE80211_BAND_2GHZ) {
 		n_channels = RTW_2G_CHANNELS_NUM;
 		n_bitrates = RTW_G_RATES_NUM;
-	}
-	else if (band == IEEE80211_BAND_5GHZ)
-	{
+	} else if (band == IEEE80211_BAND_5GHZ) {
 		n_channels = RTW_5G_CHANNELS_NUM;
 		n_bitrates = RTW_A_RATES_NUM;
-	}
-	else
-	{
+	} else {
 		goto exit;
 	}
 
@@ -193,13 +182,10 @@ struct ieee80211_supported_band *rtw_spt_band_alloc(
 	spt_band->n_channels = n_channels;
 	spt_band->n_bitrates = n_bitrates;
 
-	if (band == IEEE80211_BAND_2GHZ)
-	{
+	if (band == IEEE80211_BAND_2GHZ) {
 		rtw_2g_channels_init(spt_band->channels);
 		rtw_2g_rates_init(spt_band->bitrates);
-	}
-	else if (band == IEEE80211_BAND_5GHZ)
-	{
+	} else if (band == IEEE80211_BAND_5GHZ) {
 		rtw_5g_channels_init(spt_band->channels);
 		rtw_5g_rates_init(spt_band->bitrates);
 	}
@@ -211,7 +197,7 @@ exit:
 	return spt_band;
 }
 
-void rtw_spt_band_free(struct ieee80211_supported_band *spt_band)
+static void rtw_spt_band_free(struct ieee80211_supported_band *spt_band)
 {
 	u32 size;
 
@@ -322,7 +308,7 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	s32 notify_signal;
 	u8 buf[MAX_BSSINFO_LEN], *pbuf;
 	size_t len,bssinf_len=0;
-	struct rtw_ieee80211_hdr *pwlanhdr;
+	struct ieee80211_hdr *pwlanhdr;
 	unsigned short *fctrl;
 	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
@@ -330,7 +316,7 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	struct wiphy *wiphy = wdev->wiphy;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 
-	bssinf_len = pnetwork->network.IELength+sizeof (struct rtw_ieee80211_hdr_3addr);
+	bssinf_len = pnetwork->network.IELength+sizeof (struct ieee80211_hdr_3addr);
 	if (bssinf_len > MAX_BSSINFO_LEN) {
 		DBG_8192D("%s IE Length too long > %d byte\n",__func__,MAX_BSSINFO_LEN);
 		goto exit;
@@ -346,8 +332,8 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 
 	notify_timestamp = jiffies_to_msecs(jiffies)*1000; /* uSec */
 
-	notify_interval = le16_to_cpu(*(u16*)rtw_get_beacon_interval_from_ie(pnetwork->network.IEs));
-	notify_capability = le16_to_cpu(*(u16*)rtw_get_capability_from_ie(pnetwork->network.IEs));
+	notify_interval = le16_to_cpu(*(__le16 *)rtw_get_beacon_interval_from_ie(pnetwork->network.IEs));
+	notify_capability = le16_to_cpu(*(__le16 *)rtw_get_capability_from_ie(pnetwork->network.IEs));
 
 	notify_ie = pnetwork->network.IEs+_FIXED_IE_LENGTH_;
 	notify_ielen = pnetwork->network.IELength-_FIXED_IE_LENGTH_;
@@ -361,8 +347,8 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	}
 	pbuf = buf;
 
-	pwlanhdr = (struct rtw_ieee80211_hdr *)pbuf;
-	fctrl = &(pwlanhdr->frame_ctl);
+	pwlanhdr = (struct ieee80211_hdr *)pbuf;
+	fctrl = &(pwlanhdr->frame_control);
 	*(fctrl) = 0;
 
 	SetSeqNum(pwlanhdr, 0/*pmlmeext->mgnt_seq*/);
@@ -378,8 +364,8 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	memcpy(pwlanhdr->addr2, pnetwork->network.MacAddress, ETH_ALEN);
 	memcpy(pwlanhdr->addr3, pnetwork->network.MacAddress, ETH_ALEN);
 
-	pbuf += sizeof(struct rtw_ieee80211_hdr_3addr);
-	len = sizeof (struct rtw_ieee80211_hdr_3addr);
+	pbuf += sizeof(struct ieee80211_hdr_3addr);
+	len = sizeof (struct ieee80211_hdr_3addr);
 
 	memcpy(pbuf, pnetwork->network.IEs, pnetwork->network.IELength);
 	len += pnetwork->network.IELength;
@@ -443,20 +429,20 @@ void rtw_cfg80211_indicate_connect(struct rtw_adapter *padapter)
 		cfg80211_roamed(padapter->pnetdev, notify_channel,
 				cur_network->network.MacAddress,
 				pmlmepriv->assoc_req +
-				sizeof(struct rtw_ieee80211_hdr_3addr) + 2,
+				sizeof(struct ieee80211_hdr_3addr) + 2,
 				pmlmepriv->assoc_req_len -
-				sizeof(struct rtw_ieee80211_hdr_3addr) - 2,
+				sizeof(struct ieee80211_hdr_3addr) - 2,
 				pmlmepriv->assoc_rsp +
-				sizeof(struct rtw_ieee80211_hdr_3addr) + 6,
+				sizeof(struct ieee80211_hdr_3addr) + 6,
 				pmlmepriv->assoc_rsp_len -
-				sizeof(struct rtw_ieee80211_hdr_3addr) - 6,
+				sizeof(struct ieee80211_hdr_3addr) - 6,
 				GFP_ATOMIC);
 	} else {
 		cfg80211_connect_result(padapter->pnetdev, cur_network->network.MacAddress
-			, pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2
-			, pmlmepriv->assoc_req_len-sizeof(struct rtw_ieee80211_hdr_3addr)-2
-			, pmlmepriv->assoc_rsp+sizeof(struct rtw_ieee80211_hdr_3addr)+6
-			, pmlmepriv->assoc_rsp_len-sizeof(struct rtw_ieee80211_hdr_3addr)-6
+			, pmlmepriv->assoc_req+sizeof(struct ieee80211_hdr_3addr)+2
+			, pmlmepriv->assoc_req_len-sizeof(struct ieee80211_hdr_3addr)-2
+			, pmlmepriv->assoc_rsp+sizeof(struct ieee80211_hdr_3addr)+6
+			, pmlmepriv->assoc_rsp_len-sizeof(struct ieee80211_hdr_3addr)-6
 			, WLAN_STATUS_SUCCESS, GFP_ATOMIC);
 	}
 }
@@ -2533,10 +2519,11 @@ void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned c
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct net_device *ndev = padapter->pnetdev;
-	struct rtw_ieee80211_hdr *pwlanhdr;
+	struct ieee80211_hdr *pwlanhdr;
 	s32 freq;
 	int channel;
 	u8 *pmgmt_frame;
+	__le16 le_reason;
 	uint frame_len;
 	unsigned short *fctrl;
 	u8 mgmt_buf[128] = {0};
@@ -2554,9 +2541,9 @@ void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned c
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
 	pmgmt_frame = mgmt_buf;
-	pwlanhdr = (struct rtw_ieee80211_hdr *)pmgmt_frame;
+	pwlanhdr = (struct ieee80211_hdr *)pmgmt_frame;
 
-	fctrl = &(pwlanhdr->frame_ctl);
+	fctrl = &(pwlanhdr->frame_control);
 	*(fctrl) = 0;
 
 	memcpy(pwlanhdr->addr1, myid(&(padapter->eeprompriv)), ETH_ALEN);
@@ -2567,12 +2554,12 @@ void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned c
 	pmlmeext->mgnt_seq++;
 	SetFrameSubType(pmgmt_frame, WIFI_DEAUTH);
 
-	pmgmt_frame += sizeof(struct rtw_ieee80211_hdr_3addr);
-	frame_len = sizeof(struct rtw_ieee80211_hdr_3addr);
+	pmgmt_frame += sizeof(struct ieee80211_hdr_3addr);
+	frame_len = sizeof(struct ieee80211_hdr_3addr);
 
-	reason = cpu_to_le16(reason);
+	le_reason = cpu_to_le16(reason);
 	pmgmt_frame = rtw_set_fixed_ie(pmgmt_frame, _RSON_CODE_ ,
-				       (unsigned char *)&reason, &frame_len);
+				       (unsigned char *)&le_reason, &frame_len);
 
 	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, mgmt_buf, frame_len, flags, GFP_ATOMIC);
 #endif /* defined(RTW_USE_CFG80211_STA_EVENT) */
@@ -2604,7 +2591,7 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 	int dot11_hdr_len = 24;
 	int snap_len = 6;
 	unsigned char *pdata;
-	u16 frame_ctl;
+	u16 frame_control;
 	unsigned char src_mac_addr[6];
 	unsigned char dst_mac_addr[6];
 	struct ieee80211_hdr *dot11_hdr;
@@ -2634,15 +2621,15 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 	skb_pull(skb, rtap_len);
 
 	dot11_hdr = (struct ieee80211_hdr *)skb->data;
-	frame_ctl = le16_to_cpu(dot11_hdr->frame_control);
+	frame_control = le16_to_cpu(dot11_hdr->frame_control);
 	/* Check if the QoS bit is set */
-	if ((frame_ctl & RTW_IEEE80211_FCTL_FTYPE) == RTW_IEEE80211_FTYPE_DATA) {
+	if ((frame_control & RTW_IEEE80211_FCTL_FTYPE) == RTW_IEEE80211_FTYPE_DATA) {
 		/* Check if this ia a Wireless Distribution System (WDS) frame
 		 * which has 4 MAC addresses
 		 */
-		if (dot11_hdr->frame_control & 0x0080)
+		if (frame_control & 0x0080)
 			qos_len = 2;
-		if ((dot11_hdr->frame_control & 0x0300) == 0x0300)
+		if ((frame_control & 0x0300) == 0x0300)
 			dot11_hdr_len += 6;
 
 		memcpy(dst_mac_addr, dot11_hdr->addr1, sizeof(dst_mac_addr));
@@ -2664,7 +2651,7 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 		return ret;
 
 	}
-	else if ((frame_ctl & (RTW_IEEE80211_FCTL_FTYPE|RTW_IEEE80211_FCTL_STYPE))
+	else if ((frame_control & (RTW_IEEE80211_FCTL_FTYPE|RTW_IEEE80211_FCTL_STYPE))
 		== (RTW_IEEE80211_FTYPE_MGMT|RTW_IEEE80211_STYPE_ACTION)
 	)
 	{
@@ -2672,7 +2659,7 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 		struct xmit_frame		*pmgntframe;
 		struct pkt_attrib	*pattrib;
 		unsigned char	*pframe;
-		struct rtw_ieee80211_hdr *pwlanhdr;
+		struct ieee80211_hdr *pwlanhdr;
 		struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 		struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 		u8 *buf = skb->data;
@@ -2682,7 +2669,7 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 
 		if (rtw_action_frame_parse(buf, len, &category, &action) == false) {
 			DBG_8192D(FUNC_NDEV_FMT" frame_control:0x%x\n", FUNC_NDEV_ARG(ndev),
-				le16_to_cpu(((struct rtw_ieee80211_hdr_3addr *)buf)->frame_ctl));
+				le16_to_cpu(((struct ieee80211_hdr_3addr *)buf)->frame_control));
 			goto fail;
 		}
 
@@ -2716,7 +2703,7 @@ dump:
 		memcpy(pframe, (void*)buf, len);
 		pattrib->pktlen = len;
 
-		pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
+		pwlanhdr = (struct ieee80211_hdr *)pframe;
 		/* update seq number */
 		pmlmeext->mgnt_seq = GetSequence(pwlanhdr);
 		pattrib->seqnum = pmlmeext->mgnt_seq;
@@ -2729,7 +2716,7 @@ dump:
 	}
 	else
 	{
-		DBG_8192D("frame_ctl=0x%x\n", frame_ctl & (RTW_IEEE80211_FCTL_FTYPE|RTW_IEEE80211_FCTL_STYPE));
+		DBG_8192D("frame_control=0x%x\n", frame_control & (RTW_IEEE80211_FCTL_FTYPE|RTW_IEEE80211_FCTL_STYPE));
 	}
 
 fail:
@@ -3268,33 +3255,32 @@ void rtw_cfg80211_rx_action(struct rtw_adapter *adapter, u8 *frame, uint frame_l
 #ifdef CONFIG_P2P
 void rtw_cfg80211_issue_p2p_provision_request(struct rtw_adapter *padapter, const u8 *buf, size_t len)
 {
-	u16	wps_devicepassword_id = 0x0000;
+	__be16	wps_devicepassword_id = 0x0000;
 	uint	wps_devicepassword_id_len = 0;
-	u8			wpsie[255] = { 0x00 }, p2p_ie[255] = { 0x00 };
-	uint			p2p_ielen = 0;
-	uint			wpsielen = 0;
+	u8	wpsie[255] = { 0x00 }, p2p_ie[255] = { 0x00 };
+	uint	p2p_ielen = 0;
+	uint	wpsielen = 0;
 	u32	devinfo_contentlen = 0;
 	u8	devinfo_content[64] = { 0x00 };
 	u16	capability = 0;
 	uint capability_len = 0;
 	unsigned char category = RTW_WLAN_CATEGORY_PUBLIC;
-	u8			action = P2P_PUB_ACTION_ACTION;
-	u8			dialogToken = 1;
-	u32			p2poui = cpu_to_be32(P2POUI);
-	u8			oui_subtype = P2P_PROVISION_DISC_REQ;
-	u32			p2pielen = 0;
-	struct xmit_frame			*pmgntframe;
-	struct pkt_attrib			*pattrib;
-	unsigned char					*pframe;
-	struct rtw_ieee80211_hdr	*pwlanhdr;
-	unsigned short				*fctrl;
-	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
+	u8	action = P2P_PUB_ACTION_ACTION;
+	u8	dialogToken = 1;
+	__be32	p2poui = cpu_to_be32(P2POUI);
+	u8	oui_subtype = P2P_PROVISION_DISC_REQ;
+	u32	p2pielen = 0;
+	struct xmit_frame	*pmgntframe;
+	struct pkt_attrib	*pattrib;
+	unsigned char		*pframe;
+	struct ieee80211_hdr	*pwlanhdr;
+	unsigned short		*fctrl;
+	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-
 	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-	u8 *frame_body = (unsigned char *)(buf + sizeof(struct rtw_ieee80211_hdr_3addr));
-	size_t frame_body_len = len - sizeof(struct rtw_ieee80211_hdr_3addr);
+	u8 *frame_body = (unsigned char *)(buf + sizeof(struct ieee80211_hdr_3addr));
+	size_t frame_body_len = len - sizeof(struct ieee80211_hdr_3addr);
 
 	DBG_8192D("[%s] In\n", __func__);
 
@@ -3306,28 +3292,26 @@ void rtw_cfg80211_issue_p2p_provision_request(struct rtw_adapter *padapter, cons
 
 	rtw_get_wps_ie(frame_body + _PUBLIC_ACTION_IE_OFFSET_, frame_body_len - _PUBLIC_ACTION_IE_OFFSET_, wpsie, &wpsielen);
 	rtw_get_wps_attr_content(wpsie, wpsielen, WPS_ATTR_DEVICE_PWID, (u8*) &wps_devicepassword_id, &wps_devicepassword_id_len);
-	wps_devicepassword_id = be16_to_cpu(wps_devicepassword_id);
 
-	switch (wps_devicepassword_id)
-	{
-		case WPS_DPID_PIN:
-			pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_LABEL;
-			break;
-		case WPS_DPID_USER_SPEC:
-			pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_DISPLYA;
-			break;
-		case WPS_DPID_MACHINE_SPEC:
-			break;
-		case WPS_DPID_REKEY:
-			break;
-		case WPS_DPID_PBC:
-			pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_PUSH_BUTTON;
-			break;
-		case WPS_DPID_REGISTRAR_SPEC:
-			pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_KEYPAD;
-			break;
-		default:
-			break;
+	switch (be16_to_cpu(wps_devicepassword_id)) {
+	case WPS_DPID_PIN:
+		pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_LABEL;
+		break;
+	case WPS_DPID_USER_SPEC:
+		pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_DISPLYA;
+		break;
+	case WPS_DPID_MACHINE_SPEC:
+		break;
+	case WPS_DPID_REKEY:
+		break;
+	case WPS_DPID_PBC:
+		pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_PUSH_BUTTON;
+		break;
+	case WPS_DPID_REGISTRAR_SPEC:
+		pwdinfo->tx_prov_disc_info.wps_config_method_request = WPS_CM_KEYPAD;
+		break;
+	default:
+		break;
 	}
 
 	if (rtw_get_p2p_ie(frame_body + _PUBLIC_ACTION_IE_OFFSET_, frame_body_len - _PUBLIC_ACTION_IE_OFFSET_, p2p_ie, &p2p_ielen))
@@ -3344,9 +3328,7 @@ void rtw_cfg80211_issue_p2p_provision_request(struct rtw_adapter *padapter, cons
 	p2p_ielen = 0;
 
 	if ((pmgntframe = alloc_mgtxmitframe(pxmitpriv)) == NULL)
-	{
 		return;
-	}
 
 	/* update attribute */
 	pattrib = &pmgntframe->attrib;
@@ -3355,9 +3337,9 @@ void rtw_cfg80211_issue_p2p_provision_request(struct rtw_adapter *padapter, cons
 	memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
-	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
+	pwlanhdr = (struct ieee80211_hdr *)pframe;
 
-	fctrl = &(pwlanhdr->frame_ctl);
+	fctrl = &(pwlanhdr->frame_control);
 	*(fctrl) = 0;
 
 	memcpy(pwlanhdr->addr1, pwdinfo->tx_prov_disc_info.peerDevAddr, ETH_ALEN);
@@ -3368,8 +3350,8 @@ void rtw_cfg80211_issue_p2p_provision_request(struct rtw_adapter *padapter, cons
 	pmlmeext->mgnt_seq++;
 	SetFrameSubType(pframe, WIFI_ACTION);
 
-	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
-	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+	pframe += sizeof(struct ieee80211_hdr_3addr);
+	pattrib->pktlen = sizeof(struct ieee80211_hdr_3addr);
 
 	pframe = rtw_set_fixed_ie(pframe, 1, &(category), &(pattrib->pktlen));
 	pframe = rtw_set_fixed_ie(pframe, 1, &(action), &(pattrib->pktlen));
@@ -3424,16 +3406,16 @@ void rtw_cfg80211_issue_p2p_provision_request(struct rtw_adapter *padapter, cons
 
 	wpsielen = 0;
 	/*	WPS OUI */
-	*(u32*) (wpsie) = cpu_to_be32(WPSOUI);
+	*(__be32 *)(wpsie) = cpu_to_be32(WPSOUI);
 	wpsielen += 4;
 
 	/*	WPS version */
 	/*	Type: */
-	*(u16*) (wpsie + wpsielen) = cpu_to_be16(WPS_ATTR_VER1);
+	*(__be16 *)(wpsie + wpsielen) = cpu_to_be16(WPS_ATTR_VER1);
 	wpsielen += 2;
 
 	/*	Length: */
-	*(u16*) (wpsie + wpsielen) = cpu_to_be16(0x0001);
+	*(__be16 *)(wpsie + wpsielen) = cpu_to_be16(0x0001);
 	wpsielen += 2;
 
 	/*	Value: */
@@ -3441,15 +3423,15 @@ void rtw_cfg80211_issue_p2p_provision_request(struct rtw_adapter *padapter, cons
 
 	/*	Config Method */
 	/*	Type: */
-	*(u16*) (wpsie + wpsielen) = cpu_to_be16(WPS_ATTR_CONF_METHOD);
+	*(__be16 *)(wpsie + wpsielen) = cpu_to_be16(WPS_ATTR_CONF_METHOD);
 	wpsielen += 2;
 
 	/*	Length: */
-	*(u16*) (wpsie + wpsielen) = cpu_to_be16(0x0002);
+	*(__be16 *)(wpsie + wpsielen) = cpu_to_be16(0x0002);
 	wpsielen += 2;
 
 	/*	Value: */
-	*(u16*) (wpsie + wpsielen) = cpu_to_be16(pwdinfo->tx_prov_disc_info.wps_config_method_request);
+	*(__be16 *)(wpsie + wpsielen) = cpu_to_be16(pwdinfo->tx_prov_disc_info.wps_config_method_request);
 	wpsielen += 2;
 
 	pframe = rtw_set_ie(pframe, _VENDOR_SPECIFIC_IE_, wpsielen, (unsigned char *) wpsie, &pattrib->pktlen);
@@ -3642,7 +3624,7 @@ static int _cfg80211_rtw_mgmt_tx(struct rtw_adapter *padapter, u8 tx_ch, const u
 	unsigned char	*pframe;
 	int ret = _FAIL;
 	bool ack = true;
-	struct rtw_ieee80211_hdr *pwlanhdr;
+	struct ieee80211_hdr *pwlanhdr;
 	struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(padapter->rtw_wdev);
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
@@ -3723,7 +3705,7 @@ static int _cfg80211_rtw_mgmt_tx(struct rtw_adapter *padapter, u8 tx_ch, const u
 	memcpy(pframe, (void*)buf, len);
 	pattrib->pktlen = len;
 
-	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
+	pwlanhdr = (struct ieee80211_hdr *)pframe;
 	/* update seq number */
 	pmlmeext->mgnt_seq = GetSequence(pwlanhdr);
 	pattrib->seqnum = pmlmeext->mgnt_seq;
@@ -3792,7 +3774,7 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy,
 
 	if (rtw_action_frame_parse(buf, len, &category, &action) == false) {
 		DBG_8192D(FUNC_ADPT_FMT" frame_control:0x%x\n", FUNC_ADPT_ARG(padapter),
-			le16_to_cpu(((struct rtw_ieee80211_hdr_3addr *)buf)->frame_ctl));
+			le16_to_cpu(((struct ieee80211_hdr_3addr *)buf)->frame_control));
 		goto exit;
 	}
 
@@ -3948,19 +3930,17 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 	DBG_8192D("%s, ielen=%d\n", __func__, len);
 #endif
 
-	if (len>0)
-	{
-		if ((wps_ie = rtw_get_wps_ie(buf, len, NULL, &wps_ielen)))
-		{
+	if (len > 0) {
+		wps_ie = rtw_get_wps_ie(buf, len, NULL, &wps_ielen);
+		if (wps_ie) {
 			uint	attr_contentlen = 0;
-			u16	uconfig_method, *puconfig_method = NULL;
+			u16	*puconfig_method = NULL;
 
 			#ifdef CONFIG_DEBUG_CFG80211
 			DBG_8192D("probe_resp_wps_ielen=%d\n", wps_ielen);
 			#endif
 
-			if (pmlmepriv->wps_probe_resp_ie)
-			{
+			if (pmlmepriv->wps_probe_resp_ie) {
 				u32 free_len = pmlmepriv->wps_probe_resp_ie_len;
 				pmlmepriv->wps_probe_resp_ie_len = 0;
 				kfree(pmlmepriv->wps_probe_resp_ie);
@@ -3976,12 +3956,7 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 
 			/* add PUSH_BUTTON config_method by driver self in wpsie of probe_resp at GO Mode */
 			if ((puconfig_method = (u16*)rtw_get_wps_attr_content(wps_ie, wps_ielen, WPS_ATTR_CONF_METHOD , NULL, &attr_contentlen)) != NULL)
-			{
-				uconfig_method = WPS_CM_PUSH_BUTTON;
-				uconfig_method = cpu_to_be16(uconfig_method);
-
-				*puconfig_method |= uconfig_method;
-			}
+				*puconfig_method |= WPS_CM_PUSH_BUTTON;
 
 			memcpy(pmlmepriv->wps_probe_resp_ie, wps_ie, wps_ielen);
 			pmlmepriv->wps_probe_resp_ie_len = wps_ielen;
@@ -3989,11 +3964,10 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 		}
 
 		#ifdef CONFIG_P2P
-		if ((p2p_ie=rtw_get_p2p_ie(buf, len, NULL, &p2p_ielen)))
-		{
+		if ((p2p_ie=rtw_get_p2p_ie(buf, len, NULL, &p2p_ielen))) {
 			u8 is_GO = false;
 			u32 attr_contentlen = 0;
-			u16 cap_attr=0;
+			__le16 cap_attr = 0;
 
 			#ifdef CONFIG_DEBUG_CFG80211
 			DBG_8192D("probe_resp_p2p_ielen=%d\n", p2p_ielen);
@@ -4003,8 +3977,7 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 			if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CAPABILITY, (u8*)&cap_attr, (uint*) &attr_contentlen))
 			{
 				u8 grp_cap=0;
-				cap_attr = le16_to_cpu(cap_attr);
-				grp_cap = (u8)((cap_attr >> 8)&0xff);
+				grp_cap = (u8)((le16_to_cpu(cap_attr) >> 8) & 0xff);
 
 				is_GO = (grp_cap&BIT(0)) ? true:false;
 
@@ -4208,7 +4181,7 @@ static void rtw_cfg80211_init_ht_capab(struct ieee80211_sta_ht_cap *ht_cap, enum
 		ht_cap->mcs.rx_mask[1] = 0x00;
 		ht_cap->mcs.rx_mask[4] = 0x01;
 
-		ht_cap->mcs.rx_highest = MAX_BIT_RATE_40MHZ_MCS7;
+		ht_cap->mcs.rx_highest = cpu_to_le16(MAX_BIT_RATE_40MHZ_MCS7);
 	}
 	else if ((rf_type == RF_1T2R) || (rf_type==RF_2T2R))
 	{
@@ -4216,7 +4189,7 @@ static void rtw_cfg80211_init_ht_capab(struct ieee80211_sta_ht_cap *ht_cap, enum
 		ht_cap->mcs.rx_mask[1] = 0xFF;
 		ht_cap->mcs.rx_mask[4] = 0x01;
 
-		ht_cap->mcs.rx_highest = MAX_BIT_RATE_40MHZ_MCS15;
+		ht_cap->mcs.rx_highest = cpu_to_le16(MAX_BIT_RATE_40MHZ_MCS15);
 	}
 	else
 	{

@@ -22,9 +22,6 @@
 #include <cmd_osdep.h>
 #include <mlme_osdep.h>
 #include <rtw_cmd.h>
-#ifdef CONFIG_BR_EXT
-#include <rtw_br_ext.h>
-#endif /* CONFIG_BR_EXT */
 #include <usb_osintf.h>
 /*
 Caller and the rtw_cmd_thread can protect cmd_q by spin_lock.
@@ -1903,11 +1900,6 @@ void rtw_disassoc_cmd_callback(struct rtw_adapter *padapter,  struct cmd_obj *pc
 		RT_TRACE(_module_rtl871x_cmd_c_, _drv_err_, ("\n ***Error: disconnect_cmd_callback Fail ***\n."));
 		return;
 	}
-#ifdef CONFIG_BR_EXT
-	else /* clear bridge database */
-		nat25_db_cleanup(padapter);
-#endif /* CONFIG_BR_EXT */
-
 	/*  free cmd */
 	rtw_free_cmd_obj(pcmd);
 }

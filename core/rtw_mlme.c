@@ -1994,9 +1994,6 @@ static void rtw_auto_scan_handler(struct rtw_adapter *padapter)
 
 void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 {
-#ifdef CONFIG_BR_EXT
-	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
-#endif
 	struct registry_priv *pregistrypriv = &adapter->registrypriv;
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter *pbuddy_adapter = adapter->pbuddy_adapter;
@@ -2036,27 +2033,6 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 			rtw_auto_scan_handler(adapter);
 		}
 	}
-
-#ifdef CONFIG_BR_EXT
-
-	rcu_read_lock();
-
-	if (rcu_dereference(adapter->pnetdev->rx_handler_data) &&
-	    check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE)) {
-		/*  expire NAT2.5 entry */
-		nat25_db_expire(adapter);
-
-		if (adapter->pppoe_connection_in_progress > 0) {
-			adapter->pppoe_connection_in_progress--;
-		}
-
-		/*  due to rtw_dynamic_check_timer_handlder() is called every 2 seconds */
-		if (adapter->pppoe_connection_in_progress > 0) {
-			adapter->pppoe_connection_in_progress--;
-		}
-	}
-	rcu_read_unlock();
-#endif /*  CONFIG_BR_EXT */
 }
 
 #ifdef CONFIG_IOCTL_CFG80211

@@ -1960,38 +1960,12 @@ static int amsdu_to_msdu(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 		}
 
 		/* Indicat the packets to upper layer */
-		{
+		sub_skb->protocol =
+		    eth_type_trans(sub_skb, padapter->pnetdev);
+		sub_skb->dev = padapter->pnetdev;
 
-#ifdef CONFIG_BR_EXT
-			/*  Insert NAT2.5 RX here! */
-			struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-			void *br_port = NULL;
-
-			rcu_read_lock();
-			br_port =
-			    rcu_dereference(padapter->pnetdev->rx_handler_data);
-			rcu_read_unlock();
-
-			if (br_port &&
-			    (check_fwstate(pmlmepriv, WIFI_STATION_STATE |
-					   WIFI_ADHOC_STATE) == true)) {
-				if (nat25_handle_frame(padapter, sub_skb) == -1) {
-					/* priv->ext_stats.rx_data_drops++; */
-					/* DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n"); */
-					/* return FAIL; */
-
-					/*  bypass this frame to upper layer!! */
-				}
-			}
-#endif /*  CONFIG_BR_EXT */
-
-			sub_skb->protocol =
-			    eth_type_trans(sub_skb, padapter->pnetdev);
-			sub_skb->dev = padapter->pnetdev;
-
-			sub_skb->ip_summed = CHECKSUM_NONE;
-			netif_rx(sub_skb);
-		}
+		sub_skb->ip_summed = CHECKSUM_NONE;
+		netif_rx(sub_skb);
 	}
 
 exit:

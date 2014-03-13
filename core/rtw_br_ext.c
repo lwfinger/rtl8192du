@@ -166,7 +166,7 @@ static inline void __nat25_generate_ipx_network_addr_with_node(unsigned char *ne
 }
 
 static inline void __nat25_generate_ipx_network_addr_with_socket(unsigned char *networkAddr,
-				__be32 *ipxNetAddr, unsigned short *ipxSocketAddr)
+				__be32 *ipxNetAddr, __be16 *ipxSocketAddr)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
@@ -765,7 +765,7 @@ int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method)
 		__be32 *sender;
 
 		if (arp->ar_pro != __constant_htons(ETH_P_IP)) {
-			ERR_8192D("NAT25: arp protocol unknown (%4x)!\n", htons(arp->ar_pro));
+			ERR_8192D("NAT25: arp protocol unknown (%4x)!\n", arp->ar_pro);
 			return -1;
 		}
 
@@ -1218,7 +1218,7 @@ int nat25_db_handle(struct rtw_adapter *priv, struct sk_buff *skb, int method)
 						hdr->icmp6_cksum = csum_ipv6_magic(&iph->saddr, &iph->daddr,
 										be16_to_cpu(iph->payload_len),
 										IPPROTO_ICMPV6,
-										csum_partial((__u8 *)hdr, iph->payload_len, 0));
+										csum_partial((__u8 *)hdr, be16_to_cpu(iph->payload_len), 0));
 					}
 				}
 			}
@@ -1390,7 +1390,7 @@ void *scdb_findentry(struct rtw_adapter *priv, unsigned char *macaddr,
 	struct nat25_network_db_entry *db;
 	int hash;
 
-	__nat25_generate_ipv4_network_addr(networkAddr, (unsigned int *)ipaddr);
+	__nat25_generate_ipv4_network_addr(networkAddr, (__be32 *)ipaddr);
 	hash = __nat25_network_hash(networkAddr);
 	db = priv->nethash[hash];
 	while (db != NULL) {

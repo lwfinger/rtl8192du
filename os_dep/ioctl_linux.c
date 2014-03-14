@@ -3047,11 +3047,11 @@ static int rtw_wps_start(struct net_device *dev,
 	u32   u32wps_start = 0;
 	unsigned int uintRet = 0;
 
+	if (!pdata || padapter->bDriverStopped)
+		return -EINVAL;
 	uintRet = copy_from_user((void*) &u32wps_start, pdata->pointer, 4);
-	if (uintRet || padapter->bDriverStopped || pdata == NULL) {
-		ret = -EINVAL;
-		goto exit;
-	}
+	if (uintRet)
+		return -EINVAL;
 
 	if (u32wps_start == 0)
 		u32wps_start = *extra;
@@ -5090,30 +5090,32 @@ static int rtw_dbg_port(struct net_device *dev,
 			case 0x12: /* set rx_stbc */
 			{
 				struct registry_priv	*pregpriv = &padapter->registrypriv;
-				/*  0: disable, bit(0):enable 2.4g, bit(1):enable 5g, 0x3: enable both 2.4g and 5g */
-				/* default is set to enable 2.4GHZ for IOT issue with bufflao's AP at 5GHZ */
-				if (pregpriv && (extra_arg == 0 || extra_arg == 1|| extra_arg == 2 || extra_arg == 3))
-				{
+				/*  0: disable, bit(0):enable 2.4g, bit(1):enable 5g,
+				 * 0x3: enable both 2.4g and 5g
+				 * default is set to enable 2.4GHZ for IOT issue with
+				 * Buffalo's AP at 5GHZ
+				 */
+				if (pregpriv && (extra_arg >= 0 && extra_arg <= 3)) {
 					pregpriv->rx_stbc = extra_arg;
 					DBG_8192D("set rx_stbc =%d\n", pregpriv->rx_stbc);
-				}
-				else
+				} else {
 					DBG_8192D("get rx_stbc =%d\n", pregpriv->rx_stbc);
+				}
 
 			}
 			break;
 			case 0x13: /* set ampdu_enable */
 			{
 				struct registry_priv	*pregpriv = &padapter->registrypriv;
-				/*  0: disable, 0x1:enable (but wifi_spec should be 0), 0x2: force enable (don't care wifi_spec) */
-				if (pregpriv && extra_arg >= 0 && extra_arg < 3)
-				{
+				/*  0: disable, 0x1:enable (but wifi_spec should be 0),
+				 *  0x2: force enable (don't care wifi_spec)
+				 */
+				if (pregpriv && (extra_arg >= 0 && extra_arg < 3)) {
 					pregpriv->ampdu_enable = extra_arg;
 					DBG_8192D("set ampdu_enable =%d\n", pregpriv->ampdu_enable);
-				}
-				else
+				} else {
 					DBG_8192D("get ampdu_enable =%d\n", pregpriv->ampdu_enable);
-
+				}
 			}
 			break;
 			case 0x14: /* get wifi_spec */

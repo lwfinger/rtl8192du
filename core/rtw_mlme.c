@@ -2344,12 +2344,8 @@ int rtw_set_key(struct rtw_adapter *adapter,
 
 	INIT_LIST_HEAD(&pcmd->list);
 
-	/* _rtw_init_sema(&(pcmd->cmd_sem), 0); */
-
 	res = rtw_enqueue_cmd(pcmdpriv, pcmd);
-
 exit:
-
 	return res;
 }
 

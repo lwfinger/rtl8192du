@@ -342,7 +342,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 	if (adapter->bSurpriseRemoved)
 		return _FAIL;
 
-	if (!adapter->firmware) {
+	if (!adapter->firmware || !adapter->firmware->buffer) {
 		if (!get_fw_from_file(adapter)) {
 			rtStatus = _FAIL;
 			adapter->firmware = NULL;

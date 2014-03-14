@@ -556,20 +556,18 @@ static int set_group_key(struct rtw_adapter *padapter, u8 *key, u8 alg, int keyi
 
 	psetkeyparm->set_tx = 1;
 
-	switch (alg)
-	{
-		case _WEP40_:
-			keylen = 5;
-			break;
-		case _WEP104_:
-			keylen = 13;
-			break;
-		case _TKIP_:
-		case _TKIP_WTMIC_:
-		case _AES_:
-			keylen = 16;
-		default:
-			keylen = 16;
+	switch (alg) {
+	case _WEP40_:
+		keylen = 5;
+		break;
+	case _WEP104_:
+		keylen = 13;
+		break;
+	case _TKIP_:
+	case _TKIP_WTMIC_:
+	case _AES_:
+	default:
+		keylen = 16;
 	}
 
 	memcpy(&(psetkeyparm->key[0]), key, keylen);
@@ -1538,36 +1536,31 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(struct rtw_adapter *padapter, cha
 static int cfg80211_rtw_scan(struct wiphy *wiphy,
 			     struct cfg80211_scan_request *request)
 {
-	int i;
-	u8 _status = false;
-	int ret = 0;
 	struct rtw_adapter *padapter = wiphy_to_adapter(wiphy);
 	struct mlme_priv *pmlmepriv= &padapter->mlmepriv;
 	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
 	struct rtw_ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
-	u8 *wps_ie=NULL;
-	uint wps_ielen=0;
-	u8 *p2p_ie=NULL;
-	uint p2p_ielen=0;
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 #endif /* CONFIG_P2P */
 	struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(padapter->rtw_wdev);
 	struct cfg80211_ssid *ssids = request->ssids;
-	int social_channel = 0, j = 0;
-	bool need_indicate_scan_done = false;
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter *pbuddy_adapter = NULL;
 	struct mlme_priv *pbuddy_mlmepriv = NULL;
 #endif /* CONFIG_CONCURRENT_MODE */
-
-#ifdef CONFIG_DEBUG_CFG80211
-	DBG_8192D(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
-#endif
+	int i;
+	u8 _status = false;
+	int ret = 0;
+	u8 *wps_ie=NULL;
+	uint wps_ielen=0;
+	u8 *p2p_ie=NULL;
+	uint p2p_ielen=0;
+	int social_channel = 0, j = 0;
+	bool need_indicate_scan_done = false;
 
 #ifdef CONFIG_CONCURRENT_MODE
-	if (rtw_buddy_adapter_up(padapter))
-	{
+	if (rtw_buddy_adapter_up(padapter)) {
 		pbuddy_adapter = padapter->pbuddy_adapter;
 		pbuddy_mlmepriv = &(pbuddy_adapter->mlmepriv);
 	}
@@ -1576,14 +1569,6 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy,
 	spin_lock_bh(&pwdev_priv->scan_req_lock);
 	pwdev_priv->scan_request = request;
 	spin_unlock_bh(&pwdev_priv->scan_req_lock);
-
-	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
-	{
-
-#ifdef CONFIG_DEBUG_CFG80211
-		DBG_8192D("%s under WIFI_AP_STATE\n", __func__);
-#endif
-	}
 
 	if (_FAIL == rtw_pwr_wakeup(padapter)) {
 		need_indicate_scan_done = true;
@@ -2129,14 +2114,13 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	phead = get_list_head(queue);
 	pmlmepriv->pscanned = phead->next;
 
-	while (1)
-	{
-		if (rtw_end_of_queue_search(phead, pmlmepriv->pscanned) == true)
-		{
+	while (1) {
+		if (rtw_end_of_queue_search(phead, pmlmepriv->pscanned))
 			break;
-		}
 
 		pnetwork = container_of(pmlmepriv->pscanned, struct wlan_network, list);
+		if (!pnetwork)
+			break;
 		pmlmepriv->pscanned = pmlmepriv->pscanned->next;
 
 		dst_ssid = pnetwork->network.Ssid.Ssid;
@@ -2148,14 +2132,12 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		}
 
 		if (sme->ssid && sme->ssid_len) {
-			if (	pnetwork->network.Ssid.SsidLength != sme->ssid_len
-				|| _rtw_memcmp(pnetwork->network.Ssid.Ssid, (void *)sme->ssid, sme->ssid_len) == false
-			)
+			if (pnetwork->network.Ssid.SsidLength != sme->ssid_len ||
+			    !_rtw_memcmp(pnetwork->network.Ssid.Ssid, (void *)sme->ssid, sme->ssid_len))
 				continue;
 		}
 
-		if (sme->bssid)
-		{
+		if (sme->bssid) {
 			src_bssid = sme->bssid;
 
 			if (_rtw_memcmp(dst_bssid, (void *)src_bssid, ETH_ALEN)) {
@@ -2168,24 +2150,19 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 				break;
 			}
 
-		}
-		else if (sme->ssid && sme->ssid_len)
-		{
+		} else if (sme->ssid && sme->ssid_len) {
 			src_ssid = ndis_ssid.Ssid;
 
 			if ((_rtw_memcmp(dst_ssid, src_ssid, ndis_ssid.SsidLength) == true) &&
-				(pnetwork->network.Ssid.SsidLength==ndis_ssid.SsidLength))
-			{
+			    (pnetwork->network.Ssid.SsidLength == ndis_ssid.SsidLength)) {
 				DBG_8192D("matched by ssid\n");
-				matched=true;
+				matched = true;
 				break;
 			}
 		}
-
 	}
 
-	if ((matched == false) || (pnetwork== NULL))
-	{
+	if (!matched || !pnetwork) {
 		ret = -ENOENT;
 		DBG_8192D("connect, matched == false, goto exit\n");
 		spin_unlock_bh(&queue->lock);
@@ -2193,8 +2170,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		goto exit;
 	}
 
-	if (rtw_set_802_11_infrastructure_mode(padapter, pnetwork->network.InfrastructureMode) == false)
-	{
+	if (!rtw_set_802_11_infrastructure_mode(padapter, pnetwork->network.InfrastructureMode)) {
 		ret = -EPERM;
 		spin_unlock_bh(&queue->lock);
 		spin_unlock_bh(&pmlmepriv->lock);
@@ -2230,10 +2206,8 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	}
 
 	/* For WEP Shared auth */
-	if ((psecuritypriv->dot11AuthAlgrthm == dot11AuthAlgrthm_Shared
-		|| psecuritypriv->dot11AuthAlgrthm == dot11AuthAlgrthm_Auto) && sme->key
-	)
-	{
+	if ((psecuritypriv->dot11AuthAlgrthm == dot11AuthAlgrthm_Shared ||
+	    psecuritypriv->dot11AuthAlgrthm == dot11AuthAlgrthm_Auto) && sme->key) {
 		u32 wep_key_idx, wep_key_len,wep_total_len;
 		struct ndis_802_11_wep *pwep = NULL;
 		DBG_8192D("%s(): Shared/Auto WEP\n",__func__);
@@ -2246,13 +2220,12 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 			goto exit;
 		}
 
-		if (wep_key_len > 0)
-		{
+		if (wep_key_len > 0) {
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
 			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
 			pwep =(struct ndis_802_11_wep *) kmalloc(wep_total_len, GFP_KERNEL);
 			if (pwep == NULL) {
-				DBG_8192D(" wpa_set_encryption: pwep allocate fail !!!\n");
+				DBG_8192D("wpa_set_encryption: pwep allocate fail!!!\n");
 				ret = -ENOMEM;
 				goto exit;
 			}
@@ -2262,13 +2235,11 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 			pwep->KeyLength = wep_key_len;
 			pwep->Length = wep_total_len;
 
-			if (wep_key_len==13)
-			{
+			if (wep_key_len == 13) {
 				padapter->securitypriv.dot11PrivacyAlgrthm=_WEP104_;
 				padapter->securitypriv.dot118021XGrpPrivacy=_WEP104_;
 			}
-		}
-		else {
+		} else {
 			ret = -EINVAL;
 			goto exit;
 		}
@@ -2311,7 +2282,6 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 exit:
 
 	DBG_8192D("<=%s, ret %d\n",__func__, ret);
-
 	return ret;
 }
 
@@ -2324,8 +2294,7 @@ static int cfg80211_rtw_disconnect(struct wiphy *wiphy, struct net_device *ndev,
 
 	rtw_set_roaming(padapter, 0);
 
-	if (check_fwstate(&padapter->mlmepriv, _FW_LINKED))
-	{
+	if (check_fwstate(&padapter->mlmepriv, _FW_LINKED)) {
 		rtw_scan_abort(padapter);
 		LeaveAllPowerSaveMode(padapter);
 		rtw_disassoc_cmd(padapter, 500, false);
@@ -2338,7 +2307,6 @@ static int cfg80211_rtw_disconnect(struct wiphy *wiphy, struct net_device *ndev,
 
 		rtw_free_assoc_resources(padapter, 1);
 	}
-
 	return 0;
 }
 

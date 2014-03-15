@@ -449,11 +449,6 @@ u32 rtw_start_drv_threads(struct rtw_adapter *padapter)
 	u32 _status = _SUCCESS;
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("+rtw_start_drv_threads\n"));
-#ifdef CONFIG_XMIT_THREAD_MODE
-	padapter->xmitThread = kthread_run(rtw_xmit_thread, padapter, "RTW_XMIT_THREAD");
-	if (IS_ERR(padapter->xmitThread))
-		_status = _FAIL;
-#endif
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (padapter->isprimary == true)
@@ -477,19 +472,11 @@ void rtw_stop_drv_threads (struct rtw_adapter *padapter)
 	if (padapter->isprimary == true)
 #endif /* CONFIG_CONCURRENT_MODE */
 	{
-		/* Below is to termindate rtw_cmd_thread & event_thread... */
+		/* Below is to terminate rtw_cmd_thread & event_thread... */
 		_rtw_up_sema(&padapter->cmdpriv.cmd_queue_sema);
-		if (padapter->cmdThread) {
+		if (padapter->cmdThread)
 			_rtw_down_sema(&padapter->cmdpriv.terminate_cmdthread_sema);
-		}
 	}
-
-#ifdef CONFIG_XMIT_THREAD_MODE
-	/*  Below is to termindate tx_thread... */
-	_rtw_up_sema(&padapter->xmitpriv.xmit_sema);
-	_rtw_down_sema(&padapter->xmitpriv.terminate_xmitthread_sema);
-	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("\n drv_halt: rtw_xmit_thread can be terminated !\n"));
-#endif
 }
 
 static u8 rtw_init_default_value(struct rtw_adapter *padapter)

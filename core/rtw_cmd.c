@@ -408,11 +408,6 @@ u8 rtw_sitesurvey_cmd(struct rtw_adapter *padapter,
 	if (check_fwstate(pmlmepriv, _FW_LINKED))
 		rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_SCAN, 1);
 
-#ifdef CONFIG_P2P_PS
-	if (check_fwstate(pmlmepriv, _FW_LINKED))
-		p2p_ps_wk_cmd(padapter, P2P_PS_SCAN, 1);
-#endif /*  CONFIG_P2P_PS */
-
 	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
 	if (ph2c == NULL)
 		return _FAIL;
@@ -1904,11 +1899,6 @@ u8 rtw_drvextra_cmd_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 	case LPS_CTRL_WK_CID:
 		lps_ctrl_wk_hdl(padapter, (u8)pdrvextra_cmd->type_size);
 		break;
-#ifdef CONFIG_P2P_PS
-	case P2P_PS_WK_CID:
-		p2p_ps_wk_hdl(padapter, pdrvextra_cmd->type_size);
-		break;
-#endif /*  CONFIG_P2P_PS */
 	case P2P_PROTO_WK_CID:
 		/*	I used the type_size as the type command */
 		p2p_protocol_wk_hdl(padapter, pdrvextra_cmd->type_size);

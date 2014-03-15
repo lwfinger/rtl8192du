@@ -4399,14 +4399,6 @@ static void SetHwReg8192DU(struct rtw_adapter *adapter, u8 variable, u8 *val)
 		case HW_VAR_H2C_FW_JOINBSSRPT:
 			rtl8192d_set_FwJoinBssReport_cmd(adapter, (*(u8 *)val));
 			break;
-#ifdef CONFIG_P2P_PS
-		case HW_VAR_H2C_FW_P2P_PS_OFFLOAD:
-			{
-				u8	p2p_ps_state = (*(u8 *)val);
-				rtl8192d_set_p2p_ps_offload_cmd(adapter, p2p_ps_state);
-			}
-			break;
-#endif /*  CONFIG_P2P_PS */
 		case HW_VAR_INITIAL_GAIN:
 			{
 				struct DIG_T *dig_table = &pdmpriv->DM_DigTable;

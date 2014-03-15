@@ -299,21 +299,16 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 
 	/* if (pwrpriv->pwr_mode == PS_MODE_ACTIVE) */
 	if (ps_mode == PS_MODE_ACTIVE) {
-#ifdef CONFIG_P2P_PS
-		if (pwdinfo->opp_ps == 0)
-#endif /*  CONFIG_P2P_PS */
-		{
-			DBG_8192D
-			    ("rtw_set_ps_mode(): Busy Traffic , Leave 802.11 power save..\n");
+		DBG_8192D
+		    ("rtw_set_ps_mode(): Busy Traffic , Leave 802.11 power save..\n");
 
-			pwrpriv->smart_ps = smart_ps;
-			pwrpriv->pwr_mode = ps_mode;
+		pwrpriv->smart_ps = smart_ps;
+		pwrpriv->pwr_mode = ps_mode;
 
-			rtw_set_rpwm(padapter, PS_STATE_S4);
-			rtw_hal_set_hwreg(padapter, HW_VAR_H2C_FW_PWRMODE,
-					  (u8 *)(&ps_mode));
-			pwrpriv->bFwCurrentInPSMode = false;
-		}
+		rtw_set_rpwm(padapter, PS_STATE_S4);
+		rtw_hal_set_hwreg(padapter, HW_VAR_H2C_FW_PWRMODE,
+				  (u8 *)(&ps_mode));
+		pwrpriv->bFwCurrentInPSMode = false;
 	} else {
 		if (ps_rdy_check(padapter)) {
 			DBG_8192D
@@ -323,11 +318,6 @@ void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 			pwrpriv->pwr_mode = ps_mode;
 			pwrpriv->bFwCurrentInPSMode = true;
 			rtw_hal_set_hwreg(padapter, HW_VAR_H2C_FW_PWRMODE, (u8 *)(&ps_mode));
-#ifdef CONFIG_P2P_PS
-			/*  Set CTWindow after LPS */
-			if (pwdinfo->opp_ps == 1)
-				p2p_ps_wk_cmd(padapter, P2P_PS_ENABLE, 0);
-#endif /*  CONFIG_P2P_PS */
 			rtw_set_rpwm(padapter, PS_STATE_S2);
 		}
 	}
@@ -444,13 +434,8 @@ void LeaveAllPowerSaveMode(struct rtw_adapter *adapter)
 {
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 
-	/* DBG_8192D("%s.....\n",__func__); */
-	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {	/* connect */
-#ifdef CONFIG_P2P_PS
-		p2p_ps_wk_cmd(adapter, P2P_PS_DISABLE, 0);
-#endif /*  CONFIG_P2P_PS */
+	if (check_fwstate(pmlmepriv, _FW_LINKED))
 		rtw_lps_leave(adapter);
-	}
 }
 
 void rtw_init_pwrctrl_priv(struct rtw_adapter *padapter)

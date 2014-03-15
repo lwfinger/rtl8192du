@@ -923,17 +923,8 @@ unsigned int OnBeacon(struct rtw_adapter *adapt,
 		if (pmlmeinfo->state & WIFI_FW_AUTH_NULL) {
 			/* check the vendor of the assoc AP */
 			pmlmeinfo->assoc_AP_vendor =
-			    check_assoc_AP(pframe +
-					   sizeof(struct
-						  ieee80211_hdr_3addr),
-					   len -
-					   sizeof(struct
-						  ieee80211_hdr_3addr));
-#ifdef CONFIG_P2P_PS
-			/*  do P2P PS Before link ? , ToDo */
-			/*process_p2p_ps_ie(adapt, (pframe + WLAN_HDR_A3_LEN), (len - WLAN_HDR_A3_LEN)); */
-#endif /*  CONFIG_P2P_PS */
-
+			    check_assoc_AP(pframe + sizeof(struct ieee80211_hdr_3addr),
+					   len - sizeof(struct ieee80211_hdr_3addr));
 			/* update TSF Value */
 			update_TSF(pmlmeext, pframe, len);
 
@@ -974,11 +965,6 @@ unsigned int OnBeacon(struct rtw_adapter *adapt,
 					update_beacon_info(adapt, pframe,
 							   len, psta);
 				}
-#ifdef CONFIG_P2P_PS
-				process_p2p_ps_ie(adapt,
-						  (pframe + WLAN_HDR_A3_LEN),
-						  (len - WLAN_HDR_A3_LEN));
-#endif /* CONFIG_P2P_PS */
 			}
 		} else if ((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE) {
 			psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));

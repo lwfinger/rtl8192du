@@ -2382,13 +2382,6 @@ rtl8192d_HalDmWatchDog(
 		rtw_hal_get_hwreg(adapter, HW_VAR_FWLPS_RF_ON, (u8 *)(&bFwPSAwake));
 	}
 
-#ifdef CONFIG_P2P_PS
-	/*  Fw is under p2p powersaving mode, driver should stop dynamic mechanism. */
-	/*  modifed by thomas. 2011.06.11. */
-	if (adapter->wdinfo.p2p_ps_mode)
-		bFwPSAwake = false;
-#endif /*  CONFIG_P2P_PS */
-
 	/*  Stop dynamic mechanism when: */
 	/*  1. RF is OFF. (No need to do DM.) */
 	/*  2. Fw is under power saving mode for FwLPS. (Prevent from SW/FW I/O racing.) */
@@ -2398,9 +2391,8 @@ rtl8192d_HalDmWatchDog(
 	/*      wating to long for RFChangeInProgress.) */
 	/*  4. RFChangeInProgress is TRUE. (Prevent from broken by IPS/HW/SW Rf off.) */
 	/*  Noted by tynli. 2010.06.01. */
-	if ((hw_init_completed == true)
-		&& ((!bFwCurrentInPSMode) && bFwPSAwake))
-	{
+	if ((hw_init_completed == true) && ((!bFwCurrentInPSMode) &&
+	    bFwPSAwake)) {
 		/*  */
 		/*  Calculate Tx/Rx statistics. */
 		/*  */

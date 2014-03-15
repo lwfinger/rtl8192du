@@ -31,14 +31,6 @@
 #include <rtw_mlme.h>
 #include <linux/vmalloc.h>
 
-#ifdef CONFIG_DISABLE_MCS13TO15
-extern unsigned char MCS_rate_2R_MCS13TO15_OFF[16];
-extern unsigned char MCS_rate_2R[16];
-#else /* CONFIG_DISABLE_MCS13TO15 */
-extern unsigned char MCS_rate_2R[16];
-#endif /* CONFIG_DISABLE_MCS13TO15 */
-extern unsigned char MCS_rate_1R[16];
-
 int _rtw_init_mlme_priv(struct rtw_adapter *padapter)
 {
 	int i;
@@ -2761,19 +2753,8 @@ void rtw_update_ht_cap(struct rtw_adapter *padapter, u8 *pie, uint ie_len,
 				pmlmeinfo->HT_caps.u.HT_cap_element.
 				    MCS_rate[i] &= MCS_rate_1R[i];
 			} else {
-#ifdef CONFIG_DISABLE_MCS13TO15
-				if (pmlmeext->cur_bwmode == HT_CHANNEL_WIDTH_40 &&
-				    pregistrypriv->wifi_spec != 1) {
-					pmlmeinfo->HT_caps.u.HT_cap_element.
-					    MCS_rate[i] &=
-					    MCS_rate_2R_MCS13TO15_OFF[i];
-				} else
-					pmlmeinfo->HT_caps.u.HT_cap_element.
-					    MCS_rate[i] &= MCS_rate_2R[i];
-#else
 				pmlmeinfo->HT_caps.u.HT_cap_element.
 				    MCS_rate[i] &= MCS_rate_2R[i];
-#endif /* CONFIG_DISABLE_MCS13TO15 */
 			}
 			if (pregistrypriv->special_rf_path)
 				pmlmeinfo->HT_caps.u.HT_cap_element.

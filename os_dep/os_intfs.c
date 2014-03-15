@@ -399,36 +399,8 @@ int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 {
 	struct rtw_adapter *padapter = rtw_netdev_priv(pnetdev);
 
-#ifdef CONFIG_EASY_REPLACEMENT
-	struct net_device	*TargetNetdev = NULL;
-	struct rtw_adapter			*target_adapter = NULL;
-	struct net		*devnet = NULL;
-
-	if (padapter->bDongle == 1)
-	{
-		devnet = dev_net(pnetdev);
-		TargetNetdev = dev_get_by_name(devnet, "wlan0");
-		if (TargetNetdev) {
-			DBG_8192D("Force onboard module driver disappear !!!\n");
-			target_adapter = rtw_netdev_priv(TargetNetdev);
-			target_adapter->DriverState = DRIVER_DISAPPEAR;
-
-			padapter->pid[0] = target_adapter->pid[0];
-			padapter->pid[1] = target_adapter->pid[1];
-			padapter->pid[2] = target_adapter->pid[2];
-
-			dev_put(TargetNetdev);
-			unregister_netdev(TargetNetdev);
-
-			padapter->DriverState = DRIVER_REPLACE_DONGLE;
-		}
-	}
-#endif
-
 	if (dev_alloc_name(pnetdev, ifname) < 0)
-	{
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("dev_alloc_name, fail!\n"));
-	}
 
 	netif_carrier_off(pnetdev);
 	return 0;

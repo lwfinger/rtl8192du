@@ -825,12 +825,9 @@ static struct rtw_adapter  *rtw_sw_export = NULL;
 
 static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device_id *did)
 {
-	uint status = _FAIL;
 	struct rtw_adapter *if1 = NULL, *if2 = NULL;
 	struct dvobj_priv *dvobj = NULL;
-#ifdef CONFIG_MULTI_VIR_IFACES
-	int i;
-#endif /* CONFIG_MULTI_VIR_IFACES */
+	uint status = _FAIL;
 
 	/* step 0. */
 	process_spec_devid(did);
@@ -852,14 +849,6 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 	if ((if2 = rtw_drv_if2_init(if1, NULL, usb_set_intf_ops)) == NULL) {
 		goto free_if1;
 	}
-#ifdef CONFIG_MULTI_VIR_IFACES
-	for (i=0; i<if1->registrypriv.ext_iface_num;i++) {
-		if (rtw_drv_add_vir_if (if1, "wlan%d", usb_set_intf_ops) == NULL) {
-			DBG_8192D("rtw_drv_add_iface failed! (%d)\n", i);
-			break;
-		}
-	}
-#endif /* CONFIG_MULTI_VIR_IFACES */
 #endif
 
 	status = _SUCCESS;
@@ -895,18 +884,12 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 	LeaveAllPowerSaveMode(padapter);
 
 #ifdef CONFIG_CONCURRENT_MODE
-#ifdef CONFIG_MULTI_VIR_IFACES
-	rtw_drv_stop_vir_ifaces(dvobj);
-#endif /* CONFIG_MULTI_VIR_IFACES */
 	rtw_drv_if2_stop(dvobj->if2);
 #endif	/* CONFIG_CONCURRENT_MODE */
 
 	rtw_usb_if1_deinit(padapter);
 
 #ifdef CONFIG_CONCURRENT_MODE
-#ifdef CONFIG_MULTI_VIR_IFACES
-	rtw_drv_free_vir_ifaces(dvobj);
-#endif /* CONFIG_MULTI_VIR_IFACES */
 	rtw_drv_if2_free(dvobj->if2);
 #endif /* CONFIG_CONCURRENT_MODE */
 

@@ -149,12 +149,7 @@ struct registry_priv {
 	u8 ifname[16];
 	u8 if2name[16];
 	u8 notch_filter;
-
-#ifdef CONFIG_MULTI_VIR_IFACES
-	u8 ext_iface_num;/* primary/secondary iface is excluded */
-#endif
 };
-
 
 /* For registry parameters */
 #define RGTRY_OFT(field) ((u32)FIELD_OFFSET(struct registry_priv, field))

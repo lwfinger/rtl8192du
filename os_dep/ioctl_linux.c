@@ -1375,12 +1375,7 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 #endif /* CONFIG_P2P */
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_set_scan\n"));
 
-	#ifdef DBG_IOCTL
-	DBG_8192D("DBG_IOCTL %s:%d\n", __func__, __LINE__);
-	#endif
-
-	if (_FAIL == rtw_pwr_wakeup(padapter))
-	{
+	if (_FAIL == rtw_pwr_wakeup(padapter)) {
 		ret = -1;
 		goto exit;
 	}
@@ -1410,18 +1405,15 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 		goto exit;
 	}
 
-	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
-	{
+	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING)) {
 		indicate_wx_scan_complete_event(padapter);
 		goto exit;
 	}
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (check_buddy_fwstate(padapter,
-		_FW_UNDER_SURVEY|_FW_UNDER_LINKING|WIFI_UNDER_WPS) == true)
-	{
-		if (check_buddy_fwstate(padapter, _FW_UNDER_SURVEY))
-		{
+		_FW_UNDER_SURVEY|_FW_UNDER_LINKING|WIFI_UNDER_WPS)) {
+		if (check_buddy_fwstate(padapter, _FW_UNDER_SURVEY)) {
 			DBG_8192D("scanning_via_buddy_intf\n");
 			pmlmepriv->scanning_via_buddy_intf = true;
 		}
@@ -1433,21 +1425,18 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 #endif
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if (dc_check_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
-	{
+	if (dc_check_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING)) {
 		indicate_wx_scan_complete_event(padapter);
 		goto exit;
 	}
 #endif
 
-/*	Mareded by Albert 20101103 */
 /*	For the DMP WiFi Display project, the driver won't to scan because */
 /*	the pmlmepriv->scan_interval is always equal to 3. */
 /*	So, the wpa_supplicant won't find out the WPS SoftAP. */
 
 #ifdef CONFIG_P2P
-	if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-	{
+	if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)) {
 		rtw_p2p_set_pre_state(pwdinfo, rtw_p2p_state(pwdinfo));
 		rtw_p2p_set_state(pwdinfo, P2P_STATE_FIND_PHASE_SEARCH);
 		rtw_p2p_findphase_ex_set(pwdinfo, P2P_FINDPHASE_EX_FULL);
@@ -1458,12 +1447,10 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 	memset(ssid, 0, sizeof(struct ndis_802_11_ssid)*RTW_SSID_SCAN_AMOUNT);
 
 #if WIRELESS_EXT >= 17
-	if (wrqu->data.length == sizeof(struct iw_scan_req))
-	{
+	if (wrqu->data.length == sizeof(struct iw_scan_req)) {
 		struct iw_scan_req *req = (struct iw_scan_req *)extra;
 
-		if (wrqu->data.flags & IW_SCAN_THIS_ESSID)
-		{
+		if (wrqu->data.flags & IW_SCAN_THIS_ESSID) {
 			int len = min((int)req->essid_len, IW_ESSID_MAX_SIZE);
 
 			memcpy(ssid[0].Ssid, req->essid, len);
@@ -1477,14 +1464,11 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 
 			spin_unlock_bh(&pmlmepriv->lock);
 
-		}
-		else if (req->scan_type == IW_SCAN_TYPE_PASSIVE)
-		{
+		} else if (req->scan_type == IW_SCAN_TYPE_PASSIVE) {
 			DBG_8192D("rtw_wx_set_scan, req->scan_type == IW_SCAN_TYPE_PASSIVE\n");
 		}
 
-	}
-	else
+	} else
 #endif
 
 	if (wrqu->data.length >= WEXT_CSCAN_HEADER_SIZE &&
@@ -1499,40 +1483,39 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 			section = *(pos++); len-= 1;
 
 			switch (section) {
-				case WEXT_CSCAN_SSID_SECTION:
-					if (len < 1) {
-						len = 0;
-						break;
-					}
+			case WEXT_CSCAN_SSID_SECTION:
+				if (len < 1) {
+					len = 0;
+					break;
+				}
 
-					sec_len = *(pos++); len-= 1;
+				sec_len = *(pos++); len-= 1;
 
-					if (sec_len > 0 && sec_len<= len) {
-						ssid[ssid_index].SsidLength = sec_len;
-						memcpy(ssid[ssid_index].Ssid, pos, ssid[ssid_index].SsidLength);
-						ssid_index++;
-					}
+				if (sec_len > 0 && sec_len<= len) {
+					ssid[ssid_index].SsidLength = sec_len;
+					memcpy(ssid[ssid_index].Ssid, pos, ssid[ssid_index].SsidLength);
+					ssid_index++;
+				}
 
-					pos+= sec_len; len-= sec_len;
-					break;
-
-				case WEXT_CSCAN_CHANNEL_SECTION:
-					pos+= 1; len-= 1;
-					break;
-				case WEXT_CSCAN_ACTV_DWELL_SECTION:
-					pos+= 2; len-= 2;
-					break;
-				case WEXT_CSCAN_PASV_DWELL_SECTION:
-					pos+= 2; len-= 2;
-					break;
-				case WEXT_CSCAN_HOME_DWELL_SECTION:
-					pos+= 2; len-= 2;
-					break;
-				case WEXT_CSCAN_TYPE_SECTION:
-					pos+= 1; len-= 1;
-					break;
-				default:
-					len = 0; /*  stop parsing */
+				pos+= sec_len; len-= sec_len;
+				break;
+			case WEXT_CSCAN_CHANNEL_SECTION:
+				pos+= 1; len-= 1;
+				break;
+			case WEXT_CSCAN_ACTV_DWELL_SECTION:
+				pos+= 2; len-= 2;
+				break;
+			case WEXT_CSCAN_PASV_DWELL_SECTION:
+				pos+= 2; len-= 2;
+				break;
+			case WEXT_CSCAN_HOME_DWELL_SECTION:
+				pos+= 2; len-= 2;
+				break;
+			case WEXT_CSCAN_TYPE_SECTION:
+				pos+= 1; len-= 1;
+				break;
+			default:
+				len = 0; /*  stop parsing */
 			}
 		}
 		/* jeff: it has still some scan paramater to parse, we only do this now... */
@@ -1544,12 +1527,7 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 
 	if (_status == false)
 		ret = -1;
-
 exit:
-	#ifdef DBG_IOCTL
-	DBG_8192D("DBG_IOCTL %s:%d return %d\n", __func__, __LINE__, ret);
-	#endif
-
 	return ret;
 }
 
@@ -1575,12 +1553,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_get_scan\n"));
 	RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_info_, (" Start of Query SIOCGIWSCAN .\n"));
 
-	#ifdef DBG_IOCTL
-	DBG_8192D("DBG_IOCTL %s:%d\n", __func__, __LINE__);
-	#endif
-
-	if (padapter->pwrctrlpriv.brfoffbyhw && padapter->bDriverStopped)
-	{
+	if (padapter->pwrctrlpriv.brfoffbyhw && padapter->bDriverStopped) {
 		ret = -EINVAL;
 		goto exit;
 	}
@@ -1667,10 +1640,6 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 
 exit:
 
-	#ifdef DBG_IOCTL
-	DBG_8192D("DBG_IOCTL %s:%d return %d\n", __func__, __LINE__, ret);
-	#endif
-
 	return ret ;
 }
 
@@ -1688,31 +1657,15 @@ static int rtw_wx_set_essid(struct net_device *dev,
 	struct __queue *queue = &pmlmepriv->scanned_queue;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct list_head *phead;
-	s8 status = true;
 	struct wlan_network *pnetwork = NULL;
-	enum NDIS_802_11_AUTHENTICATION_MODE authmode;
 	struct ndis_802_11_ssid ndis_ssid;
+	s8 status = true;
+	enum NDIS_802_11_AUTHENTICATION_MODE authmode;
 	u8 *dst_ssid, *src_ssid;
-
 	uint ret = 0, len;
 
-	#ifdef DBG_IOCTL
-	DBG_8192D("DBG_IOCTL %s:%d\n", __func__, __LINE__);
-	#endif
-
-/*
 #ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->iface_type > PRIMARY_IFACE)
-	{
-		ret = -EINVAL;
-		goto exit;
-	}
-#endif
-*/
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (check_buddy_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
-	{
+	if (check_buddy_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING)) {
 		DBG_8192D("set ssid, but buddy_intf is under scanning or linking\n");
 
 		ret = -EINVAL;
@@ -1840,13 +1793,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 	}
 
 exit:
-
 	DBG_8192D("<=%s, ret %d\n", __func__, ret);
-
-	#ifdef DBG_IOCTL
-	DBG_8192D("DBG_IOCTL %s:%d return %d\n", __func__, __LINE__, ret);
-	#endif
-
 	return ret;
 }
 

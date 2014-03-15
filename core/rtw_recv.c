@@ -976,15 +976,6 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 				 (" SA==myself\n"));
-#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D
-			    ("DBG_RX_DROP_FRAME %s SA=%x:%x:%x:%x:%x:%x, myhwaddr= %x:%x:%x:%x:%x:%x\n",
-			     __func__, pattrib->src[0], pattrib->src[1],
-			     pattrib->src[2], pattrib->src[3], pattrib->src[4],
-			     pattrib->src[5], *(myhwaddr), *(myhwaddr + 1),
-			     *(myhwaddr + 2), *(myhwaddr + 3), *(myhwaddr + 4),
-			     *(myhwaddr + 5));
-#endif
 			ret = _FAIL;
 			goto exit;
 		}
@@ -994,10 +985,6 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
 				 (" ap2sta_data_frame:  compare DA fail; DA=%pM\n",
 				  pattrib->dst));
-#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D("DBG_RX_DROP_FRAME %s DA=%pM\n", __func__,
-				  pattrib->dst);
-#endif
 			ret = _FAIL;
 			goto exit;
 		}
@@ -1011,15 +998,6 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 				  pattrib->bssid));
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
 				 ("mybssid=%pM\n", mybssid));
-#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D
-			    ("DBG_RX_DROP_FRAME %s BSSID=%pM, mybssid=%pM\n",
-			     __func__, pattrib->bssid, mybssid);
-			DBG_8192D("this adapter = %d, buddy adapter = %d\n",
-				  adapter->adapter_type,
-				  adapter->pbuddy_adapter->adapter_type);
-#endif
-
 			if (!bmcast) {
 				DBG_8192D
 				    ("issue_deauth to the nonassociated ap=%pM for the reason(7)\n",
@@ -1040,11 +1018,6 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 		if (*psta == NULL) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 				 ("ap2sta: can't get psta under STATION_MODE ; drop pkt\n"));
-#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D
-			    ("DBG_RX_DROP_FRAME %s can't get psta under STATION_MODE ; drop pkt\n",
-			     __func__);
-#endif
 			ret = _FAIL;
 			goto exit;
 		}
@@ -1071,11 +1044,6 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 		if (*psta == NULL) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 				 ("can't get psta under MP_MODE ; drop pkt\n"));
-#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D
-			    ("DBG_RX_DROP_FRAME %s can't get psta under WIFI_MP_STATE ; drop pkt\n",
-			     __func__);
-#endif
 			ret = _FAIL;
 			goto exit;
 		}
@@ -1098,10 +1066,6 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 		}
 
 		ret = _FAIL;
-#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s fw_state:0x%x\n", __func__,
-			  get_fwstate(pmlmepriv));
-#endif
 	}
 
 exit:
@@ -1405,15 +1369,8 @@ static int validate_recv_data_frame(struct rtw_adapter *adapter,
 		break;
 	}
 
-	if (ret == _FAIL) {
-#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s case:%d, res:%d\n", __func__,
-			  pattrib->to_fr_ds, ret);
-#endif
+	if (ret == _FAIL || ret == RTW_RX_HANDLED)
 		goto exit;
-	} else if (ret == RTW_RX_HANDLED) {
-		goto exit;
-	}
 
 	if (psta == NULL) {
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
@@ -1422,8 +1379,6 @@ static int validate_recv_data_frame(struct rtw_adapter *adapter,
 		goto exit;
 	}
 
-	/* psta->rssi = prxcmd->rssi; */
-	/* psta->signal_quality= prxcmd->sq; */
 	precv_frame->psta = psta;
 
 	pattrib->amsdu = 0;
@@ -1559,11 +1514,6 @@ static int validate_recv_frame(struct rtw_adapter *adapter,
 	default:
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 			 ("validate_recv_data_frame fail! type=0x%x\n", type));
-#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D
-		    ("DBG_RX_DROP_FRAME validate_recv_data_frame fail! type=0x%x\n",
-		     type);
-#endif
 		retval = _FAIL;
 		break;
 	}
@@ -1992,14 +1942,8 @@ static int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_n
 	}
 
 	/*  Drop out the packet which SeqNum is smaller than WinStart */
-	if (SN_LESS(seq_num, preorder_ctrl->indicate_seq)) {
-#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("%s IndicateSeq: %d > NewSeq: %d\n", __func__,
-			  preorder_ctrl->indicate_seq, seq_num);
-#endif
-
+	if (SN_LESS(seq_num, preorder_ctrl->indicate_seq))
 		return false;
-	}
 
 	/*  */
 	/*  Sliding window manipulation. Conditions includes: */
@@ -2172,8 +2116,6 @@ static int recv_indicatepkt_reorder(struct rtw_adapter *padapter,
 				rtw_recv_indicatepkt(padapter, prframe);
 				return _SUCCESS;
 			}
-			DBG_8192D("DBG_RX_DROP_FRAME %s pattrib->qos !=1\n",
-				  __func__);
 			return _FAIL;
 		}
 
@@ -2307,13 +2249,8 @@ static int process_recv_indicatepkts(struct rtw_adapter *padapter,
 	struct ht_priv *phtpriv = &pmlmepriv->htpriv;
 
 	if (phtpriv->ht_option == true)	/* B/G/N Mode */ {
-		if (recv_indicatepkt_reorder(padapter, prframe) != _SUCCESS) {	/*  including perform A-MPDU Rx Ordering Buffer Control */
-#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D
-			    ("DBG_RX_DROP_FRAME %s recv_indicatepkt_reorder error!\n",
-			     __func__);
-#endif
-
+		if (recv_indicatepkt_reorder(padapter, prframe) != _SUCCESS) {
+			/*  perform A-MPDU Rx Ordering Buffer Control */
 			if ((padapter->bDriverStopped == false) &&
 			    (padapter->bSurpriseRemoved == false)) {
 				retval = _FAIL;
@@ -2325,11 +2262,6 @@ static int process_recv_indicatepkts(struct rtw_adapter *padapter,
 		if (retval != _SUCCESS) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 				 ("wlanhdr_to_ethhdr: drop pkt\n"));
-#ifdef DBG_RX_DROP_FRAME
-			DBG_8192D
-			    ("DBG_RX_DROP_FRAME %s wlanhdr_to_ethhdr error!\n",
-			     __func__);
-#endif
 			return retval;
 		}
 
@@ -2391,10 +2323,6 @@ static int recv_func_posthandle(struct rtw_adapter *padapter,
 	if (prframe == NULL) {
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 			 ("decryptor: drop pkt\n"));
-#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s decryptor: drop pkt\n",
-			  __func__);
-#endif
 		ret = _FAIL;
 		goto _recv_data_drop;
 	}
@@ -2402,11 +2330,6 @@ static int recv_func_posthandle(struct rtw_adapter *padapter,
 	if (prframe == NULL) {
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 			 ("recvframe_chk_defrag: drop pkt\n"));
-#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D
-		    ("DBG_RX_DROP_FRAME %s recvframe_chk_defrag: drop pkt\n",
-		     __func__);
-#endif
 		goto _recv_data_drop;
 	}
 
@@ -2414,10 +2337,6 @@ static int recv_func_posthandle(struct rtw_adapter *padapter,
 	if (prframe == NULL) {
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 			 ("portctrl: drop pkt\n"));
-#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D("DBG_RX_DROP_FRAME %s portctrl: drop pkt\n",
-			  __func__);
-#endif
 		ret = _FAIL;
 		goto _recv_data_drop;
 	}
@@ -2427,11 +2346,6 @@ static int recv_func_posthandle(struct rtw_adapter *padapter,
 	if (ret != _SUCCESS) {
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 			 ("recv_func: process_recv_indicatepkts fail!\n"));
-#ifdef DBG_RX_DROP_FRAME
-		DBG_8192D
-		    ("DBG_RX_DROP_FRAME %s recv_func: process_recv_indicatepkts fail!\n",
-		     __func__);
-#endif
 		rtw_free_recvframe(orig_prframe, pfree_recv_queue);	/* free this recv_frame */
 		goto _recv_data_drop;
 	}

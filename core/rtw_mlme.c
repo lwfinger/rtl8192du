@@ -897,11 +897,6 @@ exit:
 void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 {
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
-#ifdef CONFIG_MLME_EXT
-
-	mlmeext_surveydone_event_callback(adapter);
-
-#endif
 
 	spin_lock_bh(&pmlmepriv->lock);
 

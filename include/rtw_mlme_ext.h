@@ -337,11 +337,9 @@ struct mlme_ext_info
 
 /*  The channel information about this channel including joining, scanning, and power constraints. */
 struct rt_channel_info {
-	u8				ChannelNum;		/*  The channel number. */
+	u8 ChannelNum;		/*  The channel number. */
 	enum RT_SCAN_TYPE	ScanType;		/*  Scan type such as passive or active scan. */
-#ifdef CONFIG_FIND_BEST_CHANNEL
-	u32				rx_count;
-#endif
+	u32 rx_count;
 };
 
 int rtw_ch_set_search_ch(struct rt_channel_info *ch_set, const u32 ch);

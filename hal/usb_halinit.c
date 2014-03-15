@@ -3589,7 +3589,6 @@ static void hw_var_set_mlme_sitesurvey(struct rtw_adapter *adapter, u8 variable,
 #endif
 		reg_bcn_ctl = REG_BCN_CTRL;
 
-#ifdef CONFIG_FIND_BEST_CHANNEL
 
 	if ((check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 #ifdef CONFIG_CONCURRENT_MODE
@@ -3602,15 +3601,6 @@ static void hw_var_set_mlme_sitesurvey(struct rtw_adapter *adapter, u8 variable,
 
 	/*  Recieve all data frames */
 	value_rxfltmap2 = 0xFFFF;
-
-#else /* CONFIG_FIND_BEST_CHANNEL */
-
-	rcr_clear_bit = RCR_CBSSID_BCN;
-
-	/* config RCR to receive different BSSID & not to receive data frame */
-	value_rxfltmap2 = 0;
-
-#endif /* CONFIG_FIND_BEST_CHANNEL */
 
 	value_rcr = rtw_read32(adapter, REG_RCR);
 

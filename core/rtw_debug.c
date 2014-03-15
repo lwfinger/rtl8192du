@@ -1018,7 +1018,6 @@ int proc_get_all_sta_info(char *page, char **start,
 
 #endif
 
-#ifdef CONFIG_FIND_BEST_CHANNEL
 int proc_get_best_channel(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data)
@@ -1075,6 +1074,5 @@ int proc_get_best_channel(char *page, char **start,
 	*eof = 1;
 	return len;
 }
-#endif /* CONFIG_FIND_BEST_CHANNEL */
 
 #endif

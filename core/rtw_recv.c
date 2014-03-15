@@ -1422,17 +1422,16 @@ exit:
 static int validate_recv_frame(struct rtw_adapter *adapter,
 			struct recv_frame_hdr *precv_frame)
 {
-	/* shall check frame subtype, to / from ds, da, bssid */
-
-	/* then call check if rx seq/frag. duplicated. */
+	/* shall check frame subtype, to / from ds, da, bssid
+	 * then call check if rx seq/frag. duplicated.
+	 */
+	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
+	struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
 	u8 type;
 	u8 subtype;
 	int retval = _SUCCESS;
-	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
 	u8 *ptr = precv_frame->rx_data;
 	u8 ver = (unsigned char)(*ptr) & 0x3;
-#ifdef CONFIG_FIND_BEST_CHANNEL
-	struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
 
 	if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS) {
 		int ch_set_idx =
@@ -1441,7 +1440,6 @@ static int validate_recv_frame(struct rtw_adapter *adapter,
 		if (ch_set_idx >= 0)
 			pmlmeext->channel_set[ch_set_idx].rx_count++;
 	}
-#endif
 
 	/* add version chk */
 	if (ver != 0) {

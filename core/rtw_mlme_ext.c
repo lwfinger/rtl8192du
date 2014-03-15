@@ -2103,47 +2103,7 @@ exit:
 unsigned int on_action_spct(struct rtw_adapter *adapt,
 			    struct recv_frame_hdr *precv_frame)
 {
-	unsigned int ret = _FAIL;
-	struct sta_info *psta = NULL;
-	struct sta_priv *pstapriv = &adapt->stapriv;
-	u8 *pframe = precv_frame->rx_data;
-	uint frame_len = precv_frame->len;
-	u8 *frame_body =
-	    (u8 *)(pframe + sizeof(struct ieee80211_hdr_3addr));
-	u8 category;
-	u8 action;
-
-	DBG_8192D(FUNC_NDEV_FMT "\n", FUNC_NDEV_ARG(adapt->pnetdev));
-
-	psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
-
-	if (!psta)
-		goto exit;
-
-	category = frame_body[0];
-	if (category != RTW_WLAN_CATEGORY_SPECTRUM_MGMT)
-		goto exit;
-
-	action = frame_body[1];
-	switch (action) {
-	case RTW_WLAN_ACTION_SPCT_MSR_REQ:
-	case RTW_WLAN_ACTION_SPCT_MSR_RPRT:
-	case RTW_WLAN_ACTION_SPCT_TPC_REQ:
-	case RTW_WLAN_ACTION_SPCT_TPC_RPRT:
-		break;
-	case RTW_WLAN_ACTION_SPCT_CHL_SWITCH:
-#ifdef CONFIG_SPCT_CH_SWITCH
-		ret = on_action_spct_ch_switch(adapt, psta, &frame_body[2],
-					       frame_len - (frame_body -
-							    pframe) - 2);
-#endif
-		break;
-	default:
-		break;
-	}
-
-exit:
-	return ret;
+	return _FAIL;
 }
 
 unsigned int OnAction_qos(struct rtw_adapter *adapt,
@@ -11530,18 +11490,8 @@ int concurrent_chk_start_clnt_join(struct rtw_adapter *adapt)
 		}
 
 		if (inform_ch_switch) {
-#ifdef CONFIG_SPCT_CH_SWITCH
-			if (1) {
-				rtw_ap_inform_ch_switch(pbuddy_adapter,
-							pmlmeext->cur_channel,
-							pmlmeext->
-							cur_ch_offset);
-			} else
-#endif
-			{
-				/* issue deauth to all stas if if2 is at ap mode */
-				rtw_sta_flush(pbuddy_adapter);
-			}
+			/* issue deauth to all stas if if2 is at ap mode */
+			rtw_sta_flush(pbuddy_adapter);
 			rtw_hal_set_hwreg(adapt, HW_VAR_CHECK_TXBUF, 0);
 		}
 	} else if (check_fwstate(pbuddy_mlmepriv, _FW_LINKED) == true && check_fwstate(pbuddy_mlmepriv, WIFI_STATION_STATE) == true) {	/* for Client Mode/p2p client */

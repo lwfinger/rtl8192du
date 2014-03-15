@@ -604,17 +604,10 @@ void rtl8192du_recv_tasklet(void *priv)
 
 		recvbuf2recvframe(padapter, pskb);
 
-#ifdef CONFIG_PREALLOC_RECV_SKB
-
 		skb_reset_tail_pointer(pskb);
 		pskb->len = 0;
 
 		skb_queue_tail(&precvpriv->free_recv_skb_queue, pskb);
-
-#else
-		dev_kfree_skb_any(pskb);
-#endif
-
 	}
 }
 
@@ -629,19 +622,12 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 
 	precvpriv->rx_pending_cnt --;
 
-	if (padapter->bSurpriseRemoved || padapter->bDriverStopped||padapter->bReadPortCancel)
-	{
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped(%d) OR bSurpriseRemoved(%d)\n", padapter->bDriverStopped, padapter->bSurpriseRemoved));
+	if (padapter->bSurpriseRemoved || padapter->bDriverStopped||padapter->bReadPortCancel) {
+		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
+			 ("usb_read_port_complete:bDriverStopped(%d) OR bSurpriseRemoved(%d)\n",
+			 padapter->bDriverStopped, padapter->bSurpriseRemoved));
 
-	#ifdef CONFIG_PREALLOC_RECV_SKB
 		precvbuf->reuse = true;
-	#else
-		if (precvbuf->pskb) {
-			DBG_8192D("==> free skb(%p)\n",precvbuf->pskb);
-			dev_kfree_skb_any(precvbuf->pskb);
-		}
-	#endif
-
 		return;
 	}
 
@@ -720,13 +706,10 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port:precvbuf ==NULL\n"));
 		return _FAIL;
 	}
-#ifdef CONFIG_PREALLOC_RECV_SKB
 	if ((precvbuf->reuse == false) || (precvbuf->pskb == NULL)) {
 		if (NULL != (precvbuf->pskb = skb_dequeue(&precvpriv->free_recv_skb_queue)))
 			precvbuf->reuse = true;
 	}
-#endif
-
 	if (precvbuf != NULL) {
 		rtl8192du_init_recvbuf(adapter, precvbuf);
 

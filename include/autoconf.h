@@ -54,10 +54,6 @@
 	#define CONFIG_TSF_RESET_OFFLOAD 1			/*  For 2 PORT TSF SYNC. */
 #endif	/*  CONFIG_CONCURRENT_MODE */
 
-/* Interface  Related Config */
-
-#define CONFIG_PREALLOC_RECV_SKB	1
-
 /*
  * USB VENDOR REQ BUFFER ALLOCATION METHOD
  * if not set we'll use function local variable (stack memory)

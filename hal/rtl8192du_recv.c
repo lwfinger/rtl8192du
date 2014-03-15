@@ -45,8 +45,11 @@ void rtl8192du_init_recvbuf(struct rtw_adapter *padapter, struct recv_buf *precv
 int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 {
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
+	struct sk_buff *pskb=NULL;
 	int	i, res = _SUCCESS;
 	struct recv_buf *precvbuf;
+	SIZE_PTR tmpaddr=0;
+	SIZE_PTR alignment=0;
 
 	tasklet_init(&precvpriv->recv_tasklet,
 	     (void(*)(unsigned long))rtl8192du_recv_tasklet,
@@ -66,8 +69,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 
 	precvbuf = (struct recv_buf*)precvpriv->precv_buf;
 
-	for (i=0; i < NR_RECVBUFF ; i++)
-	{
+	for (i=0; i < NR_RECVBUFF ; i++) {
 		INIT_LIST_HEAD(&precvbuf->list);
 
 		spin_lock_init(&precvbuf->recvbuf_lock);
@@ -87,33 +89,24 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 	precvpriv->free_recv_buf_queue_cnt = NR_RECVBUFF;
 	skb_queue_head_init(&precvpriv->rx_skb_queue);
 
-#ifdef CONFIG_PREALLOC_RECV_SKB
-	{
-		int i;
-		SIZE_PTR tmpaddr=0;
-		SIZE_PTR alignment=0;
-		struct sk_buff *pskb=NULL;
+	skb_queue_head_init(&precvpriv->free_recv_skb_queue);
 
-		skb_queue_head_init(&precvpriv->free_recv_skb_queue);
+	for (i = 0; i < NR_PREALLOC_RECV_SKB; i++) {
+		pskb = netdev_alloc_skb(padapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 
-		for (i = 0; i < NR_PREALLOC_RECV_SKB; i++) {
-			pskb = netdev_alloc_skb(padapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
+		if (pskb) {
+			pskb->dev = padapter->pnetdev;
 
-			if (pskb) {
-				pskb->dev = padapter->pnetdev;
+			tmpaddr = (SIZE_PTR)pskb->data;
+			alignment = tmpaddr & (RECVBUFF_ALIGN_SZ-1);
+			skb_reserve(pskb, (RECVBUFF_ALIGN_SZ - alignment));
 
-				tmpaddr = (SIZE_PTR)pskb->data;
-				alignment = tmpaddr & (RECVBUFF_ALIGN_SZ-1);
-				skb_reserve(pskb, (RECVBUFF_ALIGN_SZ - alignment));
-
-				skb_queue_tail(&precvpriv->free_recv_skb_queue, pskb);
-			}
-
-			pskb=NULL;
-
+			skb_queue_tail(&precvpriv->free_recv_skb_queue, pskb);
 		}
+
+		pskb=NULL;
+
 	}
-#endif
 
 exit:
 
@@ -140,12 +133,10 @@ void rtl8192du_free_recv_priv (struct rtw_adapter *padapter)
 
 	skb_queue_purge(&precvpriv->rx_skb_queue);
 
-#ifdef CONFIG_PREALLOC_RECV_SKB
 
 	if (skb_queue_len(&precvpriv->free_recv_skb_queue)) {
 		DBG_8192D(KERN_WARNING "free_recv_skb_queue not empty, %d\n", skb_queue_len(&precvpriv->free_recv_skb_queue));
 	}
 
 	skb_queue_purge(&precvpriv->free_recv_skb_queue);
-#endif
 }

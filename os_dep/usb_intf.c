@@ -662,11 +662,7 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	padapter->isprimary = true;
 	padapter->adapter_type = PRIMARY_ADAPTER;
 	padapter->iface_id = IFACE_ID0;
-	#ifndef CONFIG_HWPORT_SWAP
 	padapter->iface_type = IFACE_PORT0;
-	#else
-	padapter->iface_type = IFACE_PORT1;
-	#endif
 	dvobj->padapters[dvobj->iface_nums++] = padapter;
 #endif
 

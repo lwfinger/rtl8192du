@@ -103,9 +103,9 @@ void	rtl8192d_Add_RateATid(struct rtw_adapter * adapter, u32 bitmap, u8 arg);
 void	rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_state);
 #endif /* CONFIG_P2P */
 
-#ifdef CONFIG_TSF_RESET_OFFLOAD
+#ifdef CONFIG_CONCURRENT_MODE
 int reset_tsf(struct rtw_adapter * adapter, u8 reset_port);
-#endif	/*  CONFIG_TSF_RESET_OFFLOAD */
+#endif	/*  CONFIG_CONCURRENT_MODE */
 
 #ifdef CONFIG_WOWLAN
 struct set_wowlan_parm {

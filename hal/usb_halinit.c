@@ -3184,14 +3184,14 @@ static void hw_var_set_opmode(struct rtw_adapter *adapter, u8 variable, u8 *val)
 
 			/* dis BCN0 ATIM  WND if if1 is station */
 			rtw_write8(adapter, REG_BCN_CTRL, rtw_read8(adapter, REG_BCN_CTRL)|BIT(0));
-#ifdef CONFIG_TSF_RESET_OFFLOAD
+#ifdef CONFIG_CONCURRENT_MODE
 			/*  Reset TSF for STA+AP concurrent mode */
 			if (check_buddy_fwstate(adapter, (WIFI_STATION_STATE|WIFI_ASOC_STATE))) {
 				if (reset_tsf(adapter, IFACE_PORT1) == false)
 					DBG_8192D("ERROR! %s()-%d: Reset port1 TSF fail\n",
 						__func__, __LINE__);
 			}
-#endif	/*  CONFIG_TSF_RESET_OFFLOAD */
+#endif	/*  CONFIG_CONCURRENT_MODE */
 		}
 
 	}
@@ -3261,14 +3261,14 @@ static void hw_var_set_opmode(struct rtw_adapter *adapter, u8 variable, u8 *val)
 
 			/* dis BCN1 ATIM  WND if if2 is station */
 			rtw_write8(adapter, REG_BCN_CTRL_1, rtw_read8(adapter, REG_BCN_CTRL_1)|BIT(0));
-#ifdef CONFIG_TSF_RESET_OFFLOAD
+#ifdef CONFIG_CONCURRENT_MODE
 			/*  Reset TSF for STA+AP concurrent mode */
 			if (check_buddy_fwstate(adapter, (WIFI_STATION_STATE|WIFI_ASOC_STATE))) {
 				if (reset_tsf(adapter, IFACE_PORT0) == false)
 					DBG_8192D("ERROR! %s()-%d: Reset port0 TSF fail\n",
 						__func__, __LINE__);
 			}
-#endif /*  CONFIG_TSF_RESET_OFFLOAD */
+#endif /*  CONFIG_CONCURRENT_MODE */
 #endif /*  CONFIG_CONCURRENT_MODE */
 		}
 
@@ -3375,7 +3375,7 @@ static void hw_var_set_correct_tsf(struct rtw_adapter *adapter, u8 variable,
 		/* enable related TSF function */
 		rtw_write8(adapter, REG_BCN_CTRL_1, rtw_read8(adapter, REG_BCN_CTRL_1)|BIT(3));
 
-#ifdef CONFIG_TSF_RESET_OFFLOAD
+#ifdef CONFIG_CONCURRENT_MODE
 		/*  Update buddy port's TSF(TBTT) if it is SoftAP for beacon TX issue! */
 		if ((pmlmeinfo->state&0x03) == WIFI_FW_STATION_STATE
 			&& check_buddy_fwstate(adapter, WIFI_AP_STATE)) {
@@ -3383,7 +3383,7 @@ static void hw_var_set_correct_tsf(struct rtw_adapter *adapter, u8 variable,
 				DBG_8192D("ERROR! %s()-%d: Reset port0 TSF fail\n",
 					__func__, __LINE__);
 		}
-#endif	/*  CONFIG_TSF_RESET_OFFLOAD */
+#endif	/*  CONFIG_CONCURRENT_MODE */
 
 	}
 	else	/*  adapter->iface_type == IFACE_PORT1 */
@@ -3412,7 +3412,7 @@ static void hw_var_set_correct_tsf(struct rtw_adapter *adapter, u8 variable,
 			/* enable related TSF function */
 			rtw_write8(adapter, REG_BCN_CTRL_1, rtw_read8(adapter, REG_BCN_CTRL_1)|BIT(3));
 		}
-#ifdef CONFIG_TSF_RESET_OFFLOAD
+#ifdef CONFIG_CONCURRENT_MODE
 		/*  Update buddy port's TSF if it is SoftAP for beacon TX issue! */
 		if ((pmlmeinfo->state&0x03) == WIFI_FW_STATION_STATE
 			&& check_buddy_fwstate(adapter, WIFI_AP_STATE)) {
@@ -3420,7 +3420,7 @@ static void hw_var_set_correct_tsf(struct rtw_adapter *adapter, u8 variable,
 				DBG_8192D("ERROR! %s()-%d: Reset port1 TSF fail\n",
 					__func__, __LINE__);
 		}
-#endif	/*  CONFIG_TSF_RESET_OFFLOAD */
+#endif	/*  CONFIG_CONCURRENT_MODE */
 	}
 
 	if (((pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE) || ((pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE))

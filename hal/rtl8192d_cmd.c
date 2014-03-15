@@ -818,7 +818,7 @@ void rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus)
 
 }
 
-#ifdef CONFIG_TSF_RESET_OFFLOAD
+#ifdef CONFIG_CONCURRENT_MODE
 /*
 	ask FW to Reset sync register at Beacon early interrupt
 */
@@ -857,7 +857,7 @@ int reset_tsf(struct rtw_adapter * adapter, u8 reset_port)
 	return(loop_cnt >= 10) ? _FAIL : true;
 }
 
-#endif	/*  CONFIG_TSF_RESET_OFFLOAD */
+#endif	/*  CONFIG_CONCURRENT_MODE */
 
 #ifdef CONFIG_WOWLAN
 

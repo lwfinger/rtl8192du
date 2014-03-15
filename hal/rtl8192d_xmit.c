@@ -43,10 +43,6 @@ void handle_txrpt_ccx_8192d(struct rtw_adapter *adapter, void *buf)
 {
 	struct txrpt_ccx_8192d *txrpt_ccx = buf;
 
-	#ifdef DBG_CCX
-	dump_txrpt_ccx_8192d(buf);
-	#endif
-
 	if (txrpt_ccx->int_ccx) {
 		if (txrpt_ccx->pkt_ok)
 			rtw_ack_tx_done(&adapter->xmitpriv, RTW_SCTX_DONE_SUCCESS);

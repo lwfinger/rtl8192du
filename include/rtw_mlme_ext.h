@@ -412,10 +412,7 @@ struct mlme_ext_priv
 	/* recv_decache check for Action_public frame */
         u8 action_public_dialog_token;
 	u16	 action_public_rxseq;
-
-#ifdef CONFIG_80211D
 	u8 update_channel_plan_by_ap_done;
-#endif
 	u8 active_keep_alive_check;
 };
 

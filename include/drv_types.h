@@ -149,14 +149,9 @@ struct registry_priv {
 
 	u8  special_rf_path; /* 0: 2T2R ,1: only turn on path A 1T1R, 2: only turn on path B 1T1R */
 	u8	mac_phy_mode; /* 0:by efuse, 1:smsp, 2:dmdp, 3:dmsp. */
-
-#ifdef CONFIG_80211D
 	u8 enable80211d;
-#endif
-
 	u8 ifname[16];
 	u8 if2name[16];
-
 	u8 notch_filter;
 
 #ifdef CONFIG_MULTI_VIR_IFACES

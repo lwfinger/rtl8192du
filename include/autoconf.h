@@ -56,8 +56,6 @@
 	#define CONFIG_TSF_RESET_OFFLOAD 1			/*  For 2 PORT TSF SYNC. */
 #endif	/*  CONFIG_CONCURRENT_MODE */
 
-#define CONFIG_80211D
-
 /* Interface  Related Config */
 
 #define CONFIG_PREALLOC_RECV_SKB	1

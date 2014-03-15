@@ -8888,7 +8888,6 @@ unsigned int receive_disconnect(struct rtw_adapter *adapt,
 	return _SUCCESS;
 }
 
-#ifdef CONFIG_80211D
 static void process_80211d(struct rtw_adapter *adapt,
 			   struct wlan_bssid_ex *bssid)
 {
@@ -9015,7 +9014,6 @@ static void process_80211d(struct rtw_adapter *adapt,
 			       (chplan_sta[i].ChannelNum <= 14)) {
 				chplan_new[k].ChannelNum =
 				    chplan_sta[i].ChannelNum;
-/*				chplan_new[k].ScanType = chplan_sta[i].ScanType; */
 				chplan_new[k].ScanType = SCAN_PASSIVE;
 				i++;
 				k++;
@@ -9084,7 +9082,6 @@ static void process_80211d(struct rtw_adapter *adapt,
 			while ((i < MAX_CHANNEL_NUM) && (chplan_sta[i].ChannelNum != 0)) {
 				chplan_new[k].ChannelNum =
 				    chplan_sta[i].ChannelNum;
-/*				chplan_new[k].ScanType = chplan_sta[i].ScanType; */
 				chplan_new[k].ScanType = SCAN_PASSIVE;
 				i++;
 				k++;
@@ -9142,7 +9139,6 @@ static void process_80211d(struct rtw_adapter *adapt,
 		i++;
 	}
 }
-#endif
 
 /****************************************************************************
 
@@ -9204,9 +9200,7 @@ void report_survey_event(struct rtw_adapter *adapt,
 		kfree(pevtcmd);
 		return;
 	}
-#ifdef CONFIG_80211D
 	process_80211d(adapt, &psurvey_evt->bss);
-#endif
 
 	rtw_enqueue_cmd(pcmdpriv, pcmd_obj);
 

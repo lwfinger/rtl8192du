@@ -131,9 +131,7 @@ int rtw_mc2u_disable = 0;
 
 static int rtw_mac_phy_mode; /* 0:by efuse, 1:smsp, 2:dmdp, 3:dmsp. */
 
-#ifdef CONFIG_80211D
 static int rtw_80211d = 0;
-#endif
 
 static char *ifname = "wlan%d";
 module_param(ifname, charp, 0644);
@@ -193,9 +191,7 @@ module_param(rtw_mc2u_disable, int, 0644);
 
 module_param(rtw_mac_phy_mode, int, 0644);
 
-#ifdef CONFIG_80211D
 module_param(rtw_80211d, int, 0644);
-#endif
 
 static uint rtw_notch_filter = RTW_NOTCH_FILTER;
 module_param(rtw_notch_filter, uint, 0644);
@@ -283,9 +279,7 @@ static uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev)
 	registry_par->mac_phy_mode = rtw_mac_phy_mode;
 	GlobalDebugLevel = debug;
 
-#ifdef CONFIG_80211D
 	registry_par->enable80211d = (u8)rtw_80211d;
-#endif
 
 	snprintf(registry_par->ifname, 16, "%s", ifname);
 	snprintf(registry_par->if2name, 16, "%s", if2name);

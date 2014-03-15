@@ -87,8 +87,6 @@
 
 #define RTL8192D_DUAL_MAC_MODE_SWITCH	0
 
-#define SWLCK   1
-
 #define FW_PROCESS_VENDOR_CMD 1
 
 #define DBG 0

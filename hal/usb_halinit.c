@@ -1506,18 +1506,15 @@ static void dump_wakup_reason(struct rtw_adapter *padapter)
 
 static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 {
-	u8	val8 = 0, tmpU1b;
-	u16	val16;
-	u32	boundary, i = 0,  status = _SUCCESS;
-#if SWLCK == 0
-	u32	j;
-#endif /* SWLCK == 0 */
 	struct hal_data_8192du  *pHalData = GET_HAL_DATA(padapter);
 	struct pwrctrl_priv		*pwrctrlpriv = &padapter->pwrctrlpriv;
 	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	struct rtw_adapter *	Buddyadapter = padapter->pbuddy_adapter;
 #endif
+	u8	val8 = 0, tmpU1b;
+	u16	val16;
+	u32	boundary, i = 0,  status = _SUCCESS;
 	u32 init_start_time = rtw_get_current_time();
 
 	padapter->init_adpt_in_progress = true;
@@ -1896,37 +1893,13 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 		rtl8192d_dm_CheckTXPowerTracking(padapter);
 
 		rtl8192d_PHY_LCCalibrate(padapter);
-		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY
-		&& ((pHalData->interfaceIndex == 0 && pHalData->BandSet92D == BAND_ON_2_4G)
-			|| (pHalData->interfaceIndex == 1 && pHalData->BandSet92D == BAND_ON_5G)))
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY &&
+		    ((pHalData->interfaceIndex == 0 &&
+		     pHalData->BandSet92D == BAND_ON_2_4G) ||
+		     (pHalData->interfaceIndex == 1 &&
+		     pHalData->BandSet92D == BAND_ON_5G)))
 			RELEASE_GLOBAL_MUTEX(GlobalMutexForMac0_2G_Mac1_5G);
 		/* 5G and 2.4G must wait sometime to let RF LO ready */
-		/* by sherry 2010.06.28 */
-#if SWLCK == 0
-		{
-			u32 tmpRega, tmpRegb;
-			for (j = 0;j<10000;j++)
-			{
-				rtw_udelay_os(MAX_STALL_TIME);
-				if (pHalData->rf_type == RF_1T1R)
-				{
-					tmpRega = PHY_QueryRFReg(padapter, (enum RF_RADIO_PATH_E)RF_PATH_A, 0x2a, bMaskDWord);
-					if ((tmpRega&BIT11) == BIT11)
-						break;
-				}
-				else
-				{
-					tmpRega = PHY_QueryRFReg(padapter, (enum RF_RADIO_PATH_E)RF_PATH_A, 0x2a, bMaskDWord);
-					tmpRegb = PHY_QueryRFReg(padapter, (enum RF_RADIO_PATH_E)RF_PATH_B, 0x2a, bMaskDWord);
-					if (((tmpRega&BIT11) == BIT11)&&((tmpRegb&BIT11) == BIT11))
-						break;
-					/*  temply add for DMSP */
-					if (pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY&&(pHalData->interfaceIndex!= 0))
-						break;
-				}
-			}
-		}
-#endif
 	}
 
 	PHY_InitPABias92D(padapter);

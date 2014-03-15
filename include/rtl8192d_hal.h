@@ -92,9 +92,7 @@ static u32	RF_REG_Param_for_C_CUT_2G[3][RF_REG_NUM_for_C_CUT_2G] = {
 			{0x643BC,	0xFC038,	0x07C1A,	0x41289,	0x01840},
 			{0x243BC,	0xFC438,	0x07C1A,	0x4128B,	0x0FC41}};
 
-#if SWLCK == 1
 static u32 RF_REG_SYN_G4_for_C_CUT_2G = 0xD1C31&0x7FF;
-#endif
 
 static u32	RF_REG_Param_for_C_CUT_5G_internalPA[3][RF_REG_NUM_for_C_CUT_5G_internalPA] = {
 			{0x01a00,	0x40443,	0x00eb5,	0x89bec,	0x94a12,	0x94a12,	0x94a12},

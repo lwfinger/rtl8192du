@@ -2215,17 +2215,12 @@ PHY_RestoreRFENV(
 			}
 			else if (RF_REG_for_C_CUT_5G[i] == RF_SYN_G4)
 			{
-#if SWLCK == 1
 				u4tmp2 = (RF_REG_Param_for_C_CUT_5G[index][i]&0x7FF)|(u4tmp << 11);
 
 				if (channel == 36)
 					u4tmp2 &= ~(BIT7|BIT6);
 
 				PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask, u4tmp2);
-#else
-				u4tmp2 = RF_REG_Param_for_C_CUT_5G[index][i];
-				PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, 0xFF8FF, u4tmp2);
-#endif
 			} else {
 				PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask, RF_REG_Param_for_C_CUT_5G[index][i]);
 			}
@@ -2314,21 +2309,19 @@ PHY_RestoreRFENV(
 
 		for (i = 0; i < RF_REG_NUM_for_C_CUT_2G; i++)
 		{
-#if SWLCK == 1
 			if (RF_REG_for_C_CUT_2G[i] == RF_SYN_G7)
-				PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)path, RF_REG_for_C_CUT_2G[i]|MaskforPhySet, bRFRegOffsetMask, (RF_REG_Param_for_C_CUT_2G[index][i] | BIT17));
+				PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)path,
+					     RF_REG_for_C_CUT_2G[i]|MaskforPhySet,
+					     bRFRegOffsetMask, (RF_REG_Param_for_C_CUT_2G[index][i] | BIT17));
 			else
-#endif
-			PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)path, RF_REG_for_C_CUT_2G[i]|MaskforPhySet, bRFRegOffsetMask, RF_REG_Param_for_C_CUT_2G[index][i]);
+				PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)path,
+					     RF_REG_for_C_CUT_2G[i]|MaskforPhySet,
+					     bRFRegOffsetMask, RF_REG_Param_for_C_CUT_2G[index][i]);
 		}
 
-#if SWLCK == 1
-		/* for SWLCK */
-
-		PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)path, RF_SYN_G4|MaskforPhySet, bRFRegOffsetMask, RF_REG_SYN_G4_for_C_CUT_2G | (u4tmp << 11));
-#endif
-		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 0)
-		{
+		PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)path, RF_SYN_G4|MaskforPhySet,
+			     bRFRegOffsetMask, RF_REG_SYN_G4_for_C_CUT_2G | (u4tmp << 11));
+		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 0) {
 			if (bNeedPowerDownRadio) {
 				PHY_RestoreRFENV(adapter, path, MaskforPhySet, &u4RegValue);
 			}
@@ -4449,106 +4442,14 @@ phy_IQCalibrate_5G_Normal(
 	}
 }
 
-#if SWLCK != 1
-static void
-phy_LCCalibrate92D(
-	struct rtw_adapter *	adapter,
-	bool		is2T
-	)
-{
-	u8	tmpReg, index = 0;
-	u32	RF_mode[2], tmpu4Byte[2];
-	u8	path = is2T?2:1;
-#if SWLCK == 1
-	u16	timeout = 800, timecount = 0;
-#endif
-
-	/* Check continuous TX and Packet TX */
-	tmpReg = rtw_read8(adapter, 0xd03);
-
-	if ((tmpReg&0x70) != 0)			/* Deal with contisuous TX case */
-		rtw_write8(adapter, 0xd03, tmpReg&0x8F);	/* disable all continuous TX */
-	else							/*  Deal with Packet TX case */
-		rtw_write8(adapter, REG_TXPAUSE, 0xFF);			/*  block all queues */
-
-	PHY_SetBBReg(adapter, rFPGA0_AnalogParameter4, 0xF00000, 0x0F);
-
-	for (index = 0; index <path; index ++)
-	{
-		/* 1. Read original RF mode */
-		RF_mode[index] = PHY_QueryRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_AC, bRFRegOffsetMask);
-
-		/* 2. Set RF mode = standby mode */
-		PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_AC, 0x70000, 0x01);
-
-		tmpu4Byte[index] = PHY_QueryRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G4, bRFRegOffsetMask);
-		PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G4, 0x700, 0x07);
-
-		/* 4. Set LC calibration begin */
-		PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_CHNLBW, 0x08000, 0x01);
-
-	}
-
-#if SWLCK == 1
-	for (index = 0; index <path; index ++)
-	{
-		while (!(PHY_QueryRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G6, BIT11)) &&
-			timecount <= timeout)
-		{
-
-			#ifdef CONFIG_LONG_DELAY_ISSUE
-			rtw_msleep_os(50);
-			#else
-			rtw_mdelay_os(50);
-			#endif
-			timecount += 50;
-		}
-	}
-#else
-	#ifdef CONFIG_LONG_DELAY_ISSUE
-	rtw_msleep_os(100);
-	#else
-	rtw_mdelay_os(100);
-	#endif
-#endif
-
-	/* Restore original situation */
-	for (index = 0; index <path; index ++)
-	{
-		PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G4, bRFRegOffsetMask, tmpu4Byte[index]);
-		PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_AC, bRFRegOffsetMask, RF_mode[index]);
-	}
-
-	if ((tmpReg&0x70) != 0)
-	{
-		/* Path-A */
-		rtw_write8(adapter, 0xd03, tmpReg);
-	}
-	else /*  Deal with Packet TX case */
-	{
-		rtw_write8(adapter, REG_TXPAUSE, 0x00);
-	}
-
-	PHY_SetBBReg(adapter, rFPGA0_AnalogParameter4, 0xF00000, 0x00);
-}
-#endif  /* SWLCK != 1, amy, temp remove */
-
-static u32
-get_abs(
-	u32	val1,
-	u32	val2
-	)
+static u32 get_abs(u32	val1, u32 val2)
 {
 	u32 ret = 0;
 
 	if (val1 >= val2)
-	{
 		ret = val1 - val2;
-	}
 	else
-	{
 		ret = val2 - val1;
-	}
 	return ret;
 }
 
@@ -4765,11 +4666,7 @@ phy_LCCalibrate(
 	bool		is2T
 	)
 {
-#if SWLCK == 1
 	phy_LCCalibrate92DSW(adapter, is2T);
-#else
-	phy_LCCalibrate92D(adapter, is2T);
-#endif
 }
 
 /* Analog Pre-distortion calibration */

@@ -11882,16 +11882,8 @@ u8 set_chplan_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 
 u8 led_blink_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 {
-#ifdef CONFIG_LED_HANDLED_BY_CMD_THREAD
-	struct LedBlink_param *ledBlink_param;
-#endif
 	if (!pbuf)
 		return H2C_PARAMETERS_ERROR;
-
-#ifdef CONFIG_LED_HANDLED_BY_CMD_THREAD
-	ledBlink_param = (struct LedBlink_param *)pbuf;
-	BlinkHandler(ledBlink_param->pled);
-#endif
 	return H2C_SUCCESS;
 }
 

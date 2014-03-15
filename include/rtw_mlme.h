@@ -431,15 +431,8 @@ struct mlme_priv {
 
 #ifdef CONFIG_92D_AP_MODE
 
-struct hostapd_priv
-{
+struct hostapd_priv {
 	struct rtw_adapter *padapter;
-
-#ifdef CONFIG_HOSTAPD_MLME
-	struct net_device *pmgnt_netdev;
-	struct usb_anchor anchored;
-#endif
-
 };
 
 int hostapd_mode_init(struct rtw_adapter *padapter);

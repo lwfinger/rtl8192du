@@ -321,15 +321,6 @@ void rtw_hal_bcn_related_reg_setting(struct rtw_adapter *padapter)
 		padapter->HalFunc.SetBeaconRelatedRegistersHandler(padapter);
 }
 
-#ifdef CONFIG_HOSTAPD_MLME
-s32	rtw_hal_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, struct sk_buff *pkt)
-{
-	if (padapter->HalFunc.hostap_mgnt_xmit_entry)
-		return padapter->HalFunc.hostap_mgnt_xmit_entry(padapter, pkt);
-	return _FAIL;
-}
-#endif /* CONFIG_HOSTAPD_MLME */
-
 void rtw_hal_notch_filter(struct rtw_adapter *adapter, bool enable)
 {
 	if (adapter->HalFunc.hal_notch_filter)

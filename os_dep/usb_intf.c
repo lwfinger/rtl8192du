@@ -740,22 +740,18 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 	DBG_8192D("MAC Address from pnetdev->dev_addr= %pM\n", pnetdev->dev_addr);
 
-#ifdef CONFIG_HOSTAPD_MLME
-	hostapd_mode_init(padapter);
-#endif
-
 	/* step 6. Tell the network stack we exist */
 	if (register_netdev(pnetdev) != 0) {
 		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("register_netdev() failed\n"));
 		goto free_hal_data;
 	}
 
-	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-drv_init - adapter->bDriverStopped=%d, adapter->bSurpriseRemoved=%d\n",padapter->bDriverStopped, padapter->bSurpriseRemoved));
-	DBG_8192D("bDriverStopped:%d, bSurpriseRemoved:%d, bup:%d, hw_init_completed:%d\n"
-		,padapter->bDriverStopped
-		,padapter->bSurpriseRemoved
-		,padapter->bup
-		,padapter->hw_init_completed
+	RT_TRACE(_module_hci_intfs_c_, _drv_err_,
+		 ("-drv_init - adapter->bDriverStopped=%d, adapter->bSurpriseRemoved=%d\n",
+		 padapter->bDriverStopped, padapter->bSurpriseRemoved));
+	DBG_8192D("bDriverStopped:%d, bSurpriseRemoved:%d, bup:%d, hw_init_completed:%d\n",
+		  padapter->bDriverStopped, padapter->bSurpriseRemoved,
+		  padapter->bup, padapter->hw_init_completed
 	);
 
 	status = _SUCCESS;
@@ -795,9 +791,6 @@ static void rtw_usb_if1_deinit(struct rtw_adapter *if1)
 
 #ifdef CONFIG_92D_AP_MODE
 	free_mlme_ap_info(if1);
-	#ifdef CONFIG_HOSTAPD_MLME
-	hostapd_mode_unload(if1);
-	#endif
 #endif
 
 	if (if1->DriverState != DRIVER_DISAPPEAR) {

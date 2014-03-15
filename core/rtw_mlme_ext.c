@@ -615,19 +615,11 @@ void mgt_dispatcher(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 	case WIFI_ASSOCREQ:
 	case WIFI_REASSOCREQ:
 		_mgt_dispatcher(adapt, ptable, precv_frame);
-#ifdef CONFIG_HOSTAPD_MLME
-		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
-			rtw_hostapd_mlme_rx(adapt, precv_frame);
-#endif
 		break;
 	case WIFI_PROBEREQ:
-		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
-#ifdef CONFIG_HOSTAPD_MLME
-			rtw_hostapd_mlme_rx(adapt, precv_frame);
-#else
+		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 			_mgt_dispatcher(adapt, ptable, precv_frame);
-#endif
-		} else
+		else
 			_mgt_dispatcher(adapt, ptable, precv_frame);
 		break;
 	case WIFI_BEACON:

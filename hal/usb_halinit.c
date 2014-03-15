@@ -4998,10 +4998,5 @@ void rtl8192du_set_hal_ops(struct rtw_adapter *padapter)
 	pHalFunc->hal_xmit = &rtl8192du_hal_xmit;
 	pHalFunc->mgnt_xmit = &rtl8192du_mgnt_xmit;
 
-#ifdef CONFIG_HOSTAPD_MLME
-	pHalFunc->hostap_mgnt_xmit_entry = &rtl8192du_hostap_mgnt_xmit_entry;
-#endif
-
 	rtl8192d_set_hal_ops(pHalFunc);
-
 }

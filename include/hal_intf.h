@@ -188,10 +188,6 @@ struct hal_ops {
 	void	(*write_bbreg)(struct rtw_adapter * adapter, u32 RegAddr, u32 BitMask, u32 Data);
 	u32	(*read_rfreg)(struct rtw_adapter * adapter, enum RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask);
 	void	(*write_rfreg)(struct rtw_adapter * adapter, enum RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
-
-#ifdef CONFIG_HOSTAPD_MLME
-	s32	(*hostap_mgnt_xmit_entry)(struct rtw_adapter * adapter, struct sk_buff *pkt);
-#endif
 	void (*EfusePowerSwitch)(struct rtw_adapter * adapter, u8 bWrite, u8 PwrState);
 	void (*ReadEFuse)(struct rtw_adapter * adapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest);
 	void (*EFUSEGetEfuseDefinition)(struct rtw_adapter * adapter, u8 efuseType, u8 type, void * *pOut, bool bPseudoTest);
@@ -293,69 +289,46 @@ struct wowlan_ioctl_param{
 
 void rtw_hal_def_value_init(struct rtw_adapter *padapter);
 void rtw_hal_free_data(struct rtw_adapter *padapter);
-
 void rtw_hal_dm_init(struct rtw_adapter *padapter);
 void rtw_hal_dm_deinit(struct rtw_adapter *padapter);
 void rtw_hal_sw_led_init(struct rtw_adapter *padapter);
 void rtw_hal_sw_led_deinit(struct rtw_adapter *padapter);
-
 uint rtw_hal_init(struct rtw_adapter *padapter);
 uint rtw_hal_deinit(struct rtw_adapter *padapter);
 void rtw_hal_stop(struct rtw_adapter *padapter);
-
 void rtw_hal_set_hwreg(struct rtw_adapter * padapter, u8 variable, u8 *val);
 void rtw_hal_get_hwreg(struct rtw_adapter * padapter, u8 variable, u8 *val);
-
 void rtw_hal_chip_configure(struct rtw_adapter *padapter);
 void rtw_hal_read_chip_info(struct rtw_adapter *padapter);
 void rtw_hal_read_chip_version(struct rtw_adapter *padapter);
-
 u8 rtw_hal_set_def_var(struct rtw_adapter *padapter, enum HAL_DEF_VARIABLE eVariable,
 		       void *pValue);
 u8 rtw_hal_get_def_var(struct rtw_adapter *padapter, enum HAL_DEF_VARIABLE eVariable,
 		       void *pValue);
-
 void rtw_hal_enable_interrupt(struct rtw_adapter *padapter);
 void rtw_hal_disable_interrupt(struct rtw_adapter *padapter);
-
 u32 rtw_hal_inirp_init(struct rtw_adapter *padapter);
 u32 rtw_hal_inirp_deinit(struct rtw_adapter *padapter);
-
 u8 rtw_hal_intf_ps_func(struct rtw_adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val);
-
 s32 rtw_hal_xmit(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe);
 s32 rtw_hal_mgnt_xmit(struct rtw_adapter *padapter, struct xmit_frame *pmgntframe);
-
 s32 rtw_hal_init_xmit_priv(struct rtw_adapter *padapter);
 void rtw_hal_free_xmit_priv(struct rtw_adapter *padapter);
-
 s32 rtw_hal_init_recv_priv(struct rtw_adapter *padapter);
 void rtw_hal_free_recv_priv(struct rtw_adapter *padapter);
-
 void rtw_hal_update_ra_mask(struct rtw_adapter *padapter, u32 mac_id);
 void rtw_hal_add_ra_tid(struct rtw_adapter *padapter, u32 bitmap, u8 arg);
-
 void rtw_hal_bcn_related_reg_setting(struct rtw_adapter *padapter);
-
 u32 rtw_hal_read_bbreg(struct rtw_adapter *padapter, u32 RegAddr, u32 BitMask);
 void rtw_hal_write_bbreg(struct rtw_adapter *padapter, u32 RegAddr, u32 BitMask, u32 Data);
 u32 rtw_hal_read_rfreg(struct rtw_adapter *padapter, u32 eRFPath, u32 RegAddr, u32 BitMask);
 void rtw_hal_write_rfreg(struct rtw_adapter *padapter, u32 eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
-
 s32 rtw_hal_interrupt_handler(struct rtw_adapter *padapter);
-
 void rtw_hal_set_bwmode(struct rtw_adapter *padapter, enum HT_CHANNEL_WIDTH Bandwidth, u8 Offset);
 void rtw_hal_set_chan(struct rtw_adapter *padapter, u8 channel);
-
 void rtw_hal_dm_watchdog(struct rtw_adapter *padapter);
-
-#ifdef CONFIG_HOSTAPD_MLME
-s32 rtw_hal_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, struct sk_buff *pkt);
-#endif
-
 void rtw_hal_notch_filter(struct rtw_adapter *adapter, bool enable);
 void rtw_hal_reset_security_engine(struct rtw_adapter *adapter);
-
 s32 rtw_hal_c2h_handler(struct rtw_adapter *adapter, struct c2h_evt_hdr *c2h_evt);
 c2h_id_filter rtw_hal_c2h_id_filter_ccx(struct rtw_adapter *adapter);
 

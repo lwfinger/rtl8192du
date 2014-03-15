@@ -159,35 +159,6 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 
 void rtw_hostapd_mlme_rx(struct rtw_adapter *padapter, struct recv_frame_hdr *precv_frame)
 {
-#ifdef CONFIG_HOSTAPD_MLME
-	struct sk_buff *skb;
-	struct hostapd_priv *phostapdpriv  = padapter->phostapdpriv;
-	struct net_device *pmgnt_netdev = phostapdpriv->pmgnt_netdev;
-
-	RT_TRACE(_module_recv_osdep_c_, _drv_info_, ("+rtw_hostapd_mlme_rx\n"));
-
-	skb = precv_frame->pkt;
-
-	if (skb == NULL)
-		return;
-
-	skb->data = precv_frame->rx_data;
-	skb->tail = precv_frame->rx_tail;
-	skb->len = precv_frame->len;
-
-	skb->dev = pmgnt_netdev;
-	skb->ip_summed = CHECKSUM_NONE;
-	skb->pkt_type = PACKET_OTHERHOST;
-	skb->protocol = __constant_htons(0x0003); /*ETH_P_80211_RAW*/
-
-	skb_reset_mac_header(skb);
-
-       memset(skb->cb, 0, sizeof(skb->cb));
-
-	netif_rx(skb);
-
-	precv_frame->pkt = NULL; /*  set pointer to NULL before rtw_free_recvframe() if call netif_rx() */
-#endif
 }
 
 int rtw_recv_indicatepkt(struct rtw_adapter *padapter, struct recv_frame_hdr *precv_frame)

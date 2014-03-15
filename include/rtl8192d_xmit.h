@@ -86,23 +86,14 @@ void handle_txrpt_ccx_8192d(struct rtw_adapter *adapter, void *buf);
 #define MAX_TX_AGG_PACKET_NUMBER 0xFF
 
 s32	rtl8192du_init_xmit_priv(struct rtw_adapter * padapter);
-
 void	rtl8192du_free_xmit_priv(struct rtw_adapter * padapter);
-
 void rtl8192du_cal_txdesc_chksum(struct tx_desc	*ptxdesc);
-
 s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter,
 				 struct xmit_priv *pxmitpriv,
 				 struct xmit_buf *pxmitbuf);
-
 s32 rtl8192du_mgnt_xmit(struct rtw_adapter *padapter,
 			struct xmit_frame *pmgntframe);
-
 s32 rtl8192du_hal_xmit(struct rtw_adapter *padapter,
 		       struct xmit_frame *pxmitframe);
-
-#ifdef CONFIG_HOSTAPD_MLME
-s32	rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, struct sk_buff *pkt);
-#endif
 
 #endif

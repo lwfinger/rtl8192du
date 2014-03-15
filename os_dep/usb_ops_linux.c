@@ -281,14 +281,6 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	/* translate DMA FIFO addr to pipehandle */
 	pipe = ffaddr2pipehdl(pdvobj, addr);
 
-#ifdef CONFIG_REDUCE_USB_TX_INT
-	if ((pxmitpriv->free_xmitbuf_cnt%NR_XMITBUFF == 0) ||
-	    (pxmitbuf->ext_tag == true))
-		purb->transfer_flags  &=  (~URB_NO_INTERRUPT);
-	else
-		purb->transfer_flags  |=  URB_NO_INTERRUPT;
-#endif
-
 	usb_fill_bulk_urb(purb, pusbd, pipe,
 			  pxmitframe->buf_addr, /*  pxmitbuf->pbuf */
 			  cnt,

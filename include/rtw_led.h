@@ -59,12 +59,12 @@ enum LED_STATE_871X {
 	LED_BLINK_WPS_STOP_OVERLAP = 12,	/* for BELKIN */
 };
 
-#define IS_LED_WPS_BLINKING(_LED_871X)	(((struct LED_871X *)_LED_871X)->CurrLedState==LED_BLINK_WPS \
-					|| ((struct LED_871X *)_LED_871X)->CurrLedState==LED_BLINK_WPS_STOP \
-					|| ((struct LED_871X *)_LED_871X)->bLedWPSBlinkInProgress)
+#define IS_LED_WPS_BLINKING(_LED_871X)	(((struct LED_871X *)_LED_871X)->currledstate==LED_BLINK_WPS \
+					|| ((struct LED_871X *)_LED_871X)->currledstate==LED_BLINK_WPS_STOP \
+					|| ((struct LED_871X *)_LED_871X)->wps_blink_in_prog)
 
-#define IS_LED_BLINKING(_LED_871X)	(((struct LED_871X *)_LED_871X)->bLedWPSBlinkInProgress \
-					||((struct LED_871X *)_LED_871X)->bLedScanBlinkInProgress)
+#define IS_LED_BLINKING(_LED_871X)	(((struct LED_871X *)_LED_871X)->wps_blink_in_prog \
+					||((struct LED_871X *)_LED_871X)->scan_blink_in_prog)
 
 enum LED_PIN_871X {
 	LED_PIN_GPIO0,
@@ -75,24 +75,24 @@ enum LED_PIN_871X {
 struct LED_871X {
 	struct rtw_adapter				*padapter;
 	enum LED_PIN_871X		LedPin;	/*  Identify how to implement this SW led. */
-	enum LED_STATE_871X		CurrLedState; /*  Current LED state. */
-	u8					bLedOn; /*  true if LED is ON, false if LED is OFF. */
+	enum LED_STATE_871X		currledstate; /*  Current LED state. */
+	u8					led_on; /*  true if LED is ON, false if LED is OFF. */
 
 	u8					bSWLedCtrl;
 
-	u8					bLedBlinkInProgress; /*  true if it is blinking, false o.w.. */
+	u8					blink_in_prog; /*  true if it is blinking, false o.w.. */
 	/*  ALPHA, added by chiyoko, 20090106 */
-	u8					bLedNoLinkBlinkInProgress;
-	u8					bLedLinkBlinkInProgress;
-	u8					bLedStartToLinkBlinkInProgress;
-	u8					bLedScanBlinkInProgress;
-	u8					bLedWPSBlinkInProgress;
+	u8					nolink_blink_in_prog;
+	u8					link_blink_in_prog;
+	u8					start_link_blink_in_prog;
+	u8					scan_blink_in_prog;
+	u8					wps_blink_in_prog;
 
-	u32					BlinkTimes; /*  Number of times to toggle led state for blinking. */
-	enum LED_STATE_871X		BlinkingLedState; /*  Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are. */
+	u32					blinktimes; /*  Number of times to toggle led state for blinking. */
+	enum LED_STATE_871X		blinkingledstate; /*  Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are. */
 
-	struct timer_list		BlinkTimer; /*  Timer object for led blinking. */
-	struct work_struct BlinkWorkItem; /*  Workitem used by BlinkTimer to manipulate H/W to blink LED. */
+	struct timer_list		blinktimer; /*  Timer object for led blinking. */
+	struct work_struct BlinkWorkItem; /*  Workitem used by blinktimer to manipulate H/W to blink LED. */
 };
 
 
@@ -126,6 +126,6 @@ struct led_priv{
 							     (_ledaction)); \
 	} while (0)
 
-extern void BlinkHandler(struct LED_871X *pLed);
+extern void BlinkHandler(struct LED_871X *pled);
 
 #endif /* __RTW_LED_H_ */

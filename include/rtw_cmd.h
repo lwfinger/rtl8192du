@@ -718,7 +718,7 @@ struct setchannelplan_param
 /*H2C Handler index: 60 */
 struct ledblink_param
 {
-	struct LED_871X	*pLed;
+	struct LED_871X	*pled;
 };
 
 /*H2C Handler index: 61 */
@@ -799,7 +799,7 @@ u8 rtw_chk_hi_queue_cmd(struct rtw_adapter*padapter);
 
 u8 rtw_set_ch_cmd(struct rtw_adapter*padapter, u8 ch, u8 bw, u8 ch_offset, u8 enqueue);
 u8 rtw_set_chplan_cmd(struct rtw_adapter*padapter, u8 chplan, u8 enqueue);
-u8 rtw_led_blink_cmd(struct rtw_adapter*padapter, struct LED_871X *pLed);
+u8 rtw_led_blink_cmd(struct rtw_adapter*padapter, struct LED_871X *pled);
 u8 rtw_set_csa_cmd(struct rtw_adapter*padapter, u8 new_ch_no);
 u8 rtw_tdls_cmd(struct rtw_adapter*padapter, u8 *addr, u8 option);
 

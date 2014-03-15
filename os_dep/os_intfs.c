@@ -935,10 +935,6 @@ _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,
 	DBG_8192D("register rtw_netdev_virtual_iface_ops to netdev_ops\n");
 	pnetdev->netdev_ops = &rtw_netdev_vir_if_ops;
 
-#ifdef CONFIG_NO_WIRELESS_HANDLERS
-	pnetdev->wireless_handlers = NULL;
-#endif
-
 	/****** init adapter ******/
 	padapter = rtw_netdev_priv(pnetdev);
 	memcpy(padapter, primary_padapter, sizeof(struct rtw_adapter));
@@ -1269,10 +1265,6 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 
 	DBG_8192D("register rtw_netdev_if2_ops to netdev_ops\n");
 	pnetdev->netdev_ops = &rtw_netdev_if2_ops;
-
-#ifdef CONFIG_NO_WIRELESS_HANDLERS
-	pnetdev->wireless_handlers = NULL;
-#endif
 
 	/****** init adapter ******/
 	padapter = rtw_netdev_priv(pnetdev);

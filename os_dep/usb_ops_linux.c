@@ -237,41 +237,37 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("+usb_write_port\n"));
 
 	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx)) {
-		#ifdef DBG_TX
-		DBG_8192D(" DBG_TX %s:%d bDriverStopped%d, bSurpriseRemoved:%d, pnp_bstop_trx:%d\n",__func__, __LINE__
-			,padapter->bDriverStopped, padapter->bSurpriseRemoved, padapter->pwrctrlpriv.pnp_bstop_trx);
-		#endif
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port:(padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
+		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
+			 ("usb_write_port:(padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_TX_DENY);
 		goto exit;
 	}
 
 	spin_lock_irqsave(&pxmitpriv->lock, irqL);
 
-	switch (addr)
-	{
-		case VO_QUEUE_INX:
-			pxmitpriv->voq_cnt++;
-			pxmitbuf->flags = VO_QUEUE_INX;
-			break;
-		case VI_QUEUE_INX:
-			pxmitpriv->viq_cnt++;
-			pxmitbuf->flags = VI_QUEUE_INX;
-			break;
-		case BE_QUEUE_INX:
-			pxmitpriv->beq_cnt++;
-			pxmitbuf->flags = BE_QUEUE_INX;
-			break;
-		case BK_QUEUE_INX:
-			pxmitpriv->bkq_cnt++;
-			pxmitbuf->flags = BK_QUEUE_INX;
-			break;
-		case HIGH_QUEUE_INX:
-			pxmitbuf->flags = HIGH_QUEUE_INX;
-			break;
-		default:
-			pxmitbuf->flags = MGT_QUEUE_INX;
-			break;
+	switch (addr) {
+	case VO_QUEUE_INX:
+		pxmitpriv->voq_cnt++;
+		pxmitbuf->flags = VO_QUEUE_INX;
+		break;
+	case VI_QUEUE_INX:
+		pxmitpriv->viq_cnt++;
+		pxmitbuf->flags = VI_QUEUE_INX;
+		break;
+	case BE_QUEUE_INX:
+		pxmitpriv->beq_cnt++;
+		pxmitbuf->flags = BE_QUEUE_INX;
+		break;
+	case BK_QUEUE_INX:
+		pxmitpriv->bkq_cnt++;
+		pxmitbuf->flags = BK_QUEUE_INX;
+		break;
+	case HIGH_QUEUE_INX:
+		pxmitbuf->flags = HIGH_QUEUE_INX;
+		break;
+	default:
+		pxmitbuf->flags = MGT_QUEUE_INX;
+		break;
 	}
 
 	spin_unlock_irqrestore(&pxmitpriv->lock, irqL);

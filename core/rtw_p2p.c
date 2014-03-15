@@ -1836,14 +1836,6 @@ int rtw_p2p_check_frames(struct rtw_adapter *padapter, const u8 *buf, u32 len, u
 					  tx ? "Tx" : "Rx", dialogToken);
 
 				if (tx) {
-#ifdef CONFIG_DRV_ISSUE_PROV_REQ /*  IOT FOR S2 */
-					if (pwdev_priv->provdisc_req_issued == false) {
-						rtw_cfg80211_issue_p2p_provision_request(padapter, buf, len);
-						pwdev_priv->provdisc_req_issued = true;
-						rtw_msleep_os(200);
-					}
-#endif /* CONFIG_DRV_ISSUE_PROV_REQ */
-
 #ifdef CONFIG_CONCURRENT_MODE
 					if (check_buddy_fwstate(padapter, _FW_LINKED))
 						rtw_cfg80211_adjust_p2pie_channel(padapter, frame_body, len-sizeof(struct ieee80211_hdr_3addr));

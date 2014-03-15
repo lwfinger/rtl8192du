@@ -49,10 +49,6 @@
 #include <rtw_tdls.h>
 #include <rtw_ap.h>
 
-#ifdef CONFIG_DRVEXT_MODULE
-#include <drvext_api.h>
-#endif
-
 #ifdef CONFIG_IOCTL_CFG80211
 	#include "ioctl_cfg80211.h"
 #endif /* CONFIG_IOCTL_CFG80211 */
@@ -281,10 +277,6 @@ struct rtw_adapter {
 	struct	pwrctrl_priv	pwrctrlpriv;
 	struct	eeprom_priv eeprompriv;
 	struct	led_priv	ledpriv;
-
-#ifdef CONFIG_DRVEXT_MODULE
-	struct	drvext_priv	drvextpriv;
-#endif
 
 #ifdef CONFIG_92D_AP_MODE
 	struct	hostapd_priv	*phostapdpriv;

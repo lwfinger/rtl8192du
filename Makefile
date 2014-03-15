@@ -26,8 +26,6 @@ CONFIG_HW_PWRP_DETECTION = n
 CONFIG_BT_COEXISTENCE = n
 CONFIG_WAKE_ON_WLAN = n
 
-CONFIG_DRVEXT_MODULE = n
-
 export TopDIR ?= $(shell pwd)
 
 ccflags-y += -D__CHECK_ENDIAN__

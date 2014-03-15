@@ -240,10 +240,8 @@ int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("+xmit_enry\n"));
 
 	if (rtw_if_up(padapter) == false) {
-		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("rtw_xmit_entry: rtw_if_up fail\n"));
-		#ifdef DBG_TX_DROP_FRAME
-		DBG_8192D("DBG_TX_DROP_FRAME %s if_up fail\n", __func__);
-		#endif
+		RT_TRACE(_module_xmit_osdep_c_, _drv_err_,
+			 ("rtw_xmit_entry: rtw_if_up fail\n"));
 		goto drop_packet;
 	}
 
@@ -270,12 +268,8 @@ int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
 	}
 
 	res = rtw_xmit(padapter, &pkt);
-	if (res < 0) {
-		#ifdef DBG_TX_DROP_FRAME
-		DBG_8192D("DBG_TX_DROP_FRAME %s rtw_xmit fail\n", __func__);
-		#endif
+	if (res < 0)
 		goto drop_packet;
-	}
 
 	pxmitpriv->tx_pkts++;
 	RT_TRACE(_module_xmit_osdep_c_, _drv_info_, ("rtw_xmit_entry: tx_pkts=%d\n", (u32)pxmitpriv->tx_pkts));

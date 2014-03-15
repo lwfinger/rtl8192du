@@ -1627,9 +1627,6 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 		psta = rtw_get_stainfo(&adapter->stapriv, pstassoc->macaddr);
 		if (psta) {
 #ifdef CONFIG_IOCTL_CFG80211
-#ifdef COMPAT_KERNEL_RELEASE
-
-#elif defined(CONFIG_IOCTL_CFG80211)
 			u8 *passoc_req = NULL;
 			u32 assoc_req_len;
 
@@ -1655,7 +1652,6 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 				kfree(passoc_req);
 			}
-#endif /* defined(CONFIG_IOCTL_CFG80211) */
 #endif /* CONFIG_IOCTL_CFG80211 */
 
 			ap_sta_info_defer_update(adapter, psta);

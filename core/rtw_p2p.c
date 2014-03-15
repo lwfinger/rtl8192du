@@ -1731,10 +1731,6 @@ static void ro_ch_handler(struct rtw_adapter *padapter)
 	}
 
 	rtw_p2p_set_state(pwdinfo, rtw_p2p_pre_state(pwdinfo));
-#ifdef CONFIG_DEBUG_CFG80211
-	DBG_8192D("%s, role =%d, p2p_state =%d\n", __func__,
-		  rtw_p2p_role(pwdinfo), rtw_p2p_state(pwdinfo));
-#endif
 
 	pcfg80211_wdinfo->is_ro_ch = false;
 
@@ -1826,10 +1822,6 @@ int rtw_p2p_check_frames(struct rtw_adapter *padapter, const u8 *buf, u32 len, u
 			OUI_Subtype = frame_body[6];
 			dialogToken = frame_body[7];
 			is_p2p_frame = OUI_Subtype;
-			#ifdef CONFIG_DEBUG_CFG80211
-			DBG_8192D("ACTION_CATEGORY_PUBLIC: ACT_PUBLIC_VENDOR, OUI = 0x%x, OUI_Subtype =%d, dialogToken =%d\n",
-				  cpu_to_be32(*((u32 *)(frame_body + 2))), OUI_Subtype, dialogToken);
-			#endif
 
 			p2p_ie = rtw_get_p2p_ie(
 				(u8 *)buf+sizeof(struct ieee80211_hdr_3addr)+_PUBLIC_ACTION_IE_OFFSET_,
@@ -1969,14 +1961,10 @@ int rtw_p2p_check_frames(struct rtw_adapter *padapter, const u8 *buf, u32 len, u
 							frame_body_len - _PUBLIC_ACTION_IE_OFFSET_,
 							NULL, &p2p_ielen);
 				if (p2p_ie) {
-					if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_GROUP_ID, NULL, &contentlen)) {
+					if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_GROUP_ID, NULL, &contentlen))
 						pwdev_priv->provdisc_req_issued = false;/* case: p2p_client join p2p GO */
-					} else {
-						#ifdef CONFIG_DEBUG_CFG80211
-						DBG_8192D("provdisc_req_issued is true\n");
-						#endif /* CONFIG_DEBUG_CFG80211 */
+					else
 						pwdev_priv->provdisc_req_issued = true;/* case: p2p_devices connection before Nego req. */
-					}
 				}
 				break; }
 			case P2P_PROVISION_DISC_RESP:
@@ -1992,11 +1980,6 @@ int rtw_p2p_check_frames(struct rtw_adapter *padapter, const u8 *buf, u32 len, u
 	} else if (category == RTW_WLAN_CATEGORY_P2P) {
 		OUI_Subtype = frame_body[5];
 		dialogToken = frame_body[6];
-
-		#ifdef CONFIG_DEBUG_CFG80211
-		DBG_8192D("ACTION_CATEGORY_P2P: OUI = 0x%x, OUI_Subtype =%d, dialogToken =%d\n",
-			  cpu_to_be32(*((u32 *)(frame_body + 1))), OUI_Subtype, dialogToken);
-		#endif
 
 		is_p2p_frame = OUI_Subtype;
 

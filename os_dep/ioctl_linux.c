@@ -1620,14 +1620,8 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 		pnetwork = container_of(plist, struct wlan_network, list);
 
 		/* report network only if the current channel set contains the channel to which this network belongs */
-		if (rtw_ch_set_search_ch(padapter->mlmeextpriv.channel_set, pnetwork->network.Configuration.DSConfig) >= 0
-			#ifdef CONFIG_VALIDATE_SSID
-			&& true == rtw_validate_ssid(&(pnetwork->network.Ssid))
-			#endif
-		)
-		{
+		if (rtw_ch_set_search_ch(padapter->mlmeextpriv.channel_set, pnetwork->network.Configuration.DSConfig) >= 0)
 			ev = translate_scan(padapter, a, pnetwork, ev, stop);
-		}
 
 		plist = plist->next;
 

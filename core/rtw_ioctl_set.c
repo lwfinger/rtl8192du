@@ -330,14 +330,6 @@ handle_tkip_countermeasure:
 			goto release_mlme_lock;
 		}
 	}
-
-	#ifdef CONFIG_VALIDATE_SSID
-	if (rtw_validate_ssid(ssid) == false) {
-		status = _FAIL;
-		goto release_mlme_lock;
-	}
-	#endif
-
 	memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(struct ndis_802_11_ssid));
 	pmlmepriv->assoc_by_bssid = false;
 

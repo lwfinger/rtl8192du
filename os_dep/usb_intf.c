@@ -666,11 +666,9 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	dvobj->padapters[dvobj->iface_nums++] = padapter;
 #endif
 
-	#ifndef RTW_DVOBJ_CHIP_HW_TYPE
 	/* step 1-1., decide the chip_type via vid/pid */
 	padapter->interface_type = RTW_USB;
 	decide_chip_type_by_usb_device_id(padapter, pdid);
-	#endif
 
 	if ((pnetdev = rtw_init_netdev(padapter)) == NULL) {
 		goto free_adapter;

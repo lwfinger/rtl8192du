@@ -579,13 +579,6 @@ static struct recv_frame_hdr *decryptor(struct rtw_adapter *padapter,
 #endif
 			psecuritypriv->hw_decrypted = false;
 
-#ifdef DBG_RX_DECRYPTOR
-		DBG_8192D
-		    ("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  Setting psecuritypriv->hw_decrypted = %d\n",
-		     prxattrib->bdecrypted, prxattrib->encrypt,
-		     psecuritypriv->hw_decrypted);
-#endif
-
 		switch (prxattrib->encrypt) {
 		case _WEP40_:
 		case _WEP104_:
@@ -604,20 +597,6 @@ static struct recv_frame_hdr *decryptor(struct rtw_adapter *padapter,
 		   (psecuritypriv->busetkipkey == 1 ||
 		   prxattrib->encrypt != _TKIP_)) {
 		psecuritypriv->hw_decrypted = true;
-#ifdef DBG_RX_DECRYPTOR
-		DBG_8192D
-		    ("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  Setting psecuritypriv->hw_decrypted = %d\n",
-		     prxattrib->bdecrypted, prxattrib->encrypt,
-		     psecuritypriv->hw_decrypted);
-#endif
-
-	} else {
-#ifdef DBG_RX_DECRYPTOR
-		DBG_8192D
-		    ("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  psecuritypriv->hw_decrypted:%d\n",
-		     prxattrib->bdecrypted, prxattrib->encrypt,
-		     psecuritypriv->hw_decrypted);
-#endif
 	}
 
 	if (res == _FAIL) {

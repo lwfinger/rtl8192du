@@ -2367,79 +2367,6 @@ void init_wifidirect_info(struct rtw_adapter *padapter, enum P2P_ROLE role)
 	pwdinfo->p2p_info.scan_op_ch_only = 0;
 }
 
-#ifdef CONFIG_DBG_P2P
-char *p2p_role_str[] = {
-	"P2P_ROLE_DISABLE",
-	"P2P_ROLE_DEVICE",
-	"P2P_ROLE_CLIENT",
-	"P2P_ROLE_GO"
-};
-
-char *p2p_state_str[] = {
-	"P2P_STATE_NONE",
-	"P2P_STATE_IDLE",
-	"P2P_STATE_LISTEN",
-	"P2P_STATE_SCAN",
-	"P2P_STATE_FIND_PHASE_LISTEN",
-	"P2P_STATE_FIND_PHASE_SEARCH",
-	"P2P_STATE_TX_PROVISION_DIS_REQ",
-	"P2P_STATE_RX_PROVISION_DIS_RSP",
-	"P2P_STATE_RX_PROVISION_DIS_REQ",
-	"P2P_STATE_GONEGO_ING",
-	"P2P_STATE_GONEGO_OK",
-	"P2P_STATE_GONEGO_FAIL",
-	"P2P_STATE_RECV_INVITE_REQ_MATCH",
-	"P2P_STATE_PROVISIONING_ING",
-	"P2P_STATE_PROVISIONING_DONE"
-	"P2P_STATE_RECV_INVITE_REQ_DISMATCH",
-	"P2P_STATE_RECV_INVITE_REQ_GO",
-};
-
-void dbg_rtw_p2p_set_state(struct wifidirect_info *wdinfo, enum P2P_STATE state, const char *caller, int line)
-{
-	if (!_rtw_p2p_chk_state(wdinfo, state)) {
-		enum P2P_STATE old_state = _rtw_p2p_state(wdinfo);
-		_rtw_p2p_set_state(wdinfo, state);
-		DBG_8192D("[CONFIG_DBG_P2P]%s:%d set_state from %s to %s\n", caller, line
-			, p2p_state_str[old_state], p2p_state_str[_rtw_p2p_state(wdinfo)]
-		);
-	} else {
-		DBG_8192D("[CONFIG_DBG_P2P]%s:%d set_state to same state %s\n", caller, line
-			, p2p_state_str[_rtw_p2p_state(wdinfo)]
-		);
-	}
-}
-void dbg_rtw_p2p_set_pre_state(struct wifidirect_info *wdinfo, enum P2P_STATE state, const char *caller, int line)
-{
-	if (_rtw_p2p_pre_state(wdinfo) != state) {
-		enum P2P_STATE old_state = _rtw_p2p_pre_state(wdinfo);
-		_rtw_p2p_set_pre_state(wdinfo, state);
-		DBG_8192D("[CONFIG_DBG_P2P]%s:%d set_pre_state from %s to %s\n", caller, line
-			, p2p_state_str[old_state], p2p_state_str[_rtw_p2p_pre_state(wdinfo)]
-		);
-	} else {
-		DBG_8192D("[CONFIG_DBG_P2P]%s:%d set_pre_state to same state %s\n", caller, line
-			, p2p_state_str[_rtw_p2p_pre_state(wdinfo)]
-		);
-	}
-}
-
-void dbg_rtw_p2p_set_role(struct wifidirect_info *wdinfo, enum P2P_ROLE role, const char *caller, int line)
-{
-	if (wdinfo->role != role) {
-		enum P2P_ROLE old_role = wdinfo->role;
-		_rtw_p2p_set_role(wdinfo, role);
-		DBG_8192D("[CONFIG_DBG_P2P]%s:%d set_role from %s to %s\n", caller, line
-			, p2p_role_str[old_role], p2p_role_str[wdinfo->role]
-		);
-	} else {
-		DBG_8192D("[CONFIG_DBG_P2P]%s:%d set_role to same role %s\n", caller, line
-			, p2p_role_str[wdinfo->role]
-		);
-	}
-}
-#endif /* CONFIG_DBG_P2P */
-
 int rtw_p2p_enable(struct rtw_adapter *padapter, enum P2P_ROLE role)
 {
 	int ret = _SUCCESS;
@@ -2454,7 +2381,6 @@ int rtw_p2p_enable(struct rtw_adapter *padapter, enum P2P_ROLE role)
 #ifdef CONFIG_CONCURRENT_MODE
 		struct rtw_adapter				*pbuddy_adapter = padapter->pbuddy_adapter;
 		struct wifidirect_info	*pbuddy_wdinfo = &pbuddy_adapter->wdinfo;
-		/*	Commented by Albert 2011/12/30 */
 		/*	The driver just supports 1 P2P group operation. */
 		/*	So, this function will do nothing if the buddy adapter had enabled the P2P function. */
 		if (!rtw_p2p_chk_state(pbuddy_wdinfo, P2P_STATE_NONE)) {

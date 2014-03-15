@@ -1026,10 +1026,6 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	dc_resume_xmit(adapter);
 #endif
 
-#ifdef CONFIG_DRVEXT_MODULE_WSC
-	drvext_surveydone_callback(&adapter->drvextpriv);
-#endif
-
 #ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_surveydone_event_callback(adapter);
 #endif /* CONFIG_IOCTL_CFG80211 */
@@ -1903,17 +1899,12 @@ void _rtw_join_timeout_handler(struct rtw_adapter *adapter)
 	}
 
 	spin_unlock_bh(&pmlmepriv->lock);
-
-#ifdef CONFIG_DRVEXT_MODULE_WSC
-	drvext_assoc_fail_indicate(&adapter->drvextpriv);
-#endif
-
 }
 
 /*
-* rtw_scan_timeout_handler - Timeout/Faliure handler for CMD SiteSurvey
-* @adapter: pointer to _adapter structure
-*/
+ * rtw_scan_timeout_handler - Timeout/Faliure handler for CMD SiteSurvey
+ * @adapter: pointer to _adapter structure
+ */
 void rtw_scan_timeout_handler(struct rtw_adapter *adapter)
 {
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;

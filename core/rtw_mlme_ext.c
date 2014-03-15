@@ -908,33 +908,13 @@ unsigned int OnBeacon(struct rtw_adapter *adapt,
 		    (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS)) {
 			psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
 			if (psta != NULL) {
-#ifdef CONFIG_PATCH_JOIN_WRONG_CHANNEL
-				/* Merge from 8712 FW code */
-				if (cmp_pkt_chnl_diff(adapt, pframe, len) != 0) {	/*  join wrong channel, deauth and reconnect */
-					issue_deauth(adapt,
-						     (&(pmlmeinfo->network))->
-						     MacAddress,
-						     WLAN_REASON_DEAUTH_LEAVING);
-
-					report_del_sta_event(adapt,
-							     (&
-							      (pmlmeinfo->
-							       network))->
-							     MacAddress,
-							     WLAN_REASON_JOIN_WRONG_CHANNEL);
-					pmlmeinfo->state &=
-					    (~WIFI_FW_ASSOC_SUCCESS);
-					return _SUCCESS;
-				}
-#endif /* CONFIG_PATCH_JOIN_WRONG_CHANNEL */
-
-				/* update WMM, ERP in the beacon */
-				/* todo: the timer is used instead of the number of the beacon received */
-				if ((sta_rx_pkts(psta) & 0xf) == 0) {
-					/* DBG_8192D("update_bcn_info\n"); */
+				/* update WMM, ERP in the beacon 
+				 * todo: the timer is used instead of the
+				 * number of the beacon received
+				 */
+				if ((sta_rx_pkts(psta) & 0xf) == 0)
 					update_beacon_info(adapt, pframe,
 							   len, psta);
-				}
 			}
 		} else if ((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE) {
 			psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));

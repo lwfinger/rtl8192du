@@ -152,10 +152,6 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct rtw_adapter *padapte
 		pxmitbuf->flags = XMIT_VO_QUEUE;
 
 		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmitbuf_queue.queue));
-		#ifdef DBG_XMIT_BUF
-		pxmitbuf->no = i;
-		#endif
-
 		pxmitbuf++;
 	}
 	pxmitpriv->free_xmitbuf_cnt = NR_XMITBUFF;
@@ -188,9 +184,6 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct rtw_adapter *padapte
 			goto exit;
 
 		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmit_extbuf_queue.queue));
-		#ifdef DBG_XMIT_BUF
-		pxmitbuf->no = i;
-		#endif
 		pxmitbuf++;
 	}
 
@@ -1225,9 +1218,6 @@ struct xmit_buf *rtw_alloc_xmitbuf_ext(struct xmit_priv *pxmitpriv)
 	}
 	if (pxmitbuf !=  NULL) {
 		pxmitpriv->free_xmit_extbuf_cnt--;
-		#ifdef DBG_XMIT_BUF
-		DBG_8192D("DBG_XMIT_BUF ALLOC no =%d,  free_xmit_extbuf_cnt =%d\n", pxmitbuf->no, pxmitpriv->free_xmit_extbuf_cnt);
-		#endif
 		pxmitbuf->priv_data = NULL;
 		if (pxmitbuf->sctx) {
 			DBG_8192D("%s pxmitbuf->sctx is not NULL\n", __func__);
@@ -1253,9 +1243,6 @@ s32 rtw_free_xmitbuf_ext(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 
 	rtw_list_insert_tail(&(pxmitbuf->list), get_list_head(pfree_queue));
 	pxmitpriv->free_xmit_extbuf_cnt++;
-	#ifdef DBG_XMIT_BUF
-	DBG_8192D("DBG_XMIT_BUF FREE no =%d, free_xmit_extbuf_cnt =%d\n", pxmitbuf->no , pxmitpriv->free_xmit_extbuf_cnt);
-	#endif
 
 	spin_unlock_irqrestore(&pfree_queue->lock, flags);
 
@@ -1287,10 +1274,6 @@ struct xmit_buf *rtw_alloc_xmitbuf(struct xmit_priv *pxmitpriv)
 
 	if (pxmitbuf !=  NULL) {
 		pxmitpriv->free_xmitbuf_cnt--;
-		#ifdef DBG_XMIT_BUF
-		DBG_8192D("DBG_XMIT_BUF ALLOC no =%d,  free_xmitbuf_cnt =%d\n", pxmitbuf->no, pxmitpriv->free_xmitbuf_cnt);
-		#endif
-
 		pxmitbuf->priv_data = NULL;
 
 		if (pxmitbuf->sctx) {
@@ -1298,11 +1281,6 @@ struct xmit_buf *rtw_alloc_xmitbuf(struct xmit_priv *pxmitpriv)
 			rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_ALLOC);
 		}
 	}
-	#ifdef DBG_XMIT_BUF
-	else {
-		DBG_8192D("DBG_XMIT_BUF rtw_alloc_xmitbuf return NULL\n");
-	}
-	#endif
 
 	spin_unlock_irqrestore(&pfree_xmitbuf_queue->lock, flags);
 
@@ -1332,10 +1310,6 @@ s32 rtw_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 		rtw_list_insert_tail(&(pxmitbuf->list), get_list_head(pfree_xmitbuf_queue));
 
 		pxmitpriv->free_xmitbuf_cnt++;
-		/* DBG_8192D("FREE, free_xmitbuf_cnt =%d\n", pxmitpriv->free_xmitbuf_cnt); */
-		#ifdef DBG_XMIT_BUF
-		DBG_8192D("DBG_XMIT_BUF FREE no =%d, free_xmitbuf_cnt =%d\n", pxmitbuf->no , pxmitpriv->free_xmitbuf_cnt);
-		#endif
 		spin_unlock_irqrestore(&pfree_xmitbuf_queue->lock, flags);
 	}
 

@@ -92,11 +92,7 @@ static int rtw_lowrate_two_xmit = 1;/* Use 2 path Tx to transmit MCS0~7 and lega
 /* int rf_config = RF_1T2R;   1T2R */
 static int rtw_rf_config = RF_819X_MAX_TYPE;  /* auto */
 static int rtw_low_power;
-#ifdef CONFIG_WIFI_TEST
-int rtw_wifi_spec = 1;/* for wifi test */
-#else
 static int rtw_wifi_spec;
-#endif
 
 static int rtw_special_rf_path = 0; /* 0: 2T2R , 1: only turn on path A 1T1R, 2: only turn on path B 1T1R */
 

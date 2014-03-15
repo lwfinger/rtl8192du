@@ -42,9 +42,7 @@
 #define CONFIG_P2P	1
 
 #ifdef CONFIG_P2P
-	#ifndef CONFIG_WIFI_TEST
-		#define CONFIG_P2P_REMOVE_GROUP_INFO
-	#endif
+	#define CONFIG_P2P_REMOVE_GROUP_INFO
 #endif
 
 //#define CONFIG_IOCTL_CFG80211

@@ -553,7 +553,6 @@ static void UpdateEarlyModeInfo8192D(struct rtw_adapter *padapter,
 	spin_unlock_bh(&pxmitpriv->lock);
 }
 
-#define IDEA_CONDITION 1	/*  check all packets before enqueue */
 s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 {
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(padapter);
@@ -576,13 +575,8 @@ s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv 
 	u8	ac_index;
 	u8	bfirst = true;/* first aggregation xmitframe */
 	u8	bulkstart = false;
-
 	/*  dump frame variable */
 	u32 ff_hwaddr;
-
-#ifndef IDEA_CONDITION
-	int res = _SUCCESS;
-#endif
 
 	RT_TRACE(_module_rtl8192c_xmit_c_, _drv_info_, ("+xmitframe_complete\n"));
 
@@ -669,15 +663,7 @@ s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv 
 		if (pHalData->bEarlyModeEnable)
 			UpdateEarlyModeInfo8192D(padapter, pxmitframe,ptxservq);
 
-#ifdef IDEA_CONDITION
 		rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
-#else
-		res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
-		if (res == false) {
-			rtw_free_xmitframe(pxmitpriv, pxmitframe);
-			continue;
-		}
-#endif
 
 		/*  always return ndis_packet after rtw_xmitframe_coalesce */
 		rtw_os_xmit_complete(padapter, pxmitframe);

@@ -2831,10 +2831,6 @@ _ReadLEDSetting(
 			pledpriv->LedStrategy = SW_LED_MODE0;
 			break;
 	}
-
-	#ifdef CONFIG_FORCE_HW_LED
-	pledpriv->LedStrategy = HW_LED;
-	#endif
 }
 
 #ifdef CONFIG_WOWLAN

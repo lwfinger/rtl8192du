@@ -8275,7 +8275,7 @@ void site_survey(struct rtw_adapter *adapt)
 				pmlmeinfo->scan_cnt++;
 			}
 		}
-#endif /* CONFIG_STA_MODE_SCAN_UNDER_AP_MODE */
+#endif
 #endif /* CONFIG_CONCURRENT_MODE */
 		if (pmlmeext->sitesurvey_res.channel_idx == 0) {
 			set_channel_bwmode(adapt, survey_channel,
@@ -8345,15 +8345,7 @@ void site_survey(struct rtw_adapter *adapt)
 				}
 			}
 		}
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
-		if (stay_buddy_ch == 1)
-			set_survey_timer(pmlmeext,
-					 pmlmeext->chan_scan_time *
-					 RTW_STAY_AP_CH_MILLISECOND);
-		else
-#endif /* CONFIG_STA_MODE_SCAN_UNDER_AP_MODE */
-			set_survey_timer(pmlmeext, pmlmeext->chan_scan_time);
-
+		set_survey_timer(pmlmeext, pmlmeext->chan_scan_time);
 	} else {
 		/*      channel number is 0 or this channel is not valid. */
 
@@ -8417,10 +8409,6 @@ void site_survey(struct rtw_adapter *adapt)
 		} else
 #endif /* CONFIG_P2P */
 		{
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
-			pmlmeinfo->scan_cnt = 0;
-#endif /* CONFIG_DMP_STA_NODE_SCAN_UNDER_AP_MODE */
-
 #ifdef CONFIG_P2P
 			if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_SCAN) || rtw_p2p_chk_state(pwdinfo,
 			    P2P_STATE_FIND_PHASE_SEARCH)) {
@@ -9958,13 +9946,8 @@ void survey_timer_hdl(struct rtw_adapter *adapt)
 
 	/* issue rtw_sitesurvey_cmd */
 	if (pmlmeext->sitesurvey_res.state > SCAN_START) {
-		if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS) {
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
-			if (adapt->mlmeextpriv.mlmext_info.scan_cnt !=
-			    RTW_SCAN_NUM_OF_CH)
-#endif /* CONFIG_STA_MODE_SCAN_UNDER_AP_MODE */
-				pmlmeext->sitesurvey_res.channel_idx++;
-		}
+		if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS)
+			pmlmeext->sitesurvey_res.channel_idx++;
 
 		if (pmlmeext->scan_abort == true) {
 #ifdef CONFIG_P2P

@@ -302,10 +302,6 @@ struct	sta_info *rtw_alloc_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 			reorder->enable = false;
 
 			reorder->indicate_seq = 0xffff;
-			#ifdef DBG_RX_SEQ
-			DBG_8192D("DBG_RX_SEQ %s:%d IndicateSeq: %d\n",
-				  __func__, __LINE__, reorder->indicate_seq);
-			#endif
 			reorder->wend_b = 0xffff;
 			reorder->wsize_b = 64;/* 64; */
 			_rtw_init_queue(&reorder->pending_recvframe_queue);

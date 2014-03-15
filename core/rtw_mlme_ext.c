@@ -2241,11 +2241,6 @@ unsigned int OnAction_back(struct rtw_adapter *adapt,
 				preorder_ctrl = &psta->recvreorder_ctrl[tid];
 				preorder_ctrl->enable = false;
 				preorder_ctrl->indicate_seq = 0xffff;
-#ifdef DBG_RX_SEQ
-				DBG_8192D("DBG_RX_SEQ %s:%d indicate_seq:%u\n",
-					  __func__, __LINE__,
-					  preorder_ctrl->indicate_seq);
-#endif
 			}
 
 			DBG_8192D("%s(): DELBA: %x(%x)\n", __func__,
@@ -8079,16 +8074,9 @@ unsigned int send_delba(struct rtw_adapter *adapt, u8 initiator, u8 *addr)
 				psta->recvreorder_ctrl[tid].enable = false;
 				psta->recvreorder_ctrl[tid].indicate_seq =
 				    0xffff;
-#ifdef DBG_RX_SEQ
-				DBG_8192D("DBG_RX_SEQ %s:%d indicate_seq:%u\n",
-					  __func__, __LINE__,
-					  psta->recvreorder_ctrl[tid].
-					  indicate_seq);
-#endif
 			}
 		}
 	} else if (initiator == 1) {	/*  originator */
-		/* DBG_8192D("tx agg_enable_bitmap(0x%08x)\n", psta->htpriv.agg_enable_bitmap); */
 		for (tid = 0; tid < MAXTID; tid++) {
 			if (psta->htpriv.agg_enable_bitmap & BIT(tid)) {
 				DBG_8192D("tx agg disable tid(%d)\n", tid);

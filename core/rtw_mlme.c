@@ -1145,9 +1145,6 @@ void rtw_indicate_connect(struct rtw_adapter *padapter)
 	pmlmepriv->to_join = false;
 
 	if (!check_fwstate(&padapter->mlmepriv, _FW_LINKED)) {
-#ifdef CONFIG_SW_ANTENNA_DIVERSITY
-		rtw_hal_set_hwreg(padapter, HW_VAR_ANTENNA_DIVERSITY_LINK, 0);
-#endif
 		set_fwstate(pmlmepriv, _FW_LINKED);
 
 		rtw_led_control(padapter, LED_CTL_LINK);

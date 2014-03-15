@@ -2223,14 +2223,6 @@ _ResetDigitalProcedure1(
 		DBG_8192D("=====> 8051 in ROM.\n");
 	}
 
-	#ifdef DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE
-	{
-		u8 val;
-		if ((val = rtw_read8(adapter, REG_MCUFWDL)))
-			DBG_8192D("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __func__, __LINE__, val);
-	}
-	#endif
-
 	rtw_write8(adapter, REG_SYS_FUNC_EN+1, 0x54);	/* Reset MAC and Enable 8051 */
 	rtw_write8(adapter, REG_MCUFWDL, 0);
 

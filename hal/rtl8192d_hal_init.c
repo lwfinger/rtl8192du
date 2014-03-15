@@ -45,13 +45,6 @@ static void _FWDownloadEnable(struct rtw_adapter *adapter, bool enable)
 	u8	tmp;
 
 	if (enable) {
-		#ifdef DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE
-		{
-			u8 val;
-			if ((val = rtw_read8(adapter, REG_MCUFWDL)))
-				DBG_8192D("DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE %s:%d REG_MCUFWDL:0x%02x\n", __func__, __LINE__, val);
-		}
-		#endif
 		/*  8051 enable */
 		tmp = rtw_read8(adapter, REG_SYS_FUNC_EN+1);
 		rtw_write8(adapter, REG_SYS_FUNC_EN+1, tmp|0x04);

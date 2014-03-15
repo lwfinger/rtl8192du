@@ -80,13 +80,6 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
 	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
 
-#ifdef CONFIG_USE_USB_BUFFER_ALLOC_TX
-	pxmitbuf->pallocated_buf = rtw_usb_buffer_alloc(pusbd, (size_t)alloc_sz, GFP_ATOMIC, &pxmitbuf->dma_transfer_addr);
-	pxmitbuf->pbuf = pxmitbuf->pallocated_buf;
-	if (pxmitbuf->pallocated_buf == NULL)
-		return _FAIL;
-#else /*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
-
 	pxmitbuf->pallocated_buf = kzalloc(alloc_sz, GFP_KERNEL);
 	if (pxmitbuf->pallocated_buf == NULL)
 	{
@@ -96,13 +89,9 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 	pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitbuf->pallocated_buf), XMITBUF_ALIGN_SZ);
 	pxmitbuf->dma_transfer_addr = 0;
 
-#endif /*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
-
-	for (i=0; i<8; i++)
-	{
+	for (i=0; i < 8; i++) {
 		pxmitbuf->pxmit_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
-		if (pxmitbuf->pxmit_urb[i] == NULL)
-		{
+		if (pxmitbuf->pxmit_urb[i] == NULL) {
 			DBG_8192D("pxmitbuf->pxmit_urb[i]==NULL");
 			return _FAIL;
 		}
@@ -125,13 +114,7 @@ void rtw_os_xmit_resource_free(struct rtw_adapter *padapter, struct xmit_buf *px
 		}
 	}
 
-#ifdef CONFIG_USE_USB_BUFFER_ALLOC_TX
-	rtw_usb_buffer_free(pusbd, (size_t)free_sz, pxmitbuf->pallocated_buf, pxmitbuf->dma_transfer_addr);
-	pxmitbuf->pallocated_buf =  NULL;
-	pxmitbuf->dma_transfer_addr = 0;
-#else	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 	kfree(pxmitbuf->pallocated_buf);
-#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 }
 
 void rtw_os_pkt_complete(struct rtw_adapter *padapter, struct sk_buff *pkt)

@@ -1396,26 +1396,25 @@ static void rtw_joinbss_update_network(struct rtw_adapter *padapter,
 			  (u8) cur_network->network.Configuration.DSConfig);
 }
 
-/* Notes: the fucntion could be > passive_level (the same context as Rx tasklet) */
-/* pnetwork : returns from rtw_joinbss_event_callback */
-/* ptarget_wlan: found from scanned_queue */
-/* if join_res > 0, for (fw_state==WIFI_STATION_STATE), we check if  "ptarget_sta" & "ptarget_wlan" exist. */
-/* if join_res > 0, for (fw_state==WIFI_ADHOC_STATE), we only check if "ptarget_wlan" exist. */
-/* if join_res > 0, update "cur_network->network" from "pnetwork->network" if (ptarget_wlan !=NULL). */
-/*  */
-/* define REJOIN */
+/* Notes: the fucntion could be > passive_level (the same context as Rx tasklet)
+ * pnetwork : returns from rtw_joinbss_event_callback
+ * ptarget_wlan: found from scanned_queue
+ * if join_res > 0, for (fw_state==WIFI_STATION_STATE), we check if
+ *  "ptarget_sta" & "ptarget_wlan" exist.
+ * if join_res > 0, for (fw_state==WIFI_ADHOC_STATE), we only check if
+ *  "ptarget_wlan" exist.
+ * if join_res > 0, update "cur_network->network" from "pnetwork->network"
+ *  if (ptarget_wlan !=NULL).
+ */
 void rtw_joinbss_event_prehandle(struct rtw_adapter *adapter, u8 *pbuf)
 {
-#ifdef REJOIN
-	static u8 retry;
-#endif
-	u8 timer_cancelled;
 	struct sta_info *ptarget_sta = NULL, *pcur_sta = NULL;
 	struct sta_priv *pstapriv = &adapter->stapriv;
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 	struct wlan_network *pnetwork = (struct wlan_network *)pbuf;
 	struct wlan_network *cur_network = &(pmlmepriv->cur_network);
 	struct wlan_network *pcur_wlan = NULL, *ptarget_wlan = NULL;
+	u8 timer_cancelled;
 	unsigned int the_same_macaddr = false;
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_,
@@ -1451,9 +1450,6 @@ void rtw_joinbss_event_prehandle(struct rtw_adapter *adapter, u8 *pbuf)
 
 	if (pnetwork->join_res > 0) {
 		spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
-#ifdef REJOIN
-		retry = 0;
-#endif
 		if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING)) {
 			/* s1. find ptarget_wlan */
 			if (check_fwstate(pmlmepriv, _FW_LINKED)) {
@@ -1587,36 +1583,9 @@ void rtw_joinbss_event_prehandle(struct rtw_adapter *adapter, u8 *pbuf)
 		}
 
 	} else {		/* if join_res < 0 (join fails), then try again */
-
-#ifdef REJOIN
-		res = _FAIL;
-		if (retry < 2) {
-			res = rtw_select_and_join_from_scanned_queue(pmlmepriv);
-			RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_,
-				 ("rtw_select_and_join_from_scanned_queue again! res:%d\n",
-				  res));
-		}
-
-		if (res == _SUCCESS) {
-			/* extend time of assoc_timer */
-			_set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
-			retry++;
-		} else if (res == 2) {	/* there is no need to wait for join */
-			_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
-			rtw_indicate_connect(adapter);
-		} else {
-			RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_,
-				 ("Set Assoc_Timer = 1; can't find match ssid in scanned_q\n"));
-#endif
-
-			_set_timer(&pmlmepriv->assoc_timer, 1);
-			/* rtw_free_assoc_resources(adapter, 1); */
-			_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
-
-#ifdef REJOIN
-			retry = 0;
-		}
-#endif
+		_set_timer(&pmlmepriv->assoc_timer, 1);
+		/* rtw_free_assoc_resources(adapter, 1); */
+		_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 	}
 
 ignore_joinbss_callback:

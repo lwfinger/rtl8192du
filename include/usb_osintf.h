@@ -23,7 +23,6 @@
 
 #define USBD_HALTED(Status) ((u32)(Status) >> 30 == 3)
 
-extern int rtw_ht_enable;
 extern int rtw_cbw40_enable;
 extern int rtw_ampdu_enable;/* for enable tx_ampdu */
 

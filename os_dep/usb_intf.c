@@ -934,8 +934,6 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 	return;
 }
 
-extern int console_suspend_enabled;
-
 static int __init rtw_drv_entry(void)
 {
 	usb_drv->drv_registered = true;

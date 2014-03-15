@@ -310,129 +310,60 @@ PHY_ScanOperationBackup8192D(struct rtw_adapter *	adapter,
 void	PHY_SetBWMode8192D(	struct rtw_adapter *			adapter,
 			enum HT_CHANNEL_WIDTH	ChnlWidth,
 									unsigned char	Offset	);
-
-/*  */
-/*  Set FW CMD IO for 8192S. */
-/*  */
-
-/*  */
 /*  Set A2 entry to fw for 8192S */
-/*  */
-extern	void FillA2Entry8192C(		struct rtw_adapter *			adapter,
-										u8				index,
-										u8*				val);
+void FillA2Entry8192C(struct rtw_adapter *adapter, u8 index, u8 *val);
 
-
-/*  */
 /*  channel switch related funciton */
-/*  */
-void	PHY_SwChnl8192D(	struct rtw_adapter *		adapter,
-									u8			channel	);
-				/*  Call after initialization */
-void	PHY_SwChnlPhy8192D(	struct rtw_adapter *		adapter,
-									u8			channel	);
+void PHY_SwChnl8192D(struct rtw_adapter *adapter, u8 channel);
+/*  Call after initialization */
+void PHY_SwChnlPhy8192D(struct rtw_adapter *adapter, u8 channel);
 
-extern void ChkFwCmdIoDone(	struct rtw_adapter *	adapter);
+void ChkFwCmdIoDone(struct rtw_adapter *adapter);
 
-/*  */
 /*  BB/MAC/RF other monitor API */
-/*  */
-void	PHY_SetMonitorMode8192D(struct rtw_adapter *	adapter,
-										bool		bEnableMonitorMode	);
+void PHY_SetMonitorMode8192D(struct rtw_adapter *adapter, bool bEnableMonitorMode);
 
-bool	PHY_CheckIsLegalRfPath8192D(struct rtw_adapter *	adapter,
-											u32		eRFPath	);
+bool PHY_CheckIsLegalRfPath8192D(struct rtw_adapter *adapter, u32 eRFPath);
 
-/*  */
 /*  IQ calibrate */
-/*  */
-void	rtl8192d_PHY_IQCalibrate(	struct rtw_adapter *	adapter);
+void rtl8192d_PHY_IQCalibrate(struct rtw_adapter *adapter);
 
-
-/*  */
 /*  LC calibrate */
-/*  */
-void	rtl8192d_PHY_LCCalibrate(struct rtw_adapter *	adapter);
+void rtl8192d_PHY_LCCalibrate(struct rtw_adapter *adapter);
 
-/*  */
 /*  AP calibrate */
-/*  */
-void	rtl8192d_PHY_APCalibrate(struct rtw_adapter *	adapter, char		delta);
+void rtl8192d_PHY_APCalibrate(struct rtw_adapter *adapter, char delta);
 
-
-/*  */
 /*  Modify the value of the hw register when beacon interval be changed. */
-/*  */
-void
-rtl8192d_PHY_SetBeaconHwReg(	struct rtw_adapter *		adapter,
-					u16			BeaconInterval	);
+void rtl8192d_PHY_SetBeaconHwReg(struct rtw_adapter *adapter, u16 BeaconInterval);
 
+void PHY_SwitchEphyParameter(struct rtw_adapter *adapter);
 
-extern	void
-PHY_SwitchEphyParameter(
-	struct rtw_adapter *			adapter
-	);
+void PHY_EnableHostClkReq(struct rtw_adapter *adapter);
 
-extern	void
-PHY_EnableHostClkReq(
-	struct rtw_adapter *			adapter
-	);
+bool SetAntennaConfig92C(struct rtw_adapter *adapter, u8 DefaultAnt);
 
-bool
-SetAntennaConfig92C(
-	struct rtw_adapter *	adapter,
-	u8		DefaultAnt
-	);
+void PHY_StopTRXBeforeChangeBand8192D(struct rtw_adapter *adapter);
 
-void
-PHY_StopTRXBeforeChangeBand8192D(
-	  struct rtw_adapter *		adapter
-);
+void PHY_UpdateBBRFConfiguration8192D(struct rtw_adapter *adapter, bool bisBandSwitch);
 
-void
-PHY_UpdateBBRFConfiguration8192D(
-	struct rtw_adapter * adapter,
-	bool bisBandSwitch
-);
+void PHY_ReadMacPhyMode92D(struct rtw_adapter *adapter, bool AutoloadFail);
 
-void PHY_ReadMacPhyMode92D(
-	struct rtw_adapter *	adapter,
-	bool	AutoloadFail
-);
+void PHY_ConfigMacPhyMode92D(struct rtw_adapter *adapter);
 
-void PHY_ConfigMacPhyMode92D(
-	struct rtw_adapter *	adapter
-);
+void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *adapter);
 
-void PHY_ConfigMacPhyModeInfo92D(
-	struct rtw_adapter *	adapter
-);
+void PHY_ConfigMacCoexist_RFPage92D(struct rtw_adapter *adapter);
 
-void PHY_ConfigMacCoexist_RFPage92D(
-	struct rtw_adapter *	adapter
-);
+void rtl8192d_PHY_InitRxSetting(struct rtw_adapter *adapter);
 
-void
-rtl8192d_PHY_InitRxSetting(
-	struct rtw_adapter * adapter
-);
+void rtl8192d_PHY_ResetIQKResult(struct rtw_adapter *adapter);
 
-void
-rtl8192d_PHY_ResetIQKResult(
-	struct rtw_adapter * adapter
-);
+void rtl8192d_PHY_SetRFPathSwitch(struct rtw_adapter *adapter, bool main);
 
+void HalChangeCCKStatus8192D(struct rtw_adapter *adapter, bool cckdisable);
 
-void
-rtl8192d_PHY_SetRFPathSwitch(struct rtw_adapter *	adapter, bool		bMain);
-
-void
-HalChangeCCKStatus8192D(
-	struct rtw_adapter *	adapter,
-	bool		bCCKDisable
-);
-
-void PHY_InitPABias92D(struct rtw_adapter * adapter);
+void PHY_InitPABias92D(struct rtw_adapter *adapter);
 
 /*--------------------------Exported Function prototype---------------------*/
 

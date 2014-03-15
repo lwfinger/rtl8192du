@@ -23,42 +23,42 @@
 #define _SUCCESS	1
 #define RTW_RX_HANDLED 2
 
-	#include <linux/version.h>
-	#include <linux/spinlock.h>
-	#include <linux/compiler.h>
-	#include <linux/kernel.h>
-	#include <linux/errno.h>
-	#include <linux/init.h>
-	#include <linux/slab.h>
-	#include <linux/module.h>
-	#include <linux/kref.h>
-	#include <linux/netdevice.h>
-	#include <linux/skbuff.h>
-	#include <asm/uaccess.h>
-	#include <asm/byteorder.h>
-	#include <asm/atomic.h>
-	#include <asm/io.h>
-	#include <linux/semaphore.h>
-	#include <linux/sem.h>
-	#include <linux/sched.h>
-	#include <linux/etherdevice.h>
-	#include <linux/wireless.h>
-	#include <net/iw_handler.h>
-	#include <linux/if_arp.h>
-	#include <linux/rtnetlink.h>
-	#include <linux/delay.h>
-	#include <linux/proc_fs.h>	/*  Necessary because we use the proc fs */
-	#include <linux/interrupt.h>	/*  for struct tasklet_struct */
-	#include <linux/ip.h>
-	#include <linux/kthread.h>
+#include <linux/version.h>
+#include <linux/spinlock.h>
+#include <linux/compiler.h>
+#include <linux/kernel.h>
+#include <linux/errno.h>
+#include <linux/init.h>
+#include <linux/slab.h>
+#include <linux/module.h>
+#include <linux/kref.h>
+#include <linux/netdevice.h>
+#include <linux/skbuff.h>
+#include <asm/uaccess.h>
+#include <asm/byteorder.h>
+#include <asm/atomic.h>
+#include <asm/io.h>
+#include <linux/semaphore.h>
+#include <linux/sem.h>
+#include <linux/sched.h>
+#include <linux/etherdevice.h>
+#include <linux/wireless.h>
+#include <net/iw_handler.h>
+#include <linux/if_arp.h>
+#include <linux/rtnetlink.h>
+#include <linux/delay.h>
+#include <linux/proc_fs.h>	/*  Necessary because we use the proc fs */
+#include <linux/interrupt.h>	/*  for struct tasklet_struct */
+#include <linux/ip.h>
+#include <linux/kthread.h>
 
 #ifdef CONFIG_IOCTL_CFG80211
         #include <net/ieee80211_radiotap.h>
 	#include <net/cfg80211.h>
 #endif /* CONFIG_IOCTL_CFG80211 */
 
-	#include <linux/usb.h>
-	#include <linux/usb/ch9.h>
+#include <linux/usb.h>
+#include <linux/usb/ch9.h>
 
 #define _mutex	struct mutex
 
@@ -66,6 +66,8 @@ struct	__queue	{
 	struct	list_head	queue;
 	spinlock_t	lock;
 };
+
+extern unsigned char REALTEK_96B_IE[];
 
 #define thread_exit() complete_and_exit(NULL, 0)
 

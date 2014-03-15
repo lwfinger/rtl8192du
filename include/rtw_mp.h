@@ -135,23 +135,23 @@ struct mpt_context {
 	bool			bMptWorkItemInProgress;
 
 	/*  1=Start, 0=Stop from UI. */
-	u32			MptTestStart;
+	u32 		MptTestStart;
 	/*  _TEST_MODE, defined in MPT_Req2.h */
-	u32			MptTestItem;
+	u32 		MptTestItem;
 	/*  Variable needed in each implementation of CurrMptAct. */
-	u32			MptActType;	/*  Type of action performed in CurrMptAct. */
+	u32 		MptActType;	/*  Type of action performed in CurrMptAct. */
 	/*  The Offset of IO operation is depend of MptActType. */
-	u32			MptIoOffset;
+	u32 		MptIoOffset;
 	/*  The Value of IO operation is depend of MptActType. */
-	u32			MptIoValue;
+	u32 		MptIoValue;
 	/*  The RfPath of IO operation is depend of MptActType. */
-	u32			MptRfPath;
+	u32 		MptRfPath;
 
 	enum WIRELESS_MODE	MptWirelessModeToSw;	/*  Wireless mode to switch. */
 	u8			MptChannelToSw;		/*  Channel to switch. */
 	u8			MptInitGainToSet;	/*  Initial gain to set. */
-	u32			MptBandWidth;		/*  bandwidth to switch. */
-	u32			MptRateIndex;		/*  rate index. */
+	u32 		MptBandWidth;		/*  bandwidth to switch. */
+	u32 		MptRateIndex;		/*  rate index. */
 	/*  Register value kept for Single Carrier Tx test. */
 	u8			btMpCckTxPower;
 	/*  Register value kept for Single Carrier Tx test. */
@@ -160,13 +160,13 @@ struct mpt_context {
 	u8			TxPwrLevel[2];	/*  rf-A, rf-B */
 
 	/*  Content of RCR Regsiter for Mass Production Test. */
-	u32			MptRCR;
+	u32 		MptRCR;
 	/*  TRUE if we only receive packets with specific pattern. */
 	bool			bMptFilterPattern;
 	/*  Rx OK count, statistics used in Mass Production Test. */
-	u32			MptRxOkCnt;
+	u32 		MptRxOkCnt;
 	/*  Rx CRC32 error count, statistics used in Mass Production Test. */
-	u32			MptRxCrcErrCnt;
+	u32 		MptRxCrcErrCnt;
 
 	bool			bCckContTx;	/*  TRUE if we are in CCK Continuous Tx test. */
 	bool			bOfdmContTx;	/*  TRUE if we are in OFDM Continuous Tx test. */
@@ -180,7 +180,7 @@ struct mpt_context {
 
 	/*  ACK counter asked by K.Y.. */
 	bool			bMptEnableAckCounter;
-	u32			MptAckCounter;
+	u32 		MptAckCounter;
 
 	/*  SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~! */
 
@@ -383,84 +383,79 @@ enum OFDM_TX_MODE {
 
 /*  */
 
-extern s32 init_mp_priv(struct rtw_adapter * padapter);
-extern void free_mp_priv(struct mp_priv *pmp_priv);
-extern s32 MPT_Initializeadapter(struct rtw_adapter * padapter, u8 Channel);
-extern void MPT_DeInitadapter(struct rtw_adapter * padapter);
-extern s32 mp_start_test(struct rtw_adapter * padapter);
-extern void mp_stop_test(struct rtw_adapter * padapter);
+s32 init_mp_priv(struct rtw_adapter *padapter);
+void free_mp_priv(struct mp_priv *pmp_priv);
+s32 MPT_Initializeadapter(struct rtw_adapter *padapter, u8 Channel);
+void MPT_DeInitadapter(struct rtw_adapter *padapter);
+s32 mp_start_test(struct rtw_adapter *padapter);
+void mp_stop_test(struct rtw_adapter *padapter);
 
-/*  */
+u32 _read_rfreg(struct rtw_adapter *padapter, enum RF_RADIO_PATH_E rfpath, u32 addr, u32 bitmask);
+void _write_rfreg(struct rtw_adapter *padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val);
 
+u32 read_macreg(struct rtw_adapter *padapter, u32 addr, u32 sz);
+void write_macreg(struct rtw_adapter *padapter, u32 addr, u32 val, u32 sz);
+u32 read_bbreg(struct rtw_adapter *padapter, u32 addr, u32 bitmask);
+void write_bbreg(struct rtw_adapter *padapter, u32 addr, u32 bitmask, u32 val);
+u32 read_rfreg(struct rtw_adapter *padapter, u8 rfpath, u32 addr);
+void write_rfreg(struct rtw_adapter *padapter, u8 rfpath, u32 addr, u32 val);
 
+void SetChannel(struct rtw_adapter *adapter);
+void SetBandwidth(struct rtw_adapter *adapter);
+void SetTxPower(struct rtw_adapter *adapter);
+void SetAntennaPathPower(struct rtw_adapter *adapter);
+void SetDataRate(struct rtw_adapter *adapter);
 
-extern u32 _read_rfreg(struct rtw_adapter * padapter, enum RF_RADIO_PATH_E rfpath, u32 addr, u32 bitmask);
-extern void _write_rfreg(struct rtw_adapter * padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val);
-
-extern u32 read_macreg(struct rtw_adapter *padapter, u32 addr, u32 sz);
-extern void write_macreg(struct rtw_adapter *padapter, u32 addr, u32 val, u32 sz);
-extern u32 read_bbreg(struct rtw_adapter *padapter, u32 addr, u32 bitmask);
-extern void write_bbreg(struct rtw_adapter *padapter, u32 addr, u32 bitmask, u32 val);
-extern u32 read_rfreg(struct rtw_adapter * padapter, u8 rfpath, u32 addr);
-extern void write_rfreg(struct rtw_adapter * padapter, u8 rfpath, u32 addr, u32 val);
-
-extern void	SetChannel(struct rtw_adapter * adapter);
-extern void	SetBandwidth(struct rtw_adapter * adapter);
-extern void	SetTxPower(struct rtw_adapter * adapter);
-extern void	SetAntennaPathPower(struct rtw_adapter * adapter);
-extern void	SetDataRate(struct rtw_adapter * adapter);
-
-extern void	SetAntenna(struct rtw_adapter * adapter);
+void SetAntenna(struct rtw_adapter *adapter);
 
 
-extern s32	SetThermalMeter(struct rtw_adapter * adapter, u8 target_ther);
-extern void	GetThermalMeter(struct rtw_adapter * adapter, u8 *value);
+s32 SetThermalMeter(struct rtw_adapter *adapter, u8 target_ther);
+void GetThermalMeter(struct rtw_adapter *adapter, u8 *value);
 
-extern void	SetContinuousTx(struct rtw_adapter * adapter, u8 bStart);
-extern void	SetSingleCarrierTx(struct rtw_adapter * adapter, u8 bStart);
-extern void	SetSingleToneTx(struct rtw_adapter * adapter, u8 bStart);
-extern void	SetCarrierSuppressionTx(struct rtw_adapter * adapter, u8 bStart);
+void SetContinuousTx(struct rtw_adapter *adapter, u8 bStart);
+void SetSingleCarrierTx(struct rtw_adapter *adapter, u8 bStart);
+void SetSingleToneTx(struct rtw_adapter *adapter, u8 bStart);
+void SetCarrierSuppressionTx(struct rtw_adapter *adapter, u8 bStart);
 
-extern void	fill_txdesc_for_mp(struct rtw_adapter * padapter, struct tx_desc *ptxdesc);
-extern void	SetPacketTx(struct rtw_adapter * padapter);
-extern void	SetPacketRx(struct rtw_adapter * adapter, u8 bStartRx);
+void fill_txdesc_for_mp(struct rtw_adapter *padapter, struct tx_desc *ptxdesc);
+void SetPacketTx(struct rtw_adapter *padapter);
+void SetPacketRx(struct rtw_adapter *adapter, u8 bStartRx);
 
-extern void	ResetPhyRxPktCount(struct rtw_adapter * adapter);
-extern u32	GetPhyRxPktReceived(struct rtw_adapter * adapter);
-extern u32	GetPhyRxPktCRC32Error(struct rtw_adapter * adapter);
+void ResetPhyRxPktCount(struct rtw_adapter *adapter);
+u32 GetPhyRxPktReceived(struct rtw_adapter *adapter);
+u32 GetPhyRxPktCRC32Error(struct rtw_adapter *adapter);
 
-extern s32	SetPowerTracking(struct rtw_adapter * padapter, u8 enable);
-extern void	GetPowerTracking(struct rtw_adapter * padapter, u8 *enable);
+s32 SetPowerTracking(struct rtw_adapter *padapter, u8 enable);
+void GetPowerTracking(struct rtw_adapter *padapter, u8 *enable);
 
-extern u32	mp_query_psd(struct rtw_adapter * adapter, u8 *data);
+u32 mp_query_psd(struct rtw_adapter *adapter, u8 *data);
 
+void Hal_SetAntenna(struct rtw_adapter *adapter);
+void Hal_SetBandwidth(struct rtw_adapter *adapter);
 
-extern void Hal_SetAntenna(struct rtw_adapter * adapter);
-extern void Hal_SetBandwidth(struct rtw_adapter * adapter);
+void Hal_SetTxPower(struct rtw_adapter *adapter);
+void Hal_SetCarrierSuppressionTx(struct rtw_adapter *adapter, u8 bStart);
+void Hal_SetSingleToneTx (struct rtw_adapter *adapter, u8 bStart);
+void Hal_SetSingleCarrierTx (struct rtw_adapter *adapter, u8 bStart);
+void Hal_SetContinuousTx (struct rtw_adapter *adapter, u8 bStart);
+void Hal_SetBandwidth(struct rtw_adapter *adapter);
 
-extern void Hal_SetTxPower(struct rtw_adapter * adapter);
-extern void Hal_SetCarrierSuppressionTx(struct rtw_adapter * adapter, u8 bStart);
-extern void Hal_SetSingleToneTx (struct rtw_adapter * adapter, u8 bStart);
-extern void Hal_SetSingleCarrierTx (struct rtw_adapter * adapter, u8 bStart);
-extern void Hal_SetContinuousTx (struct rtw_adapter * adapter, u8 bStart);
-extern void Hal_SetBandwidth(struct rtw_adapter * adapter);
-
-extern void Hal_SetDataRate(struct rtw_adapter * adapter);
-extern void Hal_SetChannel(struct rtw_adapter * adapter);
-extern void Hal_SetAntennaPathPower(struct rtw_adapter * adapter);
-extern s32 Hal_SetThermalMeter(struct rtw_adapter * adapter, u8 target_ther);
-extern s32 Hal_SetPowerTracking(struct rtw_adapter * padapter, u8 enable);
-extern void Hal_GetPowerTracking(struct rtw_adapter * padapter, u8 *enable);
-extern void Hal_GetThermalMeter(struct rtw_adapter * adapter, u8 *value);
-extern void Hal_mpt_SwitchRfSetting(struct rtw_adapter * adapter);
-extern void Hal_MPT_CCKTxPowerAdjust(struct rtw_adapter * adapter, bool bInCH14);
-extern void Hal_MPT_CCKTxPowerAdjustbyIndex(struct rtw_adapter * adapter, bool beven);
-extern void Hal_SetCCKTxPower(struct rtw_adapter * adapter, u8 *TxPower);
-extern void Hal_SetOFDMTxPower(struct rtw_adapter * adapter, u8 *TxPower);
-extern void Hal_TriggerRFThermalMeter(struct rtw_adapter * adapter);
-extern u8 Hal_ReadRFThermalMeter(struct rtw_adapter * adapter);
-extern void Hal_SetCCKContinuousTx(struct rtw_adapter * adapter, u8 bStart);
-extern void Hal_SetOFDMContinuousTx(struct rtw_adapter * adapter, u8 bStart);
-extern void Hal_ProSetCrystalCap (struct rtw_adapter * adapter, u32 CrystalCapVal);
+void Hal_SetDataRate(struct rtw_adapter *adapter);
+void Hal_SetChannel(struct rtw_adapter *adapter);
+void Hal_SetAntennaPathPower(struct rtw_adapter *adapter);
+s32 Hal_SetThermalMeter(struct rtw_adapter *adapter, u8 target_ther);
+s32 Hal_SetPowerTracking(struct rtw_adapter *padapter, u8 enable);
+void Hal_GetPowerTracking(struct rtw_adapter *padapter, u8 *enable);
+void Hal_GetThermalMeter(struct rtw_adapter *adapter, u8 *value);
+void Hal_mpt_SwitchRfSetting(struct rtw_adapter *adapter);
+void Hal_MPT_CCKTxPowerAdjust(struct rtw_adapter *adapter, bool bInCH14);
+void Hal_MPT_CCKTxPowerAdjustbyIndex(struct rtw_adapter *adapter, bool beven);
+void Hal_SetCCKTxPower(struct rtw_adapter *adapter, u8 *TxPower);
+void Hal_SetOFDMTxPower(struct rtw_adapter *adapter, u8 *TxPower);
+void Hal_TriggerRFThermalMeter(struct rtw_adapter *adapter);
+u8 Hal_ReadRFThermalMeter(struct rtw_adapter *adapter);
+void Hal_SetCCKContinuousTx(struct rtw_adapter *adapter, u8 bStart);
+void Hal_SetOFDMContinuousTx(struct rtw_adapter *adapter, u8 bStart);
+void Hal_ProSetCrystalCap (struct rtw_adapter *adapter, u32 CrystalCapVal);
 
 #endif /* _RTW_MP_H_ */

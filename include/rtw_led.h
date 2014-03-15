@@ -126,6 +126,6 @@ struct led_priv{
 							     (_ledaction)); \
 	} while (0)
 
-extern void BlinkHandler(struct LED_871X *pled);
+void BlinkHandler(struct LED_871X *pled);
 
 #endif /* __RTW_LED_H_ */

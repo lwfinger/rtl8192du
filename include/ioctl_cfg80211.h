@@ -77,6 +77,11 @@ struct rtw_wdev_priv
 
 #define wiphy_to_wdev(x) (struct wireless_dev *)(((struct rtw_wdev_priv*)wiphy_priv(x))->rtw_wdev)
 
+int netdev_open(struct net_device *pnetdev);
+#ifdef CONFIG_CONCURRENT_MODE
+int netdev_if2_open(struct net_device *pnetdev);
+#endif
+
 int rtw_wdev_alloc(struct rtw_adapter *padapter, struct device *dev);
 void rtw_wdev_free(struct wireless_dev *wdev);
 void rtw_wdev_unregister(struct wireless_dev *wdev);

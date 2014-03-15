@@ -1171,9 +1171,7 @@ static void _InitAMPDUAggregation(struct rtw_adapter *adapter)
 
 static void _InitBeaconMaxError(struct rtw_adapter *adapter, bool InfraMode)
 {
-#ifdef RTL8192CU_ADHOC_WORKAROUND_SETTING
 	rtw_write8(adapter, REG_BCN_MAX_ERR,  0xFF);
-#endif
 }
 
 static void _InitRDGSetting(struct rtw_adapter *adapter)
@@ -1383,7 +1381,6 @@ static void _InitRFType(struct rtw_adapter *adapter)
 #endif
 }
 
-#if RTL8192CU_ADHOC_WORKAROUND_SETTING
 static void _InitAdhocWorkaroundParams(struct rtw_adapter *adapter)
 {
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
@@ -1393,7 +1390,6 @@ static void _InitAdhocWorkaroundParams(struct rtw_adapter *adapter)
 	pHalData->RegReg542 = rtw_read8(adapter, REG_TBTT_PROHIBIT+2);
 	pHalData->RegCR_1 = rtw_read8(adapter, REG_CR+1);
 }
-#endif
 
 static void
 _BeaconFunctionEnable(
@@ -1841,9 +1837,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 
 #endif
 
-#if RTL8192CU_ADHOC_WORKAROUND_SETTING
 	_InitAdhocWorkaroundParams(padapter);
-#endif
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (!pHalData->bSlaveOfDMSP)

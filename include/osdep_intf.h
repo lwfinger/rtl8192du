@@ -78,14 +78,6 @@ struct net_device *rtw_init_netdev(struct rtw_adapter *padapter);
 
 u16 rtw_recv_select_queue(struct sk_buff *skb);
 
-#ifdef CONFIG_PROC_DEBUG
-void rtw_proc_init_one(struct net_device *dev);
-void rtw_proc_remove_one(struct net_device *dev);
-#else /* CONFIG_PROC_DEBUG */
-static void rtw_proc_init_one(struct net_device *dev) {}
-static void rtw_proc_remove_one(struct net_device *dev) {}
-#endif /* CONFIG_PROC_DEBUG */
-
 void rtw_ips_dev_unload(struct rtw_adapter *padapter);
 int rtw_ips_pwr_up(struct rtw_adapter *padapter);
 void rtw_ips_pwr_down(struct rtw_adapter *padapter);

@@ -320,8 +320,6 @@ int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname)
 	else
 		unregister_netdevice(cur_pnetdev);
 
-	rtw_proc_remove_one(cur_pnetdev);
-
 	rereg_priv->old_pnetdev=cur_pnetdev;
 
 	pnetdev = rtw_init_netdev(padapter);
@@ -345,9 +343,6 @@ int rtw_change_ifname(struct rtw_adapter *padapter, const char *ifname)
 		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("register_netdev() failed\n"));
 		goto error;
 	}
-
-	rtw_proc_init_one(pnetdev);
-
 	return 0;
 
 error:

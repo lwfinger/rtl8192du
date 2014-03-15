@@ -712,12 +712,7 @@ phy_RF6052_Config_ParaFile(
 	}
 
 	for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
-	{
-#if MP_DRIVER == 1
-		PHY_SetRFReg(adapter, eRFPath, RF_RXRF_A3, bRFRegOffsetMask, 0xff456);
-#endif
 		pdmpriv->RegRF3C[eRFPath] = PHY_QueryRFReg(adapter, eRFPath, RF_RXRF_A3, bRFRegOffsetMask);
-	}
 
 	return rtStatus;
 

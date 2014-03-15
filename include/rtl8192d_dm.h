@@ -350,10 +350,6 @@ struct	dm_priv
 	int	RegE9C;
 	int	RegEB4;
 	int	RegEBC;
-#if MP_DRIVER == 1
-	u8	RegC04_MP;
-	u32	RegD04_MP;
-#endif
 	u32	TXPowerTrackingCallbackCnt;	/* cosa add for debug */
 
 	u32	prv_traffic_idx; /*  edca turbo */

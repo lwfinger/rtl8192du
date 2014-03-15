@@ -1963,27 +1963,19 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 	pdmpriv->TXPowercount = 0;
 }
 
-static	void
-dm_InitializeTXPowerTracking_ThermalMeter(
-	struct rtw_adapter *		adapter)
+static	void dm_InitializeTXPowerTracking_ThermalMeter(struct rtw_adapter *adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
-	{
-		pdmpriv->bTXPowerTracking = true;
-		pdmpriv->TXPowercount = 0;
-		pdmpriv->bTXPowerTrackingInit = false;
-#if	(MP_DRIVER != 1)		/* for mp driver, turn off txpwrtracking as default */
-		pdmpriv->TxPowerTrackControl = true;
-#endif
-	}
+	pdmpriv->bTXPowerTracking = true;
+	pdmpriv->TXPowercount = 0;
+	pdmpriv->bTXPowerTrackingInit = false;
+	pdmpriv->TxPowerTrackControl = true;
 	MSG_8192D("pdmpriv->TxPowerTrackControl = %d\n", pdmpriv->TxPowerTrackControl);
 }
 
-static void
-DM_InitializeTXPowerTracking(
-	struct rtw_adapter *		adapter)
+static void DM_InitializeTXPowerTracking(struct rtw_adapter *adapter)
 {
 
 	{

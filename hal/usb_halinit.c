@@ -1625,7 +1625,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 		return status;
 	}
 
-#if ((1 == MP_DRIVER) ||  (0 == FW_PROCESS_VENDOR_CMD))
+#if (0 == FW_PROCESS_VENDOR_CMD)
 
 	rtl8192d_PHY_InitRxSetting(padapter);
 	RELEASE_GLOBAL_MUTEX(GlobalMutexForPowerAndEfuse);
@@ -1884,11 +1884,6 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	rtw_write8(padapter, 0x652, 0x0);
 	rtw_write8(padapter, 0xc87, 0x50);/* suggest by Jackson for CCA */
 
-#if (MP_DRIVER == 1)
-	padapter->mppriv.channel = pHalData->CurrentChannel;
-	MPT_Initializeadapter(padapter, padapter->mppriv.channel);
-	/* MPT_Initializeadapter(padapter, Channel); */
-#else /*  temply marked this for RF */
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (!pHalData->bSlaveOfDMSP)
 #endif
@@ -1933,7 +1928,6 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 		}
 #endif
 	}
-#endif
 
 	PHY_InitPABias92D(padapter);
 

@@ -91,8 +91,6 @@
 
 #define FW_PROCESS_VENDOR_CMD 1
 
-#define MP_DRIVER 0
-
 #define DBG 0
 
 #define CONFIG_DEBUG_RTL819X

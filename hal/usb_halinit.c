@@ -27,15 +27,9 @@
 #include <usb_hal.h>
 #include <usb_osintf.h>
 
-#if DISABLE_BB_RF
-	#define		HAL_MAC_ENABLE	0
-	#define		HAL_BB_ENABLE		0
-	#define		HAL_RF_ENABLE		0
-#else
-	#define		HAL_MAC_ENABLE	1
-	#define		HAL_BB_ENABLE		1
-	#define		HAL_RF_ENABLE		1
-#endif
+#define HAL_MAC_ENABLE		1
+#define HAL_BB_ENABLE		1
+#define HAL_RF_ENABLE		1
 
 /* endpoint number 1, 2, 3, 4, 5 */
 /*  bult in : 1 */
@@ -1364,21 +1358,12 @@ static void _InitRFType(struct rtw_adapter *adapter)
 {
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 
-#if (DISABLE_BB_RF == 1)
-	pHalData->rf_chip	= RF_PSEUDO_11N;
-	pHalData->rf_type	= RF_1T1R;/*  RF_2T2R; */
-#else
-
 	pHalData->rf_chip	= RF_6052;
 
 	if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
-	{
 		pHalData->rf_type = RF_1T1R;
-	}
-	else {/*  SMSP OR DMSP */
+	else /*  SMSP OR DMSP */
 		pHalData->rf_type = RF_2T2R;
-	}
-#endif
 }
 
 static void _InitAdhocWorkaroundParams(struct rtw_adapter *adapter)
@@ -1413,9 +1398,6 @@ static void _BBTurnOnBlock(
 	)
 {
 	struct hal_data_8192du		*pHalData	= GET_HAL_DATA(adapter);
-#if (DISABLE_BB_RF)
-	return;
-#endif
 
 	if (pHalData->CurrentBandType92D == BAND_ON_5G)
 		PHY_SetBBReg(adapter, rFPGA0_RFMOD, bCCKEn|bOFDMEn, 0x2);
@@ -1430,10 +1412,6 @@ static void _RfPowerSave(
 	struct hal_data_8192du	*pHalData	= GET_HAL_DATA(adapter);
 	struct pwrctrl_priv		*pwrctrlpriv = &adapter->pwrctrlpriv;
 	u8			eRFPath;
-
-#if (DISABLE_BB_RF)
-	return;
-#endif
 
 	if (pwrctrlpriv->reg_rfoff == true) { /*  User disable RF via registry. */
 		/* RT_TRACE((COMP_INIT|COMP_RF), DBG_LOUD, ("Initializeadapter8192CUsb(): Turn off RF for RegRfOff.\n")); */
@@ -2936,11 +2914,7 @@ _ReadRFType(
 {
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 
-#if DISABLE_BB_RF
-	pHalData->rf_chip = RF_PSEUDO_11N;
-#else
 	pHalData->rf_chip = RF_6052;
-#endif
 }
 
 static int _ReadadapterInfo8192DU(struct rtw_adapter *	adapter)

@@ -152,20 +152,12 @@ static	u32 phy_CalculateBitShift(u32 BitMask)
 /*  */
 /* To avoid miswrite Reg0x800 for 92D */
 /*  */
-void
-rtl8192d_PHY_SetBBReg1Byte(
-	struct rtw_adapter *	adapter,
-	u32		RegAddr,
-	u32		BitMask,
-	u32		Data
-	)
+void rtl8192d_PHY_SetBBReg1Byte(struct rtw_adapter *adapter, u32 RegAddr,
+				u32 BitMask, u32 Data)
 {
-	u32			OriginalValue, BitShift, offset = 0;
-       u8			value = 0;
+	u32	OriginalValue, BitShift, offset = 0;
+       u8	value = 0;
 
-#if (DISABLE_BB_RF == 1)
-	return;
-#endif
 	/*  BitMask only support bit0~bit7 or bit8~bit15, bit16~bit23, bit24~bit31, should in 1 byte scale; */
 	BitShift = phy_CalculateBitShift(BitMask);
 	offset = BitShift /8;
@@ -201,10 +193,6 @@ rtl8192d_PHY_QueryBBReg(
 {
 	u32	ReturnValue = 0, OriginalValue, BitShift;
 
-#if (DISABLE_BB_RF == 1)
-	return 0;
-#endif
-
 	OriginalValue = rtw_read32(adapter, RegAddr);
 	BitShift = phy_CalculateBitShift(BitMask);
 	ReturnValue = (OriginalValue & BitMask) >> BitShift;
@@ -239,12 +227,8 @@ rtl8192d_PHY_SetBBReg(
 {
 	u32	OriginalValue, BitShift;
 
-#if (DISABLE_BB_RF == 1)
-	return;
-#endif
-
-	if (BitMask!= bMaskDWord)
-	{/* if not "double word" write */
+	if (BitMask!= bMaskDWord) {
+		/* if not "double word" write */
 		OriginalValue = rtw_read32(adapter, RegAddr);
 		BitShift = phy_CalculateBitShift(BitMask);
 		Data = ((OriginalValue & (~BitMask)) | ((Data << BitShift) & BitMask));
@@ -508,10 +492,6 @@ rtl8192d_PHY_QueryRFReg(
 	u32 Original_Value, Readback_Value, BitShift;
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 
-#if (DISABLE_BB_RF == 1)
-	return 0;
-#endif
-
 	if (!pHalData->bPhyValueInitReady)
 		return 0;
 
@@ -556,10 +536,6 @@ rtl8192d_PHY_SetRFReg(
 
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	u32			Original_Value, BitShift;
-
-#if (DISABLE_BB_RF == 1)
-	return;
-#endif
 
 	if (!pHalData->bPhyValueInitReady)
 		return;
@@ -4816,10 +4792,6 @@ rtl8192d_PHY_IQCalibrate(
 	if (bStartContTx || bSingleTone || bCarrierSuppression)
 		return;
 
-#if DISABLE_BB_RF
-	return;
-#endif
-
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bSlaveOfDMSP)
 		return;
@@ -4980,10 +4952,6 @@ rtl8192d_PHY_LCCalibrate(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	struct rtw_adapter *	Buddyadapter = adapter->pbuddy_adapter;
 	struct mlme_priv	*pmlmeprivBuddyadapter;
-#endif
-
-#if DISABLE_BB_RF
-	return;
 #endif
 
 	/* ignore IQK when continuous Tx */
@@ -5610,17 +5578,12 @@ void rtl8192d_PHY_SetRFPathSwitch(struct rtw_adapter *adapter, bool main)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 
-#if DISABLE_BB_RF
-	return ;
-#else
-
 	if (IS_92D_SINGLEPHY(pHalData->VersionID)) {
 		phy_SetRFPathSwitch(adapter, main, true);
 	} else {
 		/*  For 88C 1T1R */
 		phy_SetRFPathSwitch(adapter, main, false);
 	}
-#endif
 }
 
 void

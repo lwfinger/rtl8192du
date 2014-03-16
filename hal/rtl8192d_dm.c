@@ -2036,10 +2036,6 @@ void
 rtl8192d_dm_CheckTXPowerTracking(
 	struct rtw_adapter *		adapter)
 {
-
-#if DISABLE_BB_RF
-	return;
-#endif
 	dm_CheckTXPowerTracking_ThermalMeter(adapter);
 }
 

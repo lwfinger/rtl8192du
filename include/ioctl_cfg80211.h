@@ -16,14 +16,6 @@
 #ifndef __IOCTL_CFG80211_H__
 #define __IOCTL_CFG80211_H__
 
-#if defined(CONFIG_IOCTL_CFG80211) && !defined(CONFIG_CFG80211) && !defined(CONFIG_CFG80211_MODULE)
-	#error "Can't define CONFIG_IOCTL_CFG80211 because neither CONFIG_CFG80211 nor CONFIG_CFG80211_MODULE is defined in kernel"
-#endif
-
-#if defined(RTW_USE_CFG80211_STA_EVENT)
-	#undef CONFIG_IOCTL_CFG80211
-#endif
-
 struct rtw_wdev_invit_info {
 	u8 token;
 	u8 flags;

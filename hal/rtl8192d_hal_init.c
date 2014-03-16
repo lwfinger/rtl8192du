@@ -1500,9 +1500,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	adapter,
 				/*   so-1 ******************* */
 				if (tmp_pkt.offset  != target_pkt.offset) {
 					efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; /* Next pg_packet */
-#if (EFUSE_ERROE_HANDLE == 1)
 					WriteState = PG_STATE_HEADER;
-#endif
 				} else {		/* write the same offset */
 					/*   so-2 ******************* */
 					for (tmpindex = 0; tmpindex < (tmp_word_cnts*2); tmpindex++) {
@@ -1513,9 +1511,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	adapter,
 					/*   so-2-1 ******************* */
 					if (!bDataEmpty) {
 						efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; /* Next pg_packet */
-#if (EFUSE_ERROE_HANDLE == 1)
 						WriteState = PG_STATE_HEADER;
-#endif
 					} else {/*   so-2-2 ******************* */
 
 						match_word_en = 0x0F;			/* same bit as original wren */
@@ -1558,22 +1554,18 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	adapter,
 							} else {
 								bContinual = false;
 							}
-#if (EFUSE_ERROE_HANDLE == 1)
 							WriteState = PG_STATE_HEADER;
 							repeat_times++;
 							if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
 								bContinual = false;
 								bResult = false;
 							}
-#endif
 						} else {/*   so-2-2-B ******************* */
 							/* reorganize other pg packet */
 							efuse_addr = efuse_addr + (2*tmp_word_cnts) +1;/* next pg packet addr */
 							target_pkt.offset = offset;
 							target_pkt.word_en = target_pkt.word_en;
-#if (EFUSE_ERROE_HANDLE == 1)
 							WriteState = PG_STATE_HEADER;
-#endif
 						}
 					}
 				}
@@ -1659,9 +1651,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	adapter,
 				if (tmp_header == pg_header) {
 					/*   s1-1******************* */
 					WriteState = PG_STATE_DATA;
-				}
-#if (EFUSE_ERROE_HANDLE == 1)
-				else if (tmp_header == 0xFF) {/*   s1-3: if Write or read func doesn't work ******************* */
+				} else if (tmp_header == 0xFF) {/*   s1-3: if Write or read func doesn't work ******************* */
 					/* efuse_addr doesn't change */
 					WriteState = PG_STATE_HEADER;
 					repeat_times++;
@@ -1669,9 +1659,7 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	adapter,
 						bContinual = false;
 						bResult = false;
 					}
-				}
-#endif
-				else {/*   s1-2 : fixed the header procedure ******************* */
+				} else {/*   s1-2 : fixed the header procedure ******************* */
 					if (!bExtendedHeader) {
 						tmp_pkt.offset = (tmp_header>>4) & 0x0F;
 						tmp_pkt.word_en =  tmp_header & 0x0F;
@@ -1699,14 +1687,12 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	adapter,
 						efuse_addr = efuse_addr + (tmp_word_cnts*2) +1; /* Next pg_packet */
 					}
 
-#if (EFUSE_ERROE_HANDLE == 1)
 					WriteState = PG_STATE_HEADER;
 					repeat_times++;
 					if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
 						bContinual = false;
 						bResult = false;
 					}
-#endif
 				}
 			}
 		}
@@ -1725,14 +1711,12 @@ rtl8192d_Efuse_PgPacketWrite(struct rtw_adapter *	adapter,
 				target_pkt.offset = offset;
 				target_pkt.word_en = badworden;
 				target_word_cnts =  Efuse_CalculateWordCnts(target_pkt.word_en);
-#if (EFUSE_ERROE_HANDLE == 1)
 				WriteState = PG_STATE_HEADER;
 				repeat_times++;
 				if (repeat_times>EFUSE_REPEAT_THRESHOLD_) {
 					bContinual = false;
 					bResult = false;
 				}
-#endif
 			}
 		}
 	}

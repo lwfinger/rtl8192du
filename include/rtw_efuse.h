@@ -19,49 +19,44 @@
 #include <autoconf.h>
 #include <osdep_service.h>
 
-#define	EFUSE_ERROE_HANDLE		1
-
 #define	PG_STATE_HEADER			0x01
-#define	PG_STATE_WORD_0		0x02
-#define	PG_STATE_WORD_1		0x04
-#define	PG_STATE_WORD_2		0x08
-#define	PG_STATE_WORD_3		0x10
+#define	PG_STATE_WORD_0			0x02
+#define	PG_STATE_WORD_1			0x04
+#define	PG_STATE_WORD_2			0x08
+#define	PG_STATE_WORD_3			0x10
 #define	PG_STATE_DATA			0x20
 
 #define	PG_SWBYTE_H			0x01
 #define	PG_SWBYTE_L			0x02
 
-#define	PGPKT_DATA_SIZE		8
+#define	PGPKT_DATA_SIZE			8
 
-#define	EFUSE_WIFI				0
-#define	EFUSE_BT				1
+#define	EFUSE_WIFI			0
+#define	EFUSE_BT			1
 
 enum _EFUSE_DEF_TYPE {
-	TYPE_EFUSE_MAX_SECTION				= 0,
-	TYPE_EFUSE_REAL_CONTENT_LEN			= 1,
+	TYPE_EFUSE_MAX_SECTION			= 0,
+	TYPE_EFUSE_REAL_CONTENT_LEN		= 1,
 	TYPE_AVAILABLE_EFUSE_BYTES_BANK		= 2,
 	TYPE_AVAILABLE_EFUSE_BYTES_TOTAL	= 3,
-	TYPE_EFUSE_MAP_LEN					= 4,
+	TYPE_EFUSE_MAP_LEN			= 4,
 	TYPE_EFUSE_PROTECT_BYTES_BANK		= 5,
 };
 
 #define		EFUSE_MAX_MAP_LEN		256
 #define		EFUSE_MAX_HW_SIZE		512
-#define		EFUSE_MAX_SECTION_BASE	16
+#define		EFUSE_MAX_SECTION_BASE		16
 
 #define EXT_HEADER(header) ((header & 0x1F) == 0x0F)
 #define ALL_WORDS_DISABLED(wde)	((wde & 0x0F) == 0x0F)
 #define GET_HDR_OFFSET_2_0(header) ((header & 0xE0) >> 5)
 
-#define		EFUSE_REPEAT_THRESHOLD_			3
+#define EFUSE_REPEAT_THRESHOLD_			3
 
-/*  */
 /* 	The following is for BT Efuse definition */
-/*  */
 #define		EFUSE_BT_MAX_MAP_LEN		1024
 #define		EFUSE_MAX_BANK			4
 #define		EFUSE_MAX_BT_BANK		(EFUSE_MAX_BANK-1)
-/*  */
 /*--------------------------Define Parameters-------------------------------*/
 #define		EFUSE_MAX_WORD_UNIT			4
 

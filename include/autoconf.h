@@ -35,8 +35,6 @@
 #endif /* CONFIG_WAKE_ON_WLAN */
 #define CONFIG_R871X_TEST	1
 
-#define CONFIG_RECV_REORDERING_CTRL	1
-
 #define CONFIG_92D_AP_MODE 1
 
 #define CONFIG_P2P	1

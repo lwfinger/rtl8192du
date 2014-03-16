@@ -32,7 +32,6 @@
 #include <rtw_xmit.h>
 #include <rtw_recv.h>
 #include <hal_intf.h>
-#include <hal_com.h>
 #include <rtw_security.h>
 #include <rtw_pwrctrl.h>
 #include <rtw_io.h>

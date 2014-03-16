@@ -16,7 +16,6 @@
 #ifndef __RTL8192D_HAL_H__
 #define __RTL8192D_HAL_H__
 
-#include "hal_com.h"
 #include "rtl8192d_spec.h"
 #include "Hal8192DPhyReg.h"
 #include "Hal8192DPhyCfg.h"

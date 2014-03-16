@@ -17,7 +17,6 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <hal_intf.h>
-#include <hal_com.h>
 #include <rtl8192d_hal.h>
 
 #define _HAL_COM_C_

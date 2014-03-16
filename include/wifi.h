@@ -497,41 +497,41 @@ static inline int IsFrameTypeCtrl(unsigned char *pframe)
 #define _CAPABILITY_			2
 #define _CURRENT_APADDR_		6
 #define _LISTEN_INTERVAL_		2
-#define _RSON_CODE_				2
-#define _ASOC_ID_				2
+#define _RSON_CODE_			2
+#define _ASOC_ID_			2
 #define _STATUS_CODE_			2
-#define _TIMESTAMP_				8
+#define _TIMESTAMP_			8
 
-#define AUTH_ODD_TO				0
+#define AUTH_ODD_TO			0
 #define AUTH_EVEN_TO			1
 
 #define WLAN_ETHCONV_ENCAP		1
-#define WLAN_ETHCONV_RFC1042	2
+#define WLAN_ETHCONV_RFC1042		2
 #define WLAN_ETHCONV_8021h		3
 
-#define cap_ESS BIT(0)
-#define cap_IBSS BIT(1)
-#define cap_CFPollable BIT(2)
-#define cap_CFRequest BIT(3)
-#define cap_Privacy BIT(4)
-#define cap_ShortPremble BIT(5)
-#define cap_PBCC	BIT(6)
-#define cap_ChAgility	BIT(7)
-#define cap_SpecMgmt	BIT(8)
-#define cap_QoS	BIT(9)
-#define cap_ShortSlot	BIT(10)
+#define cap_ESS				BIT(0)
+#define cap_IBSS			BIT(1)
+#define cap_CFPollable			BIT(2)
+#define cap_CFRequest			BIT(3)
+#define cap_Privacy			BIT(4)
+#define cap_ShortPremble		BIT(5)
+#define cap_PBCC			BIT(6)
+#define cap_ChAgility			BIT(7)
+#define cap_SpecMgmt			BIT(8)
+#define cap_QoS				BIT(9)
+#define cap_ShortSlot			BIT(10)
 
 /*-----------------------------------------------------------------------------
 				Below is the definition for 802.11i / 802.1x
 ------------------------------------------------------------------------------*/
-#define _IEEE8021X_MGT_			1		/*  WPA */
-#define _IEEE8021X_PSK_			2		/*  WPA with pre-shared key */
+#define _IEEE8021X_MGT_			1	/*  WPA */
+#define _IEEE8021X_PSK_			2	/*  WPA with pre-shared key */
 
 /*-----------------------------------------------------------------------------
 				Below is the definition for WMM
 ------------------------------------------------------------------------------*/
-#define _WMM_IE_Length_				7  /*  for WMM STA */
-#define _WMM_Para_Element_Length_		24
+#define _WMM_IE_Length_			7  /*  for WMM STA */
+#define _WMM_Para_Element_Length_	24
 
 
 /*-----------------------------------------------------------------------------
@@ -539,18 +539,19 @@ static inline int IsFrameTypeCtrl(unsigned char *pframe)
 ------------------------------------------------------------------------------*/
 
 /* block-ack parameters */
-#define IEEE80211_ADDBA_PARAM_POLICY_MASK 0x0002
-#define IEEE80211_ADDBA_PARAM_TID_MASK 0x003C
-#define RTW_IEEE80211_ADDBA_PARAM_BUF_SIZE_MASK 0xFFA0
-#define IEEE80211_DELBA_PARAM_TID_MASK 0xF000
-#define IEEE80211_DELBA_PARAM_INITIATOR_MASK 0x0800
+#define IEEE80211_ADDBA_PARAM_POLICY_MASK	0x0002
+#define IEEE80211_ADDBA_PARAM_TID_MASK		0x003C
+#define RTW_IEEE80211_ADDBA_PARAM_BUF_SIZE_MASK	0xFFA0
+#define IEEE80211_DELBA_PARAM_TID_MASK		0xF000
+#define IEEE80211_DELBA_PARAM_INITIATOR_MASK	0x0800
 
 #define SetOrderBit(pbuf)	\
 	do	{	\
 		*(unsigned short *)(pbuf) |= cpu_to_le16(_ORDER_); \
 	} while (0)
 
-#define GetOrderBit(pbuf)	(((*(unsigned short *)(pbuf)) & le16_to_cpu(_ORDER_)) != 0)
+#define GetOrderBit(pbuf)			\
+	(((*(unsigned short *)(pbuf)) & le16_to_cpu(_ORDER_)) != 0)
 
 
 struct	qos_priv {
@@ -570,14 +571,13 @@ struct rtw_ieee80211_bar {
 	unsigned char ta[6];
 	unsigned short control;
 	unsigned short start_seq_num;
-} __attribute__((packed));
+} __packed;
 
 /* 802.11 BAR control masks */
 #define IEEE80211_BAR_CTRL_ACK_POLICY_NORMAL     0x0000
 #define IEEE80211_BAR_CTRL_CBMTID_COMPRESSED_BA  0x0004
 
- /**
- * struct rtw_ieee80211_ht_cap - HT capabilities
+ /* struct rtw_ieee80211_ht_cap - HT capabilities
  *
  * This structure refers to "HT capabilities element" as
  * described in 802.11n draft section 7.3.2.52
@@ -588,9 +588,25 @@ struct rtw_ieee80211_ht_cap {
 	unsigned char	ampdu_params_info;
 	unsigned char	supp_mcs_set[16];
 	unsigned short	extended_ht_cap_info;
-	unsigned int		tx_BF_cap_info;
-	unsigned char	       antenna_selection_info;
-} __attribute__ ((packed));
+	unsigned int	tx_BF_cap_info;
+	unsigned char	antenna_selection_info;
+} __packed;
+
+struct ht_priv {
+	u32	ht_option;
+	u32	ampdu_enable;/* for enable Tx A-MPDU */
+	u32	tx_amsdu_enable;/* for enable Tx A-MSDU */
+	u32	tx_amdsu_maxlen; /*  1: 8k, 0:4k ; default:8k, for tx */
+	/* for rx reordering ctrl win_sz, updated when join_callback. */
+	u32	rx_ampdu_maxlen;
+	u8	bwmode;
+	u8	ch_offset;/* PRIME_CHNL_OFFSET */
+	u8	sgi;/* short GI */
+	/* for processing Tx A-MPDU */
+	u8	agg_enable_bitmap;
+	u8	candidate_tid_bitmap;
+	struct rtw_ieee80211_ht_cap ht_cap;
+};
 
 /**
  * struct rtw_ieee80211_ht_cap - HT additional information
@@ -604,15 +620,12 @@ struct ieee80211_ht_addt_info {
 	unsigned short	operation_mode;
 	unsigned short	stbc_param;
 	unsigned char		basic_set[16];
-} __attribute__ ((packed));
+} __packed;
 
 
-struct HT_caps_element
-{
-	union
-	{
-		struct
-		{
+struct HT_caps_element {
+	union {
+		struct {
 			__le16	HT_caps_info;
 			unsigned char	AMPDU_para;
 			unsigned char	MCS_rate[16];
@@ -621,37 +634,33 @@ struct HT_caps_element
 			unsigned char	ASEL_caps;
 		} HT_cap_element;
 		unsigned char HT_cap[26];
-	}u;
-} __attribute__ ((packed));
+	} u;
+} __packed;
 
-struct HT_info_element
-{
+struct HT_info_element {
 	unsigned char	primary_channel;
 	unsigned char	infos[5];
 	unsigned char	MCS_rate[16];
-}  __attribute__ ((packed));
+}  __packed;
 
-struct AC_param
-{
+struct AC_param {
 	unsigned char		ACI_AIFSN;
 	unsigned char		CW;
 	unsigned short	TXOP_limit;
-}  __attribute__ ((packed));
+}  __packed;
 
-struct WMM_para_element
-{
+struct WMM_para_element {
 	unsigned char		QoS_info;
 	unsigned char		reserved;
 	struct AC_param	ac_param[4];
-}  __attribute__ ((packed));
+}  __packed;
 
-struct ADDBA_request
-{
+struct ADDBA_request {
 	unsigned char		dialog_token;
 	unsigned short	BA_para_set;
 	unsigned short	BA_timeout_value;
 	unsigned short	BA_starting_seqctrl;
-}  __attribute__ ((packed));
+}  __packed;
 
 
 /* 802.11n HT capabilities masks */

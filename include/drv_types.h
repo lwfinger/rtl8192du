@@ -26,7 +26,6 @@
 #include <autoconf.h>
 #include <osdep_service.h>
 #include <wlan_bssdef.h>
-#include <rtw_ht.h>
 #include <rtw_cmd.h>
 #include <wlan_bssdef.h>
 #include <rtw_xmit.h>

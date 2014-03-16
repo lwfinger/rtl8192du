@@ -8575,17 +8575,6 @@ u8 collect_bss_info(struct rtw_adapter *adapt,
 		}
 	}
 
-#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) & 1
-	if (strcmp(bssid->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
-		DBG_8192D
-		    ("Receiving %s(%pM, DSConfig:%u) from ch%u with ss:%3u, sq:%3u, RawRSSI:%3ld\n",
-		     bssid->Ssid.Ssid, bssid->MacAddress,
-		     bssid->Configuration.DSConfig, rtw_get_oper_ch(adapt)
-		     , bssid->PhyInfo.SignalStrength,
-		     bssid->PhyInfo.SignalQuality, bssid->Rssi);
-	}
-#endif
-
 	/*  mark bss info receving from nearby channel as SignalQuality 101 */
 	if (bssid->Configuration.DSConfig != rtw_get_oper_ch(adapt)) {
 		bssid->PhyInfo.SignalQuality = 101;

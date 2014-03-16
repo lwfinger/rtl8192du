@@ -566,16 +566,6 @@ static void update_network(struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src,
 	u8 sq_final;
 	long rssi_final;
 
-#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
-	if (strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
-		DBG_8192D
-		    ("%s %s(%pM, ch%u) ss_ori:%3u, sq_ori:%3u, rssi_ori:%3ld, ss_smp:%3u, sq_smp:%3u, rssi_smp:%3ld\n",
-		     __func__, src->Ssid.Ssid, src->MacAddress,
-		     src->Configuration.DSConfig, ss_ori, sq_ori, rssi_ori,
-		     ss_smp, sq_smp, rssi_smp);
-	}
-#endif
-
 	/* The rule below is 1/5 for sample value, 4/5 for history value */
 	if (check_fwstate(&padapter->mlmepriv, _FW_LINKED) &&
 	    is_same_network(&(padapter->mlmepriv.cur_network.network), src)) {
@@ -610,17 +600,6 @@ static void update_network(struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src,
 	dst->PhyInfo.SignalStrength = ss_final;
 	dst->PhyInfo.SignalQuality = sq_final;
 	dst->Rssi = rssi_final;
-
-#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
-	if (strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
-		DBG_8192D
-		    ("%s %s(%pM), SignalStrength:%u, SignalQuality:%u, RawRSSI:%ld\n",
-		     __func__, dst->Ssid.Ssid, dst->MacAddress,
-		     dst->PhyInfo.SignalStrength, dst->PhyInfo.SignalQuality,
-		     dst->Rssi);
-	}
-#endif
-
 }
 
 static void update_current_network(struct rtw_adapter *adapter,
@@ -1343,11 +1322,6 @@ static void rtw_joinbss_update_network(struct rtw_adapter *padapter,
 	padapter->recvpriv.rssi =
 	    translate_percentage_to_dbm(ptarget_wlan->network.PhyInfo.
 					SignalStrength);
-#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
-	DBG_8192D("%s signal_strength:%3u, rssi:%3d, signal_qual:%3u"
-		  "\n", __func__, adapter->recvpriv.signal_strength,
-		  adapter->recvpriv.rssi, adapter->recvpriv.signal_qual);
-#endif
 	rtw_set_signal_stat_timer(&padapter->recvpriv);
 
 	/* update fw_state will clr _FW_UNDER_LINKING here indirectly */

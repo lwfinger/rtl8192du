@@ -46,7 +46,6 @@
 #include <rtw_led.h>
 #include <rtw_mlme_ext.h>
 #include <rtw_p2p.h>
-#include <rtw_tdls.h>
 #include <rtw_ap.h>
 
 #ifdef CONFIG_IOCTL_CFG80211

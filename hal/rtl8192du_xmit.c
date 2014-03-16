@@ -21,8 +21,6 @@
 #include <osdep_intf.h>
 #include <usb_ops.h>
 #include <rtl8192d_hal.h>
-#include <rtw_tdls.h>
-#include <rtw_tdls.h>
 
 s32	rtl8192du_init_xmit_priv(struct rtw_adapter *padapter)
 {
@@ -425,7 +423,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 	return pull;
 }
 
-s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
+static s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 ret = _SUCCESS;
 	s32 inner_ret = _SUCCESS;

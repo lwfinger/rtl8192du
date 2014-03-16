@@ -1170,15 +1170,11 @@ static int rtw_wx_get_range(struct net_device *dev,
 #define IW_SCAN_CAPA_TIME		0x40
 */
 
-#if WIRELESS_EXT > 17
 	range->enc_capa = IW_ENC_CAPA_WPA|IW_ENC_CAPA_WPA2|
 			  IW_ENC_CAPA_CIPHER_TKIP|IW_ENC_CAPA_CIPHER_CCMP;
-#endif
 
-#ifdef IW_SCAN_CAPA_ESSID /* WIRELESS_EXT > 21 */
 	range->scan_capa = IW_SCAN_CAPA_ESSID | IW_SCAN_CAPA_TYPE |IW_SCAN_CAPA_BSSID|
 					IW_SCAN_CAPA_CHANNEL|IW_SCAN_CAPA_MODE|IW_SCAN_CAPA_RATE;
-#endif
 
 	return 0;
 }
@@ -1439,7 +1435,6 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 
 	memset(ssid, 0, sizeof(struct ndis_802_11_ssid)*RTW_SSID_SCAN_AMOUNT);
 
-#if WIRELESS_EXT >= 17
 	if (wrqu->data.length == sizeof(struct iw_scan_req)) {
 		struct iw_scan_req *req = (struct iw_scan_req *)extra;
 
@@ -1461,63 +1456,61 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 			DBG_8192D("rtw_wx_set_scan, req->scan_type == IW_SCAN_TYPE_PASSIVE\n");
 		}
 
-	} else
-#endif
-
-	if (wrqu->data.length >= WEXT_CSCAN_HEADER_SIZE &&
-	    !memcmp(extra, WEXT_CSCAN_HEADER, WEXT_CSCAN_HEADER_SIZE)) {
-		int len = wrqu->data.length -WEXT_CSCAN_HEADER_SIZE;
-		char *pos = extra+WEXT_CSCAN_HEADER_SIZE;
-		char section;
-		char sec_len;
-		int ssid_index = 0;
-
-		while (len >= 1) {
-			section = *(pos++); len-= 1;
-
-			switch (section) {
-			case WEXT_CSCAN_SSID_SECTION:
-				if (len < 1) {
-					len = 0;
-					break;
-				}
-
-				sec_len = *(pos++); len-= 1;
-
-				if (sec_len > 0 && sec_len<= len) {
-					ssid[ssid_index].SsidLength = sec_len;
-					memcpy(ssid[ssid_index].Ssid, pos, ssid[ssid_index].SsidLength);
-					ssid_index++;
-				}
-
-				pos+= sec_len; len-= sec_len;
-				break;
-			case WEXT_CSCAN_CHANNEL_SECTION:
-				pos+= 1; len-= 1;
-				break;
-			case WEXT_CSCAN_ACTV_DWELL_SECTION:
-				pos+= 2; len-= 2;
-				break;
-			case WEXT_CSCAN_PASV_DWELL_SECTION:
-				pos+= 2; len-= 2;
-				break;
-			case WEXT_CSCAN_HOME_DWELL_SECTION:
-				pos+= 2; len-= 2;
-				break;
-			case WEXT_CSCAN_TYPE_SECTION:
-				pos+= 1; len-= 1;
-				break;
-			default:
-				len = 0; /*  stop parsing */
-			}
-		}
-		/* jeff: it has still some scan paramater to parse, we only do this now... */
-		_status = rtw_set_802_11_bssid_list_scan(padapter, ssid, RTW_SSID_SCAN_AMOUNT);
-
 	} else {
-		_status = rtw_set_802_11_bssid_list_scan(padapter, NULL, 0);
-	}
+		if (wrqu->data.length >= WEXT_CSCAN_HEADER_SIZE &&
+		    !memcmp(extra, WEXT_CSCAN_HEADER, WEXT_CSCAN_HEADER_SIZE)) {
+			int len = wrqu->data.length -WEXT_CSCAN_HEADER_SIZE;
+			char *pos = extra+WEXT_CSCAN_HEADER_SIZE;
+			char section;
+			char sec_len;
+			int ssid_index = 0;
 
+			while (len >= 1) {
+				section = *(pos++); len-= 1;
+
+				switch (section) {
+				case WEXT_CSCAN_SSID_SECTION:
+					if (len < 1) {
+						len = 0;
+						break;
+					}
+
+					sec_len = *(pos++); len-= 1;
+
+					if (sec_len > 0 && sec_len<= len) {
+						ssid[ssid_index].SsidLength = sec_len;
+						memcpy(ssid[ssid_index].Ssid, pos, ssid[ssid_index].SsidLength);
+						ssid_index++;
+					}
+
+					pos+= sec_len; len-= sec_len;
+					break;
+				case WEXT_CSCAN_CHANNEL_SECTION:
+					pos+= 1; len-= 1;
+					break;
+				case WEXT_CSCAN_ACTV_DWELL_SECTION:
+					pos+= 2; len-= 2;
+					break;
+				case WEXT_CSCAN_PASV_DWELL_SECTION:
+					pos+= 2; len-= 2;
+					break;
+				case WEXT_CSCAN_HOME_DWELL_SECTION:
+					pos+= 2; len-= 2;
+					break;
+				case WEXT_CSCAN_TYPE_SECTION:
+					pos+= 1; len-= 1;
+					break;
+				default:
+					len = 0; /*  stop parsing */
+				}
+			}
+			/* jeff: it has still some scan paramater to parse, we only do this now... */
+			_status = rtw_set_802_11_bssid_list_scan(padapter, ssid, RTW_SSID_SCAN_AMOUNT);
+
+		} else {
+			_status = rtw_set_802_11_bssid_list_scan(padapter, NULL, 0);
+		}
+	}
 	if (_status == false)
 		ret = -1;
 exit:
@@ -1683,11 +1676,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 		goto exit;
 	}
 
-#if WIRELESS_EXT <= 20
-	if ((wrqu->essid.length-1) > IW_ESSID_MAX_SIZE) {
-#else
 	if (wrqu->essid.length > IW_ESSID_MAX_SIZE) {
-#endif
 		ret = -E2BIG;
 		goto exit;
 	}
@@ -1701,19 +1690,11 @@ static int rtw_wx_set_essid(struct net_device *dev,
 	DBG_8192D("=>%s\n", __func__);
 	if (wrqu->essid.flags && wrqu->essid.length)
 	{
-		/*  Commented by Albert 20100519 */
 		/*  We got the codes in "set_info" function of iwconfig source code. */
 		/*	========================================= */
 		/*	wrq.u.essid.length = strlen(essid) + 1; */
-		/*	if (we_kernel_version > 20) */
-		/*		wrq.u.essid.length--; */
 		/*	========================================= */
-		/*	That means, if the WIRELESS_EXT less than or equal to 20, the correct ssid len should subtract 1. */
-#if WIRELESS_EXT <= 20
-		len = ((wrqu->essid.length-1) < IW_ESSID_MAX_SIZE) ? (wrqu->essid.length-1) : IW_ESSID_MAX_SIZE;
-#else
 		len = (wrqu->essid.length < IW_ESSID_MAX_SIZE) ? wrqu->essid.length : IW_ESSID_MAX_SIZE;
-#endif
 
 		if (wrqu->essid.length != 33)
 			DBG_8192D("ssid =%s, len =%d\n", extra, wrqu->essid.length);
@@ -7212,7 +7193,6 @@ static iw_handler rtw_private_handler[] = {
 	rtw_test	,		/*  0x1D */
 };
 
-#if WIRELESS_EXT >= 17
 static struct iw_statistics *rtw_get_wireless_stats(struct net_device *dev)
 {
 	struct rtw_adapter *padapter =
@@ -7242,7 +7222,6 @@ static struct iw_statistics *rtw_get_wireless_stats(struct net_device *dev)
 
 	return &padapter->iwstats;
 }
-#endif
 
 #ifdef CONFIG_WIRELESS_EXT
 struct iw_handler_def rtw_handlers_def = {
@@ -7255,8 +7234,6 @@ struct iw_handler_def rtw_handlers_def = {
 	.num_private_args = sizeof(rtw_private_args) /
 			    sizeof(struct iw_priv_args),
 #endif
-#if WIRELESS_EXT >= 17
 	.get_wireless_stats = rtw_get_wireless_stats,
-#endif
 };
 #endif

@@ -1994,26 +1994,6 @@ _DisableRF_AFE(
 	/* disable RF/ AFE AD/DA */
 	value8 = APSDOFF;
 	rtw_write8(adapter, REG_APSD_CTRL, value8);
-
-#if (RTL8192CU_ASIC_VERIFICATION)
-
-	do
-	{
-		if (rtw_read8(adapter, REG_APSD_CTRL) & APSDOFF_STATUS) {
-			/* RT_TRACE(COMP_INIT, DBG_LOUD, ("Disable RF, AFE, AD, DA Done!\n")); */
-			break;
-		}
-
-		if (pollingCount++ > POLLING_READY_TIMEOUT_COUNT) {
-			/* RT_TRACE(COMP_INIT, DBG_SERIOUS, ("Failed to polling APSDOFF_STATUS done!\n")); */
-			return _FAIL;
-		}
-
-	}while (true);
-
-#endif
-
-	/* RT_TRACE(COMP_INIT, DBG_LOUD, ("Disable RF, AFE, AD, DA.\n")); */
 	return rtStatus;
 }
 

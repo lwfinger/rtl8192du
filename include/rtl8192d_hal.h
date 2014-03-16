@@ -684,5 +684,7 @@ bool PHY_CheckPowerOffFor8192D(struct rtw_adapter * adapter);
 void PHY_SetPowerOnFor8192D(struct rtw_adapter * adapter);
 void rtl8192d_free_hal_data(struct rtw_adapter *padapter);
 void rtl8192d_set_hal_ops(struct hal_ops *pHalFunc);
+void rtl8192du_InitSwLeds(struct rtw_adapter *padapter);
+void rtl8192du_DeInitSwLeds(struct rtw_adapter *padapter);
 
 #endif

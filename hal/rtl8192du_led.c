@@ -16,7 +16,6 @@
 
 #include "drv_types.h"
 #include "rtl8192d_hal.h"
-#include <rtl8192d_led.h>
 
 /*  */
 /*	Constant. */

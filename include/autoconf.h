@@ -33,7 +33,6 @@
 #ifdef CONFIG_WAKE_ON_WLAN
 #define CONFIG_WOWLAN 1
 #endif /* CONFIG_WAKE_ON_WLAN */
-#define CONFIG_R871X_TEST	1
 
 #define CONFIG_92D_AP_MODE 1
 

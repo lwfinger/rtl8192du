@@ -1,11 +1,5 @@
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
 EXTRA_CFLAGS += -O1
-#EXTRA_CFLAGS += -O3
-#EXTRA_CFLAGS += -Wall
-#EXTRA_CFLAGS += -Wextra
-#EXTRA_CFLAGS += -Werror
-#EXTRA_CFLAGS += -pedantic
-#EXTRA_CFLAGS += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
 
 EXTRA_CFLAGS += -Wno-unused-variable
 EXTRA_CFLAGS += -Wno-unused-value
@@ -27,50 +21,6 @@ CONFIG_WAKE_ON_WLAN = n
 export TopDIR ?= $(shell pwd)
 
 ccflags-y += -D__CHECK_ENDIAN__
-
-RTL871X = rtl8192d
-
-MODULE_NAME = 8192du
-
-CHIP_FILES := \
-	hal/$(RTL871X)_xmit.o
-
-HCI_NAME = usb
-
-_OS_INTFS_FILES :=	os_dep/osdep_service.o \
-			os_dep/os_intfs.o \
-			os_dep/$(HCI_NAME)_intf.o \
-			os_dep/$(HCI_NAME)_ops_linux.o \
-			os_dep/ioctl_linux.o \
-			os_dep/xmit_linux.o \
-			os_dep/mlme_linux.o \
-			os_dep/recv_linux.o \
-			os_dep/ioctl_cfg80211.o \
-			os_dep/rtw_android.o
-
-
-_HAL_INTFS_FILES :=	hal/hal_intf.o \
-			hal/hal_com.o \
-			hal/$(RTL871X)_hal_init.o \
-			hal/$(RTL871X)_phycfg.o \
-			hal/$(RTL871X)_rf6052.o \
-			hal/$(RTL871X)_dm.o \
-			hal/$(RTL871X)_rxdesc.o \
-			hal/$(RTL871X)_cmd.o \
-			hal/$(HCI_NAME)_halinit.o \
-			hal/rtl$(MODULE_NAME)_led.o \
-			hal/rtl$(MODULE_NAME)_xmit.o \
-			hal/rtl$(MODULE_NAME)_recv.o \
-			hal/Hal8192DUHWImg.o
-
-_HAL_INTFS_FILES += hal/$(HCI_NAME)_ops_linux.o
-
-_HAL_INTFS_FILES += $(CHIP_FILES)
-
-
-ifeq ($(CONFIG_AUTOCFG_CP), y)
-$(shell cp $(TopDIR)/autoconf_$(RTL871X)_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
-endif
 
 ifeq ($(CONFIG_POWER_SAVING), y)
 EXTRA_CFLAGS += -DCONFIG_POWER_SAVING
@@ -99,32 +49,54 @@ endif
 ifneq ($(KERNELRELEASE),)
 
 
-rtk_core :=	core/rtw_cmd.o \
-		core/rtw_security.o \
+rtk_core :=			\
+		core/rtw_ap.o \
+		core/rtw_cmd.o \
 		core/rtw_debug.o \
+		core/rtw_efuse.o \
+		core/rtw_ieee80211.o \
 		core/rtw_io.o \
 		core/rtw_ioctl_set.o \
-		core/rtw_ieee80211.o \
 		core/rtw_mlme.o \
 		core/rtw_mlme_ext.o \
-		core/rtw_wlan_util.o \
+		core/rtw_p2p.o \
 		core/rtw_pwrctrl.o \
-		core/rtw_rf.o \
 		core/rtw_recv.o \
+		core/rtw_rf.o \
+		core/rtw_security.o \
 		core/rtw_sta_mgt.o \
-		core/rtw_ap.o \
+		core/rtw_wlan_util.o \
 		core/rtw_xmit.o	\
-		core/rtw_p2p.o
+		hal/hal_com.o \
+		hal/hal_intf.o \
+		hal/rtl8192d_cmd.o \
+		hal/rtl8192d_dm.o \
+		hal/rtl8192d_hal_init.o \
+		hal/rtl8192d_phycfg.o \
+		hal/rtl8192d_rf6052.o \
+		hal/rtl8192d_rxdesc.o \
+		hal/rtl8192d_xmit.o \
+		hal/rtl8192du_led.o \
+		hal/rtl8192du_xmit.o \
+		hal/rtl8192du_recv.o \
+		hal/Hal8192DUHWImg.o \
+		hal/usb_halinit.o \
+		hal/usb_ops_linux.o \
+		os_dep/ioctl_cfg80211.o \
+		os_dep/ioctl_linux.o \
+		os_dep/mlme_linux.o \
+		os_dep/osdep_service.o \
+		os_dep/os_intfs.o \
+		os_dep/rtw_android.o \
+		os_dep/usb_intf.o \
+		os_dep/usb_ops_linux.o \
+		os_dep/xmit_linux.o \
+		os_dep/recv_linux.o
 
-$(MODULE_NAME)-y += $(rtk_core)
+8192du-y += $(rtk_core)
 
-$(MODULE_NAME)-y += core/rtw_efuse.o
 
-$(MODULE_NAME)-y += $(_HAL_INTFS_FILES)
-
-$(MODULE_NAME)-y += $(_OS_INTFS_FILES)
-
-obj-$(CONFIG_RTL8192DU) := $(MODULE_NAME).o
+obj-$(CONFIG_RTL8192DU) := 8192du.o
 
 else
 
@@ -136,16 +108,16 @@ modules:
 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
 
 strip:
-	$(CROSS_COMPILE)strip $(MODULE_NAME).ko --strip-unneeded
+	$(CROSS_COMPILE)strip 8192du.ko --strip-unneeded
 
 install:
-	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
+	install -p -m 644 8192du.ko  $(MODDESTDIR)
 	mkdir -p /lib/firmware/rtlwifi
 	cp -n rtl8192dufw*.bin /lib/firmware/rtlwifi/.
 	/sbin/depmod -a ${KVER}
 
 uninstall:
-	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
+	rm -f $(MODDESTDIR)/8192du.ko
 	/sbin/depmod -a ${KVER}
 
 

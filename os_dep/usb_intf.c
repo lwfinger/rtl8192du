@@ -678,11 +678,8 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	if (rtw_handle_dualmac(padapter, 1) != _SUCCESS)
 		goto free_adapter;
 
-#ifdef CONFIG_IOCTL_CFG80211
-	if (rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0) {
+	if (rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0)
 		goto handle_dualmac;
-	}
-#endif
 
 	/* step 2. hook HalFunc, allocate HalData */
 	if (padapter->chip_type == RTL8192D) {
@@ -756,10 +753,8 @@ free_hal_data:
 		kfree(padapter->HalData);
 free_wdev:
 	if (status != _SUCCESS) {
-		#ifdef CONFIG_IOCTL_CFG80211
 		rtw_wdev_unregister(padapter->rtw_wdev);
 		rtw_wdev_free(padapter->rtw_wdev);
-		#endif
 	}
 handle_dualmac:
 	if (status != _SUCCESS)
@@ -804,10 +799,8 @@ static void rtw_usb_if1_deinit(struct rtw_adapter *if1)
 	/* s6. */
 	rtw_handle_dualmac(if1, 0);
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_wdev_unregister(if1->rtw_wdev);
 	rtw_wdev_free(if1->rtw_wdev);
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 	rtw_free_drv_sw(if1);
 

@@ -199,10 +199,8 @@ struct sta_info {
 
 	u8 keep_alive_trycnt;
 
-#ifdef CONFIG_IOCTL_CFG80211
 	u8 *passoc_req;
 	u32 assoc_req_len;
-#endif
 
 	/* for DM */
 	struct rssi_sta	 rssi_stat;

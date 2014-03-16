@@ -38,17 +38,15 @@ static void _dynamic_check_timer_handlder (void *FunctionContext)
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
 
 	rtw_dynamic_check_timer_handlder(adapter);
-
 	_set_timer(&adapter->mlmepriv.dynamic_chk_timer, 2000);
 }
 
-#ifdef CONFIG_IOCTL_CFG80211
 static void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
 {
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
+
 	rtw_set_scan_deny_timer_hdl(adapter);
 }
-#endif
 
 void rtw_init_mlme_timer(struct rtw_adapter *padapter)
 {
@@ -59,17 +57,13 @@ void rtw_init_mlme_timer(struct rtw_adapter *padapter)
 
 	_init_timer(&(pmlmepriv->dynamic_chk_timer), padapter->pnetdev, _dynamic_check_timer_handlder, padapter);
 
-	#ifdef CONFIG_IOCTL_CFG80211
 	_init_timer(&(pmlmepriv->set_scan_deny_timer), padapter->pnetdev, _rtw_set_scan_deny_timer_hdl, padapter);
-	#endif
 }
 
 void rtw_os_indicate_connect(struct rtw_adapter *adapter)
 {
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_indicate_connect(adapter);
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 	rtw_indicate_wx_assoc_event(adapter);
 	netif_carrier_on(adapter->pnetdev);
@@ -81,9 +75,7 @@ void rtw_os_indicate_connect(struct rtw_adapter *adapter)
 
 void rtw_os_indicate_scan_done(struct rtw_adapter *padapter, bool aborted)
 {
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_indicate_scan_done(wdev_to_priv(padapter->rtw_wdev), aborted);
-#endif
 	indicate_wx_scan_complete_event(padapter);
 }
 
@@ -141,17 +133,13 @@ void rtw_reset_securitypriv(struct rtw_adapter *adapter)
 
 void rtw_os_indicate_disconnect(struct rtw_adapter *adapter)
 {
-
 	netif_carrier_off(adapter->pnetdev); /*  Do it first for tx broadcast pkt after disconnection issue! */
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_indicate_disconnect(adapter);
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 	rtw_indicate_wx_disassoc_event(adapter);
 
 	 rtw_reset_securitypriv(adapter);
-
 }
 
 void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie)

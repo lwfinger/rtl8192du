@@ -27,8 +27,6 @@
 
 //#define CONFIG_P2P	1
 
-#define CONFIG_IOCTL_CFG80211
-
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable,*/
 
 //#define CONFIG_CONCURRENT_MODE 1

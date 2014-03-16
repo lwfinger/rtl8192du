@@ -112,104 +112,22 @@ static int hwaddr_aton_i(const char *txt, u8 *addr)
 
 static void indicate_wx_custom_event(struct rtw_adapter *padapter, char *msg)
 {
-#ifndef CONFIG_IOCTL_CFG80211
-	u8 *buff, *p;
-	union iwreq_data wrqu;
-
-	if ((u32)strlen(msg) > IW_CUSTOM_MAX) {
-		DBG_8192D("%s strlen(msg):%u > IW_CUSTOM_MAX:%u\n", __func__ ,
-			  (u32)strlen(msg), IW_CUSTOM_MAX);
-		return;
-	}
-
-	buff = kzalloc(IW_CUSTOM_MAX+1, GFP_KERNEL);
-	if (!buff)
-		return;
-
-	memcpy(buff, msg, strlen(msg));
-
-	memset(&wrqu, 0, sizeof(wrqu));
-	wrqu.data.length = strlen(msg);
-
-	DBG_8192D("%s %s\n", __func__, buff);
-	wireless_send_event(padapter->pnetdev, IWEVCUSTOM, &wrqu, buff);
-
-	kfree(buff);
-#endif
 }
 
 static void request_wps_pbc_event(struct rtw_adapter *padapter)
 {
-#ifndef CONFIG_IOCTL_CFG80211
-	u8 *buff, *p;
-	union iwreq_data wrqu;
-
-	buff = kmalloc(IW_CUSTOM_MAX, GFP_KERNEL);
-	if (!buff)
-		return;
-
-	memset(buff, 0, IW_CUSTOM_MAX);
-
-	p = buff;
-
-	p+= sprintf(p, "WPS_PBC_START.request = TRUE");
-
-	memset(&wrqu, 0, sizeof(wrqu));
-
-	wrqu.data.length = p-buff;
-
-	wrqu.data.length = (wrqu.data.length<IW_CUSTOM_MAX) ?
-			   wrqu.data.length : IW_CUSTOM_MAX;
-
-	DBG_8192D("%s\n", __func__);
-
-	wireless_send_event(padapter->pnetdev, IWEVCUSTOM, &wrqu, buff);
-
-	kfree(buff);
-#endif
 }
 
 void indicate_wx_scan_complete_event(struct rtw_adapter *padapter)
 {
-#ifndef CONFIG_IOCTL_CFG80211
-	union iwreq_data wrqu;
-	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
-	memset(&wrqu, 0, sizeof(union iwreq_data));
-
-	wireless_send_event(padapter->pnetdev, SIOCGIWSCAN, &wrqu, NULL);
-#endif
 }
 
 void rtw_indicate_wx_assoc_event(struct rtw_adapter *padapter)
 {
-#ifndef CONFIG_IOCTL_CFG80211
-	union iwreq_data wrqu;
-	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
-	memset(&wrqu, 0, sizeof(union iwreq_data));
-
-	wrqu.ap_addr.sa_family = ARPHRD_ETHER;
-
-	memcpy(wrqu.ap_addr.sa_data,
-	       pmlmepriv->cur_network.network.MacAddress, ETH_ALEN);
-
-	wireless_send_event(padapter->pnetdev, SIOCGIWAP, &wrqu, NULL);
-#endif
 }
 
 void rtw_indicate_wx_disassoc_event(struct rtw_adapter *padapter)
 {
-#ifndef CONFIG_IOCTL_CFG80211
-	union iwreq_data wrqu;
-
-	memset(&wrqu, 0, sizeof(union iwreq_data));
-
-	wrqu.ap_addr.sa_family = ARPHRD_ETHER;
-	memset(wrqu.ap_addr.sa_data, 0, ETH_ALEN);
-
-	wireless_send_event(padapter->pnetdev, SIOCGIWAP, &wrqu, NULL);
-#endif
 }
 
 static char *translate_scan(struct rtw_adapter *padapter,

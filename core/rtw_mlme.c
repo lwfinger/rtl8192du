@@ -999,11 +999,7 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	dc_resume_xmit(adapter);
 #endif
-
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_surveydone_event_callback(adapter);
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 }
 
 void rtw_dummy_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
@@ -1585,7 +1581,6 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 		psta = rtw_get_stainfo(&adapter->stapriv, pstassoc->macaddr);
 		if (psta) {
-#ifdef CONFIG_IOCTL_CFG80211
 			u8 *passoc_req = NULL;
 			u32 assoc_req_len;
 
@@ -1611,8 +1606,6 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 				kfree(passoc_req);
 			}
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 			ap_sta_info_defer_update(adapter, psta);
 		}
 		return;
@@ -1680,14 +1673,13 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	struct sta_priv *pstapriv = &adapter->stapriv;
 	struct wlan_network *tgt_network = &(pmlmepriv->cur_network);
 
+#ifdef CONFIG_92D_AP_MODE
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
-#if defined(CONFIG_92D_AP_MODE)
 		rtw_cfg80211_indicate_sta_disassoc(adapter, pstadel->macaddr,
 						   *(u16 *)pstadel->rsvd);
-#endif /* defined(CONFIG_IOCTL_CFG80211) */
 		return;
 	}
-
+#endif
 	mlmeext_sta_del_event_callback(adapter);
 
 	spin_lock_bh(&pmlmepriv->lock);
@@ -1922,7 +1914,6 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 	}
 }
 
-#ifdef CONFIG_IOCTL_CFG80211
 inline bool rtw_is_scan_deny(struct rtw_adapter *adapter)
 {
 	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
@@ -1958,7 +1949,6 @@ void rtw_set_scan_deny(struct rtw_adapter *adapter, u32 ms)
 	_set_timer(&b_mlmepriv->set_scan_deny_timer, ms);
 #endif
 }
-#endif
 
 #define RTW_SCAN_RESULT_EXPIRE 2000
 

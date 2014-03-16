@@ -1975,8 +1975,7 @@ u8 ap_free_sta(struct rtw_adapter *padapter, struct sta_info *psta,
 
 #ifdef CONFIG_92D_AP_MODE
 	rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr, reason);
-#endif /* CONFIG_IOCTL_CFG80211 */
-
+#endif
 	report_del_sta_event(padapter, psta->hwaddr, reason);
 
 	beacon_updated = bss_cap_update_on_sta_leave(padapter, psta);

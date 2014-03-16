@@ -106,10 +106,8 @@ static bool rtw_pwr_unassociated_idle(struct rtw_adapter *adapter)
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo = &(adapter->wdinfo);
-#ifdef CONFIG_IOCTL_CFG80211
 	struct cfg80211_wifidirect_info *pcfg80211_wdinfo =
 	    &adapter->cfg80211_wdinfo;
-#endif
 #endif
 
 	bool ret = false;
@@ -133,10 +131,8 @@ static bool rtw_pwr_unassociated_idle(struct rtw_adapter *adapter)
 		struct mlme_priv *b_pmlmepriv = &(buddy->mlmepriv);
 #ifdef CONFIG_P2P
 		struct wifidirect_info *b_pwdinfo = &(buddy->wdinfo);
-#ifdef CONFIG_IOCTL_CFG80211
 		struct cfg80211_wifidirect_info *b_pcfg80211_wdinfo =
 		    &buddy->cfg80211_wdinfo;
-#endif
 #endif
 
 		if (check_fwstate(b_pmlmepriv, WIFI_ASOC_STATE | WIFI_SITE_MONITOR) ||
@@ -264,10 +260,8 @@ static u8 ps_rdy_check(struct rtw_adapter *padapter)
 		DBG_8192D("Group handshake still in progress !!!\n");
 		return false;
 	}
-#ifdef CONFIG_IOCTL_CFG80211
 	if (!rtw_cfg80211_pwr_mgmt(padapter))
 		return false;
-#endif
 
 	return true;
 }
@@ -336,10 +330,8 @@ void rtw_lps_enter(struct rtw_adapter *padapter)
 		struct mlme_priv *b_pmlmepriv = &(buddy->mlmepriv);
 #ifdef CONFIG_P2P
 		struct wifidirect_info *b_pwdinfo = &(buddy->wdinfo);
-#ifdef CONFIG_IOCTL_CFG80211
 		struct cfg80211_wifidirect_info *b_pcfg80211_wdinfo =
 		    &buddy->cfg80211_wdinfo;
-#endif
 #endif
 
 		if (check_fwstate

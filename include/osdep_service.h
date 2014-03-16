@@ -51,12 +51,8 @@
 #include <linux/interrupt.h>	/*  for struct tasklet_struct */
 #include <linux/ip.h>
 #include <linux/kthread.h>
-
-#ifdef CONFIG_IOCTL_CFG80211
-        #include <net/ieee80211_radiotap.h>
-	#include <net/cfg80211.h>
-#endif /* CONFIG_IOCTL_CFG80211 */
-
+#include <net/ieee80211_radiotap.h>
+#include <net/cfg80211.h>
 #include <linux/usb.h>
 #include <linux/usb/ch9.h>
 

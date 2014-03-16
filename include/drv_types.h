@@ -45,9 +45,7 @@
 #include <rtw_p2p.h>
 #include <rtw_ap.h>
 
-#ifdef CONFIG_IOCTL_CFG80211
-	#include "ioctl_cfg80211.h"
-#endif /* CONFIG_IOCTL_CFG80211 */
+#include "ioctl_cfg80211.h"
 
 #define SPEC_DEV_ID_NONE BIT(0)
 #define SPEC_DEV_ID_DISABLE_HT BIT(1)
@@ -262,42 +260,31 @@ struct rtw_adapter {
 	struct	pwrctrl_priv	pwrctrlpriv;
 	struct	eeprom_priv eeprompriv;
 	struct	led_priv	ledpriv;
-
+	struct cfg80211_wifidirect_info	cfg80211_wdinfo;
 #ifdef CONFIG_92D_AP_MODE
 	struct	hostapd_priv	*phostapdpriv;
 #endif
-
-#ifdef CONFIG_IOCTL_CFG80211
-	struct cfg80211_wifidirect_info	cfg80211_wdinfo;
-#endif /* CONFIG_IOCTL_CFG80211 */
-	u32	setband;
 	struct wifidirect_info	wdinfo;
-
+	struct hal_ops	HalFunc;
+	u32	setband;
 	void *HalData;
 	u32 hal_data_sz;
-	struct hal_ops	HalFunc;
-
 	s32	bDriverStopped;
 	s32	bSurpriseRemoved;
 	s32  bCardDisableWOHSM;
-
 	u32	IsrContent;
 	u32	ImrContent;
-
 	u8	EepromAddressSize;
 	u8	hw_init_completed;
 	u8	bDriverIsGoingToUnload;
 	u8	init_adpt_in_progress;
 	u8	bHaltInProgress;
-
 	void *cmdThread;
 	void *evtThread;
 	void *xmitThread;
 	void *recvThread;
-
 	void (*intf_start)(struct rtw_adapter *adapter);
 	void (*intf_stop)(struct rtw_adapter *adapter);
-
 	struct net_device *pnetdev;
 
 	/*  used by rtw_rereg_nd_name related function */
@@ -312,11 +299,7 @@ struct rtw_adapter {
 	struct net_device_stats stats;
 	struct iw_statistics iwstats;
 	struct proc_dir_entry *dir_dev;/*  for proc directory */
-
-#ifdef CONFIG_IOCTL_CFG80211
 	struct wireless_dev *rtw_wdev;
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 	int net_closed;
 
 	u8 bFWReady;

@@ -145,14 +145,11 @@ static int rtw_android_get_p2p_dev_addr(struct net_device *net, char *command, i
 
 static int rtw_android_set_block(struct net_device *net, char *command, int total_len)
 {
-	int ret;
 	struct rtw_adapter *adapter = (struct rtw_adapter *)rtw_netdev_priv(net);
+	int ret;
 	char *block_value = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_BLOCK]) + 1;
 
-	#ifdef CONFIG_IOCTL_CFG80211
 	wdev_to_priv(adapter->rtw_wdev)->block = (*block_value=='0')?false:true;
-	#endif
-
 	return 0;
 }
 
@@ -160,10 +157,8 @@ static int get_int_from_command(char* pcmd)
 {
 	int i = 0;
 
-	for (i = 0; i < strlen(pcmd); i++)
-	{
-		if (pcmd[i] == '=')
-		{
+	for (i = 0; i < strlen(pcmd); i++) {
+		if (pcmd[i] == '=') {
 			/*	Skip the '=' and space characters. */
 			i += 2;
 			break;
@@ -284,15 +279,12 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		break;
 	case ANDROID_WIFI_CMD_P2P_SET_PS:
 		break;
-#ifdef CONFIG_IOCTL_CFG80211
 	case ANDROID_WIFI_CMD_SET_AP_WPS_P2P_IE:
 	{
 		int skip = strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_SET_AP_WPS_P2P_IE]) + 3;
 		bytes_written = rtw_cfg80211_set_mgnt_wpsp2pie(net, command + skip, priv_cmd.total_len - skip, *(command + skip - 2) - '0');
 		break;
 	}
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 	default:
 		DBG_8192D("Unknown PRIVATE command %s - ignored\n", command);
 		snprintf(command, 3, "OK");

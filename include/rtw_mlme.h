@@ -179,8 +179,7 @@ struct scan_limit_info{
 	u8					operation_ch[2];				/* 	Store the operation channel of invitation request frame */
 };
 
-#ifdef CONFIG_IOCTL_CFG80211
-struct cfg80211_wifidirect_info{
+struct cfg80211_wifidirect_info {
 	struct timer_list		remain_on_ch_timer;
 	u8				restore_channel;
 	struct ieee80211_channel	remain_on_ch_channel;
@@ -188,9 +187,8 @@ struct cfg80211_wifidirect_info{
 	u64				remain_on_ch_cookie;
 	bool is_ro_ch;
 };
-#endif /* CONFIG_IOCTL_CFG80211 */
 
-struct wifidirect_info{
+struct wifidirect_info {
 	struct rtw_adapter *padapter;
 	struct timer_list			find_phase_timer;
 	struct timer_list			restore_p2p_state_timer;
@@ -327,10 +325,8 @@ struct mlme_priv {
 	struct timer_list scan_to_timer; /*  driver itself handles scan_timeout status. */
 	u32 scan_start_time; /*  used to evaluate the time spent in scanning */
 
-	#ifdef CONFIG_IOCTL_CFG80211
 	struct timer_list set_scan_deny_timer;
 	atomic_t set_scan_deny; /* 0: allowed, 1: deny */
-	#endif
 
 	struct qos_priv qospriv;
 
@@ -387,11 +383,11 @@ struct mlme_priv {
 
 	u8 *wps_beacon_ie;
 	u8 *wps_probe_resp_ie;
-	u8 *wps_assoc_resp_ie; /*  for CONFIG_IOCTL_CFG80211, this IE could include p2p ie / wfd ie */
+	u8 *wps_assoc_resp_ie; /*  for IOCTL_CFG80211, this IE could include p2p ie / wfd ie */
 
 	u32 wps_beacon_ie_len;
 	u32 wps_probe_resp_ie_len;
-	u32 wps_assoc_resp_ie_len; /*  for CONFIG_IOCTL_CFG80211, this IE len could include p2p ie / wfd ie */
+	u32 wps_assoc_resp_ie_len; /*  for IOCTL_CFG80211, this IE len could include p2p ie / wfd ie */
 
 	u8 *p2p_beacon_ie;
 	u8 *p2p_probe_req_ie;
@@ -550,18 +546,10 @@ void _rtw_join_timeout_handler(struct rtw_adapter *adapter);
 void rtw_scan_timeout_handler(struct rtw_adapter *adapter);
 
 void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter);
-#ifdef CONFIG_IOCTL_CFG80211
 bool rtw_is_scan_deny(struct rtw_adapter *adapter);
 void rtw_clear_scan_deny(struct rtw_adapter *adapter);
 void rtw_set_scan_deny_timer_hdl(struct rtw_adapter *adapter);
 void rtw_set_scan_deny(struct rtw_adapter *adapter, u32 ms);
-#else
-#define rtw_is_scan_deny(adapter) false
-#define rtw_clear_scan_deny(adapter) do {} while (0)
-#define rtw_set_scan_deny_timer_hdl(adapter) do {} while (0)
-#define rtw_set_scan_deny(adapter, ms) do {} while (0)
-#endif
-
 
 int _rtw_init_mlme_priv(struct rtw_adapter *padapter);
 
@@ -575,9 +563,10 @@ struct wlan_network* _rtw_dequeue_network(struct __queue *queue);
 
 struct wlan_network* _rtw_alloc_network(struct mlme_priv *pmlmepriv);
 
-
-void _rtw_free_network(struct mlme_priv *pmlmepriv, struct wlan_network *pnetwork, u8 isfreeall);
-void _rtw_free_network_nolock(struct mlme_priv *pmlmepriv, struct wlan_network *pnetwork);
+void _rtw_free_network(struct mlme_priv *pmlmepriv,
+		       struct wlan_network *pnetwork, u8 isfreeall);
+void _rtw_free_network_nolock(struct mlme_priv *pmlmepriv,
+			      struct wlan_network *pnetwork);
 void rtw_indicate_wx_assoc_event(struct rtw_adapter *padapter);
 void rtw_indicate_wx_disassoc_event(struct rtw_adapter *padapter);
 
@@ -587,22 +576,26 @@ void _rtw_free_network_queue(struct rtw_adapter* padapter, u8 isfreeall);
 
 int rtw_if_up(struct rtw_adapter *padapter);
 
-
 u8 *rtw_get_capability_from_ie(u8 *ie);
 u8 *rtw_get_timestampe_from_ie(u8 *ie);
 u8 *rtw_get_beacon_interval_from_ie(u8 *ie);
 
-
 void rtw_joinbss_reset(struct rtw_adapter *padapter);
 
-unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len, u8 channel);
-void rtw_update_ht_cap(struct rtw_adapter *padapter, u8 *pie, uint ie_len, u8 channel);
-void rtw_issue_addbareq_cmd(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe);
+unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
+				   u8 *out_ie, uint in_len, uint *pout_len,
+				   u8 channel);
+void rtw_update_ht_cap(struct rtw_adapter *padapter, u8 *pie, uint ie_len,
+		       u8 channel);
+void rtw_issue_addbareq_cmd(struct rtw_adapter *padapter,
+			    struct xmit_frame *pxmitframe);
 
-int rtw_is_same_ibss(struct rtw_adapter *adapter, struct wlan_network *pnetwork);
+int rtw_is_same_ibss(struct rtw_adapter *adapter,
+		     struct wlan_network *pnetwork);
 int is_same_network(struct wlan_bssid_ex *src, struct wlan_bssid_ex *dst);
 
-void _rtw_roaming(struct rtw_adapter *adapter, struct wlan_network *tgt_network);
+void _rtw_roaming(struct rtw_adapter *adapter,
+		  struct wlan_network *tgt_network);
 void rtw_roaming(struct rtw_adapter *adapter, struct wlan_network *tgt_network);
 void rtw_set_roaming(struct rtw_adapter *adapter, u8 to_roaming);
 u8 rtw_to_roaming(struct rtw_adapter *adapter);

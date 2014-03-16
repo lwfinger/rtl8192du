@@ -1617,56 +1617,43 @@ Current IOREG MAP
 
 /* 2 MBIDCAMCFG */
 
-
-
 /* 2 AMPDU_MIN_SPACE */
-#define _MIN_SPACE(x)				((x) & 0x7)
+#define _MIN_SPACE(x)			((x) & 0x7)
 #define _SHORT_GI_PADDING(x)		(((x) & 0x1F) << 3)
 
 
 /* 2 RXERR_RPT */
-#define RXERR_TYPE_OFDM_PPDU			0
+#define RXERR_TYPE_OFDM_PPDU		0
 #define RXERR_TYPE_OFDMfalse_ALARM	1
 #define RXERR_TYPE_OFDM_MPDU_OK		2
 #define RXERR_TYPE_OFDM_MPDU_FAIL	3
-#define RXERR_TYPE_CCK_PPDU			4
+#define RXERR_TYPE_CCK_PPDU		4
 #define RXERR_TYPE_CCKfalse_ALARM	5
 #define RXERR_TYPE_CCK_MPDU_OK		6
-#define RXERR_TYPE_CCK_MPDU_FAIL		7
-#define RXERR_TYPE_HT_PPDU				8
+#define RXERR_TYPE_CCK_MPDU_FAIL	7
+#define RXERR_TYPE_HT_PPDU		8
 #define RXERR_TYPE_HTfalse_ALARM	9
-#define RXERR_TYPE_HT_MPDU_TOTAL		10
-#define RXERR_TYPE_HT_MPDU_OK			11
+#define RXERR_TYPE_HT_MPDU_TOTAL	10
+#define RXERR_TYPE_HT_MPDU_OK		11
 #define RXERR_TYPE_HT_MPDU_FAIL		12
 #define RXERR_TYPE_RX_FULL_DROP		15
 
-#define RXERR_COUNTER_MASK			0xFFFFF
-#define RXERR_RPT_RST					BIT(27)
-#define _RXERR_RPT_SEL(type)			((type) << 28)
+#define RXERR_COUNTER_MASK		0xFFFFF
+#define RXERR_RPT_RST			BIT(27)
+#define _RXERR_RPT_SEL(type)		((type) << 28)
 
 
 /* 2 SECCFG */
-#define	SCR_TxUseDK					BIT(0)			/* Force Tx Use Default Key */
-#define	SCR_RxUseDK					BIT(1)			/* Force Rx Use Default Key */
-#define	SCR_TxEncEnable				BIT(2)			/* Enable Tx Encryption */
-#define	SCR_RxDecEnable				BIT(3)			/* Enable Rx Decryption */
-#define	SCR_SKByA2						BIT(4)			/* Search kEY BY A2 */
-#define	SCR_NoSKMC						BIT(5)			/* No Key Search Multicast */
-#define		SCR_TXBCUSEDK					BIT(6)			/*  Force Tx Broadcast packets Use Default Key */
-#define		SCR_RXBCUSEDK					BIT(7)			/*  Force Rx Broadcast packets Use Default Key */
+#define	SCR_TxUseDK			BIT(0)		/* Force Tx Use Default Key */
+#define	SCR_RxUseDK			BIT(1)		/* Force Rx Use Default Key */
+#define	SCR_TxEncEnable			BIT(2)		/* Enable Tx Encryption */
+#define	SCR_RxDecEnable			BIT(3)		/* Enable Rx Decryption */
+#define	SCR_SKByA2			BIT(4)		/* Search kEY BY A2 */
+#define	SCR_NoSKMC			BIT(5)		/* No Key Search Multicast */
+#define SCR_TXBCUSEDK			BIT(6)		/*  Force Tx Broadcast packets Use Default Key */
+#define SCR_RXBCUSEDK			BIT(7)		/*  Force Rx Broadcast packets Use Default Key */
 
-/* vivi added for new cam search flow, 20091028 */
-#ifdef HW_EN_DE_CRYPTION_FOR_NEW_CAM_SEARCH_FLOW
-#define	SCR_TxUseBroadcastDK			BIT6			/* Force Tx Use Broadcast Default Key */
-#define	SCR_RxUseBroadcastDK			BIT7			/* Force Rx Use Broadcast Default Key */
-#endif
-
-
-/*  */
-/*  */
 /* 	0xFE00h ~ 0xFE55h	USB Configuration */
-/*  */
-/*  */
 
 /* 2 USB Information (0xFE17) */
 #define USB_IS_HIGH_SPEED				0

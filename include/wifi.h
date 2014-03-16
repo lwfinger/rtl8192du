@@ -553,8 +553,12 @@ static inline int IsFrameTypeCtrl(unsigned char *pframe)
 #define GetOrderBit(pbuf)	(((*(unsigned short *)(pbuf)) & le16_to_cpu(_ORDER_)) != 0)
 
 
-/**
- * struct rtw_ieee80211_bar - HT Block Ack Request
+struct	qos_priv {
+	/* bit mask option: u-apsd, s-apsd, ts, block ack... */
+	unsigned int qos_option;
+};
+
+/*struct rtw_ieee80211_bar - HT Block Ack Request
  *
  * This structure refers to "HT BlockAckReq" as
  * described in 802.11n draft section 7.2.1.7.1

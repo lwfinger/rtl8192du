@@ -453,11 +453,8 @@ static char *translate_scan(struct rtw_adapter *padapter,
 
 	/* Add quality statistics */
 	iwe.cmd = IWEVQUAL;
-	iwe.u.qual.updated = IW_QUAL_QUAL_UPDATED | IW_QUAL_LEVEL_UPDATED | IW_QUAL_NOISE_INVALID
-	#ifdef CONFIG_SIGNAL_DISPLAY_DBM
-		| IW_QUAL_DBM
-	#endif
-	;
+	iwe.u.qual.updated = IW_QUAL_QUAL_UPDATED | IW_QUAL_LEVEL_UPDATED |
+			     IW_QUAL_NOISE_INVALID | IW_QUAL_DBM;
 
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true &&
 	    is_same_network(&pmlmepriv->cur_network.network, &pnetwork->network)) {
@@ -468,11 +465,7 @@ static char *translate_scan(struct rtw_adapter *padapter,
 		sq = pnetwork->network.PhyInfo.SignalQuality;
 	}
 
-	#ifdef CONFIG_SIGNAL_DISPLAY_DBM
 	iwe.u.qual.level = (u8) translate_percentage_to_dbm(ss);/* dbm */
-	#else
-	iwe.u.qual.level = (u8)ss;/*  */
-	#endif
 
 	iwe.u.qual.qual = (u8)sq;   /*  signal quality */
 
@@ -7264,11 +7257,7 @@ static struct iw_statistics *rtw_get_wireless_stats(struct net_device *dev)
 		piwstats->qual.level = 0;
 		piwstats->qual.noise = 0;
 	} else {
-		#ifdef CONFIG_SIGNAL_DISPLAY_DBM
 		tmp_level = translate_percentage_to_dbm(padapter->recvpriv.signal_strength);
-		#else
-		tmp_level = padapter->recvpriv.signal_strength;
-		#endif
 
 		tmp_qual = padapter->recvpriv.signal_qual;
 		tmp_noise = padapter->recvpriv.noise;
@@ -7279,9 +7268,7 @@ static struct iw_statistics *rtw_get_wireless_stats(struct net_device *dev)
 	}
 	piwstats->qual.updated = IW_QUAL_ALL_UPDATED ;/* IW_QUAL_DBM; */
 
-	#ifdef CONFIG_SIGNAL_DISPLAY_DBM
 	piwstats->qual.updated = piwstats->qual.updated | IW_QUAL_DBM;
-	#endif
 
 	return &padapter->iwstats;
 }

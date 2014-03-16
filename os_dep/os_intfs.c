@@ -108,12 +108,6 @@ static int rtw_AcceptAddbaReq = true;/*  0:Reject AP's Add BA req, 1:Accept AP's
 
 static int  rtw_antdiv_cfg = 2; /*  0:OFF , 1:ON, 2:decide by Efuse config */
 
-#ifdef CONFIG_USB_AUTOSUSPEND
-int rtw_enusbss = 1;/* 0:disable, 1:enable */
-#else
-static int rtw_enusbss = 0;/* 0:disable, 1:enable */
-#endif
-
 static int rtw_hwpdn_mode = 2;/* 0:disable, 1:enable, 2: by EFUSE config */
 
 static int rtw_hw_wps_pbc = 1;
@@ -163,7 +157,6 @@ module_param(rtw_special_rf_path, int, 0644);
 
 module_param(rtw_antdiv_cfg, int, 0644);
 
-module_param(rtw_enusbss, int, 0644);
 module_param(rtw_hwpdn_mode, int, 0644);
 
 module_param(rtw_hw_wps_pbc, int, 0644);

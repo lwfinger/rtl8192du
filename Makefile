@@ -21,7 +21,6 @@ EXTRA_CFLAGS += -I$(src)/include
 CONFIG_AUTOCFG_CP = n
 
 CONFIG_POWER_SAVING = y
-CONFIG_USB_AUTOSUSPEND = n
 CONFIG_BT_COEXISTENCE = n
 CONFIG_WAKE_ON_WLAN = n
 
@@ -71,11 +70,6 @@ _HAL_INTFS_FILES += $(CHIP_FILES)
 
 ifeq ($(CONFIG_AUTOCFG_CP), y)
 $(shell cp $(TopDIR)/autoconf_$(RTL871X)_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
-endif
-
-
-ifeq ($(CONFIG_USB_AUTOSUSPEND), y)
-EXTRA_CFLAGS += -DCONFIG_USB_AUTOSUSPEND
 endif
 
 ifeq ($(CONFIG_POWER_SAVING), y)

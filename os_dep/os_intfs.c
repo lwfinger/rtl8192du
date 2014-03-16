@@ -116,12 +116,6 @@ static int rtw_enusbss = 0;/* 0:disable, 1:enable */
 
 static int rtw_hwpdn_mode = 2;/* 0:disable, 1:enable, 2: by EFUSE config */
 
-#ifdef CONFIG_HW_PWRP_DETECTION
-int rtw_hwpwrp_detect = 1;
-#else
-static int rtw_hwpwrp_detect = 0; /* HW power  ping detect 0:disable , 1:enable */
-#endif
-
 static int rtw_hw_wps_pbc = 1;
 
 int rtw_mc2u_disable = 0;
@@ -171,7 +165,6 @@ module_param(rtw_antdiv_cfg, int, 0644);
 
 module_param(rtw_enusbss, int, 0644);
 module_param(rtw_hwpdn_mode, int, 0644);
-module_param(rtw_hwpwrp_detect, int, 0644);
 
 module_param(rtw_hw_wps_pbc, int, 0644);
 

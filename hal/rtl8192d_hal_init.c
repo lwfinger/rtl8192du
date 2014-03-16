@@ -867,54 +867,11 @@ rtl8192d_ReadTxPowerInfo(
 			pHalData->TxPwrLevelHT40_2S[rfPath][ch]  = (pwr > diff) ? (pwr - diff) : 0;
 		}
 	}
-
-#if DBG
-
-	for (rfPath = 0; rfPath < RF_PATH_MAX; rfPath++) {
-		for (ch = 0; ch < CHANNEL_MAX_NUMBER; ch++) {
-			if (ch < CHANNEL_MAX_NUMBER_2G)
-			{
-				DBG_8192D("RF(%d)-Ch(%d) [CCK / HT40_1S / HT40_2S] = [0x%x / 0x%x / 0x%x]\n",
-					rfPath, ch,
-					pHalData->TxPwrLevelCck[rfPath][ch],
-					pHalData->TxPwrLevelHT40_1S[rfPath][ch],
-					pHalData->TxPwrLevelHT40_2S[rfPath][ch]);
-			}
-			else
-			{
-				DBG_8192D("RF(%d)-Ch(%d) [HT40_1S / HT40_2S] = [0x%x / 0x%x]\n",
-					rfPath, ch,
-					pHalData->TxPwrLevelHT40_1S[rfPath][ch],
-					pHalData->TxPwrLevelHT40_2S[rfPath][ch]);
-			}
-		}
-	}
-
-	for (ch = 0; ch < CHANNEL_MAX_NUMBER; ch++) {
-		DBG_8192D("RF-A Ht20 to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrHt20Diff[RF_PATH_A][ch]);
-	}
-
-	for (ch = 0; ch < CHANNEL_MAX_NUMBER; ch++) {
-		DBG_8192D("RF-A Legacy to Ht40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrLegacyHtDiff[RF_PATH_A][ch]);
-	}
-
-	for (ch = 0; ch < CHANNEL_MAX_NUMBER; ch++) {
-		DBG_8192D("RF-B Ht20 to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrHt20Diff[RF_PATH_B][ch]);
-	}
-
-	for (ch = 0; ch < CHANNEL_MAX_NUMBER; ch++) {
-		DBG_8192D("RF-B Legacy to HT40 Diff[%d] = 0x%x\n", ch, pHalData->TxPwrLegacyHtDiff[RF_PATH_B][ch]);
-	}
-
-#endif
 }
 
-/*  */
 /*	Description: */
 /*		Reset Dual Mac Mode Switch related settings */
-/*  */
 /*	Assumption: */
-/*  */
 void rtl8192d_ResetDualMacSwitchVariables(
 		struct rtw_adapter *			adapter
 )

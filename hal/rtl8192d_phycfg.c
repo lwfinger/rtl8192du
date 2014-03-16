@@ -5453,68 +5453,31 @@ void PHY_ConfigMacPhyModeInfo92D(struct rtw_adapter *adapter)
 
 	adapter->registrypriv.channel = pHalData->CurrentChannel;
 
-#if DBG
-	switch (pHalData->VersionID)
-	{
-		case VERSION_NORMAL_CHIP_92D_D_CUT_SINGLEPHY:
-			MSG_8192D("Chip Version ID: VERSION_NORMAL_CHIP_92D_D_CUT_SINGLEPHY.\n");
-			break;
-		case VERSION_NORMAL_CHIP_92D_D_CUT_DUALPHY:
-			MSG_8192D("Chip Version ID: VERSION_NORMAL_CHIP_92D_D_CUT_DUALPHY.\n");
-			break;
-		case VERSION_NORMAL_CHIP_92D_E_CUT_SINGLEPHY:
-			MSG_8192D("Chip Version ID: VERSION_NORMAL_CHIP_92D_E_CUT_SINGLEPHY.\n");
-			break;
-		case VERSION_NORMAL_CHIP_92D_E_CUT_DUALPHY:
-			MSG_8192D("Chip Version ID: VERSION_NORMAL_CHIP_92D_E_CUT_DUALPHY.\n");
-			break;
-		case VERSION_NORMAL_CHIP_92D_C_CUT_SINGLEPHY:
-			MSG_8192D("Chip Version ID: VERSION_NORMAL_CHIP_92D_C_CUT_SINGLEPHY.\n");
-			break;
-		case VERSION_NORMAL_CHIP_92D_C_CUT_DUALPHY:
-			MSG_8192D("Chip Version ID: VERSION_NORMAL_CHIP_92D_C_CUT_DUALPHY.\n");
-			break;
-		case VERSION_TEST_CHIP_92D_SINGLEPHY:
-			MSG_8192D("Chip Version ID: VERSION_TEST_CHIP_92D_SINGLEPHY.\n");
-			break;
-		case VERSION_TEST_CHIP_92D_DUALPHY:
-			MSG_8192D("Chip Version ID: VERSION_TEST_CHIP_92D_DUALPHY.\n");
-			break;
-		default:
-			MSG_8192D("Chip Version ID: ???????????????.0x%04X\n", pHalData->VersionID);
-			break;
-	}
-#endif
+	switch (pHalData->BandSet92D) {
+	case BAND_ON_2_4G:
+		adapter->registrypriv.wireless_mode = WIRELESS_11BG_24N;
+		break;
 
-	switch (pHalData->BandSet92D)
-	{
-		case BAND_ON_2_4G:
-			adapter->registrypriv.wireless_mode = WIRELESS_11BG_24N;
-			break;
+	case BAND_ON_5G:
+		adapter->registrypriv.wireless_mode = WIRELESS_11A_5N;
+		break;
 
-		case BAND_ON_5G:
-			adapter->registrypriv.wireless_mode = WIRELESS_11A_5N;
-			break;
+	case BAND_ON_BOTH:
+		adapter->registrypriv.wireless_mode = WIRELESS_11ABGN;
+		break;
 
-		case BAND_ON_BOTH:
-			adapter->registrypriv.wireless_mode = WIRELESS_11ABGN;
-			break;
-
-		default:
-			adapter->registrypriv.wireless_mode = WIRELESS_11ABGN;
-			break;
+	default:
+		adapter->registrypriv.wireless_mode = WIRELESS_11ABGN;
+		break;
 	}
 	DBG_8192D("%s(): wireless_mode = %x\n", __func__, adapter->registrypriv.wireless_mode);
 }
 
-/*  */
 /*	Description: */
 /*	set RX packet buffer and other setting acording to dual mac mode */
-/*  */
 /*	Assumption: */
 /*		1. Boot from EEPROM and CR9346 regiser has verified. */
 /*		2. PASSIVE_LEVEL (USB interface) */
-/*  */
 void PHY_ConfigMacCoexist_RFPage92D(
 		struct rtw_adapter *			adapter
 )

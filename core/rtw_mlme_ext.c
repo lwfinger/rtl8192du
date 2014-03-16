@@ -4720,9 +4720,7 @@ int issue_probereq_p2p_ex(struct rtw_adapter *adapter, u8 *da, int try_cnt,
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
-#ifndef DBG_XMIT_ACK
 		goto exit;
-#endif
 	}
 
 	if (try_cnt && wait_ms) {
@@ -6377,9 +6375,7 @@ int issue_probereq_ex(struct rtw_adapter *adapt,
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
-#ifndef DBG_XMIT_ACK
 		goto exit;
-#endif
 	}
 
 	if (try_cnt && wait_ms) {
@@ -7319,9 +7315,7 @@ int issue_nulldata(struct rtw_adapter *adapt, unsigned char *da,
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
-#ifndef DBG_XMIT_ACK
 		goto exit;
-#endif
 	}
 
 	if (try_cnt && wait_ms) {
@@ -7454,9 +7448,7 @@ int issue_qos_nulldata(struct rtw_adapter *adapt, unsigned char *da, u16 tid,
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
-#ifndef DBG_XMIT_ACK
 		goto exit;
-#endif
 	}
 
 	if (try_cnt && wait_ms) {
@@ -7580,9 +7572,7 @@ int issue_deauth_ex(struct rtw_adapter *adapt, u8 *da,
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
-#ifndef DBG_XMIT_ACK
 		goto exit;
-#endif
 	}
 
 	if (try_cnt && wait_ms) {

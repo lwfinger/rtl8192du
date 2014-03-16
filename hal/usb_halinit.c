@@ -908,8 +908,7 @@ static void _InitNormalChipTwoOutEpPriority(struct rtw_adapter *adapter)
 		voQ		= valueHi;
 		mgtQ	= valueHi;
 		hiQ		= valueHi;
-	}
-	else {/* for WMM , CONFIG_OUT_EP_WIFI_MODE */
+	} else {/* for WMM */
 		beQ		= valueLow;
 		bkQ		= valueHi;
 		viQ		= valueHi;
@@ -971,11 +970,7 @@ static void _InitNetworkType(struct rtw_adapter *adapter)
 	value32 = rtw_read32(adapter, REG_CR);
 
 	/*  TODO: use the other function to set network type */
-#if RTL8191C_FPGA_NETWORKTYPE_ADHOC
-	value32 = (value32 & ~MASK_NETTYPE) | _NETTYPE(NT_LINK_AD_HOC);
-#else
 	value32 = (value32 & ~MASK_NETTYPE) | _NETTYPE(NT_LINK_AP);
-#endif
 	rtw_write32(adapter, REG_CR, value32);
 }
 

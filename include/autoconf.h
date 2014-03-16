@@ -51,27 +51,6 @@
 
 //#define CONFIG_CONCURRENT_MODE 1
 
-/*
- * USB VENDOR REQ BUFFER ALLOCATION METHOD
- * if not set we'll use function local variable (stack memory)
- */
-
 /* HAL  Related Config */
 
-#define CONFIG_ONLY_ONE_OUT_EP_TO_LOW	0
-
-#define CONFIG_OUT_EP_WIFI_MODE	0
-
-#define RTL8191C_FPGA_NETWORKTYPE_ADHOC 0
-
-#define ANTENNA_SELECTION_STATIC_SETTING 0
-
-#define TX_POWER_FOR_5G_BAND				1	/* For 5G band TX Power */
-
-#define RTL8192D_EASY_SMART_CONCURRENT	0
-
-#define RTL8192D_DUAL_MAC_MODE_SWITCH	0
-
 #define DBG 0
-
-#define CONFIG_DEBUG_RTL819X

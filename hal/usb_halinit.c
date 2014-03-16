@@ -1009,10 +1009,6 @@ static void _InitWMACSetting(struct rtw_adapter *adapter)
 	/*  don't turn on AAP, it will allow all packets to driver */
 	pHalData->ReceiveConfig = APM | AM | AB | CBSSID |CBSSID_BCN | APP_ICV | AMF | HTC_LOC_CTRL | APP_MIC | APP_PHYSTS;
 
-#if (0 == RTL8192C_RX_PACKET_NO_INCLUDE_CRC)
-	pHalData->ReceiveConfig |= ACRC32;
-#endif
-
 	rtw_write32(adapter, REG_RCR, pHalData->ReceiveConfig);
 
 	/*  Accept all multicast address */

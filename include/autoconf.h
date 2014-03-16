@@ -58,8 +58,6 @@
 
 /* HAL  Related Config */
 
-#define RTL8192C_RX_PACKET_NO_INCLUDE_CRC	1
-
 #define CONFIG_ONLY_ONE_OUT_EP_TO_LOW	0
 
 #define CONFIG_OUT_EP_WIFI_MODE	0

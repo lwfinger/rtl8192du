@@ -4429,7 +4429,6 @@ static u32 get_abs(u32	val1, u32 val2)
 	return ret;
 }
 
-#define	TESTFLAG			0
 #define	BASE_CHNL_NUM		6
 #define	BASE_CHNL_NUM_2G	2
 
@@ -4509,9 +4508,7 @@ phy_LCCalibrate92DSW(
 	)
 {
 	u8	RF_mode[2], tmpReg, index = 0;
-#if (TESTFLAG == 0)
 	u32	tmpu4Byte[2];
-#endif /* TESTFLAG == 0) */
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	u8	u1bTmp = 0, path = is2T?2:1;
 	u32	i, u4tmp, offset;
@@ -4537,10 +4534,8 @@ phy_LCCalibrate92DSW(
 
 		/* 2. Set RF mode = standby mode */
 		PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_AC, bRFRegOffsetMask, 0x010000);
-#if (TESTFLAG == 0)
 		tmpu4Byte[index] = PHY_QueryRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G4, bRFRegOffsetMask);
 		PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G4, 0x700, 0x07);
-#endif
 
 		if (adapter->hw_init_completed)
 		{
@@ -4623,11 +4618,8 @@ phy_LCCalibrate92DSW(
 	}
 
 	/* Restore original situation */
-	for (index = 0; index <path; index ++)
-	{
-#if (TESTFLAG == 0)
+	for (index = 0; index <path; index ++) {
 		PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G4, bRFRegOffsetMask, tmpu4Byte[index]);
-#endif
 		offset = index == 0?rOFDM0_XAAGCCore1:rOFDM0_XBAGCCore1;
 		rtw_write8(adapter, offset, 0x50);
 		rtw_write8(adapter, offset, RF_mode[index]);
@@ -4636,11 +4628,7 @@ phy_LCCalibrate92DSW(
 	phy_ReloadLCKSetting(adapter, pHalData->CurrentChannel);
 }
 
-static void
-phy_LCCalibrate(
-	struct rtw_adapter *	adapter,
-	bool		is2T
-	)
+static void phy_LCCalibrate(struct rtw_adapter *adapter, bool is2T)
 {
 	phy_LCCalibrate92DSW(adapter, is2T);
 }
@@ -4650,105 +4638,110 @@ phy_LCCalibrate(
 #define		APK_CURVE_REG_NUM 4
 #define		PATH_NUM		2
 
-static void
-phy_APCalibrate(
-	struct rtw_adapter *	adapter,
-	char		delta,
-	bool		is2T
-	)
+static void phy_APCalibrate(struct rtw_adapter *adapter, char delta, bool is2T)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	u32			regD[PATH_NUM];
-	u32			tmpReg, index, offset, path, i, pathbound = PATH_NUM, apkbound;
+	u32 regD[PATH_NUM];
+	u32 tmpReg, index, offset, path, i, pathbound = PATH_NUM, apkbound;
 
-	u32			BB_backup[APK_BB_REG_NUM];
-	u32			BB_REG[APK_BB_REG_NUM] = {
-						rFPGA1_TxBlock,		rOFDM0_TRxPathEnable,
-						rFPGA0_RFMOD,	rOFDM0_TRMuxPar,
-						rFPGA0_XCD_RFInterfaceSW,	rFPGA0_XAB_RFInterfaceSW,
-						rFPGA0_XA_RFInterfaceOE,	rFPGA0_XB_RFInterfaceOE	};
-	u32			BB_AP_MODE[APK_BB_REG_NUM] = {
-						0x00000020, 0x00a05430, 0x02040000,
-						0x000800e4, 0x00204000 };
-	u32			BB_normal_AP_MODE[APK_BB_REG_NUM] = {
-						0x00000020, 0x00a05430, 0x02040000,
-						0x000800e4, 0x22204000 };
+	u32 BB_backup[APK_BB_REG_NUM];
+	u32 BB_REG[APK_BB_REG_NUM] = {
+		rFPGA1_TxBlock,		rOFDM0_TRxPathEnable,
+		rFPGA0_RFMOD,	rOFDM0_TRMuxPar,
+		rFPGA0_XCD_RFInterfaceSW,	rFPGA0_XAB_RFInterfaceSW,
+		rFPGA0_XA_RFInterfaceOE,	rFPGA0_XB_RFInterfaceOE
+	};
+	u32 BB_AP_MODE[APK_BB_REG_NUM] = {
+		0x00000020, 0x00a05430, 0x02040000,
+		0x000800e4, 0x00204000
+	};
+	u32 BB_normal_AP_MODE[APK_BB_REG_NUM] = {
+		0x00000020, 0x00a05430, 0x02040000,
+		0x000800e4, 0x22204000
+	};
 
-	u32			AFE_backup[IQK_ADDA_REG_NUM];
-	u32			AFE_REG[IQK_ADDA_REG_NUM] = {
-						rFPGA0_XCD_SwitchControl,	rBlue_Tooth,
-						rRx_Wait_CCA,		rTx_CCK_RFON,
-						rTx_CCK_BBON,	rTx_OFDM_RFON,
-						rTx_OFDM_BBON,	rTx_To_Rx,
-						rTx_To_Tx,		rRx_CCK,
-						rRx_OFDM,		rRx_Wait_RIFS,
-						rRx_TO_Rx,		rStandby,
-						rSleep,				rPMPD_ANAEN };
+	u32 AFE_backup[IQK_ADDA_REG_NUM];
+	u32 AFE_REG[IQK_ADDA_REG_NUM] = {
+		rFPGA0_XCD_SwitchControl, rBlue_Tooth,
+		rRx_Wait_CCA, rTx_CCK_RFON,
+		rTx_CCK_BBON, rTx_OFDM_RFON,
+		rTx_OFDM_BBON, rTx_To_Rx,
+		rTx_To_Tx, rRx_CCK,
+		rRx_OFDM, rRx_Wait_RIFS,
+		rRx_TO_Rx, rStandby,
+		rSleep, rPMPD_ANAEN
+	};
 
-	u32			MAC_backup[IQK_MAC_REG_NUM];
-	u32			MAC_REG[IQK_MAC_REG_NUM] = {
-						REG_TXPAUSE,		REG_BCN_CTRL,
-						REG_BCN_CTRL_1,	REG_GPIO_MUXCFG};
+	u32 MAC_backup[IQK_MAC_REG_NUM];
+	u32 MAC_REG[IQK_MAC_REG_NUM] = {
+		REG_TXPAUSE,		REG_BCN_CTRL,
+		REG_BCN_CTRL_1,	REG_GPIO_MUXCFG
+	};
 
-	u32			APK_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
-					{0x0852c, 0x1852c, 0x5852c, 0x1852c, 0x5852c},
-					{0x2852e, 0x0852e, 0x3852e, 0x0852e, 0x0852e}
-					};
+	u32 APK_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
+		{0x0852c, 0x1852c, 0x5852c, 0x1852c, 0x5852c},
+		{0x2852e, 0x0852e, 0x3852e, 0x0852e, 0x0852e}
+	};
 
-	u32			APK_normal_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
-					{0x0852c, 0x0a52c, 0x3a52c, 0x5a52c, 0x5a52c},	/* path settings equal to path b settings */
-					{0x0852c, 0x0a52c, 0x5a52c, 0x5a52c, 0x5a52c}
-					};
+	u32 APK_normal_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
+		{0x0852c, 0x0a52c, 0x3a52c, 0x5a52c, 0x5a52c},	/* path settings equal to path b settings */
+		{0x0852c, 0x0a52c, 0x5a52c, 0x5a52c, 0x5a52c}
+	};
 
-	u32			APK_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
-					{0x52019, 0x52014, 0x52013, 0x5200f, 0x5208d},
-					{0x5201a, 0x52019, 0x52016, 0x52033, 0x52050}
-					};
+	u32 APK_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
+		{0x52019, 0x52014, 0x52013, 0x5200f, 0x5208d},
+		{0x5201a, 0x52019, 0x52016, 0x52033, 0x52050}
+	};
 
-	u32			APK_normal_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
-					{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a},	/* path settings equal to path b settings */
-					{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a}
-					};
-	u32			AFE_on_off[PATH_NUM] = {
-					0x04db25a4, 0x0b1b25a4};	/* path A on path B off / path A off path B on */
+	u32 APK_normal_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
+		{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a},	/* path settings equal to path b settings */
+		{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a}
+	};
+	u32 AFE_on_off[PATH_NUM] = {
+		0x04db25a4, 0x0b1b25a4i
+	};	/* path A on path B off / path A off path B on */
 
-	u32			APK_offset[PATH_NUM] = {
-					rConfig_AntA, rConfig_AntB};
+	u32 APK_offset[PATH_NUM] = {
+		rConfig_AntA, rConfig_AntB
+	};
 
-	u32			APK_normal_offset[PATH_NUM] = {
-					rConfig_Pmpd_AntA, rConfig_Pmpd_AntB};
+	u32 APK_normal_offset[PATH_NUM] = {
+		rConfig_Pmpd_AntA, rConfig_Pmpd_AntB
+	};
 
-	u32			APK_value[PATH_NUM] = {
-					0x92fc0000, 0x12fc0000};
+	u32 APK_value[PATH_NUM] = {
+		0x92fc0000, 0x12fc0000
+	};
 
-	u32			APK_normal_value[PATH_NUM] = {
-					0x92680000, 0x12680000};
+	u32 APK_normal_value[PATH_NUM] = {
+		0x92680000, 0x12680000
+	};
 
-	char			APK_delta_mapping[APK_BB_REG_NUM][13] = {
-					{-4, -3, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
-					{-4, -3, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
-					{-6, -4, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
-					{-1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6},
-					{-11, -9, -7, -5, -3, -1, 0, 0, 0, 0, 0, 0, 0}
-					};
+	char APK_delta_mapping[APK_BB_REG_NUM][13] = {
+		{-4, -3, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
+		{-4, -3, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
+		{-6, -4, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
+		{-1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6},
+		{-11, -9, -7, -5, -3, -1, 0, 0, 0, 0, 0, 0, 0}
+	};
 
-	u32			APK_normal_setting_value_1[13] = {
-					0x01017018, 0xf7ed8f84, 0x1b1a1816, 0x2522201e, 0x322e2b28,
-					0x433f3a36, 0x5b544e49, 0x7b726a62, 0xa69a8f84, 0xdfcfc0b3,
-					0x12680000, 0x00880000, 0x00880000
-					};
+	u32 APK_normal_setting_value_1[13] = {
+		0x01017018, 0xf7ed8f84, 0x1b1a1816, 0x2522201e, 0x322e2b28,
+		0x433f3a36, 0x5b544e49, 0x7b726a62, 0xa69a8f84, 0xdfcfc0b3,
+		0x12680000, 0x00880000, 0x00880000
+	};
 
-	u32			APK_normal_setting_value_2[16] = {
-					0x01c7021d, 0x01670183, 0x01000123, 0x00bf00e2, 0x008d00a3,
-					0x0068007b, 0x004d0059, 0x003a0042, 0x002b0031, 0x001f0025,
-					0x0017001b, 0x00110014, 0x000c000f, 0x0009000b, 0x00070008,
-					0x00050006
-					};
+	u32 APK_normal_setting_value_2[16] = {
+		0x01c7021d, 0x01670183, 0x01000123, 0x00bf00e2, 0x008d00a3,
+		0x0068007b, 0x004d0059, 0x003a0042, 0x002b0031, 0x001f0025,
+		0x0017001b, 0x00110014, 0x000c000f, 0x0009000b, 0x00070008,
+		0x00050006
+	};
 
-	u32			APK_result[PATH_NUM][APK_BB_REG_NUM];	/* val_1_1a, val_1_2a, val_2a, val_3a, val_4a */
+	u32 APK_result[PATH_NUM][APK_BB_REG_NUM];	/* val_1_1a, val_1_2a, val_2a, val_3a, val_4a */
 
-	int			BB_offset, delta_V, delta_offset;
+	int BB_offset, delta_V, delta_offset;
 
 	if (!is2T)
 		pathbound = 1;

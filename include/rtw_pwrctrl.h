@@ -101,24 +101,24 @@ struct reportpwrstate_parm {
 	unsigned short rsvd;
 };
 
-__inline static void _init_pwrlock(struct  semaphore *plock)
+static inline void _init_pwrlock(struct  semaphore *plock)
 {
 	_rtw_init_sema(plock, 1);
 }
 
-__inline static void _free_pwrlock(struct  semaphore *plock)
+static inline void _free_pwrlock(struct  semaphore *plock)
 {
 	_rtw_free_sema(plock);
 }
 
 
-__inline static void _enter_pwrlock(struct  semaphore *plock)
+static inline void _enter_pwrlock(struct  semaphore *plock)
 {
 	_rtw_down_sema(plock);
 }
 
 
-__inline static void _exit_pwrlock(struct  semaphore *plock)
+static inline void _exit_pwrlock(struct  semaphore *plock)
 {
 	_rtw_up_sema(plock);
 }

@@ -224,11 +224,8 @@ static inline unsigned char _cancel_timer_ex(struct timer_list *timer)
 	return del_timer_sync(timer);
 }
 
-static __inline void thread_enter(char *name)
+static inline void thread_enter(char *name)
 {
-	#ifdef daemonize
-	daemonize("%s", name);
-	#endif
 	allow_signal(SIGTERM);
 }
 

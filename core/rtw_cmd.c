@@ -19,7 +19,6 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <recv_osdep.h>
-#include <cmd_osdep.h>
 #include <mlme_osdep.h>
 #include <rtw_cmd.h>
 #include <usb_osintf.h>

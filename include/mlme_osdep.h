@@ -25,10 +25,14 @@ void rtw_os_indicate_disconnect(struct rtw_adapter *adapter);
 void rtw_os_indicate_connect(struct rtw_adapter *adapter);
 void rtw_os_indicate_scan_done(struct rtw_adapter *padapter, bool aborted);
 void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie);
-
 void rtw_reset_securitypriv(struct rtw_adapter *adapter);
 void indicate_wx_scan_complete_event(struct rtw_adapter *padapter);
 u8 rtw_do_join(struct rtw_adapter *padapter);
-
+int _rtw_init_cmd_priv (struct	cmd_priv *pcmdpriv);
+int _rtw_init_evt_priv(struct evt_priv *pevtpriv);
+void _rtw_free_evt_priv (struct	evt_priv *pevtpriv);
+void _rtw_free_cmd_priv (struct	cmd_priv *pcmdpriv);
+int _rtw_enqueue_cmd(struct __queue *queue, struct cmd_obj *obj);
+struct cmd_obj	*_rtw_dequeue_cmd(struct __queue *queue);
 
 #endif	/* _MLME_OSDEP_H_ */

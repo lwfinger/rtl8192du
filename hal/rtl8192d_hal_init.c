@@ -288,9 +288,7 @@ static bool get_fw_from_file(struct rtw_adapter *adapter)
 	const char *fw_name = "rtlwifi/rtl8192dufw.bin";
 #endif /* CONFIG_WOWLAN */
 
-	if (request_firmware(&fw, fw_name, device))
-		return false;
-	if (!fw) {
+	if (request_firmware(&fw, fw_name, device) || !fw) {
 		pr_err("Firmware %s not available\n", fw_name);
 		return false;
 	}

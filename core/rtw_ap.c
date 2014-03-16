@@ -169,10 +169,7 @@ static void update_BCNTIM(struct rtw_adapter *padapter)
 		offset =  (uint)(dst_ie - pie);
 		pnetwork_mlmeext->IELength = offset + remainder_ielen;
 	}
-
-#ifndef CONFIG_INTERRUPT_BASED_TXBCN
 	set_tx_beacon_cmd(padapter);
-#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 }
 
 void rtw_add_bcn_ie(struct rtw_adapter *padapter,
@@ -1037,13 +1034,11 @@ static void start_bss_network(struct rtw_adapter *padapter, u8 *pbuf)
 	if (pmlmeext->bstart_bss) {
 		update_beacon(padapter, _TIM_IE_, NULL, false);
 
-#ifndef CONFIG_INTERRUPT_BASED_TXBCN
 		/* other case will  tx beacon when bcn interrupt coming in.
 		 * issue beacon frame
 		 */
 		if (send_beacon(padapter) == _FAIL)
 			DBG_8192D("issue_beacon, fail!\n");
-#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 	}
 
 	/* update bc/mc sta_info */
@@ -1636,10 +1631,8 @@ void update_beacon(struct rtw_adapter *padapter, u8 ie_id, u8 *oui, u8 tx)
 
 	spin_unlock_bh(&pmlmepriv->bcn_update_lock);
 
-#ifndef CONFIG_INTERRUPT_BASED_TXBCN
 	if (tx)
 		set_tx_beacon_cmd(padapter);
-#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 }
 
 /* op_mode

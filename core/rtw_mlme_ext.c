@@ -1736,7 +1736,6 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 			spin_unlock_bh(&pstat->lock);
 #endif /* !defined(CONFIG_IOCTL_CFG80211) */
 		} else
-#endif /* CONFIG_IOCTL_CFG80211 */
 		{
 			rtw_indicate_sta_assoc_event(adapt, pstat);
 		}
@@ -1759,6 +1758,7 @@ OnAssocReqFail:
 		issue_asocrsp(adapt, status, pstat, WIFI_ASSOCRSP);
 	else
 		issue_asocrsp(adapt, status, pstat, WIFI_REASSOCRSP);
+#endif /* CONFIG_92D_AP_MODE */
 	return _FAIL;
 }
 

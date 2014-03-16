@@ -27,10 +27,6 @@
 #include <usb_hal.h>
 #include <usb_osintf.h>
 
-#define HAL_MAC_ENABLE		1
-#define HAL_BB_ENABLE		1
-#define HAL_RF_ENABLE		1
-
 /* endpoint number 1, 2, 3, 4, 5 */
 /*  bult in : 1 */
 /*  bult out: 2 (High) */
@@ -38,10 +34,7 @@
 /*  interrupt in: 4 */
 /*  bult out: 5 (Low) for 3 out_ep */
 
-static void
-_OneOutEpMapping(
-	struct hal_data_8192du *pHalData
-	)
+static void _OneOutEpMapping(struct hal_data_8192du *pHalData)
 {
 	/* only endpoint number 0x02 */
 
@@ -56,15 +49,10 @@ _OneOutEpMapping(
 	pHalData->Queue2EPNum[7] = pHalData->RtBulkOutPipe[0];/* BCN */
 }
 
-static void
-_TwoOutEpMapping(
-	struct hal_data_8192du	*pHalData,
-	bool			bWIFICfg
-	)
+static void _TwoOutEpMapping(struct hal_data_8192du *pHalData, bool bWIFICfg)
 {
 
 	if (bWIFICfg) { /*  Normal chip && wmm */
-
 		/*	BK,	BE,	VI,	VO,	BCN,	CMD, MGT, HIGH, HCCA */
 		/*   0,		1,	0,	1,	0,	0,	0,	0,		0	}; */
 		/* 0:H(end_number = 0x02), 1:L (end_number = 0x03) */
@@ -78,10 +66,7 @@ _TwoOutEpMapping(
 		pHalData->Queue2EPNum[5] = pHalData->RtBulkOutPipe[0];/* MGT */
 		pHalData->Queue2EPNum[6] = pHalData->RtBulkOutPipe[0];/* BMC */
 		pHalData->Queue2EPNum[7] = pHalData->RtBulkOutPipe[0];/* BCN */
-
-	}
-	else {/* typical setting */
-
+	} else {/* typical setting */
 		/* BK,	BE,	VI,	VO,	BCN,	CMD, MGT, HIGH, HCCA */
 		/*   1,		1,	0,	0,	0,	0,	0,	0,		0	}; */
 		/* 0:H(end_number = 0x02), 1:L (end_number = 0x03) */
@@ -95,17 +80,12 @@ _TwoOutEpMapping(
 		pHalData->Queue2EPNum[5] = pHalData->RtBulkOutPipe[0];/* MGT */
 		pHalData->Queue2EPNum[6] = pHalData->RtBulkOutPipe[0];/* BMC */
 		pHalData->Queue2EPNum[7] = pHalData->RtBulkOutPipe[0];/* BCN */
-
 	}
 }
 
-static void _ThreeOutEpMapping(
-	struct hal_data_8192du *pHalData,
-	bool			bWIFICfg
-	)
+static void _ThreeOutEpMapping(struct hal_data_8192du *pHalData, bool bWIFICfg)
 {
 	if (bWIFICfg) {/* for WMM */
-
 		/*	BK,	BE,	VI,	VO,	BCN,	CMD, MGT, HIGH, HCCA */
 		/*   1,		2,	1,	0,	0,	0,	0,	0,		0	}; */
 		/* 0:H(end_number = 0x02), 1:N(end_number = 0x03), 2:L (end_number = 0x05) */
@@ -119,10 +99,7 @@ static void _ThreeOutEpMapping(
 		pHalData->Queue2EPNum[5] = pHalData->RtBulkOutPipe[0];/* MGT */
 		pHalData->Queue2EPNum[6] = pHalData->RtBulkOutPipe[0];/* BMC */
 		pHalData->Queue2EPNum[7] = pHalData->RtBulkOutPipe[0];/* BCN */
-
-	}
-	else {/* typical setting */
-
+	} else {/* typical setting */
 		/*	BK,	BE,	VI,	VO,	BCN,	CMD, MGT, HIGH, HCCA */
 		/*   2,		2,	1,	0,	0,	0,	0,	0,		0	}; */
 		/* 0:H(end_number = 0x02), 1:N(end_number = 0x03), 2:L (end_number = 0x05) */
@@ -139,45 +116,33 @@ static void _ThreeOutEpMapping(
 	}
 }
 
-static bool
-_MappingOutEP(
-	struct rtw_adapter *	adapter,
-	u8		NumOutPipe
-	)
+static bool _MappingOutEP(struct rtw_adapter *adapter, u8 NumOutPipe)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	struct registry_priv *pregistrypriv = &adapter->registrypriv;
-
 	bool	 bWIFICfg = (pregistrypriv->wifi_spec) ?true:false;
-
 	bool result = true;
 
-	switch (NumOutPipe)
-	{
-		case 2:
-			_TwoOutEpMapping(pHalData, bWIFICfg);
-			break;
-		case 3:
-			_ThreeOutEpMapping(pHalData, bWIFICfg);
-			break;
-		case 1:
-			_OneOutEpMapping(pHalData);
-			break;
-		default:
-			result = false;
-			break;
+	switch (NumOutPipe) {
+	case 2:
+		_TwoOutEpMapping(pHalData, bWIFICfg);
+		break;
+	case 3:
+		_ThreeOutEpMapping(pHalData, bWIFICfg);
+		break;
+	case 1:
+		_OneOutEpMapping(pHalData);
+		break;
+	default:
+		result = false;
+		break;
 	}
-
 	return result;
 }
 
-static void
-_ConfigChipOutEP(
-	struct rtw_adapter *	adapter,
-	u8		NumOutPipe
-	)
+static void _ConfigChipOutEP(struct rtw_adapter *adapter, u8 NumOutPipe)
 {
-	u8			value8;
+	u8	value8;
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 
 	pHalData->OutEpQueueSel = 0;
@@ -212,24 +177,21 @@ _ConfigChipOutEP(
 
 	/* add for 0xfe44 0xfe45 0xfe47 0xfe48 not validly */
 	switch (NumOutPipe) {
-		case 3:
-			pHalData->OutEpQueueSel = TX_SELE_HQ| TX_SELE_LQ|TX_SELE_NQ;
-			pHalData->OutEpNumber = 3;
-			break;
-		case 2:
-			pHalData->OutEpQueueSel = TX_SELE_HQ| TX_SELE_NQ;
-			pHalData->OutEpNumber = 2;
-			break;
-		case 1:
-			pHalData->OutEpQueueSel = TX_SELE_HQ;
-			pHalData->OutEpNumber = 1;
-			break;
-		default:
-			break;
+	case 3:
+		pHalData->OutEpQueueSel = TX_SELE_HQ| TX_SELE_LQ|TX_SELE_NQ;
+		pHalData->OutEpNumber = 3;
+		break;
+	case 2:
+		pHalData->OutEpQueueSel = TX_SELE_HQ| TX_SELE_NQ;
+		pHalData->OutEpNumber = 2;
+		break;
+	case 1:
+		pHalData->OutEpQueueSel = TX_SELE_HQ;
+		pHalData->OutEpNumber = 1;
+		break;
+	default:
+		break;
 	}
-
-	/*  TODO: Error recovery for this case */
-	/* RT_ASSERT((NumOutPipe == pHalData->OutEpNumber), ("Out EP number isn't match! %d(Descriptor) != %d (SIE reg)\n", (u4Byte)NumOutPipe, (u4Byte)pHalData->OutEpNumber)); */
 }
 
 static bool HalUsbSetQueuePipeMapping8192DUsb(
@@ -1644,17 +1606,14 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	/*  Save target channel */
 	/*  <Roger_Notes> Current Channel will be updated again later. */
 
-#if (HAL_MAC_ENABLE == 1)
 	status = PHY_MACConfig8192D(padapter);
-	if (status == _FAIL)
-	{
+	if (status == _FAIL) {
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY
 		&& ((pHalData->interfaceIndex == 0 && pHalData->BandSet92D == BAND_ON_2_4G)
 			|| (pHalData->interfaceIndex == 1 && pHalData->BandSet92D == BAND_ON_5G)))
 			RELEASE_GLOBAL_MUTEX(GlobalMutexForMac0_2G_Mac1_5G);
 		goto exit;
 	}
-#endif
 
 	_InitQueueReservedPage(padapter);
 	_InitTxBufferBoundary(padapter);
@@ -1755,17 +1714,14 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	/*  */
 	/* d. Initialize BB related configurations. */
 	/*  */
-#if (HAL_BB_ENABLE == 1)
 	status = PHY_BBConfig8192D(padapter);
-	if (status == _FAIL)
-	{
+	if (status == _FAIL) {
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY
 		&& ((pHalData->interfaceIndex == 0 && pHalData->BandSet92D == BAND_ON_2_4G)
 			|| (pHalData->interfaceIndex == 1 && pHalData->BandSet92D == BAND_ON_5G)))
 			RELEASE_GLOBAL_MUTEX(GlobalMutexForMac0_2G_Mac1_5G);
 		goto exit;
 	}
-#endif
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if (pHalData->bSlaveOfDMSP)
@@ -1791,7 +1747,6 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	/*  */
 	/*  2007/11/02 MH Before initalizing RF. We can not use FW to do RF-R/W. */
 	/* pHalData->Rf_Mode = RF_OP_By_SW_3wire; */
-#if (HAL_RF_ENABLE == 1)
 	/*  set before initialize RF, */
 	PHY_SetBBReg(padapter, rFPGA0_AnalogParameter4, 0x00f00000,  0xf);
 
@@ -1812,8 +1767,6 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	if (!pHalData->bSlaveOfDMSP)
 #endif
 		PHY_UpdateBBRFConfiguration8192D(padapter, false);
-
-#endif
 
 	_InitAdhocWorkaroundParams(padapter);
 

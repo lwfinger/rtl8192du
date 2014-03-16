@@ -58,10 +58,6 @@
 #define	WIFI_WDS					0x00001000
 #define	WIFI_WDS_RX_BEACON		0x00002000		/*  already rx WDS AP beacon */
 #endif
-#ifdef AUTO_CONFIG
-#define	WIFI_AUTOCONF				0x00004000
-#define	WIFI_AUTOCONF_IND		0x00008000
-#endif
 
 #define	WIFI_MP_STATE							0x00010000
 #define	WIFI_MP_CTX_BACKGROUND				0x00020000	/*  in continous tx background */

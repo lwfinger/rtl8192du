@@ -1623,12 +1623,6 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	_InitBeaconMaxError(padapter, true);
 
 #if defined(CONFIG_CONCURRENT_MODE)
-
-#ifdef CONFIG_CHECK_AC_LIFETIME
-	/*  Enable lifetime check for the four ACs */
-	rtw_write8(padapter, REG_LIFETIME_EN, 0x0F);
-#endif	/*  CONFIG_CHECK_AC_LIFETIME */
-
 	rtw_write16(padapter, REG_PKT_VO_VI_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
 	rtw_write16(padapter, REG_PKT_BE_BK_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
 #endif	/*  CONFIG_CONCURRENT_MODE */

@@ -24,9 +24,10 @@
 #include <linux/wireless.h>
 #define MGMT_QUEUE_NUM 5
 
-#define ETH_ALEN	6
 #define ETH_TYPE_LEN		2
 #define PAYLOAD_TYPE_LEN	1
+#define LLC_HEADER_SIZE		6	/*  LLC Header Length */
+#define ETHERNET_HEADER_SIZE	14
 
 #ifdef CONFIG_92D_AP_MODE
 

@@ -21,7 +21,6 @@
 #include <mlme_osdep.h>
 #include <linux/ip.h>
 #include <linux/if_ether.h>
-#include <ethernet.h>
 #include <usb_ops.h>
 #include <wifi.h>
 #include <usb_osintf.h>

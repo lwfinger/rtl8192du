@@ -18,13 +18,9 @@
 #include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-
 #include <wifi.h>
 #include <recv_osdep.h>
-
 #include <osdep_intf.h>
-#include <ethernet.h>
-
 #include <usb_ops.h>
 
 /* init os related resource in struct recv_priv */

@@ -1558,16 +1558,6 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 		return status;
 	}
 
-#if (0 == FW_PROCESS_VENDOR_CMD)
-
-	rtl8192d_PHY_InitRxSetting(padapter);
-	RELEASE_GLOBAL_MUTEX(GlobalMutexForPowerAndEfuse);
-	DBG_8192D("%s(): Don't Download Firmware !!\n", __func__);
-	padapter->bFWReady = false;
-	pHalData->fw_ractrl = false;
-
-#else
-
 	status = FirmwareDownload92D(padapter, false);
 	RELEASE_GLOBAL_MUTEX(GlobalMutexForPowerAndEfuse);
 	if (status == _FAIL) {
@@ -1585,20 +1575,15 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 
 			goto exit;
 		}
-	}
-	else	{
+	} else {
 		padapter->bFWReady = true;
 		pHalData->fw_ractrl = true;
 		DBG_8192D("fw download ok!\n");
 	}
-
-#endif
-
 	pHalData->LastHMEBoxNum = 0;
 
-	if (pwrctrlpriv->reg_rfoff == true) {
+	if (pwrctrlpriv->reg_rfoff == true)
 		pwrctrlpriv->rf_pwrstate = rf_off;
-	}
 
 	/*  Set RF type for BB/RF configuration */
 	_InitRFType(padapter);/* _ReadRFType() */

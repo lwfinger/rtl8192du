@@ -15,7 +15,7 @@
  ******************************************************************************/
 #define _RTL8192D_XMIT_C_
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <rtl8192d_hal.h>

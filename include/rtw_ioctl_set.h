@@ -16,7 +16,7 @@
 #ifndef __RTW_IOCTL_SET_H_
 #define __RTW_IOCTL_SET_H_
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <drv_types.h>
 
 u8 rtw_set_802_11_add_key(struct rtw_adapter * padapter, struct ndis_802_11_key *key);

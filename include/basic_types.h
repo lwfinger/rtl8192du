@@ -16,7 +16,7 @@
 #ifndef __BASIC_TYPES_H__
 #define __BASIC_TYPES_H__
 
-#include <drv_conf.h>
+#include <autoconf.h>
 
 
 #define SUCCESS	0

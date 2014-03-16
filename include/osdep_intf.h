@@ -17,7 +17,7 @@
 #ifndef __OSDEP_INTF_H_
 #define __OSDEP_INTF_H_
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 

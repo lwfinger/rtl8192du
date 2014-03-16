@@ -15,7 +15,7 @@
  ******************************************************************************/
 #define _HCI_OPS_OS_C_
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <osdep_intf.h>

@@ -16,7 +16,7 @@
 
 #define _MLME_OSDEP_C_
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <mlme_osdep.h>

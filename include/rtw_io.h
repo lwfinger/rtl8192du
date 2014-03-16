@@ -17,7 +17,7 @@
 #ifndef _RTW_IO_H_
 #define _RTW_IO_H_
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <osdep_intf.h>
 

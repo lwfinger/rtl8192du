@@ -37,7 +37,7 @@
 
 #define _RTL8192D_RF6052_C_
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 

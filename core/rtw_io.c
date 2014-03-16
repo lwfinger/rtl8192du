@@ -35,7 +35,7 @@ jackson@realtek.com.tw
 */
 
 #define _RTW_IO_C_
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <rtw_io.h>

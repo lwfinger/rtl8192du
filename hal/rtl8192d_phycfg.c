@@ -46,7 +46,7 @@
 ******************************************************************************/
 #define _HAL_8192D_PHYCFG_C_
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <rtw_efuse.h>

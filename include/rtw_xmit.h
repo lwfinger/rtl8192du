@@ -16,7 +16,7 @@
 #ifndef _RTW_XMIT_H_
 #define _RTW_XMIT_H_
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #define MAX_XMITBUF_SZ		(20480)	/*  20k */

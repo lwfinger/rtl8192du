@@ -16,7 +16,7 @@
 #ifndef __IEEE80211_H
 #define __IEEE80211_H
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include "wifi.h"

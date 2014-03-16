@@ -16,7 +16,7 @@
 #ifndef _RTW_SRESET_C_
 #define _RTW_SRESET_C_
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 

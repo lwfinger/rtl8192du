@@ -15,7 +15,7 @@
  ******************************************************************************/
 #ifndef _RTW_EVENT_H_
 #define _RTW_EVENT_H_
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 
 #include <wlan_bssdef.h>

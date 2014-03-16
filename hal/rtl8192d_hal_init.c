@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #define _RTL8192D_HAL_INIT_C_
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <rtw_efuse.h>

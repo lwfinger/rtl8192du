@@ -3449,48 +3449,6 @@ static void hw_var_set_mlme_disconnect(struct rtw_adapter *adapter,
 		rtw_write8(adapter, REG_FWHW_TXQ_CTRL+2, (pHalData->RegFwHwTxQCtrl) & (~BIT6));
 		pHalData->RegFwHwTxQCtrl &= (~BIT6);
 
-#ifdef CONFIG_BEACON_DISABLE_OFFLOAD
-		u8 reg_bcn_disable_cnt = rtw_read8(adapter, REG_FW_BCN_DIS_CNT);
-		DBG_8192D("%s()-%d: reg_bcn_disable_cnt =%02x\n", __func__, __LINE__, reg_bcn_disable_cnt);
-
-		reg_bcn_ctrl_1 = rtw_read8(adapter, REG_BCN_CTRL_1);
-		DBG_8192D("%s()-%d: reg_bcn_ctrl_1 =%02x\n", __func__, __LINE__, reg_bcn_ctrl_1);
-
-		/*  b. driver set h2c cmd */
-		rtl8192c_dis_beacon_fun_cmd(adapter);
-
-		/*
-			  FW Job for port 0
-
-		   c. 8051 set nettype to ap
-		   d. 8051 check dma_int
-		   e. 8051 set nettype to no_link
-		   f.8051 dis_tsf_update   0x550 bit 4
-		   g.8051 reset  beacon function test count   0x553 bit0.
-		   h.8051 disable beacon function   0x550  bit3
-		   i. 8051 sent ready to driver
-
-		*/
-
-		/*  The worst case is 100 + 15 ms */
-		rtw_msleep_os(120);
-
-		for (i = 0; i< 10; i++) {
-			reg_bcn_ctrl_1 = rtw_read8(adapter, REG_BCN_CTRL_1);
-			if ((reg_bcn_ctrl_1 & BIT(3)) == 0) {
-				break;
-			}
-			DBG_8192D("%s()-%d: BEACON_DISABLE_OFFLOAD not finished! REG_BCN_CTRL_1 =%02x\n", __func__, __LINE__, reg_bcn_ctrl_1);
-			DBG_8192D("%s()-%d: reg_bcn_disable_cnt =%02x\n", __func__, __LINE__, rtw_read8(adapter, REG_FW_BCN_DIS_CNT));
-			DBG_8192D("%s()-%d: REG_BCN_CTRL =%02x\n", __func__, __LINE__, rtw_read8(adapter, REG_BCN_CTRL));
-			DBG_8192D("%s()-%d: FWISR =%08x\n", __func__, __LINE__, rtw_read32(adapter, REG_FWISR));
-			rtw_msleep_os(100);
-		}
-		DBG_8192D("%s()-%d: reg_bcn_disable_cnt =%02x\n", __func__, __LINE__, rtw_read8(adapter, REG_FW_BCN_DIS_CNT));
-		DBG_8192D("%s()-%d: reg_bcn_ctrl_1 =%02x\n", __func__, __LINE__, reg_bcn_ctrl_1);
-
-#else   /*  CONFIG_BEACON_DISABLE_OFFLOAD */
-
 		/* disable update TSF1 */
 			rtw_write8(adapter, REG_BCN_CTRL_1, rtw_read8(adapter, REG_BCN_CTRL_1)|BIT(4));
 
@@ -3499,8 +3457,6 @@ static void hw_var_set_mlme_disconnect(struct rtw_adapter *adapter,
 
 		/*  disable Port1's beacon function */
 		rtw_write8(adapter, REG_BCN_CTRL_1, rtw_read8(adapter, REG_BCN_CTRL_1)&(~BIT(3)));
-
-#endif  /*  CONFIG_BEACON_DISABLE_OFFLOAD */
 
 		/*  j, Driver set 0x422 bit 6 = 1 */
 		rtw_write8(adapter, REG_FWHW_TXQ_CTRL+2, (pHalData->RegFwHwTxQCtrl) | BIT6);

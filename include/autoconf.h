@@ -38,10 +38,6 @@
 
 #define CONFIG_P2P	1
 
-#ifdef CONFIG_P2P
-	#define CONFIG_P2P_REMOVE_GROUP_INFO
-#endif
-
 //#define CONFIG_IOCTL_CFG80211
 
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable,*/

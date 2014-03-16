@@ -761,7 +761,7 @@ static void rtw_add_network(struct rtw_adapter *adapter,
 
 	/* spin_lock_bh(&queue->lock); */
 
-#if defined(CONFIG_P2P) && defined(CONFIG_P2P_REMOVE_GROUP_INFO)
+#if defined(CONFIG_P2P)
 	rtw_wlan_bssid_ex_remove_p2p_attr(pnetwork, P2P_ATTR_GROUP_INFO);
 #endif
 

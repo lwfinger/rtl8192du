@@ -819,13 +819,8 @@ phy_ConfigBBWithHeaderFile(
 
 	if (ConfigType == BaseBand_Config_PHY_REG) {
 		for (i = 0; i < PHY_REGArrayLen; i = i+2) {
-			if (Rtl819XPHY_REGArray_Table[i] == 0xfe || Rtl819XPHY_REGArray_Table[i] == 0xffe) {
-				#ifdef CONFIG_LONG_DELAY_ISSUE
-				rtw_msleep_os(50);
-				#else
+			if (Rtl819XPHY_REGArray_Table[i] == 0xfe || Rtl819XPHY_REGArray_Table[i] == 0xffe)
 				rtw_mdelay_os(50);
-				#endif
-			}
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xfd)
 				rtw_mdelay_os(5);
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xfc)
@@ -1207,38 +1202,21 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 		case RF_PATH_A:
 			for (i = 0;i<RadioA_ArrayLen; i = i+2)
 			{
-				if (Rtl819XRadioA_Array_Table[i] == 0xfe)
-				{
-					#ifdef CONFIG_LONG_DELAY_ISSUE
-					rtw_msleep_os(50);
-					#else
+				if (Rtl819XRadioA_Array_Table[i] == 0xfe) {
 					rtw_mdelay_os(50);
-					#endif
-				}
-				else if (Rtl819XRadioA_Array_Table[i] == 0xfd)
-				{
+				} else if (Rtl819XRadioA_Array_Table[i] == 0xfd) {
 					for (j = 0;j<100;j++)
 						rtw_udelay_os(MAX_STALL_TIME);
-				}
-				else if (Rtl819XRadioA_Array_Table[i] == 0xfc)
-				{
+				} else if (Rtl819XRadioA_Array_Table[i] == 0xfc) {
 					for (j = 0;j<20;j++)
 						rtw_udelay_os(MAX_STALL_TIME);
-				}
-				else if (Rtl819XRadioA_Array_Table[i] == 0xfb)
-				{
+				} else if (Rtl819XRadioA_Array_Table[i] == 0xfb) {
 					rtw_udelay_os(50);
-				}
-				else if (Rtl819XRadioA_Array_Table[i] == 0xfa)
-				{
+				} else if (Rtl819XRadioA_Array_Table[i] == 0xfa) {
 					rtw_udelay_os(5);
-				}
-				else if (Rtl819XRadioA_Array_Table[i] == 0xf9)
-				{
+				} else if (Rtl819XRadioA_Array_Table[i] == 0xf9) {
 					rtw_udelay_os(1);
-				}
-				else
-				{
+				} else {
 					PHY_SetRFReg(adapter, eRFPath, Rtl819XRadioA_Array_Table[i]|MaskforPhySet, bRFRegOffsetMask, Rtl819XRadioA_Array_Table[i+1]);
 					/*  Add 1us delay between BB/RF register setting. */
 					rtw_udelay_os(1);
@@ -1250,38 +1228,22 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 			{
 				if (Rtl819XRadioB_Array_Table[i] == 0xfe)
 				{ /*  Deay specific ms. Only RF configuration require delay. */
-					#ifdef CONFIG_LONG_DELAY_ISSUE
-					rtw_msleep_os(50);
-					#else
 					rtw_mdelay_os(50);
-					#endif
-				}
-				else if (Rtl819XRadioB_Array_Table[i] == 0xfd)
-				{
+				} else if (Rtl819XRadioB_Array_Table[i] == 0xfd) {
 					/* rtw_mdelay_os(5); */
 					for (j = 0;j<100;j++)
 						rtw_udelay_os(MAX_STALL_TIME);
-				}
-				else if (Rtl819XRadioB_Array_Table[i] == 0xfc)
-				{
+				} else if (Rtl819XRadioB_Array_Table[i] == 0xfc) {
 					/* rtw_mdelay_os(1); */
 					for (j = 0;j<20;j++)
 						rtw_udelay_os(MAX_STALL_TIME);
-				}
-				else if (Rtl819XRadioB_Array_Table[i] == 0xfb)
-				{
+				} else if (Rtl819XRadioB_Array_Table[i] == 0xfb) {
 					rtw_udelay_os(50);
-				}
-				else if (Rtl819XRadioB_Array_Table[i] == 0xfa)
-				{
+				} else if (Rtl819XRadioB_Array_Table[i] == 0xfa) {
 					rtw_udelay_os(5);
-				}
-				else if (Rtl819XRadioB_Array_Table[i] == 0xf9)
-				{
+				} else if (Rtl819XRadioB_Array_Table[i] == 0xf9) {
 					rtw_udelay_os(1);
-				}
-				else
-				{
+				} else {
 					PHY_SetRFReg(adapter, eRFPath, Rtl819XRadioB_Array_Table[i]|MaskforPhySet, bRFRegOffsetMask, Rtl819XRadioB_Array_Table[i+1]);
 					/*  Add 1us delay between BB/RF register setting. */
 					rtw_udelay_os(1);
@@ -2666,11 +2628,7 @@ PHY_SwChnl8192D(	/*  Call after initialization */
 		pHalDataBuddyadapter = GET_HAL_DATA(Buddyadapter);
 		while (pHalDataBuddyadapter->bLCKInProgress && timecount < timeout)
 		{
-			#ifdef CONFIG_LONG_DELAY_ISSUE
-			rtw_msleep_os(50);
-			#else
 			rtw_mdelay_os(50);
-			#endif
 			timecount += 50;
 		}
 	}
@@ -2678,11 +2636,7 @@ PHY_SwChnl8192D(	/*  Call after initialization */
 
 	while (pHalData->bLCKInProgress && timecount < timeout)
 	{
-		#ifdef CONFIG_LONG_DELAY_ISSUE
-		rtw_msleep_os(50);
-		#else
 		rtw_mdelay_os(50);
-		#endif
 		timecount += 50;
 	}
 
@@ -4545,11 +4499,7 @@ phy_LCCalibrate92DSW(
 		while ((!(u4tmp & BIT11)) &&
 			timecount <= timeout)
 		{
-				#ifdef CONFIG_LONG_DELAY_ISSUE
-				rtw_msleep_os(50);
-				#else
-				rtw_mdelay_os(50);
-				#endif
+			rtw_mdelay_os(50);
 			timecount += 50;
 			u4tmp = PHY_QueryRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G6, bRFRegOffsetMask);
 		}

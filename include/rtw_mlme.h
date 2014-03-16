@@ -22,61 +22,50 @@
 #include <drv_types.h>
 #include <wlan_bssdef.h>
 
-#define	MAX_BSS_CNT	128
-#define   MAX_JOIN_TIMEOUT	6500
+#define	MAX_BSS_CNT			128
+#define   MAX_JOIN_TIMEOUT		6500
 
-/* 	Commented by Albert 20101105 */
 /* 	Increase the scanning timeout because of increasing the SURVEY_TO value. */
 
-#define		SCANNING_TIMEOUT	8000
+#define SCANNING_TIMEOUT		8000
 
 #define	SCAN_INTERVAL	(30) /*  unit:2sec, 30*2=60sec */
 
-#ifdef PALTFORM_OS_WINCE
-#define	SCANQUEUE_LIFETIME 12000000 /*  unit:us */
-#else
 #define	SCANQUEUE_LIFETIME 20 /*  unit:sec */
-#endif
 
-#define		WIFI_NULL_STATE			0x00000000
+#define		WIFI_NULL_STATE		0x00000000
 
 #define	WIFI_ASOC_STATE			0x00000001		/*  Under Linked state... */
-#define		WIFI_REASOC_STATE		0x00000002
-#define	WIFI_SLEEP_STATE			0x00000004
+#define		WIFI_REASOC_STATE	0x00000002
+#define	WIFI_SLEEP_STATE		0x00000004
 #define	WIFI_STATION_STATE		0x00000008
 
-#define	WIFI_AP_STATE				0x00000010
-#define	WIFI_ADHOC_STATE			0x00000020
-#define   WIFI_ADHOC_MASTER_STATE 0x00000040
+#define	WIFI_AP_STATE			0x00000010
+#define	WIFI_ADHOC_STATE		0x00000020
+#define   WIFI_ADHOC_MASTER_STATE 	0x00000040
 #define   WIFI_UNDER_LINKING		0x00000080
 
 #define	WIFI_UNDER_WPS			0x00000100
 #define	WIFI_STA_ALIVE_CHK_STATE	0x00000400
-#define	WIFI_SITE_MONITOR			0x00000800		/* to indicate the station is under site surveying */
+#define	WIFI_SITE_MONITOR		0x00000800		/* to indicate the station is under site surveying */
 
-#ifdef WDS
-#define	WIFI_WDS					0x00001000
-#define	WIFI_WDS_RX_BEACON		0x00002000		/*  already rx WDS AP beacon */
-#endif
-
-#define	WIFI_MP_STATE							0x00010000
-#define	WIFI_MP_CTX_BACKGROUND				0x00020000	/*  in continous tx background */
-#define	WIFI_MP_CTX_ST						0x00040000	/*  in continous tx with single-tone */
+#define	WIFI_MP_STATE			0x00010000
+#define	WIFI_MP_CTX_BACKGROUND		0x00020000	/*  in continous tx background */
+#define	WIFI_MP_CTX_ST			0x00040000	/*  in continous tx with single-tone */
 #define	WIFI_MP_CTX_BACKGROUND_PENDING	0x00080000	/*  pending in continous tx background due to out of skb */
-#define	WIFI_MP_CTX_CCK_HW					0x00100000	/*  in continous tx */
-#define	WIFI_MP_CTX_CCK_CS					0x00200000	/*  in continous tx with carrier suppression */
-#define   WIFI_MP_LPBK_STATE					0x00400000
+#define	WIFI_MP_CTX_CCK_HW		0x00100000	/*  in continous tx */
+#define	WIFI_MP_CTX_CCK_CS		0x00200000	/*  in continous tx with carrier suppression */
+#define   WIFI_MP_LPBK_STATE		0x00400000
 #define _FW_UNDER_LINKING	WIFI_UNDER_LINKING
-#define _FW_LINKED			WIFI_ASOC_STATE
+#define _FW_LINKED		WIFI_ASOC_STATE
 #define _FW_UNDER_SURVEY	WIFI_SITE_MONITOR
 
-
 enum dot11AuthAlgrthmNum {
- dot11AuthAlgrthm_Open = 0,
- dot11AuthAlgrthm_Shared,
- dot11AuthAlgrthm_8021X,
- dot11AuthAlgrthm_Auto,
- dot11AuthAlgrthm_MaxNum
+	dot11AuthAlgrthm_Open = 0,
+	dot11AuthAlgrthm_Shared,
+	dot11AuthAlgrthm_8021X,
+	dot11AuthAlgrthm_Auto,
+	dot11AuthAlgrthm_MaxNum
 };
 
 /*  Scan type including active and passive scan. */
@@ -86,19 +75,17 @@ enum RT_SCAN_TYPE {
 	SCAN_MIX,
 };
 
-enum  _BAND
-{
+enum  _BAND {
 	GHZ24_50 = 0,
 	GHZ_50,
 	GHZ_24,
 };
 
-enum SCAN_RESULT_TYPE
-{
+enum SCAN_RESULT_TYPE {
 	SCAN_RESULT_P2P_ONLY = 0,		/* 	Will return all the P2P devices. */
 	SCAN_RESULT_ALL = 1,			/* 	Will return all the scanned device, include AP. */
 	SCAN_RESULT_WFD_TYPE = 2		/* 	Will just return the correct WFD device. */
-									/* 	If this device is Miracast sink device, it will just return all the Miracast source devices. */
+						/* 	If this device is Miracast sink device, it will just return all the Miracast source devices. */
 };
 
 /*

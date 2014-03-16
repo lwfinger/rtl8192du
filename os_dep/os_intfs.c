@@ -25,7 +25,6 @@
 #include <rtw_ioctl.h>
 #include <usb_osintf.h>
 #include <rtl8192d_hal.h>
-#include <usb_hal.h>
 #include <linux/vmalloc.h>
 
 MODULE_LICENSE("GPL");

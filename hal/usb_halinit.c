@@ -24,7 +24,6 @@
 #include <rtl8192d_hal.h>
 #include <rtl8192d_led.h>
 #include <usb_ops.h>
-#include <usb_hal.h>
 #include <usb_osintf.h>
 
 /* endpoint number 1, 2, 3, 4, 5 */

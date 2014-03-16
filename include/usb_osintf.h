@@ -50,5 +50,6 @@ void process_wmmps_data(struct rtw_adapter *padapter,
 			struct recv_frame_hdr *precv_frame);
 s32 c2h_evt_hdl(struct rtw_adapter *adapter, struct c2h_evt_hdr *c2h_evt,
 		c2h_id_filter filter);
+void rtl8192du_set_hal_ops(struct rtw_adapter * padapter);
 
 #endif

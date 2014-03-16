@@ -20,7 +20,6 @@
 #include <drv_types.h>
 #include <rtw_efuse.h>
 #include <hal_intf.h>
-#include <usb_hal.h>
 #include <rtl8192d_hal.h>
 #include <linux/vmalloc.h>
 #include <linux/firmware.h>

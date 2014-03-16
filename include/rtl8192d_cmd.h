@@ -69,16 +69,16 @@ enum RTL8192D_H2C_CMD {
 	H2C_P2P_PS_OFFLOAD = 8,
 	H2C_MAC_MODE_SEL = 9,
 	H2C_PWRM=15,
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	H2C_WO_WLAN_CMD = 20,	/*  Wake on Wlan. */
-#endif /*  CONFIG_WOWLAN */
+#endif /*  CONFIG_WAKE_ON_WLAN */
 	H2C_P2P_PS_CTW_CMD = 24,
 	H2C_PathDiv = 26,                  /* PathDiv--NeilChen--2011.07.15 */
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	KEEP_ALIVE_CONTROL_CMD=31, /* keep alive for wake on wlan */
 	DISCONNECT_DECISION_CTRL_CMD=32,
 	REMOTE_WAKE_CTRL_CMD=34,
-#endif /*  CONFIG_WOWLAN */
+#endif /*  CONFIG_WAKE_ON_WLAN */
 	H2C_92D_TSF_SYNC=36,
 	H2C_92D_RESET_TSF = 43,
 	H2C_CMD_MAX
@@ -107,7 +107,7 @@ void	rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_sta
 int reset_tsf(struct rtw_adapter * adapter, u8 reset_port);
 #endif	/*  CONFIG_CONCURRENT_MODE */
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 struct set_wowlan_parm {
 	u8	mode;
 	u8	gpio_index;
@@ -130,6 +130,6 @@ struct set_wowlan_parm {
 
 void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter);
 void SetFwRelatedForWoWLAN8192DU(struct rtw_adapter*	padapter,u8 bHostIsGoingtoSleep);
-#endif /*  CONFIG_WOWLAN */
+#endif /*  CONFIG_WAKE_ON_WLAN */
 
 #endif	/*  __RTL8192D_CMD_H_ */

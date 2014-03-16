@@ -23,15 +23,10 @@
 
 #define CONFIG_IOCTL_CFG80211 1
 
-/*
- * Internal  General Config
- */
-#define CONFIG_PWRCTRL	1
-
 //#define CONFIG_WAKE_ON_WLAN
 
 #ifdef CONFIG_WAKE_ON_WLAN
-#define CONFIG_WOWLAN 1
+#define CONFIG_WAKE_ON_WLAN 1
 #endif /* CONFIG_WAKE_ON_WLAN */
 
 #define CONFIG_92D_AP_MODE 1

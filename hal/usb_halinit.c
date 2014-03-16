@@ -408,7 +408,7 @@ static u16 calc_crc(u8 *pdata, int length)
 	return CRC;
 }
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 static int rtw_wowlan_set_pattern(struct rtw_adapter *padapter , u8 *pbuf) {
 	struct pwrctrl_priv *pwrpriv =&padapter->pwrctrlpriv;
 	int res = 0, crc_idx;
@@ -567,7 +567,7 @@ void rtw_wowlan_reload_pattern(struct rtw_adapter *padapter) {
 
 	}
 }
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 
 /*  */
 /*  */
@@ -1398,7 +1398,7 @@ static void init_hwled(struct rtw_adapter *adapter)
 			return;
 }
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 static void dump_wakup_reason(struct rtw_adapter *padapter)
 {
 	switch (rtw_read8(padapter, REG_WOWLAN_REASON))
@@ -1429,7 +1429,7 @@ static void dump_wakup_reason(struct rtw_adapter *padapter)
 			break;
 	}
 }
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 
 static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 {
@@ -1484,7 +1484,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	val8 &= (~BIT7);
 	rtw_write8(padapter, 0x0003, val8);
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	if (rtw_read8(padapter, REG_MCUFWDL)&BIT7)
 	{
 		u8 reg_val = 0;
@@ -1508,7 +1508,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 		reg_val |= BIT(4) | BIT(7);
 		rtw_write8(padapter, REG_SYS_FUNC_EN+1, reg_val);
 	}
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 	/* mac status: */
 	/* 0x81[4]:0 mac0 off, 1:mac0 on */
 	/* 0x82[4]:0 mac1 off, 1: mac1 on. */
@@ -1841,7 +1841,7 @@ exit:
 
 	DBG_8192D("%s in %dms\n", __func__, rtw_get_passing_time_ms(init_start_time));
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	if (padapter->pwrctrlpriv.wowlan_mode == true)
 		dump_wakup_reason(padapter);
 	{
@@ -1854,7 +1854,7 @@ exit:
 	/* prevent 8051 to be reset by PERST# wake on wlan by Alex & Baron */
 	/* rtw_write8(padapter, REG_RSV_CTRL, 0x20); */
 	/* rtw_write8(padapter, REG_RSV_CTRL, 0x60); */
-#endif /*  CONFIG_WOWLAN */
+#endif /*  CONFIG_WAKE_ON_WLAN */
 	return status;
 }
 
@@ -2708,7 +2708,7 @@ _ReadLEDSetting(
 	}
 }
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 static void
 _ReadWOWLAN(
 	struct rtw_adapter *	adapter,
@@ -2726,7 +2726,7 @@ _ReadWOWLAN(
 		DBG_8192D("efuse remote wakeup =%d\n", adapter->pwrctrlpriv.bSupportRemoteWakeup);
 	}
 }
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 
 static void _InitadapterVariablesByPROM(
 	struct rtw_adapter *	adapter,
@@ -2742,9 +2742,9 @@ static void _InitadapterVariablesByPROM(
 	rtl8192d_EfuseParseChnlPlan(adapter, PROMContent, AutoloadFail);
 	_ReadBoardType(adapter, PROMContent, AutoloadFail);
 	_ReadLEDSetting(adapter, PROMContent, AutoloadFail);
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	_ReadWOWLAN(adapter, PROMContent, AutoloadFail);
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 }
 
 static void _ReadPROMContent(
@@ -4229,7 +4229,7 @@ static void SetHwReg8192DU(struct rtw_adapter *adapter, u8 variable, u8 *val)
 			}
 			break;
 		case HW_VAR_WOWLAN:
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 			{
 				struct wowlan_ioctl_param *poidparam;
 
@@ -4332,7 +4332,7 @@ static void SetHwReg8192DU(struct rtw_adapter *adapter, u8 variable, u8 *val)
 					adapter->pwrctrlpriv.wowlan_mode = false;
 			}
 			break;
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 		case HW_VAR_CHECK_TXBUF:
 #if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 			{

@@ -229,10 +229,10 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	/*  channel 1~14 */
 struct rt_firmware_92d {
 	u8 *buffer;
 	u32 length;
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	u8 *wowbuffer;
 	u32 wowlength;
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 };
 
 /*  This structure must be careful with le byte-ordering */

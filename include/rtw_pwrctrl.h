@@ -209,14 +209,14 @@ struct pwrctrl_priv
 	u8		bInternalAutoSuspend;
 	u8		bInSuspend;
 	u8		bSupportRemoteWakeup;
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	u8		wowlan_mode;
 	u8		wowlan_pattern;
 	u8		wowlan_magic;
 	u8		wowlan_unicast;
 	u8		wowlan_pattern_idx;
 	u32		wowlan_pattern_context[8][5];
-#endif /*  CONFIG_WOWLAN */
+#endif /*  CONFIG_WAKE_ON_WLAN */
 	struct timer_list pwr_state_check_timer;
 	int		pwr_state_check_interval;
 	u8		pwr_state_check_cnts;

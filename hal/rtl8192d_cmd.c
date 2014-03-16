@@ -859,7 +859,7 @@ int reset_tsf(struct rtw_adapter * adapter, u8 reset_port)
 
 #endif	/*  CONFIG_CONCURRENT_MODE */
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 
 void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter)
 {
@@ -950,4 +950,4 @@ void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter)
 	return ;
 }
 
-#endif  /* CONFIG_WOWLAN */
+#endif  /* CONFIG_WAKE_ON_WLAN */

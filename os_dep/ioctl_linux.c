@@ -6888,7 +6888,7 @@ static int rtw_pm_set(struct net_device *dev,
 	return ret;
 }
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 static int rtw_wowlan_ctrl(struct net_device *dev,
 			   struct iw_request_info *info,
 			   union iwreq_data *wrqu, char *extra)
@@ -6942,7 +6942,7 @@ _rtw_wowlan_ctrl_exit:
 
 	return ret;
 }
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 
 static int rtw_test(struct net_device *dev, struct iw_request_info *info,
 		    union iwreq_data *wrqu, char *extra)
@@ -7095,11 +7095,11 @@ static const struct iw_priv_args rtw_private_args[] = {
 		IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 2, IW_PRIV_TYPE_CHAR |
 		IW_PRIV_SIZE_FIXED | IFNAMSIZ, "rfr"
 	},
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	{
 		SIOCIWFIRSTPRIV + 0xE, 0, 0, "wowlan_ctrl"
 	},
-#endif /*  CONFIG_WOWLAN */
+#endif /*  CONFIG_WAKE_ON_WLAN */
 	{
 		SIOCIWFIRSTPRIV + 0x10,
 		IW_PRIV_TYPE_CHAR | P2P_PRIVATE_IOCTL_SET_LEN, 0, "p2p_set"
@@ -7167,11 +7167,11 @@ static iw_handler rtw_private_handler[] = {
 	rtw_wx_write_rf,		/* 0x0C */
 	rtw_wx_read_rf,			/* 0x0D */
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	rtw_wowlan_ctrl,		/* 0x0E */
 #else
 	rtw_wx_priv_null,		/* 0x0E */
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 	rtw_wx_priv_null,		/* 0x0F */
 
 	rtw_p2p_set,			/* 0x10 */

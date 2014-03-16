@@ -254,7 +254,7 @@ enum HARDWARE_TYPE {
 
 #define GET_EEPROM_EFUSE_PRIV(priv)	(&priv->eeprompriv)
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 enum wowlan_subcode {
 	WOWLAN_PATTERN_MATCH = 1,
 	WOWLAN_MAGIC_PACKET  = 2,
@@ -285,7 +285,7 @@ struct wowlan_ioctl_param{
 #define Rx_MagicPkt				BIT(5)
 #define FinishBtFwPatch				BIT(7)
 
-#endif /*  CONFIG_WOWLAN */
+#endif /*  CONFIG_WAKE_ON_WLAN */
 
 void rtw_hal_def_value_init(struct rtw_adapter *padapter);
 void rtw_hal_free_data(struct rtw_adapter *padapter);

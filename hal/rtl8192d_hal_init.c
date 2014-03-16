@@ -275,11 +275,11 @@ static bool get_fw_from_file(struct rtw_adapter *adapter)
 	struct device *device = dvobj_to_dev(dvobj);
 	const struct firmware *fw;
 	bool rtstatus = false;
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	const char *fw_name = "rtlwifi/rtl8192dufw_wol.bin";
 #else
 	const char *fw_name = "rtlwifi/rtl8192dufw.bin";
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 
 	if (request_firmware(&fw, fw_name, device) || !fw) {
 		pr_err("Firmware %s not available\n", fw_name);
@@ -319,10 +319,10 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	u8 *FwImage;
 	u32 FwImageLen;
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	u8 *FwImageWoWLAN;
 	u32 FwImageWoWLANLen;
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 	struct rt_8192d_firmware_hdr *pFwHdr = NULL;
 	u8 *pFirmwareBuf;
 	u32 FirmwareLen;
@@ -354,7 +354,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 		FirmwareLen = FirmwareLen -32;
 	}
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	/* write 0x5 BIT(3), don't suspend to reset MAC */
 	if (bUsedWoWLANFw) {
 		u8 test;
@@ -363,7 +363,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 		rtw_write8(adapter, REG_APS_FSMCO+1, test);
 	}
 
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 	ACQUIRE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 	if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY ||
 	    pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY) {
@@ -457,7 +457,7 @@ Exit:
 	return rtStatus;
 }
 
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 void InitializeFirmwareVars92D(struct rtw_adapter *adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
@@ -499,7 +499,7 @@ void SetFwRelatedForWoWLAN8192DU(struct rtw_adapter *padapter, u8 bHostIsGoingto
 		InitializeFirmwareVars92D(padapter);
 	}
 }
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 
 /* chnl" begins from 0. It's not a real channel. */
 /* channel_info[chnl]" is a real channel. */

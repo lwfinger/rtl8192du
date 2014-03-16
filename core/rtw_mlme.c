@@ -1179,9 +1179,9 @@ void rtw_indicate_disconnect(struct rtw_adapter *padapter)
 		rtw_led_control(padapter, LED_CTL_NO_LINK);
 		rtw_clear_scan_deny(padapter);
 	}
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	if (padapter->pwrctrlpriv.wowlan_mode == false)
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 		rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_DISCONNECT, 1);
 }
 

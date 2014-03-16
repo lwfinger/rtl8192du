@@ -452,12 +452,12 @@ static void rtw_dev_unload(struct rtw_adapter *padapter)
 
 		/* s5. */
 		if (padapter->bSurpriseRemoved == false) {
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 			if ((padapter->pwrctrlpriv.bSupportRemoteWakeup==true)&&(padapter->pwrctrlpriv.wowlan_mode==true)) {
 				DBG_8192D("%s bSupportWakeOnWlan==true  do not run rtw_hal_deinit()\n",__func__);
 			}
 			else
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 			{
 				rtw_hal_deinit(padapter);
 			}
@@ -465,9 +465,9 @@ static void rtw_dev_unload(struct rtw_adapter *padapter)
 		}
 
 		padapter->bup = false;
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 		padapter->hw_init_completed=false;
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 	}
 	else
 	{
@@ -509,9 +509,9 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct usb_device *usb_dev = interface_to_usbdev(pusb_intf);
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	struct wowlan_ioctl_param poidparam;
-#endif /*  CONFIG_WOWLAN */
+#endif /*  CONFIG_WAKE_ON_WLAN */
 	int ret = 0;
 	u32 start_time = rtw_get_current_time();
 
@@ -535,7 +535,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 		netif_carrier_off(pnetdev);
 		rtw_netif_stop_queue(pnetdev);
 	}
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	if (padapter->pwrctrlpriv.bSupportRemoteWakeup==true&&padapter->pwrctrlpriv.wowlan_mode==true) {
 		u8 ps_mode=PS_MODE_MIN;
 		/* set H2C command */
@@ -543,7 +543,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 		rtw_hal_set_hwreg(padapter,HW_VAR_WOWLAN,(u8 *)&poidparam);
 	}
 	else
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 	{
 		/* s2. */
 		rtw_disassoc_cmd(padapter, 0, false);
@@ -793,9 +793,9 @@ static void rtw_usb_if1_deinit(struct rtw_adapter *if1)
 	}
 
 	rtw_cancel_all_timer(if1);
-#ifdef CONFIG_WOWLAN
+#ifdef CONFIG_WAKE_ON_WLAN
 	if1->pwrctrlpriv.wowlan_mode=false;
-#endif /* CONFIG_WOWLAN */
+#endif /* CONFIG_WAKE_ON_WLAN */
 	rtw_dev_unload(if1);
 
 	DBG_8192D("%s, hw_init_completed=%d\n", __func__, if1->hw_init_completed);

@@ -6266,17 +6266,12 @@ static int rtw_wx_set_priv(struct net_device *dev,
 				union iwreq_data *awrq,
 				char *extra)
 {
-
-#ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
-	char *ext_dbg;
-#endif
-
+	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
+	struct iw_point *dwrq = (struct iw_point*)awrq;
 	int ret = 0;
 	int len = 0;
 	char *ext;
 	int i;
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-	struct iw_point *dwrq = (struct iw_point*)awrq;
 
 	if (dwrq->length == 0)
 		return -EFAULT;
@@ -6288,15 +6283,6 @@ static int rtw_wx_set_priv(struct net_device *dev,
 		vfree(ext);
 		return -EFAULT;
 	}
-
-	#ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
-	if (!(ext_dbg = rtw_vmalloc(len))) {
-		vfree(ext);
-		return -ENOMEM;
-	}
-
-	memcpy(ext_dbg, ext, len);
-	#endif
 
 	/* added for wps2.0 @20110524 */
 	if (dwrq->flags == 0x8766 && len > 8) {
@@ -6389,33 +6375,17 @@ static int rtw_wx_set_priv(struct net_device *dev,
 		sprintf(ext, "OK");
 		break; }
 	default :
-		#ifdef  CONFIG_DEBUG_RTW_WX_SET_PRIV
-		DBG_8192D("%s: %s unknowned req =%s\n", __func__,
-			dev->name, ext_dbg);
-		#endif
-
 		sprintf(ext, "OK");
 	}
 
 	if (copy_to_user(dwrq->pointer, ext, min(dwrq->length, (u16)(strlen(ext)+1))))
 		ret = -EFAULT;
 
-	#ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
-	DBG_8192D("%s: %s req =%s rep =%s dwrq->length =%d, strlen(ext)+1 =%d\n", __func__,
-		dev->name, ext_dbg , ext, dwrq->length, (u16)(strlen(ext)+1));
-	#endif
 #endif /* end of CONFIG_ANDROID */
 
 FREE_EXT:
 
 	vfree(ext);
-	#ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
-	vfree(ext_dbg);
-	#endif
-
-	/* DBG_8192D("rtw_wx_set_priv: (SIOCSIWPRIV) %s ret =%d\n", */
-	/*		dev->name, ret); */
-
 	return ret;
 }
 

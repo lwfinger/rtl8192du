@@ -952,8 +952,9 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 	}
 
 	memcpy(padapter->eeprompriv.mac_addr, mac, ETH_ALEN);
+#ifdef CONFIG_P2P
 	rtw_init_wifidirect_addrs(padapter, padapter->eeprompriv.mac_addr, padapter->eeprompriv.mac_addr);
-
+#endif
 	memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
 
 	DBG_8192D("MAC Address (if2) = %pM\n", mac);

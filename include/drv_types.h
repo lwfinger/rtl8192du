@@ -268,14 +268,10 @@ struct rtw_adapter {
 #endif
 
 #ifdef CONFIG_IOCTL_CFG80211
-#ifdef CONFIG_P2P
 	struct cfg80211_wifidirect_info	cfg80211_wdinfo;
-#endif /* CONFIG_P2P */
 #endif /* CONFIG_IOCTL_CFG80211 */
 	u32	setband;
-#ifdef CONFIG_P2P
 	struct wifidirect_info	wdinfo;
-#endif /* CONFIG_P2P */
 
 	void *HalData;
 	u32 hal_data_sz;

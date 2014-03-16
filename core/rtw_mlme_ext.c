@@ -8075,12 +8075,11 @@ void site_survey(struct rtw_adapter *adapt)
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	u32 initialgain = 0;
-
-#ifdef CONFIG_P2P
-
 #ifdef CONFIG_92D_AP_MODE
 	u8 stay_buddy_ch = 0;
 #endif
+
+#ifdef CONFIG_P2P
 
 #ifdef CONFIG_CONCURRENT_MODE
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);

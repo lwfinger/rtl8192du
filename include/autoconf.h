@@ -21,15 +21,13 @@
 #define DRV_NAME "r8192du"
 #define DRIVERVERSION	"v4.2.1_7122.20130408"
 
-#define CONFIG_IOCTL_CFG80211 1
-
 //#define CONFIG_WAKE_ON_WLAN
 
 #define CONFIG_92D_AP_MODE 1
 
 #define CONFIG_P2P	1
 
-//#define CONFIG_IOCTL_CFG80211
+#define CONFIG_IOCTL_CFG80211
 
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable,*/
 

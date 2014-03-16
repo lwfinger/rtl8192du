@@ -46,10 +46,6 @@
 
 #define P80211CAPTURE_VERSION	0x80211001
 
-#ifdef GREEN_HILL
-#pragma pack(1)
-#endif
-
 enum WIFI_FRAME_TYPE {
 	WIFI_MGT_TYPE  =	(0),
 	WIFI_CTRL_TYPE =	(BIT(2)),

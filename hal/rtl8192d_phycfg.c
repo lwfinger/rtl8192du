@@ -1901,15 +1901,9 @@ PHY_SetBWMode8192D(
 #endif
 
 	if ((!adapter->bDriverStopped) && (!adapter->bSurpriseRemoved))
-	{
-#ifndef USE_WORKITEM
-	_PHY_SetBWMode92D(adapter);
-#endif
-	}
+		_PHY_SetBWMode92D(adapter);
 	else
-	{
 		pHalData->CurrentChannelBW = tmpBW;
-	}
 }
 
 /*******************************************************************
@@ -2719,18 +2713,14 @@ PHY_SwChnl8192D(	/*  Call after initialization */
 	pHalData->CurrentChannel = channel;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if ((Buddyadapter != NULL) && (pHalData->bSlaveOfDMSP))
-	{
+	if ((Buddyadapter != NULL) && (pHalData->bSlaveOfDMSP)) {
 		DBG_8192D("PHY_SwChnl8192D():slave return when slave\n");
 		return;
 	}
 #endif
 
-	if ((!adapter->bDriverStopped) && (!adapter->bSurpriseRemoved))
-	{
-#ifndef USE_WORKITEM
+	if ((!adapter->bDriverStopped) && (!adapter->bSurpriseRemoved)) {
 		_PHY_SwChnl8192D(adapter, channel);
-#endif
 		if (!bResult)
 				pHalData->CurrentChannel = tmpchannel;
 

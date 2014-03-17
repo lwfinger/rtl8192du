@@ -2137,26 +2137,6 @@ static void dm_InitRateAdaptiveMask(struct rtw_adapter *	adapter)
 		pdmpriv->bUseRAMask = false;
 }
 
-/*-----------------------------------------------------------------------------
- * Function:	dm_RefreshRateAdaptiveMask()
- *
- * Overview:	Update rate table mask according to rssi
- *
- * Input:		NONE
- *
- * Output:		NONE
- *
- * Return:		NONE
- *
- * Revised History:
- *	When		Who		Remark
- *	05/27/2009	hpfan	Create Version 0.
- *
- *---------------------------------------------------------------------------*/
-static void
-dm_RefreshRateAdaptiveMask(struct rtw_adapter *	adapter)
-{
-}
 static void
 dm_CheckProtection(
 	struct rtw_adapter *	adapter
@@ -2436,11 +2416,6 @@ rtl8192d_HalDmWatchDog(
 		if (!pHalData->bSlaveOfDMSP || adapter->DualMacConcurrent == false)
 #endif
 			rtl8192d_dm_CheckTXPowerTracking(adapter);
-
-		/*  */
-		/*  Rate Adaptive by Rx Signal Strength mechanism. */
-		/*  */
-		dm_RefreshRateAdaptiveMask(adapter);
 
 		/*  EDCA turbo */
 		/* update the EDCA paramter according to the Tx/RX mode */

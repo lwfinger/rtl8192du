@@ -356,15 +356,6 @@ void	rtl8192d_PHY_LCCalibrate(struct rtw_adapter *	adapter);
 /*  */
 void	rtl8192d_PHY_APCalibrate(struct rtw_adapter *	adapter, char		delta);
 
-
-/*  */
-/*  Modify the value of the hw register when beacon interval be changed. */
-/*  */
-void
-rtl8192d_PHY_SetBeaconHwReg(	struct rtw_adapter *		adapter,
-					u16			BeaconInterval	);
-
-
 extern	void
 PHY_SwitchEphyParameter(
 	struct rtw_adapter *			adapter

@@ -1435,10 +1435,6 @@ void update_wireless_mode(struct rtw_adapter *padapter)
 	}
 }
 
-static void fire_write_MAC_cmd(struct rtw_adapter *padapter, unsigned int addr, unsigned int value)
-{
-}
-
 void update_bmc_sta_support_rate(struct rtw_adapter *padapter, u32 mac_id)
 {
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);

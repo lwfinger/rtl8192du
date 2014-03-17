@@ -176,8 +176,6 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	/*  channel 1~14 */
 /*  */
 /* 		RTL8192DU From file */
 /*  */
-	#define RTL8192D_FW_IMG					"rtl8192DU\\rtl8192dfw.bin"
-
 	#define RTL8192D_PHY_REG					"rtl8192DU\\PHY_REG.txt"
 	#define RTL8192D_PHY_REG_PG				"rtl8192DU\\PHY_REG_PG.txt"
 	#define RTL8192D_PHY_REG_MP				"rtl8192DU\\PHY_REG_MP.txt"

@@ -3075,20 +3075,6 @@ PHY_SwChnlPhy8192D(	/*  Only called during initialize */
 	pHalData->CurrentChannel=channel;
 }
 
-/*  */
-/*	Description: */
-/*		Configure H/W functionality to enable/disable Monitor mode. */
-/*		Note, because we possibly need to configure BB and RF in this function, */
-/*		so caller should in PASSIVE_LEVEL. 080118, by rcnjko. */
-/*  */
-void
-PHY_SetMonitorMode8192D(
-	struct rtw_adapter *			adapter,
-	bool				bEnableMonitorMode
-	)
-{
-}
-
 /*-----------------------------------------------------------------------------
  * Function:	PHYCheckIsLegalRfPath8190Pci()
  *

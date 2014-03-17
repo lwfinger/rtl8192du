@@ -326,12 +326,6 @@ void	PHY_SwChnlPhy8192D(	struct rtw_adapter *		adapter,
 
 extern void ChkFwCmdIoDone(	struct rtw_adapter *	adapter);
 
-/*  */
-/*  BB/MAC/RF other monitor API */
-/*  */
-void	PHY_SetMonitorMode8192D(struct rtw_adapter *	adapter,
-										bool		bEnableMonitorMode	);
-
 bool	PHY_CheckIsLegalRfPath8192D(struct rtw_adapter *	adapter,
 											u32		eRFPath	);
 

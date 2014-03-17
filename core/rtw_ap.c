@@ -1539,10 +1539,6 @@ static void update_bcn_wps_ie(struct rtw_adapter *padapter)
 	kfree(pbackup_remainder_ie);
 }
 
-static void update_bcn_p2p_ie(struct rtw_adapter *padapter)
-{
-}
-
 static void update_bcn_vendor_spec_ie(struct rtw_adapter *padapter, u8 *oui)
 {
 	DBG_8192D("%s\n", __func__);
@@ -1554,7 +1550,7 @@ static void update_bcn_vendor_spec_ie(struct rtw_adapter *padapter, u8 *oui)
 	else if (_rtw_memcmp(WPS_OUI, oui, 4))
 		update_bcn_wps_ie(padapter);
 	else if (_rtw_memcmp(P2P_OUI, oui, 4))
-		update_bcn_p2p_ie(padapter);
+		return;
 	else
 		DBG_8192D("unknown OUI type!\n");
 }

@@ -1376,8 +1376,6 @@ void rtw_joinbss_event_prehandle(struct rtw_adapter *adapter, u8 *pbuf)
 		 ("joinbss event call back received with res=%d\n",
 		  pnetwork->join_res));
 
-	rtw_get_encrypt_decrypt_from_registrypriv(adapter);
-
 	if (pmlmepriv->assoc_ssid.SsidLength == 0) {
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_,
 			 ("@@@@@   joinbss event call back  for Any SSid\n"));
@@ -2453,11 +2451,6 @@ void rtw_update_registrypriv_dev_network(struct rtw_adapter *adapter)
 
 	pdev_network->Length =
 	    get_wlan_bssid_ex_sz((struct wlan_bssid_ex *)pdev_network);
-
-}
-
-void rtw_get_encrypt_decrypt_from_registrypriv(struct rtw_adapter *adapter)
-{
 
 }
 

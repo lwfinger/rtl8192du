@@ -1594,14 +1594,6 @@ PHY_UpdateTxPowerDbm8192D(
 */
 
 void
-rtl8192d_PHY_SetBeaconHwReg(
-	struct rtw_adapter *		adapter,
-	u16			BeaconInterval
-	)
-{
-}
-
-void
 PHY_ScanOperationBackup8192D(
 	struct rtw_adapter *	adapter,
 	u8		Operation

@@ -2634,14 +2634,6 @@ phy_SetSwChnlCmdArray(
 	return true;
 }
 
-static	void
-phy_FinishSwChnlNow(	/*  We should not call this function directly */
-		struct rtw_adapter *	adapter,
-		u8		channel
-		)
-{
-}
-
 /*  */
 /*  Description: */
 /*	Switch channel synchronously. Called by SwChnlByDelayHandler. */
@@ -2673,9 +2665,6 @@ PHY_SwChnlPhy8192D(	/*  Only called during initialize */
 		channel = 1;
 
 	pHalData->CurrentChannel = channel;
-
-	phy_FinishSwChnlNow(adapter, channel);
-
 }
 
 /*  */

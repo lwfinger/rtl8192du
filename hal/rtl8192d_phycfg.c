@@ -266,31 +266,6 @@ phy_FwRFSerialRead(
 	return	(retValue);
 }	/* phy_FwRFSerialRead */
 
-/*-----------------------------------------------------------------------------
- * Function:	phy_FwRFSerialWrite()
- *
- * Overview:	We support firmware to execute RF-R/W.
- *
- * Input:		NONE
- *
- * Output:		NONE
- *
- * Return:		NONE
- *
- * Revised History:
- *	When		Who		Remark
- *	01/21/2008	MHC		Create Version 0.
- *
- *---------------------------------------------------------------------------*/
-static	void
-phy_FwRFSerialWrite(
-	struct rtw_adapter *			adapter,
-	enum RF_RADIO_PATH_E	eRFPath,
-	u32				Offset,
-	u32				Data	)
-{
-}
-
 /**
 * Function:	phy_RFSerialRead
 *

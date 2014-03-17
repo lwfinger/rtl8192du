@@ -2137,13 +2137,6 @@ static void dm_InitRateAdaptiveMask(struct rtw_adapter *	adapter)
 		pdmpriv->bUseRAMask = false;
 }
 
-static void
-dm_CheckStatistics(
-	struct rtw_adapter *	adapter
-	)
-{
-}
-
 /*  */
 /*  Initialize GPIO setting registers */
 /*  */
@@ -2353,11 +2346,6 @@ rtl8192d_HalDmWatchDog(
 	if ((hw_init_completed == true)
 		&& ((!bFwCurrentInPSMode) && bFwPSAwake))
 	{
-		/*  */
-		/*  Calculate Tx/Rx statistics. */
-		/*  */
-		dm_CheckStatistics(adapter);
-
 		/*  */
 		/*  For PWDB monitor and record some value for later use. */
 		/*  */

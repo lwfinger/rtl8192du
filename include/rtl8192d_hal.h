@@ -29,10 +29,6 @@
 /* Channel switch:The size of command tables for switch channel*/
 #define MAX_PRECMD_CNT 16
 #define MAX_RFDEPENDCMD_CNT 16
-#define MAX_POSTCMD_CNT 16
-
-#define MAX_DOZE_WAITING_TIMES_9x 64
-
 #define MAX_RF_IMR_INDEX 12
 #define MAX_RF_IMR_INDEX_NORMAL 13
 #define RF_REG_NUM_for_C_CUT_5G		6

@@ -1481,11 +1481,6 @@ static void update_bcn_erpinfo_ie(struct rtw_adapter *padapter)
 	}
 }
 
-static void update_bcn_htinfo_ie(struct rtw_adapter *padapter)
-{
-	DBG_8192D("%s\n", __func__);
-}
-
 static void update_bcn_rsn_ie(struct rtw_adapter *padapter)
 {
 	DBG_8192D("%s\n", __func__);
@@ -1600,9 +1595,6 @@ void update_beacon(struct rtw_adapter *padapter, u8 ie_id, u8 *oui, u8 tx)
 		break;
 	case _RSN_IE_2_:
 		update_bcn_rsn_ie(padapter);
-		break;
-	case _HT_ADD_INFO_IE_:
-		update_bcn_htinfo_ie(padapter);
 		break;
 	case _VENDOR_SPECIFIC_IE_:
 		update_bcn_vendor_spec_ie(padapter, oui);

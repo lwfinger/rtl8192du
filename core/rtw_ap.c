@@ -1413,11 +1413,6 @@ static void update_bcn_erpinfo_ie(struct rtw_adapter *padapter)
 	}
 }
 
-static void update_bcn_wmm_ie(struct rtw_adapter *padapter)
-{
-	DBG_8192D("%s\n", __func__);
-}
-
 static void update_bcn_wps_ie(struct rtw_adapter *padapter)
 {
 	u8 *pwps_ie = NULL, *pwps_ie_src, *premainder_ie, *pbackup_remainder_ie = NULL;
@@ -1478,7 +1473,7 @@ static void update_bcn_vendor_spec_ie(struct rtw_adapter *padapter, u8 *oui)
 	if (_rtw_memcmp(RTW_WPA_OUI, oui, 4))
 		return;
 	else if (_rtw_memcmp(WMM_OUI, oui, 4))
-		update_bcn_wmm_ie(padapter);
+		return;
 	else if (_rtw_memcmp(WPS_OUI, oui, 4))
 		update_bcn_wps_ie(padapter);
 	else if (_rtw_memcmp(P2P_OUI, oui, 4))

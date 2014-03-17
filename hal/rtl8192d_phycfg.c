@@ -2608,18 +2608,6 @@ PHY_SwChnl8192D(	/*  Call after initialization */
 }
 
 static	bool
-phy_SwChnlStepByStep(
-	struct rtw_adapter *	adapter,
-	u8		channel,
-	u8		*stage,
-	u8		*step,
-	u32		*delay
-	)
-{
-	return true;
-}
-
-static	bool
 phy_SetSwChnlCmdArray(
 	struct sw_chnl_cmd *cmdtable,
 	u32			cmdtableidx,

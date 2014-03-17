@@ -1108,10 +1108,6 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 }
 
-void rtw_dummy_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
-{
-}
-
 void rtw_fwdbg_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 {
 }

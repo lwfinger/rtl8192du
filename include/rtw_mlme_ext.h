@@ -827,7 +827,6 @@ struct C2HEvent_Header
 
 };
 
-void rtw_dummy_event_callback(struct rtw_adapter *adapter , u8 *pbuf);
 void rtw_fwdbg_event_callback(struct rtw_adapter *adapter , u8 *pbuf);
 
 enum rtw_c2h_event
@@ -866,7 +865,7 @@ enum rtw_c2h_event
 
 static struct fwevent wlanevents[] =
 {
-	{0, rtw_dummy_event_callback},	/*0*/
+	{0, NULL}, /*rtw_dummy_event_callback},*/	/*0*/
 	{0, NULL},
 	{0, NULL},
 	{0, NULL},
@@ -881,7 +880,7 @@ static struct fwevent wlanevents[] =
 	{sizeof(struct stassoc_event), &rtw_stassoc_event_callback},
 	{sizeof(struct stadel_event), &rtw_stadel_event_callback},
 	{0, &rtw_atimdone_event_callback},
-	{0, rtw_dummy_event_callback},
+	{0, NULL}, /*rtw_dummy_event_callback},*/
 	{0, NULL},	/*15*/
 	{0, NULL},
 	{0, NULL},

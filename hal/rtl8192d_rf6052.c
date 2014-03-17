@@ -726,14 +726,14 @@ phy_RF6052_Config_ParaFile(
 				else
 					rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radioa_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
 #else
-				rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(adapter, pszRadioAFile, (enum RF_RADIO_PATH_E)eRFPath);
+				rtStatus = _SUCCESS;
 #endif
 				break;
 			case RF_PATH_B:
 #ifdef CONFIG_EMBEDDED_FWIMG
 			rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radiob_txt, (enum RF_RADIO_PATH_E)eRFPath);
 #else
-			rtStatus = rtl8192d_PHY_ConfigRFWithParaFile(adapter, pszRadioBFile, (enum RF_RADIO_PATH_E)eRFPath);
+			rtStatus = _SUCCESS;
 #endif
 				break;
 			case RF_PATH_C:

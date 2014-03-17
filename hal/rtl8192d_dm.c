@@ -2040,29 +2040,6 @@ rtl8192d_dm_CheckTXPowerTracking(
 }
 
 /*-----------------------------------------------------------------------------
- * Function:	dm_CheckRfCtrlGPIO()
- *
- * Overview:	Copy 8187B template for 9xseries.
- *
- * Input:		NONE
- *
- * Output:		NONE
- *
- * Return:		NONE
- *
- * Revised History:
- *	When		Who		Remark
- *	01/10/2008	MHC		Create Version 0.
- *
- *---------------------------------------------------------------------------*/
-static void
-dm_CheckRfCtrlGPIO(
-	struct rtw_adapter *	adapter
-	)
-{
-}	/* dm_CheckRfCtrlGPIO */
-
-/*-----------------------------------------------------------------------------
  * Function:	dm_CheckPbcGPIO()
  *
  * Overview:	Check if PBC button is pressed.

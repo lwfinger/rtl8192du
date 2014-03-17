@@ -2278,11 +2278,6 @@ u8 process_p2p_provdisc_req(struct wifidirect_info *pwdinfo,  u8 *pframe, uint l
 	return true;
 }
 
-u8 process_p2p_provdisc_resp(struct wifidirect_info *pwdinfo,  u8 *pframe)
-{
-	return true;
-}
-
 static u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_content, u8 ch_cnt, u8 *peer_ch_list)
 {
 	u8 i = 0, j = 0;

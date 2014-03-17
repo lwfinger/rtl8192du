@@ -5729,7 +5729,6 @@ static unsigned int on_action_public_p2p(struct recv_frame_hdr *precv_frame)
 			_cancel_timer_ex(&pwdinfo->restore_p2p_state_timer);
 			rtw_p2p_set_state(pwdinfo,
 					  P2P_STATE_RX_PROVISION_DIS_RSP);
-			process_p2p_provdisc_resp(pwdinfo, pframe);
 			_set_timer(&pwdinfo->restore_p2p_state_timer,
 				   P2P_PROVISION_TIMEOUT);
 			break;

@@ -272,9 +272,6 @@ int	PHY_MACConfig8192D(	struct rtw_adapter *	adapter	);
 int	PHY_BBConfig8192D(	struct rtw_adapter *	adapter	);
 int	PHY_RFConfig8192D(	struct rtw_adapter *	adapter	);
 /* RF config */
-int	rtl8192d_PHY_ConfigRFWithParaFile(	struct rtw_adapter *	adapter,
-						u8 *pFileName,
-						enum RF_RADIO_PATH_E	eRFPath);
 int	rtl8192d_PHY_ConfigRFWithHeaderFile(	struct rtw_adapter *			adapter,
 						enum RF_CONTENT			Content,
 						enum RF_RADIO_PATH_E	eRFPath);

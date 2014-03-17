@@ -1481,11 +1481,6 @@ static void update_bcn_erpinfo_ie(struct rtw_adapter *padapter)
 	}
 }
 
-static void update_bcn_wpa_ie(struct rtw_adapter *padapter)
-{
-	DBG_8192D("%s\n", __func__);
-}
-
 static void update_bcn_wmm_ie(struct rtw_adapter *padapter)
 {
 	DBG_8192D("%s\n", __func__);
@@ -1553,7 +1548,7 @@ static void update_bcn_vendor_spec_ie(struct rtw_adapter *padapter, u8 *oui)
 	DBG_8192D("%s\n", __func__);
 
 	if (_rtw_memcmp(RTW_WPA_OUI, oui, 4))
-		update_bcn_wpa_ie(padapter);
+		return;
 	else if (_rtw_memcmp(WMM_OUI, oui, 4))
 		update_bcn_wmm_ie(padapter);
 	else if (_rtw_memcmp(WPS_OUI, oui, 4))

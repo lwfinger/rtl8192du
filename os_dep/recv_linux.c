@@ -23,14 +23,6 @@
 #include <osdep_intf.h>
 #include <usb_ops.h>
 
-/* init os related resource in struct recv_priv */
-int rtw_os_recv_resource_init(struct recv_priv *precvpriv, struct rtw_adapter *padapter)
-{
-	int	res=_SUCCESS;
-
-	return res;
-}
-
 /* alloc os related resource in struct recv_frame_hdr */
 int rtw_os_recv_resource_alloc(struct rtw_adapter *padapter, struct recv_frame_hdr *precvframe)
 {

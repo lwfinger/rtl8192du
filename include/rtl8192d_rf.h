@@ -68,8 +68,6 @@
 /*  */
 /*  RF RL6052 Series API */
 /*  */
-void		rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	adapter,
-										u16		DataRate);
 void		rtl8192d_PHY_RF6052SetBandwidth(
 										struct rtw_adapter *				adapter,
 					enum HT_CHANNEL_WIDTH		Bandwidth);

@@ -69,29 +69,6 @@ static	struct rf_shadow_compare_map RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
 /*------------------------Define local variable------------------------------*/
 
 /*-----------------------------------------------------------------------------
- * Function:	RF_ChangeTxPath
- *
- * Overview:	For RL6052, we must change some RF settign for 1T or 2T.
- *
- * Input:		u2Byte DataRate		  0x80-8f, 0x90-9f
- *
- * Output:      NONE
- *
- * Return:      NONE
- *
- * Revised History:
- * When			Who		Remark
- * 09/25/2008	MHC		Create Version 0.
- *						Firmwaer support the utility later.
- *
- *---------------------------------------------------------------------------*/
-void rtl8192d_RF_ChangeTxPath(	struct rtw_adapter *	adapter,
-										u16		DataRate)
-{
-/*  We do not support gain table change inACUT now !!!! Delete later !!! */
-}	/* RF_ChangeTxPath */
-
-/*-----------------------------------------------------------------------------
  * Function:    PHY_RF6052SetBandwidth()
  *
  * Overview:    This function is called by SetBWModeCallback8190Pci() only

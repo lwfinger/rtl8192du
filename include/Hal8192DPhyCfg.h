@@ -297,11 +297,6 @@ bool	PHY_UpdateTxPowerDbm8192D(	struct rtw_adapter *	adapter,
 											int		powerInDbm	);
 
 /*  */
-void
-PHY_ScanOperationBackup8192D(struct rtw_adapter *	adapter,
-										u8		Operation	);
-
-/*  */
 /*  Switch bandwidth for 8192S */
 /*  */
 void	PHY_SetBWMode8192D(	struct rtw_adapter *			adapter,

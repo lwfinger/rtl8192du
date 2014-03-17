@@ -1942,22 +1942,6 @@ PHY_UpdateTxPowerDbm8192D(
 	return true;
 }
 
-/*
-	Description:
-		When beacon interval is changed, the values of the
-		hw registers should be modified.
-	By tynli, 2008.10.24.
-
-*/
-
-void
-PHY_ScanOperationBackup8192D(
-	struct rtw_adapter *	adapter,
-	u8		Operation
-	)
-{
-}
-
 /*-----------------------------------------------------------------------------
  * Function:    PHY_SetBWModeCallback8192C()
  *

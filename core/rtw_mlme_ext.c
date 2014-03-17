@@ -5232,11 +5232,7 @@ static unsigned int on_action_public_p2p(struct recv_frame_hdr *precv_frame)
 			break;
 
 		case P2P_DEVDISC_RESP:
-
-			process_p2p_devdisc_resp(pwdinfo, pframe, len);
-
 			break;
-
 		case P2P_PROVISION_DISC_REQ:
 			DBG_8192D
 			    ("[%s] Got Provisioning Discovery Request Frame\n",

@@ -983,11 +983,6 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 	return (status == P2P_STATUS_SUCCESS) ? true : false;
 }
 
-u32 process_p2p_devdisc_resp(struct wifidirect_info *pwdinfo, u8 *pframe, uint len)
-{
-	return true;
-}
-
 u8 process_p2p_provdisc_req(struct wifidirect_info *pwdinfo,  u8 *pframe, uint len)
 {
 	u8 *frame_body;

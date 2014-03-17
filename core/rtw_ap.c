@@ -1543,13 +1543,11 @@ static void update_bcn_vendor_spec_ie(struct rtw_adapter *padapter, u8 *oui)
 {
 	DBG_8192D("%s\n", __func__);
 
-	if (_rtw_memcmp(RTW_WPA_OUI, oui, 4))
-		return;
-	else if (_rtw_memcmp(WMM_OUI, oui, 4))
-		update_bcn_wmm_ie(padapter);
-	else if (_rtw_memcmp(WPS_OUI, oui, 4))
+	if (_rtw_memcmp(WPS_OUI, oui, 4))
 		update_bcn_wps_ie(padapter);
-	else if (_rtw_memcmp(P2P_OUI, oui, 4))
+	else if ((_rtw_memcmp(RTW_WPA_OUI, oui, 4)) ||
+		 (_rtw_memcmp(WMM_OUI, oui, 4)) ||
+		 (_rtw_memcmp(P2P_OUI, oui, 4)))
 		return;
 	else
 		DBG_8192D("unknown OUI type!\n");

@@ -3075,34 +3075,6 @@ PHY_SwChnlPhy8192D(	/*  Only called during initialize */
 	pHalData->CurrentChannel=channel;
 }
 
-/*-----------------------------------------------------------------------------
- * Function:	PHYCheckIsLegalRfPath8190Pci()
- *
- * Overview:	Check different RF type to execute legal judgement. If RF Path is illegal
- *			We will return false.
- *
- * Input:		NONE
- *
- * Output:		NONE
- *
- * Return:		NONE
- *
- * Revised History:
- *	When		Who		Remark
- *	11/15/2007	MHC		Create Version 0.
- *
- *---------------------------------------------------------------------------*/
-bool
-PHY_CheckIsLegalRfPath8192D(
-	struct rtw_adapter *	adapter,
-	u32	eRFPath)
-{
-	bool				rtValue = true;
-
-	/*  NOt check RF Path now.! */
-	return	rtValue;
-}	/* PHY_CheckIsLegalRfPath8192D */
-
 /*  */
 /*  */
 /*	IQK */

@@ -1380,11 +1380,6 @@ int rtw_acl_remove_sta(struct rtw_adapter *padapter, u8 *addr)
 
 #ifdef CONFIG_NATIVEAP_MLME
 
-static void update_bcn_fixed_ie(struct rtw_adapter *padapter)
-{
-	DBG_8192D("%s\n", __func__);
-}
-
 static void update_bcn_erpinfo_ie(struct rtw_adapter *padapter)
 {
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
@@ -1530,9 +1525,6 @@ void update_beacon(struct rtw_adapter *padapter, u8 ie_id, u8 *oui, u8 tx)
 	spin_lock_bh(&pmlmepriv->bcn_update_lock);
 
 	switch (ie_id) {
-	case 0xFF:
-		update_bcn_fixed_ie(padapter);/* 8: TimeStamp, 2: Beacon Interval 2:Capability */
-		break;
 	case _TIM_IE_:
 		update_BCNTIM(padapter);
 		break;

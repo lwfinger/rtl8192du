@@ -317,6 +317,11 @@ exit:
 	release_firmware(fw);
 	return rtstatus;
 }
+#ifdef CONFIG_WOWLAN
+MODULE_FIRMWARE("rtlwifi/rtl8192dufw_wol.bin");
+#else
+MODULE_FIRMWARE("rtlwifi/rtl8192dufw.bin");
+#endif /* CONFIG_WOWLAN */
 
 /*	Description: Download 8192D firmware code. */
 int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)

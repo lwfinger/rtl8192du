@@ -2126,13 +2126,6 @@ static void dm_InitRateAdaptiveMask(struct rtw_adapter *	adapter)
 }
 
 static void
-dm_CheckProtection(
-	struct rtw_adapter *	adapter
-	)
-{
-}
-
-static void
 dm_CheckStatistics(
 	struct rtw_adapter *	adapter
 	)
@@ -2398,11 +2391,6 @@ rtl8192d_HalDmWatchDog(
 		/*  EDCA turbo */
 		/* update the EDCA paramter according to the Tx/RX mode */
 		dm_CheckEdcaTurbo(adapter);
-
-		/*  */
-		/*  Dynamically switch RTS/CTS protection. */
-		/*  */
-		/* dm_CheckProtection(adapter); */
 
 		/*  */
 		/* Dynamic BB Power Saving Mechanism */

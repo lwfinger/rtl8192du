@@ -116,7 +116,6 @@ extern void eeprom_read_sz(struct rtw_adapter * padapter, u16 reg,u8* data, u32 
 extern void read_eeprom_content_by_attrib(struct rtw_adapter *	padapter	);
 
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
-extern int isAdaptorInfoFileValid(void);
 extern int storeAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv);
 extern int retriveAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv);
 #endif /* CONFIG_ADAPTOR_INFO_CACHING_FILE */

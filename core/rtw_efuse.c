@@ -721,11 +721,6 @@ void EFUSE_ShadowMapUpdate(struct rtw_adapter *adapter, u8 efusetype, bool test)
 
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
 
-int isAdaptorInfoFileValid(void)
-{
-	return true;
-}
-
 int storeAdaptorInfoFile(char *path, struct eeprom_priv *eeprom_priv)
 {
 	int ret = _SUCCESS;

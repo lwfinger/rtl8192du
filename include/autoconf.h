@@ -23,7 +23,7 @@
 
 //#define CONFIG_WAKE_ON_WLAN
 
-//#define CONFIG_92D_AP_MODE 1
+#define CONFIG_92D_AP_MODE 1
 
 //#define CONFIG_P2P	1
 

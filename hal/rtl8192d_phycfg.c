@@ -1084,6 +1084,33 @@ PHY_RFConfig8192D(
 	return rtStatus;
 }
 
+/*-----------------------------------------------------------------------------
+ * Function:    PHY_ConfigRFWithParaFile()
+ *
+ * Overview:    This function read RF parameters from general file format, and do RF 3-wire
+ *
+ * Input:	struct rtw_adapter *			adapter
+ *			ps1Byte					pFileName
+ *			enum RF_RADIO_PATH_E	eRFPath
+ *
+ * Output:      NONE
+ *
+ * Return:      RT_STATUS_SUCCESS: configuration file exist
+ *
+ * Note:		Delay may be required for RF configuration
+ *---------------------------------------------------------------------------*/
+int
+rtl8192d_PHY_ConfigRFWithParaFile(
+	struct rtw_adapter *			adapter,
+	u8*				pFileName,
+	enum RF_RADIO_PATH_E		eRFPath
+)
+{
+	int	rtStatus = _SUCCESS;
+
+	return rtStatus;
+}
+
 /*  */
 /*-----------------------------------------------------------------------------
  * Function:    PHY_ConfigRFWithHeaderFile()

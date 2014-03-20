@@ -647,10 +647,12 @@ phy_RF6052_Config_ParaFile(
 			if (bTrueBPath == true)
 				rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radiob_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
 			else
-				rtStatus = _SUCCESS;
+				rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radioa_txt|MaskforPhySet, (enum RF_RADIO_PATH_E)eRFPath);
+			break;
+		case RF_PATH_B:
+		rtStatus = rtl8192d_PHY_ConfigRFWithHeaderFile(adapter,radiob_txt, (enum RF_RADIO_PATH_E)eRFPath);
 			break;
 		case RF_PATH_C:
-			rtStatus = _SUCCESS;
 			break;
 		case RF_PATH_D:
 			break;

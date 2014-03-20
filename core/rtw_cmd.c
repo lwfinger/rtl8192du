@@ -1201,7 +1201,7 @@ u8 rtw_setassocsta_cmd(struct rtw_adapter *padapter, u8 *mac_addr)
 		goto exit;
 	}
 
-	psetassocsta_rsp = kzalloc(sizeof(*psetassocsta_para), GFP_ATOMIC);
+	psetassocsta_rsp = kzalloc(sizeof(*psetassocsta_rsp), GFP_ATOMIC);
 	if (psetassocsta_rsp == NULL) {
 		kfree(ph2c);
 		kfree(psetassocsta_para);

@@ -36,15 +36,6 @@ inline int RTW_STATUS_CODE(int error_code) {
 	}
 }
 
-int	_rtw_memcmp(void *dst, void *src, u32 sz)
-{
-/* under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0 */
-	if (!(memcmp(dst, src, sz)))
-		return true;
-	else
-		return false;
-}
-
 /*
 For the following list_xxx operations,
 caller must guarantee the atomic context.

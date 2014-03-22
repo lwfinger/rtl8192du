@@ -258,7 +258,7 @@ u8 *rtw_get_ie_ex(u8 *in_ie, uint in_len, u8 eid, u8 *oui, u8 oui_len,
 	cnt = 0;
 	while (cnt < in_len) {
 		if (eid == in_ie[cnt] &&
-		    (!oui || _rtw_memcmp(&in_ie[cnt+2], oui, oui_len) == true)) {
+		    (!oui || !memcmp(&in_ie[cnt+2], oui, oui_len))) {
 			target_ie = &in_ie[cnt];
 			if (ie)
 				memcpy(ie, &in_ie[cnt], in_ie[cnt+1]+2);
@@ -441,7 +441,7 @@ unsigned char *rtw_get_wpa_ie(unsigned char *pie, int *wpa_ie_len, int limit)
 
 		if (pbuf) {
 			/* check if oui matches... */
-			if (_rtw_memcmp((pbuf + 2), wpa_oui_type, sizeof(wpa_oui_type)) == false)
+			if (memcmp((pbuf + 2), wpa_oui_type, sizeof(wpa_oui_type)))
 				goto check_next_ie;
 
 			/* check version... */
@@ -481,15 +481,15 @@ unsigned char *rtw_get_wpa2_ie(unsigned char *pie, int *rsn_ie_len, int limit)
 
 int rtw_get_wpa_cipher_suite(u8 *s)
 {
-	if (_rtw_memcmp(s, WPA_CIPHER_SUITE_NONE, WPA_SELECTOR_LEN) == true)
+	if (!memcmp(s, WPA_CIPHER_SUITE_NONE, WPA_SELECTOR_LEN))
 		return WPA_CIPHER_NONE;
-	if (_rtw_memcmp(s, WPA_CIPHER_SUITE_WEP40, WPA_SELECTOR_LEN) == true)
+	if (!memcmp(s, WPA_CIPHER_SUITE_WEP40, WPA_SELECTOR_LEN))
 		return WPA_CIPHER_WEP40;
-	if (_rtw_memcmp(s, WPA_CIPHER_SUITE_TKIP, WPA_SELECTOR_LEN) == true)
+	if (!memcmp(s, WPA_CIPHER_SUITE_TKIP, WPA_SELECTOR_LEN))
 		return WPA_CIPHER_TKIP;
-	if (_rtw_memcmp(s, WPA_CIPHER_SUITE_CCMP, WPA_SELECTOR_LEN) == true)
+	if (!memcmp(s, WPA_CIPHER_SUITE_CCMP, WPA_SELECTOR_LEN))
 		return WPA_CIPHER_CCMP;
-	if (_rtw_memcmp(s, WPA_CIPHER_SUITE_WEP104, WPA_SELECTOR_LEN) == true)
+	if (!memcmp(s, WPA_CIPHER_SUITE_WEP104, WPA_SELECTOR_LEN))
 		return WPA_CIPHER_WEP104;
 
 	return 0;
@@ -497,15 +497,15 @@ int rtw_get_wpa_cipher_suite(u8 *s)
 
 int rtw_get_wpa2_cipher_suite(u8 *s)
 {
-	if (_rtw_memcmp(s, RSN_CIPHER_SUITE_NONE, RSN_SELECTOR_LEN) == true)
+	if (!memcmp(s, RSN_CIPHER_SUITE_NONE, RSN_SELECTOR_LEN))
 		return WPA_CIPHER_NONE;
-	if (_rtw_memcmp(s, RSN_CIPHER_SUITE_WEP40, RSN_SELECTOR_LEN) == true)
+	if (!memcmp(s, RSN_CIPHER_SUITE_WEP40, RSN_SELECTOR_LEN))
 		return WPA_CIPHER_WEP40;
-	if (_rtw_memcmp(s, RSN_CIPHER_SUITE_TKIP, RSN_SELECTOR_LEN) == true)
+	if (!memcmp(s, RSN_CIPHER_SUITE_TKIP, RSN_SELECTOR_LEN))
 		return WPA_CIPHER_TKIP;
-	if (_rtw_memcmp(s, RSN_CIPHER_SUITE_CCMP, RSN_SELECTOR_LEN) == true)
+	if (!memcmp(s, RSN_CIPHER_SUITE_CCMP, RSN_SELECTOR_LEN))
 		return WPA_CIPHER_CCMP;
-	if (_rtw_memcmp(s, RSN_CIPHER_SUITE_WEP104, RSN_SELECTOR_LEN) == true)
+	if (!memcmp(s, RSN_CIPHER_SUITE_WEP104, RSN_SELECTOR_LEN))
 		return WPA_CIPHER_WEP104;
 
 	return 0;
@@ -523,7 +523,7 @@ int rtw_parse_wpa_ie(u8 *wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 	}
 
 	if ((*wpa_ie != _WPA_IE_ID_) || (*(wpa_ie+1) != (u8)(wpa_ie_len - 2)) ||
-	    (_rtw_memcmp(wpa_ie+2, RTW_WPA_OUI_TYPE, WPA_SELECTOR_LEN) != true))
+	    (memcmp(wpa_ie+2, RTW_WPA_OUI_TYPE, WPA_SELECTOR_LEN)))
 		return _FAIL;
 
 	pos = wpa_ie;
@@ -646,7 +646,7 @@ int rtw_get_sec_ie(u8 *in_ie, uint in_len, u8 *rsn_ie, u16 *rsn_len, u8 *wpa_ie,
 		authmode = in_ie[cnt];
 
 		if ((authmode == _WPA_IE_ID_) &&
-		    (_rtw_memcmp(&in_ie[cnt+2], &wpa_oui[0], 4) == true)) {
+		    (!memcmp(&in_ie[cnt+2], &wpa_oui[0], 4))) {
 				RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_,
 					 ("\n rtw_get_wpa_ie: in_ie[cnt+1]+2 =%d\n",
 					 in_ie[cnt+1]+2));
@@ -702,7 +702,7 @@ u8 rtw_is_wps_ie(u8 *ie_ptr, uint *wps_ielen)
 
 	eid = ie_ptr[0];
 
-	if ((eid == _WPA_IE_ID_) && (_rtw_memcmp(&ie_ptr[2], wps_oui, 4) == true)) {
+	if ((eid == _WPA_IE_ID_) && (!memcmp(&ie_ptr[2], wps_oui, 4))) {
 		*wps_ielen = ie_ptr[1]+2;
 		match = true;
 	}
@@ -736,7 +736,7 @@ u8 *rtw_get_wps_ie(u8 *in_ie, uint in_len, u8 *wps_ie, uint *wps_ielen)
 		eid = in_ie[cnt];
 
 		if ((eid == _WPA_IE_ID_) &&
-		    (_rtw_memcmp(&in_ie[cnt+2], wps_oui, 4) == true)) {
+		    (!memcmp(&in_ie[cnt+2], wps_oui, 4))) {
 			wpsie_ptr = &in_ie[cnt];
 			if (wps_ie)
 				memcpy(wps_ie, &in_ie[cnt], in_ie[cnt+1]+2);
@@ -771,7 +771,7 @@ u8 *rtw_get_wps_attr(u8 *wps_ie, uint wps_ielen, u16 target_attr_id, u8 *buf_att
 		*len_attr = 0;
 
 	if ((wps_ie[0] != _VENDOR_SPECIFIC_IE_) ||
-	    (_rtw_memcmp(wps_ie + 2, wps_oui, 4) != true))
+	    (memcmp(wps_ie + 2, wps_oui, 4)))
 		return attr_ptr;
 
 	/*  6 = 1(Element ID) + 1(Length) + 4(WPS OUI) */
@@ -1201,7 +1201,7 @@ u8 *rtw_get_p2p_ie(u8 *in_ie, int in_len, u8 *p2p_ie, uint *p2p_ielen)
 			return NULL;
 		}
 		if ((eid == _VENDOR_SPECIFIC_IE_) &&
-		    (_rtw_memcmp(&in_ie[cnt+2], p2p_oui, 4) == true)) {
+		    (!memcmp(&in_ie[cnt+2], p2p_oui, 4))) {
 			p2p_ie_ptr = in_ie + cnt;
 
 			if (p2p_ie != NULL)
@@ -1240,7 +1240,7 @@ u8 *rtw_get_p2p_attr(u8 *p2p_ie, uint p2p_ielen, u8 target_attr_id, u8 *buf_attr
 		*len_attr = 0;
 
 	if (!p2p_ie || (p2p_ie[0] != _VENDOR_SPECIFIC_IE_) ||
-	    (_rtw_memcmp(p2p_ie + 2, p2p_oui, 4) != true))
+	    (memcmp(p2p_ie + 2, p2p_oui, 4)))
 		return attr_ptr;
 
 	/*  6 = 1(Element ID) + 1(Length) + 3 (OUI) + 1(OUI Type) */

@@ -176,7 +176,7 @@ int rtw_recv_indicatepkt(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 		struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
 		int bmcast = IS_MCAST(pattrib->dst);
 
-		if (_rtw_memcmp(pattrib->dst, myid(&padapter->eeprompriv), ETH_ALEN)==false) {
+		if (memcmp(pattrib->dst, myid(&padapter->eeprompriv), ETH_ALEN)) {
 			if (bmcast) {
 				psta = rtw_get_bcmc_stainfo(padapter);
 				pskb2 = skb_clone(skb, GFP_ATOMIC);

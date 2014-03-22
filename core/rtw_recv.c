@@ -853,21 +853,21 @@ static int sta2sta_data_frame(struct rtw_adapter *adapter,
 	if ((check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true) ||
 	    (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true)) {
 		/*  filter packets that SA is myself or multicast or broadcast */
-		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)) {
+		if (!memcmp(myhwaddr, pattrib->src, ETH_ALEN)) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 				 (" SA==myself\n"));
 			ret = _FAIL;
 			goto exit;
 		}
 
-		if ((!_rtw_memcmp(myhwaddr, pattrib->dst, ETH_ALEN)) && (!bmcast)) {
+		if ((!!memcmp(myhwaddr, pattrib->dst, ETH_ALEN)) && (!bmcast)) {
 			ret = _FAIL;
 			goto exit;
 		}
 
-		if (_rtw_memcmp(pattrib->bssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
-		    _rtw_memcmp(mybssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
-		    (!_rtw_memcmp(pattrib->bssid, mybssid, ETH_ALEN))) {
+		if (!memcmp(pattrib->bssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
+		    !memcmp(mybssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
+		    (!!memcmp(pattrib->bssid, mybssid, ETH_ALEN))) {
 			ret = _FAIL;
 			goto exit;
 		}
@@ -876,7 +876,7 @@ static int sta2sta_data_frame(struct rtw_adapter *adapter,
 
 	} else if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) == true) {
 		/*  For Station mode, sa and bssid should always be BSSID, and DA is my mac-address */
-		if (!_rtw_memcmp
+		if (!!memcmp
 		    (pattrib->bssid, pattrib->src, ETH_ALEN)) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 				 ("bssid != TA under STATION_MODE; drop pkt\n"));
@@ -895,7 +895,7 @@ static int sta2sta_data_frame(struct rtw_adapter *adapter,
 		} else {	/*  not mc-frame */
 
 			/*  For AP mode, if DA is non-MCAST, then it must be BSSID, and bssid == BSSID */
-			if (!_rtw_memcmp
+			if (!!memcmp
 			    (pattrib->bssid, pattrib->dst, ETH_ALEN)) {
 				ret = _FAIL;
 				goto exit;
@@ -949,7 +949,7 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 	    (check_fwstate(pmlmepriv, _FW_LINKED) == true ||
 	    check_fwstate(pmlmepriv, _FW_UNDER_LINKING) == true)) {
 		/*  filter packets that SA is myself or multicast or broadcast */
-		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)) {
+		if (!memcmp(myhwaddr, pattrib->src, ETH_ALEN)) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 				 (" SA==myself\n"));
 			ret = _FAIL;
@@ -957,7 +957,7 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 		}
 
 		/*  da should be for me */
-		if ((!_rtw_memcmp(myhwaddr, pattrib->dst, ETH_ALEN)) && (!bmcast)) {
+		if ((!!memcmp(myhwaddr, pattrib->dst, ETH_ALEN)) && (!bmcast)) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
 				 (" ap2sta_data_frame:  compare DA fail; DA=%pM\n",
 				  pattrib->dst));
@@ -966,9 +966,9 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 		}
 
 		/*  check BSSID */
-		if (_rtw_memcmp(pattrib->bssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
-		    _rtw_memcmp(mybssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
-		    (!_rtw_memcmp(pattrib->bssid, mybssid, ETH_ALEN))) {
+		if (!memcmp(pattrib->bssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
+		    !memcmp(mybssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
+		    (!!memcmp(pattrib->bssid, mybssid, ETH_ALEN))) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
 				 (" ap2sta_data_frame:  compare BSSID fail ; BSSID=%pM\n",
 				  pattrib->bssid));
@@ -1029,7 +1029,7 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 		ret = RTW_RX_HANDLED;
 		goto exit;
 	} else {
-		if (_rtw_memcmp(myhwaddr, pattrib->dst, ETH_ALEN) && (!bmcast)) {
+		if (!memcmp(myhwaddr, pattrib->dst, ETH_ALEN) && (!bmcast)) {
 			*psta = rtw_get_stainfo(pstapriv, pattrib->bssid);	/*  get sta_info */
 			if (*psta == NULL) {
 				DBG_8192D
@@ -1061,7 +1061,7 @@ static int sta2ap_data_frame(struct rtw_adapter *adapter,
 
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 		/* For AP mode, RA=BSSID, TX=STA(SRC_ADDR), A3=DST_ADDR */
-		if (!_rtw_memcmp(pattrib->bssid, mybssid, ETH_ALEN)) {
+		if (!!memcmp(pattrib->bssid, mybssid, ETH_ALEN)) {
 			ret = _FAIL;
 			goto exit;
 		}
@@ -1095,7 +1095,7 @@ static int sta2ap_data_frame(struct rtw_adapter *adapter,
 		}
 	} else {
 		u8 *myhwaddr = myid(&adapter->eeprompriv);
-		if (!_rtw_memcmp(pattrib->ra, myhwaddr, ETH_ALEN)) {
+		if (!!memcmp(pattrib->ra, myhwaddr, ETH_ALEN)) {
 			ret = RTW_RX_HANDLED;
 			goto exit;
 		}
@@ -1128,7 +1128,7 @@ static int validate_recv_ctrl_frame(struct rtw_adapter *padapter,
 	}
 
 	/* receive the frames that ra(a1) is my address */
-	if (!_rtw_memcmp
+	if (!!memcmp
 	    (GetAddr1Ptr(pframe), myid(&padapter->eeprompriv), ETH_ALEN))
 		return _FAIL;
 
@@ -1276,7 +1276,7 @@ static int validate_recv_mgnt_frame(struct rtw_adapter *padapter,
 			} else if (GetFrameSubType(precv_frame->rx_data) == WIFI_PROBEREQ) {
 				psta->sta_stats.rx_probereq_pkts++;
 			} else if (GetFrameSubType(precv_frame->rx_data) == WIFI_PROBERSP) {
-				if (_rtw_memcmp(padapter->eeprompriv.mac_addr, GetAddr1Ptr(precv_frame->rx_data), ETH_ALEN) == true)
+				if (!memcmp(padapter->eeprompriv.mac_addr, GetAddr1Ptr(precv_frame->rx_data), ETH_ALEN))
 					psta->sta_stats.rx_probersp_pkts++;
 				else if (is_broadcast_mac_addr(GetAddr1Ptr(precv_frame->rx_data)) ||
 					 is_multicast_mac_addr(GetAddr1Ptr(precv_frame->rx_data)))
@@ -1524,12 +1524,11 @@ static int wlanhdr_to_ethhdr(struct recv_frame_hdr *precvframe)
 	psnap_type = ptr + pattrib->hdrlen + pattrib->iv_len + SNAP_SIZE;
 	/* convert hdr + possible LLC headers into Ethernet header */
 	/* eth_type = (psnap_type[0] << 8) | psnap_type[1]; */
-	if ((_rtw_memcmp(psnap, rtw_rfc1042_header, SNAP_SIZE) &&
-	     (_rtw_memcmp(psnap_type, SNAP_ETH_TYPE_IPX, 2) == false) &&
-	     (_rtw_memcmp(psnap_type, SNAP_ETH_TYPE_APPLETALK_AARP, 2) ==
-	      false)) ||
+	if ((!memcmp(psnap, rtw_rfc1042_header, SNAP_SIZE) &&
+	     memcmp(psnap_type, SNAP_ETH_TYPE_IPX, 2) &&
+	     memcmp(psnap_type, SNAP_ETH_TYPE_APPLETALK_AARP, 2)) ||
 	    /* eth_type != ETH_P_AARP && eth_type != ETH_P_IPX) || */
-	    _rtw_memcmp(psnap, rtw_bridge_tunnel_header, SNAP_SIZE)) {
+	    !memcmp(psnap, rtw_bridge_tunnel_header, SNAP_SIZE)) {
 		/* remove RFC1042 or Bridge-Tunnel encapsulation and replace EtherType */
 		bsnaphdr = true;
 	} else {
@@ -1863,9 +1862,9 @@ static int amsdu_to_msdu(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 		/* convert hdr + possible LLC headers into Ethernet header */
 		eth_type = RTW_GET_BE16(&sub_skb->data[6]);
 		if (sub_skb->len >= 8 &&
-		    ((_rtw_memcmp(sub_skb->data, rtw_rfc1042_header, SNAP_SIZE) &&
+		    ((!memcmp(sub_skb->data, rtw_rfc1042_header, SNAP_SIZE) &&
 		     eth_type != ETH_P_AARP && eth_type != ETH_P_IPX) ||
-		     _rtw_memcmp(sub_skb->data, rtw_bridge_tunnel_header, SNAP_SIZE))) {
+		     !memcmp(sub_skb->data, rtw_bridge_tunnel_header, SNAP_SIZE))) {
 			/* remove RFC1042 or Bridge-Tunnel encapsulation and replace EtherType */
 			skb_pull(sub_skb, SNAP_SIZE);
 			memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src,

@@ -340,7 +340,7 @@ static s32 pre_recv_entry(struct recv_frame_hdr *precvframe, struct recv_stat *p
 	{
 		secondary_myid = myid(&secondary_padapter->eeprompriv);
 
-		if (_rtw_memcmp(paddr1, secondary_myid, ETH_ALEN))
+		if (!memcmp(paddr1, secondary_myid, ETH_ALEN))
 		{
 			/* change to secondary interface */
 			precvframe->adapter = secondary_padapter;

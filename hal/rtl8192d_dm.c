@@ -1235,8 +1235,8 @@ static void PWDB_Monitor(
 
 				plist = plist->next;
 
-				if (_rtw_memcmp(psta	->hwaddr, bcast_addr, ETH_ALEN) ||
-					_rtw_memcmp(psta->hwaddr, myid(&adapter->eeprompriv), ETH_ALEN))
+				if (!memcmp(psta->hwaddr, bcast_addr, ETH_ALEN) ||
+					!memcmp(psta->hwaddr, myid(&adapter->eeprompriv), ETH_ALEN))
 					continue;
 
 				if (psta->state & WIFI_ASOC_STATE)
@@ -1603,7 +1603,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 				{
 					if (pdmpriv->bCCKinCH14)
 					{
-						if (_rtw_memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch14[i][2], 4)==true)
+						if (!memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch14[i][2], 4))
 						{
 							CCK_index_old =(u8)i;
 							break;
@@ -1611,7 +1611,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 					}
 					else
 					{
-						if (_rtw_memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch1_Ch13[i][2], 4)==true)
+						if (!memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch1_Ch13[i][2], 4))
 						{
 							CCK_index_old =(u8)i;
 							break;

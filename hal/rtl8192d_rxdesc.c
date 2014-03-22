@@ -485,9 +485,9 @@ void rtl8192d_translate_rx_signal_stuff(struct recv_frame_hdr *precvframe, struc
 	if ((pattrib->physt) && (pphy_info != NULL))
 	{
 		bPacketMatchBSSID = ((!IsFrameTypeCtrl(precvframe->rx_data)) && !(pattrib->icv_err) && !(pattrib->crc_err) &&
-			_rtw_memcmp(get_hdr_bssid(precvframe->rx_data), get_my_bssid(&padapter->mlmeextpriv.mlmext_info.network), ETH_ALEN));
+			!memcmp(get_hdr_bssid(precvframe->rx_data), get_my_bssid(&padapter->mlmeextpriv.mlmext_info.network), ETH_ALEN));
 
-		bPacketToSelf = bPacketMatchBSSID &&  (_rtw_memcmp(get_da(precvframe->rx_data), myid(&padapter->eeprompriv), ETH_ALEN));
+		bPacketToSelf = bPacketMatchBSSID &&  (!memcmp(get_da(precvframe->rx_data), myid(&padapter->eeprompriv), ETH_ALEN));
 
 		bPacketBeacon =bPacketMatchBSSID && (GetFrameSubType(precvframe->rx_data) ==  WIFI_BEACON);
 

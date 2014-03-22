@@ -1051,11 +1051,11 @@ unsigned int is_ap_in_tkip(struct rtw_adapter *padapter)
 
 			switch (pIE->ElementID) {
 			case _VENDOR_SPECIFIC_IE_:
-				if ((_rtw_memcmp(pIE->data, RTW_WPA_OUI, 4)) && (_rtw_memcmp((pIE->data + 12), WPA_TKIP_CIPHER, 4)))
+				if ((!memcmp(pIE->data, RTW_WPA_OUI, 4)) && (!memcmp((pIE->data + 12), WPA_TKIP_CIPHER, 4)))
 					return true;
 				break;
 			case _RSN_IE_2_:
-				if (_rtw_memcmp((pIE->data + 8), RSN_TKIP_CIPHER, 4))
+				if (!memcmp((pIE->data + 8), RSN_TKIP_CIPHER, 4))
 					return true;
 			default:
 				break;
@@ -1261,28 +1261,28 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
 
 		switch (pIE->ElementID) {
 		case _VENDOR_SPECIFIC_IE_:
-			if ((_rtw_memcmp(pIE->data, ARTHEROS_OUI1, 3)) ||
-			    (_rtw_memcmp(pIE->data, ARTHEROS_OUI2, 3))) {
+			if ((!memcmp(pIE->data, ARTHEROS_OUI1, 3)) ||
+			    (!memcmp(pIE->data, ARTHEROS_OUI2, 3))) {
 				DBG_8192D("link to Artheros AP\n");
 				return atherosAP;
-			} else if ((_rtw_memcmp(pIE->data, BROADCOM_OUI1, 3)) ||
-				   (_rtw_memcmp(pIE->data, BROADCOM_OUI2, 3)) ||
-				   (_rtw_memcmp(pIE->data, BROADCOM_OUI2, 3))) {
+			} else if ((!memcmp(pIE->data, BROADCOM_OUI1, 3)) ||
+				   (!memcmp(pIE->data, BROADCOM_OUI2, 3)) ||
+				   (!memcmp(pIE->data, BROADCOM_OUI2, 3))) {
 				DBG_8192D("link to Broadcom AP\n");
 				return broadcomAP;
-			} else if (_rtw_memcmp(pIE->data, MARVELL_OUI, 3)) {
+			} else if (!memcmp(pIE->data, MARVELL_OUI, 3)) {
 				DBG_8192D("link to Marvell AP\n");
 				return marvellAP;
-			} else if (_rtw_memcmp(pIE->data, RALINK_OUI, 3)) {
+			} else if (!memcmp(pIE->data, RALINK_OUI, 3)) {
 				DBG_8192D("link to Ralink AP\n");
 				return ralinkAP;
-			} else if (_rtw_memcmp(pIE->data, CISCO_OUI, 3)) {
+			} else if (!memcmp(pIE->data, CISCO_OUI, 3)) {
 				DBG_8192D("link to Cisco AP\n");
 				return ciscoAP;
-			} else if (_rtw_memcmp(pIE->data, REALTEK_OUI, 3)) {
+			} else if (!memcmp(pIE->data, REALTEK_OUI, 3)) {
 				DBG_8192D("link to Realtek 96B\n");
 				return realtekAP;
-			} else if (_rtw_memcmp(pIE->data, AIRGOCAP_OUI, 3)) {
+			} else if (!memcmp(pIE->data, AIRGOCAP_OUI, 3)) {
 				DBG_8192D("link to Airgo Cap\n");
 				return airgocapAP;
 			} else {

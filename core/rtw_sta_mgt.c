@@ -507,7 +507,7 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 	while ((rtw_end_of_queue_search(phead, plist)) == false) {
 		psta = container_of(plist, struct sta_info, hash_list);
 
-		if (_rtw_memcmp(psta->hwaddr, addr, ETH_ALEN) == true) {
+		if (!memcmp(psta->hwaddr, addr, ETH_ALEN)) {
 			/*  if found the matched address */
 			break;
 		}
@@ -575,7 +575,7 @@ u8 rtw_access_ctrl(struct rtw_adapter *padapter, u8 *mac_addr)
 					  list);
 		plist = plist->next;
 
-		if (_rtw_memcmp(paclnode->addr, mac_addr, ETH_ALEN)) {
+		if (!memcmp(paclnode->addr, mac_addr, ETH_ALEN)) {
 			if (paclnode->valid == true) {
 				match = true;
 				break;

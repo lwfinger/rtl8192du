@@ -820,7 +820,6 @@ static int netdev_if2_close(struct net_device *pnetdev)
 			rtw_netif_stop_queue(pnetdev);
 	}
 	rtw_scan_abort(padapter);
-	wdev_to_priv(padapter->rtw_wdev)->bandroid_scan = false;
 	return 0;
 }
 
@@ -1225,7 +1224,6 @@ static int netdev_close(struct net_device *pnetdev)
 				rtw_netif_stop_queue(pnetdev);
 		}
 
-#ifndef CONFIG_ANDROID
 		/* s2. */
 		LeaveAllPowerSaveMode(padapter);
 		rtw_disassoc_cmd(padapter, 500, false);
@@ -1235,7 +1233,6 @@ static int netdev_close(struct net_device *pnetdev)
 		rtw_free_assoc_resources(padapter, 1);
 		/* s2-4. */
 		rtw_free_network_queue(padapter, true);
-#endif
 		/*  Close LED */
 		rtw_led_control(padapter, LED_CTL_POWER_OFF);
 	}
@@ -1247,7 +1244,6 @@ static int netdev_close(struct net_device *pnetdev)
 #endif /* CONFIG_P2P */
 
 	rtw_scan_abort(padapter);
-	wdev_to_priv(padapter->rtw_wdev)->bandroid_scan = false;
 	padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; /* set this at the end */
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-871x_drv - drv_close\n"));

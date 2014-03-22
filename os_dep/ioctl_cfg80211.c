@@ -4121,8 +4121,6 @@ int rtw_wdev_alloc(struct rtw_adapter *padapter, struct device *dev)
 	pwdev_priv->provdisc_req_issued = false;
 	rtw_wdev_invit_info_init(&pwdev_priv->invit_info);
 
-	pwdev_priv->bandroid_scan = false;
-
 	if (padapter->registrypriv.power_mgnt != PS_MODE_ACTIVE)
 		pwdev_priv->power_mgmt = true;
 	else

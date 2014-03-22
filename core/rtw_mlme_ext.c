@@ -6929,7 +6929,7 @@ void issue_assocreq(struct rtw_adapter *adapt)
 				if (!adapt->registrypriv.wifi_spec) {
 					/* Commented by Kurt 20110629 */
 					/* In some older APs, WPS handshake */
-					/* would be fail if we append vender extensions informations to AP */
+					/* would be fail if we append vendor extensions informations to AP */
 					if (_rtw_memcmp(pIE->data, WPS_OUI, 4)) {
 						pIE->Length = 14;
 					}

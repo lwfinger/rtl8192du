@@ -33,17 +33,17 @@ int rtw_resume_process(struct rtw_adapter *padapter);
 static int rtw_drv_init(struct usb_interface *pusb_intf,const struct usb_device_id *pdid);
 static void rtw_dev_remove(struct usb_interface *pusb_intf);
 
-#define USB_VENDER_ID_REALTEK		0x0BDA
+#define USB_VENDOR_ID_REALTEK		0x0BDA
 
 /* DID_USB_v915_20121224 */
 #define RTL8192D_USB_IDS \
 	/*=== Realtek demoboard ===*/ \
 	/****** 8192DU ********/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8193)},/* 8192DU-VC */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8194)},/* 8192DU-VS */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8111)},/* Realtek 5G dongle for WiFi Display */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x0193)},/* 8192DE-VAU */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8171)},/* 8192DU-VC */ \
+	{USB_DEVICE(USB_VENDOR_ID_REALTEK, 0x8193)},/* 8192DU-VC */ \
+	{USB_DEVICE(USB_VENDOR_ID_REALTEK, 0x8194)},/* 8192DU-VS */ \
+	{USB_DEVICE(USB_VENDOR_ID_REALTEK, 0x8111)},/* Realtek 5G dongle for WiFi Display */ \
+	{USB_DEVICE(USB_VENDOR_ID_REALTEK, 0x0193)},/* 8192DE-VAU */ \
+	{USB_DEVICE(USB_VENDOR_ID_REALTEK, 0x8171)},/* 8192DU-VC */ \
 	/*=== Customer ID ===*/ \
 	/****** 8192DU-VC ********/ \
 	{USB_DEVICE(0x2019, 0xAB2C)},/* PCI - Abocm */ \
@@ -71,8 +71,8 @@ MODULE_DEVICE_TABLE(usb, rtw_usb_id_tbl);
 static int const rtw_usb_id_len = sizeof(rtw_usb_id_tbl) / sizeof(struct usb_device_id);
 
 static struct specific_device_id specific_device_id_tbl[] = {
-	{.idVendor=USB_VENDER_ID_REALTEK, .idProduct=0x8177, .flags=SPEC_DEV_ID_DISABLE_HT},/* 8188cu 1*1 dongole, (b/g mode only) */
-	{.idVendor=USB_VENDER_ID_REALTEK, .idProduct=0x817E, .flags=SPEC_DEV_ID_DISABLE_HT},/* 8188CE-VAU USB minCard (b/g mode only) */
+	{.idVendor=USB_VENDOR_ID_REALTEK, .idProduct=0x8177, .flags=SPEC_DEV_ID_DISABLE_HT},/* 8188cu 1*1 dongole, (b/g mode only) */
+	{.idVendor=USB_VENDOR_ID_REALTEK, .idProduct=0x817E, .flags=SPEC_DEV_ID_DISABLE_HT},/* 8188CE-VAU USB minCard (b/g mode only) */
 	{.idVendor=0x0b05, .idProduct=0x1791, .flags=SPEC_DEV_ID_DISABLE_HT},
 	{.idVendor=0x13D3, .idProduct=0x3311, .flags=SPEC_DEV_ID_DISABLE_HT},
 	{.idVendor=0x13D3, .idProduct=0x3359, .flags=SPEC_DEV_ID_DISABLE_HT},/* Russian customer -Azwave (8188CE-VAU  g mode) */

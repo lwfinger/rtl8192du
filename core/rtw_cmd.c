@@ -336,7 +336,9 @@ post_process:
 			}
 		}
 
-		flush_signals_thread();
+		if (signal_pending (current))
+			flush_signals(current);
+
 		goto _next;
 	}
 	pcmdpriv->cmdthd_running = false;

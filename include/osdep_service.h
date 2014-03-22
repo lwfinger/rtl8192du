@@ -176,16 +176,6 @@ static inline u32 _RND128(u32 sz)
 	return ((sz >> 7) + ((sz & 127) ? 1: 0)) << 7;
 }
 
-static inline u32 bitshift(u32 bitmask)
-{
-	u32 i;
-
-	for (i = 0; i <= 31; i++)
-		if (((bitmask>>i) &  0x1) == 1) break;
-
-	return i;
-}
-
 /* ifdef __GNUC__ */
 #define STRUCT_PACKED __attribute__ ((packed))
 

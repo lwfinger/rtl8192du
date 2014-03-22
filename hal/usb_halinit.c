@@ -1816,7 +1816,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 		rtw_write32(padapter, 0x100, ulRegRead);
 
 		/*  2006.11.29. After reset cpu, we sholud wait for a second, otherwise, it may fail to write registers. Emily */
-		rtw_udelay_os(500);
+		udelay(500);
 	}
 
 	RT_CLEAR_PS_LEVEL(pwrctrlpriv, RT_RF_OFF_LEVL_HALT_NIC);
@@ -2081,7 +2081,7 @@ _ResetDigitalProcedure1(
 			rtw_write8(adapter, REG_HMETFR+3, 0x20);/* 8051 reset by self */
 
 			while ((retry_cnts++ <100) && (FEN_CPUEN &rtw_read16(adapter, REG_SYS_FUNC_EN)))
-				rtw_udelay_os(50);/* us */
+				udelay(50);/* us */
 
 			if (retry_cnts>= 100) {
 				rtw_write8(adapter, REG_FWIMR, 0x00);
@@ -2210,7 +2210,7 @@ CanGotoPowerOff92D(
 	u1bTmp|= BIT7;
 	rtw_write8(adapter, 0x17, u1bTmp);
 
-	rtw_udelay_os(500);
+	udelay(500);
 	/*  query another mac status; */
 	if (pHalData->interfaceIndex == 0)
 	{	/*  query another mac status; */
@@ -2248,7 +2248,7 @@ CardDisableHWSM(/*  HW Auto state machine */
 	}
 
 	rtw_write8(adapter, REG_TXPAUSE, 0xFF);
-	rtw_udelay_os(500);
+	udelay(500);
 	rtw_write8(adapter,	REG_CR, 0x0);
 
 	/*  RF Off Sequence ==== */
@@ -2299,7 +2299,7 @@ CardDisableWithoutHWSM(/*  without HW Auto state machine */
 	}
 
 	rtw_write8(adapter, REG_TXPAUSE, 0xFF);
-	rtw_udelay_os(500);
+	udelay(500);
 	rtw_write8(adapter,	REG_CR, 0x0);
 
 	/*  RF Off Sequence ==== */
@@ -2310,7 +2310,7 @@ CardDisableWithoutHWSM(/*  without HW Auto state machine */
 
 	/*  stop tx/rx */
 	rtw_write8(adapter, REG_TXPAUSE, 0xFF);
-	rtw_udelay_os(500);
+	udelay(500);
 	rtw_write8(adapter,	REG_CR, 0x0);
 
 	if (!PHY_CheckPowerOffFor8192D(adapter))

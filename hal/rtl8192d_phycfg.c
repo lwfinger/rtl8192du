@@ -328,13 +328,13 @@ phy_RFSerialRead(
 	tmplong2 = (tmplong2 & (~bLSSIReadAddress)) | (NewOffset<<23) | bLSSIReadEdge;	/* T65 RF */
 
 	PHY_SetBBReg(adapter, rFPGA0_XA_HSSIParameter2|MaskforPhySet, bMaskDWord, tmplong&(~bLSSIReadEdge));
-	rtw_udelay_os(10);
+	udelay(10);
 
 	PHY_SetBBReg(adapter, pPhyReg->rfHSSIPara2|MaskforPhySet, bMaskDWord, tmplong2);
 	for (i = 0; i < 2; i++)
-		rtw_udelay_os(MAX_STALL_TIME);
+		udelay(MAX_STALL_TIME);
 	PHY_SetBBReg(adapter, rFPGA0_XA_HSSIParameter2|MaskforPhySet, bMaskDWord, tmplong|bLSSIReadEdge);
-	rtw_udelay_os(10);
+	udelay(10);
 
 	if (eRFPath == RF_PATH_A)
 		RfPiEnable = (u8)PHY_QueryBBReg(adapter, rFPGA0_XA_HSSIParameter1|MaskforPhySet, BIT8);
@@ -801,17 +801,17 @@ phy_ConfigBBWithHeaderFile(
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xfc)
 				rtw_mdelay_os(1);
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xfb)
-				rtw_udelay_os(50);
+				udelay(50);
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xfa)
-				rtw_udelay_os(5);
+				udelay(5);
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xf9)
-				rtw_udelay_os(1);
+				udelay(1);
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xa24)
 				pdmpriv->RegA24 = Rtl819XPHY_REGArray_Table[i+1];
 			PHY_SetBBReg(adapter, Rtl819XPHY_REGArray_Table[i], bMaskDWord, Rtl819XPHY_REGArray_Table[i+1]);
 
 			/*  Add 1us delay between BB/RF register setting. */
-			rtw_udelay_os(1);
+			udelay(1);
 		}
 	} else if (ConfigType == BaseBand_Config_AGC_TAB) {
 		/* especial for 5G, vivi, 20100528 */
@@ -820,7 +820,7 @@ phy_ConfigBBWithHeaderFile(
 				PHY_SetBBReg(adapter, Rtl819XAGCTAB_Array_Table[i], bMaskDWord, Rtl819XAGCTAB_Array_Table[i+1]);
 
 				/*  Add 1us delay between BB/RF register setting. */
-				rtw_udelay_os(1);
+				udelay(1);
 
 			}
 		} else {
@@ -831,7 +831,7 @@ phy_ConfigBBWithHeaderFile(
 					PHY_SetBBReg(adapter, Rtl819XAGCTAB_Array_Table[i], bMaskDWord, Rtl819XAGCTAB_Array_Table[i+1]);
 
 					/*  Add 1us delay between BB/RF register setting. */
-					rtw_udelay_os(1);
+					udelay(1);
 				}
 			} else {
 				for (i = 0;i<AGCTAB_5GArrayLen;i = i+2)
@@ -839,7 +839,7 @@ phy_ConfigBBWithHeaderFile(
 					PHY_SetBBReg(adapter, Rtl819XAGCTAB_5GArray_Table[i], bMaskDWord, Rtl819XAGCTAB_5GArray_Table[i+1]);
 
 					/*  Add 1us delay between BB/RF register setting. */
-					rtw_udelay_os(1);
+					udelay(1);
 				}
 			}
 		}
@@ -1154,20 +1154,20 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 					rtw_mdelay_os(50);
 				} else if (Rtl819XRadioA_Array_Table[i] == 0xfd) {
 					for (j = 0;j<100;j++)
-						rtw_udelay_os(MAX_STALL_TIME);
+						udelay(MAX_STALL_TIME);
 				} else if (Rtl819XRadioA_Array_Table[i] == 0xfc) {
 					for (j = 0;j<20;j++)
-						rtw_udelay_os(MAX_STALL_TIME);
+						udelay(MAX_STALL_TIME);
 				} else if (Rtl819XRadioA_Array_Table[i] == 0xfb) {
-					rtw_udelay_os(50);
+					udelay(50);
 				} else if (Rtl819XRadioA_Array_Table[i] == 0xfa) {
-					rtw_udelay_os(5);
+					udelay(5);
 				} else if (Rtl819XRadioA_Array_Table[i] == 0xf9) {
-					rtw_udelay_os(1);
+					udelay(1);
 				} else {
 					PHY_SetRFReg(adapter, eRFPath, Rtl819XRadioA_Array_Table[i]|MaskforPhySet, bRFRegOffsetMask, Rtl819XRadioA_Array_Table[i+1]);
 					/*  Add 1us delay between BB/RF register setting. */
-					rtw_udelay_os(1);
+					udelay(1);
 				}
 			}
 			break;
@@ -1180,21 +1180,21 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 				} else if (Rtl819XRadioB_Array_Table[i] == 0xfd) {
 					/* rtw_mdelay_os(5); */
 					for (j = 0;j<100;j++)
-						rtw_udelay_os(MAX_STALL_TIME);
+						udelay(MAX_STALL_TIME);
 				} else if (Rtl819XRadioB_Array_Table[i] == 0xfc) {
 					/* rtw_mdelay_os(1); */
 					for (j = 0;j<20;j++)
-						rtw_udelay_os(MAX_STALL_TIME);
+						udelay(MAX_STALL_TIME);
 				} else if (Rtl819XRadioB_Array_Table[i] == 0xfb) {
-					rtw_udelay_os(50);
+					udelay(50);
 				} else if (Rtl819XRadioB_Array_Table[i] == 0xfa) {
-					rtw_udelay_os(5);
+					udelay(5);
 				} else if (Rtl819XRadioB_Array_Table[i] == 0xf9) {
-					rtw_udelay_os(1);
+					udelay(1);
 				} else {
 					PHY_SetRFReg(adapter, eRFPath, Rtl819XRadioB_Array_Table[i]|MaskforPhySet, bRFRegOffsetMask, Rtl819XRadioB_Array_Table[i+1]);
 					/*  Add 1us delay between BB/RF register setting. */
-					rtw_udelay_os(1);
+					udelay(1);
 				}
 			}
 			break;
@@ -1912,7 +1912,7 @@ static void PHY_SwitchWirelessBand(struct rtw_adapter *adapter, u8 Band)
 	}
 
 	for (i = 0;i<20;i++)
-			rtw_udelay_os(MAX_STALL_TIME);
+		udelay(MAX_STALL_TIME);
 
 }
 
@@ -1942,18 +1942,18 @@ PHY_EnableRFENV(
 
 	/*----Set RF_ENV enable----*/
 	PHY_SetBBReg(adapter, pPhyReg->rfintfe|MaskforPhySet, bRFSI_RFENV<<16, 0x1);
-	rtw_udelay_os(1);
+	udelay(1);
 
 	/*----Set RF_ENV output high----*/
 	PHY_SetBBReg(adapter, pPhyReg->rfintfo|MaskforPhySet, bRFSI_RFENV, 0x1);
-	rtw_udelay_os(1);
+	udelay(1);
 
 	/* Set bit number of Address and Data for RF register */
 	PHY_SetBBReg(adapter, pPhyReg->rfHSSIPara2|MaskforPhySet, b3WireAddressLength, 0x0);	/*  Set 1 to 4 bits for 8255 */
-	rtw_udelay_os(1);
+	udelay(1);
 
 	PHY_SetBBReg(adapter, pPhyReg->rfHSSIPara2|MaskforPhySet, b3WireDataLength, 0x0); /*  Set 0 to 12	bits for 8255 */
-	rtw_udelay_os(1);
+	udelay(1);
 }
 
 static void
@@ -2726,7 +2726,7 @@ phy_PathA_IQK(
 	PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf8000000);
 
 	/*  delay x ms */
-	rtw_udelay_os(IQK_DELAY_TIME*1000);
+	udelay(IQK_DELAY_TIME*1000);
 
 	/*  Check failed */
 	regEAC = PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord);
@@ -2809,14 +2809,14 @@ phy_PathA_IQK_5G_Normal(
 
 		while (timecount < timeout && PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, BIT26) == 0x00)
 		{
-			rtw_udelay_os(IQK_DELAY_TIME*1000*2);
+			udelay(IQK_DELAY_TIME*1000*2);
 			timecount++;
 		}
 
 		timecount = 0;
 		while (timecount < timeout && PHY_QueryBBReg(adapter, rRx_Power_Before_IQK_A_2, 0x3FF0000) == 0x00)
 		{
-			rtw_udelay_os(IQK_DELAY_TIME*1000*2);
+			udelay(IQK_DELAY_TIME*1000*2);
 			timecount++;
 		}
 
@@ -2879,7 +2879,7 @@ phy_PathB_IQK(
 	PHY_SetBBReg(adapter, rIQK_AGC_Cont, bMaskDWord, 0x00000000);
 
 	/*  delay x ms */
-	rtw_udelay_os(IQK_DELAY_TIME*1000);/* PlatformStallExecution(IQK_DELAY_TIME*1000); */
+	udelay(IQK_DELAY_TIME*1000);/* PlatformStallExecution(IQK_DELAY_TIME*1000); */
 
 	/*  Check failed */
 	regEAC = PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord);
@@ -2948,13 +2948,13 @@ phy_PathB_IQK_5G_Normal(
 		rtw_mdelay_os(IQK_DELAY_TIME*10);
 
 		while (timecount < timeout && PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, BIT29) == 0x00) {
-			rtw_udelay_os(IQK_DELAY_TIME*1000*2);
+			udelay(IQK_DELAY_TIME*1000*2);
 			timecount++;
 		}
 
 		timecount = 0;
 		while (timecount < timeout && PHY_QueryBBReg(adapter, rRx_Power_Before_IQK_B_2, 0x3FF0000) == 0x00) {
-			rtw_udelay_os(IQK_DELAY_TIME*1000*2);
+			udelay(IQK_DELAY_TIME*1000*2);
 			timecount++;
 		}
 
@@ -3776,7 +3776,7 @@ phy_IQCalibrate_5G(
 	PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf8000000);
 
 	/* Delay 1 ms */
-	rtw_udelay_os(IQK_DELAY_TIME*1000);
+	udelay(IQK_DELAY_TIME*1000);
 
 	/* Exit IQK mode */
 	PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x00000000);
@@ -3847,7 +3847,7 @@ phy_IQCalibrate_5G(
 		/* load TX0 IMR setting */
 		PHY_SetBBReg(adapter, rTx_IQK, bMaskDWord, RX0REG0xe40);
 		/* Sleep(5) -> delay 1ms */
-		rtw_udelay_os(IQK_DELAY_TIME*1000);
+		udelay(IQK_DELAY_TIME*1000);
 
 		/* LO calibration setting */
 		PHY_SetBBReg(adapter, rIQK_AGC_Rsp, bMaskDWord, 0x0046a911);
@@ -3857,7 +3857,7 @@ phy_IQCalibrate_5G(
 		PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf8000000);
 
 		/* Delay 3 ms */
-		rtw_udelay_os(3*IQK_DELAY_TIME*1000);
+		udelay(3*IQK_DELAY_TIME*1000);
 
 		/* Exit IQK mode */
 		PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x00000000);
@@ -3925,7 +3925,7 @@ phy_IQCalibrate_5G(
 	PHY_SetBBReg(adapter, rIQK_AGC_Cont, bMaskDWord, 0x00000000);
 
 	/* Delay 1 ms */
-	rtw_udelay_os(IQK_DELAY_TIME*1000);
+	udelay(IQK_DELAY_TIME*1000);
 
 	/* Exit IQK mode */
 	PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x00000000);
@@ -3990,7 +3990,7 @@ phy_IQCalibrate_5G(
 		PHY_SetBBReg(adapter, rTx_IQK, bMaskDWord, RX1REG0xe40);
 
 		/* Sleep(5) -> delay 1ms */
-		rtw_udelay_os(IQK_DELAY_TIME*1000);
+		udelay(IQK_DELAY_TIME*1000);
 
 		/* LO calibration setting */
 		PHY_SetBBReg(adapter, rIQK_AGC_Rsp, bMaskDWord, 0x0046a911);
@@ -4000,7 +4000,7 @@ phy_IQCalibrate_5G(
 		PHY_SetBBReg(adapter, rIQK_AGC_Cont, bMaskDWord, 0x00000000);
 
 		/* Delay 1 ms */
-		rtw_udelay_os(3*IQK_DELAY_TIME*1000);
+		udelay(3*IQK_DELAY_TIME*1000);
 
 		/* Check_RX_IQK_B_result() */
 		REG0xeac = PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord);
@@ -5364,7 +5364,7 @@ HalChangeCCKStatus8192D(
 			{
 				DBG_8192D("packet in tx packet buffer aaaaaaaaa 0x204 %x\n", rtw_read32(adapter, 0x204));
 				DBG_8192D("packet in tx packet buffer aaaaaaa 0x200 %x\n", rtw_read32(adapter, 0x200));
-				rtw_udelay_os(1000);
+				udelay(1000);
 			}
 			else
 			{

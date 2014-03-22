@@ -138,7 +138,7 @@ static void _FillH2CCmd92D(struct rtw_adapter* padapter, u8 ElementID, u32 CmdLe
 				DBG_8192D("FillH2CCmd92C(): Wating too long for FW read clear HMEBox(%d)!!!\n", BoxNum);
 				break;
 			}
-			rtw_udelay_os(10); /* us */
+			udelay(10); /* us */
 			IsFwRead = CheckFwReadLastH2C(padapter, BoxNum);
 		}
 

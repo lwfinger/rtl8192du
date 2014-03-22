@@ -211,11 +211,6 @@ void rtw_mdelay_os(int ms)
 	mdelay((unsigned long)ms);
 }
 
-void rtw_udelay_os(int us)
-{
-      udelay((unsigned long)us);
-}
-
 #define RTW_SUSPEND_LOCK_NAME "rtw_wifi"
 
 struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv)

@@ -211,7 +211,7 @@ void rtl8192d_FirmwareSelfReset(struct rtw_adapter *adapter)
 		Delay--;
 		if (Delay == 0)
 			break;
-		rtw_udelay_os(50);
+		udelay(50);
 		u1bTmp = rtw_read8(adapter, REG_SYS_FUNC_EN+1);
 	}
 
@@ -243,14 +243,14 @@ static int _FWInit(struct rtw_adapter *adapter)
 					  rtw_read8(adapter, FW_MAC0_ready));
 				return _SUCCESS;
 			}
-			rtw_udelay_os(5);
+			udelay(5);
 		} else {
 			if (rtw_read8(adapter, FW_MAC1_ready) &mac1_ready) {
 				DBG_8192D("Polling FW ready success!! FW_MAC1_ready:0x%x\n",
 					  rtw_read8(adapter, FW_MAC1_ready));
 				return _SUCCESS;
 			}
-			rtw_udelay_os(5);
+			udelay(5);
 		}
 
 	} while (counter++ < POLLING_READY_TIMEOUT_COUNT);
@@ -377,7 +377,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 		} else if (bFwDownloadInProcess) {
 			RELEASE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 			for (count = 0; count < 5000; count++) {
-				rtw_udelay_os(500);
+				udelay(500);
 				ACQUIRE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 				bFwDownloaded = _IsFWDownloaded(adapter);
 				if ((rtw_read8(adapter, 0x1f)&BIT5) == BIT5)
@@ -989,7 +989,7 @@ PHY_SetPowerOnFor8192D(
 			}
 			else
 			{
-				rtw_udelay_os(500);
+				udelay(500);
 				ACQUIRE_GLOBAL_MUTEX(GlobalMutexForPowerOnAndPowerOff);
 				value8 = rtw_read8(adapter, REG_POWER_OFF_IN_PROCESS);
 				RELEASE_GLOBAL_MUTEX(GlobalMutexForPowerOnAndPowerOff);

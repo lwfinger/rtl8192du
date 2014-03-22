@@ -1133,7 +1133,7 @@ blinktimerCallback(
              return;
        }
 
-	_set_workitem(&(pled->BlinkWorkItem));
+	schedule_work(&(pled->BlinkWorkItem));
 }
 
 /*  */

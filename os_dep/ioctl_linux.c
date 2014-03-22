@@ -3713,7 +3713,7 @@ static int rtw_p2p_connect(struct net_device *dev,
 #ifdef CONFIG_CONCURRENT_MODE
 		if (check_buddy_fwstate(padapter, _FW_LINKED))
 		{
-			_cancel_timer_ex(&pwdinfo->ap_p2p_switch_timer);
+			del_timer_sync(&pwdinfo->ap_p2p_switch_timer);
 		}
 #endif /*  CONFIG_CONCURRENT_MODE */
 
@@ -3724,7 +3724,7 @@ static int rtw_p2p_connect(struct net_device *dev,
 		memcpy(pwdinfo->nego_req_info.peerDevAddr, pnetwork->network.MacAddress, ETH_ALEN);
 		pwdinfo->nego_req_info.benable = true;
 
-		_cancel_timer_ex(&pwdinfo->restore_p2p_state_timer);
+		del_timer_sync(&pwdinfo->restore_p2p_state_timer);
 		if (rtw_p2p_state(pwdinfo) != P2P_STATE_GONEGO_OK)
 		{
 			/*	Restore to the listen state if the current p2p state is not nego OK */
@@ -3884,7 +3884,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 #ifdef CONFIG_CONCURRENT_MODE
 		if (check_fwstate(pbuddy_mlmepriv, _FW_LINKED))
 		{
-			_cancel_timer_ex(&pwdinfo->ap_p2p_switch_timer);
+			del_timer_sync(&pwdinfo->ap_p2p_switch_timer);
 		}
 #endif /*  CONFIG_CONCURRENT_MODE */
 
@@ -4142,7 +4142,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 #ifdef CONFIG_CONCURRENT_MODE
 		if (check_buddy_fwstate(padapter, _FW_LINKED))
 		{
-			_cancel_timer_ex(&pwdinfo->ap_p2p_switch_timer);
+			del_timer_sync(&pwdinfo->ap_p2p_switch_timer);
 		}
 #endif /*  CONFIG_CONCURRENT_MODE */
 		memcpy(pwdinfo->tx_prov_disc_info.peerIFAddr, pnetwork->network.MacAddress, ETH_ALEN);

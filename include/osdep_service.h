@@ -158,11 +158,6 @@ u32	rtw_ms_to_systime(u32 ms);
 void	rtw_sleep_schedulable(int ms);
 void	rtw_usleep_os(int us);
 
-static inline unsigned char _cancel_timer_ex(struct timer_list *timer)
-{
-	return del_timer_sync(timer);
-}
-
 static inline void thread_enter(char *name)
 {
 	allow_signal(SIGTERM);

@@ -210,7 +210,7 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 
 				for (i = 0; i < 16; i++) {
 					reorder = &psta->recvreorder_ctrl[i];
-					_cancel_timer_ex(&reorder->reordering_ctrl_timer);
+					del_timer_sync(&reorder->reordering_ctrl_timer);
 				}
 			}
 		}
@@ -373,7 +373,7 @@ u32	rtw_free_stainfo(struct rtw_adapter *padapter, struct sta_info *psta)
 	_rtw_init_sta_xmit_priv(&psta->sta_xmitpriv);
 	_rtw_init_sta_recv_priv(&psta->sta_recvpriv);
 
-	_cancel_timer_ex(&psta->addba_retry_timer);
+	del_timer_sync(&psta->addba_retry_timer);
 
 	/* for A-MPDU Rx reordering buffer control, cancel reorder_ctrl_timer */
 	for (i = 0; i < 16; i++) {
@@ -384,7 +384,7 @@ u32	rtw_free_stainfo(struct rtw_adapter *padapter, struct sta_info *psta)
 
 		reorder = &psta->recvreorder_ctrl[i];
 
-		_cancel_timer_ex(&reorder->reordering_ctrl_timer);
+		del_timer_sync(&reorder->reordering_ctrl_timer);
 
 		ppending_recvframe_queue = &reorder->pending_recvframe_queue;
 

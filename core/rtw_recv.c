@@ -2132,7 +2132,7 @@ static int recv_indicatepkt_reorder(struct rtw_adapter *padapter,
 		_set_timer(&preorder_ctrl->reordering_ctrl_timer,
 			   REORDER_WAIT_TIME);
 	} else {
-		_cancel_timer_ex(&preorder_ctrl->reordering_ctrl_timer);
+		del_timer_sync(&preorder_ctrl->reordering_ctrl_timer);
 	}
 	spin_unlock_bh(&ppending_recvframe_queue->lock);
 	return _SUCCESS;

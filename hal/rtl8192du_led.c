@@ -101,7 +101,7 @@ static void InitLed871x(struct rtw_adapter *padapter,
 static void DeInitLed871x(struct LED_871X *pled)
 {
 	cancel_work_sync(&(pled->BlinkWorkItem));
-	_cancel_timer_ex(&(pled->blinktimer));
+	del_timer_sync(&(pled->blinktimer));
 	/*  We should reset blink_in_prog if we cancel the LedControlTimer, 2005.03.10, by rcnjko. */
 	ResetLedStatus(pled);
 }
@@ -1259,7 +1259,7 @@ static void SwLedControlMode0(
 
 		if (pled->blink_in_prog)
 		{
-			_cancel_timer_ex(&(pled->blinktimer));
+			del_timer_sync(&(pled->blinktimer));
 			pled->blink_in_prog = false;
 		}
 		SwLedOff(padapter, pled);
@@ -1290,7 +1290,7 @@ static void SwLedControlMode0(
 		if (pled->blink_in_prog)
 		{
 			pled->currledstate = RTW_LED_OFF;
-			_cancel_timer_ex(&(pled->blinktimer));
+			del_timer_sync(&(pled->blinktimer));
 			pled->blink_in_prog = false;
 		}
 		break;
@@ -1328,12 +1328,12 @@ static void SwLedControlMode1(
 				}
 				if (pled->link_blink_in_prog == true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->link_blink_in_prog = false;
 				}
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 
@@ -1356,12 +1356,12 @@ static void SwLedControlMode1(
 				}
 				if (pled->nolink_blink_in_prog == true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->nolink_blink_in_prog = false;
 				}
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				pled->link_blink_in_prog = true;
@@ -1384,17 +1384,17 @@ static void SwLedControlMode1(
 
 				if (pled->nolink_blink_in_prog == true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->nolink_blink_in_prog = false;
 				}
 				if (pled->link_blink_in_prog == true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					 pled->link_blink_in_prog = false;
 				}
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				pled->scan_blink_in_prog = true;
@@ -1418,12 +1418,12 @@ static void SwLedControlMode1(
                             }
                             if (pled->nolink_blink_in_prog == true)
                             {
-                                _cancel_timer_ex(&(pled->blinktimer));
+                                del_timer_sync(&(pled->blinktimer));
                                 pled->nolink_blink_in_prog = false;
                             }
                             if (pled->link_blink_in_prog == true)
                             {
-                                _cancel_timer_ex(&(pled->blinktimer));
+                                del_timer_sync(&(pled->blinktimer));
                                 pled->link_blink_in_prog = false;
                             }
                             pled->blink_in_prog = true;
@@ -1443,22 +1443,22 @@ static void SwLedControlMode1(
 			 {
 				if (pled->nolink_blink_in_prog == true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->nolink_blink_in_prog = false;
 				}
 				if (pled->link_blink_in_prog == true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					 pled->link_blink_in_prog = false;
 				}
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				if (pled->scan_blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->scan_blink_in_prog = false;
 				}
 				pled->wps_blink_in_prog = true;
@@ -1474,27 +1474,27 @@ static void SwLedControlMode1(
 		case LED_CTL_STOP_WPS:
 			if (pled->nolink_blink_in_prog == true)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->nolink_blink_in_prog = false;
 			}
 			if (pled->link_blink_in_prog == true)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				 pled->link_blink_in_prog = false;
 			}
 			if (pled->blink_in_prog ==true)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->blink_in_prog = false;
 			}
 			if (pled->scan_blink_in_prog ==true)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->scan_blink_in_prog = false;
 			}
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 			}
 			else
 			{
@@ -1517,7 +1517,7 @@ static void SwLedControlMode1(
 		case LED_CTL_STOP_WPS_FAIL:
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->wps_blink_in_prog = false;
 			}
 
@@ -1536,27 +1536,27 @@ static void SwLedControlMode1(
 
 			if (pled->nolink_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->nolink_blink_in_prog = false;
 			}
 			if (pled->link_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->link_blink_in_prog = false;
 			}
 			if (pled->blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->blink_in_prog = false;
 			}
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->wps_blink_in_prog = false;
 			}
 			if (pled->scan_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->scan_blink_in_prog = false;
 			}
 
@@ -1593,7 +1593,7 @@ static void SwLedControlMode2(
 
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				pled->scan_blink_in_prog = true;
@@ -1632,12 +1632,12 @@ static void SwLedControlMode2(
 			pled->blinkingledstate = RTW_LED_ON;
 			if (pled->blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->blink_in_prog = false;
 			}
 			if (pled->scan_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->scan_blink_in_prog = false;
 			}
 
@@ -1650,12 +1650,12 @@ static void SwLedControlMode2(
 			{
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				if (pled->scan_blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->scan_blink_in_prog = false;
 				}
 				pled->wps_blink_in_prog = true;
@@ -1710,17 +1710,17 @@ static void SwLedControlMode2(
 			pled->blinkingledstate = RTW_LED_OFF;
 			if (pled->blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->blink_in_prog = false;
 			}
 			if (pled->scan_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->scan_blink_in_prog = false;
 			}
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->wps_blink_in_prog = false;
 			}
 
@@ -1757,7 +1757,7 @@ static void SwLedControlMode3(
 
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				pled->scan_blink_in_prog = true;
@@ -1799,12 +1799,12 @@ static void SwLedControlMode3(
 			pled->blinkingledstate = RTW_LED_ON;
 			if (pled->blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->blink_in_prog = false;
 			}
 			if (pled->scan_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->scan_blink_in_prog = false;
 			}
 
@@ -1817,12 +1817,12 @@ static void SwLedControlMode3(
 			{
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				if (pled->scan_blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->scan_blink_in_prog = false;
 				}
 				pled->wps_blink_in_prog = true;
@@ -1838,7 +1838,7 @@ static void SwLedControlMode3(
 		case LED_CTL_STOP_WPS:
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->wps_blink_in_prog = false;
 			}
 			else
@@ -1863,7 +1863,7 @@ static void SwLedControlMode3(
 		case LED_CTL_STOP_WPS_FAIL:
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->wps_blink_in_prog = false;
 			}
 
@@ -1887,17 +1887,17 @@ static void SwLedControlMode3(
 			pled->blinkingledstate = RTW_LED_OFF;
 			if (pled->blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->blink_in_prog = false;
 			}
 			if (pled->scan_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->scan_blink_in_prog = false;
 			}
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->wps_blink_in_prog = false;
 			}
 
@@ -1929,7 +1929,7 @@ static void SwLedControlMode4(
 			if (pled1->wps_blink_in_prog)
 			{
 				pled1->wps_blink_in_prog = false;
-				_cancel_timer_ex(&(pled1->blinktimer));
+				del_timer_sync(&(pled1->blinktimer));
 
 				pled1->blinkingledstate = RTW_LED_OFF;
 				pled1->currledstate = RTW_LED_OFF;
@@ -1946,12 +1946,12 @@ static void SwLedControlMode4(
 				}
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				if (pled->nolink_blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->nolink_blink_in_prog = false;
 				}
 
@@ -1978,7 +1978,7 @@ static void SwLedControlMode4(
 				if (pled1->wps_blink_in_prog)
 				{
 					pled1->wps_blink_in_prog = false;
-					_cancel_timer_ex(&(pled1->blinktimer));
+					del_timer_sync(&(pled1->blinktimer));
 
 					pled1->blinkingledstate = RTW_LED_OFF;
 					pled1->currledstate = RTW_LED_OFF;
@@ -1996,7 +1996,7 @@ static void SwLedControlMode4(
 				}
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 
@@ -2020,12 +2020,12 @@ static void SwLedControlMode4(
 
 				if (pled->nolink_blink_in_prog == true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->nolink_blink_in_prog = false;
 				}
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				pled->scan_blink_in_prog = true;
@@ -2049,7 +2049,7 @@ static void SwLedControlMode4(
 				}
 				if (pled->nolink_blink_in_prog == true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->nolink_blink_in_prog = false;
 				}
 				pled->blink_in_prog = true;
@@ -2068,7 +2068,7 @@ static void SwLedControlMode4(
 			if (pled1->wps_blink_in_prog)
 			{
 				pled1->wps_blink_in_prog = false;
-				_cancel_timer_ex(&(pled1->blinktimer));
+				del_timer_sync(&(pled1->blinktimer));
 
 				pled1->blinkingledstate = RTW_LED_OFF;
 				pled1->currledstate = RTW_LED_OFF;
@@ -2081,17 +2081,17 @@ static void SwLedControlMode4(
 			{
 				if (pled->nolink_blink_in_prog == true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->nolink_blink_in_prog = false;
 				}
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				if (pled->scan_blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->scan_blink_in_prog = false;
 				}
 				pled->wps_blink_in_prog = true;
@@ -2112,7 +2112,7 @@ static void SwLedControlMode4(
 		case LED_CTL_STOP_WPS:	/* WPS connect success */
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->wps_blink_in_prog = false;
 			}
 
@@ -2129,7 +2129,7 @@ static void SwLedControlMode4(
 		case LED_CTL_STOP_WPS_FAIL:		/* WPS authentication fail */
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->wps_blink_in_prog = false;
 			}
 
@@ -2143,7 +2143,7 @@ static void SwLedControlMode4(
 
 			/* LED1 settings */
 			if (pled1->wps_blink_in_prog)
-				_cancel_timer_ex(&(pled1->blinktimer));
+				del_timer_sync(&(pled1->blinktimer));
 			else
 				pled1->wps_blink_in_prog = true;
 
@@ -2159,7 +2159,7 @@ static void SwLedControlMode4(
 		case LED_CTL_STOP_WPS_FAIL_OVERLAP:	/* WPS session overlap */
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->wps_blink_in_prog = false;
 			}
 
@@ -2173,7 +2173,7 @@ static void SwLedControlMode4(
 
 			/* LED1 settings */
 			if (pled1->wps_blink_in_prog)
-				_cancel_timer_ex(&(pled1->blinktimer));
+				del_timer_sync(&(pled1->blinktimer));
 			else
 				pled1->wps_blink_in_prog = true;
 
@@ -2193,38 +2193,38 @@ static void SwLedControlMode4(
 
 			if (pled->nolink_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->nolink_blink_in_prog = false;
 			}
 			if (pled->link_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->link_blink_in_prog = false;
 			}
 			if (pled->blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->blink_in_prog = false;
 			}
 			if (pled->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->wps_blink_in_prog = false;
 			}
 			if (pled->scan_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->scan_blink_in_prog = false;
 			}
 			if (pled->start_link_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->start_link_blink_in_prog = false;
 			}
 
 			if (pled1->wps_blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled1->blinktimer));
+				del_timer_sync(&(pled1->blinktimer));
 				pled1->wps_blink_in_prog = false;
 			}
 
@@ -2273,7 +2273,7 @@ static void SwLedControlMode5(
 			{
 				if (pled->blink_in_prog ==true)
 				{
-					_cancel_timer_ex(&(pled->blinktimer));
+					del_timer_sync(&(pled->blinktimer));
 					pled->blink_in_prog = false;
 				}
 				pled->scan_blink_in_prog = true;
@@ -2312,7 +2312,7 @@ static void SwLedControlMode5(
 
 			if (pled->blink_in_prog)
 			{
-				_cancel_timer_ex(&(pled->blinktimer));
+				del_timer_sync(&(pled->blinktimer));
 				pled->blink_in_prog = false;
 			}
 

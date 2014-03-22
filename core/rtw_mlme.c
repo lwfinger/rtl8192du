@@ -87,10 +87,6 @@ exit:
 	return res;
 }
 
-static void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv)
-{
-}
-
 static void rtw_free_mlme_ie_data(u8 **ppie, u32 *plen)
 {
 	if (*ppie) {
@@ -133,8 +129,6 @@ void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
 	rtw_free_mlme_priv_ie_data(pmlmepriv);
 
 	if (pmlmepriv) {
-		rtw_mfree_mlme_priv_lock(pmlmepriv);
-
 		if (pmlmepriv->free_bss_buf)
 			vfree(pmlmepriv->free_bss_buf);
 	}

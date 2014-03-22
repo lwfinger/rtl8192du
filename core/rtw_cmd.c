@@ -208,7 +208,7 @@ u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 	res = _rtw_enqueue_cmd(&pcmdpriv->cmd_queue, cmd_obj);
 
 	if (res == _SUCCESS)
-		_rtw_up_sema(&pcmdpriv->cmd_queue_sema);
+		up(&pcmdpriv->cmd_queue_sema);
 
 exit:
 	return res;
@@ -262,7 +262,7 @@ int rtw_cmd_thread(void *context)
 	pcmdbuf = pcmdpriv->cmd_buf;
 
 	pcmdpriv->cmdthd_running = true;
-	_rtw_up_sema(&pcmdpriv->terminate_cmdthread_sema);
+	up(&pcmdpriv->terminate_cmdthread_sema);
 
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_info_,
 		 ("start r871x rtw_cmd_thread !!!!\n"));
@@ -350,7 +350,7 @@ post_process:
 		rtw_free_cmd_obj(pcmd);
 	} while (1);
 
-	_rtw_up_sema(&pcmdpriv->terminate_cmdthread_sema);
+	up(&pcmdpriv->terminate_cmdthread_sema);
 
 	thread_exit();
 }

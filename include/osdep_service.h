@@ -178,7 +178,6 @@ enum {
 
 #define rtw_update_mem_stat(flag, sz) do {} while (0)
 
-void	_rtw_up_sema(struct  semaphore *sema);
 u32	_rtw_down_sema(struct  semaphore *sema);
 void	_rtw_mutex_init(_mutex *pmutex);
 void	_rtw_mutex_free(_mutex *pmutex);

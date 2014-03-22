@@ -458,7 +458,7 @@ void rtw_stop_drv_threads (struct rtw_adapter *padapter)
 #endif /* CONFIG_CONCURRENT_MODE */
 	{
 		/* Below is to terminate rtw_cmd_thread & event_thread... */
-		_rtw_up_sema(&padapter->cmdpriv.cmd_queue_sema);
+		up(&padapter->cmdpriv.cmd_queue_sema);
 		if (padapter->cmdThread)
 			_rtw_down_sema(&padapter->cmdpriv.terminate_cmdthread_sema);
 	}

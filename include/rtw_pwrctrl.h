@@ -119,7 +119,7 @@ static inline void _enter_pwrlock(struct  semaphore *plock)
 
 static inline void _exit_pwrlock(struct  semaphore *plock)
 {
-	_rtw_up_sema(plock);
+	up(plock);
 }
 
 #define LPS_DELAY_TIME	1*HZ /*  1 sec */

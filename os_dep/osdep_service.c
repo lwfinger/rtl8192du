@@ -413,22 +413,3 @@ inline bool rtw_cbuf_empty(struct rtw_cbuf *cbuf)
 {
 	return (cbuf->write == cbuf->read)? true : false;
 }
-
-/**
- * rtw_cbuf_push - push a pointer into cbuf
- * @cbuf: pointer of struct rtw_cbuf
- * @buf: pointer to push in
- *
- * Lock free operation, be careful of the use scheme
- * Returns: true push success
- */
-bool rtw_cbuf_push(struct rtw_cbuf *cbuf, void *buf)
-{
-	if (rtw_cbuf_full(cbuf))
-		return _FAIL;
-
-	cbuf->bufs[cbuf->write] = buf;
-	cbuf->write = (cbuf->write+1)%cbuf->size;
-
-	return _SUCCESS;
-}

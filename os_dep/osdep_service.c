@@ -391,14 +391,3 @@ keep_ori:
 	if (ori && ori_len > 0)
 		kfree(ori);
 }
-
-/**
- * rtw_cbuf_full - test if cbuf is full
- * @cbuf: pointer of struct rtw_cbuf
- *
- * Returns: true if cbuf is full
- */
-inline bool rtw_cbuf_full(struct rtw_cbuf *cbuf)
-{
-	return (cbuf->write == cbuf->read-1)? true : false;
-}

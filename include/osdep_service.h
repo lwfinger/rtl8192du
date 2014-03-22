@@ -412,6 +412,4 @@ struct rtw_cbuf {
 	u32 size;
 	void *bufs[0];
 };
-
-bool rtw_cbuf_full(struct rtw_cbuf *cbuf);
 #endif

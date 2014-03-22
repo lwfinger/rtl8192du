@@ -2075,9 +2075,3 @@ void rtw_setassocsta_cmdrsp_callback(struct rtw_adapter *padapter,
 exit:
 	rtw_free_cmd_obj(pcmd);
 }
-
-static void rtw_getrttbl_cmd_cmdrsp_callback(struct rtw_adapter *padapter,
-					     struct cmd_obj *pcmd)
-{
-	rtw_free_cmd_obj(pcmd);
-}

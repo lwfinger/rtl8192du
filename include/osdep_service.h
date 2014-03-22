@@ -163,13 +163,7 @@ void	rtw_usleep_os(int us);
 
 static inline u32 _RND4(u32 sz)
 {
-
-	u32	val;
-
-	val = ((sz >> 2) + ((sz & 3) ? 1: 0)) << 2;
-
-	return val;
-
+	return ((sz >> 2) + ((sz & 3) ? 1: 0)) << 2;
 }
 
 static inline u32 _RND8(u32 sz)

@@ -26,13 +26,6 @@
 #include <usb_osintf.h>
 #include <linux/vmalloc.h>
 
-static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
-static int rtw_resume(struct usb_interface *intf);
-int rtw_resume_process(struct rtw_adapter *padapter);
-
-static int rtw_drv_init(struct usb_interface *pusb_intf,const struct usb_device_id *pdid);
-static void rtw_dev_remove(struct usb_interface *pusb_intf);
-
 static struct usb_device_id rtl8192d_usb_id_tbl[] = {
 	/* Realtek */
 	/* 8192DU */
@@ -68,16 +61,6 @@ static struct specific_device_id specific_device_id_tbl[] = {
 	{.idVendor=0x13D3, .idProduct=0x3311, .flags=SPEC_DEV_ID_DISABLE_HT},
 	{.idVendor=0x13D3, .idProduct=0x3359, .flags=SPEC_DEV_ID_DISABLE_HT},/* Russian customer -Azwave (8188CE-VAU  g mode) */
 	{}
-};
-
-static struct usb_driver rtl8192d_usb_drv = {
-	.name		= "rtl8192du",
-	.probe		= rtw_drv_init,
-	.disconnect	= rtw_dev_remove,
-	.id_table	= rtl8192d_usb_id_tbl,
-	.suspend	= rtw_suspend,
-	.resume		= rtw_resume,
-	.reset_resume	= rtw_resume,
 };
 
 static inline int RT_usb_endpoint_dir_in(const struct usb_endpoint_descriptor *epd)
@@ -463,22 +446,6 @@ exit:
 	return ret;
 }
 
-static int rtw_resume(struct usb_interface *pusb_intf)
-{
-	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
-	struct rtw_adapter *padapter = dvobj->if1;
-	struct net_device *pnetdev = padapter->pnetdev;
-	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-	 int ret = 0;
-
-	if (pwrpriv->bInternalAutoSuspend)
-		ret = rtw_resume_process(padapter);
-	else
-		ret = rtw_resume_process(padapter);
-
-	return ret;
-}
-
 int rtw_resume_process(struct rtw_adapter *padapter)
 {
 	struct net_device *pnetdev;
@@ -520,6 +487,22 @@ exit:
 		pwrpriv->bInSuspend = false;
 	DBG_8192D("<===  %s return %d.............. in %dms\n", __func__,
 		  ret, rtw_get_passing_time_ms(start_time));
+	return ret;
+}
+
+static int rtw_resume(struct usb_interface *pusb_intf)
+{
+	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
+	struct rtw_adapter *padapter = dvobj->if1;
+	struct net_device *pnetdev = padapter->pnetdev;
+	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
+	 int ret = 0;
+
+	if (pwrpriv->bInternalAutoSuspend)
+		ret = rtw_resume_process(padapter);
+	else
+		ret = rtw_resume_process(padapter);
+
 	return ret;
 }
 
@@ -774,5 +757,15 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 
 	return;
 }
+
+static struct usb_driver rtl8192d_usb_drv = {
+	.name		= "rtl8192du",
+	.probe		= rtw_drv_init,
+	.disconnect	= rtw_dev_remove,
+	.id_table	= rtl8192d_usb_id_tbl,
+	.suspend	= rtw_suspend,
+	.resume		= rtw_resume,
+	.reset_resume	= rtw_resume,
+};
 
 module_usb_driver(rtl8192d_usb_drv);

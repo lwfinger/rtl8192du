@@ -257,7 +257,7 @@ int rtw_cmd_thread(void *context)
 	struct rtw_adapter *padapter = (struct rtw_adapter *)context;
 	struct cmd_priv *pcmdpriv = &(padapter->cmdpriv);
 
-	thread_enter("RTW_CMD_THREAD");
+	allow_signal(SIGTERM);
 
 	pcmdbuf = pcmdpriv->cmd_buf;
 

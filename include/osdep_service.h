@@ -158,11 +158,6 @@ u32	rtw_ms_to_systime(u32 ms);
 void	rtw_sleep_schedulable(int ms);
 void	rtw_usleep_os(int us);
 
-static inline void thread_enter(char *name)
-{
-	allow_signal(SIGTERM);
-}
-
 static inline void flush_signals_thread(void)
 {
 	if (signal_pending (current))

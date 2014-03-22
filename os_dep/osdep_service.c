@@ -41,11 +41,6 @@ For the following list_xxx operations,
 caller must guarantee the atomic context.
 Otherwise, there will be racing condition.
 */
-void rtw_list_insert_head(struct list_head *plist, struct list_head *phead)
-{
-	list_add(plist, phead);
-}
-
 void rtw_list_insert_tail(struct list_head *plist, struct list_head *phead)
 {
 	list_add_tail(plist, phead);

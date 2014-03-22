@@ -71,18 +71,6 @@ static int hex2num_i(char c)
 	return -1;
 }
 
-static int hex2byte_i(const char *hex)
-{
-	int a, b;
-	a = hex2num_i(*hex++);
-	if (a < 0)
-		return -1;
-	b = hex2num_i(*hex++);
-	if (b < 0)
-		return -1;
-	return (a << 4) | b;
-}
-
 /**
  * hwaddr_aton - Convert ASCII string to MAC address
  * @txt: MAC address as a string (e.g., "00:11:22:33:44:55")

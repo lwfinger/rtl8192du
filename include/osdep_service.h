@@ -179,9 +179,6 @@ static inline u32 _RND128(u32 sz)
 /* ifdef __GNUC__ */
 #define STRUCT_PACKED __attribute__ ((packed))
 
-/*  limitation of path length */
-	#define PATH_LENGTH_MAX PATH_MAX
-
 struct rtw_netdev_priv_indicator {
 	void *priv;
 	u32 sizeof_priv;

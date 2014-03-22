@@ -91,7 +91,7 @@ static void InitLed871x(struct rtw_adapter *padapter,
 
 	_init_timer(&(pled->blinktimer), padapter->pnetdev, blinktimerCallback, pled);
 
-	_init_workitem(&(pled->BlinkWorkItem), BlinkWorkItemCallback, pled);
+	INIT_WORK(&(pled->BlinkWorkItem), BlinkWorkItemCallback);
 }
 
 /*  */

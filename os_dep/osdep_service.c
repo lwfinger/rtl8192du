@@ -432,22 +432,3 @@ bool rtw_cbuf_push(struct rtw_cbuf *cbuf, void *buf)
 
 	return _SUCCESS;
 }
-
-/**
- * rtw_cbuf_pop - pop a pointer from cbuf
- * @cbuf: pointer of struct rtw_cbuf
- *
- * Lock free operation, be careful of the use scheme
- * Returns: pointer popped out
- */
-void *rtw_cbuf_pop(struct rtw_cbuf *cbuf)
-{
-	void *buf;
-	if (rtw_cbuf_empty(cbuf))
-		return NULL;
-
-	buf = cbuf->bufs[cbuf->read];
-	cbuf->read = (cbuf->read+1)%cbuf->size;
-
-	return buf;
-}

@@ -416,5 +416,4 @@ struct rtw_cbuf {
 bool rtw_cbuf_full(struct rtw_cbuf *cbuf);
 bool rtw_cbuf_empty(struct rtw_cbuf *cbuf);
 bool rtw_cbuf_push(struct rtw_cbuf *cbuf, void *buf);
-void *rtw_cbuf_pop(struct rtw_cbuf *cbuf);
 #endif

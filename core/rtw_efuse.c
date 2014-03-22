@@ -329,11 +329,7 @@ int Efuse_PgPacketRead(struct rtw_adapter *adapter, u8 offset, u8 *data, bool te
 int Efuse_PgPacketWrite(struct rtw_adapter *adapter, u8 offset, u8 word_en,
 			u8 *data, bool test)
 {
-	int ret;
-
-	ret =  adapter->HalFunc.Efuse_PgPacketWrite(adapter, offset, word_en, data, test);
-
-	return ret;
+	return adapter->HalFunc.Efuse_PgPacketWrite(adapter, offset, word_en, data, test);
 }
 
 /*-----------------------------------------------------------------------------

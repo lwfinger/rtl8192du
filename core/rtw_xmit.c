@@ -212,8 +212,6 @@ exit:
 
 static void  rtw_mfree_xmit_priv_lock(struct xmit_priv *pxmitpriv)
 {
-	_rtw_free_sema(&pxmitpriv->xmit_sema);
-	_rtw_free_sema(&pxmitpriv->terminate_xmitthread_sema);
 }
 
 void _rtw_free_xmit_priv(struct xmit_priv *pxmitpriv)

@@ -36,10 +36,6 @@ inline int RTW_STATUS_CODE(int error_code) {
 	}
 }
 
-void _rtw_free_sema(struct  semaphore *sema)
-{
-}
-
 void _rtw_up_sema(struct  semaphore *sema)
 {
 	up(sema);

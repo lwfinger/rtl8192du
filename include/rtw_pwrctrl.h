@@ -108,7 +108,6 @@ static inline void _init_pwrlock(struct  semaphore *plock)
 
 static inline void _free_pwrlock(struct  semaphore *plock)
 {
-	_rtw_free_sema(plock);
 }
 
 

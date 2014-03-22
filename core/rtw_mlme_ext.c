@@ -7935,7 +7935,7 @@ unsigned int send_beacon(struct rtw_adapter *adapt)
 		issue_beacon(adapt);
 		issue++;
 		do {
-			rtw_yield_os();
+			yield();
 			rtw_hal_get_hwreg(adapt, HW_VAR_BCN_VALID,
 					  (u8 *)(&bxmitok));
 			poll++;

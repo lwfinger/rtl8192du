@@ -398,7 +398,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	if (pnetdev)
 	{
 		netif_carrier_off(pnetdev);
-		rtw_netif_stop_queue(pnetdev);
+		netif_tx_stop_all_queues(pnetdev);
 	}
 #ifdef CONFIG_WAKE_ON_WLAN
 	if (padapter->pwrctrlpriv.bSupportRemoteWakeup==true&&padapter->pwrctrlpriv.wowlan_mode==true) {

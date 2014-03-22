@@ -44,11 +44,6 @@ u32 _rtw_down_sema(struct  semaphore *sema)
 		return _SUCCESS;
 }
 
-void	_rtw_mutex_init(_mutex *pmutex)
-{
-	mutex_init(pmutex);
-}
-
 void	_rtw_mutex_free(_mutex *pmutex)
 {
 	mutex_destroy(pmutex);

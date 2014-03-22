@@ -107,7 +107,7 @@ static u8 rtw_init_intf_priv(struct dvobj_priv *dvobj)
 {
 	u8 rst = _SUCCESS;
 
-	_rtw_mutex_init(&dvobj->usb_vendor_req_mutex);
+	mutex_init(&dvobj->usb_vendor_req_mutex);
 
 	dvobj->usb_alloc_vendor_req_buf = kzalloc(MAX_USB_IO_CTL_SIZE, GFP_KERNEL);
 	if (dvobj->usb_alloc_vendor_req_buf == NULL) {
@@ -148,10 +148,10 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 	if (!pdvobjpriv)
 		goto exit;
 
-	_rtw_mutex_init(&pdvobjpriv->hw_init_mutex);
-	_rtw_mutex_init(&pdvobjpriv->h2c_fwcmd_mutex);
-	_rtw_mutex_init(&pdvobjpriv->setch_mutex);
-	_rtw_mutex_init(&pdvobjpriv->setbw_mutex);
+	mutex_init(&pdvobjpriv->hw_init_mutex);
+	mutex_init(&pdvobjpriv->h2c_fwcmd_mutex);
+	mutex_init(&pdvobjpriv->setch_mutex);
+	mutex_init(&pdvobjpriv->setbw_mutex);
 
 	pdvobjpriv->pusbintf = usb_intf ;
 	pusbd = pdvobjpriv->pusbdev = interface_to_usbdev(usb_intf);

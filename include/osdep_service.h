@@ -178,8 +178,6 @@ enum {
 
 #define rtw_update_mem_stat(flag, sz) do {} while (0)
 
-void	rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
-
 void	_rtw_init_sema(struct  semaphore *sema, int init_val);
 void	_rtw_free_sema(struct  semaphore *sema);
 void	_rtw_up_sema(struct  semaphore *sema);

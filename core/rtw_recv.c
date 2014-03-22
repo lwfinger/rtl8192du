@@ -76,7 +76,7 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv,
 	for (i = 0; i < NR_RECVFRAME; i++) {
 		INIT_LIST_HEAD(&(precvframe->list));
 
-		rtw_list_insert_tail(&(precvframe->list),
+		list_add_tail(&(precvframe->list),
 				     &(precvpriv->free_recv_queue.queue));
 
 		res = rtw_os_recv_resource_alloc(padapter, precvframe);
@@ -199,7 +199,7 @@ int rtw_free_recvframe(struct recv_frame_hdr *precvframe,
 
 	list_del_init(&(precvframe->list));
 
-	rtw_list_insert_tail(&(precvframe->list),
+	list_add_tail(&(precvframe->list),
 			     get_list_head(pfree_recv_queue));
 
 	if (padapter != NULL) {
@@ -220,7 +220,7 @@ int _rtw_enqueue_recvframe(struct recv_frame_hdr *precvframe, struct __queue *qu
 	/* INIT_LIST_HEAD(&(precvframe->list)); */
 	list_del_init(&(precvframe->list));
 
-	rtw_list_insert_tail(&(precvframe->list), get_list_head(queue));
+	list_add_tail(&(precvframe->list), get_list_head(queue));
 
 	if (padapter != NULL) {
 		if (queue == &precvpriv->free_recv_queue)
@@ -311,7 +311,7 @@ int rtw_enqueue_recvbuf(struct recv_buf *precvbuf, struct __queue *queue)
 
 	list_del_init(&precvbuf->list);
 
-	rtw_list_insert_tail(&precvbuf->list, get_list_head(queue));
+	list_add_tail(&precvbuf->list, get_list_head(queue));
 
 	spin_unlock_irqrestore(&queue->lock, irqL);
 
@@ -1716,7 +1716,7 @@ struct recv_frame_hdr *recvframe_chk_defrag(struct rtw_adapter *padapter,
 
 			/* spin_lock(&pdefrag_q->lock); */
 			phead = get_list_head(pdefrag_q);
-			rtw_list_insert_tail(&pfhdr->list, phead);
+			list_add_tail(&pfhdr->list, phead);
 			/* spin_unlock(&pdefrag_q->lock); */
 
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
@@ -1741,7 +1741,7 @@ struct recv_frame_hdr *recvframe_chk_defrag(struct rtw_adapter *padapter,
 		if (pdefrag_q != NULL) {
 			/* spin_lock(&pdefrag_q->lock); */
 			phead = get_list_head(pdefrag_q);
-			rtw_list_insert_tail(&pfhdr->list, phead);
+			list_add_tail(&pfhdr->list, phead);
 			/* spin_unlock(&pdefrag_q->lock); */
 
 			/* call recvframe_defrag to defrag */
@@ -1956,7 +1956,7 @@ static int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl,
 			break;
 	}
 	list_del_init(&(prframe->list));
-	rtw_list_insert_tail(&(prframe->list), plist);
+	list_add_tail(&(prframe->list), plist);
 	return true;
 }
 

@@ -36,18 +36,6 @@ inline int RTW_STATUS_CODE(int error_code) {
 	}
 }
 
-/*
-For the following list_xxx operations,
-caller must guarantee the atomic context.
-Otherwise, there will be racing condition.
-*/
-void rtw_list_insert_tail(struct list_head *plist, struct list_head *phead)
-{
-	list_add_tail(plist, phead);
-}
-
-/* Caller must check if the list is empty before calling list_del_init */
-
 void _rtw_init_sema(struct  semaphore *sema, int init_val)
 {
 	sema_init(sema, init_val);

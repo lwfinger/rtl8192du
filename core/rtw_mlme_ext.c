@@ -1043,7 +1043,7 @@ unsigned int OnAuth(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 
 	spin_lock_bh(&pstapriv->auth_list_lock);
 	if (list_empty(&pstat->auth_list)) {
-		rtw_list_insert_tail(&pstat->auth_list, &pstapriv->auth_list);
+		list_add_tail(&pstat->auth_list, &pstapriv->auth_list);
 		pstapriv->auth_list_cnt++;
 	}
 	spin_unlock_bh(&pstapriv->auth_list_lock);
@@ -1691,7 +1691,7 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 	spin_lock_bh(&pstapriv->asoc_list_lock);
 	if (list_empty(&pstat->asoc_list)) {
 		pstat->expire_to = pstapriv->expire_to;
-		rtw_list_insert_tail(&pstat->asoc_list, &pstapriv->asoc_list);
+		list_add_tail(&pstat->asoc_list, &pstapriv->asoc_list);
 		pstapriv->asoc_list_cnt++;
 	}
 	spin_unlock_bh(&pstapriv->asoc_list_lock);

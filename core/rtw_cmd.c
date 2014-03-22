@@ -114,7 +114,7 @@ int	_rtw_enqueue_cmd(struct __queue *queue, struct cmd_obj *obj)
 
 	spin_lock_irqsave(&queue->lock, flags);
 
-	rtw_list_insert_tail(&obj->list, &queue->queue);
+	list_add_tail(&obj->list, &queue->queue);
 
 	spin_unlock_irqrestore(&queue->lock, flags);
 
@@ -2016,7 +2016,7 @@ void rtw_createbss_cmd_callback(struct rtw_adapter *padapter,
 			}
 			pwlan->last_scanned = jiffies;
 		} else {
-			rtw_list_insert_tail(&(pwlan->list),
+			list_add_tail(&(pwlan->list),
 					     &pmlmepriv->scanned_queue.queue);
 		}
 

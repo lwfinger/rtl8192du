@@ -70,21 +70,15 @@ static struct specific_device_id specific_device_id_tbl[] = {
 	{}
 };
 
-struct rtw_usb_drv {
-	struct usb_driver usbdrv;
-	int drv_registered;
+static struct usb_driver rtl8192d_usb_drv = {
+	.name		= "rtl8192du",
+	.probe		= rtw_drv_init,
+	.disconnect	= rtw_dev_remove,
+	.id_table	= rtl8192d_usb_id_tbl,
+	.suspend	= rtw_suspend,
+	.resume		= rtw_resume,
+	.reset_resume	= rtw_resume,
 };
-
-static struct rtw_usb_drv rtl8192d_usb_drv = {
-	.usbdrv.name = (char*)"rtl8192du",
-	.usbdrv.probe = rtw_drv_init,
-	.usbdrv.disconnect = rtw_dev_remove,
-	.usbdrv.id_table = rtl8192d_usb_id_tbl,
-	.usbdrv.suspend =  rtw_suspend,
-	.usbdrv.resume = rtw_resume,
-	.usbdrv.reset_resume   = rtw_resume,
-};
-static struct rtw_usb_drv *usb_drv = &rtl8192d_usb_drv;
 
 static inline int RT_usb_endpoint_dir_in(const struct usb_endpoint_descriptor *epd)
 {
@@ -758,9 +752,6 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 
 	DBG_8192D("+rtw_dev_remove\n");
 
-	if (usb_drv->drv_registered )
-		padapter->bSurpriseRemoved = true;
-
 	rtw_pm_set_ips(padapter, IPS_NONE);
 	rtw_pm_set_lps(padapter, PS_MODE_ACTIVE);
 
@@ -784,22 +775,4 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 	return;
 }
 
-static int __init rtw_drv_entry(void)
-{
-	usb_drv->drv_registered = true;
-	return usb_register(&usb_drv->usbdrv);
-}
-
-static void __exit rtw_drv_halt(void)
-{
-	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+rtw_drv_halt\n"));
-	DBG_8192D("+rtw_drv_halt\n");
-
-	usb_drv->drv_registered = false;
-	usb_deregister(&usb_drv->usbdrv);
-
-	DBG_8192D("-rtw_drv_halt\n");
-}
-
-module_init(rtw_drv_entry);
-module_exit(rtw_drv_halt);
+module_usb_driver(rtl8192d_usb_drv);

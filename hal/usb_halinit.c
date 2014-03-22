@@ -2087,7 +2087,7 @@ _ResetDigitalProcedure1(
 				rtw_write8(adapter, REG_FWIMR, 0x00);
 				/*  2010/08/31 MH According to Filen's info, if 8051 reset fail, reset MAC directly. */
 				rtw_write8(adapter, REG_SYS_FUNC_EN+1, 0x50);	/* Reset MAC and Enable 8051 */
-				rtw_mdelay_os(10);
+				mdelay(10);
 			} else {
 				DBG_8192D("=====> 8051 reset success (%d) .\n", retry_cnts);
 			}
@@ -4221,7 +4221,7 @@ static void SetHwReg8192DU(struct rtw_adapter *adapter, u8 variable, u8 *val)
 					/* RQPN Load 0 */
 					rtw_write16(adapter, REG_RQPN_NPQ, 0x0);
 					rtw_write32(adapter, REG_RQPN, 0x80000000);
-					rtw_mdelay_os(10);
+					mdelay(10);
 				}
 
 			}

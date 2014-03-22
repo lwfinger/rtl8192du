@@ -209,8 +209,6 @@ void	rtw_usleep_os(int us);
 
 u32	rtw_atoi(u8* s);
 
-void	rtw_mdelay_os(int ms);
-
 static inline unsigned char _cancel_timer_ex(struct timer_list *timer)
 {
 	return del_timer_sync(timer);

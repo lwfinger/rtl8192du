@@ -795,11 +795,11 @@ phy_ConfigBBWithHeaderFile(
 	if (ConfigType == BaseBand_Config_PHY_REG) {
 		for (i = 0; i < PHY_REGArrayLen; i = i+2) {
 			if (Rtl819XPHY_REGArray_Table[i] == 0xfe || Rtl819XPHY_REGArray_Table[i] == 0xffe)
-				rtw_mdelay_os(50);
+				mdelay(50);
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xfd)
-				rtw_mdelay_os(5);
+				mdelay(5);
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xfc)
-				rtw_mdelay_os(1);
+				mdelay(1);
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xfb)
 				udelay(50);
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xfa)
@@ -1151,7 +1151,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 			for (i = 0;i<RadioA_ArrayLen; i = i+2)
 			{
 				if (Rtl819XRadioA_Array_Table[i] == 0xfe) {
-					rtw_mdelay_os(50);
+					mdelay(50);
 				} else if (Rtl819XRadioA_Array_Table[i] == 0xfd) {
 					for (j = 0;j<100;j++)
 						udelay(MAX_STALL_TIME);
@@ -1176,13 +1176,13 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 			{
 				if (Rtl819XRadioB_Array_Table[i] == 0xfe)
 				{ /*  Deay specific ms. Only RF configuration require delay. */
-					rtw_mdelay_os(50);
+					mdelay(50);
 				} else if (Rtl819XRadioB_Array_Table[i] == 0xfd) {
-					/* rtw_mdelay_os(5); */
+					/* mdelay(5); */
 					for (j = 0;j<100;j++)
 						udelay(MAX_STALL_TIME);
 				} else if (Rtl819XRadioB_Array_Table[i] == 0xfc) {
-					/* rtw_mdelay_os(1); */
+					/* mdelay(1); */
 					for (j = 0;j<20;j++)
 						udelay(MAX_STALL_TIME);
 				} else if (Rtl819XRadioB_Array_Table[i] == 0xfb) {
@@ -1269,9 +1269,9 @@ rtl8192d_PHY_CheckBBAndRFOK(
 			WriteData[i] &= 0xfff;
 			PHY_SetRFReg(adapter, eRFPath, WriteAddr[HW90_BLOCK_RF], bRFRegOffsetMask, WriteData[i]);
 			/*  TODO: we should not delay for such a long time. Ask SD3 */
-			rtw_mdelay_os(10);
+			mdelay(10);
 			ulRegRead = PHY_QueryRFReg(adapter, eRFPath, WriteAddr[HW90_BLOCK_RF], bRFRegOffsetMask);
-			rtw_mdelay_os(10);
+			mdelay(10);
 			/* cosa PlatformReleaseSpinLock(adapter, RT_INITIAL_SPINLOCK); */
 			break;
 
@@ -2552,7 +2552,7 @@ PHY_SwChnl8192D(	/*  Call after initialization */
 		pHalDataBuddyadapter = GET_HAL_DATA(Buddyadapter);
 		while (pHalDataBuddyadapter->bLCKInProgress && timecount < timeout)
 		{
-			rtw_mdelay_os(50);
+			mdelay(50);
 			timecount += 50;
 		}
 	}
@@ -2560,7 +2560,7 @@ PHY_SwChnl8192D(	/*  Call after initialization */
 
 	while (pHalData->bLCKInProgress && timecount < timeout)
 	{
-		rtw_mdelay_os(50);
+		mdelay(50);
 		timecount += 50;
 	}
 
@@ -2805,7 +2805,7 @@ phy_PathA_IQK_5G_Normal(
 		PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf8000000);
 
 		/*  delay x ms */
-		rtw_mdelay_os(IQK_DELAY_TIME*10);
+		mdelay(IQK_DELAY_TIME*10);
 
 		while (timecount < timeout && PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, BIT26) == 0x00)
 		{
@@ -2945,7 +2945,7 @@ phy_PathB_IQK_5G_Normal(
 		PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf8000000);
 
 		/*  delay x ms */
-		rtw_mdelay_os(IQK_DELAY_TIME*10);
+		mdelay(IQK_DELAY_TIME*10);
 
 		while (timecount < timeout && PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, BIT29) == 0x00) {
 			udelay(IQK_DELAY_TIME*1000*2);
@@ -4077,7 +4077,7 @@ phy_IQCalibrate_5G_Normal(
 
 	bool		is2T =  IS_92D_SINGLEPHY(pHalData->VersionID);
 
-	rtw_mdelay_os(IQK_DELAY_TIME*20);
+	mdelay(IQK_DELAY_TIME*20);
 
 	if (t == 0) {
 		/*  Save ADDA parameters, turn Path A ADDA on */
@@ -4358,7 +4358,7 @@ phy_LCCalibrate92DSW(
 		while ((!(u4tmp & BIT11)) &&
 			timecount <= timeout)
 		{
-			rtw_mdelay_os(50);
+			mdelay(50);
 			timecount += 50;
 			u4tmp = PHY_QueryRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G6, bRFRegOffsetMask);
 		}

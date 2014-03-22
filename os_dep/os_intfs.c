@@ -782,7 +782,7 @@ static int _netdev_if2_open(struct net_device *pnetdev)
 	_set_timer(&padapter->mlmepriv.dynamic_chk_timer, 2000);
 
 	if (!rtw_netif_queue_stopped(pnetdev))
-		rtw_netif_start_queue(pnetdev);
+		netif_tx_start_all_queues(pnetdev);
 	else
 		netif_tx_wake_all_queues(pnetdev);
 
@@ -1072,7 +1072,7 @@ int _netdev_open(struct net_device *pnetdev)
 	rtw_set_pwr_state_check_timer(&padapter->pwrctrlpriv);
 
 	if (!rtw_netif_queue_stopped(pnetdev))
-		rtw_netif_start_queue(pnetdev);
+		netif_tx_start_all_queues(pnetdev);
 	else
 		netif_tx_wake_all_queues(pnetdev);
 

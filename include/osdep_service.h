@@ -158,11 +158,6 @@ u32	rtw_ms_to_systime(u32 ms);
 void	rtw_sleep_schedulable(int ms);
 void	rtw_usleep_os(int us);
 
-static inline int res_to_status(int res)
-{
-	return res;
-}
-
 #define _RND(sz, r) ((((sz)+((r)-1))/(r))*(r))
 #define RND4(x)	(((x >> 2) + (((x & 3) == 0) ?  0: 1)) << 2)
 

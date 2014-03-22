@@ -784,7 +784,7 @@ static int _netdev_if2_open(struct net_device *pnetdev)
 	if (!rtw_netif_queue_stopped(pnetdev))
 		rtw_netif_start_queue(pnetdev);
 	else
-		rtw_netif_wake_queue(pnetdev);
+		netif_tx_wake_all_queues(pnetdev);
 
 	DBG_8192D("-871x_drv - if2_open, bup =%d\n", padapter->bup);
 	return 0;
@@ -1074,7 +1074,7 @@ int _netdev_open(struct net_device *pnetdev)
 	if (!rtw_netif_queue_stopped(pnetdev))
 		rtw_netif_start_queue(pnetdev);
 	else
-		rtw_netif_wake_queue(pnetdev);
+		netif_tx_wake_all_queues(pnetdev);
 
 netdev_open_normal_process:
 

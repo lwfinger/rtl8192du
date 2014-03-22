@@ -2059,7 +2059,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 
 		if (sme->ssid && sme->ssid_len) {
 			if (pnetwork->network.Ssid.SsidLength != sme->ssid_len ||
-			    !!memcmp(pnetwork->network.Ssid.Ssid, (void *)sme->ssid, sme->ssid_len))
+			    memcmp(pnetwork->network.Ssid.Ssid, (void *)sme->ssid, sme->ssid_len))
 				continue;
 		}
 

@@ -860,14 +860,14 @@ static int sta2sta_data_frame(struct rtw_adapter *adapter,
 			goto exit;
 		}
 
-		if ((!!memcmp(myhwaddr, pattrib->dst, ETH_ALEN)) && (!bmcast)) {
+		if ((memcmp(myhwaddr, pattrib->dst, ETH_ALEN)) && (!bmcast)) {
 			ret = _FAIL;
 			goto exit;
 		}
 
 		if (!memcmp(pattrib->bssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
 		    !memcmp(mybssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
-		    (!!memcmp(pattrib->bssid, mybssid, ETH_ALEN))) {
+		    (memcmp(pattrib->bssid, mybssid, ETH_ALEN))) {
 			ret = _FAIL;
 			goto exit;
 		}
@@ -876,7 +876,7 @@ static int sta2sta_data_frame(struct rtw_adapter *adapter,
 
 	} else if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) == true) {
 		/*  For Station mode, sa and bssid should always be BSSID, and DA is my mac-address */
-		if (!!memcmp
+		if (memcmp
 		    (pattrib->bssid, pattrib->src, ETH_ALEN)) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 				 ("bssid != TA under STATION_MODE; drop pkt\n"));
@@ -895,7 +895,7 @@ static int sta2sta_data_frame(struct rtw_adapter *adapter,
 		} else {	/*  not mc-frame */
 
 			/*  For AP mode, if DA is non-MCAST, then it must be BSSID, and bssid == BSSID */
-			if (!!memcmp
+			if (memcmp
 			    (pattrib->bssid, pattrib->dst, ETH_ALEN)) {
 				ret = _FAIL;
 				goto exit;
@@ -957,7 +957,7 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 		}
 
 		/*  da should be for me */
-		if ((!!memcmp(myhwaddr, pattrib->dst, ETH_ALEN)) && (!bmcast)) {
+		if ((memcmp(myhwaddr, pattrib->dst, ETH_ALEN)) && (!bmcast)) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
 				 (" ap2sta_data_frame:  compare DA fail; DA=%pM\n",
 				  pattrib->dst));
@@ -968,7 +968,7 @@ static int ap2sta_data_frame(struct rtw_adapter *adapter,
 		/*  check BSSID */
 		if (!memcmp(pattrib->bssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
 		    !memcmp(mybssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
-		    (!!memcmp(pattrib->bssid, mybssid, ETH_ALEN))) {
+		    (memcmp(pattrib->bssid, mybssid, ETH_ALEN))) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
 				 (" ap2sta_data_frame:  compare BSSID fail ; BSSID=%pM\n",
 				  pattrib->bssid));
@@ -1061,7 +1061,7 @@ static int sta2ap_data_frame(struct rtw_adapter *adapter,
 
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 		/* For AP mode, RA=BSSID, TX=STA(SRC_ADDR), A3=DST_ADDR */
-		if (!!memcmp(pattrib->bssid, mybssid, ETH_ALEN)) {
+		if (memcmp(pattrib->bssid, mybssid, ETH_ALEN)) {
 			ret = _FAIL;
 			goto exit;
 		}
@@ -1095,7 +1095,7 @@ static int sta2ap_data_frame(struct rtw_adapter *adapter,
 		}
 	} else {
 		u8 *myhwaddr = myid(&adapter->eeprompriv);
-		if (!!memcmp(pattrib->ra, myhwaddr, ETH_ALEN)) {
+		if (memcmp(pattrib->ra, myhwaddr, ETH_ALEN)) {
 			ret = RTW_RX_HANDLED;
 			goto exit;
 		}
@@ -1128,8 +1128,7 @@ static int validate_recv_ctrl_frame(struct rtw_adapter *padapter,
 	}
 
 	/* receive the frames that ra(a1) is my address */
-	if (!!memcmp
-	    (GetAddr1Ptr(pframe), myid(&padapter->eeprompriv), ETH_ALEN))
+	if (memcmp(GetAddr1Ptr(pframe), myid(&padapter->eeprompriv), ETH_ALEN))
 		return _FAIL;
 
 	/* only handle ps-poll */

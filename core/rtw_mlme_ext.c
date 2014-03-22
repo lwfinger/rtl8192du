@@ -543,8 +543,8 @@ static void _mgt_dispatcher(struct rtw_adapter *adapt,
 
 	if (ptable->func) {
 		/* receive the frames that ra(a1) is my address or ra(a1) is bc address. */
-		if (!!memcmp(GetAddr1Ptr(pframe), myid(&adapt->eeprompriv), ETH_ALEN) &&
-		    !!memcmp(GetAddr1Ptr(pframe), bc_addr, ETH_ALEN))
+		if (memcmp(GetAddr1Ptr(pframe), myid(&adapt->eeprompriv), ETH_ALEN) &&
+		    memcmp(GetAddr1Ptr(pframe), bc_addr, ETH_ALEN))
 			return;
 		ptable->func(adapt, precv_frame);
 	}
@@ -574,8 +574,8 @@ void mgt_dispatcher(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 	}
 
 	/* receive the frames that ra(a1) is my address or ra(a1) is bc address. */
-	if (!!memcmp(GetAddr1Ptr(pframe), myid(&adapt->eeprompriv), ETH_ALEN) &&
-	    !!memcmp(GetAddr1Ptr(pframe), bc_addr, ETH_ALEN)) {
+	if (memcmp(GetAddr1Ptr(pframe), myid(&adapt->eeprompriv), ETH_ALEN) &&
+	    memcmp(GetAddr1Ptr(pframe), bc_addr, ETH_ALEN)) {
 		return;
 	}
 
@@ -1157,7 +1157,7 @@ unsigned int OnAuthClient(struct rtw_adapter *adapt,
 	DBG_8192D("%s\n", __func__);
 
 	/* check A1 matches or not */
-	if (!!memcmp
+	if (memcmp
 	    (myid(&(adapt->eeprompriv)), get_da(pframe), ETH_ALEN))
 		return _SUCCESS;
 
@@ -1335,7 +1335,7 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 		status = _STATS_FAILURE_;
 	else {
 		/*  check if ssid match */
-		if (!!memcmp
+		if (memcmp
 		    ((void *)(p + 2), cur->Ssid.Ssid, cur->Ssid.SsidLength))
 			status = _STATS_FAILURE_;
 
@@ -1753,7 +1753,7 @@ unsigned int OnAssocRsp(struct rtw_adapter *adapt,
 	DBG_8192D("%s\n", __func__);
 
 	/* check A1 matches or not */
-	if (!!memcmp
+	if (memcmp
 	    (myid(&(adapt->eeprompriv)), get_da(pframe), ETH_ALEN))
 		return _SUCCESS;
 
@@ -2070,7 +2070,7 @@ unsigned int OnAction_back(struct rtw_adapter *adapt,
 	struct sta_priv *pstapriv = &adapt->stapriv;
 
 	/* check RA matches or not */
-	if (!!memcmp(myid(&(adapt->eeprompriv)), GetAddr1Ptr(pframe), ETH_ALEN))	/* for if1, sta/ap mode */
+	if (memcmp(myid(&(adapt->eeprompriv)), GetAddr1Ptr(pframe), ETH_ALEN))	/* for if1, sta/ap mode */
 		return _SUCCESS;
 
 	DBG_8192D("%s\n", __func__);
@@ -5326,7 +5326,7 @@ unsigned int on_action_public(struct rtw_adapter *adapt,
 	u8 category, action;
 
 	/* check RA matches or not */
-	if (!!memcmp
+	if (memcmp
 	    (myid(&(adapt->eeprompriv)), GetAddr1Ptr(pframe), ETH_ALEN))
 		goto exit;
 
@@ -5373,7 +5373,7 @@ unsigned int OnAction_p2p(struct rtw_adapter *adapt,
 	DBG_8192D("%s\n", __func__);
 
 	/* check RA matches or not */
-	if (!!memcmp(myid(&(adapt->eeprompriv)), GetAddr1Ptr(pframe), ETH_ALEN))	/* for if1, sta/ap mode */
+	if (memcmp(myid(&(adapt->eeprompriv)), GetAddr1Ptr(pframe), ETH_ALEN))	/* for if1, sta/ap mode */
 		return _SUCCESS;
 
 	frame_body =

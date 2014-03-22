@@ -126,7 +126,7 @@ static u8 rtw_deinit_intf_priv(struct dvobj_priv *dvobj)
 	u8 rst = _SUCCESS;
 
 	kfree(dvobj->usb_alloc_vendor_req_buf);
-	_rtw_mutex_free(&dvobj->usb_vendor_req_mutex);
+	mutex_destroy(&dvobj->usb_vendor_req_mutex);
 	return rst;
 }
 
@@ -223,10 +223,10 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 free_dvobj:
 	if (status != _SUCCESS && pdvobjpriv) {
 		usb_set_intfdata(usb_intf, NULL);
-		_rtw_mutex_free(&pdvobjpriv->hw_init_mutex);
-		_rtw_mutex_free(&pdvobjpriv->h2c_fwcmd_mutex);
-		_rtw_mutex_free(&pdvobjpriv->setch_mutex);
-		_rtw_mutex_free(&pdvobjpriv->setbw_mutex);
+		mutex_destroy(&pdvobjpriv->hw_init_mutex);
+		mutex_destroy(&pdvobjpriv->h2c_fwcmd_mutex);
+		mutex_destroy(&pdvobjpriv->setch_mutex);
+		mutex_destroy(&pdvobjpriv->setbw_mutex);
 		kfree(pdvobjpriv);
 		pdvobjpriv = NULL;
 	}
@@ -243,10 +243,10 @@ static void usb_dvobj_deinit(struct usb_interface *usb_intf)
 	if (dvobj) {
 		/* Modify condition for 92DU DMDP 2010.11.18, by Thomas */
 		rtw_deinit_intf_priv(dvobj);
-		_rtw_mutex_free(&dvobj->hw_init_mutex);
-		_rtw_mutex_free(&dvobj->h2c_fwcmd_mutex);
-		_rtw_mutex_free(&dvobj->setch_mutex);
-		_rtw_mutex_free(&dvobj->setbw_mutex);
+		mutex_destroy(&dvobj->hw_init_mutex);
+		mutex_destroy(&dvobj->h2c_fwcmd_mutex);
+		mutex_destroy(&dvobj->setch_mutex);
+		mutex_destroy(&dvobj->setbw_mutex);
 		kfree(dvobj);
 	}
 

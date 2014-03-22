@@ -4663,7 +4663,7 @@ int issue_probereq_p2p_ex(struct rtw_adapter *adapter, u8 *da, int try_cnt,
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	do {
 		ret =
@@ -6289,7 +6289,7 @@ int issue_probereq_ex(struct rtw_adapter *adapt,
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	do {
 		ret =
@@ -7206,7 +7206,7 @@ int issue_nulldata(struct rtw_adapter *adapt, unsigned char *da,
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -7339,7 +7339,7 @@ int issue_qos_nulldata(struct rtw_adapter *adapt, unsigned char *da, u16 tid,
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -7469,7 +7469,7 @@ int issue_deauth_ex(struct rtw_adapter *adapt, u8 *da,
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	do {
 		ret =
@@ -7928,7 +7928,7 @@ unsigned int send_beacon(struct rtw_adapter *adapt)
 	int issue = 0;
 	int poll = 0;
 
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	rtw_hal_set_hwreg(adapt, HW_VAR_BCN_VALID, NULL);
 	do {

@@ -152,11 +152,6 @@ u32 rtw_end_of_queue_search(struct list_head *head, struct list_head *plist)
 		return false;
 }
 
-u32	rtw_get_current_time(void)
-{
-	return jiffies;
-}
-
 inline u32 rtw_systime_to_ms(u32 systime)
 {
 	return systime * 1000 / HZ;

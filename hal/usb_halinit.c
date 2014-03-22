@@ -1440,7 +1440,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	u8	val8 = 0, tmpU1b;
 	u16	val16;
 	u32	boundary, i = 0,  status = _SUCCESS;
-	u32 init_start_time = rtw_get_current_time();
+	u32 init_start_time = jiffies;
 
 	padapter->init_adpt_in_progress = true;
 
@@ -2820,7 +2820,7 @@ _ReadRFType(
 
 static int _ReadadapterInfo8192DU(struct rtw_adapter *	adapter)
 {
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	DBG_8192D("====> %s\n", __func__);
 

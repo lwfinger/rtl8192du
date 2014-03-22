@@ -414,7 +414,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 		}
 
 		_FWDownloadEnable(adapter, true);
-		fwdl_start_time = rtw_get_current_time();
+		fwdl_start_time = jiffies;
 		while (1) {
 			/* reset the FWDL chksum */
 			rtw_write8(adapter, REG_MCUFWDL, rtw_read8(adapter, REG_MCUFWDL)|FWDL_ChkSum_rpt);

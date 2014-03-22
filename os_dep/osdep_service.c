@@ -41,14 +41,6 @@ For the following list_xxx operations,
 caller must guarantee the atomic context.
 Otherwise, there will be racing condition.
 */
-u32	rtw_is_list_empty(struct list_head *phead)
-{
-	if (list_empty(phead))
-		return true;
-	else
-		return false;
-}
-
 void rtw_list_insert_head(struct list_head *plist, struct list_head *phead)
 {
 	list_add(plist, phead);
@@ -103,7 +95,7 @@ void	_rtw_init_queue(struct __queue *pqueue)
 
 u32	  _rtw_queue_empty(struct __queue *pqueue)
 {
-	return (rtw_is_list_empty(&(pqueue->queue)));
+	return (list_empty(&(pqueue->queue)));
 }
 
 u32 rtw_end_of_queue_search(struct list_head *head, struct list_head *plist)

@@ -393,7 +393,7 @@ u32	rtw_free_stainfo(struct rtw_adapter *padapter, struct sta_info *psta)
 		phead =		get_list_head(ppending_recvframe_queue);
 		plist = phead->next;
 
-		while (!rtw_is_list_empty(phead)) {
+		while (!list_empty(phead)) {
 			prframe = container_of(plist, struct recv_frame_hdr, list);
 
 			plist = plist->next;
@@ -408,7 +408,7 @@ u32	rtw_free_stainfo(struct rtw_adapter *padapter, struct sta_info *psta)
 #ifdef CONFIG_92D_AP_MODE
 
 	spin_lock_bh(&pstapriv->auth_list_lock);
-	if (!rtw_is_list_empty(&psta->auth_list)) {
+	if (!list_empty(&psta->auth_list)) {
 		list_del_init(&psta->auth_list);
 		pstapriv->auth_list_cnt--;
 	}

@@ -128,7 +128,7 @@ struct cmd_obj *_rtw_dequeue_cmd(struct __queue *queue)
 	struct cmd_obj *obj;
 
 	spin_lock_irqsave(&queue->lock, flags);
-	if (rtw_is_list_empty(&(queue->queue))) {
+	if (list_empty(&(queue->queue))) {
 		obj = NULL;
 	} else {
 		obj = container_of((&queue->queue)->next, struct cmd_obj, list);

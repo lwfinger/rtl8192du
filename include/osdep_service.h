@@ -178,7 +178,6 @@ enum {
 
 #define rtw_update_mem_stat(flag, sz) do {} while (0)
 
-u32	rtw_is_list_empty(struct list_head *phead);
 void	rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
 void	rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
 

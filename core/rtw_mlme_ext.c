@@ -1027,7 +1027,7 @@ unsigned int OnAuth(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 		pstat->auth_seq = 0;
 	} else {
 		spin_lock_bh(&pstapriv->asoc_list_lock);
-		if (rtw_is_list_empty(&pstat->asoc_list) == false) {
+		if (list_empty(&pstat->asoc_list) == false) {
 			list_del_init(&pstat->asoc_list);
 			pstapriv->asoc_list_cnt--;
 			if (pstat->expire_to > 0) {
@@ -1042,7 +1042,7 @@ unsigned int OnAuth(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 	}
 
 	spin_lock_bh(&pstapriv->auth_list_lock);
-	if (rtw_is_list_empty(&pstat->auth_list)) {
+	if (list_empty(&pstat->auth_list)) {
 		rtw_list_insert_tail(&pstat->auth_list, &pstapriv->auth_list);
 		pstapriv->auth_list_cnt++;
 	}
@@ -1682,14 +1682,14 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 	pstat->state |= WIFI_FW_ASSOC_SUCCESS;
 
 	spin_lock_bh(&pstapriv->auth_list_lock);
-	if (!rtw_is_list_empty(&pstat->auth_list)) {
+	if (!list_empty(&pstat->auth_list)) {
 		list_del_init(&pstat->auth_list);
 		pstapriv->auth_list_cnt--;
 	}
 	spin_unlock_bh(&pstapriv->auth_list_lock);
 
 	spin_lock_bh(&pstapriv->asoc_list_lock);
-	if (rtw_is_list_empty(&pstat->asoc_list)) {
+	if (list_empty(&pstat->asoc_list)) {
 		pstat->expire_to = pstapriv->expire_to;
 		rtw_list_insert_tail(&pstat->asoc_list, &pstapriv->asoc_list);
 		pstapriv->asoc_list_cnt++;
@@ -1878,7 +1878,7 @@ unsigned int OnDeAuth(struct rtw_adapter *adapt,
 			u8 updated;
 
 			spin_lock_bh(&pstapriv->asoc_list_lock);
-			if (rtw_is_list_empty(&psta->asoc_list) == false) {
+			if (list_empty(&psta->asoc_list) == false) {
 				list_del_init(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated =
@@ -1943,7 +1943,7 @@ unsigned int OnDisassoc(struct rtw_adapter *adapt,
 			u8 updated;
 
 			spin_lock_bh(&pstapriv->asoc_list_lock);
-			if (rtw_is_list_empty(&psta->asoc_list) == false) {
+			if (list_empty(&psta->asoc_list) == false) {
 				list_del_init(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated =

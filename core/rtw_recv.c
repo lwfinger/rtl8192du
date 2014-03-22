@@ -1977,7 +1977,7 @@ static int recv_indicatepkts_in_order(struct rtw_adapter *padapter,
 
 	/*  Handling some condition for forced indicate case. */
 	if (bforced == true) {
-		if (rtw_is_list_empty(phead)) {
+		if (list_empty(phead)) {
 			/*  spin_unlock_irqrestore(&ppending_recvframe_queue->lock, &irql); */
 			/* spin_unlock(&ppending_recvframe_queue->lock); */
 			return true;
@@ -1990,7 +1990,7 @@ static int recv_indicatepkts_in_order(struct rtw_adapter *padapter,
 
 	/*  Prepare indication list and indication. */
 	/*  Check if there is any packet need indicate. */
-	while (!rtw_is_list_empty(phead)) {
+	while (!list_empty(phead)) {
 		prframe = container_of(plist, struct recv_frame_hdr, list);
 		pattrib = &prframe->attrib;
 

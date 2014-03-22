@@ -1601,7 +1601,7 @@ s32 rtw_xmit_classifier(struct rtw_adapter *padapter, struct xmit_frame *pxmitfr
 
 	ptxservq = rtw_get_sta_pending(padapter, psta, pattrib->priority, (u8 *)(&ac_index));
 
-	if (rtw_is_list_empty(&ptxservq->tx_pending)) {
+	if (list_empty(&ptxservq->tx_pending)) {
 		rtw_list_insert_tail(&ptxservq->tx_pending, get_list_head(phwxmits[ac_index].sta_queue));
 	}
 

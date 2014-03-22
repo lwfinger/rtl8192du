@@ -20,8 +20,8 @@
 #include <drv_types.h>
 #include <wifi.h>
 
-static unsigned char ARTHEROS_OUI1[] = {0x00, 0x03, 0x7f};
-static unsigned char ARTHEROS_OUI2[] = {0x00, 0x13, 0x74};
+static unsigned char ATHEROS_OUI1[] = {0x00, 0x03, 0x7f};
+static unsigned char ATHEROS_OUI2[] = {0x00, 0x13, 0x74};
 
 static unsigned char BROADCOM_OUI1[] = {0x00, 0x10, 0x18};
 static unsigned char BROADCOM_OUI2[] = {0x00, 0x0a, 0xf7};
@@ -1261,9 +1261,9 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
 
 		switch (pIE->ElementID) {
 		case _VENDOR_SPECIFIC_IE_:
-			if ((!memcmp(pIE->data, ARTHEROS_OUI1, 3)) ||
-			    (!memcmp(pIE->data, ARTHEROS_OUI2, 3))) {
-				DBG_8192D("link to Artheros AP\n");
+			if ((!memcmp(pIE->data, ATHEROS_OUI1, 3)) ||
+			    (!memcmp(pIE->data, ATHEROS_OUI2, 3))) {
+				DBG_8192D("link to Atheros AP\n");
 				return atherosAP;
 			} else if ((!memcmp(pIE->data, BROADCOM_OUI1, 3)) ||
 				   (!memcmp(pIE->data, BROADCOM_OUI2, 3)) ||

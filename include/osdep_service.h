@@ -199,10 +199,7 @@ u32	rtw_systime_to_ms(u32 systime);
 u32	rtw_ms_to_systime(u32 ms);
 
 void	rtw_sleep_schedulable(int ms);
-
 void	rtw_usleep_os(int us);
-
-u32	rtw_atoi(u8* s);
 
 static inline unsigned char _cancel_timer_ex(struct timer_list *timer)
 {

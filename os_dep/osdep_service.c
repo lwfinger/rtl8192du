@@ -402,14 +402,3 @@ inline bool rtw_cbuf_full(struct rtw_cbuf *cbuf)
 {
 	return (cbuf->write == cbuf->read-1)? true : false;
 }
-
-/**
- * rtw_cbuf_empty - test if cbuf is empty
- * @cbuf: pointer of struct rtw_cbuf
- *
- * Returns: true if cbuf is empty
- */
-inline bool rtw_cbuf_empty(struct rtw_cbuf *cbuf)
-{
-	return (cbuf->write == cbuf->read)? true : false;
-}

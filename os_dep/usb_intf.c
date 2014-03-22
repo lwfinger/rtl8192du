@@ -440,8 +440,8 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 		rtw_indicate_disconnect(padapter);
 
 exit:
-	DBG_8192D("<===  %s return %d.............. in %dms\n", __func__
-		, ret, rtw_get_passing_time_ms(start_time));
+	DBG_8192D("<===  %s return %d.............. in %dms\n", __func__,
+		  ret, rtw_systime_to_ms(jiffies - start_time));
 
 	return ret;
 }
@@ -486,7 +486,7 @@ exit:
 	if (pwrpriv)
 		pwrpriv->bInSuspend = false;
 	DBG_8192D("<===  %s return %d.............. in %dms\n", __func__,
-		  ret, rtw_get_passing_time_ms(start_time));
+		  ret, rtw_systime_to_ms(jiffies - start_time));
 	return ret;
 }
 

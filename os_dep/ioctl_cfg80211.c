@@ -3641,7 +3641,7 @@ dump:
 
 	if (tx_ret != _SUCCESS || dump_cnt > 1) {
 		DBG_8192D(FUNC_ADPT_FMT" %s (%d/%d) in %d ms\n", FUNC_ADPT_ARG(padapter),
-			tx_ret==_SUCCESS?"OK":"FAIL", dump_cnt, dump_limit, rtw_get_passing_time_ms(start));
+			tx_ret==_SUCCESS?"OK":"FAIL", dump_cnt, dump_limit, rtw_systime_to_ms(jiffies - start));
 	}
 
 	switch (type) {

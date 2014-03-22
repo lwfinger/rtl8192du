@@ -1837,7 +1837,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 exit:
 	padapter->init_adpt_in_progress = false;
 
-	DBG_8192D("%s in %dms\n", __func__, rtw_get_passing_time_ms(init_start_time));
+	DBG_8192D("%s in %dms\n", __func__, rtw_systime_to_ms(jiffies - init_start_time));
 
 #ifdef CONFIG_WAKE_ON_WLAN
 	if (padapter->pwrctrlpriv.wowlan_mode == true)
@@ -2830,7 +2830,7 @@ static int _ReadadapterInfo8192DU(struct rtw_adapter *	adapter)
 	_InitOtherVariable(adapter);
 
 	/* For 92DU Phy and Mac mode set , will initialize by EFUSE/EPPROM     zhiyuan 2010/03/25 */
-	DBG_8192D("<==== %s in %d ms\n", __func__, rtw_get_passing_time_ms(start));
+	DBG_8192D("<==== %s in %d ms\n", __func__, rtw_systime_to_ms(jiffies - start));
 
 	return _SUCCESS;
 }

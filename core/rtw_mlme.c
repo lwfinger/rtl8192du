@@ -988,7 +988,6 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	}
 
 	indicate_wx_scan_complete_event(adapter);
-	/* DBG_8192D("scan complete in %dms\n",rtw_get_passing_time_ms(pmlmepriv->scan_start_time)); */
 
 	spin_unlock_bh(&pmlmepriv->lock);
 
@@ -1167,7 +1166,7 @@ void rtw_scan_abort(struct rtw_adapter *adapter)
 	start = rtw_get_current_time();
 	pmlmeext->scan_abort = true;
 	while (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) &&
-	       rtw_get_passing_time_ms(start) <= 200) {
+		rtw_systime_to_ms(jiffies - start) <= 200) {
 		if (adapter->bDriverStopped || adapter->bSurpriseRemoved)
 			break;
 
@@ -1977,7 +1976,7 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv,
 		goto exit;
 
 	if (rtw_to_roaming(adapter) > 0) {
-		if (rtw_get_passing_time_ms((u32) competitor->last_scanned) >=
+		if (rtw_systime_to_ms(jiffies - (u32)competitor->last_scanned) >=
 		    RTW_SCAN_RESULT_EXPIRE ||
 		    is_same_ess(&competitor->network,
 				   &pmlmepriv->cur_network.network) == false)

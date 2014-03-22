@@ -400,7 +400,7 @@ void rtw_lps_leave(struct rtw_adapter *padapter)
 					if (bAwake || padapter->bSurpriseRemoved)
 						break;
 
-					if (rtw_get_passing_time_ms(start_time) > LPS_LEAVE_TIMEOUT_MS) {
+					if (rtw_systime_to_ms(jiffies - start_time) > LPS_LEAVE_TIMEOUT_MS) {
 						DBG_8192D
 						    ("Wait for FW LPS leave more than %u ms!!!\n",
 						     LPS_LEAVE_TIMEOUT_MS);
@@ -514,7 +514,7 @@ int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms,
 	if (pwrpriv->ps_processing) {
 		DBG_8192D("%s wait ps_processing...\n", __func__);
 		while (pwrpriv->ps_processing &&
-		       rtw_get_passing_time_ms(start) <= 3000)
+		       rtw_systime_to_ms(jiffies - start) <= 3000)
 			msleep(10);
 		if (pwrpriv->ps_processing)
 			DBG_8192D("%s wait ps_processing timeout\n", __func__);
@@ -525,7 +525,7 @@ int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms,
 	if (pwrpriv->bInternalAutoSuspend == false && pwrpriv->bInSuspend) {
 		DBG_8192D("%s wait bInSuspend...\n", __func__);
 		while (pwrpriv->bInSuspend &&
-		       ((rtw_get_passing_time_ms(start) <= 3000)))
+		       ((rtw_systime_to_ms(jiffies - start) <= 3000)))
 			msleep(10);
 		if (pwrpriv->bInSuspend)
 			DBG_8192D("%s wait bInSuspend timeout\n", __func__);

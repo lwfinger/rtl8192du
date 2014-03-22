@@ -4692,13 +4692,13 @@ int issue_probereq_p2p_ex(struct rtw_adapter *adapter, u8 *da, int try_cnt,
 				  FUNC_ADPT_ARG(adapter), da,
 				  rtw_get_oper_ch(adapter),
 				  ret == _SUCCESS ? ", acked" : "", i, try_cnt,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 		else
 			DBG_8192D(FUNC_ADPT_FMT ", ch:%u%s, %d/%d in %u ms\n",
 				  FUNC_ADPT_ARG(adapter),
 				  rtw_get_oper_ch(adapter),
 				  ret == _SUCCESS ? ", acked" : "", i, try_cnt,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 	}
 exit:
 	return ret;
@@ -6318,13 +6318,13 @@ int issue_probereq_ex(struct rtw_adapter *adapt,
 				  FUNC_ADPT_ARG(adapt), da,
 				  rtw_get_oper_ch(adapt),
 				  ret == _SUCCESS ? ", acked" : "", i, try_cnt,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 		else
 			DBG_8192D(FUNC_ADPT_FMT ", ch:%u%s, %d/%d in %u ms\n",
 				  FUNC_ADPT_ARG(adapt),
 				  rtw_get_oper_ch(adapt),
 				  ret == _SUCCESS ? ", acked" : "", i, try_cnt,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 	}
 exit:
 	return ret;
@@ -7241,13 +7241,13 @@ int issue_nulldata(struct rtw_adapter *adapt, unsigned char *da,
 				  FUNC_ADPT_ARG(adapt), da,
 				  rtw_get_oper_ch(adapt),
 				  ret == _SUCCESS ? ", acked" : "", i, try_cnt,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 		else
 			DBG_8192D(FUNC_ADPT_FMT ", ch:%u%s, %d/%d in %u ms\n",
 				  FUNC_ADPT_ARG(adapt),
 				  rtw_get_oper_ch(adapt),
 				  ret == _SUCCESS ? ", acked" : "", i, try_cnt,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 	}
 exit:
 	return ret;
@@ -7374,13 +7374,13 @@ int issue_qos_nulldata(struct rtw_adapter *adapt, unsigned char *da, u16 tid,
 				  FUNC_ADPT_ARG(adapt), da,
 				  rtw_get_oper_ch(adapt),
 				  ret == _SUCCESS ? ", acked" : "", i, try_cnt,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 		else
 			DBG_8192D(FUNC_ADPT_FMT ", ch:%u%s, %d/%d in %u ms\n",
 				  FUNC_ADPT_ARG(adapt),
 				  rtw_get_oper_ch(adapt),
 				  ret == _SUCCESS ? ", acked" : "", i, try_cnt,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 	}
 exit:
 	return ret;
@@ -7498,13 +7498,13 @@ int issue_deauth_ex(struct rtw_adapter *adapt, u8 *da,
 				  FUNC_ADPT_ARG(adapt), da,
 				  rtw_get_oper_ch(adapt),
 				  ret == _SUCCESS ? ", acked" : "", i, try_cnt,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 		else
 			DBG_8192D(FUNC_ADPT_FMT ", ch:%u%s, %d/%d in %u ms\n",
 				  FUNC_ADPT_ARG(adapt),
 				  rtw_get_oper_ch(adapt),
 				  ret == _SUCCESS ? ", acked" : "", i, try_cnt,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 	}
 exit:
 	return ret;
@@ -7949,15 +7949,15 @@ unsigned int send_beacon(struct rtw_adapter *adapt)
 		return _FAIL;
 	if (false == bxmitok) {
 		DBG_8192D("%s fail! %u ms\n", __func__,
-			  rtw_get_passing_time_ms(start));
+			  rtw_systime_to_ms(jiffies - start));
 		return _FAIL;
 	} else {
-		u32 passing_time = rtw_get_passing_time_ms(start);
+		u32 passing_time = rtw_systime_to_ms(jiffies - start);
 
 		if (passing_time > 100 || issue > 3)
 			DBG_8192D("%s success, issue:%d, poll:%d, %u ms\n",
 				  __func__, issue, poll,
-				  rtw_get_passing_time_ms(start));
+				  rtw_systime_to_ms(jiffies - start));
 		return _SUCCESS;
 	}
 }

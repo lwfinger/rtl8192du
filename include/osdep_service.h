@@ -199,7 +199,6 @@ u32	rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement)
 u32	rtw_get_current_time(void);
 u32	rtw_systime_to_ms(u32 systime);
 u32	rtw_ms_to_systime(u32 ms);
-s32	rtw_get_passing_time_ms(u32 start);
 
 void	rtw_sleep_schedulable(int ms);
 

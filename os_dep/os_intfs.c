@@ -1157,7 +1157,7 @@ int rtw_ips_pwr_up(struct rtw_adapter *padapter)
 
 	rtw_led_control(padapter, LED_CTL_NO_LINK);
 
-	DBG_8192D("<===  rtw_ips_pwr_up.............. in %dms\n", rtw_get_passing_time_ms(start_time));
+	DBG_8192D("<===  rtw_ips_pwr_up.............. in %dms\n", rtw_systime_to_ms(jiffies - start_time));
 	return result;
 }
 
@@ -1173,7 +1173,7 @@ void rtw_ips_pwr_down(struct rtw_adapter *padapter)
 
 	rtw_ips_dev_unload(padapter);
 	padapter->bCardDisableWOHSM = false;
-	DBG_8192D("<=== rtw_ips_pwr_down..................... in %dms\n", rtw_get_passing_time_ms(start_time));
+	DBG_8192D("<=== rtw_ips_pwr_down..................... in %dms\n", rtw_systime_to_ms(jiffies - start_time));
 }
 
 void rtw_ips_dev_unload(struct rtw_adapter *padapter)

@@ -422,13 +422,13 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 			rtStatus = _WriteFW(adapter, pFirmwareBuf, FirmwareLen);
 
 			if (rtStatus == _SUCCESS ||
-			    (rtw_get_passing_time_ms(fwdl_start_time) > 500 &&
+			    (rtw_systime_to_ms(jiffies - fwdl_start_time) > 500 &&
 			    writeFW_retry++ >= 3))
 				break;
 
 			DBG_8192D("%s writeFW_retry:%u, time after fwdl_start_time:%ums\n",
 				  __func__, writeFW_retry,
-				  rtw_get_passing_time_ms(fwdl_start_time));
+				  rtw_systime_to_ms(jiffies - fwdl_start_time));
 		}
 		_FWDownloadEnable(adapter, false);
 		if (_SUCCESS != rtStatus) {

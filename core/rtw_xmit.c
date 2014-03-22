@@ -2140,7 +2140,7 @@ static int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 		}
 
 		msleep(10);
-	} while (rtw_get_passing_time_ms(pack_tx_ops->submit_time) < timeout_ms);
+	} while (rtw_systime_to_ms(jiffies - pack_tx_ops->submit_time) < timeout_ms);
 
 	if (pack_tx_ops->status == RTW_SCTX_SUBMITTED) {
 		pack_tx_ops->status = RTW_SCTX_DONE_TIMEOUT;

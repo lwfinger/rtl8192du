@@ -4758,7 +4758,7 @@ rtl8192d_PHY_LCCalibrate(
 		pmlmeprivBuddyadapter = &Buddyadapter->mlmepriv;
 		while ((check_fwstate(pmlmeprivBuddyadapter, _FW_UNDER_LINKING|_FW_UNDER_SURVEY) == true) && timecount < timeout)
 		{
-			rtw_msleep_os(50);
+			msleep(50);
 			timecount += 50;
 		}
 	}

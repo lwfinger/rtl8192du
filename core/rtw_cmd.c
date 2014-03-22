@@ -1765,7 +1765,7 @@ static void rtw_chk_hi_queue_hdl(struct rtw_adapter *padapter)
 
 	if (psta_bmc->sleepq_len == 0) {
 		while ((rtw_read32(padapter, 0x414)&0x00ffff00) != 0) {
-			rtw_msleep_os(100);
+			msleep(100);
 			cnt++;
 			if (cnt > 10)
 				break;

@@ -4283,13 +4283,13 @@ static void SetHwReg8192DU(struct rtw_adapter *adapter, u8 variable, u8 *val)
 						if (adapter->pwrctrlpriv.wowlan_pattern == true)
 							rtw_wowlan_reload_pattern(adapter);
 						rtl8192d_set_wowlan_cmd(adapter);
-						rtw_msleep_os(10);
+						msleep(10);
 						break;
 
 					case WOWLAN_DISABLE:
 						adapter->pwrctrlpriv.wowlan_mode = false;
 						rtl8192d_set_wowlan_cmd(adapter);
-						rtw_msleep_os(10);
+						msleep(10);
 						break;
 
 					case WOWLAN_STATUS:
@@ -4343,7 +4343,7 @@ static void SetHwReg8192DU(struct rtw_adapter *adapter, u8 variable, u8 *val)
 				{
 					if (rtw_read32(adapter, 0x200) != rtw_read32(adapter, 0x204))
 					{
-						rtw_msleep_os(10);
+						msleep(10);
 					}
 					else
 					{

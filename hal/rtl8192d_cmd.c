@@ -848,7 +848,7 @@ int reset_tsf(struct rtw_adapter * adapter, u8 reset_port)
 	rtl8192d_reset_tsf(adapter, reset_port);
 
 	while ((reset_cnt_after == reset_cnt_before) && (loop_cnt < 10)) {
-		rtw_msleep_os(100);
+		msleep(100);
 		loop_cnt++;
 		reset_cnt_after = rtw_read8(adapter, reg_reset_tsf_cnt);
 	}
@@ -887,7 +887,7 @@ void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter)
 		{
 			tasklet_schedule(&precvpriv->recv_tasklet);
 			test = rtw_read8(padapter, REG_RXPKT_NUM+2) & BIT(1);
-			rtw_msleep_os(10);
+			msleep(10);
 		}
 		/* mask usb se0 reset by Alex and DD */
 		test = rtw_read8(padapter, 0xf8);

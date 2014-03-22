@@ -645,7 +645,7 @@ static s32 xmitframe_addmic(struct rtw_adapter *padapter,
 			} else {
 				if (_rtw_memcmp(&stainfo->dot11tkiptxmickey.skey[0], null_key, 16) == true) {
 					/* DbgPrint("\nxmitframe_addmic:stainfo->dot11tkiptxmickey == 0\n"); */
-					/* rtw_msleep_os(10); */
+					/* msleep(10); */
 					return _FAIL;
 				}
 				/* start to calculate the mic code */
@@ -2139,7 +2139,7 @@ static int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 			break;
 		}
 
-		rtw_msleep_os(10);
+		msleep(10);
 	} while (rtw_get_passing_time_ms(pack_tx_ops->submit_time) < timeout_ms);
 
 	if (pack_tx_ops->status == RTW_SCTX_SUBMITTED) {

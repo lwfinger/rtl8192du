@@ -4676,7 +4676,7 @@ int issue_probereq_p2p_ex(struct rtw_adapter *adapter, u8 *da, int try_cnt,
 			break;
 
 		if (i < try_cnt && wait_ms > 0 && ret == _FAIL)
-			rtw_msleep_os(wait_ms);
+			msleep(wait_ms);
 
 	} while ((i < try_cnt) && ((ret == _FAIL) || (wait_ms == 0)));
 
@@ -6302,7 +6302,7 @@ int issue_probereq_ex(struct rtw_adapter *adapt,
 			break;
 
 		if (i < try_cnt && wait_ms > 0 && ret == _FAIL)
-			rtw_msleep_os(wait_ms);
+			msleep(wait_ms);
 
 	} while ((i < try_cnt) && ((ret == _FAIL) || (wait_ms == 0)));
 
@@ -7225,7 +7225,7 @@ int issue_nulldata(struct rtw_adapter *adapt, unsigned char *da,
 			break;
 
 		if (i < try_cnt && wait_ms > 0 && ret == _FAIL)
-			rtw_msleep_os(wait_ms);
+			msleep(wait_ms);
 
 	} while ((i < try_cnt) && ((ret == _FAIL) || (wait_ms == 0)));
 
@@ -7358,7 +7358,7 @@ int issue_qos_nulldata(struct rtw_adapter *adapt, unsigned char *da, u16 tid,
 			break;
 
 		if (i < try_cnt && wait_ms > 0 && ret == _FAIL)
-			rtw_msleep_os(wait_ms);
+			msleep(wait_ms);
 
 	} while ((i < try_cnt) && ((ret == _FAIL) || (wait_ms == 0)));
 
@@ -7482,7 +7482,7 @@ int issue_deauth_ex(struct rtw_adapter *adapt, u8 *da,
 			break;
 
 		if (i < try_cnt && wait_ms > 0 && ret == _FAIL)
-			rtw_msleep_os(wait_ms);
+			msleep(wait_ms);
 
 	} while ((i < try_cnt) && ((ret == _FAIL) || (wait_ms == 0)));
 
@@ -8117,7 +8117,7 @@ void site_survey(struct rtw_adapter *adapt)
 								 sitesurvey_res.
 								 ssid[i]),
 							       NULL);
-						/* rtw_msleep_os(SURVEY_TO>>1); */
+						/* msleep(SURVEY_TO>>1); */
 						issue_probereq(adapt,
 							       &(pmlmeext->
 								 sitesurvey_res.
@@ -8132,7 +8132,7 @@ void site_survey(struct rtw_adapter *adapt)
 				    SCAN_ACTIVE) {
 					/* todo: to issue two probe req??? */
 					issue_probereq(adapt, NULL, NULL);
-					/* rtw_msleep_os(SURVEY_TO>>1); */
+					/* msleep(SURVEY_TO>>1); */
 					issue_probereq(adapt, NULL, NULL);
 				}
 			}
@@ -10533,7 +10533,7 @@ u8 tx_beacon_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 			return H2C_SUCCESS;
 
 		if ((pstapriv->tim_bitmap & BIT(0)) && (psta_bmc->sleepq_len > 0)) {
-			rtw_msleep_os(10);	/*  10ms, ATIM(HIQ) Windows */
+			msleep(10);	/*  10ms, ATIM(HIQ) Windows */
 			spin_lock_bh(&psta_bmc->sleep_q.lock);
 
 			xmitframe_phead = get_list_head(&psta_bmc->sleep_q);

@@ -1466,7 +1466,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	while (dc_check_fwstate(padapter, wait_status) == true)
 	{
-		rtw_msleep_os(30);
+		msleep(30);
 		cnt++;
 		if (cnt > wait_for_surveydone)
 			break;
@@ -1475,7 +1475,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 
 	while (check_fwstate(pmlmepriv, wait_status) == true)
 	{
-		rtw_msleep_os(30);
+		msleep(30);
 		cnt++;
 		if (cnt > wait_for_surveydone)
 			break;
@@ -2657,7 +2657,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 	}
 
 	while (check_fwstate(pmlmepriv, (_FW_UNDER_SURVEY|_FW_UNDER_LINKING))) {
-		rtw_msleep_os(30);
+		msleep(30);
 		cnt++;
 		if (cnt > 100)
 			break;

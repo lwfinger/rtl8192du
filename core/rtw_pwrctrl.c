@@ -515,7 +515,7 @@ int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms,
 		DBG_8192D("%s wait ps_processing...\n", __func__);
 		while (pwrpriv->ps_processing &&
 		       rtw_get_passing_time_ms(start) <= 3000)
-			rtw_msleep_os(10);
+			msleep(10);
 		if (pwrpriv->ps_processing)
 			DBG_8192D("%s wait ps_processing timeout\n", __func__);
 		else
@@ -526,7 +526,7 @@ int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms,
 		DBG_8192D("%s wait bInSuspend...\n", __func__);
 		while (pwrpriv->bInSuspend &&
 		       ((rtw_get_passing_time_ms(start) <= 3000)))
-			rtw_msleep_os(10);
+			msleep(10);
 		if (pwrpriv->bInSuspend)
 			DBG_8192D("%s wait bInSuspend timeout\n", __func__);
 		else

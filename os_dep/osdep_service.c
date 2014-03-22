@@ -36,14 +36,6 @@ inline int RTW_STATUS_CODE(int error_code) {
 	}
 }
 
-inline u8* _rtw_vmalloc(u32 sz)
-{
-	u8	*pbuf;
-
-	pbuf = vmalloc(sz);
-	return pbuf;
-}
-
 int	_rtw_memcmp(void *dst, void *src, u32 sz)
 {
 /* under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0 */

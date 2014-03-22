@@ -100,11 +100,7 @@ static void InitLed871x(struct rtw_adapter *padapter,
 /*  */
 static void DeInitLed871x(struct LED_871X *pled)
 {
-	/* call _cancel_workitem_sync(&(pled->BlinkWorkItem)) */
-    /* before _cancel_timer_ex(&(pled->blinktimer)) to */
-    /* avoid led timer restarting when driver is removed */
-
-	_cancel_workitem_sync(&(pled->BlinkWorkItem));
+	cancel_work_sync(&(pled->BlinkWorkItem));
 	_cancel_timer_ex(&(pled->blinktimer));
 	/*  We should reset blink_in_prog if we cancel the LedControlTimer, 2005.03.10, by rcnjko. */
 	ResetLedStatus(pled);

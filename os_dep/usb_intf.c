@@ -33,46 +33,37 @@ int rtw_resume_process(struct rtw_adapter *padapter);
 static int rtw_drv_init(struct usb_interface *pusb_intf,const struct usb_device_id *pdid);
 static void rtw_dev_remove(struct usb_interface *pusb_intf);
 
-#define USB_VENDOR_ID_REALTEK		0x0BDA
-
-/* DID_USB_v915_20121224 */
-#define RTL8192D_USB_IDS \
-	/*=== Realtek demoboard ===*/ \
-	/****** 8192DU ********/ \
-	{USB_DEVICE(USB_VENDOR_ID_REALTEK, 0x8193)},/* 8192DU-VC */ \
-	{USB_DEVICE(USB_VENDOR_ID_REALTEK, 0x8194)},/* 8192DU-VS */ \
-	{USB_DEVICE(USB_VENDOR_ID_REALTEK, 0x8111)},/* Realtek 5G dongle for WiFi Display */ \
-	{USB_DEVICE(USB_VENDOR_ID_REALTEK, 0x0193)},/* 8192DE-VAU */ \
-	{USB_DEVICE(USB_VENDOR_ID_REALTEK, 0x8171)},/* 8192DU-VC */ \
-	/*=== Customer ID ===*/ \
-	/****** 8192DU-VC ********/ \
-	{USB_DEVICE(0x2019, 0xAB2C)},/* PCI - Abocm */ \
-	{USB_DEVICE(0x2019, 0x4903)},/* PCI - ETOP */ \
-	{USB_DEVICE(0x2019, 0x4904)},/* PCI - ETOP */ \
-	{USB_DEVICE(0x07B8, 0x8193)},/* Abocom - Abocom */ \
-	/****** 8192DU-VS ********/ \
-	{USB_DEVICE(0x20F4, 0x664B)}, /* TRENDnet - Cameo */ \
-	{USB_DEVICE(0x04DD, 0x954F)},  /* Sharp */ \
-	{USB_DEVICE(0x04DD, 0x96A6)},  /* Sharp */ \
-	{USB_DEVICE(0x050D, 0x110A)}, /* Belkin - Edimax */ \
-	{USB_DEVICE(0x050D, 0x1105)}, /* Belkin - Edimax */ \
-	{USB_DEVICE(0x050D, 0x120A)}, /* Belkin - Edimax */ \
-	{USB_DEVICE(0x1668, 0x8102)}, /*  -  */ \
-	{USB_DEVICE(0x0BDA, 0xE194)}, /*  - Edimax */ \
-	/****** 8192DU-WiFi Display Dongle ********/ \
-	{USB_DEVICE(0x2019, 0xAB2D)},/* Planex - Abocom ,5G dongle for WiFi Display */
-
-static struct usb_device_id rtw_usb_id_tbl[] ={
-	RTL8192D_USB_IDS
-	{}	/* Terminating entry */
+static struct usb_device_id rtl8192d_usb_id_tbl[] = {
+	/* Realtek */
+	/* 8192DU */
+	{USB_DEVICE(0x0BDA, 0x8193)}, /* 8192DU-VC */
+	{USB_DEVICE(0x0BDA, 0x8194)}, /* 8192DU-VS */
+	{USB_DEVICE(0x0BDA, 0x8111)}, /* Realtek 5G for WiFi Display */
+	{USB_DEVICE(0x0BDA, 0x0193)}, /* 8192DE-VAU */
+	{USB_DEVICE(0x0BDA, 0x8171)}, /* 8192DU-VC */
+	/* 8192DU-VC */
+	{USB_DEVICE(0x2019, 0xAB2C)}, /* PCI - Abocm */
+	{USB_DEVICE(0x2019, 0x4903)}, /* PCI - ETOP */
+	{USB_DEVICE(0x2019, 0x4904)}, /* PCI - ETOP */
+	{USB_DEVICE(0x07B8, 0x8193)}, /* Abocom - Abocom */
+	/* 8192DU-VS */
+	{USB_DEVICE(0x20F4, 0x664B)}, /* TRENDnet - Cameo */
+	{USB_DEVICE(0x04DD, 0x954F)}, /* Sharp */
+	{USB_DEVICE(0x04DD, 0x96A6)}, /* Sharp */
+	{USB_DEVICE(0x050D, 0x110A)}, /* Belkin - Edimax */
+	{USB_DEVICE(0x050D, 0x1105)}, /* Belkin - Edimax */
+	{USB_DEVICE(0x050D, 0x120A)}, /* Belkin - Edimax */
+	{USB_DEVICE(0x1668, 0x8102)},
+	{USB_DEVICE(0x0BDA, 0xE194)}, /* Edimax */
+	/* 8192DU-WiFi Display Dongle */
+	{USB_DEVICE(0x2019, 0xAB2D)}, /* Planex - Abocom 5G for WiFi Display */
+	{}
 };
-MODULE_DEVICE_TABLE(usb, rtw_usb_id_tbl);
-
-static int const rtw_usb_id_len = sizeof(rtw_usb_id_tbl) / sizeof(struct usb_device_id);
+MODULE_DEVICE_TABLE(usb, rtl8192d_usb_id_tbl);
 
 static struct specific_device_id specific_device_id_tbl[] = {
-	{.idVendor=USB_VENDOR_ID_REALTEK, .idProduct=0x8177, .flags=SPEC_DEV_ID_DISABLE_HT},/* 8188cu 1*1 dongle, (b/g mode only) */
-	{.idVendor=USB_VENDOR_ID_REALTEK, .idProduct=0x817E, .flags=SPEC_DEV_ID_DISABLE_HT},/* 8188CE-VAU USB minCard (b/g mode only) */
+	{.idVendor=0x0BDA, .idProduct=0x8177, .flags=SPEC_DEV_ID_DISABLE_HT},/* 8188cu 1*1 dongle, (b/g mode only) */
+	{.idVendor=0x0BDA, .idProduct=0x817E, .flags=SPEC_DEV_ID_DISABLE_HT},/* 8188CE-VAU USB minCard (b/g mode only) */
 	{.idVendor=0x0b05, .idProduct=0x1791, .flags=SPEC_DEV_ID_DISABLE_HT},
 	{.idVendor=0x13D3, .idProduct=0x3311, .flags=SPEC_DEV_ID_DISABLE_HT},
 	{.idVendor=0x13D3, .idProduct=0x3359, .flags=SPEC_DEV_ID_DISABLE_HT},/* Russian customer -Azwave (8188CE-VAU  g mode) */
@@ -82,11 +73,6 @@ static struct specific_device_id specific_device_id_tbl[] = {
 struct rtw_usb_drv {
 	struct usb_driver usbdrv;
 	int drv_registered;
-};
-
-static struct usb_device_id rtl8192d_usb_id_tbl[] ={
-	RTL8192D_USB_IDS
-	{}	/* Terminating entry */
 };
 
 static struct rtw_usb_drv rtl8192d_usb_drv = {

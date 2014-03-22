@@ -31,8 +31,8 @@ int _rtw_init_cmd_priv(struct cmd_priv *pcmdpriv)
 {
 	int res = _SUCCESS;
 
-	_rtw_init_sema(&(pcmdpriv->cmd_queue_sema), 0);
-	_rtw_init_sema(&(pcmdpriv->terminate_cmdthread_sema), 0);
+	sema_init(&(pcmdpriv->cmd_queue_sema), 0);
+	sema_init(&(pcmdpriv->terminate_cmdthread_sema), 0);
 
 	_rtw_init_queue(&(pcmdpriv->cmd_queue));
 

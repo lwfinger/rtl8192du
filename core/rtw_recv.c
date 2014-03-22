@@ -86,7 +86,7 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv,
 	}
 	precvpriv->rx_pending_cnt = 1;
 
-	_rtw_init_sema(&precvpriv->allrxreturnevt, 0);
+	sema_init(&precvpriv->allrxreturnevt, 0);
 	res = rtw_hal_init_recv_priv(padapter);
 
 	precvpriv->recvbuf_skb_alloc_fail_cnt = 0;

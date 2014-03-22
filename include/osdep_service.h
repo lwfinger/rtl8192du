@@ -173,13 +173,7 @@ static inline u32 _RND8(u32 sz)
 
 static inline u32 _RND128(u32 sz)
 {
-
-	u32	val;
-
-	val = ((sz >> 7) + ((sz & 127) ? 1: 0)) << 7;
-
-	return val;
-
+	return ((sz >> 7) + ((sz & 127) ? 1: 0)) << 7;
 }
 
 static inline u32 _RND256(u32 sz)

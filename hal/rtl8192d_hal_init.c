@@ -340,7 +340,11 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 	if (adapter->bSurpriseRemoved)
 		return _FAIL;
 
-	if (!adapter->firmware) {
+	/* Single MAC Single PHY units break if external firmware is loaded */
+	if (pHalData->MacPhyMode92D == SINGLEMAC_SINGLEPHY)
+		return _SUCCESS;
+
+ 	if (!adapter->firmware || !adapter->firmware->buffer) {
 		if (!get_fw_from_file(adapter)) {
 			rtStatus = _FAIL;
 			adapter->firmware = NULL;

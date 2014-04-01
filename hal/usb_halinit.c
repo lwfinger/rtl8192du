@@ -692,7 +692,7 @@ static u8 InitLLTTable(
 static void _SetMacID(struct rtw_adapter *adapter, u8 *MacID)
 {
 	u32 i;
-	for (i = 0 ; i< MAC_ADDR_LEN ; i++) {
+	for (i = 0 ; i< ETH_ALEN ; i++) {
 #ifdef  CONFIG_CONCURRENT_MODE
 		if (adapter->iface_type == IFACE_PORT1)
 			rtw_write32(adapter, REG_MACID1+i, MacID[i]);
@@ -705,7 +705,7 @@ static void _SetMacID(struct rtw_adapter *adapter, u8 *MacID)
 static void _SetBSSID( struct rtw_adapter *adapter, u8 *BSSID)
 {
 	u32 i;
-	for (i = 0 ; i< MAC_ADDR_LEN ; i++) {
+	for (i = 0 ; i< ETH_ALEN ; i++) {
 #ifdef  CONFIG_CONCURRENT_MODE
 		if (adapter->iface_type == IFACE_PORT1)
 			rtw_write32(adapter, REG_BSSID1+i, BSSID[i]);
@@ -2554,7 +2554,7 @@ _ReadMACAddress(
 		if (is_broadcast_mac_addr(pEEPROM->mac_addr) || is_multicast_mac_addr(pEEPROM->mac_addr))
 		{
 			/* Random assigh MAC address */
-			u8 sMacAddr[MAC_ADDR_LEN] = {0x00, 0xE0, 0x4C, 0x81, 0x92, 0x00};
+			u8 sMacAddr[ETH_ALEN] = {0x00, 0xE0, 0x4C, 0x81, 0x92, 0x00};
 			if (pHalData->interfaceIndex == 1)
 				sMacAddr[5] = 0x01;
 			memcpy(pEEPROM->mac_addr, sMacAddr, ETH_ALEN);
@@ -2563,7 +2563,7 @@ _ReadMACAddress(
 	else
 	{
 		/* Random assigh MAC address */
-		u8 sMacAddr[MAC_ADDR_LEN] = {0x00, 0xE0, 0x4C, 0x81, 0x92, 0x00};
+		u8 sMacAddr[ETH_ALEN] = {0x00, 0xE0, 0x4C, 0x81, 0x92, 0x00};
 		if (pHalData->interfaceIndex == 1) {
 			sMacAddr[5] = 0x01;
 		}

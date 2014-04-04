@@ -901,7 +901,7 @@ unsigned int OnBeacon(struct rtw_adapter *adapt,
 		    (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS)) {
 			psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
 			if (psta != NULL) {
-				/* update WMM, ERP in the beacon 
+				/* update WMM, ERP in the beacon
 				 * todo: the timer is used instead of the
 				 * number of the beacon received
 				 */
@@ -8901,8 +8901,8 @@ static void process_80211d(struct rtw_adapter *adapt,
 		DBG_8192D("%s: new STA channel plan {", __func__);
 		while ((k < MAX_CHANNEL_NUM) && (chplan_new[k].ChannelNum != 0)) {
 			DBG_8192D("%02d(%c),", chplan_new[k].ChannelNum,
-			        chplan_new[k].ScanType ==
-			        SCAN_PASSIVE ? 'p' : 'c');
+				  chplan_new[k].ScanType ==
+				  SCAN_PASSIVE ? 'p' : 'c');
 			k++;
 		}
 		DBG_8192D("}\n");
@@ -10734,7 +10734,7 @@ u8 dc_handle_join_request(struct rtw_adapter *adapt)
 				    pbuddy_mlmeext->cur_channel) {
 					/*  HT_CHANNEL_WIDTH_40 or HT_CHANNEL_WIDTH_20 but channel offset is different */
 					if ((pmlmeext->cur_bwmode == pbuddy_mlmeext->cur_bwmode) &&
-					    (pmlmeext->cur_ch_offset != pbuddy_mlmeext-> cur_ch_offset)) {
+					    (pmlmeext->cur_ch_offset != pbuddy_mlmeext->cur_ch_offset)) {
 						report_join_res(adapt, -4);
 						ret = 0;
 					}
@@ -11528,7 +11528,7 @@ void concurrent_chk_joinbss_done(struct rtw_adapter *adapt, int join_res)
 			}
 
 			/* buddy interface band is different from current interface, update ERP, support rate, ext support rate IE */
-			if (change_band == true)
+			if (change_band)
 				change_band_update_ie(pbuddy_adapter,
 						      pbuddy_network_mlmeext);
 		} else {

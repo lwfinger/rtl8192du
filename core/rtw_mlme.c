@@ -1786,9 +1786,7 @@ void _rtw_join_timeout_handler(struct rtw_adapter *adapter)
 				break;
 			}
 		}
-
-	} else
-	{
+	} else {
 		rtw_indicate_disconnect(adapter);
 		free_scanqueue(pmlmepriv);	/*  */
 	}

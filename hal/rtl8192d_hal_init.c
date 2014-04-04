@@ -64,7 +64,7 @@ static void _FWDownloadEnable(struct rtw_adapter *adapter, bool enable)
 
 static int _BlockWrite_92d(struct rtw_adapter *adapter, void *buffer, u32 size)
 {
-	int ret = _SUCCESS;
+	int ret = 1;
 	u32			blockSize8 = sizeof(u64);
 	u32			blocksize4 = sizeof(u32);
 	u32			blockSize = 64;
@@ -78,7 +78,7 @@ static int _BlockWrite_92d(struct rtw_adapter *adapter, void *buffer, u32 size)
 		offset = i * blockSize;
 		ret = rtw_writeN(adapter, (FW_8192D_START_ADDRESS + offset), 64, (bufferPtr + offset));
 
-		if (ret == _FAIL)
+		if (ret == 0)
 			goto exit;
 	}
 
@@ -90,7 +90,7 @@ static int _BlockWrite_92d(struct rtw_adapter *adapter, void *buffer, u32 size)
 		for (i = 0; i < blockCount8; i++) {
 			ret = rtw_writeN(adapter, (FW_8192D_START_ADDRESS + offset+i*blockSize8), 8, (bufferPtr + offset+i*blockSize8));
 
-			if (ret == _FAIL)
+			if (ret == 0)
 				goto exit;
 		}
 
@@ -102,7 +102,7 @@ static int _BlockWrite_92d(struct rtw_adapter *adapter, void *buffer, u32 size)
 			for (i = 0; i < blockCount4; i++) {
 				ret = rtw_write32(adapter, (FW_8192D_START_ADDRESS + offset+i*blocksize4), le32_to_cpu(*(__le32 *)(pu4BytePtr+ offset/4+i)));
 
-				if (ret == _FAIL)
+				if (ret == 0)
 					goto exit;
 			}
 
@@ -111,7 +111,7 @@ static int _BlockWrite_92d(struct rtw_adapter *adapter, void *buffer, u32 size)
 				for (i = 0; i < remainSize; i++) {
 					ret = rtw_write8(adapter, (FW_8192D_START_ADDRESS + offset + i), *(bufferPtr +offset+ i));
 
-					if (ret == _FAIL)
+					if (ret == 0)
 						goto exit;
 				}
 			}
@@ -137,7 +137,7 @@ static int _PageWrite(struct rtw_adapter *adapter, u32 page,
 
 static int _WriteFW(struct rtw_adapter *adapter, void *buffer, u32 size)
 {
-	int ret = _SUCCESS;
+	int ret = 1;
 	/*  Since we need to dynamically decide method of download fw,
 	 *  we call this function to get chip version.
 	 *  We can remove _ReadChipVersion from ReadadapterInfo8192C later.
@@ -153,7 +153,7 @@ static int _WriteFW(struct rtw_adapter *adapter, void *buffer, u32 size)
 		offset = page *MAX_PAGE_SIZE;
 		ret = _PageWrite(adapter, page, (bufferPtr+offset), MAX_PAGE_SIZE);
 
-		if (ret == _FAIL)
+		if (ret == 0)
 			goto exit;
 	}
 	if (remainSize) {
@@ -161,7 +161,7 @@ static int _WriteFW(struct rtw_adapter *adapter, void *buffer, u32 size)
 		page = pageNums;
 		ret = _PageWrite(adapter, page, (bufferPtr+offset), remainSize);
 
-		if (ret == _FAIL)
+		if (ret == 0)
 			goto exit;
 	}
 	DBG_8192D("_WriteFW Done- for Normal chip.\n");
@@ -182,14 +182,14 @@ static int _FWFreeToGo_92D(struct rtw_adapter *adapter)
 
 	if (counter >= POLLING_READY_TIMEOUT_COUNT) {
 		DBG_8192D("chksum report faill ! REG_MCUFWDL:0x%08x .\n", value32);
-		return _FAIL;
+		return 0;
 	}
 	DBG_8192D("Checksum report OK ! REG_MCUFWDL:0x%08x .\n", value32);
 
 	value32 = rtw_read32(adapter, REG_MCUFWDL);
 	value32 |= MCUFWDL_RDY;
 	rtw_write32(adapter, REG_MCUFWDL, value32);
-	return _SUCCESS;
+	return 1;
 }
 
 void rtl8192d_FirmwareSelfReset(struct rtw_adapter *adapter)
@@ -241,14 +241,14 @@ static int _FWInit(struct rtw_adapter *adapter)
 			if (rtw_read8(adapter, FW_MAC0_ready) & mac0_ready) {
 				DBG_8192D("Polling FW ready success!! FW_MAC0_ready:0x%x\n",
 					  rtw_read8(adapter, FW_MAC0_ready));
-				return _SUCCESS;
+				return 1;
 			}
 			udelay(5);
 		} else {
 			if (rtw_read8(adapter, FW_MAC1_ready) &mac1_ready) {
 				DBG_8192D("Polling FW ready success!! FW_MAC1_ready:0x%x\n",
 					  rtw_read8(adapter, FW_MAC1_ready));
-				return _SUCCESS;
+				return 1;
 			}
 			udelay(5);
 		}
@@ -265,7 +265,7 @@ static int _FWInit(struct rtw_adapter *adapter)
 
 	DBG_8192D("Polling FW ready fail!! REG_MCUFWDL:0x%x\n",
 		  rtw_read32(adapter, REG_MCUFWDL));
-	return _FAIL;
+	return 0;
 }
 
 static bool get_fw_from_file(struct rtw_adapter *adapter)
@@ -317,7 +317,7 @@ MODULE_FIRMWARE("rtlwifi/rtl8192dufw.bin");
 /*	Description: Download 8192D firmware code. */
 int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 {
-	int rtStatus = _SUCCESS;
+	int rtStatus = 1;
 	u8 writeFW_retry = 0;
 	u32 fwdl_start_time;
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
@@ -329,7 +329,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 	bool bFwDownloaded = false, bFwDownloadInProcess = false;
 
 	if (adapter->bSurpriseRemoved)
-		return _FAIL;
+		return 0;
 
 	/* Single MAC Single PHY units break if external firmware is loaded */
 	if (pHalData->MacPhyMode92D == SINGLEMAC_SINGLEPHY)
@@ -337,7 +337,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 
 	if (!adapter->firmware || !adapter->firmware->buffer) {
 		if (!get_fw_from_file(adapter)) {
-			rtStatus = _FAIL;
+			rtStatus = 0;
 			adapter->firmware = NULL;
 			goto Exit;
 		}
@@ -425,7 +425,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 
 			rtStatus = _WriteFW(adapter, pFirmwareBuf, FirmwareLen);
 
-			if (rtStatus == _SUCCESS ||
+			if (rtStatus == 1 ||
 			    (rtw_systime_to_ms(jiffies - fwdl_start_time) > 500 &&
 			    writeFW_retry++ >= 3))
 				break;
@@ -435,7 +435,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 				  rtw_systime_to_ms(jiffies - fwdl_start_time));
 		}
 		_FWDownloadEnable(adapter, false);
-		if (_SUCCESS != rtStatus) {
+		if (1 != rtStatus) {
 			DBG_8192D("DL Firmware failed!\n");
 			goto Exit;
 		}
@@ -448,7 +448,7 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 		rtw_write8(adapter, 0x1f, value);
 		RELEASE_GLOBAL_MUTEX(GlobalMutexForFwDownload);
 
-		if (_SUCCESS != rtStatus) {
+		if (1 != rtStatus) {
 			DBG_8192D("Firmware is not ready to run!\n");
 			goto Exit;
 		}
@@ -481,14 +481,14 @@ void InitializeFirmwareVars92D(struct rtw_adapter *adapter)
  */
 void SetFwRelatedForWoWLAN8192DU(struct rtw_adapter *padapter, u8 bHostIsGoingtoSleep)
 {
-	int	status = _FAIL;
+	int	status = 0;
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(padapter);
 	u8	 bRecover = false;
 
 	if (bHostIsGoingtoSleep) {
 		/*  1. Before WoWLAN we need to re-download WoWLAN Fw. */
 		status = FirmwareDownload92D(padapter, bHostIsGoingtoSleep);
-		if (status != _SUCCESS) {
+		if (status != 1) {
 			DBG_8192D("ConfigFwRelatedForWoWLAN8192DU(): Re-Download Firmware failed!!\n");
 			return;
 		} else {
@@ -1801,12 +1801,12 @@ static s32 c2h_id_filter_ccx_8192d(u8 id)
 
 static s32 c2h_handler_8192d(struct rtw_adapter *padapter, struct c2h_evt_hdr *c2h_evt)
 {
-	s32 ret = _SUCCESS;
+	s32 ret = 1;
 	u8 i = 0;
 
 	if (c2h_evt == NULL) {
 		DBG_8192D("%s c2h_evt is NULL\n", __func__);
-		ret = _FAIL;
+		ret = 0;
 		goto exit;
 	}
 
@@ -1815,7 +1815,7 @@ static s32 c2h_handler_8192d(struct rtw_adapter *padapter, struct c2h_evt_hdr *c
 		handle_txrpt_ccx_8192d(padapter, c2h_evt->payload);
 		break;
 	default:
-		ret = _FAIL;
+		ret = 0;
 		break;
 	}
 

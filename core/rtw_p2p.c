@@ -1046,10 +1046,10 @@ static u8 rtw_p2p_check_peer_oper_ch(struct mlme_ext_priv *pmlmeext, u8 ch)
 
 	for (i = 0; i < pmlmeext->max_chan_nums; i++) {
 		if (pmlmeext->channel_set[i].ChannelNum == ch)
-			return _SUCCESS;
+			return 1;
 	}
 
-	return _FAIL;
+	return 0;
 }
 
 static u8 rtw_p2p_ch_inclusion(struct mlme_ext_priv *pmlmeext, u8 *peer_ch_list, u8 peer_ch_num, u8 *ch_list_inclusioned)
@@ -2257,7 +2257,7 @@ void init_wifidirect_info(struct rtw_adapter *padapter, enum P2P_ROLE role)
 
 int rtw_p2p_enable(struct rtw_adapter *padapter, enum P2P_ROLE role)
 {
-	int ret = _SUCCESS;
+	int ret = 1;
 	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 
@@ -2278,8 +2278,8 @@ int rtw_p2p_enable(struct rtw_adapter *padapter, enum P2P_ROLE role)
 #endif /* CONFIG_CONCURRENT_MODE */
 
 		/* leave IPS/Autosuspend */
-		if (_FAIL == rtw_pwr_wakeup(padapter)) {
-			ret = _FAIL;
+		if (0 == rtw_pwr_wakeup(padapter)) {
+			ret = 0;
 			goto exit;
 		}
 
@@ -2291,8 +2291,8 @@ int rtw_p2p_enable(struct rtw_adapter *padapter, enum P2P_ROLE role)
 		/* Enable P2P function */
 		init_wifidirect_info(padapter, role);
 	} else if (role == P2P_ROLE_DISABLE) {
-		if (_FAIL == rtw_pwr_wakeup(padapter)) {
-			ret = _FAIL;
+		if (0 == rtw_pwr_wakeup(padapter)) {
+			ret = 0;
 			goto exit;
 		}
 

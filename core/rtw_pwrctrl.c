@@ -51,7 +51,7 @@ int ips_leave(struct rtw_adapter *padapter)
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct security_priv *psecuritypriv = &(padapter->securitypriv);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-	int result = _SUCCESS;
+	int result = 1;
 	int keyid;
 	_enter_pwrlock(&pwrpriv->lock);
 	if ((pwrpriv->rf_pwrstate == rf_off) && (!pwrpriv->bips_processing)) {
@@ -61,7 +61,7 @@ int ips_leave(struct rtw_adapter *padapter)
 		DBG_8192D("==>ips_leave cnts:%d\n", pwrpriv->ips_leave_cnts);
 
 		result = rtw_ips_pwr_up(padapter);
-		if (result == _SUCCESS)
+		if (result == 1)
 			pwrpriv->rf_pwrstate = rf_on;
 
 		if ((_WEP40_ == psecuritypriv->dot11PrivacyAlgrthm) ||
@@ -485,14 +485,14 @@ inline void rtw_set_ips_deny(struct rtw_adapter *padapter, u32 ms)
 * rtw_pwr_wakeup - Wake the NIC up from: 1)IPS. 2)USB autosuspend
 * @adapter: pointer to _adapter structure
 * @ips_deffer_ms: the ms wiil prevent from falling into IPS after wakeup
-* Return _SUCCESS or _FAIL
+* Return 1 or 0
 */
 int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms,
 		    const char *caller)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	int ret = _SUCCESS;
+	int ret = 1;
 	u32 start = jiffies;
 
 #ifdef CONFIG_CONCURRENT_MODE
@@ -536,29 +536,29 @@ int _rtw_pwr_wakeup(struct rtw_adapter *padapter, u32 ips_deffer_ms,
 	/* System suspend is not allowed to wakeup */
 	if ((pwrpriv->bInternalAutoSuspend == false) &&
 	    (true == pwrpriv->bInSuspend)) {
-		ret = _FAIL;
+		ret = 0;
 		goto exit;
 	}
 
 	/* block??? */
 	if ((pwrpriv->bInternalAutoSuspend == true) &&
 	    (padapter->net_closed == true)) {
-		ret = _FAIL;
+		ret = 0;
 		goto exit;
 	}
 
 	/* I think this should be check in IPS, LPS, autosuspend functions... */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
-		ret = _SUCCESS;
+		ret = 1;
 		goto exit;
 	}
 
 	if (rf_off == pwrpriv->rf_pwrstate) {
 		DBG_8192D("%s call ips_leave....\n", __func__);
-		if (_FAIL == ips_leave(padapter)) {
+		if (0 == ips_leave(padapter)) {
 			DBG_8192D
 			    ("======> ips_leave fail.............\n");
-			ret = _FAIL;
+			ret = 0;
 			goto exit;
 		}
 	}
@@ -618,7 +618,7 @@ int rtw_pm_set_ips(struct rtw_adapter *padapter, u8 mode)
 		rtw_ips_mode_req(pwrctrlpriv, mode);
 		DBG_8192D("%s %s\n", __func__, "IPS_NONE");
 		if ((padapter->bSurpriseRemoved == 0) &&
-		    (_FAIL == rtw_pwr_wakeup(padapter)))
+		    (0 == rtw_pwr_wakeup(padapter)))
 			return -EFAULT;
 	} else {
 		return -EINVAL;

@@ -180,7 +180,7 @@ static int netdev_close (struct net_device *pnetdev);
 
 static uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev)
 {
-	uint status = _SUCCESS;
+	uint status = 1;
 	struct registry_priv  *registry_par = &padapter->registrypriv;
 
 	registry_par->chip_version = (u8)rtw_chip_version;
@@ -431,7 +431,7 @@ struct net_device *rtw_init_netdev(struct rtw_adapter *old_padapter)
 u32 rtw_start_drv_threads(struct rtw_adapter *padapter)
 {
 
-	u32 _status = _SUCCESS;
+	u32 _status = 1;
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("+rtw_start_drv_threads\n"));
 
@@ -441,7 +441,7 @@ u32 rtw_start_drv_threads(struct rtw_adapter *padapter)
 	{
 		padapter->cmdThread = kthread_run(rtw_cmd_thread, padapter, "RTW_CMD_THREAD");
 		if (IS_ERR(padapter->cmdThread))
-			_status = _FAIL;
+			_status = 0;
 		else
 			_rtw_down_sema(&padapter->cmdpriv.terminate_cmdthread_sema); /* wait for cmd_thread to run */
 	}
@@ -466,7 +466,7 @@ void rtw_stop_drv_threads (struct rtw_adapter *padapter)
 
 static u8 rtw_init_default_value(struct rtw_adapter *padapter)
 {
-	u8 ret  = _SUCCESS;
+	u8 ret  = 1;
 	struct registry_priv* pregistrypriv = &padapter->registrypriv;
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -490,7 +490,7 @@ static u8 rtw_init_default_value(struct rtw_adapter *padapter)
 	pmlmepriv->htpriv.ampdu_enable = false;/* set to disabled */
 
 	/* security_priv */
-	psecuritypriv->binstallGrpkey = _FAIL;
+	psecuritypriv->binstallGrpkey = 0;
 	psecuritypriv->sw_encrypt = pregistrypriv->software_encrypt;
 	psecuritypriv->sw_decrypt = pregistrypriv->software_decrypt;
 
@@ -528,7 +528,7 @@ static u8 rtw_init_default_value(struct rtw_adapter *padapter)
 
 u8 rtw_reset_drv_sw(struct rtw_adapter *padapter)
 {
-	u8	ret8 = _SUCCESS;
+	u8	ret8 = 1;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct pwrctrl_priv *pwrctrlpriv = &padapter->pwrctrlpriv;
 
@@ -561,30 +561,30 @@ u8 rtw_reset_drv_sw(struct rtw_adapter *padapter)
 u8 rtw_init_drv_sw(struct rtw_adapter *padapter)
 {
 
-	u8	ret8 = _SUCCESS;
+	u8	ret8 = 1;
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("+rtw_init_drv_sw\n"));
 
-	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == _FAIL)
+	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == 0)
 	{
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("\n Can't init cmd_priv\n"));
-		ret8 = _FAIL;
+		ret8 = 0;
 		goto exit;
 	}
 
 	padapter->cmdpriv.padapter = padapter;
 
-	if ((rtw_init_evt_priv(&padapter->evtpriv)) == _FAIL)
+	if ((rtw_init_evt_priv(&padapter->evtpriv)) == 0)
 	{
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("\n Can't init evt_priv\n"));
-		ret8 = _FAIL;
+		ret8 = 0;
 		goto exit;
 	}
 
-	if (rtw_init_mlme_priv(padapter) == _FAIL)
+	if (rtw_init_mlme_priv(padapter) == 0)
 	{
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("\n Can't init mlme_priv\n"));
-		ret8 = _FAIL;
+		ret8 = 0;
 		goto exit;
 	}
 
@@ -595,31 +595,31 @@ u8 rtw_init_drv_sw(struct rtw_adapter *padapter)
 	rtw_init_cfg80211_wifidirect_info(padapter);
 #endif /* CONFIG_P2P */
 
-	if (init_mlme_ext_priv(padapter) == _FAIL) {
+	if (init_mlme_ext_priv(padapter) == 0) {
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("\n Can't init mlme_ext_priv\n"));
-		ret8 = _FAIL;
+		ret8 = 0;
 		goto exit;
 	}
 
-	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL) {
+	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == 0) {
 		DBG_8192D("Can't _rtw_init_xmit_priv\n");
-		ret8 = _FAIL;
+		ret8 = 0;
 		goto exit;
 	}
 
-	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL) {
+	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == 0) {
 		DBG_8192D("Can't _rtw_init_recv_priv\n");
-		ret8 = _FAIL;
+		ret8 = 0;
 		goto exit;
 	}
 
 	/* We don't need to memset padapter->XXX to zero, because adapter
 	 * is allocated by vzalloc().
 	 */
-	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL)
+	if (_rtw_init_sta_priv(&padapter->stapriv) == 0)
 	{
 		DBG_8192D("Can't _rtw_init_sta_priv\n");
-		ret8 = _FAIL;
+		ret8 = 0;
 		goto exit;
 	}
 
@@ -727,7 +727,7 @@ u8 rtw_free_drv_sw(struct rtw_adapter *padapter)
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-rtw_free_drv_sw\n"));
 
-	return _SUCCESS;
+	return 1;
 }
 
 #ifdef CONFIG_CONCURRENT_MODE
@@ -759,7 +759,7 @@ static int _netdev_if2_open(struct net_device *pnetdev)
 
 		rtw_hal_set_hwreg(padapter, HW_VAR_DM_INIT_PWDB, NULL);
 
-		if (rtw_start_drv_threads(padapter) == _FAIL)
+		if (rtw_start_drv_threads(padapter) == 0)
 			goto netdev_if2_open_error;
 
 		if (padapter->intf_start)
@@ -889,7 +889,7 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 	padapter->intf_stop = primary_padapter->intf_stop;
 
 	/* step init_io_priv */
-	if ((rtw_init_io_priv(padapter, set_intf_ops)) == _FAIL) {
+	if ((rtw_init_io_priv(padapter, set_intf_ops)) == 0) {
 		RT_TRACE(_module_hci_intfs_c_, _drv_err_, ("\n Can't init io_reqs\n"));
 	}
 
@@ -900,7 +900,7 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 	rtw_hal_chip_configure(padapter);
 
 	/* init drv data */
-	if (rtw_init_drv_sw(padapter)!= _SUCCESS)
+	if (rtw_init_drv_sw(padapter)!= 1)
 		goto error_rtw_drv_if2_init;
 
 	/*  alloc dev name after got efuse data. */
@@ -1033,7 +1033,7 @@ int _netdev_open(struct net_device *pnetdev)
 		padapter->bCardDisableWOHSM = false;
 
 		status = rtw_hal_init(padapter);
-		if (status == _FAIL)
+		if (status == 0)
 		{
 			RT_TRACE(_module_os_intfs_c_, _drv_err_, ("rtl871x_hal_init(): Can't init h/w!\n"));
 			goto netdev_open_error;
@@ -1042,13 +1042,13 @@ int _netdev_open(struct net_device *pnetdev)
 		DBG_8192D("MAC Address = %pM\n", pnetdev->dev_addr);
 
 		status = rtw_start_drv_threads(padapter);
-		if (status == _FAIL)
+		if (status == 0)
 		{
 			RT_TRACE(_module_os_intfs_c_, _drv_err_, ("Initialize driver software resource Failed!\n"));
 			goto netdev_open_error;
 		}
 
-		if (init_hw_mlme_ext(padapter) == _FAIL)
+		if (init_hw_mlme_ext(padapter) == 0)
 		{
 			RT_TRACE(_module_os_intfs_c_, _drv_err_, ("can't init mlme_ext_priv\n"));
 			goto netdev_open_error;
@@ -1116,7 +1116,7 @@ int netdev_open(struct net_device *pnetdev)
 
 static int  ips_netdrv_open(struct rtw_adapter *padapter)
 {
-	int status = _SUCCESS;
+	int status = 1;
 	padapter->net_closed = false;
 	DBG_8192D("===> %s.........\n", __func__);
 
@@ -1125,7 +1125,7 @@ static int  ips_netdrv_open(struct rtw_adapter *padapter)
 	padapter->bCardDisableWOHSM = false;
 
 	status = rtw_hal_init(padapter);
-	if (status == _FAIL) {
+	if (status == 0) {
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("ips_netdrv_open(): Can't init h/w!\n"));
 		goto netdev_open_error;
 	}
@@ -1136,12 +1136,12 @@ static int  ips_netdrv_open(struct rtw_adapter *padapter)
 	rtw_set_pwr_state_check_timer(&padapter->pwrctrlpriv);
 	_set_timer(&padapter->mlmepriv.dynamic_chk_timer, 5000);
 
-	 return _SUCCESS;
+	 return 1;
 
 netdev_open_error:
 	DBG_8192D("-ips_netdrv_open - drv_open failure, bup =%d\n", padapter->bup);
 
-	return _FAIL;
+	return 0;
 }
 
 int rtw_ips_pwr_up(struct rtw_adapter *padapter)
@@ -1196,7 +1196,7 @@ int pm_netdev_open(struct net_device *pnetdev, u8 bnormal)
 	if (bnormal)
 		status = netdev_open(pnetdev);
 	else
-		status =  (_SUCCESS == ips_netdrv_open((struct rtw_adapter *)rtw_netdev_priv(pnetdev)))?(0):(-1);
+		status =  (1 == ips_netdrv_open((struct rtw_adapter *)rtw_netdev_priv(pnetdev)))?(0):(-1);
 
 	return status;
 }

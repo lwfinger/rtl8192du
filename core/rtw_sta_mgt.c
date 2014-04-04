@@ -75,7 +75,7 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 						   NUM_STA + 4);
 
 	if (!pstapriv->pallocated_stainfo_buf)
-		return _FAIL;
+		return 0;
 
 	pstapriv->pstainfo_buf = pstapriv->pallocated_stainfo_buf + 4 -
 		((SIZE_PTR)(pstapriv->pallocated_stainfo_buf) & 3);
@@ -119,7 +119,7 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 
 #endif
 
-	return _SUCCESS;
+	return 1;
 }
 
 inline int rtw_stainfo_offset(struct sta_priv *stapriv, struct sta_info *sta)
@@ -223,7 +223,7 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 			vfree(pstapriv->pallocated_stainfo_buf);
 	}
 
-	return _SUCCESS;
+	return 1;
 }
 
 struct	sta_info *rtw_alloc_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
@@ -445,7 +445,7 @@ u32	rtw_free_stainfo(struct rtw_adapter *padapter, struct sta_info *psta)
 
 exit:
 
-	return _SUCCESS;
+	return 1;
 }
 
 /*  free all stainfo which in sta_hash[all] */
@@ -523,7 +523,7 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 u32 rtw_init_bcmc_stainfo(struct rtw_adapter *padapter)
 {
 	struct sta_info		*psta;
-	u32 res = _SUCCESS;
+	u32 res = 1;
 	unsigned char bcast_addr[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 	struct	sta_priv *pstapriv = &padapter->stapriv;
@@ -531,7 +531,7 @@ u32 rtw_init_bcmc_stainfo(struct rtw_adapter *padapter)
 	psta = rtw_alloc_stainfo(pstapriv, bcast_addr);
 
 	if (psta == NULL) {
-		res = _FAIL;
+		res = 0;
 		RT_TRACE(_module_rtl871x_sta_mgt_c_, _drv_err_,
 			 ("rtw_alloc_stainfo fail"));
 		goto exit;

@@ -490,7 +490,7 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		if (param->u.crypt.set_tx) {
 			DBG_8192D("wep, set_tx = 1\n");
 
-			if (rtw_set_802_11_add_wep(padapter, pwep) == (u8)_FAIL)
+			if (rtw_set_802_11_add_wep(padapter, pwep) == (u8)0)
 				ret = -EOPNOTSUPP ;
 		} else {
 			DBG_8192D("wep, set_tx = 0\n");
@@ -617,13 +617,13 @@ static int rtw_set_wpa_ie(struct rtw_adapter *padapter, char *pie, unsigned shor
 			goto exit;
 		}
 
-		if (rtw_parse_wpa_ie(buf, ielen, &group_cipher, &pairwise_cipher) == _SUCCESS) {
+		if (rtw_parse_wpa_ie(buf, ielen, &group_cipher, &pairwise_cipher) == 1) {
 			padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
 			padapter->securitypriv.ndisauthtype = NDIS802_11AUTHMODEWPAPSK;
 			memcpy(padapter->securitypriv.supplicant_ie, &buf[0], ielen);
 		}
 
-		if (rtw_parse_wpa2_ie(buf, ielen, &group_cipher, &pairwise_cipher) == _SUCCESS) {
+		if (rtw_parse_wpa2_ie(buf, ielen, &group_cipher, &pairwise_cipher) == 1) {
 			padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
 			padapter->securitypriv.ndisauthtype = NDIS802_11AUTHMODEWPA2PSK;
 			memcpy(padapter->securitypriv.supplicant_ie, &buf[0], ielen);
@@ -821,7 +821,7 @@ static int rtw_wx_set_mode(struct net_device *dev, struct iw_request_info *a,
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct __queue *queue = &pmlmepriv->scanned_queue;
 
-	if (_FAIL == rtw_pwr_wakeup(padapter)) {
+	if (0 == rtw_pwr_wakeup(padapter)) {
 		ret = -EPERM;
 		goto exit;
 	}
@@ -1124,7 +1124,7 @@ static int rtw_wx_set_wap(struct net_device *dev,
 	}
 #endif
 
-	if (_FAIL == rtw_pwr_wakeup(padapter))
+	if (0 == rtw_pwr_wakeup(padapter))
 	{
 		ret = -1;
 		goto exit;
@@ -1259,7 +1259,7 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 #endif /* CONFIG_P2P */
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_set_scan\n"));
 
-	if (_FAIL == rtw_pwr_wakeup(padapter)) {
+	if (0 == rtw_pwr_wakeup(padapter)) {
 		ret = -1;
 		goto exit;
 	}
@@ -1558,7 +1558,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 
 	RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_info_,
 		 ("+rtw_wx_set_essid: fw_state = 0x%08x\n", get_fwstate(pmlmepriv)));
-	if (_FAIL == rtw_pwr_wakeup(padapter))
+	if (0 == rtw_pwr_wakeup(padapter))
 	{
 		ret = -1;
 		goto exit;
@@ -1768,7 +1768,7 @@ set_rate:
 		RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_info_, ("datarate_inx =%d\n", datarates[i]));
 	}
 
-	if (rtw_setdatarate_cmd(padapter, datarates) != _SUCCESS) {
+	if (rtw_setdatarate_cmd(padapter, datarates) != 1) {
 		RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_err_, ("rtw_wx_set_rate Fail!!!\n"));
 		ret = -1;
 	}
@@ -2441,7 +2441,7 @@ static int rtw_wx_set_channel_plan(struct net_device *dev,
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	u8 channel_plan_req = (u8) (*((int *)wrqu));
 
-	if (_SUCCESS == rtw_set_chplan_cmd(padapter, channel_plan_req, 1)) {
+	if (1 == rtw_set_chplan_cmd(padapter, channel_plan_req, 1)) {
 		DBG_8192D("%s set channel_plan = 0x%02X\n", __func__, pmlmepriv->ChannelPlan);
 	} else
 		return -EPERM;
@@ -2810,7 +2810,7 @@ static int rtw_wext_p2p_enable(struct net_device *dev,
 	else if (*extra == '3')
 		init_role = P2P_ROLE_GO;
 
-	if (_FAIL == rtw_p2p_enable(padapter, init_role))
+	if (0 == rtw_p2p_enable(padapter, init_role))
 	{
 		ret = -EFAULT;
 		goto exit;
@@ -5129,18 +5129,18 @@ static u8 set_pairwise_key(struct rtw_adapter *padapter, struct sta_info *psta)
 	struct cmd_obj*			ph2c;
 	struct set_stakey_parm	*psetstakey_para;
 	struct cmd_priv				*pcmdpriv =&padapter->cmdpriv;
-	u8	res = _SUCCESS;
+	u8	res = 1;
 
 	ph2c = (struct cmd_obj*)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 
 	psetstakey_para = (struct set_stakey_parm*)kzalloc(sizeof(struct set_stakey_parm), GFP_KERNEL);
 	if (psetstakey_para == NULL) {
 		kfree(ph2c);
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 
@@ -5165,19 +5165,19 @@ static int set_group_key(struct rtw_adapter *padapter, u8 *key, u8 alg, int keyi
 	struct cmd_obj* pcmd;
 	struct setkey_parm *psetkeyparm;
 	struct cmd_priv	*pcmdpriv =&(padapter->cmdpriv);
-	int res = _SUCCESS;
+	int res = 1;
 
 	DBG_8192D("%s\n", __func__);
 
 	pcmd = (struct cmd_obj*)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 	psetkeyparm = (struct setkey_parm*)kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
 	if (psetkeyparm == NULL) {
 		kfree(pcmd);
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 
@@ -5576,7 +5576,7 @@ static int rtw_set_beacon(struct net_device *dev, struct ieee_param *param, int 
 	if ((pstapriv->max_num_sta>NUM_STA) || (pstapriv->max_num_sta<= 0))
 		pstapriv->max_num_sta = NUM_STA;
 
-	if (rtw_check_beacon_data(padapter, pbuf,  (len-12-2)) == _SUCCESS)/*  12 = param header, 2:no packed */
+	if (rtw_check_beacon_data(padapter, pbuf,  (len-12-2)) == 1)/*  12 = param header, 2:no packed */
 		ret = 0;
 	else
 		ret = -EINVAL;
@@ -6248,7 +6248,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 
 		mapLen = EFUSE_MAP_SIZE;
 
-		if (rtw_efuse_map_read(padapter, 0, mapLen, data) == _SUCCESS) {
+		if (rtw_efuse_map_read(padapter, 0, mapLen, data) == 1) {
 			DBG_8192D("\t  rtw_efuse_map_read\n");
 		} else {
 			DBG_8192D("\t  rtw_efuse_map_read : Fail\n");
@@ -6297,7 +6297,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 			return -EFAULT;
 		}
 
-		if (rtw_efuse_map_read(padapter, addr, cnts, data) == _FAIL)
+		if (rtw_efuse_map_read(padapter, addr, cnts, data) == 0)
 			DBG_8192D("rtw_efuse_access error\n");
 		else
 			DBG_8192D("rtw_efuse_access ok\n");
@@ -6319,7 +6319,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		addr = 0;
 		mapLen = EFUSE_MAX_SIZE;
 
-		if (rtw_efuse_access(padapter, false, addr, mapLen, rawdata) == _FAIL) {
+		if (rtw_efuse_access(padapter, false, addr, mapLen, rawdata) == 0) {
 			DBG_8192D("\t  rtw_efuse_map_read : Fail\n");
 			return -EFAULT;
 		} else {
@@ -6350,7 +6350,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 			DBG_8192D("(addr + cnts parameter error\n");
 			return -EFAULT;
 		}
-		if (rtw_efuse_map_read(padapter, addr, cnts, data) == _FAIL)
+		if (rtw_efuse_map_read(padapter, addr, cnts, data) == 0)
 			DBG_8192D("rtw_efuse_access error\n");
 		else
 			DBG_8192D("rtw_efuse_access ok\n");
@@ -6373,7 +6373,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 			DBG_8192D("(addr + cnts parameter error\n");
 			return -EFAULT;
 		}
-		if (rtw_efuse_map_read(padapter, addr, cnts, data) == _FAIL) {
+		if (rtw_efuse_map_read(padapter, addr, cnts, data) == 0) {
 			DBG_8192D("rtw_efuse_access error\n");
 		} else {
 			DBG_8192D("rtw_efuse_access ok\n");
@@ -6456,7 +6456,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 					DBG_8192D("parameter error\n");
 					return -EFAULT;
 		}
-		if (rtw_efuse_map_write(padapter, addr, cnts, setdata) == _FAIL) {
+		if (rtw_efuse_map_write(padapter, addr, cnts, setdata) == 0) {
 				DBG_8192D("rtw_efuse_map_write error\n");
 				return -EFAULT;
 		} else
@@ -6479,7 +6479,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 			for (jj = 0, kk = 0; jj < cnts; jj++, kk += 2)
 					setrawdata[jj] = key_2char2num(tmp[2][kk], tmp[2][kk+ 1]);
 
-			if (rtw_efuse_access(padapter, true, addr, cnts, setrawdata) == _FAIL) {
+			if (rtw_efuse_access(padapter, true, addr, cnts, setrawdata) == 0) {
 					DBG_8192D("\t  rtw_efuse_map_read : Fail\n");
 						return -EFAULT;
 			} else {
@@ -6508,7 +6508,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 						DBG_8192D("parameter error\n");
 						return -EFAULT;
 				}
-				if (rtw_efuse_map_write(padapter, addr, cnts, setdata) == _FAIL) {
+				if (rtw_efuse_map_write(padapter, addr, cnts, setdata) == 0) {
 					DBG_8192D("rtw_efuse_map_write error\n");
 					return -EFAULT;
 				} else
@@ -6536,7 +6536,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 				return -EFAULT;
 			}
 
-			if (rtw_efuse_map_write(padapter, addr, cnts, setdata) == _FAIL) {
+			if (rtw_efuse_map_write(padapter, addr, cnts, setdata) == 0) {
 				DBG_8192D("rtw_efuse_map_write error\n");
 				return -EFAULT;
 			} else

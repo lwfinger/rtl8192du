@@ -105,14 +105,14 @@ static inline int RT_usb_endpoint_num(const struct usb_endpoint_descriptor *epd)
 
 static u8 rtw_init_intf_priv(struct dvobj_priv *dvobj)
 {
-	u8 rst = _SUCCESS;
+	u8 rst = 1;
 
 	mutex_init(&dvobj->usb_vendor_req_mutex);
 
 	dvobj->usb_alloc_vendor_req_buf = kzalloc(MAX_USB_IO_CTL_SIZE, GFP_KERNEL);
 	if (dvobj->usb_alloc_vendor_req_buf == NULL) {
 		DBG_8192D("alloc usb_vendor_req_buf failed... /n");
-		rst = _FAIL;
+		rst = 0;
 		goto exit;
 	}
 	dvobj->usb_vendor_req_buf  =
@@ -123,7 +123,7 @@ exit:
 
 static u8 rtw_deinit_intf_priv(struct dvobj_priv *dvobj)
 {
-	u8 rst = _SUCCESS;
+	u8 rst = 1;
 
 	kfree(dvobj->usb_alloc_vendor_req_buf);
 	mutex_destroy(&dvobj->usb_vendor_req_mutex);
@@ -134,7 +134,7 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 {
 	int	i;
 	u8	val8;
-	int	status = _FAIL;
+	int	status = 0;
 	struct dvobj_priv *pdvobjpriv = NULL;
 	struct usb_device				*pusbd;
 	struct usb_host_config			*phost_conf;
@@ -206,7 +206,7 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 		DBG_8192D("NON USB_SPEED_HIGH\n");
 	}
 
-	if (rtw_init_intf_priv(pdvobjpriv) == _FAIL) {
+	if (rtw_init_intf_priv(pdvobjpriv) == 0) {
 		RT_TRACE(_module_os_intfs_c_,_drv_err_,("\n Can't INIT rtw_init_intf_priv\n"));
 		goto free_dvobj;
 	}
@@ -218,10 +218,10 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 
 	usb_get_dev(pusbd);
 
-	status = _SUCCESS;
+	status = 1;
 
 free_dvobj:
-	if (status != _SUCCESS && pdvobjpriv) {
+	if (status != 1 && pdvobjpriv) {
 		usb_set_intfdata(usb_intf, NULL);
 		mutex_destroy(&pdvobjpriv->hw_init_mutex);
 		mutex_destroy(&pdvobjpriv->h2c_fwcmd_mutex);
@@ -512,7 +512,7 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 {
 	struct rtw_adapter *padapter = NULL;
 	struct net_device *pnetdev = NULL;
-	int status = _FAIL;
+	int status = 0;
 
 	padapter = (struct rtw_adapter *)vzalloc(sizeof(*padapter));
 	if (!padapter)
@@ -541,7 +541,7 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	SET_NETDEV_DEV(pnetdev, dvobj_to_dev(dvobj));
 	padapter = rtw_netdev_priv(pnetdev);
 
-	if (rtw_handle_dualmac(padapter, 1) != _SUCCESS)
+	if (rtw_handle_dualmac(padapter, 1) != 1)
 		goto free_adapter;
 
 	if (rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0)
@@ -560,7 +560,7 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	padapter->intf_stop=&usb_intf_stop;
 
 	/* 2 */
-	if ((rtw_init_io_priv(padapter, usb_set_intf_ops)) == _FAIL) {
+	if ((rtw_init_io_priv(padapter, usb_set_intf_ops)) == 0) {
 		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("\n Can't init io_reqs\n"));
 		goto free_hal_data;
 	}
@@ -574,7 +574,7 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	rtw_hal_read_chip_info(padapter);
 
 	/* step 5. */
-	if (rtw_init_drv_sw(padapter) == _FAIL) {
+	if (rtw_init_drv_sw(padapter) == 0) {
 		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("Initialize driver software resource Failed!\n"));
 		goto free_hal_data;
 	}
@@ -612,21 +612,21 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 		  padapter->bup, padapter->hw_init_completed
 	);
 
-	status = _SUCCESS;
+	status = 1;
 
 free_hal_data:
-	if (status != _SUCCESS && padapter->HalData)
+	if (status != 1 && padapter->HalData)
 		kfree(padapter->HalData);
 free_wdev:
-	if (status != _SUCCESS) {
+	if (status != 1) {
 		rtw_wdev_unregister(padapter->rtw_wdev);
 		rtw_wdev_free(padapter->rtw_wdev);
 	}
 handle_dualmac:
-	if (status != _SUCCESS)
+	if (status != 1)
 		rtw_handle_dualmac(padapter, 0);
 free_adapter:
-	if (status != _SUCCESS) {
+	if (status != 1) {
 		if (pnetdev)
 			rtw_free_netdev(pnetdev);
 		else if (padapter)
@@ -687,7 +687,7 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 {
 	struct rtw_adapter *if1 = NULL, *if2 = NULL;
 	struct dvobj_priv *dvobj = NULL;
-	uint status = _FAIL;
+	uint status = 0;
 
 	/* step 0. */
 	process_spec_devid(did);
@@ -711,16 +711,16 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 	}
 #endif
 
-	status = _SUCCESS;
+	status = 1;
 
 free_if1:
-	if (status != _SUCCESS && if1)
+	if (status != 1 && if1)
 		rtw_usb_if1_deinit(if1);
 free_dvobj:
-	if (status != _SUCCESS)
+	if (status != 1)
 		usb_dvobj_deinit(pusb_intf);
 exit:
-	return status == _SUCCESS ? 0 : -ENODEV;
+	return status == 1 ? 0 : -ENODEV;
 }
 
 /* dev_remove() - our device is being removed

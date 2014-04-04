@@ -61,7 +61,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct rtw_adapter *padapte
 	int i;
 	struct xmit_buf *pxmitbuf;
 	struct xmit_frame *pxframe;
-	int	res = _SUCCESS;
+	int	res = 1;
 
 	/*  We don't need to memset padapter->XXX to zero, because adapter is allocated by vzalloc(). */
 	/* memset((unsigned char *)pxmitpriv, 0, sizeof(struct xmit_priv)); */
@@ -95,7 +95,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct rtw_adapter *padapte
 	if (pxmitpriv->pallocated_frame_buf  == NULL) {
 		pxmitpriv->pxmit_frame_buf = NULL;
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("alloc xmit_frame fail!\n"));
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 	pxmitpriv->pxmit_frame_buf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->pallocated_frame_buf), 4);
@@ -130,7 +130,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct rtw_adapter *padapte
 
 	if (pxmitpriv->pallocated_xmitbuf  == NULL) {
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("alloc xmit_buf fail!\n"));
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 
@@ -146,7 +146,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct rtw_adapter *padapte
 		pxmitbuf->ext_tag = false;
 
 		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
-		if (res == _FAIL)
+		if (res == 0)
 			goto exit;
 
 		pxmitbuf->flags = XMIT_VO_QUEUE;
@@ -164,7 +164,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct rtw_adapter *padapte
 
 	if (pxmitpriv->pallocated_xmit_extbuf  == NULL) {
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("alloc xmit_extbuf fail!\n"));
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 
@@ -180,7 +180,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct rtw_adapter *padapte
 		pxmitbuf->ext_tag = true;
 
 		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, MAX_XMIT_EXTBUF_SZ + XMITBUF_ALIGN_SZ);
-		if (res == _FAIL)
+		if (res == 0)
 			goto exit;
 
 		list_add_tail(&pxmitbuf->list, &(pxmitpriv->free_xmit_extbuf_queue.queue));
@@ -415,7 +415,7 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 	struct security_priv	*psecuritypriv = &padapter->securitypriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct qos_priv		*pqospriv = &pmlmepriv->qospriv;
-	int res = _SUCCESS;
+	int res = 1;
 
 	_rtw_open_pktfile(pkt, &pktfile);
 	_rtw_pktfile_read(&pktfile, (u8 *)&etherhdr, ETH_HLEN);
@@ -477,10 +477,10 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 		if (psta == NULL) { /*  if we cannot get psta => drrp the pkt */
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_,
 				 ("\nupdate_attrib => get sta_info fail, ra:%pM\n", pattrib->ra));
-			res = _FAIL;
+			res = 0;
 			goto exit;
 		} else if ((check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) && (!(psta->state & _FW_LINKED))) {
-			res = _FAIL;
+			res = 0;
 			goto exit;
 		}
 	}
@@ -492,7 +492,7 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 		/*  if we cannot get psta => drop the pkt */
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_,
 			 ("\nupdate_attrib => get sta_info fail, ra:%pM\n", pattrib->ra));
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 
@@ -525,7 +525,7 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_,
 				 ("\npsta->ieee8021x_blocked == true,  pattrib->ether_type(%.4x) != 0x888e\n",
 				 pattrib->ether_type));
-			res = _FAIL;
+			res = 0;
 			goto exit;
 		}
 	} else {
@@ -558,11 +558,11 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 		pattrib->iv_len = 8;
 		pattrib->icv_len = 4;
 
-		if (padapter->securitypriv.busetkipkey == _FAIL) {
+		if (padapter->securitypriv.busetkipkey == 0) {
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_,
-				 ("\npadapter->securitypriv.busetkipkey(%d) == _FAIL drop packet\n",
+				 ("\npadapter->securitypriv.busetkipkey(%d) == 0 drop packet\n",
 				 padapter->securitypriv.busetkipkey));
-			res = _FAIL;
+			res = 0;
 			goto exit;
 		}
 		break;
@@ -636,7 +636,7 @@ static s32 xmitframe_addmic(struct rtw_adapter *padapter,
 
 			if (bmcst) {
 				if (!memcmp(psecuritypriv->dot118021XGrptxmickey[psecuritypriv->dot118021XGrpKeyid].skey, null_key, 16)) {
-					return _FAIL;
+					return 0;
 				}
 				/* start to calculate the mic code */
 				rtw_secmicsetkey(&micdata, psecuritypriv->dot118021XGrptxmickey[psecuritypriv->dot118021XGrpKeyid].skey);
@@ -644,7 +644,7 @@ static s32 xmitframe_addmic(struct rtw_adapter *padapter,
 				if (!memcmp(&stainfo->dot11tkiptxmickey.skey[0], null_key, 16)) {
 					/* DbgPrint("\nxmitframe_addmic:stainfo->dot11tkiptxmickey == 0\n"); */
 					/* msleep(10); */
-					return _FAIL;
+					return 0;
 				}
 				/* start to calculate the mic code */
 				rtw_secmicsetkey(&micdata, &stainfo->dot11tkiptxmickey.skey[0]);
@@ -729,7 +729,7 @@ static s32 xmitframe_addmic(struct rtw_adapter *padapter,
 		}
 	}
 
-	return _SUCCESS;
+	return 1;
 }
 
 static s32 xmitframe_swencrypt(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
@@ -757,7 +757,7 @@ static s32 xmitframe_swencrypt(struct rtw_adapter *padapter, struct xmit_frame *
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_notice_, ("### xmitframe_hwencrypt\n"));
 	}
 
-	return _SUCCESS;
+	return 1;
 }
 
 s32 rtw_make_wlanhdr (struct rtw_adapter *padapter , u8 *hdr, struct pkt_attrib *pattrib)
@@ -767,7 +767,7 @@ s32 rtw_make_wlanhdr (struct rtw_adapter *padapter , u8 *hdr, struct pkt_attrib 
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct qos_priv *pqospriv = &pmlmepriv->qospriv;
 	u8 qos_option = false;
-	int res = _SUCCESS;
+	int res = 1;
 	u16 *fctrl = &pwlanhdr->frame_control;
 	struct sta_info *psta;
 	int bmcst = IS_MCAST(pattrib->ra);
@@ -815,7 +815,7 @@ s32 rtw_make_wlanhdr (struct rtw_adapter *padapter , u8 *hdr, struct pkt_attrib 
 				qos_option = true;
 		} else {
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("fw_state:%x is not allowed to xmit frame\n", get_fwstate(pmlmepriv)));
-			res = _FAIL;
+			res = 0;
 			goto exit;
 		}
 
@@ -970,7 +970,7 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, st
 	u8 *pbuf_start;
 
 	s32 bmcst = IS_MCAST(pattrib->ra);
-	s32 res = _SUCCESS;
+	s32 res = 1;
 
 	if (pattrib->psta)
 		psta = pattrib->psta;
@@ -978,18 +978,18 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, st
 		psta = rtw_get_stainfo(&padapter->stapriv, pattrib->ra);
 
 	if (psta == NULL)
-		return _FAIL;
+		return 0;
 
 	if (pxmitframe->buf_addr == NULL)
-		return _FAIL;
+		return 0;
 
 	pbuf_start = pxmitframe->buf_addr;
 
 	mem_start = pbuf_start + TXDESC_SIZE + (pxmitframe->pkt_offset * PACKET_OFFSET_SZ);
 
-	if (rtw_make_wlanhdr(padapter, mem_start, pattrib) == _FAIL) {
+	if (rtw_make_wlanhdr(padapter, mem_start, pattrib) == 0) {
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("rtw_xmitframe_coalesce: rtw_make_wlanhdr fail; drop pkt\n"));
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 
@@ -1089,9 +1089,9 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, st
 		memcpy(mem_start, pbuf_start + TXDESC_OFFSET, pattrib->hdrlen);
 	}
 
-	if (xmitframe_addmic(padapter, pxmitframe) == _FAIL) {
-		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("xmitframe_addmic(padapter, pxmitframe) == _FAIL\n"));
-		res = _FAIL;
+	if (xmitframe_addmic(padapter, pxmitframe) == 0) {
+		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("xmitframe_addmic(padapter, pxmitframe) == 0\n"));
+		res = 0;
 		goto exit;
 	}
 
@@ -1233,7 +1233,7 @@ s32 rtw_free_xmitbuf_ext(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 	struct __queue *pfree_queue = &pxmitpriv->free_xmit_extbuf_queue;
 
 	if (pxmitbuf == NULL)
-		return _FAIL;
+		return 0;
 
 	spin_lock_irqsave(&pfree_queue->lock, flags);
 
@@ -1244,7 +1244,7 @@ s32 rtw_free_xmitbuf_ext(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 
 	spin_unlock_irqrestore(&pfree_queue->lock, flags);
 
-	return _SUCCESS;
+	return 1;
 }
 
 struct xmit_buf *rtw_alloc_xmitbuf(struct xmit_priv *pxmitpriv)
@@ -1291,7 +1291,7 @@ s32 rtw_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 	struct __queue *pfree_xmitbuf_queue = &pxmitpriv->free_xmitbuf_queue;
 
 	if (pxmitbuf == NULL)
-		return _FAIL;
+		return 0;
 
 	if (pxmitbuf->sctx) {
 		DBG_8192D("%s pxmitbuf->sctx is not NULL\n", __func__);
@@ -1311,7 +1311,7 @@ s32 rtw_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 		spin_unlock_irqrestore(&pfree_xmitbuf_queue->lock, flags);
 	}
 
-	return _SUCCESS;
+	return 1;
 }
 
 /*
@@ -1411,7 +1411,7 @@ s32 rtw_free_xmitframe(struct xmit_priv *pxmitpriv, struct xmit_frame *pxmitfram
 
 exit:
 
-	return _SUCCESS;
+	return 1;
 }
 
 void rtw_free_xmitframe_queue(struct xmit_priv *pxmitpriv, struct __queue *pframequeue)
@@ -1435,13 +1435,13 @@ void rtw_free_xmitframe_queue(struct xmit_priv *pxmitpriv, struct __queue *pfram
 
 s32 rtw_xmitframe_enqueue(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 {
-	if (rtw_xmit_classifier(padapter, pxmitframe) == _FAIL) {
+	if (rtw_xmit_classifier(padapter, pxmitframe) == 0) {
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_,
 			 ("rtw_xmitframe_enqueue: drop xmit pkt for classifier fail\n"));
-		return _FAIL;
+		return 0;
 	}
 
-	return _SUCCESS;
+	return 1;
 }
 
 static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv,
@@ -1584,7 +1584,7 @@ s32 rtw_xmit_classifier(struct rtw_adapter *padapter, struct xmit_frame *pxmitfr
 	struct pkt_attrib	*pattrib = &pxmitframe->attrib;
 	struct sta_priv	*pstapriv = &padapter->stapriv;
 	struct hw_xmit	*phwxmits =  padapter->xmitpriv.hwxmits;
-	int res = _SUCCESS;
+	int res = 1;
 
 	if (pattrib->psta)
 		psta = pattrib->psta;
@@ -1592,7 +1592,7 @@ s32 rtw_xmit_classifier(struct rtw_adapter *padapter, struct xmit_frame *pxmitfr
 		psta = rtw_get_stainfo(pstapriv, pattrib->ra);
 
 	if (psta == NULL) {
-		res = _FAIL;
+		res = 0;
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("rtw_xmit_classifier: psta == NULL\n"));
 		goto exit;
 	}
@@ -1679,7 +1679,7 @@ s32 rtw_xmit(struct rtw_adapter *padapter, struct sk_buff **ppkt)
 	}
 
 	res = update_attrib(padapter, *ppkt, &pxmitframe->attrib);
-	if (res == _FAIL) {
+	if (res == 0) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_,
 			 ("rtw_xmit: update attrib fail\n"));
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
@@ -2057,7 +2057,7 @@ void rtw_sctx_init(struct submit_ctx *sctx, int timeout_ms)
 
 int rtw_sctx_wait(struct submit_ctx *sctx)
 {
-	int ret = _FAIL;
+	int ret = 0;
 	unsigned long expire;
 	int status = 0;
 
@@ -2071,7 +2071,7 @@ int rtw_sctx_wait(struct submit_ctx *sctx)
 	}
 
 	if (status == RTW_SCTX_DONE_SUCCESS)
-		ret = _SUCCESS;
+		ret = 1;
 	return ret;
 }
 
@@ -2112,11 +2112,11 @@ void rtw_sctx_done(struct submit_ctx **sctx)
  *
  * Init ack_tx_ops and then do c2h_evt_hdl() and polling ack_tx_ops repeatedly
  * till tx report or timeout
- * Returns: _SUCCESS if TX report ok, _FAIL for others
+ * Returns: 1 if TX report ok, 0 for others
  */
 static int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 {
-	int ret = _FAIL;
+	int ret = 0;
 	struct submit_ctx *pack_tx_ops = &pxmitpriv->ack_tx_ops;
 	struct rtw_adapter *adapter = container_of(pxmitpriv, struct rtw_adapter, xmitpriv);
 
@@ -2146,7 +2146,7 @@ static int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 	}
 
 	if (pack_tx_ops->status == RTW_SCTX_DONE_SUCCESS)
-		ret = _SUCCESS;
+		ret = 1;
 
 	return ret;
 }

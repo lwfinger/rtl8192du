@@ -28,20 +28,20 @@
 */
 inline int RTW_STATUS_CODE(int error_code) {
 	if (error_code >=0)
-		return _SUCCESS;
+		return 1;
 
 	switch (error_code) {
 		default:
-			return _FAIL;
+			return 0;
 	}
 }
 
 u32 _rtw_down_sema(struct  semaphore *sema)
 {
 	if (down_interruptible(sema))
-		return _FAIL;
+		return 0;
 	else
-		return _SUCCESS;
+		return 1;
 }
 
 void	_rtw_init_queue(struct __queue *pqueue)

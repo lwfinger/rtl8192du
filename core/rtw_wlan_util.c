@@ -332,7 +332,7 @@ void Switch_DM_Func(struct rtw_adapter *padapter, u8 mode, u8 enable)
 
 static void Set_NETYPE1_MSR(struct rtw_adapter *padapter, u8 type)
 {
-	rtw_hal_set_hwreg(padapter, HW_VAR_MEDIA_STATUS1, (u8 *)(&type));
+	rtw_hal_set_hwreg(padapter, HW_VAR_MEDIA_STATUS_SUCCESS, (u8 *)(&type));
 }
 
 static void Set_NETYPE0_MSR(struct rtw_adapter *padapter, u8 type)
@@ -506,7 +506,7 @@ int is_client_associated_to_ap(struct rtw_adapter *padapter)
 	struct mlme_ext_info	*pmlmeinfo;
 
 	if (!padapter)
-		return _FAIL;
+		return 0;
 
 	pmlmeext = &padapter->mlmeextpriv;
 	pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -514,7 +514,7 @@ int is_client_associated_to_ap(struct rtw_adapter *padapter)
 	if ((pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) && ((pmlmeinfo->state&0x03) == WIFI_FW_STATION_STATE))
 		return true;
 	else
-		return _FAIL;
+		return 0;
 }
 
 int is_client_associated_to_ibss(struct rtw_adapter *padapter)
@@ -525,7 +525,7 @@ int is_client_associated_to_ibss(struct rtw_adapter *padapter)
 	if ((pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) && ((pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE))
 		return true;
 	else
-		return _FAIL;
+		return 0;
 }
 
 int is_IBSS_empty(struct rtw_adapter *padapter)
@@ -536,7 +536,7 @@ int is_IBSS_empty(struct rtw_adapter *padapter)
 
 	for (i = IBSS_START_MAC_ID; i < NUM_STA; i++) {
 		if (pmlmeinfo->FW_sta_info[i].status == 1)
-			return _FAIL;
+			return 0;
 	}
 	return true;
 }
@@ -668,7 +668,7 @@ int WMM_param_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_
 
 	if (pmlmepriv->qospriv.qos_option == 0) {
 		pmlmeinfo->WMM_enable = 0;
-		return _FAIL;
+		return 0;
 	}
 
 	pmlmeinfo->WMM_enable = 1;
@@ -1159,17 +1159,17 @@ int support_short_GI(struct rtw_adapter *padapter, struct HT_caps_element *pHT_c
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	if (!(pmlmeinfo->HT_enable))
-		return _FAIL;
+		return 0;
 
 	if ((pmlmeinfo->assoc_AP_vendor == ralinkAP))
-		return _FAIL;
+		return 0;
 
 	bit_offset = (pmlmeext->cur_bwmode & HT_CHANNEL_WIDTH_40) ? 6 : 5;
 
 	if (le16_to_cpu(pHT_caps->u.HT_cap_element.HT_caps_info) & (0x1 << bit_offset))
-		return _SUCCESS;
+		return 1;
 	else
-		return _FAIL;
+		return 0;
 }
 
 unsigned char get_highest_rate_idx(u32 mask)
@@ -1458,7 +1458,7 @@ int update_sta_support_rate(struct rtw_adapter *padapter, u8 *pvar_ie, uint var_
 
 	pIE = (struct ndis_802_11_variable_ies *)rtw_get_ie(pvar_ie, _SUPPORTEDRATES_IE_, &ie_len, var_ie_len);
 	if (pIE == NULL)
-		return _FAIL;
+		return 0;
 
 	memcpy(pmlmeinfo->FW_sta_info[cam_idx].SupportedRates, pIE->data, ie_len);
 	supportRateNum = ie_len;
@@ -1467,7 +1467,7 @@ int update_sta_support_rate(struct rtw_adapter *padapter, u8 *pvar_ie, uint var_
 	if (pIE)
 		memcpy((pmlmeinfo->FW_sta_info[cam_idx].SupportedRates + supportRateNum), pIE->data, ie_len);
 
-	return _SUCCESS;
+	return 1;
 }
 
 void process_addba_req(struct rtw_adapter *padapter, u8 *paddba_req, u8 *addr)
@@ -1518,7 +1518,7 @@ static struct rtw_adapter *pbuddy_padapter;
 
 int rtw_handle_dualmac(struct rtw_adapter *adapter, bool init)
 {
-	int status = _SUCCESS;
+	int status = 1;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 
 	if (init) {
@@ -1531,7 +1531,7 @@ int rtw_handle_dualmac(struct rtw_adapter *adapter, bool init)
 		/* For SMSP on 92DU-VC, driver do not probe another Interface. */
 		if ((dvobj->DualMacMode != true) && (dvobj->InterfaceNumber != 0)) {
 			DBG_8192D("%s(): Do not init another USB Interface because SMSP\n", __func__);
-			status = _FAIL;
+			status = 0;
 			goto exit;
 		}
 #ifdef CONFIG_DUALMAC_CONCURRENT

@@ -298,7 +298,7 @@ void c2h_evt_clear(struct rtw_adapter *adapter)
 
 s32 c2h_evt_read(struct rtw_adapter *adapter, u8 *buf)
 {
-	s32 ret = _FAIL;
+	s32 ret = 0;
 	struct c2h_evt_hdr *c2h_evt;
 	int i;
 	u8 trigger;
@@ -331,7 +331,7 @@ s32 c2h_evt_read(struct rtw_adapter *adapter, u8 *buf)
 	RT_PRINT_DATA(_module_hal_init_c_, _drv_info_,
 		      "c2h_evt_read(): Command Content:\n",
 		      c2h_evt->payload, c2h_evt->plen);
-	ret = _SUCCESS;
+	ret = 1;
 clear_evt:
 	/*
 	* Clear event to notify FW we have read the command.

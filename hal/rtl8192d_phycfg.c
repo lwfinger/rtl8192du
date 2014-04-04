@@ -585,7 +585,7 @@ phy_ConfigMACWithHeaderFile(
 		rtw_write8(adapter, ptrArray[i], (u8)ptrArray[i+1]);
 	}
 
-	return _SUCCESS;
+	return 1;
 }
 
 /*-----------------------------------------------------------------------------
@@ -607,10 +607,10 @@ phy_ConfigMACWithHeaderFile(
 int PHY_MACConfig8192D(struct rtw_adapter *adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	int		rtStatus = _SUCCESS;
+	int		rtStatus = 1;
 
 	if (adapter->bSurpriseRemoved) {
-		rtStatus = _FAIL;
+		rtStatus = 0;
 		return rtStatus;
 	}
 
@@ -845,7 +845,7 @@ phy_ConfigBBWithHeaderFile(
 		}
 	}
 
-	return _SUCCESS;
+	return 1;
 }
 
 static void storePwrIndexDiffRateOffset(struct rtw_adapter *adapter,
@@ -926,19 +926,19 @@ phy_ConfigBBWithPgHeaderFile(
 		}
 	}
 
-	return _SUCCESS;
+	return 1;
 }	/* phy_ConfigBBWithPgHeaderFile */
 
 static	int phy_BB8192D_Config_ParaFile(struct rtw_adapter *adapter)
 {
 	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(adapter);
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	int		rtStatus = _SUCCESS;
+	int		rtStatus = 1;
 
 	/*  1. Read PHY_REG.TXT BB INIT!! */
 	/*  We will seperate as 88C / 92C according to chip version */
 	rtStatus = phy_ConfigBBWithHeaderFile(adapter, BaseBand_Config_PHY_REG);
-	if (rtStatus != _SUCCESS)
+	if (rtStatus != 1)
 		goto phy_BB8190_Config_ParaFile_Fail;
 
 	/*  2. If EEPROM or EFUSE autoload OK, We must config by PHY_REG_PG.txt */
@@ -948,7 +948,7 @@ static	int phy_BB8192D_Config_ParaFile(struct rtw_adapter *adapter)
 		rtStatus = phy_ConfigBBWithPgHeaderFile(adapter, BaseBand_Config_PHY_REG);
 	}
 
-	if (rtStatus != _SUCCESS)
+	if (rtStatus != 1)
 		goto phy_BB8190_Config_ParaFile_Fail;
 
 	/*  3. BB AGC table Initialization */
@@ -963,7 +963,7 @@ static	int phy_BB8192D_Config_ParaFile(struct rtw_adapter *adapter)
 		rtStatus = phy_ConfigBBWithHeaderFile(adapter, BaseBand_Config_AGC_TAB);
 	}
 
-	if (rtStatus != _SUCCESS)
+	if (rtStatus != 1)
 		goto phy_BB8190_Config_ParaFile_Fail;
 
 	/*  Check if the CCK HighPower is turned ON. */
@@ -980,7 +980,7 @@ PHY_BBConfig8192D(
 	struct rtw_adapter *	adapter
 	)
 {
-	int	rtStatus = _SUCCESS;
+	int	rtStatus = 1;
 	/* u8		PathMap = 0, index = 0, rf_num = 0; */
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	u32	RegVal;
@@ -988,7 +988,7 @@ PHY_BBConfig8192D(
 	struct registry_priv *pregistrypriv = &adapter->registrypriv;
 
 	if (adapter->bSurpriseRemoved) {
-		rtStatus = _FAIL;
+		rtStatus = 0;
 		return rtStatus;
 	}
 
@@ -1070,10 +1070,10 @@ PHY_RFConfig8192D(
 	struct rtw_adapter *	adapter
 	)
 {
-	int		rtStatus = _SUCCESS;
+	int		rtStatus = 1;
 
 	if (adapter->bSurpriseRemoved) {
-		rtStatus = _FAIL;
+		rtStatus = 0;
 		return rtStatus;
 	}
 
@@ -1108,7 +1108,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 )
 {
 	int	i, j;
-	int	rtStatus = _SUCCESS;
+	int	rtStatus = 1;
 	u32*	Rtl819XRadioA_Array_Table;
 	u32*	Rtl819XRadioB_Array_Table;
 	u16		RadioA_ArrayLen, RadioB_ArrayLen;
@@ -1136,7 +1136,7 @@ rtl8192d_PHY_ConfigRFWithHeaderFile(
 		Rtl819XRadioB_Array_Table = (u32 *)Rtl8192D_RadioB_2T_intPAArray;
 	}
 
-	rtStatus = _SUCCESS;
+	rtStatus = 1;
 
 	/* vivi added this for read parameter from header, 20100908 */
 	/* 1this only happens when DMDP, mac0 start on 2.4G, mac1 start on 5G, */
@@ -1230,7 +1230,7 @@ rtl8192d_PHY_CheckBBAndRFOK(
 	enum RF_RADIO_PATH_E	eRFPath
 	)
 {
-	int			rtStatus = _SUCCESS;
+	int			rtStatus = 1;
 
 	u32				i, CheckTimes = 4, ulRegRead = 0;
 
@@ -1276,7 +1276,7 @@ rtl8192d_PHY_CheckBBAndRFOK(
 			break;
 
 		default:
-			rtStatus = _FAIL;
+			rtStatus = 0;
 			break;
 		}
 
@@ -1285,7 +1285,7 @@ rtl8192d_PHY_CheckBBAndRFOK(
 		/*  */
 		if (ulRegRead != WriteData[i])
 		{
-			rtStatus = _FAIL;
+			rtStatus = 0;
 			break;
 		}
 	}

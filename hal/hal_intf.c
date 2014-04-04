@@ -77,7 +77,7 @@ void rtw_hal_sw_led_deinit(struct rtw_adapter *padapter)
 
 uint	 rtw_hal_init(struct rtw_adapter *padapter)
 {
-	uint	status = _SUCCESS;
+	uint	status = 1;
 
 	if (padapter->hw_init_completed == true) {
 		DBG_8192D("rtw_hal_init: hw_init_completed == true\n");
@@ -93,7 +93,7 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 			DBG_8192D("rtw_hal_init: pbuddy_adapter hw_init_completed == true\n");
 		} else {
 			status =	padapter->HalFunc.hal_init(padapter->pbuddy_adapter);
-			if (status == _SUCCESS) {
+			if (status == 1) {
 				padapter->pbuddy_adapter->hw_init_completed = true;
 			} else {
 				padapter->pbuddy_adapter->hw_init_completed = false;
@@ -108,7 +108,7 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 
 	status = padapter->HalFunc.hal_init(padapter);
 
-	if (status == _SUCCESS) {
+	if (status == 1) {
 		padapter->hw_init_completed = true;
 
 		if (padapter->registrypriv.notch_filter == 1)
@@ -127,11 +127,11 @@ uint	 rtw_hal_init(struct rtw_adapter *padapter)
 
 uint rtw_hal_deinit(struct rtw_adapter *padapter)
 {
-	uint	status = _SUCCESS;
+	uint	status = 1;
 
 	status = padapter->HalFunc.hal_deinit(padapter);
 
-	if (status == _SUCCESS)
+	if (status == 1)
 		padapter->hw_init_completed = false;
 	else
 		RT_TRACE(_module_hal_init_c_,_drv_err_,("\n rtw_hal_deinit: hal_init fail\n"));
@@ -155,14 +155,14 @@ u8 rtw_hal_set_def_var(struct rtw_adapter *padapter, enum HAL_DEF_VARIABLE eVari
 {
 	if (padapter->HalFunc.SetHalDefVarHandler)
 		return padapter->HalFunc.SetHalDefVarHandler(padapter,eVariable,pValue);
-	return _FAIL;
+	return 0;
 }
 
 u8 rtw_hal_get_def_var(struct rtw_adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue)
 {
 	if (padapter->HalFunc.GetHalDefVarHandler)
 		return padapter->HalFunc.GetHalDefVarHandler(padapter,eVariable,pValue);
-	return _FAIL;
+	return 0;
 }
 
 void rtw_hal_enable_interrupt(struct rtw_adapter *padapter)
@@ -182,7 +182,7 @@ void rtw_hal_disable_interrupt(struct rtw_adapter *padapter)
 
 u32	rtw_hal_inirp_init(struct rtw_adapter *padapter)
 {
-	u32 rst = _FAIL;
+	u32 rst = 0;
 	if (padapter->HalFunc.inirp_init)
 		rst = padapter->HalFunc.inirp_init(padapter);
 	else
@@ -196,14 +196,14 @@ u32	rtw_hal_inirp_deinit(struct rtw_adapter *padapter)
 	if (padapter->HalFunc.inirp_deinit)
 		return padapter->HalFunc.inirp_deinit(padapter);
 
-	return _FAIL;
+	return 0;
 }
 
 u8 rtw_hal_intf_ps_func(struct rtw_adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val)
 {
 	if (padapter->HalFunc.interface_ps_func)
 		return padapter->HalFunc.interface_ps_func(padapter,efunc_id,val);
-	return _FAIL;
+	return 0;
 }
 
 s32 rtw_hal_xmit(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
@@ -216,7 +216,7 @@ s32 rtw_hal_xmit(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 
 s32	rtw_hal_mgnt_xmit(struct rtw_adapter *padapter, struct xmit_frame *pmgntframe)
 {
-	s32 ret = _FAIL;
+	s32 ret = 0;
 	if (padapter->HalFunc.mgnt_xmit)
 		ret = padapter->HalFunc.mgnt_xmit(padapter, pmgntframe);
 	return ret;
@@ -226,7 +226,7 @@ s32 rtw_hal_init_xmit_priv(struct rtw_adapter *padapter)
 {
 	if (padapter->HalFunc.init_xmit_priv != NULL)
 		return padapter->HalFunc.init_xmit_priv(padapter);
-	return _FAIL;
+	return 0;
 }
 
 void rtw_hal_free_xmit_priv(struct rtw_adapter *padapter)
@@ -240,7 +240,7 @@ s32 rtw_hal_init_recv_priv(struct rtw_adapter *padapter)
 	if (padapter->HalFunc.init_recv_priv)
 		return padapter->HalFunc.init_recv_priv(padapter);
 
-	return _FAIL;
+	return 0;
 }
 
 void rtw_hal_free_recv_priv(struct rtw_adapter *padapter)
@@ -293,7 +293,7 @@ s32 rtw_hal_interrupt_handler(struct rtw_adapter *padapter)
 {
 	if (padapter->HalFunc.interrupt_handler)
 		return padapter->HalFunc.interrupt_handler(padapter);
-	return _FAIL;
+	return 0;
 }
 
 void rtw_hal_set_bwmode(struct rtw_adapter *padapter, enum HT_CHANNEL_WIDTH Bandwidth, u8 Offset)
@@ -334,7 +334,7 @@ void rtw_hal_reset_security_engine(struct rtw_adapter * adapter)
 
 s32 rtw_hal_c2h_handler(struct rtw_adapter *adapter, struct c2h_evt_hdr *c2h_evt)
 {
-	s32 ret = _FAIL;
+	s32 ret = 0;
 	if (adapter->HalFunc.c2h_handler)
 		ret = adapter->HalFunc.c2h_handler(adapter, c2h_evt);
 	return ret;

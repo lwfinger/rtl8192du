@@ -252,7 +252,7 @@ u32 _rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 			   u32 cnt, u8 *pmem);
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
-	u32 ret = _SUCCESS;
+	u32 ret = 1;
 
 	_write_port = pintfhdl->io_ops._write_port;
 
@@ -264,7 +264,7 @@ u32 _rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 u32 _rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt,
 			     u8 *pmem, int timeout_ms)
 {
-	int ret = _SUCCESS;
+	int ret = 1;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)pmem;
 	struct submit_ctx sctx;
 
@@ -273,7 +273,7 @@ u32 _rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt,
 
 	ret = _rtw_write_port(adapter, addr, cnt, pmem);
 
-	if (ret == _SUCCESS)
+	if (ret == 1)
 		ret = rtw_sctx_wait(&sctx);
 
 	 return ret;
@@ -298,7 +298,7 @@ int rtw_init_io_priv(struct rtw_adapter *padapter,
 	struct intf_hdl *pintf = &piopriv->intf;
 
 	if (set_intf_ops == NULL)
-		return _FAIL;
+		return 0;
 
 	piopriv->padapter = padapter;
 	pintf->padapter = padapter;
@@ -306,5 +306,5 @@ int rtw_init_io_priv(struct rtw_adapter *padapter,
 
 	set_intf_ops(&pintf->io_ops);
 
-	return _SUCCESS;
+	return 1;
 }

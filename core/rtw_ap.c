@@ -428,7 +428,7 @@ void	expire_timeout_chk(struct rtw_adapter *padapter)
 
 		/* issue null data to check sta alive*/
 		for (i = 0; i < chk_alive_num; i++) {
-			int ret = _FAIL;
+			int ret = 0;
 
 			psta = rtw_get_stainfo_by_offset(pstapriv,
 							 chk_alive_list[i]);
@@ -441,7 +441,7 @@ void	expire_timeout_chk(struct rtw_adapter *padapter)
 						     0, 3, 50);
 
 			psta->keep_alive_trycnt++;
-			if (ret == _SUCCESS) {
+			if (ret == 1) {
 				DBG_8192D("asoc check, sta(%pM) is alive\n",
 					  psta->hwaddr);
 				psta->expire_to = pstapriv->expire_to;
@@ -1037,7 +1037,7 @@ static void start_bss_network(struct rtw_adapter *padapter, u8 *pbuf)
 		/* other case will  tx beacon when bcn interrupt coming in.
 		 * issue beacon frame
 		 */
-		if (send_beacon(padapter) == _FAIL)
+		if (send_beacon(padapter) == 0)
 			DBG_8192D("issue_beacon, fail!\n");
 	}
 
@@ -1047,7 +1047,7 @@ static void start_bss_network(struct rtw_adapter *padapter, u8 *pbuf)
 
 int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 {
-	int ret = _SUCCESS;
+	int ret = 1;
 	u8 *p;
 	u8 *ht_caps_ie = NULL;
 	u8 *ht_info_ie = NULL;
@@ -1082,10 +1082,10 @@ int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 	DBG_8192D("%s, len =%d\n", __func__, len);
 
 	if (!check_fwstate(pmlmepriv, WIFI_AP_STATE))
-		return _FAIL;
+		return 0;
 
 	if (len > MAX_IE_SZ)
-		return _FAIL;
+		return 0;
 
 	pbss_network->IELength = len;
 
@@ -1094,7 +1094,7 @@ int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 	memcpy(ie, pbuf, pbss_network->IELength);
 
 	if (pbss_network->InfrastructureMode != NDIS802_11APMODE)
-		return _FAIL;
+		return 0;
 
 	pbss_network->Rssi = 0;
 
@@ -1171,7 +1171,7 @@ int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 		       (pbss_network->IELength - _BEACON_IE_OFFSET_));
 	if (p && ie_len > 0) {
 		if (rtw_parse_wpa2_ie(p, ie_len+2, &group_cipher,
-				      &pairwise_cipher) == _SUCCESS) {
+				      &pairwise_cipher) == 1) {
 			psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
 
 			psecuritypriv->dot8021xalg = 1;/* psk,  todo:802.1x */
@@ -1191,7 +1191,7 @@ int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 			       _BEACON_IE_OFFSET_ - (ie_len + 2)));
 		if ((p) && (!memcmp(p+2, OUI1, 4))) {
 			if (rtw_parse_wpa_ie(p, ie_len+2, &group_cipher,
-					     &pairwise_cipher) == _SUCCESS) {
+					     &pairwise_cipher) == 1) {
 				psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
 
 				psecuritypriv->dot8021xalg = 1;
@@ -1318,7 +1318,7 @@ int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 		psta = rtw_alloc_stainfo(&padapter->stapriv,
 					 pbss_network->MacAddress);
 		if (psta == NULL)
-			return _FAIL;
+			return 0;
 	}
 	/* fix bug of flush_cam_entry at STOP AP mode */
 	psta->state |= WIFI_AP_STATE;

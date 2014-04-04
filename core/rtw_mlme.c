@@ -37,7 +37,7 @@ int _rtw_init_mlme_priv(struct rtw_adapter *padapter)
 	u8 *pbuf;
 	struct wlan_network *pnetwork;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	int res = _SUCCESS;
+	int res = 1;
 
 	/*  We don't need to memset padapter->XXX to zero,
 	 * because adapter is allocated by vzalloc(). */
@@ -60,7 +60,7 @@ int _rtw_init_mlme_priv(struct rtw_adapter *padapter)
 	pbuf = vzalloc(MAX_BSS_CNT * (sizeof(struct wlan_network)));
 
 	if (pbuf == NULL) {
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 	pmlmepriv->free_bss_buf = pbuf;
@@ -149,7 +149,7 @@ int _rtw_enqueue_network(struct __queue *queue, struct wlan_network *pnetwork)
 
 exit:
 
-	return _SUCCESS;
+	return 1;
 }
 
 struct wlan_network *_rtw_dequeue_network(struct __queue *queue)
@@ -899,7 +899,7 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 				set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
 
 				if (rtw_select_and_join_from_scanned_queue
-				    (pmlmepriv) == _SUCCESS) {
+				    (pmlmepriv) == 1) {
 					_set_timer(&pmlmepriv->assoc_timer,
 						   MAX_JOIN_TIMEOUT);
 				} else {
@@ -931,7 +931,7 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 					    WIFI_ADHOC_MASTER_STATE;
 
 					if (rtw_createbss_cmd(adapter) !=
-					    _SUCCESS) {
+					    1) {
 						RT_TRACE
 						    (_module_rtl871x_mlme_c_,
 						     _drv_err_,
@@ -946,7 +946,7 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 			set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
 			pmlmepriv->to_join = false;
 			s_ret = rtw_select_and_join_from_scanned_queue(pmlmepriv);
-			if (_SUCCESS == s_ret) {
+			if (1 == s_ret) {
 				_set_timer(&pmlmepriv->assoc_timer,
 					   MAX_JOIN_TIMEOUT);
 			} else if (s_ret == 2) {	/* there is no need to wait for join */
@@ -957,7 +957,7 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 				    ("try_to_join, but select scanning queue fail, to_roaming:%d\n",
 				     rtw_to_roaming(adapter));
 				if (rtw_to_roaming(adapter) != 0) {
-					if (--pmlmepriv->to_roaming == 0 || _SUCCESS !=
+					if (--pmlmepriv->to_roaming == 0 || 1 !=
 					    rtw_sitesurvey_cmd(adapter,
 							       &pmlmepriv->
 							       assoc_ssid, 1,
@@ -1732,7 +1732,7 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 				_clr_fwstate_(pmlmepriv, WIFI_ADHOC_STATE);
 			}
 
-			if (rtw_createbss_cmd(adapter) != _SUCCESS) {
+			if (rtw_createbss_cmd(adapter) != 1) {
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,
 					 _drv_err_,
 					 ("***Error=>stadel_event_callback: rtw_createbss_cmd status FAIL***\n "));
@@ -1772,7 +1772,7 @@ void _rtw_join_timeout_handler(struct rtw_adapter *adapter)
 			if (rtw_to_roaming(adapter) != 0) {	/* try another */
 				DBG_8192D("%s try another roaming\n", __func__);
 				do_join_r = rtw_do_join(adapter);
-				if (_SUCCESS != do_join_r) {
+				if (1 != do_join_r) {
 					DBG_8192D
 					    ("%s roaming do_join return %d\n",
 					     __func__, do_join_r);
@@ -2025,9 +2025,9 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv)
 				   list);
 		if (pnetwork == NULL) {
 			RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_,
-				 ("%s return _FAIL:(pnetwork==NULL)\n",
+				 ("%s return 0:(pnetwork==NULL)\n",
 				  __func__));
-			ret = _FAIL;
+			ret = 0;
 			goto exit;
 		}
 
@@ -2037,8 +2037,8 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv)
 	}
 
 	if (candidate == NULL) {
-		DBG_8192D("%s: return _FAIL(candidate == NULL)\n", __func__);
-		ret = _FAIL;
+		DBG_8192D("%s: return 0(candidate == NULL)\n", __func__);
+		ret = 0;
 		goto exit;
 	} else {
 		DBG_8192D("%s: candidate: %s(%pM, ch:%u)\n", __func__,
@@ -2071,11 +2071,11 @@ int rtw_set_auth(struct rtw_adapter *adapter,
 	struct cmd_obj *pcmd;
 	struct setauth_parm *psetauthparm;
 	struct cmd_priv *pcmdpriv = &(adapter->cmdpriv);
-	int res = _SUCCESS;
+	int res = 1;
 
 	pcmd = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
-		res = _FAIL;	/* try again */
+		res = 0;	/* try again */
 		goto exit;
 	}
 
@@ -2083,7 +2083,7 @@ int rtw_set_auth(struct rtw_adapter *adapter,
 	    (struct setauth_parm *)kzalloc(sizeof(struct setauth_parm), GFP_KERNEL);
 	if (psetauthparm == NULL) {
 		kfree(pcmd);
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 
@@ -2117,18 +2117,18 @@ int rtw_set_key(struct rtw_adapter *adapter,
 	struct setkey_parm *psetkeyparm;
 	struct cmd_priv *pcmdpriv = &(adapter->cmdpriv);
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
-	int res = _SUCCESS;
+	int res = 1;
 
 	pcmd = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
-		res = _FAIL;	/* try again */
+		res = 0;	/* try again */
 		goto exit;
 	}
 	psetkeyparm =
 	    (struct setkey_parm *)kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
 	if (psetkeyparm == NULL) {
 		kfree(pcmd);
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 
@@ -2184,7 +2184,7 @@ int rtw_set_key(struct rtw_adapter *adapter,
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_,
 			 ("\n rtw_set_key:psecuritypriv->dot11PrivacyAlgrthm = %x (must be 1 or 2 or 4 or 5)\n",
 			  psecuritypriv->dot11PrivacyAlgrthm));
-		res = _FAIL;
+		res = 0;
 		goto exit;
 	}
 
@@ -2737,7 +2737,7 @@ void _rtw_roaming(struct rtw_adapter *padapter,
 
 		while (1) {
 			do_join_r = rtw_do_join(padapter);
-			if (_SUCCESS == do_join_r) {
+			if (1 == do_join_r) {
 				break;
 			} else {
 				DBG_8192D("roaming do_join return %d\n",

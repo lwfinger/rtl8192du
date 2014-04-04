@@ -62,7 +62,7 @@ u8 rtw_do_join(struct rtw_adapter *padapter)
 	u8 *pibss = NULL;
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct __queue *queue = &(pmlmepriv->scanned_queue);
-	u8 ret = _SUCCESS;
+	u8 ret = 1;
 
 	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
 	phead = get_list_head(queue);
@@ -90,7 +90,7 @@ u8 rtw_do_join(struct rtw_adapter *padapter)
 				 ("rtw_do_join(): site survey if scanned_queue is empty\n."));
 			/*  submit site_survey_cmd */
 			ret = rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0);
-			if (_SUCCESS != ret) {
+			if (1 != ret) {
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,
 					 _drv_err_,
 					 ("rtw_do_join(): site survey return error\n."));
@@ -102,11 +102,11 @@ u8 rtw_do_join(struct rtw_adapter *padapter)
 		int select_ret;
 		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 		select_ret = rtw_select_and_join_from_scanned_queue(pmlmepriv);
-		if (select_ret == _SUCCESS) {
+		if (select_ret == 1) {
 			pmlmepriv->to_join = false;
 			_set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
 		} else if (ret == 2) { /* there is no need to wait for join */
-			ret = _SUCCESS;
+			ret = 1;
 			_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 			rtw_indicate_connect(padapter);
 		} else {
@@ -127,7 +127,7 @@ u8 rtw_do_join(struct rtw_adapter *padapter)
 
 				rtw_generate_random_ibss(pibss);
 
-				if (rtw_createbss_cmd(padapter) != _SUCCESS) {
+				if (rtw_createbss_cmd(padapter) != 1) {
 					RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("***Error=>do_goin: rtw_createbss_cmd status FAIL***\n "));
 					ret =  false;
 					goto exit;
@@ -146,7 +146,7 @@ u8 rtw_do_join(struct rtw_adapter *padapter)
 				if (pmlmepriv->LinkDetectInfo.bBusyTraffic == false ||
 				    rtw_to_roaming(padapter) > 0) {
 					ret = rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0);
-					if (_SUCCESS != ret)
+					if (1 != ret)
 						RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
 							 ("do_join(): site survey return error\n."));
 				}
@@ -161,7 +161,7 @@ exit:
 
 u8 rtw_set_802_11_bssid(struct rtw_adapter *padapter, u8 *bssid)
 {
-	u8 status = _SUCCESS;
+	u8 status = 1;
 	u32 cur_time = 0;
 
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -171,7 +171,7 @@ u8 rtw_set_802_11_bssid(struct rtw_adapter *padapter, u8 *bssid)
 
 	if ((bssid[0] == 0x00 && bssid[1] == 0x00 && bssid[2] == 0x00 && bssid[3] == 0x00 && bssid[4] == 0x00 && bssid[5] == 0x00) ||
 	    (bssid[0] == 0xFF && bssid[1] == 0xFF && bssid[2] == 0xFF && bssid[3] == 0xFF && bssid[4] == 0xFF && bssid[5] == 0xFF)) {
-		status = _FAIL;
+		status = 0;
 		goto exit;
 	}
 
@@ -218,7 +218,7 @@ handle_tkip_countermeasure:
 			padapter->securitypriv.btkip_countermeasure = false;
 			padapter->securitypriv.btkip_countermeasure_time = 0;
 		} else {
-			status = _FAIL;
+			status = 0;
 			goto release_mlme_lock;
 		}
 	}
@@ -243,7 +243,7 @@ exit:
 
 u8 rtw_set_802_11_ssid(struct rtw_adapter *padapter, struct ndis_802_11_ssid *ssid)
 {
-	u8 status = _SUCCESS;
+	u8 status = 1;
 	u32 cur_time = 0;
 
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -256,7 +256,7 @@ u8 rtw_set_802_11_ssid(struct rtw_adapter *padapter, struct ndis_802_11_ssid *ss
 	if (padapter->hw_init_completed == false) {
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
 			 ("set_ssid: hw_init_completed== false=>exit!!!\n"));
-		status = _FAIL;
+		status = 0;
 		goto exit;
 	}
 
@@ -326,7 +326,7 @@ handle_tkip_countermeasure:
 			padapter->securitypriv.btkip_countermeasure = false;
 			padapter->securitypriv.btkip_countermeasure_time = 0;
 		} else {
-			status = _FAIL;
+			status = 0;
 			goto release_mlme_lock;
 		}
 	}
@@ -459,7 +459,7 @@ u8 rtw_set_802_11_bssid_list_scan(struct rtw_adapter *padapter, struct ndis_802_
 		if (rtw_is_scan_deny(padapter)) {
 			DBG_8192D(FUNC_ADPT_FMT": scan deny\n", FUNC_ADPT_ARG(padapter));
 			indicate_wx_scan_complete_event(padapter);
-			return _SUCCESS;
+			return 1;
 		}
 
 		spin_lock_bh(&pmlmepriv->lock);
@@ -492,7 +492,7 @@ u8 rtw_set_802_11_authentication_mode(struct rtw_adapter *padapter, enum NDIS_80
 
 	res = rtw_set_auth(padapter, psecuritypriv);
 
-	if (res == _SUCCESS)
+	if (res == 1)
 		ret = true;
 	else
 		ret = false;
@@ -504,7 +504,7 @@ u8 rtw_set_802_11_add_wep(struct rtw_adapter *padapter, struct ndis_802_11_wep *
 {
 	int		keyid, res;
 	struct security_priv *psecuritypriv = &(padapter->securitypriv);
-	u8		ret = _SUCCESS;
+	u8		ret = 1;
 
 	keyid = wep->KeyIndex & 0x3fffffff;
 
@@ -547,7 +547,7 @@ u8 rtw_set_802_11_add_wep(struct rtw_adapter *padapter, struct ndis_802_11_wep *
 
 	res = rtw_set_key(padapter, psecuritypriv, keyid, 1);
 
-	if (res == _FAIL)
+	if (res == 0)
 		ret = false;
 exit:
 
@@ -556,7 +556,7 @@ exit:
 
 u8 rtw_set_802_11_remove_wep(struct rtw_adapter *padapter, u32 keyindex)
 {
-	u8 ret = _SUCCESS;
+	u8 ret = 1;
 
 	if (keyindex >= 0x80000000 || padapter == NULL) {
 		ret = false;
@@ -571,10 +571,10 @@ u8 rtw_set_802_11_remove_wep(struct rtw_adapter *padapter, u32 keyindex)
 
 			psecuritypriv->dot11DefKeylen[keyindex] = 0;
 
-			if (res == _FAIL)
-				ret = _FAIL;
+			if (res == 0)
+				ret = 0;
 		} else {
-			ret = _FAIL;
+			ret = 0;
 		}
 	}
 
@@ -590,7 +590,7 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter *padapter, struct ndis_802_11_key *
 	struct sta_info *stainfo;
 	u8	bgroup = false;
 	u8	bgrouptkey = false;/* can be remove later */
-	u8	ret = _SUCCESS;
+	u8	ret = 1;
 
 	if (((key->KeyIndex & 0x80000000) == 0) && ((key->KeyIndex & 0x40000000) > 0)) {
 		/*  It is invalid to clear bit 31 and set bit 30. If the miniport driver encounters this combination, */
@@ -598,7 +598,7 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter *padapter, struct ndis_802_11_key *
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_info_, ("rtw_set_802_11_add_key: ((key->KeyIndex & 0x80000000) == 0)[=%d] ", (int)(key->KeyIndex & 0x80000000) == 0));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_info_, ("rtw_set_802_11_add_key:((key->KeyIndex & 0x40000000) > 0)[=%d]", (int)(key->KeyIndex & 0x40000000) > 0));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_info_, ("rtw_set_802_11_add_key: key->KeyIndex =%d\n", (int)key->KeyIndex));
-		ret = _FAIL;
+		ret = 0;
 		goto exit;
 	}
 
@@ -637,7 +637,7 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter *padapter, struct ndis_802_11_key *
 			/*  The key index should be set to zero for a Pairwise key, and the driver should fail with */
 			/*  NDIS_STATUS_INVALID_DATA if the lower 8 bits is not zero */
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, (" key->KeyIndex & 0x000000FF.\n"));
-			ret = _FAIL;
+			ret = 0;
 			goto exit;
 		}
 
@@ -652,7 +652,7 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter *padapter, struct ndis_802_11_key *
 		/* if (encryptionAlgorithm == RT_ENC_TKIP_ENCRYPTION && key->KeyLength != 32) */
 		if ((encryptionalgo == _TKIP_) && (key->KeyLength != 32)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("TKIP KeyLength:0x%x != 32\n", key->KeyLength));
-			ret = _FAIL;
+			ret = 0;
 			goto exit;
 		}
 
@@ -662,7 +662,7 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter *padapter, struct ndis_802_11_key *
 			if (key->KeyLength == 32) {
 				key->KeyLength = 16;
 			} else {
-				ret = _FAIL;
+				ret = 0;
 				goto exit;
 			}
 		}
@@ -671,7 +671,7 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter *padapter, struct ndis_802_11_key *
 		if ((encryptionalgo == _WEP40_ || encryptionalgo == _WEP104_) &&
 		    (key->KeyLength != 5 && key->KeyLength != 13)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("WEP KeyLength:0x%x != 5 or 13\n", key->KeyLength));
-			ret = _FAIL;
+			ret = 0;
 			goto exit;
 		}
 
@@ -730,21 +730,21 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter *padapter, struct ndis_802_11_key *
 
 		if ((check_fwstate(&padapter->mlmepriv, WIFI_ADHOC_STATE) == true) && (IS_MAC_ADDRESS_BROADCAST(key->BSSID) == false)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, (" IBSS but BSSID is not Broadcast Address.\n"));
-			ret = _FAIL;
+			ret = 0;
 			goto exit;
 		}
 
 		/*  Check key length for TKIP */
 		if ((encryptionalgo == _TKIP_) && (key->KeyLength != 32)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, (" TKIP GTK KeyLength:%u != 32\n", key->KeyLength));
-			ret = _FAIL;
+			ret = 0;
 			goto exit;
 
 		} else if (encryptionalgo == _AES_ && (key->KeyLength != 16 && key->KeyLength != 32)) {
 			/*  Check key length for AES */
 			/*  For NDTEST, we allow keylen= 32 in this case. 2005.01.27, by rcnjko. */
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("<=== SetInfo, OID_802_11_ADD_KEY: AES GTK KeyLength:%u != 16 or 32\n", key->KeyLength));
-			ret = _FAIL;
+			ret = 0;
 			goto exit;
 		}
 
@@ -819,7 +819,7 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter *padapter, struct ndis_802_11_key *
 			padapter->securitypriv.dot118021XGrpKeyid = (u8)key->KeyIndex;
 
 		if ((key->KeyIndex&0x3) == 0) {
-			ret = _FAIL;
+			ret = 0;
 			goto exit;
 		}
 
@@ -873,8 +873,8 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter *padapter, struct ndis_802_11_key *
 
 		res = rtw_set_key(padapter, &padapter->securitypriv, key->KeyIndex, 1);
 
-		if (res == _FAIL)
-			ret = _FAIL;
+		if (res == 0)
+			ret = 0;
 
 		goto exit;
 
@@ -919,7 +919,7 @@ u8 rtw_set_802_11_add_key(struct rtw_adapter *padapter, struct ndis_802_11_key *
 			}
 
 			if (res == false)
-				ret = _FAIL;
+				ret = 0;
 		}
 	}
 
@@ -935,10 +935,10 @@ u8 rtw_set_802_11_remove_key(struct rtw_adapter *padapter,
 	struct sta_info *stainfo;
 	u8	bgroup = (key->KeyIndex & 0x4000000) > 0 ? false : true;
 	u8	keyIndex = (u8)key->KeyIndex & 0x03;
-	u8	ret = _SUCCESS;
+	u8	ret = 1;
 
 	if ((key->KeyIndex & 0xbffffffc) > 0) {
-		ret = _FAIL;
+		ret = 0;
 		goto exit;
 	}
 	if (bgroup == true) {
@@ -955,7 +955,7 @@ u8 rtw_set_802_11_remove_key(struct rtw_adapter *padapter,
 			memset(&stainfo->dot118021x_UncstKey, 0, 16);
 			/*  \todo Send a H2C Command to Firmware for disable this Key in CAM Entry. */
 		} else {
-			ret = _FAIL;
+			ret = 0;
 			goto exit;
 		}
 	}
@@ -1032,16 +1032,16 @@ u16 rtw_get_cur_max_rate(struct rtw_adapter *adapter)
 * @adapter: pointer to _adapter structure
 * @scan_mode:
 *
-* Return _SUCCESS or _FAIL
+* Return 1 or 0
 */
 int rtw_set_scan_mode(struct rtw_adapter *adapter, enum RT_SCAN_TYPE scan_mode)
 {
 	if (scan_mode != SCAN_ACTIVE && scan_mode != SCAN_PASSIVE)
-		return _FAIL;
+		return 0;
 
 	adapter->mlmepriv.scan_mode = scan_mode;
 
-	return _SUCCESS;
+	return 1;
 }
 
 /*
@@ -1049,7 +1049,7 @@ int rtw_set_scan_mode(struct rtw_adapter *adapter, enum RT_SCAN_TYPE scan_mode)
 * @adapter: pointer to _adapter structure
 * @channel_plan:
 *
-* Return _SUCCESS or _FAIL
+* Return 1 or 0
 */
 int rtw_set_channel_plan(struct rtw_adapter *adapter, u8 channel_plan)
 {
@@ -1065,7 +1065,7 @@ int rtw_set_channel_plan(struct rtw_adapter *adapter, u8 channel_plan)
 * @adapter: pointer to _adapter structure
 * @country_code: string of country code
 *
-* Return _SUCCESS or _FAIL
+* Return 1 or 0
 */
 int rtw_set_country(struct rtw_adapter *adapter, const char *country_code)
 {

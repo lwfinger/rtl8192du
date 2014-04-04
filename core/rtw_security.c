@@ -626,10 +626,10 @@ u32 rtw_tkip_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 	struct pkt_attrib *pattrib = &((struct xmit_frame *)pxmitframe)->attrib;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-	u32 res = _SUCCESS;
+	u32 res = 1;
 
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
-		return _FAIL;
+		return 0;
 
 	pframe = ((struct xmit_frame *)pxmitframe)->buf_addr + TXDESC_SIZE +
 	    (((struct xmit_frame *)pxmitframe)->pkt_offset * PACKET_OFFSET_SZ);
@@ -710,7 +710,7 @@ u32 rtw_tkip_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 		} else {
 			RT_TRACE(_module_rtl871x_security_c_, _drv_err_,
 				 ("rtw_tkip_encrypt: stainfo == NULL!!!\n"));
-			res = _FAIL;
+			res = 0;
 		}
 	}
 
@@ -734,7 +734,7 @@ u32 rtw_tkip_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 	struct rx_pkt_attrib *prxattrib =
 	    &((struct recv_frame_hdr *)precvframe)->attrib;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
-	u32 res = _SUCCESS;
+	u32 res = 1;
 
 	pframe =
 	    (unsigned char *)((struct recv_frame_hdr *)precvframe)->rx_data;
@@ -746,7 +746,7 @@ u32 rtw_tkip_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 		if (stainfo != NULL) {
 			if (IS_MCAST(prxattrib->ra)) {
 				if (psecuritypriv->binstallGrpkey == false) {
-					res = _FAIL;
+					res = 0;
 					DBG_8192D
 					    ("%s:rx bc/mc packets, but didn't install group key!!!!!!!!!!\n",
 					     __func__);
@@ -796,12 +796,12 @@ u32 rtw_tkip_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 					  payload[length - 2], crc[1],
 					  payload[length - 3], crc[0],
 					  payload[length - 4]));
-				res = _FAIL;
+				res = 0;
 			}
 		} else {
 			RT_TRACE(_module_rtl871x_security_c_, _drv_err_,
 				 ("rtw_tkip_decrypt: stainfo == NULL!!!\n"));
-			res = _FAIL;
+			res = 0;
 		}
 	}
 
@@ -1338,7 +1338,7 @@ static int aes_cipher(u8 *key, uint hdrlen, u8 *pframe, uint plen)
 	for (j = 0; j < 8; j++)
 		pframe[payload_index++] = chain_buffer[j];
 
-	return _SUCCESS;
+	return 1;
 }
 
 u32 rtw_aes_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
@@ -1353,10 +1353,10 @@ u32 rtw_aes_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 	struct pkt_attrib *pattrib = &((struct xmit_frame *)pxmitframe)->attrib;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-	u32 res = _SUCCESS;
+	u32 res = 1;
 
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
-		return _FAIL;
+		return 0;
 
 	pframe = ((struct xmit_frame *)pxmitframe)->buf_addr + TXDESC_SIZE +
 		 (((struct xmit_frame *)pxmitframe)->pkt_offset *
@@ -1409,7 +1409,7 @@ u32 rtw_aes_encrypt(struct rtw_adapter *padapter, u8 *pxmitframe)
 		} else {
 			RT_TRACE(_module_rtl871x_security_c_, _drv_err_,
 				 ("rtw_aes_encrypt: stainfo == NULL!!!\n"));
-			res = _FAIL;
+			res = 0;
 		}
 	}
 
@@ -1421,7 +1421,7 @@ static int aes_decipher(u8 *key, uint hdrlen, u8 *pframe, uint plen)
 	static u8 message[MAX_MSG_SIZE];
 	uint qc_exists, a4_exists, i, j, payload_remainder,
 	    num_blocks, payload_index;
-	int res = _SUCCESS;
+	int res = 1;
 	u8 pn_vector[6];
 	u8 mic_iv[16];
 	u8 mic_header1[16];
@@ -1623,11 +1623,11 @@ static int aes_decipher(u8 *key, uint hdrlen, u8 *pframe, uint plen)
 			    ("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x)\n",
 			     i, pframe[hdrlen + 8 + plen - 8 + i],
 			     message[hdrlen + 8 + plen - 8 + i]);
-			res = _FAIL;
+			res = 0;
 		}
 	}
 
-	if (res == _FAIL) {
+	if (res == 0) {
 		int gg = 0;
 		for (gg = 0; gg < 32; gg++)
 			DBG_8192D(" [%d]=%02x ", gg, pframe[gg]);
@@ -1648,7 +1648,7 @@ u32 rtw_aes_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 	struct rx_pkt_attrib *prxattrib =
 	    &((struct recv_frame_hdr *)precvframe)->attrib;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
-	u32 res = _SUCCESS;
+	u32 res = 1;
 
 	pframe =
 	    (unsigned char *)((struct recv_frame_hdr *)precvframe)->rx_data;
@@ -1663,7 +1663,7 @@ u32 rtw_aes_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 			if (IS_MCAST(prxattrib->ra)) {
 				/* in concurrent we should use sw descrypt in group key, so we remove this message */
 				if (psecuritypriv->binstallGrpkey == false) {
-					res = _FAIL;
+					res = 0;
 					DBG_8192D
 					    ("%s:rx bc/mc packets, but didn't install group key!!!!!!!!!!\n",
 					     __func__);
@@ -1680,7 +1680,7 @@ u32 rtw_aes_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 					    ("not match packet_index =%d, install_index =%d\n",
 					     prxattrib->key_index,
 					     psecuritypriv->dot118021XGrpKeyid);
-					res = _FAIL;
+					res = 0;
 					goto exit;
 				}
 			} else {
@@ -1697,7 +1697,7 @@ u32 rtw_aes_decrypt(struct rtw_adapter *padapter, u8 *precvframe)
 		} else {
 			RT_TRACE(_module_rtl871x_security_c_, _drv_err_,
 				 ("rtw_aes_encrypt: stainfo == NULL!!!\n"));
-			res = _FAIL;
+			res = 0;
 		}
 	}
 

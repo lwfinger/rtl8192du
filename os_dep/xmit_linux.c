@@ -83,7 +83,7 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 	pxmitbuf->pallocated_buf = kzalloc(alloc_sz, GFP_KERNEL);
 	if (pxmitbuf->pallocated_buf == NULL)
 	{
-		return _FAIL;
+		return 0;
 	}
 
 	pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitbuf->pallocated_buf), XMITBUF_ALIGN_SZ);
@@ -93,11 +93,11 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 		pxmitbuf->pxmit_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
 		if (pxmitbuf->pxmit_urb[i] == NULL) {
 			DBG_8192D("pxmitbuf->pxmit_urb[i]==NULL");
-			return _FAIL;
+			return 0;
 		}
 
 	}
-	return _SUCCESS;
+	return 1;
 }
 
 void rtw_os_xmit_resource_free(struct rtw_adapter *padapter, struct xmit_buf *pxmitbuf,u32 free_sz)

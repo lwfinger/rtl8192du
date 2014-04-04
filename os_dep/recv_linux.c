@@ -26,7 +26,7 @@
 /* alloc os related resource in struct recv_frame_hdr */
 int rtw_os_recv_resource_alloc(struct rtw_adapter *padapter, struct recv_frame_hdr *precvframe)
 {
-	int	res=_SUCCESS;
+	int	res=1;
 
 	precvframe->pkt_newalloc = precvframe->pkt = NULL;
 
@@ -41,7 +41,7 @@ void rtw_os_recv_resource_free(struct recv_priv *precvpriv)
 /* alloc os related resource in struct recv_buf */
 int rtw_os_recvbuf_resource_alloc(struct rtw_adapter *padapter, struct recv_buf *precvbuf)
 {
-	int res=_SUCCESS;
+	int res=1;
 
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
 	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
@@ -49,7 +49,7 @@ int rtw_os_recvbuf_resource_alloc(struct rtw_adapter *padapter, struct recv_buf 
 	precvbuf->irp_pending = false;
 	precvbuf->purb = usb_alloc_urb(0, GFP_KERNEL);
 	if (precvbuf->purb == NULL) {
-		res = _FAIL;
+		res = 0;
 	}
 
 	precvbuf->pskb = NULL;
@@ -70,7 +70,7 @@ int rtw_os_recvbuf_resource_alloc(struct rtw_adapter *padapter, struct recv_buf 
 /* free os related resource in struct recv_buf */
 int rtw_os_recvbuf_resource_free(struct rtw_adapter *padapter, struct recv_buf *precvbuf)
 {
-	int ret = _SUCCESS;
+	int ret = 1;
 
 	if (precvbuf->purb)
 		usb_free_urb(precvbuf->purb);
@@ -215,14 +215,14 @@ _recv_indicatepkt_end:
 
 	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("\n rtw_recv_indicatepkt :after netif_rx!!!!\n"));
 
-        return _SUCCESS;
+        return 1;
 
 _recv_indicatepkt_drop:
 
 	 /* enqueue back to free_recv_queue */
 	 rtw_free_recvframe(precv_frame, pfree_recv_queue);
 
-	 return _FAIL;
+	 return 0;
 }
 
 void rtw_os_read_port(struct rtw_adapter *padapter, struct recv_buf *precvbuf)

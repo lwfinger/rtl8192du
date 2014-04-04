@@ -493,18 +493,18 @@ static u8 set_pairwise_key(struct rtw_adapter *padapter, struct sta_info *psta)
 	struct cmd_obj*			ph2c;
 	struct set_stakey_parm	*psetstakey_para;
 	struct cmd_priv				*pcmdpriv=&padapter->cmdpriv;
-	u8	res=_SUCCESS;
+	u8	res=1;
 
 	ph2c = (struct cmd_obj*)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
-		res= _FAIL;
+		res= 0;
 		goto exit;
 	}
 
 	psetstakey_para = (struct set_stakey_parm*)kzalloc(sizeof(struct set_stakey_parm), GFP_KERNEL);
 	if (psetstakey_para==NULL) {
 		kfree(ph2c);
-		res=_FAIL;
+		res=0;
 		goto exit;
 	}
 
@@ -529,19 +529,19 @@ static int set_group_key(struct rtw_adapter *padapter, u8 *key, u8 alg, int keyi
 	struct cmd_obj* pcmd;
 	struct setkey_parm *psetkeyparm;
 	struct cmd_priv	*pcmdpriv=&(padapter->cmdpriv);
-	int res=_SUCCESS;
+	int res=1;
 
 	DBG_8192D("%s\n", __func__);
 
 	pcmd = (struct cmd_obj*)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd==NULL) {
-		res= _FAIL;
+		res= 0;
 		goto exit;
 	}
 	psetkeyparm=(struct setkey_parm*)kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
 	if (psetkeyparm==NULL) {
 		kfree(pcmd);
-		res= _FAIL;
+		res= 0;
 		goto exit;
 	}
 
@@ -1304,7 +1304,7 @@ static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
 		}
 	}
 
-	if (_FAIL == rtw_pwr_wakeup(padapter)) {
+	if (0 == rtw_pwr_wakeup(padapter)) {
 		ret= -EPERM;
 		goto exit;
 	}
@@ -1520,7 +1520,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy,
 	pwdev_priv->scan_request = request;
 	spin_unlock_bh(&pwdev_priv->scan_req_lock);
 
-	if (_FAIL == rtw_pwr_wakeup(padapter)) {
+	if (0 == rtw_pwr_wakeup(padapter)) {
 		need_indicate_scan_done = true;
 		goto check_need_indicate_scan_done;
 	}
@@ -1825,7 +1825,7 @@ static int rtw_cfg80211_set_wpa_ie(struct rtw_adapter *padapter, u8 *pie, size_t
 
 	pwpa = rtw_get_wpa_ie(buf, &wpa_ielen, ielen);
 	if (pwpa && wpa_ielen > 0) {
-		if (rtw_parse_wpa_ie(pwpa, wpa_ielen+2, &group_cipher, &pairwise_cipher) == _SUCCESS) {
+		if (rtw_parse_wpa_ie(pwpa, wpa_ielen+2, &group_cipher, &pairwise_cipher) == 1) {
 			padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
 			padapter->securitypriv.ndisauthtype = NDIS802_11AUTHMODEWPAPSK;
 			memcpy(padapter->securitypriv.supplicant_ie, &pwpa[0], wpa_ielen+2);
@@ -1836,7 +1836,7 @@ static int rtw_cfg80211_set_wpa_ie(struct rtw_adapter *padapter, u8 *pie, size_t
 
 	pwpa2 = rtw_get_wpa2_ie(buf, &wpa2_ielen, ielen);
 	if (pwpa2 && wpa2_ielen > 0) {
-		if (rtw_parse_wpa2_ie(pwpa2, wpa2_ielen+2, &group_cipher, &pairwise_cipher) == _SUCCESS) {
+		if (rtw_parse_wpa2_ie(pwpa2, wpa2_ielen+2, &group_cipher, &pairwise_cipher) == 1) {
 			padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
 			padapter->securitypriv.ndisauthtype = NDIS802_11AUTHMODEWPA2PSK;
 			memcpy(padapter->securitypriv.supplicant_ie, &pwpa2[0], wpa2_ielen+2);
@@ -1983,7 +1983,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		goto exit;
 	}
 
-	if (_FAIL == rtw_pwr_wakeup(padapter)) {
+	if (0 == rtw_pwr_wakeup(padapter)) {
 		ret= -EPERM;
 		goto exit;
 	}
@@ -2175,7 +2175,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 
 		memcpy(pwep->KeyMaterial,  (void *)sme->key, pwep->KeyLength);
 
-		if (rtw_set_802_11_add_wep(padapter, pwep) == (u8)_FAIL)
+		if (rtw_set_802_11_add_wep(padapter, pwep) == (u8)0)
 			ret = -EOPNOTSUPP ;
 
 		if (pwep)
@@ -2799,7 +2799,7 @@ static int rtw_add_beacon(struct rtw_adapter *adapter, const u8 *head, size_t he
 	rtw_ies_remove_ie(pbuf, &len, _BEACON_IE_OFFSET_, _VENDOR_SPECIFIC_IE_, P2P_OUI, 4);
 
 	/*  pbss_network->IEs will not include p2p_ie */
-	if (rtw_check_beacon_data(adapter, pbuf,  len) == _SUCCESS)
+	if (rtw_check_beacon_data(adapter, pbuf,  len) == 1)
 	{
 #ifdef  CONFIG_P2P
 		/* check p2p if enable */
@@ -3309,7 +3309,7 @@ void rtw_cfg80211_issue_p2p_provision_request(struct rtw_adapter *padapter, cons
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
-	if (dump_mgntframe_and_wait_ack(padapter, pmgntframe) != _SUCCESS)
+	if (dump_mgntframe_and_wait_ack(padapter, pmgntframe) != 1)
 		DBG_8192D("%s, ack to\n", __func__);
 
 }
@@ -3345,7 +3345,7 @@ static s32 cfg80211_rtw_remain_on_channel(struct wiphy *wiphy,
 
 	pcfg80211_wdinfo->is_ro_ch = true;
 
-	if (_FAIL == rtw_pwr_wakeup(padapter)) {
+	if (0 == rtw_pwr_wakeup(padapter)) {
 		err = -EFAULT;
 		goto exit;
 	}
@@ -3484,7 +3484,7 @@ static int _cfg80211_rtw_mgmt_tx(struct rtw_adapter *padapter, u8 tx_ch, const u
 	struct xmit_frame	*pmgntframe;
 	struct pkt_attrib	*pattrib;
 	unsigned char	*pframe;
-	int ret = _FAIL;
+	int ret = 0;
 	bool ack = true;
 	struct ieee80211_hdr *pwlanhdr;
 	struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(padapter->rtw_wdev);
@@ -3493,7 +3493,7 @@ static int _cfg80211_rtw_mgmt_tx(struct rtw_adapter *padapter, u8 tx_ch, const u
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 
-	if (_FAIL == rtw_pwr_wakeup(padapter)) {
+	if (0 == rtw_pwr_wakeup(padapter)) {
 		ret = -EFAULT;
 		goto exit;
 	}
@@ -3551,7 +3551,7 @@ static int _cfg80211_rtw_mgmt_tx(struct rtw_adapter *padapter, u8 tx_ch, const u
 	if ((pmgntframe = alloc_mgtxmitframe(pxmitpriv)) == NULL)
 	{
 		/* ret = -ENOMEM; */
-		ret = _FAIL;
+		ret = 0;
 		goto exit;
 	}
 
@@ -3575,11 +3575,11 @@ static int _cfg80211_rtw_mgmt_tx(struct rtw_adapter *padapter, u8 tx_ch, const u
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
-	if (dump_mgntframe_and_wait_ack(padapter, pmgntframe) != _SUCCESS) {
+	if (dump_mgntframe_and_wait_ack(padapter, pmgntframe) != 1) {
 		ack = false;
-		ret = _FAIL;
+		ret = 0;
 	} else {
-		ret = _SUCCESS;
+		ret = 1;
 	}
 
 exit:
@@ -3635,11 +3635,11 @@ dump:
 	do {
 		dump_cnt++;
 		tx_ret = _cfg80211_rtw_mgmt_tx(padapter, tx_ch, buf, len);
-	} while (dump_cnt < dump_limit && tx_ret != _SUCCESS);
+	} while (dump_cnt < dump_limit && tx_ret != 1);
 
-	if (tx_ret != _SUCCESS || dump_cnt > 1) {
+	if (tx_ret != 1 || dump_cnt > 1) {
 		DBG_8192D(FUNC_ADPT_FMT" %s (%d/%d) in %d ms\n", FUNC_ADPT_ARG(padapter),
-			tx_ret==_SUCCESS?"OK":"FAIL", dump_cnt, dump_limit, rtw_systime_to_ms(jiffies - start));
+			tx_ret==1?"OK":"FAIL", dump_cnt, dump_limit, rtw_systime_to_ms(jiffies - start));
 	}
 
 	switch (type) {

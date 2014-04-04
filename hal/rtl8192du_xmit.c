@@ -29,7 +29,7 @@ s32	rtl8192du_init_xmit_priv(struct rtw_adapter *padapter)
 	tasklet_init(&pxmitpriv->xmit_tasklet,
 	     (void(*)(unsigned long))rtl8192du_xmit_tasklet,
 	     (unsigned long)padapter);
-	return _SUCCESS;
+	return 1;
 }
 
 void	rtl8192du_free_xmit_priv(struct rtw_adapter *padapter)
@@ -425,8 +425,8 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 
 static s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 {
-	s32 ret = _SUCCESS;
-	s32 inner_ret = _SUCCESS;
+	s32 ret = 1;
+	s32 inner_ret = 1;
 	int t, sz, w_sz, pull=0;
 	u8 *mem_addr;
 	u32 ff_hwaddr;
@@ -446,8 +446,8 @@ static s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmi
 	RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_dump_xframe()\n"));
 
 	for (t = 0; t < pattrib->nr_frags; t++) {
-		if (inner_ret != _SUCCESS && ret == _SUCCESS)
-			ret = _FAIL;
+		if (inner_ret != 1 && ret == 1)
+			ret = 0;
 
 		if (t != (pattrib->nr_frags - 1)) {
 			RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("pattrib->nr_frags=%d\n", pattrib->nr_frags));
@@ -486,7 +486,7 @@ static s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmi
 
 	rtw_free_xmitframe(pxmitpriv, pxmitframe);
 
-	if  (ret != _SUCCESS)
+	if  (ret != 1)
 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_UNKNOWN);
 
 	return ret;
@@ -731,10 +731,10 @@ s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv 
 
 static s32 xmitframe_direct(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 {
-	s32 res = _SUCCESS;
+	s32 res = 1;
 
 	res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
-	if (res == _SUCCESS) {
+	if (res == 1) {
 		rtw_dump_xframe(padapter, pxmitframe);
 	}
 
@@ -780,7 +780,7 @@ static s32 pre_xmitframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitf
 	pxmitframe->buf_addr = pxmitbuf->pbuf;
 	pxmitbuf->priv_data = pxmitframe;
 
-	if (xmitframe_direct(padapter, pxmitframe) != _SUCCESS) {
+	if (xmitframe_direct(padapter, pxmitframe) != 1) {
 		rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
 	}
@@ -791,7 +791,7 @@ enqueue:
 	res = rtw_xmitframe_enqueue(padapter, pxmitframe);
 	spin_unlock_bh(&pxmitpriv->lock);
 
-	if (res != _SUCCESS) {
+	if (res != 1) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("pre_xmitframe: enqueue xmitframe fail\n"));
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
 

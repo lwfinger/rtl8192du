@@ -250,7 +250,7 @@ static void rtl8192du_interface_configure(struct rtw_adapter *padapter)
 
 static u8 _InitPowerOn(struct rtw_adapter *padapter)
 {
-	u8	ret = _SUCCESS;
+	u8	ret = 1;
 	u16	value16 = 0;
 	u8	value8 = 0;
 
@@ -258,7 +258,7 @@ static u8 _InitPowerOn(struct rtw_adapter *padapter)
 	u32	pollingCount = 0;
 
 	if (padapter->bSurpriseRemoved) {
-		return _FAIL;
+		return 0;
 	}
 
 	pollingCount = 0;
@@ -271,7 +271,7 @@ static u8 _InitPowerOn(struct rtw_adapter *padapter)
 
 		if (pollingCount++ > POLLING_READY_TIMEOUT_COUNT) {
 			/* RT_TRACE(COMP_INIT, DBG_SERIOUS, ("Failed to polling REG_APS_FSMCO[PFM_ALDN] done!\n")); */
-			return _FAIL;
+			return 0;
 		}
 
 	}while (true);
@@ -309,7 +309,7 @@ static u8 _InitPowerOn(struct rtw_adapter *padapter)
 
 		if (pollingCount++ > POLLING_READY_TIMEOUT_COUNT) {
 			/* RT_TRACE(COMP_INIT, DBG_SERIOUS, ("Failed to polling REG_APS_FSMCO[APFM_ONMAC] done!\n")); */
-			return _FAIL;
+			return 0;
 		}
 
 	}while (true);
@@ -578,7 +578,7 @@ static u8 _LLTWrite(
 	u32		data
 	)
 {
-	u8	status = _SUCCESS;
+	u8	status = 1;
 	int	count = 0;
 	u32	value = _LLT_INIT_ADDR(address) | _LLT_INIT_DATA(data) | _LLT_OP(_LLT_WRITE_ACCESS);
 
@@ -594,7 +594,7 @@ static u8 _LLTWrite(
 
 		if (count > POLLING_LLT_THRESHOLD) {
 			/* RT_TRACE(COMP_INIT, DBG_SERIOUS, ("Failed to polling write LLT done at address %d!\n", address)); */
-			status = _FAIL;
+			status = 0;
 			break;
 		}
 	}while (count++);
@@ -634,7 +634,7 @@ static u8 InitLLTTable(
 	u32		boundary
 	)
 {
-	u8		status = _SUCCESS;
+	u8		status = 1;
 	u32		i;
 	u32		txpktbuf_bndy = boundary;
 	u32		Last_Entry_Of_TxPktBuf = LAST_ENTRY_OF_TX_PKT_BUFFER;
@@ -654,14 +654,14 @@ static u8 InitLLTTable(
 
 	for (i = 0 ; i < (txpktbuf_bndy - 1) ; i++) {
 		status = _LLTWrite(adapter, i , i + 1);
-		if (_SUCCESS != status) {
+		if (1 != status) {
 			return status;
 		}
 	}
 
 	/*  end of list */
 	status = _LLTWrite(adapter, (txpktbuf_bndy - 1), 0xFF);
-	if (_SUCCESS != status) {
+	if (1 != status) {
 		return status;
 	}
 
@@ -670,14 +670,14 @@ static u8 InitLLTTable(
 	/*  Otherwise used as local loopback buffer. */
 	for (i = txpktbuf_bndy ; i < Last_Entry_Of_TxPktBuf ; i++) {
 		status = _LLTWrite(adapter, i, (i + 1));
-		if (_SUCCESS != status) {
+		if (1 != status) {
 			return status;
 		}
 	}
 
 	/*  Let last entry point to the start entry of ring buffer */
 	status = _LLTWrite(adapter, Last_Entry_Of_TxPktBuf, txpktbuf_bndy);
-	if (_SUCCESS != status) {
+	if (1 != status) {
 		return status;
 	}
 
@@ -1439,7 +1439,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 #endif
 	u8	val8 = 0, tmpU1b;
 	u16	val16;
-	u32	boundary, i = 0,  status = _SUCCESS;
+	u32	boundary, i = 0,  status = 1;
 	u32 init_start_time = jiffies;
 
 	padapter->init_adpt_in_progress = true;
@@ -1459,7 +1459,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 			if (i == 100)
 			{
 				DBG_8192D("fail to initialization due to another adapter is in halt\n");
-				return _FAIL;
+				return 0;
 			}
 		}
 	}
@@ -1467,7 +1467,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	/* RT_TRACE(COMP_INIT, DBG_LOUD, ("--->Initializeadapter8192CUsb()\n")); */
 
 	if (padapter->bSurpriseRemoved)
-		return _FAIL;
+		return 0;
 
 	/* Let the first starting mac load RF parameters and do LCK in this case, by wl */
 	if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY
@@ -1517,7 +1517,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	PHY_SetPowerOnFor8192D(padapter);
 
 	status = _InitPowerOn(padapter);
-	if (status == _FAIL) {
+	if (status == 0) {
 		RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("Failed to init power on!\n"));
 		RELEASE_GLOBAL_MUTEX(GlobalMutexForPowerAndEfuse);
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY
@@ -1537,7 +1537,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	PHY_ConfigMacCoexist_RFPage92D(padapter);
 
 	status =  InitLLTTable(padapter, boundary);
-	if (status == _FAIL) {
+	if (status == 0) {
 		RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("Failed to init power on!\n"));
 		RELEASE_GLOBAL_MUTEX(GlobalMutexForPowerAndEfuse);
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY
@@ -1549,7 +1549,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 
 	status = FirmwareDownload92D(padapter, false);
 	RELEASE_GLOBAL_MUTEX(GlobalMutexForPowerAndEfuse);
-	if (status == _FAIL) {
+	if (status == 0) {
 		padapter->bFWReady = false;
 		pHalData->fw_ractrl = false;
 		DBG_8192D("fw download fail!\n");
@@ -1581,7 +1581,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	/*  <Roger_Notes> Current Channel will be updated again later. */
 
 	status = PHY_MACConfig8192D(padapter);
-	if (status == _FAIL) {
+	if (status == 0) {
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY
 		&& ((pHalData->interfaceIndex == 0 && pHalData->BandSet92D == BAND_ON_2_4G)
 			|| (pHalData->interfaceIndex == 1 && pHalData->BandSet92D == BAND_ON_5G)))
@@ -1683,7 +1683,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	/* d. Initialize BB related configurations. */
 	/*  */
 	status = PHY_BBConfig8192D(padapter);
-	if (status == _FAIL) {
+	if (status == 0) {
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY
 		&& ((pHalData->interfaceIndex == 0 && pHalData->BandSet92D == BAND_ON_2_4G)
 			|| (pHalData->interfaceIndex == 1 && pHalData->BandSet92D == BAND_ON_5G)))
@@ -1719,7 +1719,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	PHY_SetBBReg(padapter, rFPGA0_AnalogParameter4, 0x00f00000,  0xf);
 
 	status = PHY_RFConfig8192D(padapter);
-	if (status == _FAIL)
+	if (status == 0)
 	{
 		if (pHalData->MacPhyMode92D == DUALMAC_DUALPHY
 		&& ((pHalData->interfaceIndex == 0 && pHalData->BandSet92D == BAND_ON_2_4G)
@@ -1908,7 +1908,7 @@ _DisableRF_AFE(
 	struct rtw_adapter *			adapter
 	)
 {
-	int		rtStatus = _SUCCESS;
+	int		rtStatus = 1;
 	u32			pollingCount = 0;
 	u8			value8;
 
@@ -2240,7 +2240,7 @@ CardDisableHWSM(/*  HW Auto state machine */
 	)
 {
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
-	int		rtStatus = _SUCCESS;
+	int		rtStatus = 1;
 	u8		value;
 
 	if (adapter->bSurpriseRemoved) {
@@ -2291,7 +2291,7 @@ CardDisableWithoutHWSM(/*  without HW Auto state machine */
 	)
 {
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
-	int		rtStatus = _SUCCESS;
+	int		rtStatus = 1;
 	u8		value;
 
 	if (adapter->bSurpriseRemoved) {
@@ -2363,7 +2363,7 @@ static u32 rtl8192du_hal_deinit(struct rtw_adapter *padapter)
 	if (RT_IN_PS_LEVEL(pwrpriv, RT_RF_OFF_LEVL_HALT_NIC))
 	{
 		DBG_8192D("Haltadapter8192DUsb(): Not to haltadapter if HW already halt\n");
-		return _FAIL;
+		return 0;
 	}
 
 	padapter->bHaltInProgress = true;
@@ -2397,7 +2397,7 @@ static u32 rtl8192du_hal_deinit(struct rtw_adapter *padapter)
 
 	padapter->bHaltInProgress = false;
 
-	return _SUCCESS;
+	return 1;
  }
 
 static unsigned int rtl8192du_inirp_init(struct rtw_adapter *padapter)
@@ -2411,7 +2411,7 @@ static unsigned int rtl8192du_inirp_init(struct rtw_adapter *padapter)
 
 	_read_port = pintfhdl->io_ops._read_port;
 
-	status = _SUCCESS;
+	status = 1;
 
 	RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("===> usb_inirp_init\n"));
 
@@ -2424,7 +2424,7 @@ static unsigned int rtl8192du_inirp_init(struct rtw_adapter *padapter)
 		if (_read_port(pintfhdl, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf) == false)
 		{
 			RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("usb_rx_init: usb_read_port error\n"));
-			status = _FAIL;
+			status = 0;
 			goto exit;
 		}
 
@@ -2446,7 +2446,7 @@ static unsigned int rtl8192du_inirp_deinit(struct rtw_adapter *padapter)
 
 	RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("\n <=== usb_rx_deinit\n"));
 
-	return _SUCCESS;
+	return 1;
 }
 
 /*  */
@@ -2832,7 +2832,7 @@ static int _ReadadapterInfo8192DU(struct rtw_adapter *	adapter)
 	/* For 92DU Phy and Mac mode set , will initialize by EFUSE/EPPROM     zhiyuan 2010/03/25 */
 	DBG_8192D("<==== %s in %d ms\n", __func__, rtw_systime_to_ms(jiffies - start));
 
-	return _SUCCESS;
+	return 1;
 }
 
 static void ReadadapterInfo8192DU(struct rtw_adapter *adapter)
@@ -3611,7 +3611,7 @@ static void SetHwReg8192DU(struct rtw_adapter *adapter, u8 variable, u8 *val)
 				rtw_write8(adapter, MSR, val8);
 			}
 			break;
-		case HW_VAR_MEDIA_STATUS1:
+		case HW_VAR_MEDIA_STATUS_SUCCESS:
 			{
 				u8 val8;
 

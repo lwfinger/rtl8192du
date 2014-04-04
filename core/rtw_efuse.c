@@ -396,18 +396,18 @@ u8 rtw_efuse_access(struct rtw_adapter *padapter, u8 write, u16 start_addr, u16 
 {
 	int i = 0;
 	u16 real_content_len = 0, max_available_size = 0;
-	u8 res = _FAIL;
+	u8 res = 0;
 	u8 (*rw8)(struct rtw_adapter *, u16, u8*);
 
 	EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_REAL_CONTENT_LEN, (void *)&real_content_len, false);
 	EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 
 	if (start_addr > real_content_len)
-		return _FAIL;
+		return 0;
 
 	if (true == write) {
 		if ((start_addr + cnts) > max_available_size)
-			return _FAIL;
+			return 0;
 		rw8 = &efuse_write8;
 	} else {
 		rw8 = &efuse_read8;
@@ -418,12 +418,12 @@ u8 rtw_efuse_access(struct rtw_adapter *padapter, u8 write, u16 start_addr, u16 
 	/*  e-fuse one byte read / write */
 	for (i = 0; i < cnts; i++) {
 		if (start_addr >= real_content_len) {
-			res = _FAIL;
+			res = 0;
 			break;
 		}
 
 		res = rw8(padapter, start_addr++, data++);
-		if (_FAIL == res)
+		if (0 == res)
 			break;
 	}
 
@@ -445,7 +445,7 @@ u8 efuse_GetCurrentSize(struct rtw_adapter *padapter, u16 *size)
 	*size = Efuse_GetCurrentSize(padapter, EFUSE_WIFI, false);
 	Efuse_PowerSwitch(padapter, false, false);
 
-	return _SUCCESS;
+	return 1;
 }
 
 u8 rtw_efuse_map_read(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *data)
@@ -455,7 +455,7 @@ u8 rtw_efuse_map_read(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *data
 	EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&maplen, false);
 
 	if ((addr + cnts) > maplen)
-		return _FAIL;
+		return 0;
 
 	Efuse_PowerSwitch(padapter, false, true);
 
@@ -463,7 +463,7 @@ u8 rtw_efuse_map_read(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *data
 
 	Efuse_PowerSwitch(padapter, false, false);
 
-	return _SUCCESS;
+	return 1;
 }
 
 u8 rtw_efuse_map_write(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *data)
@@ -472,20 +472,20 @@ u8 rtw_efuse_map_write(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *dat
 	u8 *map;
 	u8 newdata[PGPKT_DATA_SIZE + 1];
 	s32	i, idx;
-	u8 ret = _SUCCESS;
+	u8 ret = 1;
 	u16 maplen = 0;
 
 	EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&maplen, false);
 
 	if ((addr + cnts) > maplen)
-		return _FAIL;
+		return 0;
 
 	map = kzalloc(maplen, GFP_KERNEL);
 	if (map == NULL)
-		return _FAIL;
+		return 0;
 
 	ret = rtw_efuse_map_read(padapter, 0, maplen, map);
-	if (ret == _FAIL)
+	if (ret == 0)
 		goto exit;
 
 	Efuse_PowerSwitch(padapter, true, true);
@@ -538,7 +538,7 @@ u8 rtw_efuse_map_write(struct rtw_adapter *padapter, u16 addr, u16 cnts, u8 *dat
 
 			for (i = 0; i < PGPKT_DATA_SIZE; i++)
 				DBG_8192D("data =%x \t", newdata[i]);
-			if (ret == _FAIL)
+			if (ret == 0)
 				break;
 		}
 

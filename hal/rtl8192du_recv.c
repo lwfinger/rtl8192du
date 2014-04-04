@@ -45,7 +45,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 {
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 	struct sk_buff *pskb=NULL;
-	int	i, res = _SUCCESS;
+	int	i, res = 1;
 	struct recv_buf *precvbuf;
 	SIZE_PTR tmpaddr=0;
 	SIZE_PTR alignment=0;
@@ -59,7 +59,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 
 	precvpriv->pallocated_recv_buf = kzalloc(NR_RECVBUFF *sizeof(struct recv_buf) + 4, GFP_KERNEL);
 	if (precvpriv->pallocated_recv_buf==NULL) {
-		res= _FAIL;
+		res= 0;
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("alloc recv_buf fail!\n"));
 		goto exit;
 	}
@@ -76,7 +76,7 @@ int	rtl8192du_init_recv_priv(struct rtw_adapter *padapter)
 		precvbuf->alloc_sz = MAX_RECVBUF_SZ;
 
 		res = rtw_os_recvbuf_resource_alloc(padapter, precvbuf);
-		if (res==_FAIL)
+		if (res==0)
 			break;
 
 		precvbuf->ref_cnt = 0;

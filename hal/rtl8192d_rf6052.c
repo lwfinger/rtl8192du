@@ -548,7 +548,7 @@ phy_RF6052_Config_ParaFile(
 	u32	u4RegValue=0;
 	u8	eRFPath;
 	struct bb_register_def *pPhyReg;
-	int	rtStatus = _SUCCESS;
+	int	rtStatus = 1;
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	bool		bMac1NeedInitRadioAFirst = false,bMac0NeedInitRadioBFirst = false;
@@ -671,7 +671,7 @@ phy_RF6052_Config_ParaFile(
 				break;
 		}
 
-		if (rtStatus != _SUCCESS) {
+		if (rtStatus != 1) {
 			goto phy_RF6052_Config_ParaFile_Fail;
 		}
 
@@ -702,7 +702,7 @@ PHY_RF6052_Config8192D(
 	struct rtw_adapter *		adapter)
 {
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	int rtStatus = _SUCCESS;
+	int rtStatus = 1;
 
 	/*  */
 	/*  Initialize general global value */

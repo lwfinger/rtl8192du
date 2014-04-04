@@ -19,8 +19,6 @@
 #include <autoconf.h>
 #include <basic_types.h>
 
-#define _FAIL		0
-#define _SUCCESS	1
 #define RTW_RX_HANDLED 2
 
 #include <linux/spinlock.h>

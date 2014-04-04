@@ -281,11 +281,11 @@ u8 *rtw_get_ie_ex(u8 *in_ie, uint in_len, u8 eid, u8 *oui, u8 oui_len,
  * @oui: OUI to match
  * @oui_len: OUI length
  *
- * Returns: _SUCCESS: ies is updated, _FAIL: not updated
+ * Returns: 1: ies is updated, 0: not updated
  */
 int rtw_ies_remove_ie(u8 *ies, uint *ies_len, uint offset, u8 eid, u8 *oui, u8 oui_len)
 {
-	int ret = _FAIL;
+	int ret = 0;
 	u8 *target_ie;
 	u32 target_ielen;
 	u8 *start;
@@ -307,7 +307,7 @@ int rtw_ies_remove_ie(u8 *ies, uint *ies_len, uint offset, u8 eid, u8 *oui, u8 o
 			memcpy(buf, remain_ies, remain_len);
 			memcpy(target_ie, buf, remain_len);
 			*ies_len = *ies_len - target_ielen;
-			ret = _SUCCESS;
+			ret = 1;
 
 			start = target_ie;
 			search_len = remain_len;
@@ -424,7 +424,7 @@ int rtw_generate_ie(struct registry_priv *pregistrypriv)
 	if (rate_len > 8)
 		ie = rtw_set_ie(ie, _EXT_SUPPORTEDRATES_IE_, (rate_len - 8), (pdev_network->SupportedRates + 8), &sz);
 
-	/* return _SUCCESS; */
+	/* return 1; */
 	return sz;
 }
 
@@ -513,18 +513,18 @@ int rtw_get_wpa2_cipher_suite(u8 *s)
 
 int rtw_parse_wpa_ie(u8 *wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwise_cipher)
 {
-	int i, ret = _SUCCESS;
+	int i, ret = 1;
 	int left, count;
 	u8 *pos;
 
 	if (wpa_ie_len <= 0) {
 		/* No WPA IE - fail silently */
-		return _FAIL;
+		return 0;
 	}
 
 	if ((*wpa_ie != _WPA_IE_ID_) || (*(wpa_ie+1) != (u8)(wpa_ie_len - 2)) ||
 	    (memcmp(wpa_ie+2, RTW_WPA_OUI_TYPE, WPA_SELECTOR_LEN)))
-		return _FAIL;
+		return 0;
 
 	pos = wpa_ie;
 
@@ -541,7 +541,7 @@ int rtw_parse_wpa_ie(u8 *wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 	} else if (left > 0) {
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("%s: ie length mismatch, %u too much", __func__, left));
 
-		return _FAIL;
+		return 0;
 	}
 
 	/* pairwise_cipher */
@@ -555,7 +555,7 @@ int rtw_parse_wpa_ie(u8 *wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 			RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_,
 				 ("%s: ie count botch (pairwise), count %u left %u",
 				 __func__, count, left));
-			return _FAIL;
+			return 0;
 		}
 
 		for (i = 0; i < count; i++) {
@@ -567,7 +567,7 @@ int rtw_parse_wpa_ie(u8 *wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 
 	} else if (left == 1) {
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("%s: ie too short (for key mgmt)",   __func__));
-		return _FAIL;
+		return 0;
 	}
 
 	return ret;
@@ -575,18 +575,18 @@ int rtw_parse_wpa_ie(u8 *wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 
 int rtw_parse_wpa2_ie(u8 *rsn_ie, int rsn_ie_len, int *group_cipher, int *pairwise_cipher)
 {
-	int i, ret = _SUCCESS;
+	int i, ret = 1;
 	int left, count;
 	u8 *pos;
 
 	if (rsn_ie_len <= 0) {
 		/* No RSN IE - fail silently */
-		return _FAIL;
+		return 0;
 	}
 
 	if ((*rsn_ie != _WPA2_IE_ID_) ||
 	    (*(rsn_ie+1) != (u8)(rsn_ie_len - 2)))
-		return _FAIL;
+		return 0;
 
 	pos = rsn_ie;
 	pos += 4;
@@ -601,7 +601,7 @@ int rtw_parse_wpa2_ie(u8 *rsn_ie, int rsn_ie_len, int *group_cipher, int *pairwi
 
 	} else if (left > 0) {
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("%s: ie length mismatch, %u too much", __func__, left));
-		return _FAIL;
+		return 0;
 	}
 
 	/* pairwise_cipher */
@@ -613,7 +613,7 @@ int rtw_parse_wpa2_ie(u8 *rsn_ie, int rsn_ie_len, int *group_cipher, int *pairwi
 		if (count == 0 || left < count * RSN_SELECTOR_LEN) {
 			RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("%s: ie count botch (pairwise), "
 						 "count %u left %u", __func__, count, left));
-			return _FAIL;
+			return 0;
 		}
 
 		for (i = 0; i < count; i++) {
@@ -626,7 +626,7 @@ int rtw_parse_wpa2_ie(u8 *rsn_ie, int rsn_ie_len, int *group_cipher, int *pairwi
 	} else if (left == 1) {
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("%s: ie too short (for key mgmt)",  __func__));
 
-		return _FAIL;
+		return 0;
 	}
 
 	return ret;

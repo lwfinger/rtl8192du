@@ -321,7 +321,7 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 
 static s32 pre_recv_entry(struct recv_frame_hdr *precvframe, struct recv_stat *prxstat, struct phy_stat *pphy_info)
 {
-	s32 ret=_SUCCESS;
+	s32 ret=1;
 #ifdef CONFIG_CONCURRENT_MODE
 	u8 *primary_myid, *secondary_myid, *paddr1;
 	struct recv_frame_hdr	*precvframe_if2 = NULL;
@@ -558,17 +558,17 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 		}
 #ifdef CONFIG_CONCURRENT_MODE
 		if (rtw_buddy_adapter_up(padapter)) {
-			if (pre_recv_entry(precvframe, prxstat, pphy_info) != _SUCCESS)
-				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: recv_entry(precvframe) != _SUCCESS\n"));
+			if (pre_recv_entry(precvframe, prxstat, pphy_info) != 1)
+				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: recv_entry(precvframe) != 1\n"));
 		} else {
 			rtl8192d_translate_rx_signal_stuff(precvframe, pphy_info);
-			if (rtw_recv_entry(precvframe) != _SUCCESS)
-				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: rtw_recv_entry(precvframe) != _SUCCESS\n"));
+			if (rtw_recv_entry(precvframe) != 1)
+				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: rtw_recv_entry(precvframe) != 1\n"));
 		}
 #else
 		rtl8192d_translate_rx_signal_stuff(precvframe, pphy_info);
-		if (rtw_recv_entry(precvframe) != _SUCCESS)
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: rtw_recv_entry(precvframe) != _SUCCESS\n"));
+		if (rtw_recv_entry(precvframe) != 1)
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: rtw_recv_entry(precvframe) != 1\n"));
 #endif /* CONFIG_CONCURRENT_MODE */
 		pkt_cnt--;
 
@@ -584,7 +584,7 @@ static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 
 _exit_recvbuf2recvframe:
 
-	return _SUCCESS;
+	return 1;
 }
 
 void rtl8192du_recv_tasklet(void *priv)
@@ -687,7 +687,7 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 	int err, pipe;
 	SIZE_PTR tmpaddr=0;
 	SIZE_PTR alignment=0;
-	u32 ret = _SUCCESS;
+	u32 ret = 1;
 	struct urb *purb = NULL;
 	struct recv_buf	*precvbuf = (struct recv_buf *)rmem;
 	struct rtw_adapter *adapter = pintfhdl->padapter;
@@ -699,12 +699,12 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 	    adapter->pwrctrlpriv.pnp_bstop_trx) {
 		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
 			 ("usb_read_port:(padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
-		return _FAIL;
+		return 0;
 	}
 
 	if (!precvbuf) {
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port:precvbuf ==NULL\n"));
-		return _FAIL;
+		return 0;
 	}
 	if ((precvbuf->reuse == false) || (precvbuf->pskb == NULL)) {
 		if (NULL != (precvbuf->pskb = skb_dequeue(&precvpriv->free_recv_skb_queue)))
@@ -718,7 +718,7 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 			precvbuf->pskb = netdev_alloc_skb(adapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 			if (precvbuf->pskb == NULL) {
 				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("init_recvbuf(): alloc_skb fail!\n"));
-				return _FAIL;
+				return 0;
 			}
 
 			tmpaddr = (SIZE_PTR)precvbuf->pskb->data;
@@ -759,7 +759,7 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 		if ((err) && (err != (-EPERM))) {
 			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("cannot submit rx in-token(err=0x%.8x), URB_STATUS =0x%.8x", err, purb->status));
 			DBG_8192D("cannot submit rx in-token(err = 0x%08x),urb_status = %d\n",err,purb->status);
-			ret = _FAIL;
+			ret = 0;
 		}
 	}
 

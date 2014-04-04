@@ -74,7 +74,7 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 
 	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||
 	    (padapter->pwrctrlpriv.pnp_bstop_trx))
-		return _FAIL;
+		return 0;
 
 	pcontext = (struct zero_bulkout_context *)kzalloc(sizeof(struct zero_bulkout_context), GFP_KERNEL);
 
@@ -95,9 +95,9 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	status = usb_submit_urb(purb, GFP_ATOMIC);
 
 	if (!status)
-		ret= _SUCCESS;
+		ret= 1;
 	else
-		ret= _FAIL;
+		ret= 0;
 
 	return ret;
 }
@@ -224,7 +224,7 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	long unsigned int irqL;
 	unsigned int pipe;
 	int status;
-	u32 ret = _FAIL, bwritezero = false;
+	u32 ret = 0, bwritezero = false;
 	struct urb *purb = NULL;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)pintfhdl->padapter;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(padapter);
@@ -299,11 +299,11 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 		}
 		goto exit;
 	}
-	ret= _SUCCESS;
+	ret= 1;
 	RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("-usb_write_port\n"));
 
 exit:
-	if (ret != _SUCCESS)
+	if (ret != 1)
 		rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
 
 	return ret;

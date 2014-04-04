@@ -285,7 +285,7 @@ static u8 rtl8192d_h2c_msg_hdl(struct rtw_adapter *padapter, unsigned char *pbuf
 u8 rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg)
 {
 	u8	buf[5];
-	u8	res=_SUCCESS;
+	u8	res=1;
 	__le32	le_mask;
 
 	memset(buf, 0, 5);
@@ -824,7 +824,7 @@ void rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus)
 static u8 rtl8192d_reset_tsf(struct rtw_adapter *padapter, u8 reset_port)
 {
 	u8	buf[2];
-	u8	res=_SUCCESS;
+	u8	res=1;
 
 	if (IFACE_PORT0==reset_port) {
 		buf[0] = 0x1; buf[1] = 0;
@@ -853,7 +853,7 @@ int reset_tsf(struct rtw_adapter * adapter, u8 reset_port)
 		reset_cnt_after = rtw_read8(adapter, reg_reset_tsf_cnt);
 	}
 
-	return(loop_cnt >= 10) ? _FAIL : true;
+	return(loop_cnt >= 10) ? 0 : true;
 }
 
 #endif	/*  CONFIG_CONCURRENT_MODE */
@@ -862,7 +862,7 @@ int reset_tsf(struct rtw_adapter * adapter, u8 reset_port)
 
 void rtl8192d_set_wowlan_cmd(struct rtw_adapter* padapter)
 {
-	u8	res=_SUCCESS;
+	u8	res=1;
 	u32 test=0;
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 

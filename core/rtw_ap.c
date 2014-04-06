@@ -24,7 +24,6 @@
 
 void init_mlme_ap_info(struct rtw_adapter *padapter)
 {
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
@@ -179,8 +178,8 @@ void rtw_add_bcn_ie(struct rtw_adapter *padapter,
 	struct ndis_802_11_variable_ies *pIE;
 	u8 bmatch = false;
 	u8 *pie = pnetwork->IEs;
-	u8 *p, *dst_ie, *premainder_ie = NULL, *pbackup_remainder_ie = NULL;
-	u32 i, offset, ielen, ie_offset, remainder_ielen = 0;
+	u8 *p = NULL, *dst_ie = NULL, *premainder_ie = NULL, *pbackup_remainder_ie = NULL;
+	u32 i, offset, ielen = 0, ie_offset, remainder_ielen = 0;
 
 	for (i = sizeof(struct ndis_802_11_fixed_ies);
 	     i < pnetwork->IELength;) {
@@ -241,7 +240,7 @@ void rtw_add_bcn_ie(struct rtw_adapter *padapter,
 
 void rtw_remove_bcn_ie(struct rtw_adapter *padapter, struct wlan_bssid_ex *pnetwork, u8 index)
 {
-	u8 *p, *dst_ie, *premainder_ie = NULL, *pbackup_remainder_ie = NULL;
+	u8 *p, *dst_ie = NULL, *premainder_ie = NULL, *pbackup_remainder_ie = NULL;
 	uint offset, ielen, ie_offset, remainder_ielen = 0;
 	u8	*pie = pnetwork->IEs;
 
@@ -295,7 +294,7 @@ static u8 chk_sta_is_alive(struct sta_info *psta)
 void	expire_timeout_chk(struct rtw_adapter *padapter)
 {
 	struct list_head *phead, *plist;
-	u8 updated;
+	u8 updated = 0;
 	struct sta_info *psta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	u8 chk_alive_num = 0;
@@ -717,7 +716,6 @@ static void update_hw_ht_param(struct rtw_adapter *padapter)
 {
 	unsigned char		max_AMPDU_len;
 	unsigned char		min_MPDU_spacing;
-	struct registry_priv	 *pregpriv = &padapter->registrypriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -764,7 +762,6 @@ static void start_bss_network(struct rtw_adapter *padapter, u8 *pbuf)
 	u32	acparm;
 	int	ie_len;
 	u8 cbw40_enable = 0;
-	u8 change_band = false;
 
 	bcn_interval = (u16)pnetwork->Configuration.BeaconPeriod;
 	cur_channel = pnetwork->Configuration.DSConfig;
@@ -1058,13 +1055,11 @@ int rtw_check_beacon_data(struct rtw_adapter *padapter, u8 *pbuf,  int len)
 	u8 channel, network_type, supportrate[NDIS_802_11_LENGTH_RATES_EX];
 	int supportratenum = 0;
 	u8 OUI1[] = {0x00, 0x50, 0xf2, 0x01};
-	u8 wps_oui[4] = {0x0, 0x50, 0xf2, 0x04};
 	u8 WMM_PARA_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x01, 0x01};
 	struct registry_priv *pregistrypriv = &padapter->registrypriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct wlan_bssid_ex *pbss_network = &pmlmepriv->cur_network.network;
-	struct sta_priv *pstapriv = &padapter->stapriv;
 	u8 *ie = pbss_network->IEs;
 
 	/* SSID
@@ -1410,7 +1405,7 @@ int rtw_acl_add_sta(struct rtw_adapter *padapter, u8 *addr)
 int rtw_acl_remove_sta(struct rtw_adapter *padapter, u8 *addr)
 {
 	struct list_head *plist, *phead;
-	int i, ret = 0;
+	int ret = 0;
 	struct rtw_wlan_acl_node *paclnode;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
@@ -1479,11 +1474,6 @@ static void update_bcn_erpinfo_ie(struct rtw_adapter *padapter)
 
 		ERP_IE_handler(padapter, pIE);
 	}
-}
-
-static void update_bcn_wmm_ie(struct rtw_adapter *padapter)
-{
-	DBG_8192D("%s\n", __func__);
 }
 
 static void update_bcn_wps_ie(struct rtw_adapter *padapter)
@@ -1905,8 +1895,6 @@ u8 ap_free_sta(struct rtw_adapter *padapter, struct sta_info *psta,
 	       bool active, u16 reason)
 {
 	u8 beacon_updated = false;
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
 	if (!psta)

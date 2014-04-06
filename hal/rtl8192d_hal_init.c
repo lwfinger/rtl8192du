@@ -1802,7 +1802,6 @@ static s32 c2h_id_filter_ccx_8192d(u8 id)
 static s32 c2h_handler_8192d(struct rtw_adapter *padapter, struct c2h_evt_hdr *c2h_evt)
 {
 	s32 ret = 1;
-	u8 i = 0;
 
 	if (c2h_evt == NULL) {
 		DBG_8192D("%s c2h_evt is NULL\n", __func__);

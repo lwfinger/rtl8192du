@@ -25,7 +25,7 @@
 
 #define CONFIG_92D_AP_MODE 1
 
-//#define CONFIG_P2P	1
+#define CONFIG_P2P	1
 
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable,*/
 

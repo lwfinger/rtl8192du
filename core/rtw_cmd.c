@@ -1048,8 +1048,6 @@ u8 rtw_clearstakey_cmd(struct rtw_adapter *padapter, u8 *psta, u8 entry, u8 enqu
 	struct set_stakey_parm *psetstakey_para;
 	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
 	struct set_stakey_rsp *psetstakey_rsp = NULL;
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct sta_info *sta = (struct sta_info *)psta;
 	u8 res = 1;
 
@@ -1429,9 +1427,7 @@ u8 rtw_set_csa_cmd(struct rtw_adapter *padapter, u8 new_ch_no)
 {
 	struct cmd_obj *pcmdobj;
 	struct setchannelswitch_param *setchannelswitch_param;
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct cmd_priv   *pcmdpriv = &padapter->cmdpriv;
-
 	u8 res = 1;
 
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_set_csa_cmd\n"));
@@ -1463,14 +1459,7 @@ exit:
 
 u8 rtw_tdls_cmd(struct rtw_adapter *padapter, u8 *addr, u8 option)
 {
-	struct cmd_obj *pcmdobj;
-	struct TDLSoption_param	*TDLSoption;
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	struct cmd_priv   *pcmdpriv = &padapter->cmdpriv;
-
-	u8 res = 1;
-
-	return res;
+	return 1;
 }
 
 static void traffic_status_watchdog(struct rtw_adapter *padapter)

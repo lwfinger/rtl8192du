@@ -26,7 +26,20 @@
 #include <usb_osintf.h>
 #include <linux/vmalloc.h>
 
+static u8 SNAP_ETH_TYPE_IPX[2] = {0x81, 0x37};
+
+static u8 SNAP_ETH_TYPE_APPLETALK_AARP[2] = {0x80, 0xf3};
+
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS);
+
+static u8 rtw_rfc1042_header[] = {
+	0xaa, 0xaa, 0x03, 0x00, 0x00, 0x00
+};
+
+/* Bridge-Tunnel header (for EtherTypes ETH_P_AARP and ETH_P_IPX) */
+static u8 rtw_bridge_tunnel_header[] = {
+	0xaa, 0xaa, 0x03, 0x00, 0x00, 0xf8
+};
 
 void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
 {
@@ -2206,8 +2219,6 @@ static int recv_func_prehandle(struct rtw_adapter *padapter,
 			       struct recv_frame_hdr *rframe)
 {
 	int ret = 1;
-	struct rx_pkt_attrib *pattrib = &rframe->attrib;
-	struct recv_priv *precvpriv = &padapter->recvpriv;
 	struct __queue *pfree_recv_queue = &padapter->recvpriv.free_recv_queue;
 
 	/* check the frame crtl field and decache */
@@ -2229,7 +2240,6 @@ static int recv_func_posthandle(struct rtw_adapter *padapter,
 {
 	int ret = 1;
 	struct recv_frame_hdr *orig_prframe = prframe;
-	struct rx_pkt_attrib *pattrib = &prframe->attrib;
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 	struct __queue *pfree_recv_queue = &padapter->recvpriv.free_recv_queue;
 
@@ -2266,8 +2276,6 @@ static int recv_func_posthandle(struct rtw_adapter *padapter,
 		rtw_free_recvframe(orig_prframe, pfree_recv_queue);	/* free this recv_frame */
 		goto _recv_data_drop;
 	}
-
-_exit_recv_func:
 	return ret;
 
 _recv_data_drop:
@@ -2280,7 +2288,6 @@ static int recv_func(struct rtw_adapter *padapter,
 {
 	int ret;
 	struct rx_pkt_attrib *prxattrib = &rframe->attrib;
-	struct recv_priv *recvpriv = &padapter->recvpriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
 

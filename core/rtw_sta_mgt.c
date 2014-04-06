@@ -182,10 +182,6 @@ static void rtw_mfree_all_stainfo(struct sta_priv *pstapriv)
 
 static void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
 {
-#ifdef CONFIG_92D_AP_MODE
-	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
-#endif
-
 	 rtw_mfree_all_stainfo(pstapriv); /* be done before free sta_hash_lock */
 }
 

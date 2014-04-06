@@ -64,9 +64,6 @@ struct rf_shadow_compare_map {
 /*------------------------Define global variable-----------------------------*/
 
 /*------------------------Define local variable------------------------------*/
-/*  2008/11/20 MH For Debug only, RF */
-static	struct rf_shadow_compare_map RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
-/*------------------------Define local variable------------------------------*/
 
 /*-----------------------------------------------------------------------------
  * Function:    PHY_RF6052SetBandwidth()

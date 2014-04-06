@@ -382,8 +382,6 @@ static const struct net_device_ops rtw_netdev_ops = {
 
 int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 {
-	struct rtw_adapter *padapter = rtw_netdev_priv(pnetdev);
-
 	if (dev_alloc_name(pnetdev, ifname) < 0)
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("dev_alloc_name, fail!\n"));
 
@@ -1176,8 +1174,6 @@ void rtw_ips_pwr_down(struct rtw_adapter *padapter)
 
 void rtw_ips_dev_unload(struct rtw_adapter *padapter)
 {
-	struct net_device *pnetdev = (struct net_device*)padapter->pnetdev;
-	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	DBG_8192D("====> %s...\n", __func__);
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_FIFO_CLEARN_UP, NULL);

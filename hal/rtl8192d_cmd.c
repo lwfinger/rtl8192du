@@ -25,23 +25,6 @@
 #include <rtl8192d_hal.h>
 
 static bool
-CheckWriteH2C(
-	struct rtw_adapter *		adapter,
-	u8		BoxNum
-)
-{
-	u8	valHMETFR;
-	bool	Result = false;
-
-	valHMETFR = rtw_read8(adapter, REG_HMETFR);
-
-	if (((valHMETFR>>BoxNum)&BIT0) == 1)
-		Result = true;
-
-	return Result;
-}
-
-static bool
 CheckFwReadLastH2C(
 	struct rtw_adapter *		adapter,
 	u8		BoxNum
@@ -263,25 +246,6 @@ FillH2CCmd92D(
 	return;
 }
 
-static u8 rtl8192d_h2c_msg_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
-{
-	u8 ElementID, CmdLen;
-	u8 *pCmdBuffer;
-	struct cmd_msg_parm  *pcmdmsg;
-
-	if (!pbuf)
-		return H2C_PARAMETERS_ERROR;
-
-	pcmdmsg = (struct cmd_msg_parm*)pbuf;
-	ElementID = pcmdmsg->eid;
-	CmdLen = pcmdmsg->sz;
-	pCmdBuffer = pcmdmsg->buf;
-
-	FillH2CCmd92D(padapter, ElementID, CmdLen, pCmdBuffer);
-
-	return H2C_SUCCESS;
-}
-
 u8 rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg)
 {
 	u8	buf[5];
@@ -341,7 +305,6 @@ void rtl8192d_set_FwPwrMode_cmd(struct rtw_adapter*padapter, u8 Mode)
 	SET_H2CCMD_PWRMODE_PARM_BCN_PASS_TIME(u1H2CSetPwrMode, beacon_interval);
 
 	FillH2CCmd92D(padapter, H2C_SETPWRMODE, 3, u1H2CSetPwrMode);
-
 }
 
 static void ConstructBeacon(struct rtw_adapter *padapter, u8 *pframe, u32 *pLength)
@@ -624,7 +587,7 @@ static void SetFwRsvdPagePkt(struct rtw_adapter * adapter, bool dl_finish)
 	struct xmit_priv	*pxmitpriv = &(adapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	u32	BeaconLength, ProbeRspLength, PSPollLength, NullFunctionDataLength;
+	u32	BeaconLength = 0, ProbeRspLength = 0, PSPollLength, NullFunctionDataLength;
 	u8	*reservedpagepacket;
 	u8	PageNum=0, U1bTmp, TxDescLen=0, TxDescOffset=0;
 	u16	BufIndex=0;
@@ -653,8 +616,6 @@ static void SetFwRsvdPagePkt(struct rtw_adapter * adapter, bool dl_finish)
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_,
 		"SetFwRsvdPagePkt(): HW_VAR_SET_TX_CMD: BCN\n",
 		&reservedpagepacket[BufIndex], (BeaconLength+BufIndex));
-
-/*  */
 
 	/*  When we count the first page size, we need to reserve description size for the RSVD */
 	/*  packet, it will be filled in front of the packet in TXPKTBUF. */

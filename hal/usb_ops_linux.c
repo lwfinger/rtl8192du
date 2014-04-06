@@ -28,10 +28,8 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	struct rtw_adapter *padapter = pintfhdl->padapter ;
 	struct dvobj_priv  *pdvobjpriv = adapter_to_dvobj(padapter);
 	struct usb_device *udev = pdvobjpriv->pusbdev;
-
 	unsigned int pipe;
 	int status = 0;
-	u32 tmp_buflen=0;
 	u8 reqtype;
 	u8 *pIo_buf;
 	int vendorreq_times = 0;
@@ -132,7 +130,6 @@ exit:
 static void usb_read_reg_rf_byfw(struct intf_hdl *pintfhdl, u16 byteCount, u32 registerIndex, void *buffer)
 {
 	u16	wPage = 0x0000, offset;
-	u32	BufferLengthRead;
 	struct rtw_adapter *	adapter = pintfhdl->padapter;
 	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	u8	RFPath=0,nPHY=0;
@@ -319,121 +316,6 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 	return ret;
 }
 
-static s32 pre_recv_entry(struct recv_frame_hdr *precvframe, struct recv_stat *prxstat, struct phy_stat *pphy_info)
-{
-	s32 ret=1;
-#ifdef CONFIG_CONCURRENT_MODE
-	u8 *primary_myid, *secondary_myid, *paddr1;
-	struct recv_frame_hdr	*precvframe_if2 = NULL;
-	struct rtw_adapter *primary_padapter = precvframe->adapter;
-	struct rtw_adapter *secondary_padapter = primary_padapter->pbuddy_adapter;
-	struct recv_priv *precvpriv = &primary_padapter->recvpriv;
-	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
-	u8	*pbuf = precvframe->rx_data;
-
-	if (!secondary_padapter)
-		return ret;
-
-	paddr1 = GetAddr1Ptr(precvframe->rx_data);
-
-	if (IS_MCAST(paddr1) == false)/* unicast packets */
-	{
-		secondary_myid = myid(&secondary_padapter->eeprompriv);
-
-		if (!memcmp(paddr1, secondary_myid, ETH_ALEN))
-		{
-			/* change to secondary interface */
-			precvframe->adapter = secondary_padapter;
-		}
-
-	}
-	else /*  Handle BC/MC Packets */
-	{
-		u8 clone = true;
-
-		if (true == clone)
-		{
-			/* clone/copy to if2 */
-			u8 shift_sz = 0;
-			u32 alloc_sz, skb_len;
-			struct sk_buff *pkt_copy = NULL;
-			struct rx_pkt_attrib *pattrib = NULL;
-
-			precvframe_if2 = rtw_alloc_recvframe(pfree_recv_queue);
-			if (precvframe_if2)
-			{
-				precvframe_if2->adapter = secondary_padapter;
-
-				INIT_LIST_HEAD(&precvframe_if2->list);
-				precvframe_if2->precvbuf = NULL;	/* can't access the precvbuf for new arch. */
-				precvframe_if2->len=0;
-
-				memcpy(&precvframe_if2->attrib, &precvframe->attrib, sizeof(struct rx_pkt_attrib));
-
-				pattrib = &precvframe_if2->attrib;
-
-				/*	Modified by Albert 20101213 */
-				/*	For 8 bytes IP header alignment. */
-				if (pattrib->qos)	/*	Qos data, wireless lan header length is 26 */
-				{
-					shift_sz = 6;
-				}
-				else
-				{
-					shift_sz = 0;
-				}
-
-				skb_len = pattrib->pkt_len;
-
-				/*  for first fragment packet, driver need allocate 1536+drvinfo_sz+RXDESC_SIZE to defrag packet. */
-				/*  modify alloc_sz for recvive crc error packet by thomas 2011-06-02 */
-				if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0)) {
-					if (skb_len <= 1650)
-						alloc_sz = 1664;
-					else
-						alloc_sz = skb_len + 14;
-				}
-				else {
-					alloc_sz = skb_len;
-					/*	6 is for IP header 8 bytes alignment in QoS packet case. */
-					/*	8 is for skb->data 4 bytes alignment. */
-					alloc_sz += 14;
-				}
-
-				pkt_copy = netdev_alloc_skb(secondary_padapter->pnetdev, alloc_sz);
-				if (pkt_copy) {
-					pkt_copy->dev = secondary_padapter->pnetdev;
-					precvframe_if2->pkt = pkt_copy;
-					precvframe_if2->rx_head = pkt_copy->data;
-					precvframe_if2->rx_end = pkt_copy->data + alloc_sz;
-					skb_reserve(pkt_copy, 8 - ((SIZE_PTR)(pkt_copy->data) & 7));/* force pkt_copy->data at 8-byte alignment address */
-					skb_reserve(pkt_copy, shift_sz);/* force ip_hdr at 8-byte alignment address according to shift_sz. */
-					memcpy(pkt_copy->data, pbuf, skb_len);
-					precvframe_if2->rx_data = precvframe_if2->rx_tail = pkt_copy->data;
-				}
-
-				recvframe_put(precvframe_if2, skb_len);
-				/* recvframe_pull(precvframe_if2, drvinfo_sz + RXDESC_SIZE); */
-
-				rtl8192d_translate_rx_signal_stuff(precvframe_if2, pphy_info);
-
-				ret = rtw_recv_entry(precvframe_if2);
-
-			}
-
-		}
-
-	}
-
-	rtl8192d_translate_rx_signal_stuff(precvframe, pphy_info);
-
-	ret = rtw_recv_entry(precvframe);
-
-#endif
-
-	return ret;
-}
-
 static int recvbuf2recvframe(struct rtw_adapter *padapter, struct sk_buff *pskb)
 {
 	u8	*pbuf;
@@ -613,7 +495,6 @@ void rtl8192du_recv_tasklet(void *priv)
 
 static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 {
-	uint isevt, *pbuf;
 	struct recv_buf	*precvbuf = (struct recv_buf *)purb->context;
 	struct rtw_adapter			*padapter =(struct rtw_adapter *)precvbuf->adapter;
 	struct recv_priv	*precvpriv = &padapter->recvpriv;

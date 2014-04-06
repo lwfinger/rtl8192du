@@ -1053,9 +1053,6 @@ int rtw_set_scan_mode(struct rtw_adapter *adapter, enum RT_SCAN_TYPE scan_mode)
 */
 int rtw_set_channel_plan(struct rtw_adapter *adapter, u8 channel_plan)
 {
-	struct registry_priv *pregistrypriv = &adapter->registrypriv;
-	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
-
 	/* handle by cmd_thread to sync with scan operation */
 	return rtw_set_chplan_cmd(adapter, channel_plan, 1);
 }

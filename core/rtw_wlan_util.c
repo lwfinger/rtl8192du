@@ -25,7 +25,6 @@ static unsigned char ATHEROS_OUI2[] = {0x00, 0x13, 0x74};
 
 static unsigned char BROADCOM_OUI1[] = {0x00, 0x10, 0x18};
 static unsigned char BROADCOM_OUI2[] = {0x00, 0x0a, 0xf7};
-static unsigned char BROADCOM_OUI3[] = {0x00, 0x05, 0xb5};
 
 static unsigned char CISCO_OUI[] = {0x00, 0x40, 0x96};
 static unsigned char MARVELL_OUI[] = {0x00, 0x50, 0x43};
@@ -330,11 +329,6 @@ void Switch_DM_Func(struct rtw_adapter *padapter, u8 mode, u8 enable)
 	}
 }
 
-static void Set_NETYPE1_MSR(struct rtw_adapter *padapter, u8 type)
-{
-	rtw_hal_set_hwreg(padapter, HW_VAR_MEDIA_STATUS_SUCCESS, (u8 *)(&type));
-}
-
 static void Set_NETYPE0_MSR(struct rtw_adapter *padapter, u8 type)
 {
 	rtw_hal_set_hwreg(padapter, HW_VAR_MEDIA_STATUS, (u8 *)(&type));
@@ -382,8 +376,6 @@ inline void rtw_set_oper_choffset(struct rtw_adapter *adapter, u8 offset)
 
 void SelectChannel(struct rtw_adapter *padapter, unsigned char channel)
 {
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	/* saved channel info */
 	rtw_set_oper_ch(padapter, channel);
@@ -404,8 +396,6 @@ void SelectChannel(struct rtw_adapter *padapter, unsigned char channel)
 
 void SetBWMode(struct rtw_adapter *padapter, unsigned short bwmode, unsigned char channel_offset)
 {
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	/* saved bw info */
 	rtw_set_oper_bw(padapter, bwmode);
@@ -429,7 +419,6 @@ void SetBWMode(struct rtw_adapter *padapter, unsigned short bwmode, unsigned cha
 void set_channel_bwmode(struct rtw_adapter *padapter, unsigned char channel, unsigned char channel_offset, unsigned short bwmode)
 {
 	u8 center_ch;
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
 	if (padapter->bNotifyChannelChange)
 		DBG_8192D("[%s] ch = %d, offset = %d, bwmode = %d\n", __func__, channel, channel_offset, bwmode);
@@ -1187,19 +1176,6 @@ unsigned char get_highest_rate_idx(u32 mask)
 	return rate_idx;
 }
 
-static unsigned char get_highest_mcs_rate(struct HT_caps_element *pHT_caps)
-{
-	int i, mcs_rate;
-
-	mcs_rate = (pHT_caps->u.HT_cap_element.MCS_rate[0] | (pHT_caps->u.HT_cap_element.MCS_rate[1] << 8));
-
-	for (i = 15; i >= 0; i--) {
-		if (mcs_rate & (0x1 << i))
-			break;
-	}
-	return i;
-}
-
 void Update_RA_Entry(struct rtw_adapter *padapter, u32 mac_id)
 {
 	rtw_hal_update_ra_mask(padapter, mac_id);
@@ -1333,7 +1309,7 @@ void update_capinfo(struct rtw_adapter *adapter, u16 updateCap)
 {
 	struct mlme_ext_priv	*pmlmeext = &adapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	bool		shortpreamble;
+	bool	shortpreamble = false;
 
 	/*  Check preamble mode, 2005.01.06, by rcnjko. */
 	/*  Mark to update preamble value forever, 2008.03.18 by lanhsin */

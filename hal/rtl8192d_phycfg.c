@@ -55,6 +55,120 @@
 #include <rtl8192d_hal.h>
 #include <Hal8192DPhyCfg.h>
 
+static u32 TargetChnl_5G[TARGET_CHNL_NUM_5G] = {
+	25141,	25116,	25091,	25066,	25041,
+	25016,	24991,	24966,	24941,	24917,
+	24892,	24867,	24843,	24818,	24794,
+	24770,	24765,	24721,	24697,	24672,
+	24648,	24624,	24600,	24576,	24552,
+	24528,	24504,	24480,	24457,	24433,
+	24409,	24385,	24362,	24338,	24315,
+	24291,	24268,	24245,	24221,	24198,
+	24175,	24151,	24128,	24105,	24082,
+	24059,	24036,	24013,	23990,	23967,
+	23945,	23922,	23899,	23876,	23854,
+	23831,	23809,	23786,	23764,	23741,
+	23719,	23697,	23674,	23652,	23630,
+	23608,	23586,	23564,	23541,	23519,
+	23498,	23476,	23454,	23432,	23410,
+	23388,	23367,	23345,	23323,	23302,
+	23280,	23259,	23237,	23216,	23194,
+	23173,	23152,	23130,	23109,	23088,
+	23067,	23046,	23025,	23003,	22982,
+	22962,	22941,	22920,	22899,	22878,
+	22857,	22837,	22816,	22795,	22775,
+	22754,	22733,	22713,	22692,	22672,
+	22652,	22631,	22611,	22591,	22570,
+	22550,	22530,	22510,	22490,	22469,
+	22449,	22429,	22409,	22390,	22370,
+	22350,	22336,	22310,	22290,	22271,
+	22251,	22231,	22212,	22192,	22173,
+	22153,	22134,	22114,	22095,	22075,
+	22056,	22037,	22017,	21998,	21979,
+	21960,	21941,	21921,	21902,	21883,
+	21864,	21845,	21826,	21807,	21789,
+	21770,	21751,	21732,	21713,	21695,
+	21676,	21657,	21639,	21620,	21602,
+	21583,	21565,	21546,	21528,	21509,
+	21491,	21473,	21454,	21436,	21418,
+	21400,	21381,	21363,	21345,	21327,
+	21309,	21291,	21273,	21255,	21237,
+	21219,	21201,	21183,	21166,	21148,
+	21130,	21112,	21095,	21077,	21059,
+	21042,	21024,	21007,	20989,	20972,
+	25679,	25653,	25627,	25601,	25575,
+	25549,	25523,	25497,	25471,	25446,
+	25420,	25394,	25369,	25343,	25318,
+	25292,	25267,	25242,	25216,	25191,
+	25166
+};
+
+static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	/*  channel 1~14 */
+	26084, 26030, 25976, 25923, 25869, 25816, 25764,
+	25711, 25658, 25606, 25554, 25502, 25451, 25328
+};
+
+static u32 RF_REG_FOR_5G_SWCHNL_NORMAL[MAX_RF_IMR_INDEX_NORMAL] = {
+	0, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x0
+};
+
+static u8 RF_REG_for_C_CUT_5G[RF_REG_NUM_for_C_CUT_5G] = {
+	RF_SYN_G1, RF_SYN_G2, RF_SYN_G3, RF_SYN_G4, RF_SYN_G5, RF_SYN_G6
+};
+
+static u8 RF_REG_for_C_CUT_5G_internalPA[RF_REG_NUM_for_C_CUT_5G_internalPA] = {
+	0x0B, 0x48, 0x49, 0x4B,	0x03, 0x04, 0x0E
+};
+
+static u8 RF_REG_for_C_CUT_2G[RF_REG_NUM_for_C_CUT_2G] = {
+	RF_SYN_G1, RF_SYN_G2, RF_SYN_G3, RF_SYN_G7, RF_SYN_G8
+};
+
+static u8 RF_CHNL_5G[RF_CHNL_NUM_5G] = {
+	36, 40, 44, 48, 52, 56, 60, 64, 100, 104, 108, 112,
+	116, 120, 124, 128, 132, 136, 140
+};
+
+static u8 RF_CHNL_5G_40M[RF_CHNL_NUM_5G_40M] = {
+	38, 42, 46, 50, 54, 58, 62, 102, 106, 110, 114, 118,
+	122, 126, 130, 134, 138
+};
+
+static u32 RF_REG_Param_for_C_CUT_5G[5][RF_REG_NUM_for_C_CUT_5G] = {
+	{0xE43BE, 0xFC638, 0x77C0A, 0xDE471, 0xd7110, 0x8EB04},
+	{0xE43BE, 0xFC078, 0xF7C1A, 0xE0C71, 0xD7550, 0xAEB04},
+	{0xE43BF, 0xFF038, 0xF7C0A, 0xDE471, 0xE5550, 0xAEB04},
+	{0xE43BF, 0xFF079, 0xF7C1A, 0xDE471, 0xE5550, 0xAEB04},
+	{0xE43BF, 0xFF038, 0xF7C1A, 0xDE471, 0xd7550, 0xAEB04}
+};
+
+static u32 RF_REG_Param_for_C_CUT_2G[3][RF_REG_NUM_for_C_CUT_2G] = {
+	{0x643BC, 0xFC038, 0x77C1A, 0x41289, 0x01840},
+	{0x643BC, 0xFC038, 0x07C1A, 0x41289, 0x01840},
+	{0x243BC, 0xFC438, 0x07C1A, 0x4128B, 0x0FC41}
+};
+
+static u32 RF_REG_SYN_G4_for_C_CUT_2G = 0xD1C31&0x7FF;
+
+static u32 RF_REG_Param_for_C_CUT_5G_internalPA[3][RF_REG_NUM_for_C_CUT_5G_internalPA] = {
+	{0x01a00, 0x40443, 0x00eb5, 0x89bec, 0x94a12, 0x94a12, 0x94a12},
+	{0x01800, 0xc0443, 0x00730, 0x896ee, 0x94a52, 0x94a52, 0x94a52},
+	{0x01800, 0xc0443, 0x00730, 0x896ee, 0x94a12, 0x94a12, 0x94a12}
+};
+
+/* mode][patha+b][reg] */
+static u32 RF_IMR_Param_Normal[3][MAX_RF_IMR_INDEX_NORMAL] = {
+	{0x70000, 0x00ff0, 0x4400f, 0x00ff0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x64888,
+	 0xe266c, 0x00090, 0x22fff},/*  channel 1-14. */
+	{0x70000, 0x22880, 0x4470f, 0x55880, 0x00070, 0x88000, 0x0, 0x88080,
+	 0x70000, 0x64a82, 0xe466c, 0x00090, 0x32c9a}, /* path 36-64 */
+	{0x70000, 0x44880, 0x4477f, 0x77880, 0x00070, 0x88000, 0x0, 0x880b0,
+	 0x0, 0x64b82, 0xe466c, 0x00090,0x32c9a} /* 100 -165 */
+};
+
+static u32 CurveIndex[TARGET_CHNL_NUM_2G_5G] = {0};
+
+
 /*---------------------Define local function prototype-----------------------*/
 static void phy_PathAFillIQKMatrix(struct rtw_adapter *adapter, bool bIQKOK,
 				   int result[][8], u8 final_candidate,
@@ -239,33 +353,6 @@ rtl8192d_PHY_SetBBReg(
 
 /*  */
 /*  2. RF register R/W API */
-/*  */
-/*-----------------------------------------------------------------------------
- * Function:	phy_FwRFSerialRead()
- *
- * Overview:	We support firmware to execute RF-R/W.
- *
- * Input:		NONE
- *
- * Output:		NONE
- *
- * Return:		NONE
- *
- * Revised History:
- *	When		Who		Remark
- *	01/21/2008	MHC		Create Version 0.
- *
- *---------------------------------------------------------------------------*/
-static	u32
-phy_FwRFSerialRead(
-	struct rtw_adapter *			adapter,
-	enum RF_RADIO_PATH_E	eRFPath,
-	u32				Offset	)
-{
-	u32		retValue = 0;
-	return	(retValue);
-}	/* phy_FwRFSerialRead */
-
 /**
 * Function:	phy_RFSerialRead
 *
@@ -566,25 +653,17 @@ rtl8192d_PHY_SetRFReg(
  * Note:		The format of MACPHY_REG.txt is different from PHY and RF.
  *			[Register][Mask][Value]
  *---------------------------------------------------------------------------*/
-static	int
-phy_ConfigMACWithHeaderFile(
-	struct rtw_adapter *		adapter
-)
+static	int phy_ConfigMACWithHeaderFile(struct rtw_adapter *adapter)
 {
-	u32					i = 0;
-	u32					ArrayLength = 0;
-	u32*				ptrArray;
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-
-	/* 2008.11.06 Modified by tynli. */
+	u32 i;
+	u32 ArrayLength;
+	u32 *ptrArray;
 
 	ArrayLength = Rtl8192D_MAC_ArrayLength;
 	ptrArray = (u32 *)Rtl8192D_MAC_Array;
 
-	for (i = 0 ;i < ArrayLength;i = i+2) { /*  Add by tynli for 2 column */
+	for (i = 0 ;i < ArrayLength;i = i+2) /*  Add by tynli for 2 column */
 		rtw_write8(adapter, ptrArray[i], (u8)ptrArray[i+1]);
-	}
-
 	return 1;
 }
 
@@ -913,7 +992,6 @@ phy_ConfigBBWithPgHeaderFile(
 	int i;
 	u32*	Rtl819XPHY_REGArray_Table_PG;
 	u16	PHY_REGArrayPGLen;
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 
 	PHY_REGArrayPGLen = Rtl8192D_PHY_REG_Array_PGLength;
 	Rtl819XPHY_REGArray_Table_PG = (u32 *)Rtl8192D_PHY_REG_Array_PG;
@@ -2319,7 +2397,7 @@ static  void
 		IMR_NUM = MAX_RF_IMR_INDEX_NORMAL;
 
 		for (i = 0; i<IMR_NUM; i++) {
-			PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_REG_FOR_5G_SWCHNL_NORMAL[i], RFMask, RF_IMR_Param_Normal[0][group][i]);
+			PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_REG_FOR_5G_SWCHNL_NORMAL[i], RFMask, RF_IMR_Param_Normal[group][i]);
 		}
 		PHY_SetBBReg(adapter, rFPGA0_AnalogParameter4, 0x00f00000, 0);
 		PHY_SetBBReg1Byte(adapter, rFPGA0_RFMOD, bOFDMEn|bCCKEn, 2);
@@ -2332,7 +2410,7 @@ static  void
 
 			IMR_NUM = MAX_RF_IMR_INDEX_NORMAL;
 			for (i = 0; i<IMR_NUM; i++) {
-				PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_REG_FOR_5G_SWCHNL_NORMAL[i], bRFRegOffsetMask, RF_IMR_Param_Normal[0][0][i]);
+				PHY_SetRFReg(adapter, (enum RF_RADIO_PATH_E)eRFPath, RF_REG_FOR_5G_SWCHNL_NORMAL[i], bRFRegOffsetMask, RF_IMR_Param_Normal[0][i]);
 			}
 			PHY_SetBBReg(adapter, rFPGA0_AnalogParameter4, 0x00f00000, 0);
 			PHY_SetBBReg1Byte(adapter, rFPGA0_RFMOD, bOFDMEn|bCCKEn, 3);
@@ -2607,42 +2685,12 @@ PHY_SwChnl8192D(	/*  Call after initialization */
 	}
 }
 
-static	bool
-phy_SetSwChnlCmdArray(
-	struct sw_chnl_cmd *cmdtable,
-	u32			cmdtableidx,
-	u32			cmdtablesz,
-	enum swchnl_cmdid	cmdid,
-	u32			para1,
-	u32			para2,
-	u32			msdelay
-	)
-{
-	struct sw_chnl_cmd *cmd;
-
-	if (cmdtable == NULL)
-		return false;
-	if (cmdtableidx >= cmdtablesz)
-		return false;
-
-	cmd = cmdtable + cmdtableidx;
-	cmd->cmdid = cmdid;
-	cmd->Para1 = para1;
-	cmd->Para2 = para2;
-	cmd->msDelay = msdelay;
-
-	return true;
-}
-
-/*  */
 /*  Description: */
 /*	Switch channel synchronously. Called by SwChnlByDelayHandler. */
-/*  */
 /*  Implemented by Bruce, 2008-02-14. */
 /*  The following procedure is operted according to SwChanlCallback8190Pci(). */
 /*  However, this procedure is performed synchronously  which should be running under */
 /*  passive level. */
-/*  */
 void
 PHY_SwChnlPhy8192D(	/*  Only called during initialize */
 	struct rtw_adapter *	adapter,
@@ -3662,382 +3710,6 @@ phy_IQCalibrate(
 }
 
 static void
-phy_IQCalibrate_5G(
-	struct rtw_adapter *	adapter,
-	int		result[][8]
-	)
-{
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	u32			extPAon, REG0xe5c, RX0REG0xe40, REG0xe40, REG0xe94;
-	u32			REG0xeac, RX1REG0xe40, REG0xeb4, REG0xea4, REG0xec4;
-	u8			TX0IQKOK = false, TX1IQKOK = false ;
-	u32			TX_X0, TX_Y0, TX_X1, TX_Y1, RX_X0, RX_Y0, RX_X1, RX_Y1;
-	u32			ADDA_REG[IQK_ADDA_REG_NUM] = {
-						rFPGA0_XCD_SwitchControl,	rBlue_Tooth,
-						rRx_Wait_CCA,		rTx_CCK_RFON,
-						rTx_CCK_BBON,	rTx_OFDM_RFON,
-						rTx_OFDM_BBON,	rTx_To_Rx,
-						rTx_To_Tx,		rRx_CCK,
-						rRx_OFDM,		rRx_Wait_RIFS,
-						rRx_TO_Rx,		rStandby,
-						rSleep,				rPMPD_ANAEN };
-
-	u32			IQK_MAC_REG[IQK_MAC_REG_NUM] = {
-						REG_TXPAUSE,		REG_BCN_CTRL,
-						REG_BCN_CTRL_1,	REG_GPIO_MUXCFG};
-
-	u32			IQK_BB_REG[IQK_BB_REG_NUM_test] = {	/* for normal */
-						rFPGA0_XAB_RFInterfaceSW,	rOFDM0_TRMuxPar,
-						rFPGA0_XCD_RFInterfaceSW,	rOFDM0_TRxPathEnable,
-						rFPGA0_RFMOD,			rFPGA0_AnalogParameter4
-					};
-
-	bool			is2T =  IS_92D_SINGLEPHY(pHalData->VersionID);
-
-	DBG_8192D("IQK for 5G:Start!!!interface %d\n", pHalData->interfaceIndex);
-
-	DBG_8192D("IQ Calibration for %s\n", (is2T ? "2T2R" : "1T1R"));
-
-	/* Save MAC default value */
-	phy_SaveMACRegisters(adapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
-
-	/* Save BB Parameter */
-	phy_SaveADDARegisters(adapter, IQK_BB_REG, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_test);
-
-	/* Save AFE Parameters */
-	phy_SaveADDARegisters(adapter, ADDA_REG, pdmpriv->ADDA_backup, IQK_ADDA_REG_NUM);
-
-	/* 1 Path-A TX IQK */
-	/* Path-A AFE all on */
-	phy_PathADDAOn(adapter, ADDA_REG, true, true);
-
-	/* MAC register setting */
-	phy_MACSettingCalibration(adapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
-
-	/* IQK must be done in PI mode */
-	pdmpriv->bRfPiEnable = (u8)PHY_QueryBBReg(adapter, rFPGA0_XA_HSSIParameter1, BIT(8));
-	if (!pdmpriv->bRfPiEnable)
-		phy_PIModeSwitch(adapter, true);
-
-	/* TXIQK RF setting */
-	PHY_SetBBReg(adapter, rFPGA0_XA_LSSIParameter, bMaskDWord, 0x01940000);
-	PHY_SetBBReg(adapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x01940000);
-
-	/* BB setting */
-	PHY_SetBBReg(adapter, rOFDM0_TRxPathEnable, bMaskDWord, 0x03a05600);
-	PHY_SetBBReg(adapter, rOFDM0_TRMuxPar, bMaskDWord, 0x000800e4);
-	PHY_SetBBReg(adapter, rFPGA0_XCD_RFInterfaceSW, bMaskDWord, 0x22208000);
-	PHY_SetBBReg(adapter, rFPGA0_XAB_RFInterfaceSW, BIT6|BIT5,  0x03);
-	PHY_SetBBReg(adapter, rFPGA0_XAB_RFInterfaceSW, BIT22|BIT21,  0x03);
-	PHY_SetBBReg(adapter, rFPGA0_AnalogParameter4, 0xf00000,  0x0f);
-
-	/* AP or IQK */
-	PHY_SetBBReg(adapter, rConfig_AntA, bMaskDWord, 0x0f600000);
-	PHY_SetBBReg(adapter, rConfig_AntB, bMaskDWord, 0x0f600000);
-
-	/* IQK global setting */
-	PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x80800000);
-	PHY_SetBBReg(adapter, rTx_IQK, bMaskDWord, 0x10007c00);
-	PHY_SetBBReg(adapter, rRx_IQK, bMaskDWord, 0x01004800);
-
-	/* path-A IQK setting */
-	if (pHalData->interfaceIndex == 0)
-	{
-		PHY_SetBBReg(adapter, rTx_IQK_Tone_A, bMaskDWord, 0x14008c1f);
-		PHY_SetBBReg(adapter, rRx_IQK_Tone_A, bMaskDWord, 0x30008c1f);
-	}
-	else
-	{
-		PHY_SetBBReg(adapter, rTx_IQK_Tone_A, bMaskDWord, 0x14008c22);
-		PHY_SetBBReg(adapter, rRx_IQK_Tone_A, bMaskDWord, 0x30008c22);
-	}
-
-	if (is2T)
-		PHY_SetBBReg(adapter, rTx_IQK_PI_A, bMaskDWord, 0x821402e2);
-	else
-		PHY_SetBBReg(adapter, rTx_IQK_PI_A, bMaskDWord, 0x821402e6);
-	PHY_SetBBReg(adapter, rRx_IQK_PI_A, bMaskDWord, 0x68110000);
-
-	/* path-B IQK setting */
-	if (is2T)
-	{
-		PHY_SetBBReg(adapter, rTx_IQK_Tone_B, bMaskDWord, 0x14008c22);
-		PHY_SetBBReg(adapter, rRx_IQK_Tone_B, bMaskDWord, 0x30008c22);
-		PHY_SetBBReg(adapter, rTx_IQK_PI_B, bMaskDWord, 0x82110000);
-		PHY_SetBBReg(adapter, rRx_IQK_PI_B, bMaskDWord, 0x68110000);
-	}
-
-	/* LO calibration setting */
-	PHY_SetBBReg(adapter, rIQK_AGC_Rsp, bMaskDWord, 0x00462911);
-
-	/* One shot, path A LOK & IQK */
-	PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf9000000);
-	PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf8000000);
-
-	/* Delay 1 ms */
-	udelay(IQK_DELAY_TIME*1000);
-
-	/* Exit IQK mode */
-	PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x00000000);
-
-	/* Check_TX_IQK_A_result() */
-	REG0xe40 = PHY_QueryBBReg(adapter, rTx_IQK, bMaskDWord);
-	REG0xeac = PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord);
-	REG0xe94 = PHY_QueryBBReg(adapter, rTx_Power_Before_IQK_A, bMaskDWord);
-
-	if (((REG0xeac&BIT(28)) == 0) && (((REG0xe94&0x3FF0000)>>16)!= 0x142))
-	{
-		TX_X0 = (PHY_QueryBBReg(adapter, rTx_Power_Before_IQK_A, bMaskDWord)&0x3FF0000)>>16;
-		TX_Y0 = (PHY_QueryBBReg(adapter, rTx_Power_After_IQK_A, bMaskDWord)&0x3FF0000)>>16;
-		RX0REG0xe40 =  0x80000000 | (REG0xe40 & 0xfc00fc00) | (TX_X0<<16) | TX_Y0;
-		result[0][0] = TX_X0;
-		result[0][1] = TX_Y0;
-		TX0IQKOK = true;
-		DBG_8192D("IQK for 5G: Path A TxOK interface %u\n", pHalData->interfaceIndex);
-	}
-	else
-	{
-		DBG_8192D("IQK for 5G: Path A Tx Fail interface %u\n", pHalData->interfaceIndex);
-	}
-
-	/* 1 path A RX IQK */
-	if (TX0IQKOK == true)
-	{
-
-		DBG_8192D("IQK for 5G: Path A Rx  START interface %u\n", pHalData->interfaceIndex);
-
-		/* TXIQK RF setting */
-		PHY_SetBBReg(adapter, rFPGA0_XA_LSSIParameter, bMaskDWord, 0x01900000);
-		PHY_SetBBReg(adapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x01900000);
-
-		/* turn on external PA */
-		if (pHalData->interfaceIndex == 1)
-			PHY_SetBBReg(adapter, rFPGA0_XAB_RFParameter, BIT(30), 0x01);
-
-		/* IQK global setting */
-		PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x80800000);
-
-		/* path-A IQK setting */
-		if (pHalData->interfaceIndex == 0)
-		{
-			PHY_SetBBReg(adapter, rTx_IQK_Tone_A, bMaskDWord, 0x14008c1f);
-			PHY_SetBBReg(adapter, rRx_IQK_Tone_A, bMaskDWord, 0x14008c1f);
-		}
-		else
-		{
-			PHY_SetBBReg(adapter, rTx_IQK_Tone_A, bMaskDWord, 0x14008c22);
-			PHY_SetBBReg(adapter, rRx_IQK_Tone_A, bMaskDWord, 0x14008c22);
-		}
-		PHY_SetBBReg(adapter, rTx_IQK_PI_A, bMaskDWord, 0x82110000);
-		if (pHalData->interfaceIndex == 0)
-			PHY_SetBBReg(adapter, rRx_IQK_PI_A, bMaskDWord, (pHalData->CurrentChannel<= 140)?0x68160c62:0x68160c66);
-		else
-			PHY_SetBBReg(adapter, rRx_IQK_PI_A, bMaskDWord, 0x68160962);
-
-		/* path-B IQK setting */
-		if (is2T)
-		{
-			PHY_SetBBReg(adapter, rTx_IQK_Tone_B, bMaskDWord, 0x14008c22);
-			PHY_SetBBReg(adapter, rRx_IQK_Tone_B, bMaskDWord, 0x14008c22);
-			PHY_SetBBReg(adapter, rTx_IQK_PI_B, bMaskDWord, 0x82110000);
-			PHY_SetBBReg(adapter, rRx_IQK_PI_B, bMaskDWord, 0x68110000);
-		}
-
-		/* load TX0 IMR setting */
-		PHY_SetBBReg(adapter, rTx_IQK, bMaskDWord, RX0REG0xe40);
-		/* Sleep(5) -> delay 1ms */
-		udelay(IQK_DELAY_TIME*1000);
-
-		/* LO calibration setting */
-		PHY_SetBBReg(adapter, rIQK_AGC_Rsp, bMaskDWord, 0x0046a911);
-
-		/* One shot, path A LOK & IQK */
-		PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf9000000);
-		PHY_SetBBReg(adapter, rIQK_AGC_Pts, bMaskDWord, 0xf8000000);
-
-		/* Delay 3 ms */
-		udelay(3*IQK_DELAY_TIME*1000);
-
-		/* Exit IQK mode */
-		PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x00000000);
-
-		/* Check_RX_IQK_A_result() */
-		REG0xeac = PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord);
-		REG0xea4 = PHY_QueryBBReg(adapter, rRx_Power_Before_IQK_A_2, bMaskDWord);
-		if (pHalData->interfaceIndex == 0)
-		{
-			if (((REG0xeac&BIT(27)) == 0) && (((REG0xea4&0x3FF0000)>>16)!= 0x132))
-			{
-				RX_X0 =  (PHY_QueryBBReg(adapter, rRx_Power_Before_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
-				RX_Y0 =  (PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
-				result[0][2] = RX_X0;
-				result[0][3] = RX_Y0;
-			}
-		}
-		else
-		{
-			if (((REG0xeac&BIT(30)) == 0) && (((REG0xea4&0x3FF0000)>>16)!= 0x132))
-			{
-				RX_X0 =  (PHY_QueryBBReg(adapter, rRx_Power_Before_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
-				RX_Y0 =  (PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
-				result[0][2] = RX_X0;
-				result[0][3] = RX_Y0;
-			}
-		}
-	}
-
-	if (!is2T)
-		goto Exit_IQK;
-
-	/* 1 path B TX IQK */
-	/* Path-B AFE all on */
-
-	DBG_8192D("IQK for 5G: Path B Tx  START interface %u\n", pHalData->interfaceIndex);
-
-	phy_PathADDAOn(adapter, ADDA_REG, false, true);
-
-	/* TXIQK RF setting */
-	PHY_SetBBReg(adapter, rFPGA0_XA_LSSIParameter, bMaskDWord, 0x01940000);
-	PHY_SetBBReg(adapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x01940000);
-
-	/* IQK global setting */
-	PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x80800000);
-	PHY_SetBBReg(adapter, rTx_IQK, bMaskDWord, 0x10007c00);
-
-	/* path-A IQK setting */
-	PHY_SetBBReg(adapter, rTx_IQK_Tone_A, bMaskDWord, 0x14008c1f);
-	PHY_SetBBReg(adapter, rRx_IQK_Tone_A, bMaskDWord, 0x30008c1f);
-	PHY_SetBBReg(adapter, rTx_IQK_PI_A, bMaskDWord, 0x82110000);
-	PHY_SetBBReg(adapter, rRx_IQK_PI_A, bMaskDWord, 0x68110000);
-
-	/* path-B IQK setting */
-	PHY_SetBBReg(adapter, rTx_IQK_Tone_B, bMaskDWord, 0x14008c22);
-	PHY_SetBBReg(adapter, rRx_IQK_Tone_B, bMaskDWord, 0x30008c22);
-	PHY_SetBBReg(adapter, rTx_IQK_PI_B, bMaskDWord, 0x82140386);
-	PHY_SetBBReg(adapter, rRx_IQK_PI_B, bMaskDWord, 0x68110000);
-
-	/* LO calibration setting */
-	PHY_SetBBReg(adapter, rIQK_AGC_Rsp, bMaskDWord, 0x00462911);
-
-	/* One shot, path A LOK & IQK */
-	PHY_SetBBReg(adapter, rIQK_AGC_Cont, bMaskDWord, 0x00000002);
-	PHY_SetBBReg(adapter, rIQK_AGC_Cont, bMaskDWord, 0x00000000);
-
-	/* Delay 1 ms */
-	udelay(IQK_DELAY_TIME*1000);
-
-	/* Exit IQK mode */
-	PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x00000000);
-
-	/*  Check_TX_IQK_B_result() */
-	REG0xe40 = PHY_QueryBBReg(adapter, rTx_IQK, bMaskDWord);
-	REG0xeac = PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord);
-	REG0xeb4 = PHY_QueryBBReg(adapter, rTx_Power_Before_IQK_B, bMaskDWord);
-	if (((REG0xeac&BIT(31)) == 0) && ((REG0xeb4&0x3FF0000)!= 0x142))
-	{
-		TX_X1 = (PHY_QueryBBReg(adapter, rTx_Power_Before_IQK_B, bMaskDWord)&0x3FF0000)>>16;
-		TX_Y1 = (PHY_QueryBBReg(adapter, rTx_Power_After_IQK_B, bMaskDWord)&0x3FF0000)>>16;
-		RX1REG0xe40 = 0x80000000 | (REG0xe40 & 0xfc00fc00) | (TX_X1<<16) | TX_Y1;
-		result[0][4] = TX_X1;
-		result[0][5] = TX_Y1;
-		TX1IQKOK = true;
-	}
-
-	/* 1 path B RX IQK */
-	if (TX1IQKOK == true)
-	{
-
-		DBG_8192D("IQK for 5G: Path B Rx  START interface %u\n", pHalData->interfaceIndex);
-
-		if (pHalData->CurrentChannel<= 140)
-		{
-			REG0xe5c = 0x68160960;
-			extPAon = 0x1;
-		}
-		else
-		{
-			REG0xe5c = 0x68150c66;
-			extPAon = 0x0;
-		}
-
-		/* TXIQK RF setting */
-		PHY_SetBBReg(adapter, rFPGA0_XA_LSSIParameter, bMaskDWord, 0x01900000);
-		PHY_SetBBReg(adapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x01900000);
-
-		/* turn on external PA */
-		PHY_SetBBReg(adapter, rFPGA0_XAB_RFParameter, BIT(30), extPAon);
-
-		/* BB setting */
-		PHY_SetBBReg(adapter, rFPGA0_AnalogParameter4, bMaskDWord, 0xcc300080);
-
-		/* IQK global setting */
-		PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x80800000);
-
-		/* path-A IQK setting */
-		PHY_SetBBReg(adapter, rTx_IQK_Tone_A, bMaskDWord, 0x14008c1f);
-		PHY_SetBBReg(adapter, rRx_IQK_Tone_A, bMaskDWord, 0x34008c1f);
-		PHY_SetBBReg(adapter, rTx_IQK_PI_A, bMaskDWord, 0x82110000);
-		PHY_SetBBReg(adapter, rRx_IQK_PI_A, bMaskDWord, 0x68110000);
-
-		/* path-B IQK setting */
-		PHY_SetBBReg(adapter, rTx_IQK_Tone_B, bMaskDWord, 0x14008c22);
-		PHY_SetBBReg(adapter, rRx_IQK_Tone_B, bMaskDWord, 0x14008c22);
-		PHY_SetBBReg(adapter, rTx_IQK_PI_B, bMaskDWord, 0x82110000);
-		PHY_SetBBReg(adapter, rRx_IQK_PI_B, bMaskDWord, REG0xe5c);
-
-		/* load TX0 IMR setting */
-		PHY_SetBBReg(adapter, rTx_IQK, bMaskDWord, RX1REG0xe40);
-
-		/* Sleep(5) -> delay 1ms */
-		udelay(IQK_DELAY_TIME*1000);
-
-		/* LO calibration setting */
-		PHY_SetBBReg(adapter, rIQK_AGC_Rsp, bMaskDWord, 0x0046a911);
-
-		/* One shot, path A LOK & IQK */
-		PHY_SetBBReg(adapter, rIQK_AGC_Cont, bMaskDWord, 0x00000002);
-		PHY_SetBBReg(adapter, rIQK_AGC_Cont, bMaskDWord, 0x00000000);
-
-		/* Delay 1 ms */
-		udelay(3*IQK_DELAY_TIME*1000);
-
-		/* Check_RX_IQK_B_result() */
-		REG0xeac = PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord);
-		REG0xec4 = PHY_QueryBBReg(adapter, rRx_Power_Before_IQK_B_2, bMaskDWord);
-		if (((REG0xeac&BIT(30)) == 0) && (((REG0xec4&0x3FF0000)>>16)!= 0x132))
-		{
-			RX_X1 =  (PHY_QueryBBReg(adapter, rRx_Power_Before_IQK_B_2, bMaskDWord)&0x3FF0000)>>16;
-			RX_Y1 =  (PHY_QueryBBReg(adapter, rRx_Power_After_IQK_B_2, bMaskDWord)&0x3FF0000)>>16;
-			result[0][6] = RX_X1;
-			result[0][7] = RX_Y1;
-		}
-	}
-
-Exit_IQK:
-	/* turn off external PA */
-	if (pHalData->interfaceIndex == 1 || is2T)
-		PHY_SetBBReg(adapter, rFPGA0_XAB_RFParameter, BIT(30), 0);
-
-	/* Exit IQK mode */
-	PHY_SetBBReg(adapter, rFPGA0_IQK, bMaskDWord, 0x00000000);
-	phy_ReloadADDARegisters(adapter, IQK_BB_REG, pdmpriv->IQK_BB_backup, IQK_BB_REG_NUM_test);
-
-	PHY_SetBBReg(adapter, rFPGA0_XA_LSSIParameter, bMaskDWord, 0x01900000);
-	PHY_SetBBReg(adapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x01900000);
-	PHY_SetBBReg(adapter, rFPGA0_XA_LSSIParameter, bMaskDWord, 0x00032fff);
-	PHY_SetBBReg(adapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x00032fff);
-
-	/* reload MAC default value */
-	phy_ReloadMACRegisters(adapter, IQK_MAC_REG, pdmpriv->IQK_MAC_backup);
-
-	if (!pdmpriv->bRfPiEnable)
-		phy_PIModeSwitch(adapter, false);
-	/* Reload ADDA power saving parameters */
-	phy_ReloadADDARegisters(adapter, ADDA_REG, pdmpriv->ADDA_backup, IQK_ADDA_REG_NUM);
-}
-
-static void
 phy_IQCalibrate_5G_Normal(
 	struct rtw_adapter *	adapter,
 	int		result[][8],
@@ -4313,7 +3985,7 @@ phy_LCCalibrate92DSW(
 	u8	RF_mode[2], tmpReg, index = 0;
 	u32	tmpu4Byte[2];
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	u8	u1bTmp = 0, path = is2T?2:1;
+	u8	path = is2T ? 2 : 1;
 	u32	i, u4tmp, offset;
 	u32	curveCountVal[CV_CURVE_CNT*2]={0};
 	u16	timeout = 800, timecount = 0;
@@ -4436,115 +4108,6 @@ static void phy_LCCalibrate(struct rtw_adapter *adapter, bool is2T)
 #define		APK_BB_REG_NUM	8
 #define		APK_CURVE_REG_NUM 4
 #define		PATH_NUM		2
-
-static void phy_APCalibrate(struct rtw_adapter *adapter, char delta, bool is2T)
-{
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	u32 regD[PATH_NUM];
-	u32 tmpReg, index, offset, path, i, pathbound = PATH_NUM, apkbound;
-
-	u32 BB_backup[APK_BB_REG_NUM];
-	u32 BB_REG[APK_BB_REG_NUM] = {
-		rFPGA1_TxBlock,		rOFDM0_TRxPathEnable,
-		rFPGA0_RFMOD,	rOFDM0_TRMuxPar,
-		rFPGA0_XCD_RFInterfaceSW,	rFPGA0_XAB_RFInterfaceSW,
-		rFPGA0_XA_RFInterfaceOE,	rFPGA0_XB_RFInterfaceOE
-	};
-	u32 BB_AP_MODE[APK_BB_REG_NUM] = {
-		0x00000020, 0x00a05430, 0x02040000,
-		0x000800e4, 0x00204000
-	};
-	u32 BB_normal_AP_MODE[APK_BB_REG_NUM] = {
-		0x00000020, 0x00a05430, 0x02040000,
-		0x000800e4, 0x22204000
-	};
-
-	u32 AFE_backup[IQK_ADDA_REG_NUM];
-	u32 AFE_REG[IQK_ADDA_REG_NUM] = {
-		rFPGA0_XCD_SwitchControl, rBlue_Tooth,
-		rRx_Wait_CCA, rTx_CCK_RFON,
-		rTx_CCK_BBON, rTx_OFDM_RFON,
-		rTx_OFDM_BBON, rTx_To_Rx,
-		rTx_To_Tx, rRx_CCK,
-		rRx_OFDM, rRx_Wait_RIFS,
-		rRx_TO_Rx, rStandby,
-		rSleep, rPMPD_ANAEN
-	};
-
-	u32 MAC_backup[IQK_MAC_REG_NUM];
-	u32 MAC_REG[IQK_MAC_REG_NUM] = {
-		REG_TXPAUSE,		REG_BCN_CTRL,
-		REG_BCN_CTRL_1,	REG_GPIO_MUXCFG
-	};
-
-	u32 APK_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
-		{0x0852c, 0x1852c, 0x5852c, 0x1852c, 0x5852c},
-		{0x2852e, 0x0852e, 0x3852e, 0x0852e, 0x0852e}
-	};
-
-	u32 APK_normal_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
-		{0x0852c, 0x0a52c, 0x3a52c, 0x5a52c, 0x5a52c},	/* path settings equal to path b settings */
-		{0x0852c, 0x0a52c, 0x5a52c, 0x5a52c, 0x5a52c}
-	};
-
-	u32 APK_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
-		{0x52019, 0x52014, 0x52013, 0x5200f, 0x5208d},
-		{0x5201a, 0x52019, 0x52016, 0x52033, 0x52050}
-	};
-
-	u32 APK_normal_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
-		{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a},	/* path settings equal to path b settings */
-		{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a}
-	};
-	u32 AFE_on_off[PATH_NUM] = {
-		0x04db25a4, 0x0b1b25a4i
-	};	/* path A on path B off / path A off path B on */
-
-	u32 APK_offset[PATH_NUM] = {
-		rConfig_AntA, rConfig_AntB
-	};
-
-	u32 APK_normal_offset[PATH_NUM] = {
-		rConfig_Pmpd_AntA, rConfig_Pmpd_AntB
-	};
-
-	u32 APK_value[PATH_NUM] = {
-		0x92fc0000, 0x12fc0000
-	};
-
-	u32 APK_normal_value[PATH_NUM] = {
-		0x92680000, 0x12680000
-	};
-
-	char APK_delta_mapping[APK_BB_REG_NUM][13] = {
-		{-4, -3, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
-		{-4, -3, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
-		{-6, -4, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
-		{-1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6},
-		{-11, -9, -7, -5, -3, -1, 0, 0, 0, 0, 0, 0, 0}
-	};
-
-	u32 APK_normal_setting_value_1[13] = {
-		0x01017018, 0xf7ed8f84, 0x1b1a1816, 0x2522201e, 0x322e2b28,
-		0x433f3a36, 0x5b544e49, 0x7b726a62, 0xa69a8f84, 0xdfcfc0b3,
-		0x12680000, 0x00880000, 0x00880000
-	};
-
-	u32 APK_normal_setting_value_2[16] = {
-		0x01c7021d, 0x01670183, 0x01000123, 0x00bf00e2, 0x008d00a3,
-		0x0068007b, 0x004d0059, 0x003a0042, 0x002b0031, 0x001f0025,
-		0x0017001b, 0x00110014, 0x000c000f, 0x0009000b, 0x00070008,
-		0x00050006
-	};
-
-	u32 APK_result[PATH_NUM][APK_BB_REG_NUM];	/* val_1_1a, val_1_2a, val_2a, val_3a, val_4a */
-
-	int BB_offset, delta_V, delta_offset;
-
-	if (!is2T)
-		pathbound = 1;
-}
 
 static void phy_SetRFPathSwitch(
 	struct rtw_adapter *	adapter,
@@ -4740,7 +4303,6 @@ rtl8192d_PHY_LCCalibrate(
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	struct mlme_ext_priv	*pmlmeext = &adapter->mlmeextpriv;
 	bool		bStartContTx = false, bSingleTone = false, bCarrierSuppression = false;
-	u32			timeout = 2000, timecount = 0;
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	struct rtw_adapter *	Buddyadapter = adapter->pbuddy_adapter;
 	struct mlme_priv	*pmlmeprivBuddyadapter;

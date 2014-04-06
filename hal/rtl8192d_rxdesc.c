@@ -68,17 +68,6 @@ static s32 signal_scale_mapping(struct rtw_adapter *padapter, s32 cur_sig)
 	return ret_sig;
 }
 
-static s32  translate2dbm(u8 signal_strength_idx)
-{
-	s32	signal_power; /*  in dBm. */
-
-	/*  Translate to dBm (x=0.5y-95). */
-	signal_power = (s32)((signal_strength_idx + 1) >> 1);
-	signal_power -= 95;
-
-	return signal_power;
-}
-
 static void query_rx_phy_status(struct recv_frame_hdr *prframe, struct phy_stat *pphy_stat, bool bPacketMatchBSSID)
 {
 	struct phy_ofdm_rx_status_report_8192cd	*pOfdm_buf;
@@ -364,7 +353,6 @@ static void query_rx_phy_status(struct recv_frame_hdr *prframe, struct phy_stat 
 
 static void process_rssi(struct rtw_adapter *padapter,struct recv_frame_hdr *prframe)
 {
-	u32	last_rssi, tmp_val;
 	struct rx_pkt_attrib *pattrib = &prframe->attrib;
 	struct signal_stat * signal_stat = &padapter->recvpriv.signal_strength_data;
 
@@ -433,7 +421,6 @@ static void process_PWDB(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 
 static void process_link_qual(struct rtw_adapter *padapter,struct recv_frame_hdr *prframe)
 {
-	u32	last_evm=0,  tmpVal;
 	struct rx_pkt_attrib *pattrib;
 	struct signal_stat * signal_stat;
 

@@ -211,7 +211,7 @@ struct dvobj_priv {
 	atomic_t continual_urb_error;
 };
 
-static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
+static inline struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 {
 	/* todo: get interface type from dvobj and the return the dev accordingly */
 	return &dvobj->pusbintf->dev;

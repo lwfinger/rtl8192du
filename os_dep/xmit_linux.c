@@ -77,19 +77,15 @@ void rtw_set_tx_chksum_offload(struct sk_buff *pkt, struct pkt_attrib *pattrib)
 int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *pxmitbuf,u32 alloc_sz)
 {
 	int i;
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
-	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
 
 	pxmitbuf->pallocated_buf = kzalloc(alloc_sz, GFP_KERNEL);
 	if (pxmitbuf->pallocated_buf == NULL)
-	{
 		return 0;
-	}
 
 	pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitbuf->pallocated_buf), XMITBUF_ALIGN_SZ);
 	pxmitbuf->dma_transfer_addr = 0;
 
-	for (i=0; i < 8; i++) {
+	for (i = 0; i < 8; i++) {
 		pxmitbuf->pxmit_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
 		if (pxmitbuf->pxmit_urb[i] == NULL) {
 			DBG_8192D("pxmitbuf->pxmit_urb[i]==NULL");
@@ -103,15 +99,10 @@ int rtw_os_xmit_resource_alloc(struct rtw_adapter *padapter, struct xmit_buf *px
 void rtw_os_xmit_resource_free(struct rtw_adapter *padapter, struct xmit_buf *pxmitbuf,u32 free_sz)
 {
 	int i;
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
-	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
 
-	for (i=0; i<8; i++)
-	{
+	for (i = 0; i < 8; i++) {
 		if (pxmitbuf->pxmit_urb[i])
-		{
 			usb_free_urb(pxmitbuf->pxmit_urb[i]);
-		}
 	}
 
 	kfree(pxmitbuf->pallocated_buf);
@@ -124,10 +115,8 @@ void rtw_os_pkt_complete(struct rtw_adapter *padapter, struct sk_buff *pkt)
 
 	queue = skb_get_queue_mapping(pkt);
 	if (__netif_subqueue_stopped(padapter->pnetdev, queue) &&
-		(pxmitpriv->hwxmits[queue].accnt < NR_XMITFRAME/2))
-	{
+	    (pxmitpriv->hwxmits[queue].accnt < NR_XMITFRAME/2))
 		netif_wake_subqueue(padapter->pnetdev, queue);
-	}
 
 	dev_kfree_skb_any(pkt);
 }
@@ -135,12 +124,7 @@ void rtw_os_pkt_complete(struct rtw_adapter *padapter, struct sk_buff *pkt)
 void rtw_os_xmit_complete(struct rtw_adapter *padapter, struct xmit_frame *pxframe)
 {
 	if (pxframe->pkt)
-	{
-
 		rtw_os_pkt_complete(padapter, pxframe->pkt);
-
-	}
-
 	pxframe->pkt = NULL;
 }
 
@@ -156,9 +140,7 @@ void rtw_os_xmit_schedule(struct rtw_adapter *padapter)
 	spin_lock_bh(&pxmitpriv->lock);
 
 	if (rtw_txframes_pending(padapter))
-	{
 		tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
-	}
 
 	spin_unlock_bh(&pxmitpriv->lock);
 }
@@ -177,8 +159,7 @@ static int rtw_mlcst2unicst(struct rtw_adapter *padapter, struct sk_buff *skb)
 	plist = phead->next;
 
 	/* free sta asoc_queue */
-	while ((rtw_end_of_queue_search(phead, plist)) == false)
-	{
+	while (!rtw_end_of_queue_search(phead, plist)) {
 		psta = container_of(plist, struct sta_info, asoc_list);
 
 		plist = plist->next;
@@ -193,11 +174,13 @@ static int rtw_mlcst2unicst(struct rtw_adapter *padapter, struct sk_buff *skb)
 			memcpy(newskb->data, psta->hwaddr, 6);
 			res = rtw_xmit(padapter, &newskb);
 			if (res < 0) {
-				DBG_8192D("%s()-%d: rtw_xmit() return error!\n", __func__, __LINE__);
+				DBG_8192D("%s()-%d: rtw_xmit() return error!\n",
+					  __func__, __LINE__);
 				pxmitpriv->tx_drop++;
 				dev_kfree_skb_any(newskb);
-			} else
+			} else {
 				pxmitpriv->tx_pkts++;
+			}
 		} else {
 			DBG_8192D("%s-%d: skb_copy() failed!\n", __func__, __LINE__);
 			pxmitpriv->tx_drop++;

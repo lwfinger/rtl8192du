@@ -496,7 +496,6 @@ static void odm_DIG(
 	static bool	bMediaConnect_0 = false;
 	static bool	bMediaConnect_1 = false;
 	bool		FirstConnect;
-	u8	TxRate = rtw_read8(adapter, REG_INIDATA_RATE_SEL);
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter * pbuddy_adapter = adapter->pbuddy_adapter;
 	struct hal_data_8192du *pbuddy_pHalData = GET_HAL_DATA(pbuddy_adapter);
@@ -811,33 +810,6 @@ static void odm_DIG(
 
 	}
 
-}
-
-static u8
-dm_initial_gain_MinPWDB(
-	struct rtw_adapter *	adapter
-	)
-{
-	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	s32	rssi_val_min = 0;
-	struct DIG_T *dm_digtable = &pdmpriv->DM_DigTable;
-
-	if ((dm_digtable->curmultistaconnectstate == DIG_MultiSTA_CONNECT) &&
-	   (dm_digtable->curstaconnectstate == DIG_STA_CONNECT)) {
-		if (pdmpriv->EntryMinUndecoratedSmoothedPWDB != 0)
-			rssi_val_min  =  (pdmpriv->EntryMinUndecoratedSmoothedPWDB > pdmpriv->UndecoratedSmoothedPWDB)?
-					pdmpriv->UndecoratedSmoothedPWDB:pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-		else
-			rssi_val_min = pdmpriv->UndecoratedSmoothedPWDB;
-	}
-	else if (	dm_digtable->curstaconnectstate == DIG_STA_CONNECT ||
-			dm_digtable->curstaconnectstate == DIG_STA_BEFORE_CONNECT)
-		rssi_val_min = pdmpriv->UndecoratedSmoothedPWDB;
-	else if (dm_digtable->curmultistaconnectstate == DIG_MultiSTA_CONNECT)
-		rssi_val_min = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-
-	return (u8)rssi_val_min;
 }
 
 static void dm_CCK_PacketDetectionThresh_DMSP(
@@ -2385,8 +2357,6 @@ rtl8192d_HalDmWatchDog(
 		/* vivi, 20101014, to pass DTM item: softap_excludeunencrypted_ext.htm */
 		/* temporarily disable it advised for performance test by yn,2010-11-03. */
 		dm_DynamicBBPowerSaving(adapter);
-
-_record_initrate:
 
 		/*  Read REG_INIDATA_RATE_SEL value for TXDESC. */
 		if (check_fwstate(&adapter->mlmepriv, WIFI_STATION_STATE)) {

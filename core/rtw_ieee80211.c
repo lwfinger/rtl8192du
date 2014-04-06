@@ -1319,7 +1319,6 @@ static uint rtw_p2p_attr_remove(u8 *ie, uint ielen_ori, u8 attr_id)
 	u8 *target_attr;
 	u32 target_attr_len;
 	uint ielen = ielen_ori;
-	int index = 0;
 
 	while (1) {
 		target_attr = rtw_get_p2p_attr(ie, ielen, attr_id, NULL, &target_attr_len);
@@ -1344,7 +1343,6 @@ void rtw_wlan_bssid_ex_remove_p2p_attr(struct wlan_bssid_ex *bss_ex, u8 attr_id)
 {
 	u8 *p2p_ie;
 	uint p2p_ielen, p2p_ielen_ori;
-	int cnt;
 
 	p2p_ie = rtw_get_p2p_ie(bss_ex->IEs+_FIXED_IE_LENGTH_,
 				bss_ex->IELength-_FIXED_IE_LENGTH_,
@@ -1473,7 +1471,7 @@ int rtw_action_frame_parse(const u8 *frame, u32 frame_len, u8 *category, u8 *act
 {
 	const u8 *frame_body = frame + sizeof(struct ieee80211_hdr_3addr);
 	u16 fc;
-	u8 c, a;
+	u8 c, a = 0;
 
 	fc = le16_to_cpu(((struct ieee80211_hdr_3addr *)frame)->frame_control);
 

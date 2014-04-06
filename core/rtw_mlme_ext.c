@@ -45,27 +45,6 @@ static struct mlme_handler mlme_sta_tbl[] = {
 	{WIFI_ACTION, "OnAction", &OnAction},
 };
 
-static struct mlme_handler mlme_ap_tbl[] = {
-	{WIFI_ASSOCREQ, "OnAssocReq", &OnAssocReq},
-	{WIFI_ASSOCRSP, "OnAssocRsp", &OnAssocRsp},
-	{WIFI_REASSOCREQ, "OnReAssocReq", &OnAssocReq},
-	{WIFI_REASSOCRSP, "OnReAssocRsp", &OnAssocRsp},
-	{WIFI_PROBEREQ, "OnProbeReq", &OnProbeReq},
-	{WIFI_PROBERSP, "OnProbeRsp", &OnProbeRsp},
-
-	/*----------------------------------------------------------
-					below 2 are reserved
-	-----------------------------------------------------------*/
-	{0, "DoReserved", &DoReserved},
-	{0, "DoReserved", &DoReserved},
-	{WIFI_BEACON, "OnBeacon", &OnBeacon},
-	{WIFI_ATIM, "OnATIM", &OnAtim},
-	{WIFI_DISASSOC, "OnDisassoc", &OnDisassoc},
-	{WIFI_AUTH, "OnAuth", &OnAuth},
-	{WIFI_DEAUTH, "OnDeAuth", &OnDeAuth},
-	{WIFI_ACTION, "OnAction", &OnAction},
-};
-
 static struct action_handler OnAction_tbl[] = {
 	{RTW_WLAN_CATEGORY_SPECTRUM_MGMT, "ACTION_SPECTRUM_MGMT",
 	 on_action_spct},
@@ -514,26 +493,6 @@ void free_mlme_ext_priv(struct mlme_ext_priv *pmlmeext)
 	}
 }
 
-static u8 cmp_pkt_chnl_diff(struct rtw_adapter *adapt, u8 *pframe,
-			    uint packet_len)
-{				/*  if the channel is same, return 0. else return channel differential */
-	uint len;
-	u8 channel;
-	u8 *p;
-	p = rtw_get_ie(pframe + WLAN_HDR_A3_LEN + _BEACON_IE_OFFSET_,
-		       _DSSET_IE_, &len, packet_len - _BEACON_IE_OFFSET_);
-	if (p) {
-		channel = *(p + 2);
-		if (adapt->mlmeextpriv.cur_channel >= channel) {
-			return adapt->mlmeextpriv.cur_channel - channel;
-		} else {
-			return channel - adapt->mlmeextpriv.cur_channel;
-		}
-	} else {
-		return 0;
-	}
-}
-
 static void _mgt_dispatcher(struct rtw_adapter *adapt,
 			    struct mlme_handler *ptable,
 			    struct recv_frame_hdr *precv_frame)
@@ -686,7 +645,6 @@ unsigned int OnProbeReq(struct rtw_adapter *adapt,
 
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
-	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
 	u8 wifi_test_chk_rate = 1;
 
 	if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE) &&
@@ -772,13 +730,10 @@ _issue_probersp:
 unsigned int OnProbeRsp(struct rtw_adapter *adapt,
 			struct recv_frame_hdr *precv_frame)
 {
-	struct sta_info *psta;
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
-	struct sta_priv *pstapriv = &adapt->stapriv;
-	u8 *pframe = precv_frame->rx_data;
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo = &adapt->wdinfo;
+	u8 *pframe = precv_frame->rx_data;
 #endif
 
 #ifdef CONFIG_P2P
@@ -1875,7 +1830,7 @@ unsigned int OnDeAuth(struct rtw_adapter *adapt,
 
 		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
 		if (psta) {
-			u8 updated;
+			u8 updated = 0;
 
 			spin_lock_bh(&pstapriv->asoc_list_lock);
 			if (list_empty(&psta->asoc_list) == false) {
@@ -1940,7 +1895,7 @@ unsigned int OnDisassoc(struct rtw_adapter *adapt,
 
 		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
 		if (psta) {
-			u8 updated;
+			u8 updated = 0;
 
 			spin_lock_bh(&pstapriv->asoc_list_lock);
 			if (list_empty(&psta->asoc_list) == false) {
@@ -1970,71 +1925,6 @@ unsigned int OnAtim(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 {
 	DBG_8192D("%s\n", __func__);
 	return 1;
-}
-
-static unsigned int on_action_spct_ch_switch(struct rtw_adapter *adapt,
-					     struct sta_info *psta, u8 *ies,
-					     uint ies_len)
-{
-	unsigned int ret = 0;
-	struct mlme_ext_priv *mlmeext = &adapt->mlmeextpriv;
-	struct mlme_ext_info *pmlmeinfo = &(mlmeext->mlmext_info);
-
-	if (!(pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS)) {
-		ret = 1;
-		goto exit;
-	}
-
-	if ((pmlmeinfo->state & 0x03) == WIFI_FW_STATION_STATE) {
-		int ch_switch_mode = -1, ch = -1, ch_switch_cnt = -1;
-		int ch_offset = -1;
-		u8 bwmode;
-		struct ieee80211_info_element *ie;
-
-		DBG_8192D(FUNC_NDEV_FMT " from %pM\n",
-			  FUNC_NDEV_ARG(adapt->pnetdev), psta->hwaddr);
-
-		for_each_ie(ie, ies, ies_len) {
-			if (ie->id == WLAN_EID_CHANNEL_SWITCH) {
-				ch_switch_mode = ie->data[0];
-				ch = ie->data[1];
-				ch_switch_cnt = ie->data[2];
-				DBG_8192D
-				    ("ch_switch_mode:%d, ch:%d, ch_switch_cnt:%d\n",
-				     ch_switch_mode, ch, ch_switch_cnt);
-			} else if (ie->id == WLAN_EID_SECONDARY_CHANNEL_OFFSET) {
-				ch_offset =
-				    secondary_ch_offset_to_hal_ch_offset(ie->
-									 data
-									 [0]);
-				DBG_8192D("ch_offset:%d\n", ch_offset);
-			}
-		}
-
-		if (ch == -1)
-			return 1;
-
-		if (ch_offset == -1)
-			bwmode = mlmeext->cur_bwmode;
-		else
-			bwmode =
-			    (ch_offset ==
-			     HAL_PRIME_CHNL_OFFSET_DONT_CARE) ?
-			    HT_CHANNEL_WIDTH_20 : HT_CHANNEL_WIDTH_40;
-
-		ch_offset =
-		    (ch_offset == -1) ? mlmeext->cur_ch_offset : ch_offset;
-
-		/* todo:
-		 * 1. the decision of channel switching
-		 * 2. things after channel switching
-		 */
-
-		ret = rtw_set_ch_cmd(adapt, ch, bwmode, ch_offset, true);
-	}
-
-exit:
-	return ret;
 }
 
 unsigned int on_action_spct(struct rtw_adapter *adapt,
@@ -2165,31 +2055,6 @@ static int get_reg_classes_full_count(struct p2p_channels channel_list)
 	return cnt;
 }
 
-static void get_channel_cnt_24g_5gl_5gh(struct mlme_ext_priv *pmlmeext,
-					u8 *p24g_cnt, u8 *p5gl_cnt,
-					u8 *p5gh_cnt)
-{
-	int i = 0;
-
-	*p24g_cnt = 0;
-	*p5gl_cnt = 0;
-	*p5gh_cnt = 0;
-
-	for (i = 0; i < pmlmeext->max_chan_nums; i++) {
-		if (pmlmeext->channel_set[i].ChannelNum <= 14) {
-			(*p24g_cnt)++;
-		} else if ((pmlmeext->channel_set[i].ChannelNum > 14) &&
-			   (pmlmeext->channel_set[i].ChannelNum <= 48)) {
-			/*      Just include the channel 36, 40, 44, 48 channels for 5G low */
-			(*p5gl_cnt)++;
-		} else if ((pmlmeext->channel_set[i].ChannelNum >= 149) &&
-			   (pmlmeext->channel_set[i].ChannelNum <= 161)) {
-			/*      Just include the channel 149, 153, 157, 161 channels for 5G high */
-			(*p5gh_cnt)++;
-		}
-	}
-}
-
 void issue_p2p_GO_request(struct rtw_adapter *adapt, u8 *raddr)
 {
 	unsigned char category = RTW_WLAN_CATEGORY_PUBLIC;
@@ -2197,8 +2062,7 @@ void issue_p2p_GO_request(struct rtw_adapter *adapt, u8 *raddr)
 	__be32 p2poui = cpu_to_be32(P2POUI);
 	u8 oui_subtype = P2P_GO_NEGO_REQ;
 	u8 wpsie[255] = { 0x00 }, p2pie[255] = {0x00};
-	u8 wpsielen = 0, p2pielen = 0, i;
-	u8 channel_cnt_24g = 0, channel_cnt_5gl = 0, channel_cnt_5gh = 0;
+	u8 wpsielen = 0, p2pielen = 0;
 	u16 len_channellist_attr = 0;
 	struct xmit_frame *pmgntframe;
 	struct pkt_attrib *pattrib;
@@ -2207,7 +2071,6 @@ void issue_p2p_GO_request(struct rtw_adapter *adapt, u8 *raddr)
 	unsigned short *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
@@ -2619,12 +2482,11 @@ static void issue_p2p_GO_response(struct rtw_adapter *adapt, u8 *raddr,
 	u8 oui_subtype = P2P_GO_NEGO_RESP;
 	u8 wpsie[255] = { 0x00 }, p2pie[255] = {
 	0x00};
-	u8 p2pielen = 0, i;
+	u8 p2pielen = 0;
 	uint wpsielen = 0;
 	u16 wps_devicepassword_id = 0x0000;
 	uint wps_devicepassword_id_len = 0;
 	__be16 be_tmp;
-	u8 channel_cnt_24g = 0, channel_cnt_5gl = 0, channel_cnt_5gh;
 	u16 len_channellist_attr = 0;
 
 	struct xmit_frame *pmgntframe;
@@ -2634,7 +2496,6 @@ static void issue_p2p_GO_response(struct rtw_adapter *adapt, u8 *raddr,
 	unsigned short *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
@@ -3083,8 +2944,8 @@ static void issue_p2p_GO_confirm(struct rtw_adapter *adapt, u8 *raddr, u8 result
 	u8 action = P2P_PUB_ACTION_ACTION;
 	__be32 p2poui = cpu_to_be32(P2POUI);
 	u8 oui_subtype = P2P_GO_NEGO_CONF;
-	u8 wpsie[255] = {0x00}, p2pie[255] = {0x00};
-	u8 wpsielen = 0, p2pielen = 0;
+	u8 p2pie[255] = {0x00};
+	u8 p2pielen = 0;
 	struct xmit_frame *pmgntframe;
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
@@ -3092,7 +2953,6 @@ static void issue_p2p_GO_confirm(struct rtw_adapter *adapt, u8 *raddr, u8 result
 	unsigned short *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
@@ -3283,9 +3143,8 @@ void issue_p2p_invitation_request(struct rtw_adapter *adapt, u8 *raddr)
 	__be32 p2poui = cpu_to_be32(P2POUI);
 	u8 oui_subtype = P2P_INVIT_REQ;
 	u8 p2pie[255] = { 0x00 };
-	u8 p2pielen = 0, i;
+	u8 p2pielen = 0;
 	u8 dialogToken = 3;
-	u8 channel_cnt_24g = 0, channel_cnt_5gl = 0, channel_cnt_5gh = 0;
 	u16 len_channellist_attr = 0;
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter *pbuddy_adapter = adapt->pbuddy_adapter;
@@ -3301,7 +3160,6 @@ void issue_p2p_invitation_request(struct rtw_adapter *adapt, u8 *raddr)
 	unsigned short *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
@@ -3622,8 +3480,7 @@ void issue_p2p_invitation_response(struct rtw_adapter *adapt, u8 *raddr,
 	__be32 p2poui = cpu_to_be32(P2POUI);
 	u8 oui_subtype = P2P_INVIT_RESP;
 	u8 p2pie[255] = { 0x00 };
-	u8 p2pielen = 0, i;
-	u8 channel_cnt_24g = 0, channel_cnt_5gl = 0, channel_cnt_5gh = 0;
+	u8 p2pielen = 0;
 	u16 len_channellist_attr = 0;
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter *pbuddy_adapter = adapt->pbuddy_adapter;
@@ -3638,7 +3495,6 @@ void issue_p2p_invitation_response(struct rtw_adapter *adapt, u8 *raddr,
 	unsigned short *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
@@ -3910,7 +3766,6 @@ void issue_p2p_provision_request(struct rtw_adapter *adapt, u8 *pssid,
 	unsigned short *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
@@ -4031,7 +3886,6 @@ void issue_probersp_p2p(struct rtw_adapter *adapt, unsigned char *da)
 	struct ieee80211_hdr *pwlanhdr;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 	struct cfg80211_wifidirect_info *pcfg80211_wdinfo =
@@ -4327,11 +4181,8 @@ static int _issue_probereq_p2p(struct rtw_adapter *adapt, u8 *da, int wait_ack)
 	struct ieee80211_hdr *pwlanhdr;
 	unsigned short *fctrl;
 	unsigned char *mac;
-	unsigned char bssrate[NUMRATES];
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
-	int bssrate_len = 0;
 	u8 bc_addr[] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 	u8 wpsie[255] = {0x00}, p2pie[255] = {0x00};
@@ -4745,14 +4596,14 @@ static s32 rtw_action_public_decache(struct recv_frame_hdr *recv_frame, s32 toke
 
 static unsigned int on_action_public_p2p(struct recv_frame_hdr *precv_frame)
 {
-	struct rtw_adapter *adapt = precv_frame->adapter;
 	u8 *pframe = precv_frame->rx_data;
-	uint len = precv_frame->len;
 	u8 *frame_body;
 	u8 dialogToken = 0;
 #ifdef CONFIG_P2P
+	struct rtw_adapter *adapt = precv_frame->adapter;
+	uint len = precv_frame->len;
 	u8 *p2p_ie;
-	u32 p2p_ielen, wps_ielen;
+	u32 p2p_ielen;
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 	u8 result = P2P_STATUS_SUCCESS;
 	u8 empty_addr[ETH_ALEN] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -5280,7 +5131,6 @@ static unsigned int on_action_public_vendor(struct recv_frame_hdr *precv_frame)
 {
 	unsigned int ret = 0;
 	u8 *pframe = precv_frame->rx_data;
-	uint frame_len = precv_frame->len;
 	u8 *frame_body = pframe + sizeof(struct ieee80211_hdr_3addr);
 
 	if (!memcmp(frame_body + 2, P2P_OUI, 4)) {
@@ -5321,7 +5171,6 @@ unsigned int on_action_public(struct rtw_adapter *adapt,
 {
 	unsigned int ret = 0;
 	u8 *pframe = precv_frame->rx_data;
-	uint frame_len = precv_frame->len;
 	u8 *frame_body = pframe + sizeof(struct ieee80211_hdr_3addr);
 	u8 category, action;
 
@@ -5935,7 +5784,6 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 	struct xmit_frame *pmgntframe;
 	struct pkt_attrib *pattrib;
 	struct ieee80211_hdr *pwlanhdr;
-	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex *cur_network = &(pmlmeinfo->network);
@@ -5946,6 +5794,9 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 	unsigned char *pframe;
 	unsigned short *fctrl;
 	unsigned char *mac, *bssid;
+#if defined (CONFIG_92D_AP_MODE) || defined(CONFIG_P2P)
+	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
+#endif
 #if defined (CONFIG_92D_AP_MODE)
 	u8 *pwps_ie;
 	uint wps_ielen;
@@ -6137,7 +5988,7 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 				       &pattrib->pktlen);
 		}
 
-		/*  EXTERNDED SUPPORTED RATE */
+		/*  EXTENDED SUPPORTED RATE */
 		if (rate_len > 8) {
 			pframe =
 			    rtw_set_ie(pframe, _EXT_SUPPORTEDRATES_IE_,
@@ -6186,7 +6037,6 @@ static int _issue_probereq(struct rtw_adapter *adapt,
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	int bssrate_len = 0;
 	u8 bc_addr[] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 
@@ -6512,9 +6362,6 @@ void issue_asocrsp(struct rtw_adapter *adapt, unsigned short status,
 	struct wlan_bssid_ex *pnetwork = &(pmlmeinfo->network);
 	u8 *ie = pnetwork->IEs;
 	__le16 leval, lestatus;
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
-#endif /* CONFIG_P2P */
 
 	DBG_8192D("%s\n", __func__);
 
@@ -6664,7 +6511,6 @@ void issue_assocreq(struct rtw_adapter *adapt)
 	unsigned char *pframe, *p;
 	struct ieee80211_hdr *pwlanhdr;
 	unsigned short *fctrl;
-	unsigned short val16;
 	__le16 le_tmp;
 	unsigned int i, j, ie_len, index = 0;
 	unsigned char rf_type, bssrate[NUMRATES], sta_bssrate[NUMRATES];
@@ -7513,16 +7359,13 @@ exit:
 void issue_action_spct_ch_switch(struct rtw_adapter *adapt, u8 *ra,
 				 u8 new_ch, u8 ch_offset)
 {
-	struct list_head *plist, *phead;
 	struct xmit_frame *pmgntframe;
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
 	struct ieee80211_hdr *pwlanhdr;
 	unsigned short *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
-	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	DBG_8192D(FUNC_NDEV_FMT " ra=%pM, ch:%u, offset:%u\n",
 		  FUNC_NDEV_ARG(adapt->pnetdev), ra, new_ch, ch_offset);
@@ -7582,10 +7425,10 @@ void issue_action_BA(struct rtw_adapter *adapt, unsigned char *raddr,
 {
 	u8 category = RTW_WLAN_CATEGORY_BACK;
 	u16 start_seq;
-	u16 BA_para_set;
+	u16 BA_para_set = 0;
 	u16 reason_code;
 	u16 BA_timeout_value;
-	u16 BA_starting_seqctrl;
+	u16 BA_starting_seqctrl = 0;
 	struct xmit_frame *pmgntframe;
 	struct pkt_attrib *pattrib;
 	u8 *pframe;
@@ -8004,8 +7847,6 @@ void site_survey(struct rtw_adapter *adapt)
 
 #endif /* CONFIG_CONCURRENT_MODE */
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
-	static unsigned char prev_survey_channel;
-	static unsigned int p2p_scan_count;
 
 	if ((pwdinfo->rx_invitereq_info.scan_op_ch_only) ||
 	    (pwdinfo->p2p_info.scan_op_ch_only)) {
@@ -9513,8 +9354,6 @@ static void _linked_rx_signal_strehgth_display(struct rtw_adapter *adapt)
 static u8 chk_ap_is_alive(struct rtw_adapter *adapt, struct sta_info *psta)
 {
 	u8 ret = false;
-	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	if ((sta_rx_data_pkts(psta) == sta_last_rx_data_pkts(psta)) &&
 	    sta_rx_beacon_pkts(psta) == sta_last_rx_beacon_pkts(psta) &&
@@ -10168,10 +10007,6 @@ u8 sitesurvey_cmd_hdl(struct rtw_adapter *adapt, u8 *pbuf)
 	u32 initialgain;
 	u32 i;
 
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &adapt->wdinfo;
-#endif
-
 	if (pmlmeext->sitesurvey_res.state == SCAN_DISABLE) {
 		/* for first time sitesurvey_cmd */
 		rtw_hal_set_hwreg(adapt, HW_VAR_CHECK_TXBUF, NULL);
@@ -10579,10 +10414,9 @@ void change_band_update_ie(struct rtw_adapter *adapt,
 {
 	u8 network_type, rate_len, total_rate_len, remainder_rate_len;
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
+#ifdef CONFIG_92D_AP_MODE
 	u8 erpinfo = 0x4;
-
-	/* DBG_8192D("%s\n", __func__); */
+#endif
 
 	if (pmlmeext->cur_channel >= 36) {
 		network_type = WIRELESS_11A;
@@ -11582,7 +11416,6 @@ void concurrent_chk_joinbss_done(struct rtw_adapter *adapt, int join_res)
 u8 set_ch_hdl(struct rtw_adapter *adapt, u8 *pbuf)
 {
 	struct set_ch_parm *set_ch_parm;
-	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
 
 	if (!pbuf)
@@ -11607,7 +11440,6 @@ u8 set_ch_hdl(struct rtw_adapter *adapt, u8 *pbuf)
 u8 set_chplan_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 {
 	struct setchannelplan_param *setchannelplan_param;
-	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
 
 	if (!pbuf)
@@ -11634,10 +11466,6 @@ u8 led_blink_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 u8 set_csa_hdl(struct rtw_adapter *adapt, unsigned char *pbuf)
 {
 	struct setchannelswitch_param *setchannelswitch_param;
-	struct setchannelplan_param *setchannelplan_param;
-	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
-	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
-	struct mlme_ext_info *pmlmeinfo = &pmlmeext->mlmext_info;
 	u8 new_ch_no;
 	u8 gval8 = 0x00, sval8 = 0xff;
 

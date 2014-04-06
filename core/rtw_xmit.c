@@ -614,7 +614,6 @@ static s32 xmitframe_addmic(struct rtw_adapter *padapter,
 	u8 *pframe, *payload, mic[8];
 	struct	mic_data micdata;
 	struct	sta_info *stainfo;
-	struct	qos_priv *pqospriv = &(padapter->mlmepriv.qospriv);
 	struct	pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct	security_priv *psecuritypriv = &padapter->securitypriv;
 	struct	xmit_priv *pxmitpriv = &padapter->xmitpriv;
@@ -1337,7 +1336,6 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)
 	struct xmit_frame *pxframe = NULL;
 	struct list_head *plist, *phead;
 	struct __queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
-	struct rtw_adapter *padapter = pxmitpriv->adapter;
 
 	spin_lock_bh(&pfree_xmit_queue->lock);
 

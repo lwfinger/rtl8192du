@@ -41,10 +41,7 @@ void rtw_os_recv_resource_free(struct recv_priv *precvpriv)
 /* alloc os related resource in struct recv_buf */
 int rtw_os_recvbuf_resource_alloc(struct rtw_adapter *padapter, struct recv_buf *precvbuf)
 {
-	int res=1;
-
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
-	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
+	int res = 1;
 
 	precvbuf->irp_pending = false;
 	precvbuf->purb = usb_alloc_urb(0, GFP_KERNEL);
@@ -105,9 +102,9 @@ void rtw_handle_tkip_mic_err(struct rtw_adapter *padapter,u8 bgroup)
 	}
 
 	if (bgroup)
-		key_type |= NL80211_KEYTYPE_GROUP;
+		key_type = NL80211_KEYTYPE_GROUP;
 	else
-		key_type |= NL80211_KEYTYPE_PAIRWISE;
+		key_type = NL80211_KEYTYPE_PAIRWISE;
 
 	cfg80211_michael_mic_failure(padapter->pnetdev, (u8 *)&pmlmepriv->assoc_bssid[0], key_type, -1,
 		NULL, GFP_ATOMIC);

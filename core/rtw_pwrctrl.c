@@ -23,7 +23,6 @@
 void ips_enter(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 
 	_enter_pwrlock(&pwrpriv->lock);
 
@@ -106,8 +105,6 @@ static bool rtw_pwr_unassociated_idle(struct rtw_adapter *adapter)
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo = &(adapter->wdinfo);
-	struct cfg80211_wifidirect_info *pcfg80211_wdinfo =
-	    &adapter->cfg80211_wdinfo;
 #endif
 
 	bool ret = false;
@@ -131,8 +128,6 @@ static bool rtw_pwr_unassociated_idle(struct rtw_adapter *adapter)
 		struct mlme_priv *b_pmlmepriv = &(buddy->mlmepriv);
 #ifdef CONFIG_P2P
 		struct wifidirect_info *b_pwdinfo = &(buddy->wdinfo);
-		struct cfg80211_wifidirect_info *b_pcfg80211_wdinfo =
-		    &buddy->cfg80211_wdinfo;
 #endif
 
 		if (check_fwstate(b_pmlmepriv, WIFI_ASOC_STATE | WIFI_SITE_MONITOR) ||
@@ -153,9 +148,6 @@ exit:
 
 void rtw_ps_processor(struct rtw_adapter *padapter)
 {
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-#endif /* CONFIG_P2P */
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 
@@ -269,9 +261,6 @@ static u8 ps_rdy_check(struct rtw_adapter *padapter)
 void rtw_set_ps_mode(struct rtw_adapter *padapter, u8 ps_mode, u8 smart_ps)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-#endif /* CONFIG_P2P */
 
 	RT_TRACE(_module_rtl871x_pwrctrl_c_, _drv_notice_,
 		 ("%s: PowerMode=%d Smart_PS=%d\n",
@@ -319,7 +308,6 @@ void rtw_lps_enter(struct rtw_adapter *padapter)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-	struct rtw_adapter *buddy = padapter->pbuddy_adapter;
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (padapter->iface_type != IFACE_PORT0)

@@ -133,7 +133,6 @@ static u8 rtw_deinit_intf_priv(struct dvobj_priv *dvobj)
 static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 {
 	int	i;
-	u8	val8;
 	int	status = 0;
 	struct dvobj_priv *pdvobjpriv = NULL;
 	struct usb_device				*pusbd;
@@ -295,12 +294,9 @@ static void usb_intf_stop(struct rtw_adapter *padapter)
 
 static void rtw_dev_unload(struct rtw_adapter *padapter)
 {
-	struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
-	u8 val8;
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+rtw_dev_unload\n"));
 
-	if (padapter->bup == true)
-	{
+	if (padapter->bup) {
 		DBG_8192D("===> rtw_dev_unload\n");
 
 		padapter->bDriverStopped = true;
@@ -373,7 +369,6 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	struct net_device *pnetdev = padapter->pnetdev;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-	struct usb_device *usb_dev = interface_to_usbdev(pusb_intf);
 #ifdef CONFIG_WAKE_ON_WLAN
 	struct wowlan_ioctl_param poidparam;
 #endif /*  CONFIG_WAKE_ON_WLAN */
@@ -446,7 +441,7 @@ exit:
 	return ret;
 }
 
-int rtw_resume_process(struct rtw_adapter *padapter)
+static int rtw_resume_process(struct rtw_adapter *padapter)
 {
 	struct net_device *pnetdev;
 	struct pwrctrl_priv *pwrpriv = NULL;
@@ -494,7 +489,6 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
 	struct rtw_adapter *padapter = dvobj->if1;
-	struct net_device *pnetdev = padapter->pnetdev;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	 int ret = 0;
 
@@ -681,11 +675,9 @@ static void rtw_usb_if1_deinit(struct rtw_adapter *if1)
  *        We accept the new device by returning 0.
 */
 
-static struct rtw_adapter  *rtw_sw_export = NULL;
-
 static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device_id *did)
 {
-	struct rtw_adapter *if1 = NULL, *if2 = NULL;
+	struct rtw_adapter *if1 = NULL;
 	struct dvobj_priv *dvobj = NULL;
 	uint status = 0;
 
@@ -713,7 +705,6 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 
 	status = 1;
 
-free_if1:
 	if (status != 1 && if1)
 		rtw_usb_if1_deinit(if1);
 free_dvobj:

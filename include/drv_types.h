@@ -120,7 +120,7 @@ struct registry_priv {
 	u8	wifi_spec;/*  !turbo_mode */
 
 	u8	channel_plan;
-#ifdef CONFIG_BT_COEXIST
+#ifdef CONFIG_92D_BT_COEXIST
 	u8	bt_iso;
 	u8	bt_sco;
 	u8	bt_ampdu;
@@ -310,7 +310,7 @@ struct rtw_adapter {
 	u8 bForceWriteInitGain;
 	/* 	The driver will show up the desired channel number when this flag is 1. */
 	u8 bNotifyChannelChange;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	/* 	The driver will show the current P2P status when the upper application reads it. */
 	u8 bShowGetP2PState;
 #endif

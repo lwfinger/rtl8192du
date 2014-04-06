@@ -114,11 +114,11 @@ static char *translate_scan(struct rtw_adapter *padapter,
 	u32 i = 0;
 	u8 bw_40MHz = 0, short_GI = 0;
 	u16 mcs_rate = 0;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info	*pwdinfo = &padapter->wdinfo;
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 	{
 		u32	blnGotP2PIE = false;
@@ -145,7 +145,7 @@ static char *translate_scan(struct rtw_adapter *padapter,
 		}
 	}
 
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 	/*  AP MAC address  */
 	iwe.cmd = SIOCGIWAP;
 	iwe.u.ap_addr.sa_family = ARPHRD_ETHER;
@@ -401,9 +401,9 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info* pwdinfo = &padapter->wdinfo;
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	param->u.crypt.err = 0;
 	param->u.crypt.alg[IEEE_CRYPT_ALG_NAME_LEN - 1] = '\0';
@@ -535,10 +535,10 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 					padapter->securitypriv.dot118021XGrpKeyid = param->u.crypt.idx;
 
 					rtw_set_key(padapter,&padapter->securitypriv, param->u.crypt.idx, 1);
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 					if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_PROVISIONING_ING))
 						rtw_p2p_set_state(pwdinfo, P2P_STATE_PROVISIONING_DONE);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 				}
 			}
@@ -570,9 +570,9 @@ static int rtw_set_wpa_ie(struct rtw_adapter *padapter, char *pie, unsigned shor
 	int ret = 0;
 	u8	null_addr[]= {0, 0, 0, 0, 0, 0};
 	int i;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info* pwdinfo = &padapter->wdinfo;
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	if ((ielen > MAX_WPA_IE_LEN) || (pie == NULL)) {
 		_clr_fwstate_(&padapter->mlmepriv, WIFI_UNDER_WPS);
@@ -684,10 +684,10 @@ static int rtw_set_wpa_ie(struct rtw_adapter *padapter, char *pie, unsigned shor
 					memcpy(padapter->securitypriv.wps_ie, &buf[cnt], padapter->securitypriv.wps_ie_len);
 
 					set_fwstate(&padapter->mlmepriv, WIFI_UNDER_WPS);
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 					if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_OK))
 						rtw_p2p_set_state(pwdinfo, P2P_STATE_PROVISIONING_ING);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 					cnt += buf[cnt+1]+2;
 
 					break;
@@ -1240,9 +1240,9 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_set_scan\n"));
 
 	if (0 == rtw_pwr_wakeup(padapter)) {
@@ -1305,14 +1305,14 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 /*	the pmlmepriv->scan_interval is always equal to 3. */
 /*	So, the wpa_supplicant won't find out the WPS SoftAP. */
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)) {
 		rtw_p2p_set_pre_state(pwdinfo, rtw_p2p_state(pwdinfo));
 		rtw_p2p_set_state(pwdinfo, P2P_STATE_FIND_PHASE_SEARCH);
 		rtw_p2p_findphase_ex_set(pwdinfo, P2P_FINDPHASE_EX_FULL);
 		rtw_free_network_queue(padapter, true);
 	}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	memset(ssid, 0, sizeof(struct ndis_802_11_ssid)*RTW_SSID_SCAN_AMOUNT);
 
@@ -1414,9 +1414,9 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	int wait_status;
 #ifdef CONFIG_CONCURRENT_MODE
 #endif
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct	wifidirect_info*	pwdinfo = &padapter->wdinfo;
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_get_scan\n"));
 	RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_info_, (" Start of Query SIOCGIWSCAN .\n"));
 
@@ -1425,7 +1425,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 		goto exit;
 	}
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 	{
 		/*	P2P is enabled */
@@ -1443,7 +1443,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	{
 		wait_for_surveydone = 100;
 	}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	wait_status = _FW_UNDER_SURVEY
 		|_FW_UNDER_LINKING
@@ -2539,7 +2539,7 @@ static void rtw_dbg_mode_hdl(struct rtw_adapter *padapter, u32 id, u8 *pdata, u3
 		DBG_8192D("==> trigger gpio 0\n");
 		rtw_hal_set_hwreg(padapter, HW_VAR_TRIGGER_GPIO_0, NULL);
 		break;
-#ifdef CONFIG_BT_COEXIST
+#ifdef CONFIG_92D_BT_COEXIST
 	case GEN_MP_IOCTL_SUBCODE(SET_DM_BT):
 		DBG_8192D("==> set dm_bt_coexist:%x\n",*(u8 *)pdata);
 		rtw_hal_set_hwreg(padapter, HW_VAR_BT_SET_COEXIST, pdata);
@@ -2765,7 +2765,7 @@ static int rtw_wps_start(struct net_device *dev,
 	return ret;
 }
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 static int rtw_wext_p2p_enable(struct net_device *dev,
 			       struct iw_request_info *info,
 			       union iwreq_data *wrqu, char *extra)
@@ -4102,14 +4102,14 @@ static int rtw_p2p_got_wpsinfo(struct net_device *dev,
 	return ret;
 }
 
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 static int rtw_p2p_set(struct net_device *dev,
 		       struct iw_request_info *info,
 		       union iwreq_data *wrqu, char *extra)
 {
 	int ret = 0;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 
 	DBG_8192D("[%s] extra = %s\n", __func__, extra);
 
@@ -4155,7 +4155,7 @@ static int rtw_p2p_set(struct net_device *dev,
 		wrqu->data.length -= 11;
 		rtw_p2p_set_persistent(dev, info, wrqu, &extra[11]);
 	}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	return ret;
 }
@@ -4166,7 +4166,7 @@ static int rtw_p2p_get(struct net_device *dev,
 {
 	int ret = 0;
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 
@@ -4192,7 +4192,7 @@ static int rtw_p2p_get(struct net_device *dev,
 	} else if (!memcmp((void const *)wrqu->data.pointer, "op_ch", 5)) {
 		rtw_p2p_get_op_ch(dev, info, wrqu, extra);
 	}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	return ret;
 }
@@ -4204,7 +4204,7 @@ static int rtw_p2p_get2(struct net_device *dev,
 
 	int ret = 0;
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 
 	int length = wrqu->data.length;
 	char *buffer = (u8 *)kmalloc(length, GFP_KERNEL);
@@ -4247,7 +4247,7 @@ static int rtw_p2p_get2(struct net_device *dev,
 bad:
 	kfree(buffer);
 
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	return ret;
 }
@@ -4670,10 +4670,10 @@ static int rtw_dbg_port(struct net_device *dev,
 				padapter->bNotifyChannelChange = extra_arg;
 				break;
 			case 0x24:
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 				DBG_8192D("turn %s the bShowGetP2PState Variable\n", (extra_arg == 1)?"on":"off");
 				padapter->bShowGetP2PState = extra_arg;
-#endif /*  CONFIG_P2P */
+#endif /*  CONFIG_92D_P2P */
 				break;
 			case 0xdd:/* registers dump , 0 for mac reg, 1 for bb reg, 2 for rf reg */
 				if (extra_arg == 0)

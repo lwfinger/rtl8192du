@@ -19,7 +19,7 @@
 #include <rtw_p2p.h>
 #include <wifi.h>
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 
 static int rtw_p2p_is_channel_list_ok(u8 desired_ch, u8 *ch_list, u8 ch_cnt)
 {
@@ -1882,7 +1882,7 @@ void p2p_protocol_wk_hdl(struct rtw_adapter *padapter, int intCmdType)
 		pre_tx_negoreq_handler(padapter);
 #endif
 		break;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 #ifdef CONFIG_CONCURRENT_MODE
 	case P2P_AP_P2P_CH_SWITCH_PROCESS_WK:
 		p2p_concurrent_handler(padapter);
@@ -2027,7 +2027,7 @@ void rtw_init_wifidirect_timers(struct rtw_adapter *padapter)
 
 void rtw_init_wifidirect_addrs(struct rtw_adapter *padapter, u8 *dev_addr, u8 *iface_addr)
 {
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 
 	if (dev_addr)
@@ -2221,4 +2221,4 @@ exit:
 	return ret;
 }
 
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */

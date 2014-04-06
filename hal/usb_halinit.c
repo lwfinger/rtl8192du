@@ -3716,7 +3716,7 @@ static void UpdateHalRAMask8192DUsb(struct rtw_adapter *padapter, u32 mac_id)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex	*cur_network = &(pmlmeinfo->network);
-#ifdef CONFIG_BT_COEXIST
+#ifdef CONFIG_92D_BT_COEXIST
 	struct btcoexist_priv	*pbtpriv = &(pHalData->bt_coexist);
 #endif
 
@@ -3778,7 +3778,7 @@ static void UpdateHalRAMask8192DUsb(struct rtw_adapter *padapter, u32 mac_id)
 			break;
 	}
 
-#ifdef CONFIG_BT_COEXIST
+#ifdef CONFIG_92D_BT_COEXIST
 	if ((pbtpriv->BT_Coexist) &&
 		(pbtpriv->BT_CoexistType == BT_CSR_BC4) &&
 		(pbtpriv->BT_CUR_State) &&

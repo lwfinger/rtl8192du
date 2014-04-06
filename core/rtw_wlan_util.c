@@ -1197,7 +1197,7 @@ void update_tx_basic_rate(struct rtw_adapter *padapter, u8 wirelessmode)
 {
 	unsigned char supported_rates[NDIS_802_11_LENGTH_RATES_EX];
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 
 	/*	Added by Albert 2011/03/22 */
@@ -1205,7 +1205,7 @@ void update_tx_basic_rate(struct rtw_adapter *padapter, u8 wirelessmode)
 	/*	So, the Tx packet shouldn't use the CCK rate */
 	if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 		return;
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 	memset(supported_rates, 0, NDIS_802_11_LENGTH_RATES_EX);
 
 	/* clear B mod if current channel is in 5G band, avoid tx cck rate in 5G band. */

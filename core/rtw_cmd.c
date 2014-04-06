@@ -1645,7 +1645,7 @@ static void power_saving_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
 	 rtw_ps_processor(padapter);
 }
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 u8 p2p_protocol_wk_cmd(struct rtw_adapter *padapter, int intcmdtype)
 {
 	struct cmd_obj *ph2c;
@@ -1682,7 +1682,7 @@ exit:
 
 	return res;
 }
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 u8 rtw_ps_cmd(struct rtw_adapter *padapter)
 {
@@ -1862,7 +1862,7 @@ u8 rtw_drvextra_cmd_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 	case LPS_CTRL_WK_CID:
 		lps_ctrl_wk_hdl(padapter, (u8)pdrvextra_cmd->type_size);
 		break;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	case P2P_PROTO_WK_CID:
 		/*	I used the type_size as the type command */
 		p2p_protocol_wk_hdl(padapter, pdrvextra_cmd->type_size);

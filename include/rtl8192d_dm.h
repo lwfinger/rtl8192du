@@ -134,6 +134,27 @@ enum DM_DIG_CONNECT_E {
 	DIG_CONNECT_MAX
 };
 
+enum BT_COTYPE {
+	BT_2Wire		= 0,		
+	BT_ISSC_3Wire		= 1,
+	BT_Accel		= 2,
+	BT_CSR_BC4		= 3,
+	BT_CSR_BC8		= 4,
+	BT_RTL8756		= 5,
+};
+
+enum {
+	BT_SCO		= 0,	
+	BT_A2DP		= 1,
+	BT_HID		= 2,
+	BT_HID_Idle	= 3,
+	BT_Scan		= 4,
+	BT_Idle		= 5,
+	BT_OtherAction	= 6,
+	BT_Busy		= 7,
+	BT_OtherBusy	= 8,
+	BT_PAN		= 9,
+};
 
 #define		DM_DIG_THRESH_HIGH			40
 #define		DM_DIG_THRESH_LOW			35

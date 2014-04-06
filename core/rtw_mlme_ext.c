@@ -601,7 +601,7 @@ void mgt_dispatcher(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 #endif
 }
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 static u32 p2p_listen_state_process(struct rtw_adapter *adapt, unsigned char *da)
 {
 	bool response = true;
@@ -622,7 +622,7 @@ static u32 p2p_listen_state_process(struct rtw_adapter *adapt, unsigned char *da
 
 	return 1;
 }
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 /****************************************************************************
 
@@ -643,7 +643,7 @@ unsigned int OnProbeReq(struct rtw_adapter *adapt,
 	uint len = precv_frame->len;
 	u8 is_valid_p2p_probereq = false;
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 	u8 wifi_test_chk_rate = 1;
 
@@ -678,7 +678,7 @@ unsigned int OnProbeReq(struct rtw_adapter *adapt,
 	}
 
 _continue:
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE)) {
 		return 1;
@@ -731,12 +731,12 @@ unsigned int OnProbeRsp(struct rtw_adapter *adapt,
 			struct recv_frame_hdr *precv_frame)
 {
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &adapt->wdinfo;
 	u8 *pframe = precv_frame->rx_data;
 #endif
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_TX_PROVISION_DIS_REQ)) {
 		if (pwdinfo->tx_prov_disc_info.benable) {
 			if (!memcmp
@@ -1205,12 +1205,12 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 	struct sta_priv *pstapriv = &adapt->stapriv;
 	u8 *pframe = precv_frame->rx_data;
 	uint pkt_len = precv_frame->len;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 	u8 p2p_status_code = P2P_STATUS_SUCCESS;
 	u8 *p2pie;
 	u32 p2pielen = 0;
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE) &&
@@ -1587,7 +1587,7 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 	if (status != _STATS_SUCCESSFUL_)
 		goto OnAssocReqFail;
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	pstat->is_p2p_device = false;
 	if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO)) {
 		p2pie = rtw_get_p2p_ie(pframe + WLAN_HDR_A3_LEN + ie_offset, pkt_len - WLAN_HDR_A3_LEN - ie_offset, NULL, &p2pielen);
@@ -1602,7 +1602,7 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 		}
 	}
 	pstat->p2p_status_code = p2p_status_code;
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	/* TODO: identify_proprietary_vendor_ie(); */
 	/*  Realtek proprietary IE */
@@ -1799,9 +1799,9 @@ unsigned int OnDeAuth(struct rtw_adapter *adapt,
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	u8 *pframe = precv_frame->rx_data;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	/* check A3 */
 	if (!
@@ -1810,12 +1810,12 @@ unsigned int OnDeAuth(struct rtw_adapter *adapt,
 	      ETH_ALEN)))
 		return 1;
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	if (pwdinfo->rx_invitereq_info.scan_op_ch_only) {
 		del_timer_sync(&pwdinfo->reset_ch_sitesurvey);
 		_set_timer(&pwdinfo->reset_ch_sitesurvey, 10);
 	}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	reason = le16_to_cpu(*(__le16 *)(pframe + WLAN_HDR_A3_LEN));
 
@@ -1864,9 +1864,9 @@ unsigned int OnDisassoc(struct rtw_adapter *adapt,
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	u8 *pframe = precv_frame->rx_data;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	/* check A3 */
 	if (!
@@ -1875,12 +1875,12 @@ unsigned int OnDisassoc(struct rtw_adapter *adapt,
 	      ETH_ALEN)))
 		return 1;
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	if (pwdinfo->rx_invitereq_info.scan_op_ch_only) {
 		del_timer_sync(&pwdinfo->reset_ch_sitesurvey);
 		_set_timer(&pwdinfo->reset_ch_sitesurvey, 10);
 	}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	reason = le16_to_cpu(*(__le16 *)(pframe + WLAN_HDR_A3_LEN));
 
@@ -2041,7 +2041,7 @@ unsigned int OnAction_back(struct rtw_adapter *adapt,
 	return 1;
 }
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 
 static int get_reg_classes_full_count(struct p2p_channels channel_list)
 {
@@ -4555,7 +4555,7 @@ exit:
 	return ret;
 }
 
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 static s32 rtw_action_public_decache(struct recv_frame_hdr *recv_frame, s32 token)
 {
@@ -4599,7 +4599,7 @@ static unsigned int on_action_public_p2p(struct recv_frame_hdr *precv_frame)
 	u8 *pframe = precv_frame->rx_data;
 	u8 *frame_body;
 	u8 dialogToken = 0;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct rtw_adapter *adapt = precv_frame->adapter;
 	uint len = precv_frame->len;
 	u8 *p2p_ie;
@@ -4607,7 +4607,7 @@ static unsigned int on_action_public_p2p(struct recv_frame_hdr *precv_frame)
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 	u8 result = P2P_STATUS_SUCCESS;
 	u8 empty_addr[ETH_ALEN] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	frame_body =
 	    (unsigned char *)(pframe + sizeof(struct ieee80211_hdr_3addr));
@@ -4617,7 +4617,7 @@ static unsigned int on_action_public_p2p(struct recv_frame_hdr *precv_frame)
 	if (rtw_action_public_decache(precv_frame, dialogToken) == 0)
 		return 0;
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	del_timer_sync(&pwdinfo->reset_ch_sitesurvey);
 	if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
 		rtw_cfg80211_rx_p2p_action_public(adapt, pframe, len);
@@ -5122,7 +5122,7 @@ static unsigned int on_action_public_p2p(struct recv_frame_hdr *precv_frame)
 			break;
 		}
 	}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	return 1;
 }
@@ -5212,7 +5212,7 @@ unsigned int OnAction_wmm(struct rtw_adapter *adapt,
 unsigned int OnAction_p2p(struct rtw_adapter *adapt,
 			  struct recv_frame_hdr *precv_frame)
 {
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	u8 *frame_body;
 	u8 category, OUI_Subtype;
 	u8 *pframe = precv_frame->rx_data;
@@ -5255,7 +5255,7 @@ unsigned int OnAction_p2p(struct rtw_adapter *adapt,
 			break;
 		}
 	}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	return 1;
 }
@@ -5476,9 +5476,9 @@ void issue_beacon(struct rtw_adapter *adapt)
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex *cur_network = &(pmlmeinfo->network);
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 	unsigned char *pframe;
 	unsigned short *fctrl;
 	unsigned int rate_len;
@@ -5519,7 +5519,7 @@ void issue_beacon(struct rtw_adapter *adapt)
 
 	if ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE) {
 		/* DBG_8192D("ie len=%d\n", cur_network->IELength); */
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 		/*  for P2P : Primary Device Type & Device Name */
 		u32 wpsielen = 0, insert_len = 0;
 		u8 *wpsie = NULL;
@@ -5630,7 +5630,7 @@ void issue_beacon(struct rtw_adapter *adapt)
 				pattrib->pktlen += remainder_ielen;
 			}
 		} else
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 		{
 			int len_diff;
 			memcpy(pframe, cur_network->IEs, cur_network->IELength);
@@ -5669,7 +5669,7 @@ void issue_beacon(struct rtw_adapter *adapt)
 				_clr_fwstate_(pmlmepriv, WIFI_UNDER_WPS);
 		}
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 		if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO)) {
 			u32 len;
 			if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
@@ -5684,7 +5684,7 @@ void issue_beacon(struct rtw_adapter *adapt)
 			pframe += len;
 			pattrib->pktlen += len;
 		}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 		goto _issue_bcn;
 	}
 
@@ -5788,13 +5788,13 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex *cur_network = &(pmlmeinfo->network);
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 	unsigned char *pframe;
 	unsigned short *fctrl;
 	unsigned char *mac, *bssid;
-#if defined (CONFIG_92D_AP_MODE) || defined(CONFIG_P2P)
+#if defined (CONFIG_92D_AP_MODE) || defined(CONFIG_92D_P2P)
 	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
 #endif
 #if defined (CONFIG_92D_AP_MODE)
@@ -5998,7 +5998,7 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 		}
 	}
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO) && is_valid_p2p_probereq) {
 		u32 len;
 		if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
@@ -6014,7 +6014,7 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 		pframe += len;
 		pattrib->pktlen += len;
 	}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
@@ -6522,11 +6522,11 @@ void issue_assocreq(struct rtw_adapter *adapt)
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	int bssrate_len = 0, sta_bssrate_len = 0;
 	u8 cbw40_enable = 0;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 	u8 p2pie[255] = { 0x00 };
 	u16 p2pielen = 0;
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	u16 cap;
 	u8 pow_cap_ele[2] = {0x00};
@@ -6799,7 +6799,7 @@ void issue_assocreq(struct rtw_adapter *adapt)
 		    rtw_set_ie(pframe, _VENDOR_SPECIFIC_IE_, 6, REALTEK_96B_IE,
 			       &(pattrib->pktlen));
 	}
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 
 	if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
 		if (pmlmepriv->p2p_assoc_req_ie &&
@@ -6954,7 +6954,7 @@ void issue_assocreq(struct rtw_adapter *adapt)
 		}
 	}
 
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 	dump_mgntframe(adapt, pmgntframe);
@@ -7245,17 +7245,17 @@ static int _issue_deauth(struct rtw_adapter *adapt, unsigned char *da,
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	int ret = 0;
 	__le16 le_tmp;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	if (!(rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)) &&
 	    (pwdinfo->rx_invitereq_info.scan_op_ch_only)) {
 		del_timer_sync(&pwdinfo->reset_ch_sitesurvey);
 		_set_timer(&pwdinfo->reset_ch_sitesurvey, 10);
 	}
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL)
@@ -7838,7 +7838,7 @@ void site_survey(struct rtw_adapter *adapt)
 	u8 stay_buddy_ch = 0;
 #endif
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 
 #ifdef CONFIG_CONCURRENT_MODE
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
@@ -7875,7 +7875,7 @@ void site_survey(struct rtw_adapter *adapt)
 		else
 			ScanType = SCAN_ACTIVE;
 	} else
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 	{
 		struct rtw_ieee80211_channel *ch;
 		if (pmlmeext->sitesurvey_res.channel_idx <
@@ -7937,7 +7937,7 @@ void site_survey(struct rtw_adapter *adapt)
 #endif
 
 		if (ScanType == SCAN_ACTIVE) {	/* obey the channel plan setting... */
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 			if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_SCAN) ||
 			    rtw_p2p_chk_state(pwdinfo,
 					      P2P_STATE_FIND_PHASE_SEARCH)
@@ -7946,7 +7946,7 @@ void site_survey(struct rtw_adapter *adapt)
 				issue_probereq_p2p(adapt, NULL);
 				issue_probereq_p2p(adapt, NULL);
 			} else
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 			{
 				int i;
 				for (i = 0; i < RTW_SSID_SCAN_AMOUNT; i++) {
@@ -8004,7 +8004,7 @@ void site_survey(struct rtw_adapter *adapt)
 		}
 #endif
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 		if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_SCAN) ||
 		    rtw_p2p_chk_state(pwdinfo,
 					 P2P_STATE_FIND_PHASE_SEARCH)) {
@@ -8035,16 +8035,16 @@ void site_survey(struct rtw_adapter *adapt)
 			_set_timer(&pwdinfo->find_phase_timer,
 				   (u32) ((u32) (pwdinfo->listen_dwell) * 100));
 		} else
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 		{
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 			if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_SCAN) || rtw_p2p_chk_state(pwdinfo,
 			    P2P_STATE_FIND_PHASE_SEARCH))
 				rtw_p2p_set_state(pwdinfo,
 						  rtw_p2p_pre_state(pwdinfo));
 			rtw_p2p_findphase_ex_set(pwdinfo,
 						 P2P_FINDPHASE_EX_NONE);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 			pmlmeext->sitesurvey_res.state = SCAN_COMPLETE;
 
@@ -9390,7 +9390,7 @@ void linked_status_chk(struct rtw_adapter *adapt)
 		psta = rtw_get_stainfo(pstapriv, pmlmeinfo->network.MacAddress);
 		if (psta != NULL) {
 			bool is_p2p_enable = false;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 			is_p2p_enable =
 			    !rtw_p2p_chk_state(&adapt->wdinfo,
 					       P2P_STATE_NONE);
@@ -9527,7 +9527,7 @@ void survey_timer_hdl(struct rtw_adapter *adapt)
 	struct sitesurvey_parm *psurveyPara;
 	struct cmd_priv *pcmdpriv = &adapt->cmdpriv;
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 #endif
 
@@ -9537,7 +9537,7 @@ void survey_timer_hdl(struct rtw_adapter *adapt)
 			pmlmeext->sitesurvey_res.channel_idx++;
 
 		if (pmlmeext->scan_abort == true) {
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 			if (!rtw_p2p_chk_state
 			    (&adapt->wdinfo, P2P_STATE_NONE)) {
 				rtw_p2p_findphase_ex_set(pwdinfo,
@@ -11129,12 +11129,12 @@ int concurrent_chk_start_clnt_join(struct rtw_adapter *adapt)
 			rtw_hal_set_hwreg(adapt, HW_VAR_CHECK_TXBUF, 0);
 		}
 	} else if (check_fwstate(pbuddy_mlmepriv, _FW_LINKED) == true && check_fwstate(pbuddy_mlmepriv, WIFI_STATION_STATE) == true) {	/* for Client Mode/p2p client */
-#if defined(CONFIG_P2P)
+#if defined(CONFIG_92D_P2P)
 		struct wifidirect_info *pbuddy_wdinfo =
 		    &(pbuddy_adapter->wdinfo);
 		if (!rtw_p2p_chk_state(pbuddy_wdinfo, P2P_STATE_NONE))
 			return 1;	/* wlan0-sta mode has higher priority than p2p0-p2p client */
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 		if (pmlmeext->cur_channel != pbuddy_mlmeext->cur_channel) {
 			DBG_8192D

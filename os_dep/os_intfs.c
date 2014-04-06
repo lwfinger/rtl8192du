@@ -98,7 +98,7 @@ static int rtw_special_rf_path = 0; /* 0: 2T2R , 1: only turn on path A 1T1R, 2:
 
 static int rtw_channel_plan = RT_CHANNEL_DOMAIN_MAX;
 
-#ifdef CONFIG_BT_COEXIST
+#ifdef CONFIG_92D_BT_COEXIST
 int rtw_bt_iso = 2;/*  0:Low, 1:High, 2:From Efuse */
 int rtw_bt_sco = 3;/*  0:Idle, 1:None-SCO, 2:SCO, 3:From Counter, 4.Busy, 5.OtherBusy */
 int rtw_bt_ampdu = 1 ;/*  0:Disable BT control A-MPDU, 1:Enable BT control A-MPDU. */
@@ -240,7 +240,7 @@ static uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev)
 	registry_par->special_rf_path = (u8)rtw_special_rf_path;
 	registry_par->channel_plan = (u8)rtw_channel_plan;
 
-#ifdef CONFIG_BT_COEXIST
+#ifdef CONFIG_92D_BT_COEXIST
 	registry_par->bt_iso = (u8)rtw_bt_iso;
 	registry_par->bt_sco = (u8)rtw_bt_sco;
 	registry_par->bt_ampdu = (u8)rtw_bt_ampdu;
@@ -518,7 +518,7 @@ static u8 rtw_init_default_value(struct rtw_adapter *padapter)
 	padapter->bRxRSSIDisplay = 0;
 	padapter->bForceWriteInitGain = 1;
 	padapter->bNotifyChannelChange = 0;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	padapter->bShowGetP2PState = 1;
 #endif
 	return ret;
@@ -586,12 +586,12 @@ u8 rtw_init_drv_sw(struct rtw_adapter *padapter)
 		goto exit;
 	}
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	rtw_init_wifidirect_timers(padapter);
 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
 	reset_global_wifidirect_info(padapter);
 	rtw_init_cfg80211_wifidirect_info(padapter);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	if (init_mlme_ext_priv(padapter) == 0) {
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("\n Can't init mlme_ext_priv\n"));
@@ -656,9 +656,9 @@ void rtw_cancel_all_timer(struct rtw_adapter *padapter)
 
 	del_timer_sync(&padapter->pwrctrlpriv.pwr_state_check_timer);
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	del_timer_sync(&padapter->cfg80211_wdinfo.remain_on_ch_timer);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	del_timer_sync(&padapter->mlmepriv.set_scan_deny_timer);
 	rtw_clear_scan_deny(padapter);
@@ -677,7 +677,7 @@ u8 rtw_free_drv_sw(struct rtw_adapter *padapter)
 	/* we can call rtw_p2p_enable here, but: */
 	/*  1. rtw_p2p_enable may have IO operation */
 	/*  2. rtw_p2p_enable is bundled with wext interface */
-	#ifdef CONFIG_P2P
+	#ifdef CONFIG_92D_P2P
 	{
 		struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 		if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
@@ -931,7 +931,7 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 	}
 
 	memcpy(padapter->eeprompriv.mac_addr, mac, ETH_ALEN);
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	rtw_init_wifidirect_addrs(padapter, padapter->eeprompriv.mac_addr, padapter->eeprompriv.mac_addr);
 #endif
 	memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
@@ -1231,11 +1231,11 @@ static int netdev_close(struct net_device *pnetdev)
 		rtw_led_control(padapter, LED_CTL_POWER_OFF);
 	}
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	if (wdev_to_priv(padapter->rtw_wdev)->p2p_enabled == true)
 		wdev_to_priv(padapter->rtw_wdev)->p2p_enabled = false;
 	rtw_p2p_enable(padapter, P2P_ROLE_DISABLE);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 	rtw_scan_abort(padapter);
 	padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; /* set this at the end */

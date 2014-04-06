@@ -393,6 +393,40 @@ enum c2h_id_8192d {
 	MAX_C2HEVENT
 };
 
+#ifdef CONFIG_92D_BT_COEXIST
+struct btcoexist_priv {
+	u8	BT_Coexist;
+	u8	BT_Ant_Num;
+	u8	BT_CoexistType;
+	u8	BT_State;
+	u8	BT_CUR_State;		/* 0:on, 1:off */
+	u8	BT_Ant_isolation;	/* 0:good, 1:bad */
+	u8	BT_PapeCtrl;		/* 0:SW, 1:SW/HW dynamic */
+	u8	BT_Service;
+	u8	BT_Ampdu;	/*  0:Disable BT control A-MPDU, 1:Enable BT control A-MPDU. */
+	u8	BT_RadioSharedType;
+	u32	Ratio_Tx;
+	u32	Ratio_PRI;
+	u8	BtRfRegOrigin1E;
+	u8	BtRfRegOrigin1F;
+	u8	BtRssiState;
+	u32	BtEdcaUL;
+	u32	BtEdcaDL;
+	u32	BT_EDCA[2];
+	u8	bCOBT;
+
+	u8	bInitSet;
+	u8	bBTBusyTraffic;
+	u8	bBTTrafficModeSet;
+	u8	bBTNonTrafficModeSet;
+	u32	CurrentState;
+	u32	PreviousState;
+	u8	BtPreRssiState;
+	u8	bFWCoexistAllOff;
+	u8	bSWCoexistAllOff;
+};
+#endif
+
 struct hal_data_8192du {
 	enum VERSION_8192D	VersionID;
 
@@ -461,7 +495,7 @@ struct hal_data_8192du {
 
 	u8	CrystalCap;	/*  CrystalCap. */
 
-#ifdef CONFIG_BT_COEXIST
+#ifdef CONFIG_92D_BT_COEXIST
 	struct btcoexist_priv	bt_coexist;
 #endif
 
@@ -561,9 +595,9 @@ struct hal_data_8192du {
 
 	u16	EfuseUsedBytes;
 	u8	RTSInitRate;	 /*  2010.11.24.by tynli. */
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 	struct P2P_PS_Offload_t	p2p_ps_offload;
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 };
 
 #define GET_HAL_DATA(__adapter)	((struct hal_data_8192du *)((__adapter)->HalData))

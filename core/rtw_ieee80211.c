@@ -1113,7 +1113,7 @@ void dump_ies(u8 *buf, u32 buf_len)
 		len = *(pos+1);
 
 		DBG_8192D("%s ID:%u, LEN:%u\n", __func__, id, len);
-		#ifdef CONFIG_P2P
+		#ifdef CONFIG_92D_P2P
 		dump_p2p_ie(pos, len);
 		#endif
 		dump_wps_ie(pos, len);
@@ -1146,7 +1146,7 @@ void dump_wps_ie(u8 *ie, u32 ie_len)
 	}
 }
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_92D_P2P
 void dump_p2p_ie(u8 *ie, u32 ie_len)
 {
 	u8 *pos = (u8 *)ie;
@@ -1361,7 +1361,7 @@ void rtw_wlan_bssid_ex_remove_p2p_attr(struct wlan_bssid_ex *bss_ex, u8 attr_id)
 	}
 }
 
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_92D_P2P */
 
 int ieee80211_is_empty_essid(const char *essid, int essid_len)
 {

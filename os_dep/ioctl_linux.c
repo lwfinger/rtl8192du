@@ -414,9 +414,7 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		goto exit;
 	}
 
-	if (param->sta_addr[0] == 0xff && param->sta_addr[1] == 0xff &&
-	    param->sta_addr[2] == 0xff && param->sta_addr[3] == 0xff &&
-	    param->sta_addr[4] == 0xff && param->sta_addr[5] == 0xff) {
+	if (is_broadcast_ether_addr(param->sta_addr)) {
 		if (param->u.crypt.idx >= WEP_KEYS) {
 			ret = -EINVAL;
 			goto exit;
@@ -5083,29 +5081,21 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		goto exit;
 	}
 
-	if (param->sta_addr[0] == 0xff && param->sta_addr[1] == 0xff &&
-	    param->sta_addr[2] == 0xff && param->sta_addr[3] == 0xff &&
-	    param->sta_addr[4] == 0xff && param->sta_addr[5] == 0xff)
-	{
-		if (param->u.crypt.idx >= WEP_KEYS)
-		{
+	if (is_broadcast_ether_addr(param->sta_addr)) {
+		if (param->u.crypt.idx >= WEP_KEYS) {
 			ret = -EINVAL;
 			goto exit;
 		}
-	}
-	else
-	{
+	} else {
 		psta = rtw_get_stainfo(pstapriv, param->sta_addr);
-		if (!psta)
-		{
+		if (!psta) {
 			/* ret = -EINVAL; */
 			DBG_8192D("rtw_set_encryption(), sta has already been removed or never been added\n");
 			goto exit;
 		}
 	}
 
-	if (strcmp(param->u.crypt.alg, "none") == 0 && (psta == NULL))
-	{
+	if (strcmp(param->u.crypt.alg, "none") == 0 && (psta == NULL)) {
 		/* todo:clear default encryption keys */
 
 		DBG_8192D("clear default encryption keys, keyid =%d\n", param->u.crypt.idx);
@@ -5113,8 +5103,7 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		goto exit;
 	}
 
-	if (strcmp(param->u.crypt.alg, "WEP") == 0 && (psta == NULL))
-	{
+	if (strcmp(param->u.crypt.alg, "WEP") == 0 && (psta == NULL)) {
 		DBG_8192D("r871x_set_encryption, crypt.alg = WEP\n");
 
 		wep_key_idx = param->u.crypt.idx;
@@ -5122,8 +5111,7 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 
 		DBG_8192D("r871x_set_encryption, wep_key_idx =%d, len =%d\n", wep_key_idx, wep_key_len);
 
-		if ((wep_key_idx >= WEP_KEYS) || (wep_key_len<= 0))
-		{
+		if ((wep_key_idx >= WEP_KEYS) || (wep_key_len<= 0)) {
 			ret = -EINVAL;
 			goto exit;
 		}
@@ -5431,29 +5419,11 @@ static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 		return -EINVAL;
 	}
 
-	if (param->sta_addr[0] == 0xff && param->sta_addr[1] == 0xff &&
-	    param->sta_addr[2] == 0xff && param->sta_addr[3] == 0xff &&
-	    param->sta_addr[4] == 0xff && param->sta_addr[5] == 0xff)
-	{
+	if (is_broadcast_ether_addr(param->sta_addr))
 		return -EINVAL;
-	}
 
-/*
 	psta = rtw_get_stainfo(pstapriv, param->sta_addr);
-	if (psta)
-	{
-		DBG_8192D("rtw_add_sta(), free has been added psta =%p\n", psta);
-		spin_lock_bh(&(pstapriv->sta_hash_lock));
-		rtw_free_stainfo(padapter,  psta);
-		spin_unlock_bh(&(pstapriv->sta_hash_lock));
-
-		psta = NULL;
-	}
-*/
-	/* psta = rtw_alloc_stainfo(pstapriv, param->sta_addr); */
-	psta = rtw_get_stainfo(pstapriv, param->sta_addr);
-	if (psta)
-	{
+	if (psta) {
 		int flags = param->u.add_sta.flags;
 
 		/* DBG_8192D("rtw_add_sta(), init sta's variables, psta =%p\n", psta); */
@@ -5472,21 +5442,17 @@ static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 			psta->qos_option = 0;
 
 		/* chec 802.11n ht cap. */
-		if (WLAN_STA_HT&flags)
-		{
+		if (WLAN_STA_HT&flags) {
 			psta->htpriv.ht_option = true;
 			psta->qos_option = 1;
 			memcpy((void*)&psta->htpriv.ht_cap, (void*)&param->u.add_sta.ht_cap, sizeof(struct rtw_ieee80211_ht_cap));
-		}
-		else
-		{
+		} else {
 			psta->htpriv.ht_option = false;
 		}
 
 		if (pmlmepriv->htpriv.ht_option == false)
 			psta->htpriv.ht_option = false;
 		update_sta_info_apmode(padapter, psta);
-
 	} else {
 		ret = -ENOMEM;
 	}
@@ -5506,9 +5472,7 @@ static int rtw_del_sta(struct net_device *dev, struct ieee_param *param)
 	if (check_fwstate(pmlmepriv, (_FW_LINKED|WIFI_AP_STATE)) != true)
 		return -EINVAL;
 
-	if (param->sta_addr[0] == 0xff && param->sta_addr[1] == 0xff &&
-	    param->sta_addr[2] == 0xff && param->sta_addr[3] == 0xff &&
-	    param->sta_addr[4] == 0xff && param->sta_addr[5] == 0xff)
+	if (is_broadcast_ether_addr(param->sta_addr))
 		return -EINVAL;
 
 	psta = rtw_get_stainfo(pstapriv, param->sta_addr);
@@ -5555,39 +5519,23 @@ static int rtw_ioctl_get_sta_data(struct net_device *dev, struct ieee_param *par
 	DBG_8192D("rtw_ioctl_get_sta_info, sta_addr: %pM\n", param_ex->sta_addr);
 
 	if (check_fwstate(pmlmepriv, (_FW_LINKED|WIFI_AP_STATE)) != true)
-	{
 		return -EINVAL;
-	}
 
-	if (param_ex->sta_addr[0] == 0xff && param_ex->sta_addr[1] == 0xff &&
-	    param_ex->sta_addr[2] == 0xff && param_ex->sta_addr[3] == 0xff &&
-	    param_ex->sta_addr[4] == 0xff && param_ex->sta_addr[5] == 0xff)
-	{
+	if (is_broadcast_ether_addr(param->sta_addr))
 		return -EINVAL;
-	}
 
 	psta = rtw_get_stainfo(pstapriv, param_ex->sta_addr);
-	if (psta)
-	{
+	if (psta) {
 		psta_data->aid = (u16)psta->aid;
 		psta_data->capability = psta->capability;
 		psta_data->flags = psta->flags;
 
-/*
-		nonerp_set : BIT(0)
-		no_short_slot_time_set : BIT(1)
-		no_short_preamble_set : BIT(2)
-		no_ht_gf_set : BIT(3)
-		no_ht_set : BIT(4)
-		ht_20mhz_set : BIT(5)
-*/
-
-		psta_data->sta_set = ((psta->nonerp_set) |
-							(psta->no_short_slot_time_set <<1) |
-							(psta->no_short_preamble_set <<2) |
-							(psta->no_ht_gf_set <<3) |
-							(psta->no_ht_set <<4) |
-							(psta->ht_20mhz_set <<5));
+		psta_data->sta_set = (psta->nonerp_set) |
+				     (psta->no_short_slot_time_set << 1) |
+				     (psta->no_short_preamble_set << 2) |
+				     (psta->no_ht_gf_set << 3) |
+				     (psta->no_ht_set << 4) |
+				     (psta->ht_20mhz_set << 5);
 
 		psta_data->tx_supp_rates_len =  psta->bssratelen;
 		memcpy(psta_data->tx_supp_rates, psta->bssrateset, psta->bssratelen);
@@ -5622,16 +5570,10 @@ static int rtw_get_sta_wpaie(struct net_device *dev, struct ieee_param *param)
 	DBG_8192D("rtw_get_sta_wpaie, sta_addr: %pM\n", param->sta_addr);
 
 	if (check_fwstate(pmlmepriv, (_FW_LINKED|WIFI_AP_STATE)) != true)
-	{
 		return -EINVAL;
-	}
 
-	if (param->sta_addr[0] == 0xff && param->sta_addr[1] == 0xff &&
-	    param->sta_addr[2] == 0xff && param->sta_addr[3] == 0xff &&
-	    param->sta_addr[4] == 0xff && param->sta_addr[5] == 0xff)
-	{
+	if (is_broadcast_ether_addr(param->sta_addr))
 		return -EINVAL;
-	}
 
 	psta = rtw_get_stainfo(pstapriv, param->sta_addr);
 	if (psta)
@@ -5811,9 +5753,7 @@ static int rtw_ioctl_acl_remove_sta(struct net_device *dev, struct ieee_param *p
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) != true)
 		return -EINVAL;
 
-	if (param->sta_addr[0] == 0xff && param->sta_addr[1] == 0xff &&
-	    param->sta_addr[2] == 0xff && param->sta_addr[3] == 0xff &&
-	    param->sta_addr[4] == 0xff && param->sta_addr[5] == 0xff)
+	if (is_broadcast_ether_addr(param->sta_addr))
 		return -EINVAL;
 
 	ret = rtw_acl_remove_sta(padapter, param->sta_addr);
@@ -5830,9 +5770,7 @@ static int rtw_ioctl_acl_add_sta(struct net_device *dev, struct ieee_param *para
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) != true)
 		return -EINVAL;
 
-	if (param->sta_addr[0] == 0xff && param->sta_addr[1] == 0xff &&
-	    param->sta_addr[2] == 0xff && param->sta_addr[3] == 0xff &&
-	    param->sta_addr[4] == 0xff && param->sta_addr[5] == 0xff)
+	if (is_broadcast_ether_addr(param->sta_addr))
 		return -EINVAL;
 
 	ret = rtw_acl_add_sta(padapter, param->sta_addr);

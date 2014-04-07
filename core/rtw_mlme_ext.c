@@ -4183,7 +4183,6 @@ static int _issue_probereq_p2p(struct rtw_adapter *adapt, u8 *da, int wait_ack)
 	unsigned char *mac;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
-	u8 bc_addr[] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 	struct wifidirect_info *pwdinfo = &(adapt->wdinfo);
 	u8 wpsie[255] = {0x00}, p2pie[255] = {0x00};
 	u16 wpsielen = 0, p2pielen = 0;
@@ -4220,8 +4219,8 @@ static int _issue_probereq_p2p(struct rtw_adapter *adapt, u8 *da, int wait_ack)
 			       pwdinfo->p2p_peer_interface_addr, ETH_ALEN);
 		} else {
 			/*      broadcast probe request frame */
-			memcpy(pwlanhdr->addr1, bc_addr, ETH_ALEN);
-			memcpy(pwlanhdr->addr3, bc_addr, ETH_ALEN);
+			eth_broadcast_addr(pwlanhdr->addr1);
+			eth_broadcast_addr(pwlanhdr->addr3);
 		}
 	}
 	memcpy(pwlanhdr->addr2, mac, ETH_ALEN);
@@ -5482,7 +5481,6 @@ void issue_beacon(struct rtw_adapter *adapt)
 	unsigned char *pframe;
 	unsigned short *fctrl;
 	unsigned int rate_len;
-	u8 bc_addr[] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL) {
@@ -5506,7 +5504,7 @@ void issue_beacon(struct rtw_adapter *adapt)
 	fctrl = &(pwlanhdr->frame_control);
 	*(fctrl) = 0;
 
-	memcpy(pwlanhdr->addr1, bc_addr, ETH_ALEN);
+	eth_broadcast_addr(pwlanhdr->addr1);
 	memcpy(pwlanhdr->addr2, myid(&(adapt->eeprompriv)), ETH_ALEN);
 	memcpy(pwlanhdr->addr3, get_my_bssid(cur_network), ETH_ALEN);
 
@@ -6038,7 +6036,6 @@ static int _issue_probereq(struct rtw_adapter *adapt,
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	int bssrate_len = 0;
-	u8 bc_addr[] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_notice_, ("+issue_probereq\n"));
 
@@ -6066,8 +6063,8 @@ static int _issue_probereq(struct rtw_adapter *adapt,
 		memcpy(pwlanhdr->addr3, da, ETH_ALEN);
 	} else {
 		/*      broadcast probe request frame */
-		memcpy(pwlanhdr->addr1, bc_addr, ETH_ALEN);
-		memcpy(pwlanhdr->addr3, bc_addr, ETH_ALEN);
+		eth_broadcast_addr(pwlanhdr->addr1);
+		eth_broadcast_addr(pwlanhdr->addr3);
 	}
 
 	memcpy(pwlanhdr->addr2, mac, ETH_ALEN);

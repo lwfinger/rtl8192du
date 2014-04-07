@@ -307,7 +307,6 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	size_t len,bssinf_len=0;
 	struct ieee80211_hdr *pwlanhdr;
 	unsigned short *fctrl;
-	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 	struct wireless_dev *wdev = padapter->rtw_wdev;
 	struct wiphy *wiphy = wdev->wiphy;
@@ -351,7 +350,7 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	SetSeqNum(pwlanhdr, 0/*pmlmeext->mgnt_seq*/);
 
 	if (pnetwork->network.Reserved[0] == 1) { /*  WIFI_BEACON */
-		memcpy(pwlanhdr->addr1, bc_addr, ETH_ALEN);
+		eth_broadcast_addr(pwlanhdr->addr1);
 		SetFrameSubType(pbuf, WIFI_BEACON);
 	} else {
 		memcpy(pwlanhdr->addr1, myid(&(padapter->eeprompriv)), ETH_ALEN);
@@ -620,24 +619,17 @@ static int rtw_cfg80211_ap_set_encryption(struct net_device *dev, struct ieee_pa
 	param->u.crypt.alg[IEEE_CRYPT_ALG_NAME_LEN - 1] = '\0';
 
 	/* sizeof(struct ieee_param) = 64 bytes; */
-	if (param_len !=  sizeof(struct ieee_param) + param->u.crypt.key_len)
-	{
+	if (param_len !=  sizeof(struct ieee_param) + param->u.crypt.key_len) {
 		ret =  -EINVAL;
 		goto exit;
 	}
 
-	if (param->sta_addr[0] == 0xff && param->sta_addr[1] == 0xff &&
-	    param->sta_addr[2] == 0xff && param->sta_addr[3] == 0xff &&
-	    param->sta_addr[4] == 0xff && param->sta_addr[5] == 0xff)
-	{
-		if (param->u.crypt.idx >= WEP_KEYS)
-		{
+	if (is_broadcast_ether_addr(param->sta_addr)) {
+		if (param->u.crypt.idx >= WEP_KEYS) {
 			ret = -EINVAL;
 			goto exit;
 		}
-	}
-	else
-	{
+	} else {
 		psta = rtw_get_stainfo(pstapriv, param->sta_addr);
 		if (!psta)
 		{
@@ -646,8 +638,7 @@ static int rtw_cfg80211_ap_set_encryption(struct net_device *dev, struct ieee_pa
 		}
 	}
 
-	if (strcmp(param->u.crypt.alg, "none") == 0 && (psta==NULL))
-	{
+	if (strcmp(param->u.crypt.alg, "none") == 0 && (psta == NULL)) {
 		/* todo:clear default encryption keys */
 
 		DBG_8192D("clear default encryption keys, keyid=%d\n", param->u.crypt.idx);
@@ -907,12 +898,8 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 		goto exit;
 	}
 
-	if (param->sta_addr[0] == 0xff && param->sta_addr[1] == 0xff &&
-	    param->sta_addr[2] == 0xff && param->sta_addr[3] == 0xff &&
-	    param->sta_addr[4] == 0xff && param->sta_addr[5] == 0xff)
-	{
-		if (param->u.crypt.idx >= WEP_KEYS)
-		{
+	if (is_broadcast_ether_addr(param->sta_addr)) {
+		if (param->u.crypt.idx >= WEP_KEYS) {
 			ret = -EINVAL;
 			goto exit;
 		}
@@ -921,8 +908,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 		goto exit;
 	}
 
-	if (strcmp(param->u.crypt.alg, "WEP") == 0)
-	{
+	if (strcmp(param->u.crypt.alg, "WEP") == 0) {
 		RT_TRACE(_module_rtl871x_ioctl_os_c,_drv_err_,("wpa_set_encryption, crypt.alg = WEP\n"));
 		DBG_8192D("wpa_set_encryption, crypt.alg = WEP\n");
 
@@ -2897,12 +2883,8 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 
 	DBG_8192D("free sta macaddr = %pM\n", mac);
 
-	if (mac[0] == 0xff && mac[1] == 0xff &&
-	    mac[2] == 0xff && mac[3] == 0xff &&
-	    mac[4] == 0xff && mac[5] == 0xff)
-	{
+	if (is_broadcast_ether_addr(mac))
 		return -EINVAL;
-	}
 
 	spin_lock_bh(&pstapriv->asoc_list_lock);
 

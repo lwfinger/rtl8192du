@@ -20,6 +20,8 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
+extern u8 bc_addr[ETH_ALEN];
+
 void rtw_init_mlme_timer(struct rtw_adapter *padapter);
 void rtw_os_indicate_disconnect(struct rtw_adapter *adapter);
 void rtw_os_indicate_connect(struct rtw_adapter *adapter);

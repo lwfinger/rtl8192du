@@ -483,7 +483,6 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 	struct sta_info *psta = NULL;
 	u32	index;
 	u8 *addr;
-	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 	if (hwaddr == NULL)
 		return NULL;
@@ -545,10 +544,8 @@ struct sta_info *rtw_get_bcmc_stainfo(struct rtw_adapter *padapter)
 {
 	struct sta_info		*psta;
 	struct sta_priv		*pstapriv = &padapter->stapriv;
-	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-	 psta = rtw_get_stainfo(pstapriv, bc_addr);
-
+	psta = rtw_get_stainfo(pstapriv, bc_addr);
 	return psta;
 }
 

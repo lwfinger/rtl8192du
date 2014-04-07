@@ -24,6 +24,8 @@
 #include <mlme_osdep.h>
 #include <recv_osdep.h>
 
+u8 bc_addr[ETH_ALEN] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+
 static struct mlme_handler mlme_sta_tbl[] = {
 	{WIFI_ASSOCREQ, "OnAssocReq", &OnAssocReq},
 	{WIFI_ASSOCRSP, "OnAssocRsp", &OnAssocRsp},
@@ -497,7 +499,6 @@ static void _mgt_dispatcher(struct rtw_adapter *adapt,
 			    struct mlme_handler *ptable,
 			    struct recv_frame_hdr *precv_frame)
 {
-	u8 bc_addr[ETH_ALEN] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 	u8 *pframe = precv_frame->rx_data;
 
 	if (ptable->func) {
@@ -516,7 +517,6 @@ void mgt_dispatcher(struct rtw_adapter *adapt, struct recv_frame_hdr *precv_fram
 #ifdef CONFIG_92D_AP_MODE
 	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
 #endif /* CONFIG_92D_AP_MODE */
-	u8 bc_addr[ETH_ALEN] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 	u8 *pframe = precv_frame->rx_data;
 	struct sta_info *psta =
 	    rtw_get_stainfo(&adapt->stapriv, GetAddr2Ptr(pframe));

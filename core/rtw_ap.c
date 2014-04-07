@@ -19,6 +19,7 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <wifi.h>
+#include <mlme_osdep.h>
 
 #ifdef CONFIG_92D_AP_MODE
 
@@ -1940,7 +1941,6 @@ int rtw_ap_inform_ch_switch(struct rtw_adapter *padapter, u8 new_ch,
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 	if ((pmlmeinfo->state&0x03) != WIFI_FW_AP_STATE)
 		return ret;
@@ -1977,7 +1977,6 @@ int rtw_sta_flush(struct rtw_adapter *padapter)
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 	DBG_8192D(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(padapter->pnetdev));
 

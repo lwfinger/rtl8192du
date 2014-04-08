@@ -622,10 +622,9 @@ static struct recv_frame_hdr *portctrl(struct rtw_adapter *adapter,
 	struct sta_info *psta;
 	struct sta_priv *pstapriv;
 	struct recv_frame_hdr *prtnframe;
-	u16 ether_type = 0;
+	u16 ether_type;
 	u16 eapol_type = 0x888e;	/* for Funia BD's WPA issue */
 	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
-	__be16 be_tmp;
 
 	pstapriv = &adapter->stapriv;
 	ptr = get_recvframe_data(precv_frame);
@@ -639,21 +638,17 @@ static struct recv_frame_hdr *portctrl(struct rtw_adapter *adapter,
 		 ("########portctrl:adapter->securitypriv.dot11AuthAlgrthm= 0x%d\n",
 		  adapter->securitypriv.dot11AuthAlgrthm));
 
-	if (auth_alg == 2) {
+	if (auth_alg == dot11AuthAlgrthm_8021X) {
+		/* get ether_type */
+		ptr = ptr + pfhdr->attrib.hdrlen + LLC_HEADER_SIZE;
+		memcpy(&ether_type, ptr, 2);
+		ether_type = ntohs((unsigned short)ether_type);
+
 		if ((psta != NULL) && (psta->ieee8021x_blocked)) {
 			/* blocked */
 			/* only accept EAPOL frame */
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
 				 ("########portctrl:psta->ieee8021x_blocked==1\n"));
-
-			prtnframe = precv_frame;
-
-			/* get ether_type */
-			ptr =
-			    ptr + pfhdr->attrib.hdrlen + pfhdr->attrib.iv_len +
-			    LLC_HEADER_SIZE;
-			memcpy(&be_tmp, ptr, 2);
-			ether_type = ntohs(be_tmp);
 
 			if (ether_type == eapol_type) {
 				prtnframe = precv_frame;
@@ -695,7 +690,6 @@ static struct recv_frame_hdr *portctrl(struct rtw_adapter *adapter,
 	} else {
 		prtnframe = precv_frame;
 	}
-
 	return prtnframe;
 }
 

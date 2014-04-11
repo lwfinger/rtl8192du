@@ -42,7 +42,6 @@
 #include <rtw_event.h>
 #include <rtw_led.h>
 #include <rtw_mlme_ext.h>
-#include <rtw_p2p.h>
 #include <rtw_ap.h>
 
 #include "ioctl_cfg80211.h"

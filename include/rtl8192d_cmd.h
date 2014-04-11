@@ -99,9 +99,6 @@ void	rtl8192d_set_FwJoinBssReport_cmd(struct rtw_adapter* padapter, u8 mstatus);
 u8	rtl8192d_set_rssi_cmd(struct rtw_adapter*padapter, u8 *param);
 u8	rtl8192d_set_raid_cmd(struct rtw_adapter*padapter, u32 mask, u8 arg);
 void	rtl8192d_Add_RateATid(struct rtw_adapter * adapter, u32 bitmap, u8 arg);
-#ifdef CONFIG_92D_P2P
-void	rtl8192d_set_p2p_ps_offload_cmd(struct rtw_adapter* padapter, u8 p2p_ps_state);
-#endif /* CONFIG_92D_P2P */
 
 #ifdef CONFIG_CONCURRENT_MODE
 int reset_tsf(struct rtw_adapter * adapter, u8 reset_port);

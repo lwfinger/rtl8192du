@@ -310,10 +310,6 @@ struct rtw_adapter {
 	u8 bForceWriteInitGain;
 	/* 	The driver will show up the desired channel number when this flag is 1. */
 	u8 bNotifyChannelChange;
-#ifdef CONFIG_92D_P2P
-	/* 	The driver will show the current P2P status when the upper application reads it. */
-	u8 bShowGetP2PState;
-#endif
 
 	/* pbuddy_adapter is used only in  two inteface case, (iface_nums=2 in struct dvobj_priv) */
 	/* PRIMARY_ADAPTER's buddy is SECONDARY_ADAPTER */

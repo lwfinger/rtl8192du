@@ -230,10 +230,6 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 	struct pkt_attrib		*pattrib = &pxmitframe->attrib;
 	struct tx_desc		*ptxdesc = (struct tx_desc *)pmem;
 	int	bmcst = IS_MCAST(pattrib->ra);
-#ifdef CONFIG_92D_P2P
-	struct wifidirect_info	*pwdinfo = &padapter->wdinfo;
-	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
-#endif /* CONFIG_92D_P2P */
 
 	if (padapter->registrypriv.mp_mode == 0) {
 
@@ -312,18 +308,6 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 			ptxdesc->txdw5 |= cpu_to_le32(ratetohwrate(pmlmeext->tx_rate));
 		}
 
-#ifdef CONFIG_92D_P2P
-		if (pregistrypriv->wifi_spec==1 && !rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-		{
-			ptxdesc->txdw1 |= cpu_to_le32(BIT(6));/* AGG BK */
-
-			ptxdesc->txdw4 |= cpu_to_le32(BIT(8));/* driver uses rate */
-
-			ptxdesc->txdw5 = cpu_to_le32(0x0001ff00);/*  */
-
-			ptxdesc->txdw5 |= cpu_to_le32(BIT(2));/*  use OFDM 6Mbps */
-		}
-#endif /* CONFIG_92D_P2P */
 	} else if ((pxmitframe->frame_tag&0x0f)== MGNT_FRAMETAG) {
 
 		/* offset 4 */
@@ -350,12 +334,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 #ifdef CONFIG_92D_AP_MODE
 		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 			ptxdesc->txdw5 |= cpu_to_le32(BIT(17));/* retry limit enable */
-#ifdef CONFIG_92D_P2P
-			if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)) {
-				ptxdesc->txdw5 |= cpu_to_le32(0x00080000);/* retry limit = 2 */
-			} else
-#endif /* CONFIG_92D_P2P */
-				ptxdesc->txdw5 |= cpu_to_le32(0x00180000);/* retry limit = 6 */
+			ptxdesc->txdw5 |= cpu_to_le32(0x00180000);/* retry limit = 6 */
 		}
 #endif
 

@@ -99,12 +99,8 @@ void rtw_free_cmd_priv (struct cmd_priv *pcmdpriv);
 
 u32 rtw_init_evt_priv (struct evt_priv *pevtpriv);
 void rtw_evt_notify_isr(struct evt_priv *pevtpriv);
-#ifdef CONFIG_92D_P2P
-u8 p2p_protocol_wk_cmd(struct rtw_adapter*padapter, int intCmdType);
-#endif /* CONFIG_92D_P2P */
 
-enum rtw_drvextra_cmd_id
-{
+enum rtw_drvextra_cmd_id {
 	NONE_WK_CID,
 	DYNAMIC_CHK_WK_CID,
 	DM_CTRL_WK_CID,
@@ -120,8 +116,7 @@ enum rtw_drvextra_cmd_id
 	MAX_WK_CID
 };
 
-enum LPS_CTRL_TYPE
-{
+enum LPS_CTRL_TYPE {
 	LPS_CTRL_SCAN=0,
 	LPS_CTRL_JOINBSS=1,
 	LPS_CTRL_CONNECT=2,

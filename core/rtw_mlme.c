@@ -692,10 +692,6 @@ exit:
 static void rtw_add_network(struct rtw_adapter *adapter,
 			    struct wlan_bssid_ex *pnetwork)
 {
-#if defined(CONFIG_92D_P2P)
-	rtw_wlan_bssid_ex_remove_p2p_attr(pnetwork, P2P_ATTR_GROUP_INFO);
-#endif
-
 	update_current_network(adapter, pnetwork);
 
 	rtw_update_scanned_network(adapter, pnetwork);
@@ -1835,14 +1831,8 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 	rtw_dynamic_chk_wk_cmd(adapter);
 
 	if (pregistrypriv->wifi_spec == 1) {
-#ifdef CONFIG_92D_P2P
-		struct wifidirect_info *pwdinfo = &adapter->wdinfo;
-		if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-#endif
-		{
-			/* auto site survey */
-			rtw_auto_scan_handler(adapter);
-		}
+		/* auto site survey */
+		rtw_auto_scan_handler(adapter);
 	}
 }
 

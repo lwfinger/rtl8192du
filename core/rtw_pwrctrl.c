@@ -103,9 +103,6 @@ static bool rtw_pwr_unassociated_idle(struct rtw_adapter *adapter)
 {
 	struct rtw_adapter *buddy = adapter->pbuddy_adapter;
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
-#ifdef CONFIG_92D_P2P
-	struct wifidirect_info *pwdinfo = &(adapter->wdinfo);
-#endif
 
 	bool ret = false;
 
@@ -117,25 +114,16 @@ static bool rtw_pwr_unassociated_idle(struct rtw_adapter *adapter)
 	if (check_fwstate(pmlmepriv, WIFI_ASOC_STATE | WIFI_SITE_MONITOR) ||
 	    check_fwstate(pmlmepriv, WIFI_UNDER_LINKING | WIFI_UNDER_WPS) ||
 	    check_fwstate(pmlmepriv, WIFI_AP_STATE) ||
-#if defined(CONFIG_92D_P2P)
-	    !rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE) ||
-#endif
 	    check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE | WIFI_ADHOC_STATE))
 		goto exit;
 
 	/* consider buddy, if exist */
 	if (buddy) {
 		struct mlme_priv *b_pmlmepriv = &(buddy->mlmepriv);
-#ifdef CONFIG_92D_P2P
-		struct wifidirect_info *b_pwdinfo = &(buddy->wdinfo);
-#endif
 
 		if (check_fwstate(b_pmlmepriv, WIFI_ASOC_STATE | WIFI_SITE_MONITOR) ||
 		    check_fwstate(b_pmlmepriv, WIFI_UNDER_LINKING | WIFI_UNDER_WPS) ||
 		    check_fwstate(b_pmlmepriv, WIFI_AP_STATE) ||
-#if defined(CONFIG_92D_P2P)
-		    !rtw_p2p_chk_state(b_pwdinfo, P2P_STATE_NONE) ||
-#endif
 		    check_fwstate(b_pmlmepriv, WIFI_ADHOC_MASTER_STATE | WIFI_ADHOC_STATE)) {
 			goto exit;
 		}
@@ -316,20 +304,12 @@ void rtw_lps_enter(struct rtw_adapter *padapter)
 	/* consider buddy, if exist */
 	if (buddy) {
 		struct mlme_priv *b_pmlmepriv = &(buddy->mlmepriv);
-#ifdef CONFIG_92D_P2P
-		struct wifidirect_info *b_pwdinfo = &(buddy->wdinfo);
-		struct cfg80211_wifidirect_info *b_pcfg80211_wdinfo =
-		    &buddy->cfg80211_wdinfo;
-#endif
 
 		if (check_fwstate
 		    (b_pmlmepriv, WIFI_ASOC_STATE | WIFI_SITE_MONITOR) ||
-		     check_fwstate(b_pmlmepriv, WIFI_UNDER_LINKING | WIFI_UNDER_WPS) ||
-		     check_fwstate(b_pmlmepriv, WIFI_AP_STATE) ||
-		     check_fwstate(b_pmlmepriv, WIFI_ADHOC_MASTER_STATE | WIFI_ADHOC_STATE) ||
-#if defined(CONFIG_92D_P2P)
-		    !rtw_p2p_chk_state(b_pwdinfo, P2P_STATE_NONE) ||
-#endif
+		    check_fwstate(b_pmlmepriv, WIFI_UNDER_LINKING | WIFI_UNDER_WPS) ||
+		    check_fwstate(b_pmlmepriv, WIFI_AP_STATE) ||
+		    check_fwstate(b_pmlmepriv, WIFI_ADHOC_MASTER_STATE | WIFI_ADHOC_STATE) ||
 		    rtw_is_scan_deny(buddy))
 			return;
 	}

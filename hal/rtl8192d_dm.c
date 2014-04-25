@@ -1482,7 +1482,7 @@ dm_TXPowerTrackingCallback_ThermalMeter_92D(
 	u32		ThermalValue_AVG = 0;
 	s32		ele_A = 0, ele_D, TempCCk, X, value32;
 	s32		Y, ele_C;
-	s8		OFDM_index[2], CCK_index=0, OFDM_index_old[2], CCK_index_old=0;
+	s8		OFDM_index[2], CCK_index=0, OFDM_index_old[2] = {0}, CCK_index_old=0;
 	s32		i = 0;
 	bool		is2T = IS_92D_SINGLEPHY(pHalData->VersionID);
 	bool		bInteralPA = false;

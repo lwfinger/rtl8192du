@@ -101,13 +101,15 @@ strip:
 	$(CROSS_COMPILE)strip 8192du.ko --strip-unneeded
 
 install:
-	install -p -m 644 8192du.ko  $(MODDESTDIR)
-	mkdir -p /lib/firmware/rtlwifi
-	cp -n rtl8192dufw*.bin /lib/firmware/rtlwifi/.
+	install -d $(DESTDIR)$(MODDESTDIR)
+	install -m644 8192du.ko  $(DESTDIR)$(MODDESTDIR)
+	install -d $(DESTDIR)/lib/firmware/rtlwifi
+	install -p -m644 rtl8192dufw.bin $(DESTDIR)/lib/firmware/rtlwifi
+	install -p -m644 rtl8192dufw_wol.bin $(DESTDIR)/lib/firmware/rtlwifi
 	/sbin/depmod -a ${KVER}
 
 uninstall:
-	rm -f $(MODDESTDIR)/8192du.ko
+	rm -f $(DESTDIR)$(MODDESTDIR)/8192du.ko
 	/sbin/depmod -a ${KVER}
 
 

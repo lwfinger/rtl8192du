@@ -172,7 +172,7 @@ install:
 	install -d $(DESTDIR)/lib/firmware/rtlwifi
 	install -m644 rtl8192dufw.bin $(DESTDIR)/lib/firmware/rtlwifi
 	install -m644 rtl8192dufw_wol.bin $(DESTDIR)/lib/firmware/rtlwifi
-	#/sbin/depmod -a ${KVER}
+	/sbin/depmod -a ${KVER}
 
 uninstall:
 	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko

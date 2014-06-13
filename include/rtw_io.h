@@ -318,15 +318,10 @@ int rtw_write8_async(struct rtw_adapter *adapter, u32 addr, u8 val);
 int rtw_write16_async(struct rtw_adapter *adapter, u32 addr, u16 val);
 int rtw_write32_async(struct rtw_adapter *adapter, u32 addr, u32 val);
 
-void _rtw_write_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
-u32 _rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
-u32 _rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem, int timeout_ms);
-void _rtw_write_port_cancel(struct rtw_adapter *adapter);
-
-#define rtw_write_mem(adapter, addr, cnt, mem) _rtw_write_mem((adapter), (addr), (cnt), (mem))
-#define rtw_write_port(adapter, addr, cnt, mem) _rtw_write_port((adapter), (addr), (cnt), (mem))
-#define rtw_write_port_and_wait(adapter, addr, cnt, mem, timeout_ms) _rtw_write_port_and_wait((adapter), (addr), (cnt), (mem), (timeout_ms))
-#define rtw_write_port_cancel(adapter) _rtw_write_port_cancel((adapter))
+void rtw_write_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
+u32 rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
+u32 rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem, int timeout_ms);
+void rtw_write_port_cancel(struct rtw_adapter *adapter);
 
 void rtw_write_scsi(struct rtw_adapter *adapter, u32 cnt, u8 *pmem);
 

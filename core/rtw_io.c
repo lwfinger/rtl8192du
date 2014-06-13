@@ -203,7 +203,7 @@ void rtw_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 }
 
-void _rtw_write_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
+void rtw_write_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 {
 	void (*_write_mem)(struct intf_hdl *pintfhdl, u32 addr,
 			   u32 cnt, u8 *pmem);
@@ -249,7 +249,7 @@ void rtw_read_port_cancel(struct rtw_adapter *adapter)
 		_read_port_cancel(pintfhdl);
 }
 
-u32 _rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
+u32 rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 {
 	u32 (*_write_port)(struct intf_hdl *pintfhdl, u32 addr,
 			   u32 cnt, u8 *pmem);
@@ -264,7 +264,7 @@ u32 _rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	return ret;
 }
 
-u32 _rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt,
+u32 rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt,
 			     u8 *pmem, int timeout_ms)
 {
 	int ret = 1;
@@ -274,7 +274,7 @@ u32 _rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt,
 	rtw_sctx_init(&sctx, timeout_ms);
 	pxmitbuf->sctx = &sctx;
 
-	ret = _rtw_write_port(adapter, addr, cnt, pmem);
+	ret = rtw_write_port(adapter, addr, cnt, pmem);
 
 	if (ret == 1)
 		ret = rtw_sctx_wait(&sctx);
@@ -282,7 +282,7 @@ u32 _rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt,
 	 return ret;
 }
 
-void _rtw_write_port_cancel(struct rtw_adapter *adapter)
+void rtw_write_port_cancel(struct rtw_adapter *adapter)
 {
 	void (*_write_port_cancel)(struct intf_hdl *pintfhdl);
 	struct io_priv *pio_priv = &adapter->iopriv;

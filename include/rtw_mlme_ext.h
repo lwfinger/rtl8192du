@@ -732,29 +732,11 @@ static struct cmd_hdl wlancmds[] =
 
 #endif
 
-struct C2HEvent_Header
-{
-
-#ifdef __LITTLE_ENDIAN
-
-	unsigned int len:16;
-	unsigned int ID:8;
-	unsigned int seq:8;
-
-#elif defined(__BIG_ENDIAN)
-
-	unsigned int seq:8;
-	unsigned int ID:8;
-	unsigned int len:16;
-
-#else
-
-#  error "Must be LITTLE or BIG Endian"
-
-#endif
-
+struct C2HEvent_Header {
+	__le16	len;
+	u8 ID;
+	u8 seq;
 	unsigned int rsvd;
-
 };
 
 enum rtw_c2h_event

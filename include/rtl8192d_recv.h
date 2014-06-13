@@ -63,23 +63,6 @@ struct phy_ofdm_rx_status_report_8192cd {
 	unsigned char	csi_target_X[2];
 	unsigned char	sigevm;
 	unsigned char	max_ex_pwr;
-#ifdef __LITTLE_ENDIAN
-	unsigned char ex_intf_flg:1;
-	unsigned char sgi_en:1;
-	unsigned char rxsc:2;
-	unsigned char idle_long:1;
-	unsigned char r_ant_train_en:1;
-	unsigned char ANTSELB:1;
-	unsigned char ANTSEL:1;
-#else	/*  __BIG_ENDIAN */
-	unsigned char ANTSEL:1;
-	unsigned char ANTSELB:1;
-	unsigned char r_ant_train_en:1;
-	unsigned char idle_long:1;
-	unsigned char rxsc:2;
-	unsigned char sgi_en:1;
-	unsigned char ex_intf_flg:1;
-#endif
 } __packed;
 
 struct phy_cck_rx_status_report_8192cd {

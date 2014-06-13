@@ -55,35 +55,6 @@ struct rsn_ie_hdr {
 	u8 version[2]; /* little endian */
 }__attribute__ ((packed));
 
-struct wme_ac_parameter {
-#if defined(__LITTLE_ENDIAN)
-	/* byte 1 */
-	u8	aifsn:4,
-		acm:1,
-		aci:2,
-		reserved:1;
-
-	/* byte 2 */
-	u8	eCWmin:4,
-		eCWmax:4;
-#elif defined(__BIG_ENDIAN)
-	/* byte 1 */
-	u8	reserved:1,
-		aci:2,
-		acm:1,
-		aifsn:4;
-
-	/* byte 2 */
-	u8	eCWmax:4,
-		eCWmin:4;
-#else
-#error	"Please fix <endian.h>"
-#endif
-
-	/* bytes 3 & 4 */
-	u16 txopLimit;
-} __attribute__ ((packed));
-
 struct wme_parameter_element {
 	/* required fields for WME version 1 */
 	u8 oui[3];
@@ -119,8 +90,6 @@ struct wme_parameter_element {
 	} while (0)
 
 #define RSN_SELECTOR_PUT(a, val) WPA_PUT_BE32((u8 *) (a), (val))
-
-
 
 /* Action category code */
 enum ieee80211_category {

@@ -50,18 +50,14 @@
 #define _IO_CMDMASK_	(0x1F80)
 
 
-/*
-	For prompt mode accessing, caller shall free io_req
-	Otherwise, io_handler will free io_req
-*/
-
-
+/* For prompt mode accessing, caller shall free io_req
+ *	Otherwise, io_handler will free io_req
+ */
 
 /*  IO STATUS TYPE */
 #define _IO_ERR_		BIT(2)
 #define _IO_SUCCESS_	BIT(1)
 #define _IO_DONE_		BIT(0)
-
 
 #define IO_RD32			(_IO_SYNC_ | _IO_WORD_)
 #define IO_RD16			(_IO_SYNC_ | _IO_HW_)
@@ -79,16 +75,10 @@
 #define IO_WR16_ASYNC	(_IO_WRITE_ | _IO_HW_)
 #define IO_WR8_ASYNC	(_IO_WRITE_ | _IO_BYTE_)
 
-/*
-
-	Only Sync. burst accessing is provided.
-
-*/
+/* Only Sync. burst accessing is provided.  */
 
 #define IO_WR_BURST(x)		(_IO_WRITE_ | _IO_SYNC_ | _IO_BURST_ | ((x) & _IOSZ_MASK_))
 #define IO_RD_BURST(x)		(_IO_SYNC_ | _IO_BURST_ | ((x) & _IOSZ_MASK_))
-
-
 
 /* below is for the intf_option bit defition... */
 
@@ -98,36 +88,34 @@ struct intf_priv;
 struct intf_hdl;
 struct io_queue;
 
-struct _io_ops
-{
-		u8 (*_read8)(struct intf_hdl *pintfhdl, u32 addr);
-		u16 (*_read16)(struct intf_hdl *pintfhdl, u32 addr);
-		u32 (*_read32)(struct intf_hdl *pintfhdl, u32 addr);
+struct _io_ops {
+	u8 (*_read8)(struct intf_hdl *pintfhdl, u32 addr);
+	u16 (*_read16)(struct intf_hdl *pintfhdl, u32 addr);
+	u32 (*_read32)(struct intf_hdl *pintfhdl, u32 addr);
 
-		int (*_write8)(struct intf_hdl *pintfhdl, u32 addr, u8 val);
-		int (*_write16)(struct intf_hdl *pintfhdl, u32 addr, u16 val);
-		int (*_write32)(struct intf_hdl *pintfhdl, u32 addr, u32 val);
-		int (*_writeN)(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata);
+	int (*_write8)(struct intf_hdl *pintfhdl, u32 addr, u8 val);
+	int (*_write16)(struct intf_hdl *pintfhdl, u32 addr, u16 val);
+	int (*_write32)(struct intf_hdl *pintfhdl, u32 addr, u32 val);
+	int (*_writeN)(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata);
 
-		int (*_write8_async)(struct intf_hdl *pintfhdl, u32 addr, u8 val);
-		int (*_write16_async)(struct intf_hdl *pintfhdl, u32 addr, u16 val);
-		int (*_write32_async)(struct intf_hdl *pintfhdl, u32 addr, u32 val);
+	int (*_write8_async)(struct intf_hdl *pintfhdl, u32 addr, u8 val);
+	int (*_write16_async)(struct intf_hdl *pintfhdl, u32 addr, u16 val);
+	int (*_write32_async)(struct intf_hdl *pintfhdl, u32 addr, u32 val);
 
-		void (*_read_mem)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
-		void (*_write_mem)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
+	void (*_read_mem)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
+	void (*_write_mem)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
 
-		void (*_sync_irp_protocol_rw)(struct io_queue *pio_q);
+	void (*_sync_irp_protocol_rw)(struct io_queue *pio_q);
 
-		u32 (*_read_interrupt)(struct intf_hdl *pintfhdl, u32 addr);
+	u32 (*_read_interrupt)(struct intf_hdl *pintfhdl, u32 addr);
 
-		u32 (*_read_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
-		u32 (*_write_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
+	u32 (*_read_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
+	u32 (*_write_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
 
-		u32 (*_write_scsi)(struct intf_hdl *pintfhdl,u32 cnt, u8 *pmem);
+	u32 (*_write_scsi)(struct intf_hdl *pintfhdl,u32 cnt, u8 *pmem);
 
-		void (*_read_port_cancel)(struct intf_hdl *pintfhdl);
-		void (*_write_port_cancel)(struct intf_hdl *pintfhdl);
-
+	void (*_read_port_cancel)(struct intf_hdl *pintfhdl);
+	void (*_write_port_cancel)(struct intf_hdl *pintfhdl);
 };
 
 struct io_req {
@@ -150,7 +138,6 @@ struct	intf_hdl {
 };
 
 struct reg_protocol_rd {
-
 #ifdef __LITTLE_ENDIAN
 
 	/* DW1 */
@@ -171,8 +158,6 @@ struct reg_protocol_rd {
 	u32		BusAddress;
 	/* DW4 */
 #else
-
-
 /* DW1 */
 	u32 Reserved1  :4;
 	u32 NumOfTrans :4;
@@ -200,15 +185,10 @@ struct reg_protocol_rd {
 	/* DW4 */
 
 #endif
-
 };
 
-
 struct reg_protocol_wt {
-
-
 #ifdef __LITTLE_ENDIAN
-
 	/* DW1 */
 	u32		NumOfTrans:4;
 	u32		Reserved1:4;
@@ -227,7 +207,6 @@ struct reg_protocol_wt {
 	u32		BusAddress;
 	/* DW4 */
 	u32		Value;
-
 #else
 	/* DW1 */
 	u32 Reserved1  :4;
@@ -254,17 +233,10 @@ struct reg_protocol_wt {
 
 	/* DW4 */
 	u32		Value;
-
 #endif
-
 };
 
-
-
-/*
-Below is the data structure used by _io_handler
-
-*/
+/* Below is the data structure used by _io_handler */
 
 struct io_queue {
 	spinlock_t lock;
@@ -276,27 +248,10 @@ struct io_queue {
 	struct	intf_hdl	intf;
 };
 
-struct io_priv{
-
+struct io_priv {
 	struct rtw_adapter *padapter;
-
 	struct intf_hdl intf;
-
 };
-
-uint ioreq_flush(struct rtw_adapter *adapter, struct io_queue *ioqueue);
-void sync_ioreq_enqueue(struct io_req *preq,struct io_queue *ioqueue);
-uint sync_ioreq_flush(struct rtw_adapter *adapter, struct io_queue *ioqueue);
-
-
-uint free_ioreq(struct io_req *preq, struct io_queue *pio_queue);
-struct io_req *alloc_ioreq(struct io_queue *pio_q);
-
-uint register_intf_hdl(u8 *dev, struct intf_hdl *pintfhdl);
-void unregister_intf_hdl(struct intf_hdl *pintfhdl);
-
-void _rtw_attrib_read(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
-void _rtw_attrib_write(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
 
 u8 rtw_read8(struct rtw_adapter *adapter, u32 addr);
 u16 rtw_read16(struct rtw_adapter *adapter, u32 addr);
@@ -304,7 +259,6 @@ u32 rtw_read32(struct rtw_adapter *adapter, u32 addr);
 void rtw_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
 void rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
 void rtw_read_port_cancel(struct rtw_adapter *adapter);
-
 
 int rtw_write8(struct rtw_adapter *adapter, u32 addr, u8 val);
 int rtw_write16(struct rtw_adapter *adapter, u32 addr, u16 val);
@@ -320,44 +274,6 @@ u32 rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
 u32 rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem, int timeout_ms);
 void rtw_write_port_cancel(struct rtw_adapter *adapter);
 
-void rtw_write_scsi(struct rtw_adapter *adapter, u32 cnt, u8 *pmem);
-
-/* ioreq */
-void ioreq_read8(struct rtw_adapter *adapter, u32 addr, u8 *pval);
-void ioreq_read16(struct rtw_adapter *adapter, u32 addr, u16 *pval);
-void ioreq_read32(struct rtw_adapter *adapter, u32 addr, u32 *pval);
-void ioreq_write8(struct rtw_adapter *adapter, u32 addr, u8 val);
-void ioreq_write16(struct rtw_adapter *adapter, u32 addr, u16 val);
-void ioreq_write32(struct rtw_adapter *adapter, u32 addr, u32 val);
-
-
-uint async_read8(struct rtw_adapter *adapter, u32 addr, u8 *pbuff,
-	void (*_async_io_callback)(struct rtw_adapter *padater, struct io_req *pio_req, u8 *cnxt), u8 *cnxt);
-uint async_read16(struct rtw_adapter *adapter, u32 addr,  u8 *pbuff,
-	void (*_async_io_callback)(struct rtw_adapter *padater, struct io_req *pio_req, u8 *cnxt), u8 *cnxt);
-uint async_read32(struct rtw_adapter *adapter, u32 addr,  u8 *pbuff,
-	void (*_async_io_callback)(struct rtw_adapter *padater, struct io_req *pio_req, u8 *cnxt), u8 *cnxt);
-
-void async_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
-void async_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
-
-void async_write8(struct rtw_adapter *adapter, u32 addr, u8 val,
-	void (*_async_io_callback)(struct rtw_adapter *padater, struct io_req *pio_req, u8 *cnxt), u8 *cnxt);
-void async_write16(struct rtw_adapter *adapter, u32 addr, u16 val,
-	void (*_async_io_callback)(struct rtw_adapter *padater, struct io_req *pio_req, u8 *cnxt), u8 *cnxt);
-void async_write32(struct rtw_adapter *adapter, u32 addr, u32 val,
-	void (*_async_io_callback)(struct rtw_adapter *padater, struct io_req *pio_req, u8 *cnxt), u8 *cnxt);
-
-void async_write_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
-void async_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
-
 int rtw_init_io_priv(struct rtw_adapter *padapter, void (*set_intf_ops)(struct _io_ops *pops));
-
-uint alloc_io_queue(struct rtw_adapter *adapter);
-void free_io_queue(struct rtw_adapter *adapter);
-void async_bus_io(struct io_queue *pio_q);
-void bus_sync_io(struct io_queue *pio_q);
-u32 _ioreq2rwmem(struct io_queue *pio_q);
-void dev_power_down(struct rtw_adapter * adapter, u8 bpwrup);
 
 #endif	/* _RTL8711_IO_H_ */

@@ -30,9 +30,6 @@
 #include <linux/usb.h>
 #include <linux/usb/ch9.h>
 
-#define rtw_usb_buffer_alloc(dev, size, mem_flags, dma) usb_alloc_coherent((dev), (size), (mem_flags), (dma))
-#define rtw_usb_buffer_free(dev, size, addr, dma) usb_free_coherent((dev), (size), (addr), (dma))
-
 #define NUM_IOREQ		8
 
 #define MAX_PROT_SZ	(64-16)

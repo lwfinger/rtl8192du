@@ -152,7 +152,7 @@ int _rtw_write8_async(struct rtw_adapter *adapter, u32 addr, u8 val)
 
 	return RTW_STATUS_CODE(ret);
 }
-int _rtw_write16_async(struct rtw_adapter *adapter, u32 addr, u16 val)
+int rtw_write16_async(struct rtw_adapter *adapter, u32 addr, u16 val)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl *pintfhdl = &(pio_priv->intf);

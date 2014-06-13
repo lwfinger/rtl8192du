@@ -84,7 +84,7 @@ u32 rtw_read32(struct rtw_adapter *adapter, u32 addr)
 	return r_val;
 }
 
-int _rtw_write8(struct rtw_adapter *adapter, u32 addr, u8 val)
+int rtw_write8(struct rtw_adapter *adapter, u32 addr, u8 val)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl *pintfhdl = &(pio_priv->intf);
@@ -98,7 +98,7 @@ int _rtw_write8(struct rtw_adapter *adapter, u32 addr, u8 val)
 	return RTW_STATUS_CODE(ret);
 }
 
-int _rtw_write16(struct rtw_adapter *adapter, u32 addr, u16 val)
+int rtw_write16(struct rtw_adapter *adapter, u32 addr, u16 val)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
@@ -111,7 +111,7 @@ int _rtw_write16(struct rtw_adapter *adapter, u32 addr, u16 val)
 
 	return RTW_STATUS_CODE(ret);
 }
-int _rtw_write32(struct rtw_adapter *adapter, u32 addr, u32 val)
+int rtw_write32(struct rtw_adapter *adapter, u32 addr, u32 val)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
@@ -125,7 +125,7 @@ int _rtw_write32(struct rtw_adapter *adapter, u32 addr, u32 val)
 	return RTW_STATUS_CODE(ret);
 }
 
-int _rtw_writeN(struct rtw_adapter *adapter, u32 addr, u32 length, u8 *pdata)
+int rtw_writeN(struct rtw_adapter *adapter, u32 addr, u32 length, u8 *pdata)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct intf_hdl *pintfhdl = (struct intf_hdl *)(&(pio_priv->intf));

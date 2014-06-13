@@ -309,10 +309,10 @@ void _rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
 void _rtw_read_port_cancel(struct rtw_adapter *adapter);
 
 
-int _rtw_write8(struct rtw_adapter *adapter, u32 addr, u8 val);
-int _rtw_write16(struct rtw_adapter *adapter, u32 addr, u16 val);
-int _rtw_write32(struct rtw_adapter *adapter, u32 addr, u32 val);
-int _rtw_writeN(struct rtw_adapter *adapter, u32 addr, u32 length, u8 *pdata);
+int rtw_write8(struct rtw_adapter *adapter, u32 addr, u8 val);
+int rtw_write16(struct rtw_adapter *adapter, u32 addr, u16 val);
+int rtw_write32(struct rtw_adapter *adapter, u32 addr, u32 val);
+int rtw_writeN(struct rtw_adapter *adapter, u32 addr, u32 length, u8 *pdata);
 
 int rtw_write8_async(struct rtw_adapter *adapter, u32 addr, u8 val);
 int rtw_write16_async(struct rtw_adapter *adapter, u32 addr, u16 val);
@@ -326,11 +326,6 @@ void _rtw_write_port_cancel(struct rtw_adapter *adapter);
 #define rtw_read_mem(adapter, addr, cnt, mem) _rtw_read_mem((adapter), (addr), (cnt), (mem))
 #define rtw_read_port(adapter, addr, cnt, mem) _rtw_read_port((adapter), (addr), (cnt), (mem))
 #define rtw_read_port_cancel(adapter) _rtw_read_port_cancel((adapter))
-
-#define  rtw_write8(adapter, addr, val) _rtw_write8((adapter), (addr), (val))
-#define  rtw_write16(adapter, addr, val) _rtw_write16((adapter), (addr), (val))
-#define  rtw_write32(adapter, addr, val) _rtw_write32((adapter), (addr), (val))
-#define  rtw_writeN(adapter, addr, length, data) _rtw_writeN((adapter), (addr), (length), (data))
 
 #define rtw_write_mem(adapter, addr, cnt, mem) _rtw_write_mem((adapter), (addr), (cnt), (mem))
 #define rtw_write_port(adapter, addr, cnt, mem) _rtw_write_port((adapter), (addr), (cnt), (mem))

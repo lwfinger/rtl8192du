@@ -301,9 +301,9 @@ void unregister_intf_hdl(struct intf_hdl *pintfhdl);
 void _rtw_attrib_read(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
 void _rtw_attrib_write(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
 
-u8 _rtw_read8(struct rtw_adapter *adapter, u32 addr);
-u16 _rtw_read16(struct rtw_adapter *adapter, u32 addr);
-u32 _rtw_read32(struct rtw_adapter *adapter, u32 addr);
+u8 rtw_read8(struct rtw_adapter *adapter, u32 addr);
+u16 rtw_read16(struct rtw_adapter *adapter, u32 addr);
+u32 rtw_read32(struct rtw_adapter *adapter, u32 addr);
 void _rtw_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
 void _rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
 void _rtw_read_port_cancel(struct rtw_adapter *adapter);
@@ -323,9 +323,6 @@ u32 _rtw_write_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
 u32 _rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem, int timeout_ms);
 void _rtw_write_port_cancel(struct rtw_adapter *adapter);
 
-#define rtw_read8(adapter, addr) _rtw_read8((adapter), (addr))
-#define rtw_read16(adapter, addr) _rtw_read16((adapter), (addr))
-#define rtw_read32(adapter, addr) _rtw_read32((adapter), (addr))
 #define rtw_read_mem(adapter, addr, cnt, mem) _rtw_read_mem((adapter), (addr), (cnt), (mem))
 #define rtw_read_port(adapter, addr, cnt, mem) _rtw_read_port((adapter), (addr), (cnt), (mem))
 #define rtw_read_port_cancel(adapter) _rtw_read_port_cancel((adapter))

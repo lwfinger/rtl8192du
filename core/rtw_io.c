@@ -42,7 +42,7 @@ jackson@realtek.com.tw
 #include <osdep_intf.h>
 #include <usb_ops.h>
 
-u8 _rtw_read8(struct rtw_adapter *adapter, u32 addr)
+u8 rtw_read8(struct rtw_adapter *adapter, u32 addr)
 {
 	u8 r_val;
 	struct io_priv *pio_priv = &adapter->iopriv;
@@ -56,7 +56,7 @@ u8 _rtw_read8(struct rtw_adapter *adapter, u32 addr)
 	return r_val;
 }
 
-u16 _rtw_read16(struct rtw_adapter *adapter, u32 addr)
+u16 rtw_read16(struct rtw_adapter *adapter, u32 addr)
 {
 	u16 r_val;
 	struct io_priv *pio_priv = &adapter->iopriv;
@@ -70,7 +70,7 @@ u16 _rtw_read16(struct rtw_adapter *adapter, u32 addr)
 	return r_val;
 }
 
-u32 _rtw_read32(struct rtw_adapter *adapter, u32 addr)
+u32 rtw_read32(struct rtw_adapter *adapter, u32 addr)
 {
 	u32 r_val;
 	struct io_priv *pio_priv = &adapter->iopriv;

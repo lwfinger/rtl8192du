@@ -182,7 +182,7 @@ int rtw_write32_async(struct rtw_adapter *adapter, u32 addr, u32 val)
 	return RTW_STATUS_CODE(ret);
 }
 
-void _rtw_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
+void rtw_read_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 {
 	void (*_read_mem)(struct intf_hdl *pintfhdl, u32 addr,
 			  u32 cnt, u8 *pmem);
@@ -216,7 +216,7 @@ void _rtw_write_mem(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 }
 
-void _rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
+void rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 {
 	u32 (*_read_port)(struct intf_hdl *pintfhdl, u32 addr,
 			  u32 cnt, u8 *pmem);
@@ -237,7 +237,7 @@ void _rtw_read_port(struct rtw_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 }
 
-void _rtw_read_port_cancel(struct rtw_adapter *adapter)
+void rtw_read_port_cancel(struct rtw_adapter *adapter)
 {
 	void (*_read_port_cancel)(struct intf_hdl *pintfhdl);
 	struct io_priv *pio_priv = &adapter->iopriv;

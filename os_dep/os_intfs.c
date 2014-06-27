@@ -99,9 +99,9 @@ static int rtw_special_rf_path = 0; /* 0: 2T2R , 1: only turn on path A 1T1R, 2:
 static int rtw_channel_plan = RT_CHANNEL_DOMAIN_MAX;
 
 #ifdef CONFIG_92D_BT_COEXIST
-int rtw_bt_iso = 2;/*  0:Low, 1:High, 2:From Efuse */
-int rtw_bt_sco = 3;/*  0:Idle, 1:None-SCO, 2:SCO, 3:From Counter, 4.Busy, 5.OtherBusy */
-int rtw_bt_ampdu = 1 ;/*  0:Disable BT control A-MPDU, 1:Enable BT control A-MPDU. */
+static int rtw_bt_iso = 2;/*  0:Low, 1:High, 2:From Efuse */
+static int rtw_bt_sco = 3;/*  0:Idle, 1:None-SCO, 2:SCO, 3:From Counter, 4.Busy, 5.OtherBusy */
+static int rtw_bt_ampdu = 1 ;/*  0:Disable BT control A-MPDU, 1:Enable BT control A-MPDU. */
 #endif
 static int rtw_AcceptAddbaReq = true;/*  0:Reject AP's Add BA req, 1:Accept AP's Add BA req. */
 

@@ -1009,6 +1009,10 @@ s32 rtw_txframes_sta_ac_pending(struct rtw_adapter *padapter, struct pkt_attrib 
 	break;
 	}
 
+	if (!ptxservq) {
+		pr_err("ptxservq is NULL for priority %d\n", priority);
+		return 0;
+	}
 	return ptxservq->qcnt;
 }
 

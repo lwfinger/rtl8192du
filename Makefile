@@ -1,6 +1,6 @@
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
 
-EXTRA_CFLAGS += -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer
+EXTRA_CFLAGS += -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 
 
 EXTRA_CFLAGS += -I$(src)/include
 

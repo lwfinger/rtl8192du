@@ -26,6 +26,7 @@
 #include <usb_osintf.h>
 #include <usb_hal.h>
 #include <linux/vmalloc.h>
+#include <linux/nl80211.h>
 
 static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
 static int rtw_resume(struct usb_interface *intf);
@@ -1211,11 +1212,19 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
 	struct rtw_adapter *padapter = dvobj->if1;
+#ifdef CONFIG_IOCTL_CFG80211
+	struct wireless_dev *pwdev = padapter->rtw_wdev;
+#endif
 
 	DBG_8192D("+rtw_dev_remove\n");
 
 	if (usb_drv->drv_registered )
 		padapter->bSurpriseRemoved = true;
+
+#ifdef CONFIG_IOCTL_CFG80211
+	/* to avoid WARN_ON in __cfg80211_disconnected() */
+	pwdev->iftype = NL80211_IFTYPE_STATION;
+#endif
 
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 	rtw_unregister_early_suspend(&padapter->pwrctrlpriv);

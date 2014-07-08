@@ -3374,6 +3374,7 @@ int rtw_p2p_check_frames(struct rtw_adapter *padapter, const u8 *buf, u32 len, u
 					}
 				}
 				break;
+			}
 			case P2P_PROVISION_DISC_RESP:
 				DBG_8192D("RTW_%s:P2P_PROVISION_DISC_RESP, dialogToken =%d\n",
 					  tx ? "Tx" : "Rx", dialogToken);

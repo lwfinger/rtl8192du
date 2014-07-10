@@ -207,7 +207,7 @@ struct ndis_802_11_test {
 };
 
 #ifndef Ndis802_11APMode
-#define Ndis802_11APMode (Ndis802_11InfrastructureMax+1)
+#define Ndis802_11APMode (NDIS802_11INFRA_MAX+1)
 #endif
 
 struct wlan_phy_info {

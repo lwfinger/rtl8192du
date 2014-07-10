@@ -830,6 +830,9 @@ static unsigned int rtw_classify8021d(struct sk_buff *skb)
 
 #if (LINUX_VERSION_CODE <= KERNEL_VERSION(3, 12, 0))
 static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb)
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0))
+static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb,
+			    void *accel, select_queue_fallback_t fallback)
 #else
 static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb,
 			    void *accel)

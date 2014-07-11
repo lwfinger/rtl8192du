@@ -2853,12 +2853,6 @@ void rtw_update_ht_cap(struct rtw_adapter *padapter, u8 *pie, uint ie_len,
 				    MCS_rate[i] &= MCS_rate_2R[i];
 #endif /* CONFIG_DISABLE_MCS13TO15 */
 			}
-#ifdef RTL8192C_RECONFIG_TO_1T1R
-			{
-				pmlmeinfo->HT_caps.u.HT_cap_element.
-				    MCS_rate[i] &= MCS_rate_1R[i];
-			}
-#endif
 			if (pregistrypriv->special_rf_path)
 				pmlmeinfo->HT_caps.u.HT_cap_element.
 				    MCS_rate[i] &= MCS_rate_1R[i];

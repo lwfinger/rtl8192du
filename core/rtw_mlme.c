@@ -1766,9 +1766,6 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 		psta = rtw_get_stainfo(&adapter->stapriv, pstassoc->macaddr);
 		if (psta) {
-#ifdef COMPAT_KERNEL_RELEASE
-
-#else
 			u8 *passoc_req = NULL;
 			u32 assoc_req_len;
 
@@ -1794,7 +1791,6 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 				kfree(passoc_req);
 			}
-#endif
 
 			ap_sta_info_defer_update(adapter, psta);
 		}
@@ -1864,12 +1860,8 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	struct wlan_network *tgt_network = &(pmlmepriv->cur_network);
 
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
-#ifdef COMPAT_KERNEL_RELEASE
-
-#else
 		rtw_cfg80211_indicate_sta_disassoc(adapter, pstadel->macaddr,
 						   *(u16 *)pstadel->rsvd);
-#endif
 		return;
 	}
 

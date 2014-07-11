@@ -1848,26 +1848,17 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 
 		/* 2 - report to upper layer */
 		DBG_8192D("indicate_sta_join_event to upper layer - hostapd\n");
-		if (1) {
-#ifdef COMPAT_KERNEL_RELEASE
-			rtw_cfg80211_indicate_sta_assoc(adapt, pframe,
-							pkt_len);
-#else
-			spin_lock_bh(&pstat->lock);
-			kfree(pstat->passoc_req);
-			pstat->passoc_req = NULL;
-			pstat->assoc_req_len = 0;
+		spin_lock_bh(&pstat->lock);
+		kfree(pstat->passoc_req);
+		pstat->passoc_req = NULL;
+		pstat->assoc_req_len = 0;
 
-			pstat->passoc_req = kzalloc(pkt_len, GFP_ATOMIC);
-			if (pstat->passoc_req) {
-				memcpy(pstat->passoc_req, pframe, pkt_len);
-				pstat->assoc_req_len = pkt_len;
-			}
-			spin_unlock_bh(&pstat->lock);
-#endif
-		} else {
-			rtw_indicate_sta_assoc_event(adapt, pstat);
+		pstat->passoc_req = kzalloc(pkt_len, GFP_ATOMIC);
+		if (pstat->passoc_req) {
+			memcpy(pstat->passoc_req, pframe, pkt_len);
+			pstat->assoc_req_len = pkt_len;
 		}
+		spin_unlock_bh(&pstat->lock);
 
 		/* 3-(1) report sta add event */
 		report_add_sta_event(adapt, pstat->hwaddr, pstat->aid);

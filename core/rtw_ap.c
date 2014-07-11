@@ -1867,14 +1867,6 @@ u8 ap_free_sta(struct rtw_adapter *padapter, struct sta_info *psta,
 	psta->state &= ~_FW_LINKED;
 	spin_unlock_bh(&psta->lock);
 
-	if (1) {
-		#ifdef COMPAT_KERNEL_RELEASE
-		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr, reason);
-		#endif
-	} else {
-		rtw_indicate_sta_disassoc_event(padapter, psta);
-	}
-
 	report_del_sta_event(padapter, psta->hwaddr, reason);
 
 	beacon_updated = bss_cap_update_on_sta_leave(padapter, psta);

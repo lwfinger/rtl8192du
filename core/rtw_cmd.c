@@ -1682,14 +1682,6 @@ static void traffic_status_watchdog(struct rtw_adapter *padapter)
 				bHigherBusyTxTraffic = true;
 		}
 
-#ifdef CONFIG_TDLS
-#ifdef CONFIG_TDLS_AUTOSETUP
-		if ((ptdlsinfo->watchdog_count % TDLS_WATCHDOG_PERIOD) == 0)	/* TDLS_WATCHDOG_PERIOD * 2sec, periodically sending */
-			issue_tdls_dis_req(padapter, NULL);
-		ptdlsinfo->watchdog_count++;
-#endif /* CONFIG_TDLS_AUTOSETUP */
-#endif /* CONFIG_TDLS */
-
 #ifdef CONFIG_LPS
 		/*  check traffic for  powersaving. */
 		if (((pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod + pmlmepriv->LinkDetectInfo.NumTxOkInPeriod) > 8) ||

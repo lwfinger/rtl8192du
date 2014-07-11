@@ -813,49 +813,6 @@ int On_TDLS_Dis_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 	/* WFDTDLS: for sigma test, not to setup direct link automatically */
 	ptdlsinfo->dev_discovered = 1;
 
-#ifdef CONFIG_TDLS_AUTOSETUP
-	psa = get_sa(ptr);
-	ptdls_sta = rtw_get_stainfo(&(adapter->stapriv), psa);
-
-	if (ptdls_sta != NULL) {
-		ptdls_sta->tdls_sta_state |= TDLS_ALIVE_STATE;
-
-		/* Record the tdls sta with lowest signal strength */
-		if ((ptdlsinfo->sta_maximum == true) && (ptdls_sta->alive_count >= 1)) {
-			if (_rtw_memcmp(ptdlsinfo->ss_record.macaddr, empty_addr, ETH_ALEN)) {
-				memcpy(ptdlsinfo->ss_record.macaddr, psa, ETH_ALEN);
-				ptdlsinfo->ss_record.rxpwdb_all = pattrib->rxpwdb_all;
-			} else {
-				if (ptdlsinfo->ss_record.rxpwdb_all < pattrib->rxpwdb_all) {
-					memcpy(ptdlsinfo->ss_record.macaddr, psa, ETH_ALEN);
-					ptdlsinfo->ss_record.rxpwdb_all = pattrib->rxpwdb_all;
-				}
-			}
-	}
-
-	} else {
-		if (ptdlsinfo->sta_maximum == true) {
-			if (_rtw_memcmp(ptdlsinfo->ss_record.macaddr, empty_addr, ETH_ALEN)) {
-				/* All traffics are busy, do not set up another direct link. */
-				return _FAIL;
-			} else {
-				if (pattrib->rxpwdb_all > ptdlsinfo->ss_record.rxpwdb_all)
-					issue_tdls_teardown(adapter, ptdlsinfo->ss_record.macaddr);
-				else
-					return _FAIL;
-			}
-		}
-
-		rtw_hal_get_def_var(adapter, HAL_DEF_UNDERCORATEDSMOOTHEDPWDB, &UndecoratedSmoothedPWDB);
-
-		if (pattrib->rxpwdb_all + TDLS_SIGNAL_THRESH >= UndecoratedSmoothedPWDB) {
-			DBG_871X("pattrib->rxpwdb_all =%d, pdmpriv->UndecoratedSmoothedPWDB =%d\n",
-				 pattrib->rxpwdb_all, UndecoratedSmoothedPWDB);
-			issue_tdls_setup_req(adapter, psa);
-		}
-	}
-#endif /* CONFIG_TDLS_AUTOSETUP */
-
 	return _SUCCESS;
 }
 
@@ -1175,7 +1132,7 @@ int On_TDLS_Setup_Rsp(_adapter *adapter, struct recv_frame_hdr *precv_frame)
 			_cancel_timer_ex(&ptdls_sta->handshake_timer);
 #ifdef CONFIG_TDLS_AUTOCHECKALIVE
 			_set_timer(&ptdls_sta->alive_timer1, TDLS_ALIVE_TIMER_PH1);
-#endif /* CONFIG_TDLS_AUTOSETUP */
+#endif
 		}
 
 		rtw_tdls_set_mac_id(ptdlsinfo, ptdls_sta);

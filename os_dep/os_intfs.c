@@ -739,9 +739,6 @@ static uint loadparam(struct rtw_adapter *padapter, struct net_device *pnetdev)
 
 #ifdef CONFIG_LAYER2_ROAMING
 	registry_par->max_roaming_times = (u8)rtw_max_roaming_times;
-#ifdef CONFIG_INTEL_WIDI
-	registry_par->max_roaming_times = (u8)rtw_max_roaming_times + 2;
-#endif /*  CONFIG_INTEL_WIDI */
 #endif
 
 	registry_par->mac_phy_mode = rtw_mac_phy_mode;
@@ -1258,15 +1255,6 @@ u8 rtw_init_drv_sw(struct rtw_adapter *padapter)
 	rtw_hal_sreset_init(padapter);
 #endif
 
-#ifdef CONFIG_INTEL_WIDI
-	if (rtw_init_intel_widi(padapter) == _FAIL)
-	{
-		DBG_8192D("Can't rtw_init_intel_widi\n");
-		ret8 = _FAIL;
-		goto exit;
-	}
-#endif /* CONFIG_INTEL_WIDI */
-
 #ifdef CONFIG_BR_EXT
 	_rtw_spinlock_init(&padapter->br_ext_lock);
 #endif	/*  CONFIG_BR_EXT */
@@ -1339,10 +1327,6 @@ u8 rtw_free_drv_sw(struct rtw_adapter *padapter)
 #ifdef CONFIG_BR_EXT
 	_rtw_spinlock_free(&padapter->br_ext_lock);
 #endif	/*  CONFIG_BR_EXT */
-
-#ifdef CONFIG_INTEL_WIDI
-	rtw_free_intel_widi(padapter);
-#endif /* CONFIG_INTEL_WIDI */
 
 	free_mlme_ext_priv(&padapter->mlmeextpriv);
 

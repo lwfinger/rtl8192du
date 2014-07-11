@@ -1038,21 +1038,6 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 							       NULL, 0)
 					    ) {
 						rtw_set_roaming(adapter, 0);
-#ifdef CONFIG_INTEL_WIDI
-						if (adapter->mlmepriv.
-						    widi_state ==
-						    INTEL_WIDI_STATE_ROAMING) {
-							memset(pmlmepriv->
-							       sa_ext, 0x00,
-							       L2SDTA_SERVICE_VE_LEN);
-							intel_widi_wk_cmd
-							    (adapter,
-							     INTEL_WIDI_LISTEN_WK,
-							     NULL);
-							DBG_8192D
-							    ("change to widi listen\n");
-						}
-#endif /*  CONFIG_INTEL_WIDI */
 						rtw_free_assoc_resources
 						    (adapter, 1);
 						rtw_indicate_disconnect
@@ -1091,9 +1076,6 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 #endif
 
 #ifdef DBG_CONFIG_ERROR_DETECT
-#ifdef CONFIG_INTEL_WIDI
-	if (adapter->mlmepriv.widi_state == INTEL_WIDI_STATE_NONE)
-#endif
 	{
 		struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
 		if (pmlmeext->sitesurvey_res.bss_cnt == 0) {
@@ -1246,14 +1228,6 @@ void rtw_indicate_connect(struct rtw_adapter *padapter)
 	}
 
 	rtw_set_roaming(padapter, 0);
-
-#ifdef CONFIG_INTEL_WIDI
-	if (padapter->mlmepriv.widi_state == INTEL_WIDI_STATE_ROAMING) {
-		memset(pmlmepriv->sa_ext, 0x00, L2SDTA_SERVICE_VE_LEN);
-		intel_widi_wk_cmd(padapter, INTEL_WIDI_LISTEN_WK, NULL);
-		DBG_8192D("change to widi listen\n");
-	}
-#endif /*  CONFIG_INTEL_WIDI */
 
 	rtw_set_scan_deny(padapter, 3000);
 
@@ -1877,9 +1851,6 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 			rtw_set_roaming(adapter,
 					adapter->registrypriv.
 					max_roaming_times);
-#ifdef CONFIG_INTEL_WIDI
-		if (adapter->mlmepriv.widi_state != INTEL_WIDI_STATE_CONNECTED)
-#endif /*  CONFIG_INTEL_WIDI */
 			if (*((unsigned short *)(pstadel->rsvd)) !=
 			    WLAN_REASON_EXPIRATION_CHK)
 				rtw_set_roaming(adapter, 0);	/* don't roam */
@@ -1902,10 +1873,6 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 		_rtw_roaming(adapter, tgt_network);
 
-#ifdef CONFIG_INTEL_WIDI
-		if (!rtw_to_roaming(adapter))
-			process_intel_widi_disconnect(adapter, 1);
-#endif /*  CONFIG_INTEL_WIDI */
 	}
 
 	if (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) ||
@@ -2009,17 +1976,6 @@ void _rtw_join_timeout_handler(struct rtw_adapter *adapter)
 				}
 				break;
 			} else {
-#ifdef CONFIG_INTEL_WIDI
-				if (adapter->mlmepriv.widi_state ==
-				    INTEL_WIDI_STATE_ROAMING) {
-					memset(pmlmepriv->sa_ext, 0x00,
-					       L2SDTA_SERVICE_VE_LEN);
-					intel_widi_wk_cmd(adapter,
-							  INTEL_WIDI_LISTEN_WK,
-							  NULL);
-					DBG_8192D("change to widi listen\n");
-				}
-#endif /*  CONFIG_INTEL_WIDI */
 				DBG_8192D("%s We've try roaming but fail\n",
 					  __func__);
 				rtw_indicate_disconnect(adapter);

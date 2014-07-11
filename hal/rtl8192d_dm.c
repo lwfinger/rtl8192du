@@ -2411,29 +2411,13 @@ rtl8192d_HalDmWatchDog(
 _record_initrate:
 
 		/*  Read REG_INIDATA_RATE_SEL value for TXDESC. */
-		if (check_fwstate(&adapter->mlmepriv, WIFI_STATION_STATE) == true)
-		{
+		if (check_fwstate(&adapter->mlmepriv, WIFI_STATION_STATE)) {
 			pdmpriv->INIDATA_RATE[0] = rtw_read8(adapter, REG_INIDATA_RATE_SEL) & 0x3f;
 
-#ifdef CONFIG_TDLS
-			if (adapter->tdlsinfo.setup_state == TDLS_LINKED_STATE)
-			{
-				u8 i=1;
-				for (; i < (adapter->tdlsinfo.macid_index) ; i++)
-				{
-					pdmpriv->INIDATA_RATE[i] = rtw_read8(adapter, (REG_INIDATA_RATE_SEL+i)) & 0x3f;
-				}
-			}
-#endif /* CONFIG_TDLS */
-
-		}
-		else
-		{
+		} else {
 			u8	i;
 			for (i=1 ; i < (adapter->stapriv.asoc_sta_count + 1); i++)
-			{
 				pdmpriv->INIDATA_RATE[i] = rtw_read8(adapter, (REG_INIDATA_RATE_SEL+i)) & 0x3f;
-			}
 		}
 	}
 

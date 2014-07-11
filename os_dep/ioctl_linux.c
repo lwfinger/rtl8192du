@@ -6911,20 +6911,6 @@ static int rtw_tdls_weaksec(struct net_device *dev,
 {
 	int ret = 0;
 
-#ifdef CONFIG_TDLS
-
-	u8 i, j;
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
-
-	if (extra[0] == '0') {
-		padapter->wdinfo.wfd_tdls_weaksec = 0;
-	} else {
-		padapter->wdinfo.wfd_tdls_weaksec = 1;
-	}
-#endif
-
 	return ret;
 }
 
@@ -6933,56 +6919,6 @@ static int rtw_tdls_enable(struct net_device *dev,
 				union iwreq_data *wrqu, char *extra)
 {
 	int ret = 0;
-
-#ifdef CONFIG_TDLS
-
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-	struct tdls_info	*ptdlsinfo = &padapter->tdlsinfo;
-	struct list_head *plist, *phead;
-	s32	index;
-	struct sta_info *psta = NULL;
-	struct	sta_priv *pstapriv = &padapter->stapriv;
-	u8 tdls_sta[NUM_STA][ETH_ALEN];
-	u8 empty_hwaddr[ETH_ALEN] = { 0x00 };
-
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
-
-	memset(tdls_sta, 0x00, sizeof(tdls_sta));
-
-	if (extra[0] == '0') {
-		ptdlsinfo->enable = 0;
-
-		if (pstapriv->asoc_sta_count == 1)
-			return ret;
-
-		spin_lock_bh(&pstapriv->sta_hash_lock);
-		for (index = 0; index< NUM_STA; index++) {
-			phead = &(pstapriv->sta_hash[index]);
-			plist = phead->next;
-
-			while ((rtw_end_of_queue_search(phead, plist)) == false) {
-				psta = container_of(plist, struct sta_info , hash_list);
-
-				plist = plist->next;
-
-				if (psta->tdls_sta_state != TDLS_STATE_NONE)
-					memcpy(tdls_sta[index], psta->hwaddr, ETH_ALEN);
-			}
-		}
-		spin_unlock_bh(&pstapriv->sta_hash_lock);
-
-		for (index = 0; index< NUM_STA; index++) {
-			if (!!memcmp(tdls_sta[index], empty_hwaddr, ETH_ALEN)) {
-				DBG_8192D("issue tear down to %pM\n", tdls_sta[index]);
-				issue_tdls_teardown(padapter, tdls_sta[index]);
-			}
-		}
-		rtw_tdls_cmd(padapter, myid(&(padapter->eeprompriv)), TDLS_RS_RCR);
-		rtw_reset_tdls_info(padapter);
-	} else if (extra[0] == '1') {
-		ptdlsinfo->enable = 1;
-	}
-#endif /* CONFIG_TDLS */
 
 	return ret;
 }
@@ -6993,20 +6929,6 @@ static int rtw_tdls_setup(struct net_device *dev,
 {
 	int ret = 0;
 
-#ifdef CONFIG_TDLS
-
-	u8 i, j;
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-	u8 mac_addr[ETH_ALEN];
-
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
-
-	for (i = 0, j = 0 ; i < ETH_ALEN; i++, j+= 3)
-		mac_addr[i]= key_2char2num(*(extra+j), *(extra+j+1));
-
-	issue_tdls_setup_req(padapter, mac_addr);
-#endif
-
 	return ret;
 }
 
@@ -7015,27 +6937,6 @@ static int rtw_tdls_teardown(struct net_device *dev,
 				union iwreq_data *wrqu, char *extra)
 {
 	int ret = 0;
-
-#ifdef CONFIG_TDLS
-
-	u8 i, j;
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-	struct sta_info *ptdls_sta = NULL;
-	u8 mac_addr[ETH_ALEN];
-
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
-
-	for (i = 0, j = 0 ; i < ETH_ALEN; i++, j+= 3)
-		mac_addr[i]= key_2char2num(*(extra+j), *(extra+j+1));
-
-	ptdls_sta = rtw_get_stainfo(&(padapter->stapriv), mac_addr);
-
-	if (ptdls_sta != NULL) {
-		ptdls_sta->stat_code = _RSON_TDLS_TEAR_UN_RSN_;
-		issue_tdls_teardown(padapter, mac_addr);
-	}
-
-#endif /* CONFIG_TDLS */
 
 	return ret;
 }
@@ -7046,18 +6947,6 @@ static int rtw_tdls_discovery(struct net_device *dev,
 {
 	int ret = 0;
 
-#ifdef CONFIG_TDLS
-
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
-
-	issue_tdls_dis_req(padapter, NULL);
-
-#endif /* CONFIG_TDLS */
-
 	return ret;
 }
 
@@ -7067,28 +6956,7 @@ static int rtw_tdls_ch_switch (struct net_device *dev,
 {
 	int ret = 0;
 
-#ifdef CONFIG_TDLS
-
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-	struct tdls_info	*ptdlsinfo = &padapter->tdlsinfo;
-	u8 i, j, mac_addr[ETH_ALEN];
-	struct sta_info *ptdls_sta = NULL;
-
-	DBG_8192S("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
-
-	for (i = 0, j = 0 ; i < ETH_ALEN; i++, j+= 3)
-		mac_addr[i]= key_2char2num(*(extra+j), *(extra+j+1));
-
-	ptdls_sta = rtw_get_stainfo(&padapter->stapriv, mac_addr);
-	if (ptdls_sta == NULL)
-		return ret;
-	ptdlsinfo->ch_sensing = 1;
-
-	rtw_tdls_cmd(padapter, ptdls_sta->hwaddr, TDLS_INIT_CH_SEN);
-
-#endif /* CONFIG_TDLS */
-
-		return ret;
+	return ret;
 }
 
 static int rtw_tdls_pson(struct net_device *dev,
@@ -7096,25 +6964,6 @@ static int rtw_tdls_pson(struct net_device *dev,
 				union iwreq_data *wrqu, char *extra)
 {
 	int ret = 0;
-
-#ifdef CONFIG_TDLS
-
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	u8 i, j, mac_addr[ETH_ALEN];
-	struct sta_info *ptdls_sta = NULL;
-
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
-
-	for (i = 0, j = 0 ; i < ETH_ALEN; i++, j+= 3)
-		mac_addr[i]= key_2char2num(*(extra+j), *(extra+j+1));
-
-	ptdls_sta = rtw_get_stainfo(&padapter->stapriv, mac_addr);
-
-	issue_nulldata_to_TDLS_peer_STA(padapter, ptdls_sta, 1);
-
-#endif /* CONFIG_TDLS */
 
 		return ret;
 }
@@ -7124,25 +6973,6 @@ static int rtw_tdls_psoff(struct net_device *dev,
 				union iwreq_data *wrqu, char *extra)
 {
 	int ret = 0;
-
-#ifdef CONFIG_TDLS
-
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	u8 i, j, mac_addr[ETH_ALEN];
-	struct sta_info *ptdls_sta = NULL;
-
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
-
-	for (i = 0, j = 0 ; i < ETH_ALEN; i++, j+= 3)
-		mac_addr[i]= key_2char2num(*(extra+j), *(extra+j+1));
-
-	ptdls_sta = rtw_get_stainfo(&padapter->stapriv, mac_addr);
-
-	issue_nulldata_to_TDLS_peer_STA(padapter, ptdls_sta, 0);
-
-#endif /* CONFIG_TDLS */
 
 	return ret;
 }
@@ -7201,24 +7031,6 @@ static int rtw_tdls_ch_switch_off(struct net_device *dev,
 {
 	int ret = 0;
 
-#ifdef CONFIG_TDLS
-
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-	u8 i, j, mac_addr[ETH_ALEN];
-	struct sta_info *ptdls_sta = NULL;
-
-	DBG_8192D("[%s] %s %d\n", __func__, extra, wrqu->data.length -1);
-
-	for (i = 0, j = 0 ; i < ETH_ALEN; i++, j+= 3) {
-		mac_addr[i]= key_2char2num(*(extra+j), *(extra+j+1));
-	}
-
-	ptdls_sta = rtw_get_stainfo(&padapter->stapriv, mac_addr);
-
-	ptdls_sta->tdls_sta_state |= TDLS_SW_OFF_STATE;
-
-#endif /* CONFIG_TDLS */
-
 	return ret;
 }
 
@@ -7227,54 +7039,6 @@ static int rtw_tdls(struct net_device *dev,
 		    union iwreq_data *wrqu, char *extra)
 {
 	int ret = 0;
-
-#ifdef CONFIG_TDLS
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
-
-	DBG_8192D("[%s] extra = %s\n", __func__, extra);
-	/*	WFD Sigma will use the tdls enable command to let the driver know we want to test the tdls now! */
-	if (!memcmp(extra, "wfdenable =", 10)) {
-		wrqu->data.length -= 10;
-		rtw_wfd_tdls_enable(dev, info, wrqu, &extra[10]);
-		return ret;
-	} else if (!memcmp(extra, "weaksec =", 8)) {
-		wrqu->data.length -= 8;
-		rtw_tdls_weaksec(dev, info, wrqu, &extra[8]);
-		return ret;
-	} else if (!memcmp(extra, "tdlsenable =", 11)) {
-		wrqu->data.length -= 11;
-		rtw_tdls_enable(dev, info, wrqu, &extra[11]);
-		return ret;
-	}
-
-	if (padapter->tdlsinfo.enable == 0) {
-		DBG_8192D("tdls haven't enabled\n");
-		return 0;
-	}
-
-	if (!memcmp(extra, "setup =", 6)) {
-		wrqu->data.length -= 6;
-		rtw_tdls_setup(dev, info, wrqu, &extra[6]);
-	} else if (!memcmp(extra, "tear =", 5)) {
-		wrqu->data.length -= 5;
-		rtw_tdls_teardown(dev, info, wrqu, &extra[5]);
-	} else if (!memcmp(extra, "dis =", 4)) {
-		wrqu->data.length -= 4;
-		rtw_tdls_discovery(dev, info, wrqu, &extra[4]);
-	} else if (!memcmp(extra, "sw =", 3)) {
-		wrqu->data.length -= 3;
-		rtw_tdls_ch_switch (dev, info, wrqu, &extra[3]);
-	} else if (!memcmp(extra, "swoff =", 6)) {
-		wrqu->data.length -= 6;
-		rtw_tdls_ch_switch_off(dev, info, wrqu, &extra[6]);
-	} else if (!memcmp(extra, "pson =", 5)) {
-		wrqu->data.length -= 5;
-		rtw_tdls_pson(dev, info, wrqu, &extra[5]);
-	} else if (!memcmp(extra, "psoff =", 6)) {
-		wrqu->data.length -= 6;
-		rtw_tdls_psoff(dev, info, wrqu, &extra[6]);
-	}
-#endif /* CONFIG_TDLS */
 
 	return ret;
 }

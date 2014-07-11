@@ -3595,10 +3595,6 @@ static void hw_var_set_mlme_sitesurvey(struct rtw_adapter *adapter, u8 variable,
 #ifdef CONFIG_CONCURRENT_MODE
 		|| (check_buddy_fwstate(adapter, WIFI_AP_STATE) == true)
 #endif
-#ifdef CONFIG_TDLS
-		/*  TDLS will clear RCR_CBSSID_DATA bit for connection. */
-		|| (adapter->tdlsinfo.setup_state & TDLS_LINKED_STATE)
-#endif /*  CONFIG_TDLS */
 		)
 	{
 		rcr_clear_bit = RCR_CBSSID_BCN;
@@ -4415,30 +4411,6 @@ static void SetHwReg8192DU(struct rtw_adapter *adapter, u8 variable, u8 *val)
 			}
 			break;
 #endif /*  CONFIG_P2P_PS */
-#ifdef CONFIG_TDLS
-		case HW_VAR_TDLS_WRCR:
-			rtw_write32(adapter, REG_RCR, rtw_read32(adapter, REG_RCR)&(~ BIT(6)));
-			break;
-		case HW_VAR_TDLS_INIT_CH_SEN:
-			{
-				rtw_write32(adapter, REG_RCR, rtw_read32(adapter, REG_RCR)&(~ BIT(6))&(~ BIT(7)));
-				rtw_write16(adapter, REG_RXFLTMAP2, 0xffff);
-
-				/* disable update TSF */
-				rtw_write8(adapter, REG_BCN_CTRL, rtw_read8(adapter, REG_BCN_CTRL)|BIT(4));
-			}
-			break;
-		case HW_VAR_TDLS_DONE_CH_SEN:
-			{
-				/* enable update TSF */
-				rtw_write8(adapter, REG_BCN_CTRL, rtw_read8(adapter, REG_BCN_CTRL)&(~ BIT(4)));
-				rtw_write32(adapter, REG_RCR, rtw_read32(adapter, REG_RCR)|(BIT(7)));
-			}
-			break;
-		case HW_VAR_TDLS_RS_RCR:
-			rtw_write32(adapter, REG_RCR, rtw_read32(adapter, REG_RCR)|(BIT(6)));
-			break;
-#endif /* CONFIG_TDLS */
 		case HW_VAR_INITIAL_GAIN:
 			{
 				struct DIG_T *dig_table = &pdmpriv->DM_DigTable;
@@ -4894,64 +4866,51 @@ static void UpdateHalRAMask8192DUsb(struct rtw_adapter *padapter, u32 mac_id)
 		return;
 	}
 
-	switch (mac_id)
-	{
-		case 0:/*  for infra mode */
+	switch (mac_id) {
+	case 0:/*  for infra mode */
 #ifdef CONFIG_CONCURRENT_MODE
-		case 2:/*  first station uses macid = 0, second station uses macid = 2 */
+	case 2:/*  first station uses macid = 0, second station uses macid = 2 */
 #endif /* CONFIG_CONCURRENT_MODE */
-			supportRateNum = rtw_get_rateset_len(cur_network->SupportedRates);
-			networkType = judge_network_type(padapter, cur_network->SupportedRates, supportRateNum);
-			raid = networktype_to_raid(networkType);
+		supportRateNum = rtw_get_rateset_len(cur_network->SupportedRates);
+		networkType = judge_network_type(padapter, cur_network->SupportedRates, supportRateNum);
+		raid = networktype_to_raid(networkType);
 
-			mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
-			mask |= (pmlmeinfo->HT_enable)? update_MSC_rate(&(pmlmeinfo->HT_caps)): 0;
+		mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
+		mask |= (pmlmeinfo->HT_enable)? update_MSC_rate(&(pmlmeinfo->HT_caps)): 0;
 
-			mask |= ((raid<<28)&0xf0000000);
+		mask |= ((raid<<28)&0xf0000000);
 
-			if (support_short_GI(padapter, &(pmlmeinfo->HT_caps)))
-			{
-				shortGIrate = true;
-			}
+		if (support_short_GI(padapter, &(pmlmeinfo->HT_caps)))
+		{
+			shortGIrate = true;
+		}
 
-			break;
+		break;
 
-		case 1:/* for broadcast/multicast */
-			supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
-			if (pmlmeext->cur_wireless_mode & WIRELESS_11B)
-				networkType = WIRELESS_11B;
-			else
-				networkType = WIRELESS_11G;
-			raid = networktype_to_raid(networkType);
+	case 1:/* for broadcast/multicast */
+		supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
+		if (pmlmeext->cur_wireless_mode & WIRELESS_11B)
+			networkType = WIRELESS_11B;
+		else
+			networkType = WIRELESS_11G;
+		raid = networktype_to_raid(networkType);
 
-			mask = update_basic_rate(cur_network->SupportedRates, supportRateNum);
-			mask |= ((raid<<28)&0xf0000000);
+		mask = update_basic_rate(cur_network->SupportedRates, supportRateNum);
+		mask |= ((raid<<28)&0xf0000000);
 
-			break;
+		break;
 
-		default: /* for each sta in IBSS */
-#ifdef CONFIG_TDLS
-			if (psta->tdls_sta_state & TDLS_LINKED_STATE)
-			{
-				shortGIrate = update_sgi_tdls(padapter, psta);
-				mask = update_mask_tdls(padapter, psta);
-				raid = mask>>28;
-				break;
-			}
-			else
-#endif /* CONFIG_TDLS */
-			{
-				supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
-				networkType = judge_network_type(padapter, pmlmeinfo->FW_sta_info[mac_id].SupportedRates, supportRateNum);
-				raid = networktype_to_raid(networkType);
+	default: /* for each sta in IBSS */
+		supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
+		networkType = judge_network_type(padapter, pmlmeinfo->FW_sta_info[mac_id].SupportedRates, supportRateNum);
+		raid = networktype_to_raid(networkType);
 
-				mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
-				mask |= ((raid<<28)&0xf0000000);
+		mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
+		mask |= ((raid<<28)&0xf0000000);
 
-				/* todo: support HT in IBSS */
+		/* todo: support HT in IBSS */
 
-				break;
-			}
+		break;
 	}
 
 #ifdef CONFIG_BT_COEXIST

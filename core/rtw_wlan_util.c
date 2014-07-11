@@ -875,18 +875,10 @@ void HT_caps_handler(struct rtw_adapter *padapter, struct ndis_802_11_variable_i
 
 	/* update the MCS rates */
 	for (i = 0; i < 16; i++) {
-		if ((rf_type == RF_1T1R) || (rf_type == RF_1T2R)) {
+		if ((rf_type == RF_1T1R) || (rf_type == RF_1T2R))
 			pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
-		} else {
-			#ifdef CONFIG_DISABLE_MCS13TO15
-			if (pmlmeext->cur_bwmode == HT_CHANNEL_WIDTH_40 && (pregistrypriv->wifi_spec != 1))
-				pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R_MCS13TO15_OFF[i];
-			else
-				pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R[i];
-			#else
+		else
 			pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R[i];
-			#endif /* CONFIG_DISABLE_MCS13TO15 */
-		}
 		if (pregistrypriv->special_rf_path)
 			pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
 	}

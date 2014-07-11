@@ -1127,9 +1127,6 @@ enum P2P_PS_MODE
 #define ICMPV6_MCAST_MAC(mac)	((mac[0]==0x33)&&(mac[1]==0x33)&&(mac[2]!=0xff))
 extern unsigned char REALTEK_96B_IE[6];
 extern unsigned char MCS_rate_2R[16];
-#ifdef CONFIG_DISABLE_MCS13TO15
-extern unsigned char MCS_rate_2R_MCS13TO15_OFF[16];
-#endif /* CONFIG_DISABLE_MCS13TO15 */
 extern unsigned char MCS_rate_1R[16];
 extern unsigned char RTW_WPA_OUI[];
 extern unsigned char WPA_TKIP_CIPHER[4];

@@ -510,126 +510,6 @@ static void process_spec_devid(const struct usb_device_id *pdid)
 	}
 }
 
-#ifdef SUPPORT_HW_RFOFF_DETECTED
-int rtw_hw_suspend(struct rtw_adapter *padapter)
-{
-	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
-	struct net_device *pnetdev = padapter->pnetdev;
-
-	if ((!padapter->bup) || (padapter->bDriverStopped)||(padapter->bSurpriseRemoved))
-	{
-		DBG_8192D("padapter->bup=%d bDriverStopped=%d bSurpriseRemoved = %d\n",
-			padapter->bup, padapter->bDriverStopped,padapter->bSurpriseRemoved);
-		goto error_exit;
-	}
-
-	if (padapter)/* system suspend */
-	{
-		LeaveAllPowerSaveMode(padapter);
-
-		DBG_8192D("==> rtw_hw_suspend\n");
-		_enter_pwrlock(&pwrpriv->lock);
-		pwrpriv->bips_processing = true;
-		/* s1. */
-		if (pnetdev)
-		{
-			netif_carrier_off(pnetdev);
-			rtw_netif_stop_queue(pnetdev);
-		}
-
-		/* s2. */
-		rtw_disassoc_cmd(padapter, 500, false);
-
-		/* s2-2.  indicate disconnect to os */
-		{
-			struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
-			if (check_fwstate(pmlmepriv, _FW_LINKED))
-			{
-				_clr_fwstate_(pmlmepriv, _FW_LINKED);
-
-				rtw_led_control(padapter, LED_CTL_NO_LINK);
-
-				rtw_os_indicate_disconnect(padapter);
-
-				#ifdef CONFIG_LPS
-				/* donnot enqueue cmd */
-				rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_DISCONNECT, 0);
-				#endif
-			}
-
-		}
-		/* s2-3. */
-		rtw_free_assoc_resources(padapter, 1);
-
-		/* s2-4. */
-		rtw_free_network_queue(padapter,true);
-		#ifdef CONFIG_IPS
-		rtw_ips_dev_unload(padapter);
-		#endif
-		pwrpriv->rf_pwrstate = rf_off;
-		pwrpriv->bips_processing = false;
-
-		_exit_pwrlock(&pwrpriv->lock);
-	}
-	else
-		goto error_exit;
-
-	return 0;
-
-error_exit:
-	DBG_8192D("%s, failed\n",__func__);
-	return (-1);
-}
-
-int rtw_hw_resume(struct rtw_adapter *padapter)
-{
-	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
-	struct net_device *pnetdev = padapter->pnetdev;
-
-	if (padapter)/* system resume */
-	{
-		DBG_8192D("==> rtw_hw_resume\n");
-		_enter_pwrlock(&pwrpriv->lock);
-		pwrpriv->bips_processing = true;
-		rtw_reset_drv_sw(padapter);
-
-		if (pm_netdev_open(pnetdev,false) != 0)
-		{
-			_exit_pwrlock(&pwrpriv->lock);
-			goto error_exit;
-		}
-
-		netif_device_attach(pnetdev);
-		netif_carrier_on(pnetdev);
-
-		if (!netif_queue_stopped(pnetdev))
-			netif_start_queue(pnetdev);
-		else
-			netif_wake_queue(pnetdev);
-
-		pwrpriv->bkeepfwalive = false;
-		pwrpriv->brfoffbyhw = false;
-
-		pwrpriv->rf_pwrstate = rf_on;
-		pwrpriv->bips_processing = false;
-
-		_exit_pwrlock(&pwrpriv->lock);
-	}
-	else
-	{
-		goto error_exit;
-	}
-
-	return 0;
-error_exit:
-	DBG_8192D("%s, Open net dev failed\n",__func__);
-	return (-1);
-}
-#endif
-
 static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
@@ -653,19 +533,6 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 		goto exit;
 	}
 
-	if (pwrpriv->bInternalAutoSuspend)
-	{
-	#ifdef CONFIG_AUTOSUSPEND
-	#ifdef SUPPORT_HW_RFOFF_DETECTED
-		/*  The FW command register update must after MAC and FW init ready. */
-		if ((padapter->bFWReady) && (padapter->pwrctrlpriv.bHWPwrPindetect) && (padapter->registrypriv.usbss_enable))
-		{
-			u8 bOpen = true;
-			rtw_interface_ps_func(padapter,HAL_USB_SELECT_SUSPEND,&bOpen);
-		}
-	#endif
-	#endif
-	}
 	pwrpriv->bInSuspend = true;
 	rtw_cancel_all_timer(padapter);
 	LeaveAllPowerSaveMode(padapter);
@@ -790,36 +657,22 @@ int rtw_resume_process(struct rtw_adapter *padapter)
 	netif_carrier_on(pnetdev);
 
 #ifdef CONFIG_AUTOSUSPEND
-	if (pwrpriv->bInternalAutoSuspend)
-	{
-		#ifdef CONFIG_AUTOSUSPEND
-		#ifdef SUPPORT_HW_RFOFF_DETECTED
-			/*  The FW command register update must after MAC and FW init ready. */
-		if ((padapter->bFWReady) && (padapter->pwrctrlpriv.bHWPwrPindetect) && (padapter->registrypriv.usbss_enable))
-		{
-			u8 bOpen = false;
-			rtw_interface_ps_func(padapter,HAL_USB_SELECT_SUSPEND,&bOpen);
-		}
-		#endif
-		#endif
-
+	if (pwrpriv->bInternalAutoSuspend) {
 		pwrpriv->bInternalAutoSuspend = false;
 		pwrpriv->brfoffbyhw = false;
+		DBG_8192D("enc_algorithm(%x),wepkeymask(%x)\n",
+			padapter->securitypriv.dot11PrivacyAlgrthm,pwrpriv->wepkeymask);
+		if (	(_WEP40_ == padapter->securitypriv.dot11PrivacyAlgrthm) ||
+			(_WEP104_ == padapter->securitypriv.dot11PrivacyAlgrthm))
 		{
-			DBG_8192D("enc_algorithm(%x),wepkeymask(%x)\n",
-				padapter->securitypriv.dot11PrivacyAlgrthm,pwrpriv->wepkeymask);
-			if (	(_WEP40_ == padapter->securitypriv.dot11PrivacyAlgrthm) ||
-				(_WEP104_ == padapter->securitypriv.dot11PrivacyAlgrthm))
-			{
-				int keyid;
+			int keyid;
 
-				for (keyid=0;keyid<4;keyid++) {
-					if (pwrpriv->wepkeymask & BIT(keyid)) {
-						if (keyid == padapter->securitypriv.dot11PrivacyKeyIndex)
-							rtw_set_key(padapter,&padapter->securitypriv, keyid, 1);
-						else
-							rtw_set_key(padapter,&padapter->securitypriv, keyid, 0);
-					}
+			for (keyid=0;keyid<4;keyid++) {
+				if (pwrpriv->wepkeymask & BIT(keyid)) {
+					if (keyid == padapter->securitypriv.dot11PrivacyKeyIndex)
+						rtw_set_key(padapter,&padapter->securitypriv, keyid, 1);
+					else
+						rtw_set_key(padapter,&padapter->securitypriv, keyid, 0);
 				}
 			}
 		}

@@ -234,18 +234,6 @@ static int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 {
 	u8 allow = false; /* set to true to allow enqueuing cmd when hw_init_completed is false */
 
-	#ifdef SUPPORT_HW_RFOFF_DETECTED
-	/* To decide allow or not */
-	if ((pcmdpriv->padapter->pwrctrlpriv.bHWPwrPindetect) &&
-	    (!pcmdpriv->padapter->registrypriv.usbss_enable)) {
-		if (cmd_obj->cmdcode == GEN_CMD_CODE(_SET_DRV_EXTRA)) {
-			struct drvextra_cmd_parm *pdrvextra_cmd_parm = (struct drvextra_cmd_parm	*)cmd_obj->parmbuf;
-			if (pdrvextra_cmd_parm->ec_id == POWER_SAVING_CTRL_WK_CID)
-				allow = true;
-		}
-	}
-	#endif
-
 	if (cmd_obj->cmdcode == GEN_CMD_CODE(_SETCHANNELPLAN))
 		allow = true;
 

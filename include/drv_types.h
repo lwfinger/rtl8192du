@@ -62,10 +62,6 @@ enum {
 #include <drvext_api.h>
 #endif
 
-#ifdef CONFIG_BR_EXT
-#include <rtw_br_ext.h>
-#endif	/*  CONFIG_BR_EXT */
-
 #include "ioctl_cfg80211.h"
 
 #define SPEC_DEV_ID_NONE BIT(0)
@@ -409,20 +405,6 @@ struct rtw_adapter {
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	u8 DualMacConcurrent; /*  1: DMSP 0:DMDP */
 #endif
-
-#ifdef CONFIG_BR_EXT
-	spinlock_t			br_ext_lock;
-	struct nat25_network_db_entry	*nethash[NAT25_HASH_SIZE];
-	int				pppoe_connection_in_progress;
-	unsigned char			pppoe_addr[MACADDRLEN];
-	unsigned char			scdb_mac[MACADDRLEN];
-	unsigned char			scdb_ip[4];
-	struct nat25_network_db_entry	*scdb_entry;
-	unsigned char			br_mac[MACADDRLEN];
-	unsigned char			br_ip[4];
-
-	struct br_ext_info		eth_br_ext_info;
-#endif	/*  CONFIG_BR_EXT */
 };
 
 #define adapter_to_dvobj(adapter) (adapter->dvobj)

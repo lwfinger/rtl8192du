@@ -27,10 +27,6 @@
 #include <rtl8192d_hal.h>
 #include <linux/vmalloc.h>
 
-#ifdef CONFIG_BR_EXT
-#include <rtw_br_ext.h>
-#endif /* CONFIG_BR_EXT */
-
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
 MODULE_AUTHOR("Realtek Semiconductor Corp.");
@@ -1250,15 +1246,8 @@ u8 rtw_init_drv_sw(struct rtw_adapter *padapter)
 #ifdef DBG_CONFIG_ERROR_DETECT
 	rtw_hal_sreset_init(padapter);
 #endif
-
-#ifdef CONFIG_BR_EXT
-	_rtw_spinlock_init(&padapter->br_ext_lock);
-#endif	/*  CONFIG_BR_EXT */
-
 exit:
-
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-rtw_init_drv_sw\n"));
-
 	return ret8;
 }
 
@@ -1319,10 +1308,6 @@ u8 rtw_free_drv_sw(struct rtw_adapter *padapter)
 		}
 	}
 	#endif
-
-#ifdef CONFIG_BR_EXT
-	_rtw_spinlock_free(&padapter->br_ext_lock);
-#endif	/*  CONFIG_BR_EXT */
 
 	free_mlme_ext_priv(&padapter->mlmeextpriv);
 
@@ -2023,53 +2008,6 @@ void rtw_drv_if2_stop(struct rtw_adapter *if2)
 }
 #endif /* end of CONFIG_CONCURRENT_MODE */
 
-#ifdef CONFIG_BR_EXT
-void netdev_br_init(struct net_device *netdev)
-{
-	struct rtw_adapter *adapter = (struct rtw_adapter *)rtw_netdev_priv(netdev);
-
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
-	rcu_read_lock();
-#endif	/*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
-
-	{
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-		if (netdev->br_port)
-#else   /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-		if (rcu_dereference(adapter->pnetdev->rx_handler_data))
-#endif  /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-		{
-			struct net_device *br_netdev;
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
-			br_netdev = dev_get_by_name(CONFIG_BR_EXT_BRNAME);
-#else	/*  (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24)) */
-			struct net *devnet = NULL;
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 26))
-			devnet = netdev->nd_net;
-#else	/*  (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 26)) */
-			devnet = dev_net(netdev);
-#endif	/*  (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 26)) */
-
-			br_netdev = dev_get_by_name(devnet, CONFIG_BR_EXT_BRNAME);
-#endif	/*  (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24)) */
-
-			if (br_netdev) {
-				memcpy(adapter->br_mac, br_netdev->dev_addr, ETH_ALEN);
-				dev_put(br_netdev);
-			} else
-				printk("%s()-%d: dev_get_by_name(%s) failed!", __func__, __LINE__, CONFIG_BR_EXT_BRNAME);
-		}
-
-		adapter->eth_br_ext_info.addPPPoETag = 1;
-	}
-
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
-	rcu_read_unlock();
-#endif	/*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
-}
-#endif /* CONFIG_BR_EXT */
-
 int _netdev_open(struct net_device *pnetdev)
 {
 	uint status;
@@ -2139,10 +2077,6 @@ int _netdev_open(struct net_device *pnetdev)
 		rtw_netif_start_queue(pnetdev);
 	else
 		rtw_netif_wake_queue(pnetdev);
-
-#ifdef CONFIG_BR_EXT
-	netdev_br_init(pnetdev);
-#endif	/*  CONFIG_BR_EXT */
 
 netdev_open_normal_process:
 
@@ -2312,10 +2246,6 @@ static int netdev_close(struct net_device *pnetdev)
 		/*  Close LED */
 		rtw_led_control(padapter, LED_CTL_POWER_OFF);
 	}
-
-#ifdef CONFIG_BR_EXT
-	nat25_db_cleanup(padapter);
-#endif	/*  CONFIG_BR_EXT */
 
 #ifdef CONFIG_P2P
 	if (wdev_to_priv(padapter->rtw_wdev)->p2p_enabled == true)

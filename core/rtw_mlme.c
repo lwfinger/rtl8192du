@@ -2090,37 +2090,6 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 	}
 #endif
 #endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
-
-#ifdef CONFIG_BR_EXT
-
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
-	rcu_read_lock();
-#endif /*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
-
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-	if (adapter->pnetdev->br_port &&
-	    check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE)) {
-#else /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-	if (rcu_dereference(adapter->pnetdev->rx_handler_data) &&
-	    check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE)) {
-#endif /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-		/*  expire NAT2.5 entry */
-		nat25_db_expire(adapter);
-
-		if (adapter->pppoe_connection_in_progress > 0) {
-			adapter->pppoe_connection_in_progress--;
-		}
-
-		/*  due to rtw_dynamic_check_timer_handlder() is called every 2 seconds */
-		if (adapter->pppoe_connection_in_progress > 0) {
-			adapter->pppoe_connection_in_progress--;
-		}
-	}
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
-	rcu_read_unlock();
-#endif /*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
-
-#endif /*  CONFIG_BR_EXT */
 }
 
 #ifdef CONFIG_SET_SCAN_DENY_TIMER

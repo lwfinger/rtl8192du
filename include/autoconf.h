@@ -68,12 +68,6 @@
 /* define CONFIG_SET_SCAN_DENY_TIMER */
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable,*/
 
-#define CONFIG_BR_EXT	1	/*  Enable NAT2.5 support for STA mode interface with a L2 Bridge */
-#ifdef CONFIG_BR_EXT
-#define CONFIG_BR_EXT_BRNAME	"br0"
-#endif	/*  CONFIG_BR_EXT */
-
-
 //#define CONFIG_CONCURRENT_MODE 1
 #ifdef CONFIG_CONCURRENT_MODE
 	#define CONFIG_TSF_RESET_OFFLOAD 1			/*  For 2 PORT TSF SYNC. */

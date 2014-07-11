@@ -2158,51 +2158,21 @@ static int amsdu_to_msdu(struct rtw_adapter *padapter, struct recv_frame_hdr *pr
 		}
 
 		/* Indicat the packets to upper layer */
-		{
-
-#ifdef CONFIG_BR_EXT
-			/*  Insert NAT2.5 RX here! */
-			struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-			void *br_port = NULL;
-
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-			br_port = padapter->pnetdev->br_port;
-#else /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-			rcu_read_lock();
-			br_port =
-			    rcu_dereference(padapter->pnetdev->rx_handler_data);
-			rcu_read_unlock();
-#endif /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-
-			if (br_port &&
-			    (check_fwstate(pmlmepriv, WIFI_STATION_STATE |
-					   WIFI_ADHOC_STATE) == true)) {
-				if (nat25_handle_frame(padapter, sub_skb) == -1) {
-					/* priv->ext_stats.rx_data_drops++; */
-					/* DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n"); */
-					/* return FAIL; */
-
-					/*  bypass this frame to upper layer!! */
-				}
-			}
-#endif /*  CONFIG_BR_EXT */
-
-			sub_skb->protocol =
-			    eth_type_trans(sub_skb, padapter->pnetdev);
-			sub_skb->dev = padapter->pnetdev;
+		sub_skb->protocol =
+		    eth_type_trans(sub_skb, padapter->pnetdev);
+		sub_skb->dev = padapter->pnetdev;
 
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-			if ((pattrib->tcpchk_valid == 1) &&
-			    (pattrib->tcp_chkrpt == 1))
-				sub_skb->ip_summed = CHECKSUM_UNNECESSARY;
-			else
-				sub_skb->ip_summed = CHECKSUM_NONE;
-#else /* !CONFIG_TCP_CSUM_OFFLOAD_RX */
+		if ((pattrib->tcpchk_valid == 1) &&
+		    (pattrib->tcp_chkrpt == 1))
+			sub_skb->ip_summed = CHECKSUM_UNNECESSARY;
+		else
 			sub_skb->ip_summed = CHECKSUM_NONE;
+#else /* !CONFIG_TCP_CSUM_OFFLOAD_RX */
+		sub_skb->ip_summed = CHECKSUM_NONE;
 #endif /* CONFIG_TCP_CSUM_OFFLOAD_RX */
 
-			netif_rx(sub_skb);
-		}
+		netif_rx(sub_skb);
 	}
 
 exit:

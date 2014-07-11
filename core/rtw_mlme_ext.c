@@ -1852,10 +1852,7 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 #ifdef COMPAT_KERNEL_RELEASE
 			rtw_cfg80211_indicate_sta_assoc(adapt, pframe,
 							pkt_len);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
-			rtw_cfg80211_indicate_sta_assoc(adapt, pframe,
-							pkt_len);
-#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
+#else
 			spin_lock_bh(&pstat->lock);
 			kfree(pstat->passoc_req);
 			pstat->passoc_req = NULL;
@@ -1867,9 +1864,8 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 				pstat->assoc_req_len = pkt_len;
 			}
 			spin_unlock_bh(&pstat->lock);
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
-		} else
-		{
+#endif
+		} else {
 			rtw_indicate_sta_assoc_event(adapt, pstat);
 		}
 

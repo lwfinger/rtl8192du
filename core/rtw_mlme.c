@@ -1768,7 +1768,7 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 		if (psta) {
 #ifdef COMPAT_KERNEL_RELEASE
 
-#elif (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
+#else
 			u8 *passoc_req = NULL;
 			u32 assoc_req_len;
 
@@ -1794,7 +1794,7 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 				kfree(passoc_req);
 			}
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
+#endif
 
 			ap_sta_info_defer_update(adapter, psta);
 		}
@@ -1866,11 +1866,10 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 #ifdef COMPAT_KERNEL_RELEASE
 
-#elif (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
+#else
 		rtw_cfg80211_indicate_sta_disassoc(adapter, pstadel->macaddr,
 						   *(u16 *)pstadel->rsvd);
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
-
+#endif
 		return;
 	}
 

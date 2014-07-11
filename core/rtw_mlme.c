@@ -1732,7 +1732,7 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 			spin_lock_bh(&psta->lock);
 			if (psta->passoc_req && psta->assoc_req_len > 0) {
-				passoc_req = kzalloc(psta->assoc_req_len, GFP_KERNEL);
+				passoc_req = kzalloc(psta->assoc_req_len, GFP_ATOMIC);
 				if (passoc_req) {
 					assoc_req_len = psta->assoc_req_len;
 					memcpy(passoc_req, psta->passoc_req,

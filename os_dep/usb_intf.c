@@ -968,11 +968,8 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	if (rtw_handle_dualmac(padapter, 1) != _SUCCESS)
 		goto free_adapter;
 
-#ifdef CONFIG_IOCTL_CFG80211
-	if (rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0) {
+	if (rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0)
 		goto handle_dualmac;
-	}
-#endif
 
 	/* step 2. hook HalFunc, allocate HalData */
 	if (padapter->chip_type == RTL8192D) {
@@ -1079,10 +1076,8 @@ free_hal_data:
 		kfree(padapter->HalData);
 free_wdev:
 	if (status != _SUCCESS) {
-		#ifdef CONFIG_IOCTL_CFG80211
 		rtw_wdev_unregister(padapter->rtw_wdev);
 		rtw_wdev_free(padapter->rtw_wdev);
-		#endif
 	}
 handle_dualmac:
 	if (status != _SUCCESS)
@@ -1133,10 +1128,8 @@ static void rtw_usb_if1_deinit(struct rtw_adapter *if1)
 	/* s6. */
 	rtw_handle_dualmac(if1, 0);
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_wdev_unregister(if1->rtw_wdev);
 	rtw_wdev_free(if1->rtw_wdev);
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 	rtw_free_drv_sw(if1);
 
@@ -1212,19 +1205,15 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
 	struct rtw_adapter *padapter = dvobj->if1;
-#ifdef CONFIG_IOCTL_CFG80211
 	struct wireless_dev *pwdev = padapter->rtw_wdev;
-#endif
 
 	DBG_8192D("+rtw_dev_remove\n");
 
 	if (usb_drv->drv_registered )
 		padapter->bSurpriseRemoved = true;
 
-#ifdef CONFIG_IOCTL_CFG80211
 	/* to avoid WARN_ON in __cfg80211_disconnected() */
 	pwdev->iftype = NL80211_IFTYPE_STATION;
-#endif
 
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 	rtw_unregister_early_suspend(&padapter->pwrctrlpriv);

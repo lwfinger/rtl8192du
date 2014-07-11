@@ -58,10 +58,8 @@
 	#include <linux/ip.h>
 	#include <linux/kthread.h>
 
-#ifdef CONFIG_IOCTL_CFG80211
         #include <net/ieee80211_radiotap.h>
 	#include <net/cfg80211.h>
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
 	#include <linux/in.h>

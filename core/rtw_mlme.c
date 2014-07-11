@@ -137,7 +137,7 @@ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv)
 			      &pmlmepriv->p2p_assoc_req_ie_len);
 #endif
 
-#if defined(CONFIG_WFD) && defined(CONFIG_IOCTL_CFG80211)
+#if defined(CONFIG_WFD)
 	rtw_free_mlme_ie_data(&pmlmepriv->wfd_beacon_ie,
 			      &pmlmepriv->wfd_beacon_ie_len);
 	rtw_free_mlme_ie_data(&pmlmepriv->wfd_probe_req_ie,
@@ -1102,10 +1102,7 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	}
 #endif
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_surveydone_event_callback(adapter);
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 }
 
 static void free_scanqueue(struct mlme_priv *pmlmepriv)
@@ -1769,7 +1766,6 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 		psta = rtw_get_stainfo(&adapter->stapriv, pstassoc->macaddr);
 		if (psta) {
-#ifdef CONFIG_IOCTL_CFG80211
 #ifdef COMPAT_KERNEL_RELEASE
 
 #elif (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
@@ -1799,7 +1795,6 @@ void rtw_stassoc_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 				kfree(passoc_req);
 			}
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 			ap_sta_info_defer_update(adapter, psta);
 		}
@@ -1869,14 +1864,12 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	struct wlan_network *tgt_network = &(pmlmepriv->cur_network);
 
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
-#ifdef CONFIG_IOCTL_CFG80211
 #ifdef COMPAT_KERNEL_RELEASE
 
 #elif (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
 		rtw_cfg80211_indicate_sta_disassoc(adapter, pstadel->macaddr,
 						   *(u16 *)pstadel->rsvd);
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 		return;
 	}

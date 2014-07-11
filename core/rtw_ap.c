@@ -1867,7 +1867,6 @@ u8 ap_free_sta(struct rtw_adapter *padapter, struct sta_info *psta,
 	psta->state &= ~_FW_LINKED;
 	spin_unlock_bh(&psta->lock);
 
-	#ifdef CONFIG_IOCTL_CFG80211
 	if (1) {
 		#ifdef COMPAT_KERNEL_RELEASE
 		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr, reason);
@@ -1875,9 +1874,7 @@ u8 ap_free_sta(struct rtw_adapter *padapter, struct sta_info *psta,
 		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr,
 						   reason);
 		#endif
-	} else
-	#endif /* CONFIG_IOCTL_CFG80211 */
-	{
+	} else {
 		rtw_indicate_sta_disassoc_event(padapter, psta);
 	}
 

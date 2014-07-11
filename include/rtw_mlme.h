@@ -225,7 +225,6 @@ struct scan_limit_info{
 	u8					operation_ch[2];				/* 	Store the operation channel of invitation request frame */
 };
 
-#ifdef CONFIG_IOCTL_CFG80211
 struct cfg80211_wifidirect_info{
 	struct timer_list		remain_on_ch_timer;
 	u8				restore_channel;
@@ -234,7 +233,6 @@ struct cfg80211_wifidirect_info{
 	u64				remain_on_ch_cookie;
 	bool is_ro_ch;
 };
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 struct wifidirect_info{
 	struct rtw_adapter *padapter;
@@ -462,11 +460,11 @@ struct mlme_priv {
 
 	u8 *wps_beacon_ie;
 	u8 *wps_probe_resp_ie;
-	u8 *wps_assoc_resp_ie; /*  for CONFIG_IOCTL_CFG80211, this IE could include p2p ie / wfd ie */
+	u8 *wps_assoc_resp_ie; /*  this IE could include p2p ie / wfd ie */
 
 	u32 wps_beacon_ie_len;
 	u32 wps_probe_resp_ie_len;
-	u32 wps_assoc_resp_ie_len; /*  for CONFIG_IOCTL_CFG80211, this IE len could include p2p ie / wfd ie */
+	u32 wps_assoc_resp_ie_len; /* this IE len could include p2p ie / wfd ie */
 
 	u8 *p2p_beacon_ie;
 	u8 *p2p_probe_req_ie;
@@ -485,7 +483,7 @@ struct mlme_priv {
 
 #endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 
-#if defined(CONFIG_WFD) && defined(CONFIG_IOCTL_CFG80211)
+#if defined(CONFIG_WFD)
 
 	u8 *wfd_beacon_ie;
 	u8 *wfd_probe_req_ie;

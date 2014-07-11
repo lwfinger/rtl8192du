@@ -1196,9 +1196,7 @@ u8 rtw_init_drv_sw(struct rtw_adapter *padapter)
 	rtw_init_wifidirect_timers(padapter);
 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
 	reset_global_wifidirect_info(padapter);
-	#ifdef CONFIG_IOCTL_CFG80211
 	rtw_init_cfg80211_wifidirect_info(padapter);
-	#endif
 #ifdef CONFIG_WFD
 	if (rtw_init_wifi_display_info(padapter) == _FAIL)
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("\n Can't init init_wifi_display_info\n"));
@@ -1299,11 +1297,9 @@ void rtw_cancel_all_timer(struct rtw_adapter *padapter)
 
 	_cancel_timer_ex(&padapter->pwrctrlpriv.pwr_state_check_timer);
 
-#ifdef CONFIG_IOCTL_CFG80211
 #ifdef CONFIG_P2P
 	_cancel_timer_ex(&padapter->cfg80211_wdinfo.remain_on_ch_timer);
 #endif /* CONFIG_P2P */
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 #ifdef CONFIG_SET_SCAN_DENY_TIMER
 	_cancel_timer_ex(&padapter->mlmepriv.set_scan_deny_timer);
@@ -1430,9 +1426,7 @@ int _netdev_vir_if_open(struct net_device *pnetdev)
 		padapter->dir_dev = NULL;
 		rtw_proc_init_one(pnetdev);
 
-#ifdef CONFIG_IOCTL_CFG80211
 		rtw_cfg80211_init_wiphy(padapter);
-#endif
 
 		padapter->bup = true;
 		padapter->hw_init_completed = true;
@@ -1486,10 +1480,8 @@ static int netdev_vir_if_close(struct net_device *pnetdev)
 			rtw_netif_stop_queue(pnetdev);
 	}
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_scan_abort(padapter);
 	wdev_to_priv(padapter->rtw_wdev)->bandroid_scan = false;
-#endif
 
 	return 0;
 }
@@ -1568,9 +1560,7 @@ _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,
 	pdvobjpriv->padapters[pdvobjpriv->iface_nums++] = padapter;
 
 	SET_NETDEV_DEV(pnetdev, dvobj_to_dev(pdvobjpriv));
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_wdev_alloc(padapter, dvobj_to_dev(pdvobjpriv));
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 	/* set interface_type/chip_type/HardwareType */
 	padapter->interface_type = primary_padapter->interface_type;
@@ -1686,9 +1676,7 @@ void rtw_drv_stop_vir_if (struct rtw_adapter *padapter)
 		padapter->bup = false;
 	}
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_wdev_unregister(padapter->rtw_wdev);
-#endif /* CONFIG_IOCTL_CFG80211 */
 }
 
 void rtw_drv_free_vir_if (struct rtw_adapter *padapter)
@@ -1703,9 +1691,7 @@ void rtw_drv_free_vir_if (struct rtw_adapter *padapter)
 
 	pnetdev = padapter->pnetdev;
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_wdev_free(padapter->rtw_wdev);
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 	rtw_free_drv_sw(padapter);
 
@@ -1790,9 +1776,7 @@ static int _netdev_if2_open(struct net_device *pnetdev)
 		padapter->dir_dev = NULL;
 		rtw_proc_init_one(pnetdev);
 
-#ifdef CONFIG_IOCTL_CFG80211
 		rtw_cfg80211_init_wiphy(padapter);
-#endif
 
 		padapter->bup = true;
 
@@ -1843,10 +1827,8 @@ static int netdev_if2_close(struct net_device *pnetdev)
 			rtw_netif_stop_queue(pnetdev);
 	}
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_scan_abort(padapter);
 	wdev_to_priv(padapter->rtw_wdev)->bandroid_scan = false;
-#endif
 
 	return 0;
 }
@@ -1919,9 +1901,7 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 	pdvobjpriv->padapters[pdvobjpriv->iface_nums++] = padapter;
 
 	SET_NETDEV_DEV(pnetdev, dvobj_to_dev(pdvobjpriv));
-	#ifdef CONFIG_IOCTL_CFG80211
 	rtw_wdev_alloc(padapter, dvobj_to_dev(pdvobjpriv));
-	#endif /* CONFIG_IOCTL_CFG80211 */
 
 	/* set interface_type/chip_type/HardwareType */
 	padapter->interface_type = primary_padapter->interface_type;
@@ -2022,9 +2002,7 @@ void rtw_drv_if2_free(struct rtw_adapter *if2)
 
 	pnetdev = padapter->pnetdev;
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_wdev_free(padapter->rtw_wdev);
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 	rtw_free_drv_sw(padapter);
 
@@ -2061,9 +2039,7 @@ void rtw_drv_if2_stop(struct rtw_adapter *if2)
 		padapter->bup = false;
 	}
 
-	#ifdef CONFIG_IOCTL_CFG80211
 	rtw_wdev_unregister(padapter->rtw_wdev);
-	#endif
 }
 #endif /* end of CONFIG_CONCURRENT_MODE */
 
@@ -2166,9 +2142,7 @@ int _netdev_open(struct net_device *pnetdev)
 		}
 		rtw_proc_init_one(pnetdev);
 
-#ifdef CONFIG_IOCTL_CFG80211
 		rtw_cfg80211_init_wiphy(padapter);
-#endif
 
 		rtw_led_control(padapter, LED_CTL_NO_LINK);
 
@@ -2364,18 +2338,14 @@ static int netdev_close(struct net_device *pnetdev)
 #endif	/*  CONFIG_BR_EXT */
 
 #ifdef CONFIG_P2P
-	#ifdef CONFIG_IOCTL_CFG80211
 	if (wdev_to_priv(padapter->rtw_wdev)->p2p_enabled == true)
 		wdev_to_priv(padapter->rtw_wdev)->p2p_enabled = false;
-	#endif
 	rtw_p2p_enable(padapter, P2P_ROLE_DISABLE);
 #endif /* CONFIG_P2P */
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_scan_abort(padapter);
 	wdev_to_priv(padapter->rtw_wdev)->bandroid_scan = false;
 	padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; /* set this at the end */
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-871x_drv - drv_close\n"));
 	DBG_8192D("-871x_drv - drv_close, bup =%d\n", padapter->bup);
@@ -2392,8 +2362,6 @@ void rtw_ndev_destructor(struct net_device *ndev)
 {
 	DBG_8192D(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 
-#ifdef CONFIG_IOCTL_CFG80211
 	kfree(ndev->ieee80211_ptr);
-#endif
 	free_netdev(ndev);
 }

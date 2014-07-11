@@ -704,7 +704,6 @@ static u32 p2p_listen_state_process(struct rtw_adapter *adapt, unsigned char *da
 {
 	bool response = true;
 
-#ifdef CONFIG_IOCTL_CFG80211
 	if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled == false ||
 	    adapt->mlmepriv.wps_probe_resp_ie == NULL ||
 	    adapt->mlmepriv.p2p_probe_resp_ie == NULL) {
@@ -715,12 +714,6 @@ static u32 p2p_listen_state_process(struct rtw_adapter *adapt, unsigned char *da
 		     adapt->mlmepriv.p2p_probe_resp_ie);
 		response = false;
 	}
-#else
-	/*      do nothing if the device name is empty */
-	if (!adapt->wdinfo.device_name_len) {
-		response = false;
-	}
-#endif
 
 	if (response == true)
 		issue_probersp_p2p(adapt, da);
@@ -1855,7 +1848,6 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 
 		/* 2 - report to upper layer */
 		DBG_8192D("indicate_sta_join_event to upper layer - hostapd\n");
-#ifdef CONFIG_IOCTL_CFG80211
 		if (1) {
 #ifdef COMPAT_KERNEL_RELEASE
 			rtw_cfg80211_indicate_sta_assoc(adapt, pframe,
@@ -1877,7 +1869,6 @@ unsigned int OnAssocReq(struct rtw_adapter *adapt,
 			spin_unlock_bh(&pstat->lock);
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
 		} else
-#endif /* CONFIG_IOCTL_CFG80211 */
 		{
 			rtw_indicate_sta_assoc_event(adapt, pstat);
 		}
@@ -4352,14 +4343,12 @@ void issue_probersp_p2p(struct rtw_adapter *adapt, unsigned char *da)
 #ifdef CONFIG_WFD
 	u32 wfdielen = 0;
 #endif /* CONFIG_WFD */
-#ifdef CONFIG_IOCTL_CFG80211
 	struct cfg80211_wifidirect_info *pcfg80211_wdinfo =
 	    &adapt->cfg80211_wdinfo;
 	struct ieee80211_channel *ieee_ch =
 	    &pcfg80211_wdinfo->remain_on_ch_channel;
 	u8 listen_channel =
 	    (u8) ieee80211_frequency_to_channel(ieee_ch->center_freq);
-#endif /* CONFIG_IOCTL_CFG80211 */
 #ifdef CONFIG_INTEL_WIDI
 	u8 zero_array_check[L2SDTA_SERVICE_VE_LEN] = { 0x00 };
 #endif /* CONFIG_INTEL_WIDI */
@@ -4427,23 +4416,19 @@ void issue_probersp_p2p(struct rtw_adapter *adapt, unsigned char *da)
 		       &pattrib->pktlen);
 
 	/*  DS parameter set */
-#ifdef CONFIG_IOCTL_CFG80211
 	if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled &&
 	    listen_channel != 0) {
 		pframe =
 		    rtw_set_ie(pframe, _DSSET_IE_, 1,
 			       (unsigned char *)&listen_channel,
 			       &pattrib->pktlen);
-	} else
-#endif /* CONFIG_IOCTL_CFG80211 */
-	{
+	} else {
 		pframe =
 		    rtw_set_ie(pframe, _DSSET_IE_, 1,
 			       (unsigned char *)&pwdinfo->listen_channel,
 			       &pattrib->pktlen);
 	}
 
-#ifdef CONFIG_IOCTL_CFG80211
 	if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
 		if (pmlmepriv->wps_probe_resp_ie != NULL &&
 		    pmlmepriv->p2p_probe_resp_ie != NULL) {
@@ -4459,9 +4444,7 @@ void issue_probersp_p2p(struct rtw_adapter *adapt, unsigned char *da)
 			pattrib->pktlen += pmlmepriv->p2p_probe_resp_ie_len;
 			pframe += pmlmepriv->p2p_probe_resp_ie_len;
 		}
-	} else
-#endif /* CONFIG_IOCTL_CFG80211 */
-	{
+	} else {
 		/*      Todo: WPS IE */
 		/*      Noted by Albert 20100907 */
 		/*      According to the WPS specification, all the WPS attribute is presented by Big Endian. */
@@ -4674,15 +4657,11 @@ void issue_probersp_p2p(struct rtw_adapter *adapt, unsigned char *da)
 	}
 
 #ifdef CONFIG_WFD
-#ifdef CONFIG_IOCTL_CFG80211
-	if (true == pwdinfo->wfd_info->wfd_enable)
-#endif /* CONFIG_IOCTL_CFG80211 */
-	{
+	if (pwdinfo->wfd_info->wfd_enable) {
 		wfdielen = build_probe_resp_wfd_ie(pwdinfo, pframe, 0);
 		pframe += wfdielen;
 		pattrib->pktlen += wfdielen;
 	}
-#ifdef CONFIG_IOCTL_CFG80211
 	else if (pmlmepriv->wfd_probe_resp_ie != NULL &&
 		 pmlmepriv->wfd_probe_resp_ie_len > 0) {
 		/* WFD IE */
@@ -4691,7 +4670,6 @@ void issue_probersp_p2p(struct rtw_adapter *adapt, unsigned char *da)
 		pattrib->pktlen += pmlmepriv->wfd_probe_resp_ie_len;
 		pframe += pmlmepriv->wfd_probe_resp_ie_len;
 	}
-#endif /* CONFIG_IOCTL_CFG80211 */
 #endif /* CONFIG_WFD */
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
@@ -4786,7 +4764,6 @@ static int _issue_probereq_p2p(struct rtw_adapter *adapt, u8 *da, int wait_ack)
 	    rtw_set_ie(pframe, _SUPPORTEDRATES_IE_, 8, pwdinfo->support_rate,
 		       &pattrib->pktlen);
 
-#ifdef CONFIG_IOCTL_CFG80211
 	if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
 		if (pmlmepriv->wps_probe_req_ie != NULL &&
 		    pmlmepriv->p2p_probe_req_ie != NULL) {
@@ -4802,9 +4779,7 @@ static int _issue_probereq_p2p(struct rtw_adapter *adapt, u8 *da, int wait_ack)
 			pattrib->pktlen += pmlmepriv->p2p_probe_req_ie_len;
 			pframe += pmlmepriv->p2p_probe_req_ie_len;
 		}
-	} else
-#endif /* CONFIG_IOCTL_CFG80211 */
-	{
+	} else {
 		/*      WPS IE */
 		/*      Noted by Albert 20110221 */
 		/*      According to the WPS specification, all the WPS attribute is presented by Big Endian. */
@@ -5029,24 +5004,18 @@ static int _issue_probereq_p2p(struct rtw_adapter *adapt, u8 *da, int wait_ack)
 	}
 
 #ifdef CONFIG_WFD
-#ifdef CONFIG_IOCTL_CFG80211
-	if (true == pwdinfo->wfd_info->wfd_enable)
-#endif
-	{
+	if (pwdinfo->wfd_info->wfd_enable) {
 		wfdielen = build_probe_req_wfd_ie(pwdinfo, pframe);
 		pframe += wfdielen;
 		pattrib->pktlen += wfdielen;
-	}
-#ifdef CONFIG_IOCTL_CFG80211
-	else if (pmlmepriv->wfd_probe_req_ie != NULL &&
-		 pmlmepriv->wfd_probe_req_ie_len > 0) {
+	} else if (pmlmepriv->wfd_probe_req_ie != NULL &&
+		   pmlmepriv->wfd_probe_req_ie_len > 0) {
 		/* WFD IE */
 		memcpy(pframe, pmlmepriv->wfd_probe_req_ie,
 		       pmlmepriv->wfd_probe_req_ie_len);
 		pattrib->pktlen += pmlmepriv->wfd_probe_req_ie_len;
 		pframe += pmlmepriv->wfd_probe_req_ie_len;
 	}
-#endif /* CONFIG_IOCTL_CFG80211 */
 #endif /* CONFIG_WFD */
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
@@ -5182,12 +5151,9 @@ static unsigned int on_action_public_p2p(struct recv_frame_hdr *precv_frame)
 
 #ifdef CONFIG_P2P
 	_cancel_timer_ex(&pwdinfo->reset_ch_sitesurvey);
-#ifdef CONFIG_IOCTL_CFG80211
 	if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
 		rtw_cfg80211_rx_p2p_action_public(adapt, pframe, len);
-	} else
-#endif /* CONFIG_IOCTL_CFG80211 */
-	{
+	} else {
 		/*      Do nothing if the driver doesn't enable the P2P function. */
 		if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE) ||
 		    rtw_p2p_chk_state(pwdinfo, P2P_STATE_IDLE))
@@ -5769,12 +5735,10 @@ static unsigned int on_action_public_default(struct recv_frame_hdr *precv_frame,
 	if (rtw_action_public_decache(precv_frame, token) == _FAIL)
 		goto exit;
 
-#ifdef CONFIG_IOCTL_CFG80211
 	cnt +=
 	    sprintf((msg + cnt), "%s(token:%u)", action_public_str(action),
 		    token);
 	rtw_cfg80211_rx_action(adapter, pframe, frame_len, msg);
-#endif
 
 	ret = _SUCCESS;
 
@@ -5852,13 +5816,10 @@ unsigned int OnAction_p2p(struct rtw_adapter *adapt,
 	if (be32_to_cpu(*((__be32 *)(frame_body + 1))) != P2POUI)
 		return _SUCCESS;
 
-#ifdef CONFIG_IOCTL_CFG80211
 	if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
 		rtw_cfg80211_rx_action_p2p(adapt, pframe, len);
 		return _SUCCESS;
-	} else
-#endif /* CONFIG_IOCTL_CFG80211 */
-	{
+	} else {
 		len -= sizeof(struct rtw_ieee80211_hdr_3addr);
 		OUI_Subtype = frame_body[5];
 		switch (OUI_Subtype) {
@@ -6161,7 +6122,6 @@ void issue_beacon(struct rtw_adapter *adapt)
 			remainder_ielen =
 			    cur_network->IELength - wps_offset - wpsielen;
 
-#ifdef CONFIG_IOCTL_CFG80211
 			if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
 				if (pmlmepriv->wps_beacon_ie && pmlmepriv->wps_beacon_ie_len > 0) {
 					memcpy(pframe, cur_network->IEs,
@@ -6187,9 +6147,7 @@ void issue_beacon(struct rtw_adapter *adapt)
 					pattrib->pktlen +=
 					    cur_network->IELength;
 				}
-			} else
-#endif /* CONFIG_IOCTL_CFG80211 */
-			{
+			} else {
 				pframe_wscie = pframe + wps_offset;
 				memcpy(pframe, cur_network->IEs,
 				       wps_offset + wpsielen);
@@ -6297,29 +6255,21 @@ void issue_beacon(struct rtw_adapter *adapt)
 #ifdef CONFIG_P2P
 		if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO)) {
 			u32 len;
-#ifdef CONFIG_IOCTL_CFG80211
 			if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
 				len = pmlmepriv->p2p_beacon_ie_len;
 				if (pmlmepriv->p2p_beacon_ie && len > 0)
 					memcpy(pframe, pmlmepriv->p2p_beacon_ie,
 					       len);
-			} else
-#endif /* CONFIG_IOCTL_CFG80211 */
-			{
+			} else {
 				len = build_beacon_p2p_ie(pwdinfo, pframe);
 			}
 
 			pframe += len;
 			pattrib->pktlen += len;
 #ifdef CONFIG_WFD
-#ifdef CONFIG_IOCTL_CFG80211
-			if (true == pwdinfo->wfd_info->wfd_enable)
-#endif /* CONFIG_IOCTL_CFG80211 */
-			{
+			if (pwdinfo->wfd_info->wfd_enable) {
 				len = build_beacon_wfd_ie(pwdinfo, pframe);
-			}
-#ifdef CONFIG_IOCTL_CFG80211
-			else {
+			} else {
 				len = 0;
 				if (pmlmepriv->wfd_beacon_ie &&
 				    pmlmepriv->wfd_beacon_ie_len > 0) {
@@ -6328,7 +6278,6 @@ void issue_beacon(struct rtw_adapter *adapt)
 					       len);
 				}
 			}
-#endif /* CONFIG_IOCTL_CFG80211 */
 			pframe += len;
 			pattrib->pktlen += len;
 #endif /* CONFIG_WFD */
@@ -6653,16 +6602,14 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 #ifdef CONFIG_P2P
 	if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO) && is_valid_p2p_probereq) {
 		u32 len;
-#ifdef CONFIG_IOCTL_CFG80211
+
 		if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
 			/* if pwdinfo->role == P2P_ROLE_DEVICE will call issue_probersp_p2p() */
 			len = pmlmepriv->p2p_go_probe_resp_ie_len;
 			if (pmlmepriv->p2p_go_probe_resp_ie && len > 0)
 				memcpy(pframe, pmlmepriv->p2p_go_probe_resp_ie,
 				       len);
-		} else
-#endif /* CONFIG_IOCTL_CFG80211 */
-		{
+		} else {
 			len = build_probe_resp_p2p_ie(pwdinfo, pframe);
 		}
 
@@ -6670,14 +6617,9 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 		pattrib->pktlen += len;
 
 #ifdef CONFIG_WFD
-#ifdef CONFIG_IOCTL_CFG80211
-		if (true == pwdinfo->wfd_info->wfd_enable)
-#endif /* CONFIG_IOCTL_CFG80211 */
-		{
+		if (pwdinfo->wfd_info->wfd_enable) {
 			len = build_probe_resp_wfd_ie(pwdinfo, pframe, 0);
-		}
-#ifdef CONFIG_IOCTL_CFG80211
-		else {
+		} else {
 			len = 0;
 			if (pmlmepriv->wfd_probe_resp_ie &&
 			    pmlmepriv->wfd_probe_resp_ie_len > 0) {
@@ -6686,7 +6628,6 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 				       len);
 			}
 		}
-#endif /* CONFIG_IOCTL_CFG80211 */
 		pframe += len;
 		pattrib->pktlen += len;
 #endif /* CONFIG_WFD */
@@ -7187,24 +7128,9 @@ void issue_asocrsp(struct rtw_adapter *adapt, unsigned short status,
 		pattrib->pktlen += pmlmepriv->wps_assoc_resp_ie_len;
 	}
 #ifdef CONFIG_P2P
-#ifndef CONFIG_IOCTL_CFG80211
-	if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO) && pstat->is_p2p_device) {
-		u32 len;
-
-		len =
-		    build_assoc_resp_p2p_ie(pwdinfo, pframe,
-					    pstat->p2p_status_code);
-
-		pframe += len;
-		pattrib->pktlen += len;
-	}
-#endif /* CONFIG_IOCTL_CFG80211 */
 #ifdef CONFIG_WFD
-	if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO)
-#ifdef CONFIG_IOCTL_CFG80211
-	    && (true == pwdinfo->wfd_info->wfd_enable)
-#endif /* CONFIG_IOCTL_CFG80211 */
-	   ) {
+	if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO) &&
+	    (pwdinfo->wfd_info->wfd_enable)) {
 		wfdielen = build_assoc_resp_wfd_ie(pwdinfo, pframe);
 		pframe += wfdielen;
 		pattrib->pktlen += wfdielen;
@@ -7549,7 +7475,6 @@ void issue_assocreq(struct rtw_adapter *adapt)
 	}
 #ifdef CONFIG_P2P
 
-#ifdef CONFIG_IOCTL_CFG80211
 	if (wdev_to_priv(adapt->rtw_wdev)->p2p_enabled) {
 		if (pmlmepriv->p2p_assoc_req_ie &&
 		    pmlmepriv->p2p_assoc_req_ie_len > 0) {
@@ -7558,9 +7483,7 @@ void issue_assocreq(struct rtw_adapter *adapt)
 			pframe += pmlmepriv->p2p_assoc_req_ie_len;
 			pattrib->pktlen += pmlmepriv->p2p_assoc_req_ie_len;
 		}
-	} else
-#endif /* CONFIG_IOCTL_CFG80211 */
-	{
+	} else {
 		if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE) &&
 		    !rtw_p2p_chk_state(pwdinfo, P2P_STATE_IDLE)) {
 			/*      Should add the P2P IE in the association request frame. */
@@ -7714,16 +7637,11 @@ void issue_assocreq(struct rtw_adapter *adapt)
 #endif /* CONFIG_P2P */
 
 #ifdef CONFIG_WFD
-#ifdef CONFIG_IOCTL_CFG80211
-	if (true == pwdinfo->wfd_info->wfd_enable)
-#endif /* CONFIG_IOCTL_CFG80211 */
-	{
+	if (pwdinfo->wfd_info->wfd_enable) {
 		wfdielen = build_assoc_req_wfd_ie(pwdinfo, pframe);
 		pframe += wfdielen;
 		pattrib->pktlen += wfdielen;
-	}
-#ifdef CONFIG_IOCTL_CFG80211
-	else if (pmlmepriv->wfd_assoc_req_ie != NULL &&
+	} else if (pmlmepriv->wfd_assoc_req_ie != NULL &&
 		 pmlmepriv->wfd_assoc_req_ie_len > 0) {
 		/* WFD IE */
 		memcpy(pframe, pmlmepriv->wfd_assoc_req_ie,
@@ -7731,7 +7649,6 @@ void issue_assocreq(struct rtw_adapter *adapt)
 		pattrib->pktlen += pmlmepriv->wfd_assoc_req_ie_len;
 		pframe += pmlmepriv->wfd_assoc_req_ie_len;
 	}
-#endif /* CONFIG_IOCTL_CFG80211 */
 #endif /* CONFIG_WFD */
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
@@ -8870,12 +8787,6 @@ void site_survey(struct rtw_adapter *adapt)
 			if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_SCAN) || rtw_p2p_chk_state(pwdinfo,
 			    P2P_STATE_FIND_PHASE_SEARCH)) {
 #ifdef CONFIG_CONCURRENT_MODE
-#ifndef CONFIG_IOCTL_CFG80211
-				if (check_buddy_fwstate(adapt, _FW_LINKED)) {
-					_set_timer(&pwdinfo->
-						   ap_p2p_switch_timer, 500);
-				}
-#endif /* CONFIG_IOCTL_CFG80211 */
 				rtw_p2p_set_state(pwdinfo,
 						  rtw_p2p_pre_state(pwdinfo));
 #else
@@ -8896,16 +8807,6 @@ void site_survey(struct rtw_adapter *adapt)
 #ifdef CONFIG_DUALMAC_CONCURRENT
 				dc_set_channel_bwmode_survey_done(adapt);
 #else
-#ifndef CONFIG_IOCTL_CFG80211
-				if (rtw_p2p_chk_state
-				    (pwdinfo, P2P_STATE_LISTEN)) {
-					set_channel_bwmode(adapt,
-							   pwdinfo->
-							   listen_channel,
-							   HAL_PRIME_CHNL_OFFSET_DONT_CARE,
-							   HT_CHANNEL_WIDTH_20);
-				} else
-#endif /* CONFIG_IOCTL_CFG80211 */
 #ifdef CONFIG_CONCURRENT_MODE
 					set_channel_bwmode(adapt,
 							   cur_channel,
@@ -11013,22 +10914,10 @@ u8 sitesurvey_cmd_hdl(struct rtw_adapter *adapt, u8 *pbuf)
 		Switch_DM_Func(adapt, DYNAMIC_FUNC_DISABLE, false);
 
 		/* config the initial gain under scaning, need to write the BB registers */
-#ifdef CONFIG_IOCTL_CFG80211
 		if ((wdev_to_priv(adapt->rtw_wdev))->p2p_enabled == true)
 			initialgain = 0x27;
 		else
 			initialgain = 0x17;
-#else /*      go through the WEXT interface CONFIG_IOCTL_CFG80211 */
-#ifdef CONFIG_P2P
-		if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-			initialgain = 0x17;
-		else
-			initialgain = 0x28;
-#else /*  CONFIG_P2P */
-		initialgain = 0x17;
-#endif /*  CONFIG_P2P */
-#endif /*  CONFIG_IOCTL_CFG80211 */
-
 		rtw_hal_set_hwreg(adapt, HW_VAR_INITIAL_GAIN,
 				  (u8 *)(&initialgain));
 
@@ -12129,12 +12018,12 @@ int concurrent_chk_start_clnt_join(struct rtw_adapter *adapt)
 			rtw_hal_set_hwreg(adapt, HW_VAR_CHECK_TXBUF, 0);
 		}
 	} else if (check_fwstate(pbuddy_mlmepriv, _FW_LINKED) == true && check_fwstate(pbuddy_mlmepriv, WIFI_STATION_STATE) == true) {	/* for Client Mode/p2p client */
-#if defined(CONFIG_P2P) && defined(CONFIG_IOCTL_CFG80211)
+#if defined(CONFIG_P2P)
 		struct wifidirect_info *pbuddy_wdinfo =
 		    &(pbuddy_adapter->wdinfo);
 		if (!rtw_p2p_chk_state(pbuddy_wdinfo, P2P_STATE_NONE))
 			return _SUCCESS;	/* wlan0-sta mode has higher priority than p2p0-p2p client */
-#endif /* CONFIG_P2P && CONFIG_IOCTL_CFG80211 */
+#endif /* CONFIG_P2P */
 
 		if (pmlmeext->cur_channel != pbuddy_mlmeext->cur_channel) {
 			DBG_8192D

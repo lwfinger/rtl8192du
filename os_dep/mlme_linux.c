@@ -67,9 +67,7 @@ void rtw_init_mlme_timer(struct rtw_adapter *padapter)
 void rtw_os_indicate_connect(struct rtw_adapter *adapter)
 {
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_indicate_connect(adapter);
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 	rtw_indicate_wx_assoc_event(adapter);
 	netif_carrier_on(adapter->pnetdev);
@@ -81,9 +79,7 @@ void rtw_os_indicate_connect(struct rtw_adapter *adapter)
 
 void rtw_os_indicate_scan_done(struct rtw_adapter *padapter, bool aborted)
 {
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_indicate_scan_done(wdev_to_priv(padapter->rtw_wdev), aborted);
-#endif
 	indicate_wx_scan_complete_event(padapter);
 }
 
@@ -144,9 +140,7 @@ void rtw_os_indicate_disconnect(struct rtw_adapter *adapter)
 
 	netif_carrier_off(adapter->pnetdev); /*  Do it first for tx broadcast pkt after disconnection issue! */
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_indicate_disconnect(adapter);
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 	rtw_indicate_wx_disassoc_event(adapter);
 

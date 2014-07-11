@@ -466,10 +466,7 @@ struct mlme_ext_priv
 	u8 update_channel_plan_by_ap_done;
 #endif
 
-#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 	u8 active_keep_alive_check;
-#endif
-
 };
 
 int init_mlme_ext_priv(struct rtw_adapter *padapter);

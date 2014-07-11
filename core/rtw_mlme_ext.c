@@ -532,10 +532,7 @@ int init_mlme_ext_priv(struct rtw_adapter *adapt)
 	pmlmeext->chan_scan_time = SURVEY_TO;
 	pmlmeext->mlmeext_init = true;
 
-#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 	pmlmeext->active_keep_alive_check = true;
-#endif
-
 	return res;
 }
 
@@ -9871,13 +9868,7 @@ void linked_status_chk(struct rtw_adapter *adapt)
 		int tx_chk = _SUCCESS, rx_chk = _SUCCESS;
 		int rx_chk_limit;
 
-#if defined(DBG_ROAMING_TEST)
-		rx_chk_limit = 1;
-#elif defined(CONFIG_ACTIVE_KEEP_ALIVE_CHECK)
 		rx_chk_limit = 4;
-#else
-		rx_chk_limit = 8;
-#endif
 
 		psta = rtw_get_stainfo(pstapriv, pmlmeinfo->network.MacAddress);
 		if (psta != NULL) {
@@ -9894,7 +9885,6 @@ void linked_status_chk(struct rtw_adapter *adapt)
 			if (pxmitpriv->last_tx_pkts == pxmitpriv->tx_pkts)
 				tx_chk = _FAIL;
 
-#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 			if (pmlmeext->active_keep_alive_check &&
 			    (rx_chk == _FAIL || tx_chk == _FAIL)) {
 				u8 backup_oper_channel = 0;
@@ -9930,9 +9920,7 @@ void linked_status_chk(struct rtw_adapter *adapt)
 					SelectChannel(adapt,
 						      backup_oper_channel);
 
-			} else
-#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
-			{
+			} else {
 				if (rx_chk != _SUCCESS) {
 					if (pmlmeext->retry == 0) {
 						issue_probereq(adapt,

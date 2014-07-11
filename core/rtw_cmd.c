@@ -1740,12 +1740,10 @@ static void dynamic_chk_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
 
 	pmlmepriv = &(padapter->mlmepriv);
 
-#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 #ifdef CONFIG_92D_AP_MODE
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 		expire_timeout_chk(padapter);
 #endif
-#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
 
 	#ifdef DBG_CONFIG_ERROR_DETECT
 	rtw_hal_sreset_xmit_status_check(padapter);

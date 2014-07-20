@@ -35,16 +35,10 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	u8 reqtype;
 	u8 *pIo_buf;
 	int vendorreq_times = 0;
-
-	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
 	u8 *tmp_buf;
-	#else /*  use stack memory */
-	u8 tmp_buf[MAX_USB_IO_CTL_SIZE];
-	#endif
 
 #ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->adapter_type > PRIMARY_ADAPTER)
-	{
+	if (padapter->adapter_type > PRIMARY_ADAPTER) {
 		padapter = padapter->pbuddy_adapter;
 		pdvobjpriv = adapter_to_dvobj(padapter);
 		udev = pdvobjpriv->pusbdev;
@@ -137,9 +131,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	}
 
 	/*  release IO memory used by vendorreq */
-	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
 	kfree(tmp_buf);
-	#endif
 
 release_mutex:
 	_exit_critical_mutex(&pdvobjpriv->usb_vendor_req_mutex);

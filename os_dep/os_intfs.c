@@ -223,7 +223,6 @@ static uint rtw_notch_filter = RTW_NOTCH_FILTER;
 module_param(rtw_notch_filter, uint, 0644);
 MODULE_PARM_DESC(rtw_notch_filter, "0:Disable, 1:Enable, 2:Enable only for P2P");
 
-int _netdev_open(struct net_device *pnetdev);
 int netdev_open (struct net_device *pnetdev);
 static int netdev_close (struct net_device *pnetdev);
 
@@ -1352,9 +1351,7 @@ int _netdev_vir_if_open(struct net_device *pnetdev)
 		goto _netdev_virtual_iface_open_error;
 
 	if (primary_padapter->bup == false || primary_padapter->hw_init_completed == false)
-	{
-		_netdev_open(primary_padapter->pnetdev);
-	}
+		netdev_open(primary_padapter->pnetdev);
 
 	if (padapter->bup == false && primary_padapter->bup == true &&
 		primary_padapter->hw_init_completed == true)
@@ -1698,7 +1695,7 @@ static int _netdev_if2_open(struct net_device *pnetdev)
 
 	if (primary_padapter->bup == false || primary_padapter->hw_init_completed == false)
 	{
-		_netdev_open(primary_padapter->pnetdev);
+		netdev_open(primary_padapter->pnetdev);
 	}
 
 	if (padapter->bup == false && primary_padapter->bup == true &&
@@ -1994,29 +1991,30 @@ void rtw_drv_if2_stop(struct rtw_adapter *if2)
 }
 #endif /* end of CONFIG_CONCURRENT_MODE */
 
-int _netdev_open(struct net_device *pnetdev)
+int netdev_open(struct net_device *pnetdev)
 {
 	uint status;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(pnetdev);
-	struct pwrctrl_priv *pwrctrlpriv = &padapter->pwrctrlpriv;
+	struct pwrctrl_priv *pwrctrlpriv;
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("+871x_drv - dev_open\n"));
 	DBG_8192D("+871x_drv - drv_open, bup =%d\n", padapter->bup);
 
-	if (pwrctrlpriv->ps_flag == true) {
+	mutex_lock(&adapter_to_dvobj(padapter)->hw_init_mutex);
+
+	pwrctrlpriv = &padapter->pwrctrlpriv;
+	if (pwrctrlpriv->ps_flag) {
 		padapter->net_closed = false;
 		goto netdev_open_normal_process;
 	}
 
-	if (padapter->bup == false)
-	{
+	if (!padapter->bup) {
 		padapter->bDriverStopped = false;
 		padapter->bSurpriseRemoved = false;
 		padapter->bCardDisableWOHSM = false;
 
 		status = rtw_hal_init(padapter);
-		if (status == _FAIL)
-		{
+		if (status == _FAIL) {
 			RT_TRACE(_module_os_intfs_c_, _drv_err_, ("rtl871x_hal_init(): Can't init h/w!\n"));
 			goto netdev_open_error;
 		}
@@ -2024,14 +2022,12 @@ int _netdev_open(struct net_device *pnetdev)
 		DBG_8192D("MAC Address = %pM\n", pnetdev->dev_addr);
 
 		status = rtw_start_drv_threads(padapter);
-		if (status == _FAIL)
-		{
+		if (status == _FAIL) {
 			RT_TRACE(_module_os_intfs_c_, _drv_err_, ("Initialize driver software resource Failed!\n"));
 			goto netdev_open_error;
 		}
 
-		if (init_hw_mlme_ext(padapter) == _FAIL)
-		{
+		if (init_hw_mlme_ext(padapter) == _FAIL) {
 			RT_TRACE(_module_os_intfs_c_, _drv_err_, ("can't init mlme_ext_priv\n"));
 			goto netdev_open_error;
 		}
@@ -2041,9 +2037,7 @@ int _netdev_open(struct net_device *pnetdev)
 #endif
 
 		if (padapter->intf_start)
-		{
 			padapter->intf_start(padapter);
-		}
 		rtw_proc_init_one(pnetdev);
 
 		rtw_cfg80211_init_wiphy(padapter);
@@ -2076,6 +2070,7 @@ netdev_open_normal_process:
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-871x_drv - dev_open\n"));
 	DBG_8192D("-871x_drv - drv_open, bup =%d\n", padapter->bup);
+	mutex_unlock(&adapter_to_dvobj(padapter)->hw_init_mutex);
 
 	return 0;
 
@@ -2089,19 +2084,8 @@ netdev_open_error:
 	RT_TRACE(_module_os_intfs_c_, _drv_err_, ("-871x_drv - dev_open, fail!\n"));
 	DBG_8192D("-871x_drv - drv_open fail, bup =%d\n", padapter->bup);
 
-	return (-1);
-}
-
-int netdev_open(struct net_device *pnetdev)
-{
-	int ret;
-	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(pnetdev);
-
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex));
-	ret = _netdev_open(pnetdev);
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex));
-
-	return ret;
+	mutex_unlock(&adapter_to_dvobj(padapter)->hw_init_mutex);
+	return -1;
 }
 
 #ifdef CONFIG_IPS

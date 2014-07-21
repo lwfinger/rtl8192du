@@ -305,13 +305,9 @@ struct rtw_adapter {
 	struct	hostapd_priv	*phostapdpriv;
 #endif
 
-#ifdef CONFIG_P2P
 	struct cfg80211_wifidirect_info	cfg80211_wdinfo;
-#endif /* CONFIG_P2P */
 	u32	setband;
-#ifdef CONFIG_P2P
 	struct wifidirect_info	wdinfo;
-#endif /* CONFIG_P2P */
 
 	void *HalData;
 	u32 hal_data_sz;

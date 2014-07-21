@@ -19,8 +19,19 @@
 #include <rtw_p2p.h>
 #include <wifi.h>
 
+void rtw_init_wifidirect_addrs(struct rtw_adapter *padapter, u8 *dev_addr, u8 *iface_addr)
+{
 #ifdef CONFIG_P2P
+	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 
+	if (dev_addr)
+		memcpy(pwdinfo->device_addr, dev_addr, ETH_ALEN);
+	if (iface_addr)
+		memcpy(pwdinfo->interface_addr, iface_addr, ETH_ALEN);
+#endif
+}
+
+#ifdef CONFIG_P2P
 static int rtw_p2p_is_channel_list_ok(u8 desired_ch, u8 *ch_list, u8 ch_cnt)
 {
 	int found = 0, i = 0;
@@ -1967,61 +1978,6 @@ void rtw_init_cfg80211_wifidirect_info(struct rtw_adapter *padapter)
 	_init_timer(&pcfg80211_wdinfo->remain_on_ch_timer, padapter->pnetdev, ro_ch_timer_process, padapter);
 }
 
-void p2p_protocol_wk_hdl(struct rtw_adapter *padapter, int intCmdType)
-{
-	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-
-	switch (intCmdType) {
-	case P2P_FIND_PHASE_WK:
-		find_phase_handler(padapter);
-		break;
-	case P2P_RESTORE_STATE_WK:
-		restore_p2p_state_handler(padapter);
-		break;
-	case P2P_PRE_TX_PROVDISC_PROCESS_WK:
-#ifdef CONFIG_CONCURRENT_MODE
-		if (check_buddy_fwstate(padapter, _FW_LINKED))
-			p2p_concurrent_handler(padapter);
-		else
-			pre_tx_provdisc_handler(padapter);
-#else
-		pre_tx_provdisc_handler(padapter);
-#endif
-		break;
-	case P2P_PRE_TX_INVITEREQ_PROCESS_WK:
-#ifdef CONFIG_CONCURRENT_MODE
-		if (check_buddy_fwstate(padapter, _FW_LINKED))
-			p2p_concurrent_handler(padapter);
-		else
-			pre_tx_invitereq_handler(padapter);
-#else
-		pre_tx_invitereq_handler(padapter);
-#endif
-		break;
-	case P2P_PRE_TX_NEGOREQ_PROCESS_WK:
-#ifdef CONFIG_CONCURRENT_MODE
-		if (check_buddy_fwstate(padapter, _FW_LINKED))
-			p2p_concurrent_handler(padapter);
-		else
-			pre_tx_negoreq_handler(padapter);
-#else
-		pre_tx_negoreq_handler(padapter);
-#endif
-		break;
-#ifdef CONFIG_P2P
-#ifdef CONFIG_CONCURRENT_MODE
-	case P2P_AP_P2P_CH_SWITCH_PROCESS_WK:
-		p2p_concurrent_handler(padapter);
-		break;
-#endif
-#endif
-	case P2P_RO_CH_WK:
-		ro_ch_handler(padapter);
-		break;
-	}
-
-}
-
 #ifdef CONFIG_P2P_PS
 void process_p2p_ps_ie(struct rtw_adapter *padapter, u8 *IEs, u32 IELength)
 {
@@ -2342,18 +2298,6 @@ void rtw_init_wifidirect_timers(struct rtw_adapter *padapter)
 #endif
 }
 
-void rtw_init_wifidirect_addrs(struct rtw_adapter *padapter, u8 *dev_addr, u8 *iface_addr)
-{
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
-
-	if (dev_addr)
-		memcpy(pwdinfo->device_addr, dev_addr, ETH_ALEN);
-	if (iface_addr)
-		memcpy(pwdinfo->interface_addr, iface_addr, ETH_ALEN);
-#endif
-}
-
 void init_wifidirect_info(struct rtw_adapter *padapter, enum P2P_ROLE role)
 {
 	struct wifidirect_info	*pwdinfo;
@@ -2617,3 +2561,59 @@ exit:
 }
 
 #endif /* CONFIG_P2P */
+
+void p2p_protocol_wk_hdl(struct rtw_adapter *padapter, int intCmdType)
+{
+#ifdef CONFIG_P2P
+	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
+
+	switch (intCmdType) {
+	case P2P_FIND_PHASE_WK:
+		find_phase_handler(padapter);
+		break;
+	case P2P_RESTORE_STATE_WK:
+		restore_p2p_state_handler(padapter);
+		break;
+	case P2P_PRE_TX_PROVDISC_PROCESS_WK:
+#ifdef CONFIG_CONCURRENT_MODE
+		if (check_buddy_fwstate(padapter, _FW_LINKED))
+			p2p_concurrent_handler(padapter);
+		else
+			pre_tx_provdisc_handler(padapter);
+#else
+		pre_tx_provdisc_handler(padapter);
+#endif
+		break;
+	case P2P_PRE_TX_INVITEREQ_PROCESS_WK:
+#ifdef CONFIG_CONCURRENT_MODE
+		if (check_buddy_fwstate(padapter, _FW_LINKED))
+			p2p_concurrent_handler(padapter);
+		else
+			pre_tx_invitereq_handler(padapter);
+#else
+		pre_tx_invitereq_handler(padapter);
+#endif
+		break;
+	case P2P_PRE_TX_NEGOREQ_PROCESS_WK:
+#ifdef CONFIG_CONCURRENT_MODE
+		if (check_buddy_fwstate(padapter, _FW_LINKED))
+			p2p_concurrent_handler(padapter);
+		else
+			pre_tx_negoreq_handler(padapter);
+#else
+		pre_tx_negoreq_handler(padapter);
+#endif
+		break;
+#ifdef CONFIG_P2P
+#ifdef CONFIG_CONCURRENT_MODE
+	case P2P_AP_P2P_CH_SWITCH_PROCESS_WK:
+		p2p_concurrent_handler(padapter);
+		break;
+#endif
+#endif
+	case P2P_RO_CH_WK:
+		ro_ch_handler(padapter);
+		break;
+	}
+#endif
+}

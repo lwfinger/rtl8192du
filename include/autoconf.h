@@ -53,14 +53,6 @@
 #endif
 #define CONFIG_FIND_BEST_CHANNEL	1
 
-/* 	Added by Albert 20110314 */
-#define CONFIG_P2P	1
-#ifdef CONFIG_P2P
-	#ifndef CONFIG_WIFI_TEST
-		#define CONFIG_P2P_REMOVE_GROUP_INFO
-	#endif
-#endif
-
 #define CONFIG_DFS	1
 
 #define CONFIG_LAYER2_ROAMING

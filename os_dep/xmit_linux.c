@@ -220,10 +220,11 @@ static int rtw_mlcst2unicst(struct rtw_adapter *padapter, struct sk_buff *skb)
 	struct sta_info *psta = NULL;
 	s32	res;
 
+#ifdef CONFIG_92D_AP_MODE
 	spin_lock_bh(&pstapriv->asoc_list_lock);
 	phead = &pstapriv->asoc_list;
 	plist = phead->next;
-
+#endif
 	/* free sta asoc_queue */
 	while ((rtw_end_of_queue_search(phead, plist)) == false)
 	{
@@ -250,12 +251,16 @@ static int rtw_mlcst2unicst(struct rtw_adapter *padapter, struct sk_buff *skb)
 			DBG_8192D("%s-%d: skb_copy() failed!\n", __func__, __LINE__);
 			pxmitpriv->tx_drop++;
 
+#ifdef CONFIG_92D_AP_MODE
 			spin_unlock_bh(&pstapriv->asoc_list_lock);
+#endif
 			return false;	/*  Caller shall tx this multicast frame via normal way. */
 		}
 	}
 
+#ifdef CONFIG_92D_AP_MODE
 	spin_unlock_bh(&pstapriv->asoc_list_lock);
+#endif
 	dev_kfree_skb_any(skb);
 	return true;
 }

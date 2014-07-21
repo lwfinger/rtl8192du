@@ -3417,12 +3417,15 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 
 			memcpy(pmlmepriv->wps_beacon_ie, wps_ie, wps_ielen);
 			pmlmepriv->wps_beacon_ie_len = wps_ielen;
-
+#ifdef CONFIG_92D_AP_MODE
 			update_beacon(padapter, _VENDOR_SPECIFIC_IE_, wps_oui, true);
+#endif
 
 		}
 
+#ifdef CONFIG_92D_AP_MODE
 		pmlmeext->bstart_bss = true;
+#endif
 	}
 
 	return ret;
@@ -3742,11 +3745,12 @@ static void rtw_cfg80211_preinit_wiphy(struct rtw_adapter *padapter, struct wiph
 	wiphy->max_remain_on_channel_duration = RTW_MAX_REMAIN_ON_CHANNEL_DURATION;
 #endif
 
-	wiphy->interface_modes = BIT(NL80211_IFTYPE_STATION) | BIT(NL80211_IFTYPE_ADHOC)
+	wiphy->interface_modes = BIT(NL80211_IFTYPE_ADHOC) |
 #ifdef CONFIG_92D_AP_MODE
-								| BIT(NL80211_IFTYPE_AP)
-								| BIT(NL80211_IFTYPE_MONITOR);
+				 BIT(NL80211_IFTYPE_AP) |
+				 BIT(NL80211_IFTYPE_MONITOR) |
 #endif
+				 BIT(NL80211_IFTYPE_STATION);
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 #ifdef CONFIG_92D_AP_MODE
 	wiphy->mgmt_stypes = rtw_cfg80211_default_mgmt_stypes;

@@ -1782,12 +1782,13 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 	struct sta_priv *pstapriv = &adapter->stapriv;
 	struct wlan_network *tgt_network = &(pmlmepriv->cur_network);
 
+#ifdef CONFIG_92D_AP_MODE
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 		rtw_cfg80211_indicate_sta_disassoc(adapter, pstadel->macaddr,
 						   *(u16 *)pstadel->rsvd);
 		return;
 	}
-
+#endif
 	mlmeext_sta_del_event_callback(adapter);
 
 	spin_lock_bh(&pmlmepriv->lock);

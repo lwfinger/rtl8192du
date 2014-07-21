@@ -2484,9 +2484,7 @@ void issue_beacon(struct rtw_adapter *adapt)
 	unsigned short *fctrl;
 	unsigned int rate_len;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
-#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex *cur_network = &(pmlmeinfo->network);
@@ -2497,9 +2495,7 @@ void issue_beacon(struct rtw_adapter *adapt)
 		DBG_8192D("%s, alloc mgnt frame fail\n", __func__);
 		return;
 	}
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 	spin_lock_bh(&pmlmepriv->bcn_update_lock);
-#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 
 	/* update attribute */
 	pattrib = &pmgntframe->attrib;
@@ -2639,11 +2635,9 @@ void issue_beacon(struct rtw_adapter *adapt)
 
 _issue_bcn:
 
-#if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 	pmlmepriv->update_bcn = false;
 
 	spin_unlock_bh(&pmlmepriv->bcn_update_lock);
-#endif /* if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 
 	if ((pattrib->pktlen + TXDESC_SIZE) > 512) {
 		DBG_8192D("beacon frame too large\n");
@@ -2651,8 +2645,6 @@ _issue_bcn:
 	}
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
-
-	/* DBG_8192D("issue bcn_sz=%d\n", pattrib->last_txcmdsz); */
 
 	dump_mgntframe(adapt, pmgntframe);
 }
@@ -7120,13 +7112,17 @@ void change_band_update_ie(struct rtw_adapter *adapt,
 		network_type = WIRELESS_11A;
 		total_rate_len = IEEE80211_NUM_OFDM_RATESLEN;
 		DBG_8192D("%s(): change to 5G Band\n", __func__);
+#ifdef CONFIG_92D_AP_MODE
 		rtw_remove_bcn_ie(adapt, pnetwork, _ERPINFO_IE_);
+#endif
 	} else {
 		network_type = WIRELESS_11BG;
 		total_rate_len =
 		    IEEE80211_CCK_RATE_LEN + IEEE80211_NUM_OFDM_RATESLEN;
 		DBG_8192D("%s(): change to 2.4G Band\n", __func__);
+#ifdef CONFIG_92D_AP_MODE
 		rtw_add_bcn_ie(adapt, pnetwork, _ERPINFO_IE_, &erpinfo, 1);
+#endif
 	}
 
 	rtw_set_supported_rate(pnetwork->SupportedRates, network_type);
@@ -7143,6 +7139,7 @@ void change_band_update_ie(struct rtw_adapter *adapt,
 		remainder_rate_len = 0;
 	}
 
+#ifdef CONFIG_92D_AP_MODE
 	rtw_add_bcn_ie(adapt, pnetwork, _SUPPORTEDRATES_IE_,
 		       pnetwork->SupportedRates, rate_len);
 
@@ -7153,6 +7150,7 @@ void change_band_update_ie(struct rtw_adapter *adapt,
 	} else {
 		rtw_remove_bcn_ie(adapt, pnetwork, _EXT_SUPPORTEDRATES_IE_);
 	}
+#endif
 }
 
 #ifdef CONFIG_DUALMAC_CONCURRENT

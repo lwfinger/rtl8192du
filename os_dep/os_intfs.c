@@ -1102,9 +1102,6 @@ u8 rtw_init_default_value(struct rtw_adapter *padapter)
 	padapter->bRxRSSIDisplay = 0;
 	padapter->bForceWriteInitGain = 1;
 	padapter->bNotifyChannelChange = 0;
-#ifdef CONFIG_P2P
-	padapter->bShowGetP2PState = 1;
-#endif
 	return ret;
 }
 
@@ -1179,13 +1176,6 @@ u8 rtw_init_drv_sw(struct rtw_adapter *padapter)
 		goto exit;
 	}
 
-#ifdef CONFIG_P2P
-	rtw_init_wifidirect_timers(padapter);
-	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
-	reset_global_wifidirect_info(padapter);
-	rtw_init_cfg80211_wifidirect_info(padapter);
-#endif /* CONFIG_P2P */
-
 	if (init_mlme_ext_priv(padapter) == _FAIL)
 	{
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("\n Can't init mlme_ext_priv\n"));
@@ -1255,10 +1245,6 @@ void rtw_cancel_all_timer(struct rtw_adapter *padapter)
 
 	_cancel_timer_ex(&padapter->pwrctrlpriv.pwr_state_check_timer);
 
-#ifdef CONFIG_P2P
-	_cancel_timer_ex(&padapter->cfg80211_wdinfo.remain_on_ch_timer);
-#endif /* CONFIG_P2P */
-
 #ifdef CONFIG_SET_SCAN_DENY_TIMER
 	_cancel_timer_ex(&padapter->mlmepriv.set_scan_deny_timer);
 	rtw_clear_scan_deny(padapter);
@@ -1275,39 +1261,13 @@ u8 rtw_free_drv_sw(struct rtw_adapter *padapter)
 {
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("==>rtw_free_drv_sw"));
 
-	/* we can call rtw_p2p_enable here, but: */
-	/*  1. rtw_p2p_enable may have IO operation */
-	/*  2. rtw_p2p_enable is bundled with wext interface */
-	#ifdef CONFIG_P2P
-	{
-		struct wifidirect_info *pwdinfo = &padapter->wdinfo;
-		if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-		{
-			_cancel_timer_ex(&pwdinfo->find_phase_timer);
-			_cancel_timer_ex(&pwdinfo->restore_p2p_state_timer);
-			_cancel_timer_ex(&pwdinfo->pre_tx_scan_timer);
-#ifdef CONFIG_CONCURRENT_MODE
-			_cancel_timer_ex(&pwdinfo->ap_p2p_switch_timer);
-#endif /*  CONFIG_CONCURRENT_MODE */
-			rtw_p2p_set_state(pwdinfo, P2P_STATE_NONE);
-		}
-	}
-	#endif
-
 	free_mlme_ext_priv(&padapter->mlmeextpriv);
-
 	rtw_free_cmd_priv(&padapter->cmdpriv);
-
 	rtw_free_evt_priv(&padapter->evtpriv);
-
 	rtw_free_mlme_priv(&padapter->mlmepriv);
-
 	_rtw_free_xmit_priv(&padapter->xmitpriv);
-
 	_rtw_free_sta_priv(&padapter->stapriv); /* will free bcmc_stainfo here */
-
 	_rtw_free_recv_priv(&padapter->recvpriv);
-
 	rtw_free_pwrctrl_priv(padapter);
 
 #ifdef CONFIG_DRVEXT_MODULE
@@ -2216,12 +2176,6 @@ static int netdev_close(struct net_device *pnetdev)
 		/*  Close LED */
 		rtw_led_control(padapter, LED_CTL_POWER_OFF);
 	}
-
-#ifdef CONFIG_P2P
-	if (wdev_to_priv(padapter->rtw_wdev)->p2p_enabled == true)
-		wdev_to_priv(padapter->rtw_wdev)->p2p_enabled = false;
-	rtw_p2p_enable(padapter, P2P_ROLE_DISABLE);
-#endif /* CONFIG_P2P */
 
 	rtw_scan_abort(padapter);
 	wdev_to_priv(padapter->rtw_wdev)->bandroid_scan = false;

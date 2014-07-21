@@ -533,12 +533,6 @@ u8 rtw_sitesurvey_cmd(struct rtw_adapter *padapter, struct ndis_802_11_ssid *ssi
 	}
 #endif
 
-#ifdef CONFIG_P2P_PS
-	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
-		p2p_ps_wk_cmd(padapter, P2P_PS_SCAN, 1);
-	}
-#endif /*  CONFIG_P2P_PS */
-
 	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
 	if (ph2c == NULL)
 		return _FAIL;
@@ -1831,44 +1825,6 @@ static void power_saving_wk_hdl(struct rtw_adapter *padapter, u8 *pbuf, int sz)
 	 rtw_ps_processor(padapter);
 }
 
-#ifdef CONFIG_P2P
-u8 p2p_protocol_wk_cmd(struct rtw_adapter *padapter, int intCmdType)
-{
-	struct cmd_obj *ph2c;
-	struct drvextra_cmd_parm *pdrvextra_cmd_parm;
-	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
-	u8 res = _SUCCESS;
-
-	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-		return res;
-
-	ph2c = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
-	if (ph2c == NULL) {
-		res = _FAIL;
-		goto exit;
-	}
-
-	pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)kzalloc(sizeof(struct drvextra_cmd_parm), GFP_ATOMIC);
-	if (pdrvextra_cmd_parm == NULL) {
-		kfree(ph2c);
-		res = _FAIL;
-		goto exit;
-	}
-
-	pdrvextra_cmd_parm->ec_id = P2P_PROTO_WK_CID;
-	pdrvextra_cmd_parm->type_size = intCmdType;	/*	As the command tppe. */
-	pdrvextra_cmd_parm->pbuf = NULL;		/*	Must be NULL here */
-
-	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_SET_DRV_EXTRA));
-
-	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
-exit:
-
-	return res;
-}
-#endif /* CONFIG_P2P */
-
 u8 rtw_ps_cmd(struct rtw_adapter *padapter)
 {
 	struct cmd_obj *ppscmd;
@@ -2092,11 +2048,6 @@ u8 rtw_drvextra_cmd_hdl(struct rtw_adapter *padapter, unsigned char *pbuf)
 		antenna_select_wk_hdl(padapter, pdrvextra_cmd->type_size);
 		break;
 #endif
-#ifdef CONFIG_P2P_PS
-	case P2P_PS_WK_CID:
-		p2p_ps_wk_hdl(padapter, pdrvextra_cmd->type_size);
-		break;
-#endif /*  CONFIG_P2P_PS */
 	case P2P_PROTO_WK_CID:
 		/*	Commented by Albert 2011/07/01 */
 		/*	I used the type_size as the type command */

@@ -778,18 +778,9 @@ static void rtw_add_network(struct rtw_adapter *adapter,
 	struct mlme_priv *pmlmepriv =
 	    &(((struct rtw_adapter *)adapter)->mlmepriv);
 
-	/* spin_lock_bh(&queue->lock); */
-
-#if defined(CONFIG_P2P) && defined(CONFIG_P2P_REMOVE_GROUP_INFO)
-	rtw_wlan_bssid_ex_remove_p2p_attr(pnetwork, P2P_ATTR_GROUP_INFO);
-#endif
-
 	update_current_network(adapter, pnetwork);
 
 	rtw_update_scanned_network(adapter, pnetwork);
-
-	/* spin_unlock_bh(&queue->lock); */
-
 }
 
 /* select the desired network based on the capability of the (i)bss. */
@@ -1039,12 +1030,6 @@ void rtw_surveydone_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 
 	spin_unlock_bh(&pmlmepriv->lock);
 
-#ifdef CONFIG_P2P_PS
-	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
-		p2p_ps_wk_cmd(adapter, P2P_PS_SCAN_DONE, 0);
-	}
-#endif /*  CONFIG_P2P_PS */
-
 	rtw_os_xmit_schedule(adapter);
 #ifdef CONFIG_CONCURRENT_MODE
 	rtw_os_xmit_schedule(adapter->pbuddy_adapter);
@@ -1227,10 +1212,6 @@ void rtw_indicate_disconnect(struct rtw_adapter *padapter)
 		rtw_led_control(padapter, LED_CTL_NO_LINK);
 		rtw_clear_scan_deny(padapter);
 	}
-#ifdef CONFIG_P2P_PS
-	p2p_ps_wk_cmd(padapter, P2P_PS_DISABLE, 1);
-#endif /*  CONFIG_P2P_PS */
-
 #ifdef CONFIG_LPS
 #ifdef CONFIG_WOWLAN
 	if (padapter->pwrctrlpriv.wowlan_mode == false)
@@ -2055,14 +2036,8 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 	rtw_dynamic_chk_wk_cmd(adapter);
 
 	if (pregistrypriv->wifi_spec == 1) {
-#ifdef CONFIG_P2P
-		struct wifidirect_info *pwdinfo = &adapter->wdinfo;
-		if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-#endif
-		{
-			/* auto site survey */
-			rtw_auto_scan_handler(adapter);
-		}
+		/* auto site survey */
+		rtw_auto_scan_handler(adapter);
 	}
 }
 

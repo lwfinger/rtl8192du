@@ -281,18 +281,6 @@ struct wifidirect_info{
 	u16						ext_listen_interval;	/* 	The interval to be available with legacy AP (ms) */
 	u16						ext_listen_period;	/* 	The time period to be available for P2P listen state (ms) */
 #endif
-#ifdef CONFIG_P2P_PS
-	enum P2P_PS_MODE		p2p_ps_mode; /*  indicate p2p ps mode */
-	enum P2P_PS_STATE		p2p_ps_state; /*  indicate p2p ps state */
-	u8						noa_index; /*  Identifies and instance of Notice of Absence timing. */
-	u8						ctwindow; /*  Client traffic window. A period of time in TU after TBTT. */
-	u8						opp_ps; /*  opportunistic power save. */
-	u8						noa_num; /*  number of NoA descriptor in P2P IE. */
-	u8						noa_count[P2P_MAX_NOA_NUM]; /*  Count for owner, Type of client. */
-	u32						noa_duration[P2P_MAX_NOA_NUM]; /*  Max duration for owner, preferred or min acceptable duration for client. */
-	u32						noa_interval[P2P_MAX_NOA_NUM]; /*  Length of interval for owner, preferred or max acceptable interval of client. */
-	u32						noa_start_time[P2P_MAX_NOA_NUM]; /*  schedule expressed in terms of the lower 4 bytes of the TSF timer. */
-#endif /*  CONFIG_P2P_PS */
 };
 
 struct tdls_ss_record{	/* signal strength record; recording the tdls sta with lowerest ss */

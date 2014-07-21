@@ -697,9 +697,6 @@ struct hal_data_8192du {
 
 	u16	EfuseUsedBytes;
 	u8	RTSInitRate;	 /*  2010.11.24.by tynli. */
-#ifdef CONFIG_P2P
-	struct P2P_PS_Offload_t	p2p_ps_offload;
-#endif /* CONFIG_P2P */
 };
 
 #define GET_HAL_DATA(__adapter)	((struct hal_data_8192du *)((__adapter)->HalData))

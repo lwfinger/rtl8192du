@@ -2327,13 +2327,6 @@ rtl8192d_HalDmWatchDog(
 	}
 #endif
 
-#ifdef CONFIG_P2P_PS
-	/*  Fw is under p2p powersaving mode, driver should stop dynamic mechanism. */
-	/*  modifed by thomas. 2011.06.11. */
-	if (adapter->wdinfo.p2p_ps_mode)
-		bFwPSAwake = false;
-#endif /*  CONFIG_P2P_PS */
-
 	/*  Stop dynamic mechanism when: */
 	/*  1. RF is OFF. (No need to do DM.) */
 	/*  2. Fw is under power saving mode for FwLPS. (Prevent from SW/FW I/O racing.) */

@@ -1489,21 +1489,19 @@ exit:
 static int validate_recv_frame(struct rtw_adapter *adapter,
 			struct recv_frame_hdr *precv_frame)
 {
-	/* shall check frame subtype, to / from ds, da, bssid */
-
-	/* then call check if rx seq/frag. duplicated. */
-
-	u8 type;
-	u8 subtype;
-	int retval = _SUCCESS;
-
+	/* shall check frame subtype, to / from ds, da, bssid 
+	 * then call check if rx seq/frag. duplicated. */
 	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
-
-	u8 *ptr = precv_frame->rx_data;
-	u8 ver = (unsigned char)(*ptr) & 0x3;
+	struct sk_buff *skb = precv_frame->pkt;
+	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *) skb->data;
 #ifdef CONFIG_FIND_BEST_CHANNEL
 	struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
 #endif
+	u8 type;
+	u8 subtype;
+	int retval = _SUCCESS;
+	u16 seq_ctrl, fctl;
+	u8 ver;
 
 #ifdef CONFIG_FIND_BEST_CHANNEL
 	if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS) {
@@ -1514,6 +1512,12 @@ static int validate_recv_frame(struct rtw_adapter *adapter,
 			pmlmeext->channel_set[ch_set_idx].rx_count++;
 	}
 #endif
+
+	fctl = le16_to_cpu(hdr->frame_control);
+	ver = fctl & IEEE80211_FCTL_VERS;
+	type = fctl & IEEE80211_FCTL_FTYPE;
+	subtype = fctl & IEEE80211_FCTL_STYPE;
+
 	/* add version chk */
 	if (ver != 0) {
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
@@ -1522,35 +1526,34 @@ static int validate_recv_frame(struct rtw_adapter *adapter,
 		goto exit;
 	}
 
-	type = GetFrameType(ptr);
-	subtype = GetFrameSubType(ptr);	/* bit(7)~bit(2) */
+	seq_ctrl = le16_to_cpu(hdr->seq_ctrl);
+	pattrib->frag_num = seq_ctrl & IEEE80211_SCTL_FRAG;
+	pattrib->seq_num = seq_ctrl >> 4;
 
-	pattrib->to_fr_ds = get_tofr_ds(ptr);
+	pattrib->to_fr_ds = get_tofr_ds(precv_frame->rx_data);
 
-	pattrib->frag_num = GetFragNum(ptr);
-	pattrib->seq_num = GetSequence(ptr);
+	pattrib->pw_save = ieee80211_has_pm(hdr->frame_control);
+	pattrib->mfrag = ieee80211_has_morefrags(hdr->frame_control);
+	pattrib->mdata = ieee80211_has_moredata(hdr->frame_control);
+	pattrib->privacy = ieee80211_has_protected(hdr->frame_control);
+	pattrib->order = ieee80211_has_order(hdr->frame_control);
 
-	pattrib->pw_save = GetPwrMgt(ptr);
-	pattrib->mfrag = GetMFrag(ptr);
-	pattrib->mdata = GetMData(ptr);
-	pattrib->privacy = GetPrivacy(ptr);
-	pattrib->order = GetOrder(ptr);
 	switch (type) {
-	case WIFI_MGT_TYPE:	/* mgnt */
+	case IEEE80211_FTYPE_MGMT:
 		retval = validate_recv_mgnt_frame(adapter, precv_frame);
 		if (retval == _FAIL)
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 				 ("validate_recv_mgnt_frame fail\n"));
 		retval = _FAIL;	/*  only data frame return _SUCCESS */
 		break;
-	case WIFI_CTRL_TYPE:	/* ctrl */
+	case IEEE80211_FTYPE_CTL:
 		retval = validate_recv_ctrl_frame(adapter, precv_frame);
 		if (retval == _FAIL)
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_,
 				 ("validate_recv_ctrl_frame fail\n"));
 		retval = _FAIL;	/*  only data frame return _SUCCESS */
 		break;
-	case WIFI_DATA_TYPE:	/* data */
+	case IEEE80211_FTYPE_DATA:
 		rtw_led_control(adapter, LED_CTL_RX);
 		pattrib->qos = (subtype & BIT(7)) ? 1 : 0;
 		retval = validate_recv_data_frame(adapter, precv_frame);

@@ -848,7 +848,7 @@ static void rtl8192du_hostap_mgnt_xmit_cb(struct urb *urb)
 	dev_kfree_skb_any(skb);
 }
 
-s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
+s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, struct sk_buff *pkt)
 {
 	u16 fc;
 	int rc, len, pipe;
@@ -922,7 +922,7 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
 	ptxdesc->txdw4 |= cpu_to_le32(BIT(7)); /*  Hw set sequence number */
 	ptxdesc->txdw3 |= cpu_to_le32((8 <<28)); /* set bit3 to 1. Suugested by TimChen. 2009.12.29. */
 
-	rtl8192cu_cal_txdesc_chksum(ptxdesc);
+	rtl8192du_cal_txdesc_chksum(ptxdesc);
 	/*  ----- end of fill tx desc ----- */
 
 	/*  */
@@ -935,7 +935,7 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(struct rtw_adapter *padapter, _pkt *pkt)
 	/* translate DMA FIFO addr to pipehandle */
 	pipe = usb_sndbulkpipe(pdvobj->pusbdev, pHalData->Queue2EPNum[(u8)MGT_QUEUE_INX]&0x0f);
 	usb_fill_bulk_urb(urb, pdvobj->pusbdev, pipe,
-		pxmit_skb->data, pxmit_skb->len, rtl8192cu_hostap_mgnt_xmit_cb, pxmit_skb);
+		pxmit_skb->data, pxmit_skb->len, rtl8192du_hostap_mgnt_xmit_cb, pxmit_skb);
 
 	urb->transfer_flags |= URB_ZERO_PACKET;
 	usb_anchor_urb(urb, &phostapdpriv->anchored);

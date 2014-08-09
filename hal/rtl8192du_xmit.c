@@ -232,24 +232,18 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 	struct pkt_attrib		*pattrib = &pxmitframe->attrib;
 	struct tx_desc		*ptxdesc = (struct tx_desc *)pmem;
 	int	bmcst = IS_MCAST(pattrib->ra);
-#ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
-if (padapter->registrypriv.mp_mode == 0)
-{
 
-	if ((false == bagg_pkt) && (urb_zero_packet_chk(padapter, sz)==0))
-	{
+	if (padapter->registrypriv.mp_mode == 0) {
+		if ((false == bagg_pkt) && (urb_zero_packet_chk(padapter, sz)==0)) {
 		ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
 		pull = 1;
 		pxmitframe->pkt_offset --;
+		}
 	}
-}
-#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 
 	memset(ptxdesc, 0, sizeof(struct tx_desc));
 
-	if ((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG)
-	{
-
+	if ((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG) {
 		/* offset 4 */
 		ptxdesc->txdw1 |= cpu_to_le32(pattrib->mac_id&0x1f);
 
@@ -722,7 +716,6 @@ s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv 
 		rtw_issue_addbareq_cmd(padapter, pfirstframe);
 	}
 
-#ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
 	/* 3 3. update first frame txdesc */
 	if ((pbuf_tail % bulkSize) == 0) {
 		/*  remove 1 pkt_offset */
@@ -730,7 +723,6 @@ s32 rtl8192du_xmitframe_complete(struct rtw_adapter *padapter, struct xmit_priv 
 		pfirstframe->buf_addr += PACKET_OFFSET_SZ;
 		pfirstframe->pkt_offset--;
 	}
-#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 	update_txdesc(pfirstframe, pfirstframe->buf_addr, pfirstframe->attrib.last_txcmdsz, true);
 
 	/* 3 4. write xmit buffer to USB FIFO */

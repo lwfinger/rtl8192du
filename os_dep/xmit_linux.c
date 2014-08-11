@@ -27,33 +27,6 @@
 #include <osdep_intf.h>
 #include <usb_osintf.h>
 
-uint rtw_remainder_len(struct pkt_file *pfile)
-{
-	return (pfile->buf_len - ((SIZE_PTR)(pfile->cur_addr) - (SIZE_PTR)(pfile->buf_start)));
-}
-
-void _rtw_open_pktfile (struct sk_buff *pktptr, struct pkt_file *pfile)
-{
-
-	pfile->pkt = pktptr;
-	pfile->cur_addr = pfile->buf_start = pktptr->data;
-	pfile->pkt_len = pfile->buf_len = pktptr->len;
-
-	pfile->cur_buffer = pfile->buf_start ;
-
-}
-
-int rtw_endofpktfile(struct pkt_file *pfile)
-{
-
-	if (pfile->pkt_len == 0) {
-
-		return true;
-	}
-
-	return false;
-}
-
 void rtw_set_tx_chksum_offload(struct sk_buff *pkt, struct pkt_attrib *pattrib)
 {
 

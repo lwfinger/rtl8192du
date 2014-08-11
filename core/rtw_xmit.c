@@ -1004,7 +1004,6 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *skb,
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct ieee80211_hdr *hdr;
-	struct pkt_file pktfile;
 	s32 frg_inx, frg_len, mpdu_len, llc_sz, mem_sz;
 	u8 *pframe, *mem_start;
 	u8 hw_hdr_offset;

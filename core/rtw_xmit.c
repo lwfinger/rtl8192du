@@ -403,111 +403,112 @@ u8	qos_acm(u8 acm_mask, u8 priority)
 	return change_priority;
 }
 
-static void set_qos(struct pkt_file *ppktfile, struct pkt_attrib *pattrib)
+static void set_qos(struct sk_buff *skb, struct pkt_attrib *pattrib)
 {
-	struct ethhdr etherhdr;
-	struct iphdr ip_hdr;
-	s32 userpriority = 0;
-
-	_rtw_open_pktfile(ppktfile->pkt, ppktfile);
-	_rtw_pktfile_read(ppktfile, (unsigned char *)&etherhdr, ETH_HLEN);
+	u8 *pframe = skb->data;
+	struct iphdr *ip_hdr;
+	u8 userpriority = 0;
 
 	/*  get userpriority from IP hdr */
-	if (pattrib->ether_type == 0x0800) {
-		_rtw_pktfile_read(ppktfile, (u8 *)&ip_hdr, sizeof(ip_hdr));
-		userpriority = ip_hdr.tos >> 5;
-	} else if (pattrib->ether_type == 0x888e) {
+	if (pattrib->ether_type == ETH_P_IP) {
+		ip_hdr = (struct iphdr *)(pframe + ETH_HLEN);
+		userpriority = ip_hdr->tos >> 5;
+	} else if (pattrib->ether_type == ETH_P_PAE) {
 		/*  "When priority processing of data frames is supported, */
-		/*  a STA's SME should send EAPOL-Key frames at the highest priority." */
+		/*  a STA's SME should send EAPOL-Key frames at the highest
+		    priority." */
 		userpriority = 7;
 	}
 
 	pattrib->priority = userpriority;
-	pattrib->hdrlen = WLAN_HDR_A3_QOS_LEN;
+	pattrib->hdrlen = sizeof(struct ieee80211_qos_hdr);
 	pattrib->subtype = WIFI_QOS_DATA_TYPE;
 }
 
-static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, struct pkt_attrib *pattrib)
+static int update_attrib(struct rtw_adapter *padapter,
+			 struct sk_buff *skb, struct pkt_attrib *pattrib)
 {
-	struct pkt_file pktfile;
 	struct sta_info *psta = NULL;
-	struct ethhdr etherhdr;
-
 	int bmcast;
-	struct sta_priv		*pstapriv = &padapter->stapriv;
-	struct security_priv	*psecuritypriv = &padapter->securitypriv;
-	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-	struct qos_priv		*pqospriv = &pmlmepriv->qospriv;
+	struct sta_priv	*pstapriv = &padapter->stapriv;
+	struct security_priv *psecuritypriv = &padapter->securitypriv;
+	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	int res = _SUCCESS;
+	struct ethhdr *ehdr = (struct ethhdr *) skb->data;
 
-	_rtw_open_pktfile(pkt, &pktfile);
-	_rtw_pktfile_read(&pktfile, (u8 *)&etherhdr, ETH_HLEN);
+	pattrib->ether_type = ntohs(ehdr->h_proto);
 
-	pattrib->ether_type = ntohs(etherhdr.h_proto);
-
-	memcpy(pattrib->dst, &etherhdr.h_dest, ETH_ALEN);
-	memcpy(pattrib->src, &etherhdr.h_source, ETH_ALEN);
+	ether_addr_copy(pattrib->dst, ehdr->h_dest);
+	ether_addr_copy(pattrib->src, ehdr->h_source);
 
 	pattrib->pctrl = 0;
 
-	if ((check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == true) ||
-	    (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true)) {
-		memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
-		memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) ||
+	    check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)) {
+		ether_addr_copy(pattrib->ra, pattrib->dst);
+		ether_addr_copy(pattrib->ta, pattrib->src);
 	} else if (check_fwstate(pmlmepriv, WIFI_STATION_STATE)) {
-		memcpy(pattrib->ra, get_bssid(pmlmepriv), ETH_ALEN);
-		memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+		ether_addr_copy(pattrib->ra, get_bssid(pmlmepriv));
+		ether_addr_copy(pattrib->ta, pattrib->src);
 	} else if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
-		memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
-		memcpy(pattrib->ta, get_bssid(pmlmepriv), ETH_ALEN);
+		ether_addr_copy(pattrib->ra, pattrib->dst);
+		ether_addr_copy(pattrib->ta, get_bssid(pmlmepriv));
 	}
 
-	pattrib->pktlen = pktfile.pkt_len;
+	pattrib->pktlen = skb->len - ETH_HLEN;
 
-	if (ETH_P_IP == pattrib->ether_type) {
-		/*  The following is for DHCP and ARP packet, we use cck1M to tx these packets and let LPS awake some time */
+	if (pattrib->ether_type == ETH_P_IP) {
+		/*  The following is for DHCP and ARP packet, we use cck1M
+		    to tx these packets and let LPS awake some time */
 		/*  to prevent DHCP protocol fail */
-		u8 tmp[24];
-		_rtw_pktfile_read(&pktfile, &tmp[0], 24);
 		pattrib->dhcp_pkt = 0;
-		if (pktfile.pkt_len > 282) {/* MINIMUM_DHCP_PACKET_SIZE) { */
-			if (ETH_P_IP == pattrib->ether_type) {/*  IP header */
-				if (((tmp[21] == 68) && (tmp[23] == 67)) ||
-				    ((tmp[21] == 67) && (tmp[23] == 68))) {
+		/* MINIMUM_DHCP_PACKET_SIZE) { */
+		if (pattrib->pktlen > 282 + 24) {
+			if (pattrib->ether_type == ETH_P_IP) {/*  IP header */
+				u8 *pframe = skb->data;
+				pframe += ETH_HLEN;
+
+				if ((pframe[21] == 68 && pframe[23] == 67) ||
+				    (pframe[21] == 67 && pframe[23] == 68)) {
 					/*  68 : UDP BOOTP client */
 					/*  67 : UDP BOOTP server */
-					RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("====================== update_attrib: get DHCP Packet\n"));
+					RT_TRACE(_module_rtl871x_xmit_c_,
+						 _drv_err_,
+						 ("======================"
+						  "update_attrib: get DHCP "
+						  "Packet\n"));
 					pattrib->dhcp_pkt = 1;
 				}
 			}
 		}
 	}
 
-	if ((pattrib->ether_type == 0x888e) || (pattrib->dhcp_pkt == 1))
+	if ((pattrib->ether_type == ETH_P_PAE) || (pattrib->dhcp_pkt == 1)) {
 		rtw_set_scan_deny(padapter, 3000);
+	}
 
 #ifdef CONFIG_LPS
 	/*  If EAPOL , ARP , OR DHCP packet, driver must be in active mode. */
-	if ((pattrib->ether_type == 0x0806) || (pattrib->ether_type == 0x888e) || (pattrib->dhcp_pkt == 1)) {
+	if ((pattrib->ether_type == ETH_P_ARP) ||
+	    (pattrib->ether_type == ETH_P_PAE) || (pattrib->dhcp_pkt == 1)) {
 		rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_SPECIAL_PACKET, 1);
 	}
 #endif
 
-	bmcast = IS_MCAST(pattrib->ra);
+	bmcast = is_multicast_ether_addr(pattrib->ra);
 
 	/*  get sta_info */
 	if (bmcast) {
 		psta = rtw_get_bcmc_stainfo(padapter);
 	} else {
 		psta = rtw_get_stainfo(pstapriv, pattrib->ra);
-		if (psta == NULL) { /*  if we cannot get psta => drrp the pkt */
-			RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:%pM\n", pattrib->ra));
-			#ifdef DBG_TX_DROP_FRAME
-			DBG_8192D("DBG_TX_DROP_FRAME %s get sta_info fail, ra:%pM\n", __func__, pattrib->ra);
-			#endif
+		if (psta == NULL) { /*  if we cannot get psta => drop the pkt */
+			RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_,
+				 ("\nupdate_attrib => get sta_info fail, ra:%pM\n", pattrib->ra));
 			res = _FAIL;
 			goto exit;
-		} else if ((check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) && (!(psta->state & _FW_LINKED))) {
+		} else if (check_fwstate(pmlmepriv, WIFI_AP_STATE) &&
+			   (!(psta->state & _FW_LINKED))) {
 			res = _FAIL;
 			goto exit;
 		}
@@ -518,44 +519,49 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 		pattrib->psta = psta;
 	} else {
 		/*  if we cannot get psta => drop the pkt */
-		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:%pM\n", pattrib->ra));
-		#ifdef DBG_TX_DROP_FRAME
-		DBG_8192D("DBG_TX_DROP_FRAME %s get sta_info fail, ra:%pM\n", __func__, pattrib->ra);
-		#endif
+		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_,
+			 ("\nupdate_attrib => get sta_info fail, ra:%pM\n", pattrib->ra));
 		res = _FAIL;
 		goto exit;
 	}
 
 	pattrib->ack_policy = 0;
 	/*  get ether_hdr_len */
+
+	/* pattrib->ether_type == 0x8100) ? (14 + 4): 14; vlan tag */
 	pattrib->pkt_hdrlen = ETH_HLEN;
 
-	pattrib->hdrlen = WLAN_HDR_A3_LEN;
+	pattrib->hdrlen = sizeof(struct ieee80211_hdr_3addr);
 	pattrib->subtype = WIFI_DATA_TYPE;
 	pattrib->priority = 0;
 
-	if (check_fwstate(pmlmepriv, WIFI_AP_STATE|WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE)) {
+	if (check_fwstate(pmlmepriv, WIFI_AP_STATE | WIFI_ADHOC_STATE |
+			  WIFI_ADHOC_MASTER_STATE)) {
 		if (psta->qos_option)
-			set_qos(&pktfile, pattrib);
+			set_qos(skb, pattrib);
 	} else {
-		if (pqospriv->qos_option) {
-			set_qos(&pktfile, pattrib);
+		if (psta->qos_option) {
+			set_qos(skb, pattrib);
 
-			if (pmlmepriv->acm_mask != 0)
-				pattrib->priority = qos_acm(pmlmepriv->acm_mask, pattrib->priority);
+			if (pmlmepriv->acm_mask != 0) {
+				pattrib->priority = qos_acm(pmlmepriv->acm_mask,
+							    pattrib->priority);
+			}
 		}
 	}
 
 	if (psta->ieee8021x_blocked == true) {
-		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("\n psta->ieee8021x_blocked == true\n"));
+		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_,
+			 ("\n psta->ieee8021x_blocked == true\n"));
 
 		pattrib->encrypt = 0;
 
-		if ((pattrib->ether_type != 0x888e) && (check_fwstate(pmlmepriv, WIFI_MP_STATE) == false)) {
-			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("\npsta->ieee8021x_blocked == true,  pattrib->ether_type(%.4x) != 0x888e\n", pattrib->ether_type));
-			#ifdef DBG_TX_DROP_FRAME
-			DBG_8192D("DBG_TX_DROP_FRAME %s psta->ieee8021x_blocked == true,  pattrib->ether_type(%.4x) != 0x888e\n", __func__, pattrib->ether_type);
-			#endif
+		if ((pattrib->ether_type != ETH_P_PAE) &&
+		    !check_fwstate(pmlmepriv, WIFI_MP_STATE)) {
+			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_,
+				 ("\npsta->ieee8021x_blocked == true,  "
+				  "pattrib->ether_type(%.4x) != 0x888e\n",
+				  pattrib->ether_type));
 			res = _FAIL;
 			goto exit;
 		}
@@ -566,11 +572,13 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 		case dot11AuthAlgrthm_Open:
 		case dot11AuthAlgrthm_Shared:
 		case dot11AuthAlgrthm_Auto:
-			pattrib->key_idx = (u8)psecuritypriv->dot11PrivacyKeyIndex;
+			pattrib->key_idx =
+				(u8)psecuritypriv->dot11PrivacyKeyIndex;
 			break;
 		case dot11AuthAlgrthm_8021X:
 			if (bmcast)
-				pattrib->key_idx = (u8)psecuritypriv->dot118021XGrpKeyid;
+				pattrib->key_idx =
+					(u8)psecuritypriv->dot118021XGrpKeyid;
 			else
 				pattrib->key_idx = 0;
 			break;
@@ -578,30 +586,35 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 			pattrib->key_idx = 0;
 			break;
 		}
+
 	}
+
 	switch (pattrib->encrypt) {
 	case _WEP40_:
 	case _WEP104_:
-		pattrib->iv_len = 4;
-		pattrib->icv_len = 4;
+		pattrib->iv_len = IEEE80211_WEP_IV_LEN;
+		pattrib->icv_len = IEEE80211_WEP_ICV_LEN;
 		break;
-	case _TKIP_:
-		pattrib->iv_len = 8;
-		pattrib->icv_len = 4;
 
-		if (padapter->securitypriv.busetkipkey == _FAIL) {
-			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("\npadapter->securitypriv.busetkipkey(%d) == _FAIL drop packet\n", padapter->securitypriv.busetkipkey));
-			#ifdef DBG_TX_DROP_FRAME
-			DBG_8192D("DBG_TX_DROP_FRAME %s padapter->securitypriv.busetkipkey(%d) == _FAIL drop packet\n", __func__, padapter->securitypriv.busetkipkey);
-			#endif
+	case _TKIP_:
+		pattrib->iv_len = IEEE80211_TKIP_IV_LEN;
+		pattrib->icv_len = IEEE80211_TKIP_ICV_LEN;
+
+		if (!padapter->securitypriv.busetkipkey) {
+			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_,
+				 ("\npadapter->securitypriv.busetkip"
+				  "key(%d) == false drop packet\n",
+				  padapter->securitypriv.busetkipkey));
 			res = _FAIL;
 			goto exit;
 		}
 		break;
 	case _AES_:
-		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("\n pattrib->encrypt =%d  (_AES_)\n", pattrib->encrypt));
-		pattrib->iv_len = 8;
-		pattrib->icv_len = 8;
+		RT_TRACE(_module_rtl871x_xmit_c_, _drv_info_,
+			 ("pattrib->encrypt =%d (WLAN_CIPHER_SUITE_CCMP)\n",
+			  pattrib->encrypt));
+		pattrib->iv_len = IEEE80211_CCMP_HDR_LEN;
+		pattrib->icv_len = IEEE80211_CCMP_MIC_LEN;
 		break;
 	default:
 		pattrib->iv_len = 0;
@@ -610,32 +623,28 @@ static s32 update_attrib(struct rtw_adapter *padapter, struct sk_buff *pkt, stru
 	}
 
 	RT_TRACE(_module_rtl871x_xmit_c_, _drv_info_,
-		 ("update_attrib: encrypt =%d  securitypriv.sw_encrypt =%d\n",
-		  pattrib->encrypt, padapter->securitypriv.sw_encrypt));
+		 ("update_attrib: encrypt =%d\n", pattrib->encrypt));
 
-	if (pattrib->encrypt &&
-	    ((padapter->securitypriv.sw_encrypt == true) ||
-	    (psecuritypriv->hw_decrypted == false))) {
+	if (pattrib->encrypt && !psecuritypriv->hw_decrypted) {
 		pattrib->bswenc = true;
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_,
-			 ("update_attrib: encrypt =%d securitypriv.hw_decrypted =%d bswenc = true\n",
-			  pattrib->encrypt, padapter->securitypriv.sw_encrypt));
+			 ("update_attrib: encrypt =%d bswenc = true\n",
+			  pattrib->encrypt));
 	} else {
 		pattrib->bswenc = false;
-		RT_TRACE(_module_rtl871x_xmit_c_, _drv_info_, ("update_attrib: bswenc = false\n"));
+		RT_TRACE(_module_rtl871x_xmit_c_, _drv_info_,
+			 ("update_attrib: bswenc = false\n"));
 	}
-
 #ifdef CONFIG_CONCURRENT_MODE
 	if ((pattrib->encrypt && bmcast) || (pattrib->encrypt == _WEP40_) || (pattrib->encrypt == _WEP104_))
 		pattrib->bswenc = true;/* force using sw enc. */
 #endif
 
-	rtw_set_tx_chksum_offload(pkt, pattrib);
+	rtw_set_tx_chksum_offload(skb, pattrib);
 
 	update_attrib_phy_info(pattrib, psta);
 
 exit:
-
 	return res;
 }
 
@@ -988,26 +997,21 @@ This sub-routine will perform all the following:
 6. apply sw-encrypt, if necessary.
 
 */
-s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, struct xmit_frame *pxmitframe)
+s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *skb,
+			   struct xmit_frame *pxmitframe)
 {
+	struct sta_info *psta;
+	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
+	struct pkt_attrib *pattrib = &pxmitframe->attrib;
+	struct ieee80211_hdr *hdr;
 	struct pkt_file pktfile;
-
 	s32 frg_inx, frg_len, mpdu_len, llc_sz, mem_sz;
-
-	SIZE_PTR addr;
-
 	u8 *pframe, *mem_start;
-
-	struct sta_info		*psta;
-	/* struct sta_priv		*pstapriv = &padapter->stapriv; */
-	/* struct mlme_priv	*pmlmepriv = &padapter->mlmepriv; */
-	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
-
-	struct pkt_attrib	*pattrib = &pxmitframe->attrib;
-
+	u8 hw_hdr_offset;
 	u8 *pbuf_start;
-
-	s32 bmcst = IS_MCAST(pattrib->ra);
+	u8 *pdata = skb->data;
+	int data_len = skb->len;
+	s32 bmcst = is_multicast_ether_addr(pattrib->ra);
 	s32 res = _SUCCESS;
 
 	if (pattrib->psta)
@@ -1015,10 +1019,10 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, st
 	else
 		psta = rtw_get_stainfo(&padapter->stapriv, pattrib->ra);
 
-	if (psta == NULL)
+	if (!psta)
 		return _FAIL;
 
-	if (pxmitframe->buf_addr == NULL)
+	if (!pxmitframe->buf_addr)
 		return _FAIL;
 
 	pbuf_start = pxmitframe->buf_addr;
@@ -1031,8 +1035,8 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, st
 		goto exit;
 	}
 
-	_rtw_open_pktfile(pkt, &pktfile);
-	_rtw_pktfile_read(&pktfile, NULL, pattrib->pkt_hdrlen);
+	pdata += pattrib->pkt_hdrlen;
+	data_len -= pattrib->pkt_hdrlen;
 
 	frg_inx = 0;
 	frg_len = pxmitpriv->frag_len - 4;/* 2346-4 = 2342 */
@@ -1044,18 +1048,18 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, st
 
 		pframe = mem_start;
 
-		SetMFrag(mem_start);
+		hdr = (struct ieee80211_hdr *)mem_start;
 
 		pframe += pattrib->hdrlen;
 		mpdu_len -= pattrib->hdrlen;
 
 		/* adding icv, if necessary... */
 		if (pattrib->iv_len) {
-			if (psta != NULL) {
+			if (psta) {
 				switch (pattrib->encrypt) {
 				case _WEP40_:
 				case _WEP104_:
-						WEP_IV(pattrib->iv, psta->dot11txpn, pattrib->key_idx);
+					WEP_IV(pattrib->iv, psta->dot11txpn, pattrib->key_idx);
 					break;
 				case _TKIP_:
 					if (bmcst)
@@ -1094,12 +1098,16 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, st
 
 		if (bmcst) {
 			/*  don't do fragment to broadcat/multicast packets */
-			mem_sz = _rtw_pktfile_read(&pktfile, pframe, pattrib->pktlen);
+			mem_sz = min_t(s32, data_len, pattrib->pktlen);
 		} else {
-			mem_sz = _rtw_pktfile_read(&pktfile, pframe, mpdu_len);
+			mem_sz = min_t(s32, data_len, mpdu_len);
 		}
 
+		memcpy(pframe, pdata, mem_sz);
+
 		pframe += mem_sz;
+		pdata += mem_sz;
+		data_len -= mem_sz;
 
 		if ((pattrib->icv_len > 0) && (pattrib->bswenc)) {
 			memcpy(pframe, pattrib->icv, pattrib->icv_len);
@@ -1108,23 +1116,23 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, st
 
 		frg_inx++;
 
-		if (bmcst || (rtw_endofpktfile(&pktfile) == true)) {
+		if (bmcst || data_len <= 0) {
 			pattrib->nr_frags = frg_inx;
 
 			pattrib->last_txcmdsz = pattrib->hdrlen + pattrib->iv_len + ((pattrib->nr_frags == 1) ? llc_sz : 0) +
 					((pattrib->bswenc) ? pattrib->icv_len : 0) + mem_sz;
 
-			ClearMFrag(mem_start);
+			hdr->frame_control &=
+				~cpu_to_le16(IEEE80211_FCTL_MOREFRAGS);
 
 			break;
 		} else {
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("%s: There're still something in packet!\n", __func__));
 		}
+		hdr->frame_control |= cpu_to_le16(IEEE80211_FCTL_MOREFRAGS);
 
-		addr = (SIZE_PTR)(pframe);
-
-		mem_start = (unsigned char *)RND4(addr) + TXDESC_OFFSET;
-		memcpy(mem_start, pbuf_start + TXDESC_OFFSET, pattrib->hdrlen);
+		mem_start = PTR_ALIGN(pframe, 4) + hw_hdr_offset;
+		memcpy(mem_start, pbuf_start + hw_hdr_offset, pattrib->hdrlen);
 	}
 
 	if (xmitframe_addmic(padapter, pxmitframe) == _FAIL) {
@@ -1139,9 +1147,7 @@ s32 rtw_xmitframe_coalesce(struct rtw_adapter *padapter, struct sk_buff *pkt, st
 		update_attrib_vcs_info(padapter, pxmitframe);
 	else
 		pattrib->vcs_mode = NONE_VCS;
-
 exit:
-
 	return res;
 }
 

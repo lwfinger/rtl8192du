@@ -43,22 +43,6 @@ void _rtw_open_pktfile (struct sk_buff *pktptr, struct pkt_file *pfile)
 
 }
 
-uint _rtw_pktfile_read (struct pkt_file *pfile, u8 *rmem, uint rlen)
-{
-	uint	len = 0;
-
-       len =  rtw_remainder_len(pfile);
-	len = (rlen > len)? len: rlen;
-
-       if (rmem)
-	  skb_copy_bits(pfile->pkt, pfile->buf_len-pfile->pkt_len, rmem, len);
-
-       pfile->cur_addr += len;
-       pfile->pkt_len -= len;
-
-	return len;
-}
-
 int rtw_endofpktfile(struct pkt_file *pfile)
 {
 

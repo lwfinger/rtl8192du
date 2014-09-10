@@ -1,0 +1,191 @@
+#!/bin/sh
+# Script to start/stop a hostapd-based access point
+#
+# Sample start call "control_ap start wlan0 eth0 encrypt"
+# Stop with "control_ap stop"
+#
+
+ENCRYPT=$4
+case "$1" in
+start)
+	if [ $# -le 2 ]
+	then
+	  echo "Usage: $0 start AP_iface NET_iface <encrypt>"
+	  echo "       Optional encrypt is wpa, wpa2, wep, or none. If not given, wpa2 is assumed"
+	  exit 1
+	fi
+	if [ $# -eq 3 ]
+	then
+	  ENCRYPT="wpa2"
+	fi
+;;
+stop)
+	if [ $# -ne 1 ]
+	then
+	  echo "Usage: $0 stop"
+	  exit 1
+	fi
+;;
+*)
+        echo "Usage:"
+	echo "$0 start AP-iface net_iface <encrypt>"
+	echo "or"
+	echo "$0 stop"
+        exit 1
+        ;;
+esac
+
+# Symbols for needed programs
+
+IPTABLES=/usr/sbin/iptables
+IFCONFIG=/sbin/ifconfig
+DHCPD=/usr/sbin/dhcpd
+#HOSTAPD=/usr/local/bin/hostapd
+HOSTAPD=/home/finger/hostapd-0.8/hostapd/hostapd
+OPT=-ddK
+
+# Symbols for AP and external interfaces
+
+NET_AP=$2
+NET_EXT=$3
+
+# First 3 octets of IP address for the AP
+
+AP_ADDR=192.168.0
+
+# IP address for nameserver
+
+NAME_SERVER=8.8.8.8
+
+# AP Channel, SSID, Encryption method,  and Encryption secret
+
+AP_CHANNEL=3
+AP_SSID=test
+WPA_SECRET=TheSecret
+WEP_SECRET=123456789a
+
+case "$1" in
+start)
+        echo "Starting AP mode for $NET_AP at address $AP_ADDR"
+        # Disable packet forwarding
+        echo 0 > /proc/sys/net/ipv4/ip_forward
+        # Stop any existing hostapd and dhcpd daemons
+        killproc hostapd
+        killproc dhcpd
+        #Set up forwarding
+        $IPTABLES -t nat -A POSTROUTING -o $NET_EXT -j MASQUERADE
+        $IPTABLES -A FORWARD -i $NET_EXT -o $NET_AP -m state \
+		--state RELATED,ESTABLISHED -j ACCEPT
+        $IPTABLES -A FORWARD -i $NET_AP -o $NET_EXT -j ACCEPT
+        # Enable packet forwarding
+        echo 1 > /proc/sys/net/ipv4/ip_forward
+        # Get the AP interface in the right state
+        $IFCONFIG $NET_AP down
+        $IFCONFIG $NET_AP up
+        $IFCONFIG $NET_AP $AP_ADDR.1
+        # dhcpd needs to have a leases file available - create it if needed
+        if [ ! -f /var/lib/dhcp/db/dhcpd.leases ]; then
+                touch /var/lib/dhcp/db/dhcpd.leases
+        fi
+	# Write the DHCP server configuration file
+	echo "option domain-name-servers $NAME_SERVER;" > ~/dhcpd.conf
+	echo "default-lease-time 600;" >> ~/dhcpd.conf
+	echo "max-lease-time 7200;" >> ~/dhcpd.conf
+	echo "ddns-update-style none; ddns-updates off;" >> ~/dhcpd.conf
+	echo "subnet $AP_ADDR.0 netmask 255.255.255.0 {" >> ~/dhcpd.conf
+	echo "        range $AP_ADDR.200 $AP_ADDR.229;" >> ~/dhcpd.conf
+	echo "        option subnet-mask 255.255.255.0;" >> ~/dhcpd.conf
+	echo "        option broadcast-address $AP_ADDR.255;" >> ~/dhcpd.conf
+	echo "        option routers $AP_ADDR.1;" >> ~/dhcpd.conf
+	echo "}" >> ~/dhcpd.conf
+        $DHCPD -cf ~/dhcpd.conf $NET_AP
+	# Write the hostapd configuration file
+	echo "interface=$NET_AP" > ~/hostapd.conf
+	echo "driver=nl80211" >> ~/hostapd.conf 
+	echo "hw_mode=g" >> ~/hostapd.conf 
+	echo "channel=$AP_CHANNEL" >> ~/hostapd.conf 
+	case "$ENCRYPT" in
+	"wpa")
+		echo "Setting up wpa"
+		echo "wpa=1" >> ~/hostapd.conf 
+		echo "wpa_key_mgmt=WPA-PSK" >> ~/hostapd.conf 
+		echo "wpa_pairwise=TKIP" >> ~/hostapd.conf 
+		echo "wpa_passphrase=$WPA_SECRET" >> ~/hostapd.conf 
+		echo "ssid=$AP_SSID-wpa" >> ~/hostapd.conf 
+		;;
+	"wpa2")
+		echo "Setting up wpa2"
+		echo "wpa=2" >> ~/hostapd.conf 
+#		echo "wpa_key_mgmt=WPA-PSK" >> ~/hostapd.conf 
+		echo "wpa_pairwise=CCMP" >> ~/hostapd.conf 
+		echo "rsn_pairwise=CCMP" >> ~/hostapd.conf
+		echo "wpa_passphrase=$WPA_SECRET" >> ~/hostapd.conf 
+		echo "ssid=$AP_SSID-wpa2" >> ~/hostapd.conf 
+		;;
+	"wep")
+		echo "Setting up wep"
+		echo "wep_default_key=0" >> ~/hostapd.conf 
+		echo "wep_key0=$WEP_SECRET" >> ~/hostapd.conf
+		echo "ssid=$AP_SSID-wep" >> ~/hostapd.conf 
+		;;
+	"none")
+		echo "No encryption"
+		echo "ssid=$AP_SSID" >> ~/hostapd.conf 
+		;; 
+	*)
+		echo "Improper value for encryption"
+		exit 1
+		;;
+	esac
+#	echo "ssid=$AP_SSID" >> ~/hostapd.conf 
+	echo "beacon_int=100" >> ~/hostapd.conf
+	echo "dtim_period=2" >> ~/hostapd.conf
+	echo "max_num_sta=20" >> ~/hostapd.conf
+	echo "rts_threshold=2347" >> ~/hostapd.conf
+	echo "fragm_threshold=2346" >> ~/hostapd.conf
+	echo "preamble=1" >> ~/hostapd.conf
+	echo "macaddr_acl=0" >> ~/hostapd.conf
+	echo "auth_algs=1" >> ~/hostapd.conf
+	echo "ignore_broadcast_ssid=0" >> ~/hostapd.conf
+	echo "wmm_enabled=1" >> ~/hostapd.conf
+	echo "wmm_ac_bk_cwmin=4" >> ~/hostapd.conf
+	echo "wmm_ac_bk_cwmax=10" >> ~/hostapd.conf
+	echo "wmm_ac_bk_aifs=7" >> ~/hostapd.conf
+	echo "wmm_ac_bk_txop_limit=0" >> ~/hostapd.conf
+	echo "wmm_ac_bk_acm=0" >> ~/hostapd.conf
+	echo "wmm_ac_be_aifs=3" >> ~/hostapd.conf
+	echo "wmm_ac_be_cwmin=4" >> ~/hostapd.conf
+	echo "wmm_ac_be_cwmax=10" >> ~/hostapd.conf
+	echo "wmm_ac_be_txop_limit=0" >> ~/hostapd.conf
+	echo "wmm_ac_be_acm=0" >> ~/hostapd.conf
+	echo "wmm_ac_vi_aifs=2" >> ~/hostapd.conf
+	echo "wmm_ac_vi_cwmin=3" >> ~/hostapd.conf
+	echo "wmm_ac_vi_cwmax=4" >> ~/hostapd.conf
+	echo "wmm_ac_vi_txop_limit=94" >> ~/hostapd.conf
+	echo "wmm_ac_vi_acm=0" >> ~/hostapd.conf
+	echo "wmm_ac_vo_aifs=2" >> ~/hostapd.conf
+	echo "wmm_ac_vo_cwmin=2" >> ~/hostapd.conf
+	echo "wmm_ac_vo_cwmax=3" >> ~/hostapd.conf
+	echo "wmm_ac_vo_txop_limit=47" >> ~/hostapd.conf
+	echo "wmm_ac_vo_acm=0" >> ~/hostapd.conf
+	echo "ieee80211n=1" >> ~/hostapd.conf
+	echo "ht_capab=[HT40+][SHORT-GI-40][DSSS_CCK-40]" >> ~/hostapd.conf
+	echo "logger_syslog=-1" >> ~/hostapd.conf
+	echo "logger_syslog_level=0" >> ~/hostapd.conf
+	echo "logger_stdout=-1" >> ~/hostapd.conf
+	echo "logger_stdout_level=0" >> ~/hostapd.conf
+	echo "ctrl_interface=/var/run/hostapd" >> ~/hostapd.conf
+	echo "ctrl_interface_group=0" >> ~/hostapd.conf
+        # Bring up hostapd
+        $HOSTAPD $OPT -B ~/hostapd.conf
+        ;;
+stop)
+        echo "Stopping AP mode"
+        # Stop hostapd and dhcpd daemons
+        killproc hostapd
+        killproc dhcpd
+	rm -f ~/hostapd.conf
+	rm -f ~/dhcpd.conf
+        ;;
+esac
+

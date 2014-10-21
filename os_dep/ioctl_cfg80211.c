@@ -1148,12 +1148,11 @@ static int cfg80211_rtw_set_default_key(struct wiphy *wiphy,
 	return 0;
 }
 
-static int cfg80211_rtw_get_station(struct wiphy *wiphy,
-				    struct net_device *ndev,
-				    u8 *mac, struct station_info *sinfo)
+static int cfg80211_rtw_get_station(struct wiphy *wiphy, struct net_device *ndev,
+				    const u8 *mac, struct station_info *sinfo)
 {
 	int ret = 0;
-	struct rtw_adapter *padapter = wiphy_to_adapter(wiphy);
+	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(ndev);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct sta_info *psta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -1166,7 +1165,7 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy,
 		goto exit;
 	}
 
-	psta = rtw_get_stainfo(pstapriv, mac);
+	psta = rtw_get_stainfo(pstapriv, (u8 *)mac);
 	if (psta == NULL) {
 		DBG_8192D("%s, sta_info is null\n", __func__);
 		ret = -ENOENT;
@@ -2195,7 +2194,7 @@ void rtw_cfg80211_indicate_sta_assoc(struct rtw_adapter *padapter, u8 *pmgmt_fra
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags, GFP_ATOMIC);
+	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags);
 }
 
 void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned char *da, unsigned short reason)
@@ -2242,7 +2241,7 @@ void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned c
 	pmgmt_frame = rtw_set_fixed_ie(pmgmt_frame, _RSON_CODE_ ,
 				       (unsigned char *)&le_reason, &frame_len);
 
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, mgmt_buf, frame_len, flags, GFP_ATOMIC);
+	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, mgmt_buf, frame_len, flags);
 }
 
 static int rtw_cfg80211_monitor_if_open(struct net_device *ndev)
@@ -2636,7 +2635,7 @@ static int cfg80211_rtw_stop_ap(struct wiphy *wiphy, struct net_device *ndev)
 }
 
 static int cfg80211_rtw_add_station(struct wiphy *wiphy, struct net_device *ndev,
-			       u8 *mac, struct station_parameters *params)
+			       const u8 *mac, struct station_parameters *params)
 {
 	DBG_8192D(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 
@@ -2644,7 +2643,7 @@ static int cfg80211_rtw_add_station(struct wiphy *wiphy, struct net_device *ndev
 }
 
 static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev,
-			       u8 *mac)
+			       const u8 *mac)
 {
 	int ret=0;
 	struct list_head *phead, *plist;
@@ -2720,7 +2719,7 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 }
 
 static int	cfg80211_rtw_change_station(struct wiphy *wiphy, struct net_device *ndev,
-				  u8 *mac, struct station_parameters *params)
+				  const u8 *mac, struct station_parameters *params)
 {
 	DBG_8192D(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 
@@ -2764,7 +2763,7 @@ void rtw_cfg80211_rx_action_p2p(struct rtw_adapter *padapter, u8 *pmgmt_frame, u
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags, GFP_ATOMIC);
+	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags);
 }
 
 void rtw_cfg80211_rx_p2p_action_public(struct rtw_adapter *padapter, u8 *pmgmt_frame, uint frame_len)
@@ -2785,7 +2784,7 @@ void rtw_cfg80211_rx_p2p_action_public(struct rtw_adapter *padapter, u8 *pmgmt_f
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags, GFP_ATOMIC);
+	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags);
 }
 
 void rtw_cfg80211_rx_action(struct rtw_adapter *adapter, u8 *frame, uint frame_len, const char*msg)
@@ -2810,7 +2809,7 @@ void rtw_cfg80211_rx_action(struct rtw_adapter *adapter, u8 *frame, uint frame_l
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-	cfg80211_rx_mgmt(adapter->rtw_wdev, freq, 0, frame, frame_len, flags, GFP_ATOMIC);
+	cfg80211_rx_mgmt(adapter->rtw_wdev, freq, 0, frame, frame_len, flags);
 }
 
 static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, int len)

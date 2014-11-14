@@ -18,8 +18,8 @@
 
 #include "hal_com.h"
 #include "rtl8192d_spec.h"
-#include "Hal8192DPhyReg.h"
-#include "Hal8192DPhyCfg.h"
+#include "hal8192dphyreg.h"
+#include "hal8192dphycfg.h"
 #include "rtl8192d_rf.h"
 #include "rtl8192d_dm.h"
 #include "rtl8192d_recv.h"
@@ -166,10 +166,10 @@ static u32 TargetChnl_2G[TARGET_CHNL_NUM_2G] = {	/*  channel 1~14 */
 };
 
 
-#include "Hal8192DUHWImg.h"
+#include "hal8192duhwimg.h"
 
 #ifdef CONFIG_WOWLAN
-	#include "Hal8192DUHWImg_wowlan.h"
+	#include "hal8192duhwimg_wowlan.h"
 #endif /* CONFIG_WOWLAN */
 	#define RTL819X_DEFAULT_RF_TYPE		RF_1T2R
 

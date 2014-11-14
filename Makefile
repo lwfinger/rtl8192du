@@ -60,7 +60,7 @@ _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/rtl$(MODULE_NAME)_led.o \
 			hal/rtl$(MODULE_NAME)_xmit.o \
 			hal/rtl$(MODULE_NAME)_recv.o \
-			hal/Hal8192DUHWImg.o
+			hal/hal8192duhwimg.o
 
 _HAL_INTFS_FILES += hal/$(HCI_NAME)_ops_linux.o
 

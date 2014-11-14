@@ -15,7 +15,7 @@
  ******************************************************************************/
 /*Created on  2011/11/11,  8: 8*/
 	
-#include <Hal8192DUHWImg.h>
+#include <hal8192duhwimg.h>
 	
 const u8 Rtl8192DUFwMainArray[Rtl8192DUMainArrayLength] = {
 	0x0,

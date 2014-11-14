@@ -53,7 +53,7 @@
 
 #include <hal_intf.h>
 #include <rtl8192d_hal.h>
-#include <Hal8192DPhyCfg.h>
+#include <hal8192dphycfg.h>
 
 /*---------------------------Define Local Constant---------------------------*/
 

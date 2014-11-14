@@ -498,8 +498,6 @@ int rtw_is_same_ibss(struct rtw_adapter *adapter, struct wlan_network *pnetwork)
 
 static inline int is_same_ess(struct wlan_bssid_ex *a, struct wlan_bssid_ex *b)
 {
-	/* RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("(%s,%d)(%s,%d)\n", */
-	/*              a->Ssid.Ssid,a->Ssid.SsidLength,b->Ssid.Ssid,b->Ssid.SsidLength)); */
 	return (a->Ssid.SsidLength == b->Ssid.SsidLength) &&
 		_rtw_memcmp(a->Ssid.Ssid, b->Ssid.Ssid,
 			    a->Ssid.SsidLength) == true;
@@ -517,7 +515,6 @@ int is_same_network(struct wlan_bssid_ex *src, struct wlan_bssid_ex *dst)
 	d_cap = le16_to_cpu(le_dcap);
 
 	return ((src->Ssid.SsidLength == dst->Ssid.SsidLength) &&
-		/*      (src->Configuration.DSConfig == dst->Configuration.DSConfig) && */
 		((_rtw_memcmp(src->MacAddress, dst->MacAddress, ETH_ALEN)) == true) &&
 		((_rtw_memcmp
 		  (src->Ssid.Ssid, dst->Ssid.Ssid,
@@ -2667,10 +2664,10 @@ unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
 				   u8 *out_ie, uint in_len, uint *pout_len,
 				   u8 channel)
 {
-	u32 ielen;
-	unsigned char *p;
+	u32 ielen, out_len;
+	unsigned char *p, *pframe;
 	struct rtw_ieee80211_ht_cap ht_capie;
-	unsigned char WMM_IE[] = { 0x00, 0x50, 0xf2, 0x02, 0x00, 0x01, 0x00 };
+	unsigned char WMM_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x00, 0x01, 0x00};
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct qos_priv *pqospriv = &pmlmepriv->qospriv;
 	struct ht_priv *phtpriv = &pmlmepriv->htpriv;
@@ -2682,8 +2679,16 @@ unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
 	p = rtw_get_ie(in_ie + 12, _HT_CAPABILITY_IE_, &ielen, in_len - 12);
 
 	if (p && ielen > 0) {
-		if (pqospriv->qos_option == 0)
+		if (pqospriv->qos_option == 0) {
+			out_len = *pout_len;
+			pframe =
+			    rtw_set_ie(out_ie + out_len, _VENDOR_SPECIFIC_IE_,
+				       _WMM_IE_Length_, WMM_IE, pout_len);
+
 			pqospriv->qos_option = 1;
+		}
+
+		out_len = *pout_len;
 
 		memset(&ht_capie, 0, sizeof(struct rtw_ieee80211_ht_cap));
 
@@ -2721,10 +2726,19 @@ unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
 			ht_capie.ampdu_params_info |=
 			    (IEEE80211_HT_CAP_AMPDU_DENSITY & 0x00);
 
+		pframe = rtw_set_ie(out_ie + out_len, _HT_CAPABILITY_IE_,
+				    sizeof(struct rtw_ieee80211_ht_cap),
+				    (unsigned char *)&ht_capie, pout_len);
 		phtpriv->ht_option = true;
 
 		p = rtw_get_ie(in_ie + 12, _HT_ADD_INFO_IE_, &ielen,
 			       in_len - 12);
+		if (p && (ielen == sizeof(struct ieee80211_ht_addt_info))) {
+			out_len = *pout_len;
+			pframe =
+			    rtw_set_ie(out_ie + out_len, _HT_ADD_INFO_IE_,
+				       ielen, p + 2, pout_len);
+		}
 	}
 	return phtpriv->ht_option;
 }

@@ -4240,7 +4240,9 @@ void issue_action_BA(struct rtw_adapter *adapt, unsigned char *raddr,
 					     (unsigned char *)(&status),
 					     &(pattrib->pktlen));
 
-			le_tmp = cpu_to_le16((pmlmeinfo->ADDBA_req.BA_para_set & 0x3f) | 0x1000);	/* 64 buffer size */
+			le_tmp = cpu_to_le16((pmlmeinfo->ADDBA_req.BA_para_set &
+					      0x3f) | 0x1000);/*64 buffer size*/
+			BA_para_set = le16_to_cpu(le_tmp);
 
 			if (pregpriv->ampdu_amsdu == 0)	/* disabled */
 				le_tmp = cpu_to_le16(BA_para_set & ~BIT(0));

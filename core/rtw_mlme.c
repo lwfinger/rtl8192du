@@ -2667,12 +2667,12 @@ unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
 	u32 ielen, out_len;
 	unsigned char *p, *pframe;
 	struct rtw_ieee80211_ht_cap ht_capie;
-	unsigned char WMM_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x00, 0x01, 0x00};
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct qos_priv *pqospriv = &pmlmepriv->qospriv;
 	struct ht_priv *phtpriv = &pmlmepriv->htpriv;
 	struct registry_priv *pregpriv = &padapter->registrypriv;
 	u8 cbw40_enable = 0;
+ 	unsigned char WMM_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x00, 0x01, 0x00};
 
 	phtpriv->ht_option = false;
 
@@ -2743,7 +2743,7 @@ unsigned int rtw_restructure_ht_ie(struct rtw_adapter *padapter, u8 *in_ie,
 	return phtpriv->ht_option;
 }
 
-/* the fucntion is > passive_level (in critical_section) */
+/* the function is > passive_level (in critical_section) */
 void rtw_update_ht_cap(struct rtw_adapter *padapter, u8 *pie, uint ie_len,
 		       u8 channel)
 {

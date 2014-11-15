@@ -43,7 +43,7 @@ static void _dynamic_check_timer_handlder (void *FunctionContext)
 }
 
 #ifdef CONFIG_SET_SCAN_DENY_TIMER
-void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
+static void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
 {
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
 	rtw_set_scan_deny_timer_hdl(adapter);

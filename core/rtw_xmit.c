@@ -809,7 +809,7 @@ s32 rtw_make_wlanhdr (struct rtw_adapter *padapter , u8 *hdr, struct pkt_attrib 
 	struct qos_priv *pqospriv = &pmlmepriv->qospriv;
 	u8 qos_option = false;
 	int res = _SUCCESS;
-	u16 *fctrl = &pwlanhdr->frame_ctl;
+	__le16 *fctrl = &pwlanhdr->frame_ctl;
 	struct sta_info *psta;
 	int bmcst = IS_MCAST(pattrib->ra);
 

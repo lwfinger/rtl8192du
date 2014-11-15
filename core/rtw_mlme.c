@@ -1139,11 +1139,11 @@ void rtw_free_assoc_resources(struct rtw_adapter *adapter,
 	    (adapter->stapriv.asoc_sta_count == 1)))
 		rtw_free_network_nolock(pmlmepriv, pwlan);
 
+	/* Sparse warning ifor context imbalance is OK here */
 	if (lock_scanned_queue)
 		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 
 	pmlmepriv->key_mask = 0;
-
 }
 
 /*

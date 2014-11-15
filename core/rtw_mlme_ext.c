@@ -2481,7 +2481,7 @@ void issue_beacon(struct rtw_adapter *adapt)
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	unsigned int rate_len;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
@@ -2656,7 +2656,7 @@ void issue_probersp(struct rtw_adapter *adapt, unsigned char *da,
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	unsigned char *mac, *bssid;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 #if defined (CONFIG_92D_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
@@ -2881,7 +2881,7 @@ static int _issue_probereq(struct rtw_adapter *adapt,
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	unsigned char *mac;
 	unsigned char bssrate[NUMRATES];
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
@@ -3041,7 +3041,7 @@ void issue_auth(struct rtw_adapter *adapt, struct sta_info *psta,
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	unsigned int val32;
 	unsigned short val16;
 	int use_shared_key = 0;
@@ -3210,7 +3210,7 @@ void issue_asocrsp(struct rtw_adapter *adapt, unsigned short status,
 	struct pkt_attrib *pattrib;
 	unsigned char *pbuf, *pframe;
 	unsigned short val;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
@@ -3367,7 +3367,7 @@ void issue_assocreq(struct rtw_adapter *adapt)
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe, *p;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	unsigned short val16;
 	__le16 le_tmp;
 	unsigned int i, j, ie_len, index = 0;
@@ -3685,7 +3685,7 @@ static int _issue_nulldata(struct rtw_adapter *adapt, unsigned char *da,
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	struct xmit_priv *pxmitpriv;
 	struct mlme_ext_priv *pmlmeext;
 	struct mlme_ext_info *pmlmeinfo;
@@ -3815,7 +3815,8 @@ static int _issue_qos_nulldata(struct rtw_adapter *adapt, unsigned char *da,
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl, *qc;
+	__le16 *fctrl;
+	u16 *qc;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -3948,7 +3949,7 @@ static int _issue_deauth(struct rtw_adapter *adapt, unsigned char *da,
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -4064,7 +4065,7 @@ void issue_action_spct_ch_switch(struct rtw_adapter *adapt, u8 *ra,
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
@@ -4136,7 +4137,7 @@ void issue_action_BA(struct rtw_adapter *adapt, unsigned char *raddr,
 	struct pkt_attrib *pattrib;
 	u8 *pframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	u16 *fctrl;
+	__le16 *fctrl;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -4240,9 +4241,9 @@ void issue_action_BA(struct rtw_adapter *adapt, unsigned char *raddr,
 					     (unsigned char *)(&status),
 					     &(pattrib->pktlen));
 
-			le_tmp = cpu_to_le16((pmlmeinfo->ADDBA_req.BA_para_set &
-					      0x3f) | 0x1000);/*64 buffer size*/
-			BA_para_set = le16_to_cpu(le_tmp);
+			BA_para_set =
+				(le16_to_cpu(pmlmeinfo->ADDBA_req.BA_para_set) &
+				 0x3f) | 0x1000;/*64 buffer size*/
 
 			if (pregpriv->ampdu_amsdu == 0)	/* disabled */
 				le_tmp = cpu_to_le16(BA_para_set & ~BIT(0));
@@ -4288,7 +4289,7 @@ static void issue_action_BSSCoexistPacket(struct rtw_adapter *adapt)
 	struct pkt_attrib *pattrib;
 	unsigned char *pframe;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	struct wlan_network *pnetwork = NULL;
 	struct xmit_priv *pxmitpriv = &(adapt->xmitpriv);
 	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;

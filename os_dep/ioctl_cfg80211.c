@@ -126,35 +126,35 @@ static struct ieee80211_channel rtw_5ghz_a_channels[] = {
 	CHAN5G(216, 0),
 };
 
-void rtw_2g_channels_init(struct ieee80211_channel *channels)
+static void rtw_2g_channels_init(struct ieee80211_channel *channels)
 {
 	memcpy((void*)channels, (void*)rtw_2ghz_channels,
 		sizeof(struct ieee80211_channel)*RTW_2G_CHANNELS_NUM
 	);
 }
 
-void rtw_5g_channels_init(struct ieee80211_channel *channels)
+static void rtw_5g_channels_init(struct ieee80211_channel *channels)
 {
 	memcpy((void*)channels, (void*)rtw_5ghz_a_channels,
 		sizeof(struct ieee80211_channel)*RTW_5G_CHANNELS_NUM
 	);
 }
 
-void rtw_2g_rates_init(struct ieee80211_rate *rates)
+static void rtw_2g_rates_init(struct ieee80211_rate *rates)
 {
 	memcpy(rates, rtw_g_rates,
 		sizeof(struct ieee80211_rate)*RTW_G_RATES_NUM
 	);
 }
 
-void rtw_5g_rates_init(struct ieee80211_rate *rates)
+static void rtw_5g_rates_init(struct ieee80211_rate *rates)
 {
 	memcpy(rates, rtw_a_rates,
 		sizeof(struct ieee80211_rate)*RTW_A_RATES_NUM
 	);
 }
 
-struct ieee80211_supported_band *rtw_spt_band_alloc(
+static struct ieee80211_supported_band *rtw_spt_band_alloc(
 	enum ieee80211_band band
 	)
 {
@@ -208,7 +208,7 @@ exit:
 	return spt_band;
 }
 
-void rtw_spt_band_free(struct ieee80211_supported_band *spt_band)
+static void rtw_spt_band_free(struct ieee80211_supported_band *spt_band)
 {
 	u32 size;
 
@@ -314,15 +314,13 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	u16 channel;
 	u32 freq;
 	u64 notify_timestamp;
-	u16 notify_capability;
-	u16 notify_interval;
 	u8 *notify_ie;
 	size_t notify_ielen;
 	s32 notify_signal;
 	u8 buf[MAX_BSSINFO_LEN], *pbuf;
 	size_t len,bssinf_len=0;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 	struct wireless_dev *wdev = padapter->rtw_wdev;
@@ -344,9 +342,6 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	notify_channel = ieee80211_get_channel(wiphy, freq);
 
 	notify_timestamp = jiffies_to_msecs(jiffies)*1000; /* uSec */
-
-	notify_interval = le16_to_cpu(*(u16*)rtw_get_beacon_interval_from_ie(pnetwork->network.IEs));
-	notify_capability = le16_to_cpu(*(u16*)rtw_get_capability_from_ie(pnetwork->network.IEs));
 
 	notify_ie = pnetwork->network.IEs+_FIXED_IE_LENGTH_;
 	notify_ielen = pnetwork->network.IELength-_FIXED_IE_LENGTH_;
@@ -1206,16 +1201,13 @@ static int cfg80211_rtw_set_default_key(struct wiphy *wiphy,
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(ndev);
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 
-		DBG_8192D(FUNC_NDEV_FMT" key_index=%d"
-		#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
-		", unicast=%d, multicast=%d"
-		#endif
-		".\n", FUNC_NDEV_ARG(ndev), key_index
-		#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
-		, unicast, multicast
-		#endif
-		);
-
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
+	DBG_8192D(FUNC_NDEV_FMT" key_index=%d, unicast=%d, multicast=%d\n",
+		  FUNC_NDEV_ARG(ndev), key_index, unicast, multicast);
+#else
+	DBG_8192D(FUNC_NDEV_FMT" key_index=%d\n", FUNC_NDEV_ARG(ndev),
+		  key_index);
+#endif
 	if ((key_index < WEP_KEYS) && ((psecuritypriv->dot11PrivacyAlgrthm == _WEP40_) || (psecuritypriv->dot11PrivacyAlgrthm == _WEP104_))) /* set wep default key */
 	{
 		psecuritypriv->ndisencryptstatus = NDIS802_11ENCRYPTION1ENABLED;
@@ -2455,7 +2447,7 @@ void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned c
 	u8 *pmgmt_frame;
 	uint frame_len;
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	u8 mgmt_buf[128] = {0};
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -2492,7 +2484,7 @@ void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned c
 	pmgmt_frame += sizeof(struct rtw_ieee80211_hdr_3addr);
 	frame_len = sizeof(struct rtw_ieee80211_hdr_3addr);
 
-	reason = cpu_to_le16(reason);
+//	reason = cpu_to_le16(reason);
 	pmgmt_frame = rtw_set_fixed_ie(pmgmt_frame, _RSON_CODE_ , (unsigned char *)&reason, &frame_len);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 18, 0))
@@ -2569,9 +2561,9 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 		/* Check if this ia a Wireless Distribution System (WDS) frame
 		 * which has 4 MAC addresses
 		 */
-		if (dot11_hdr->frame_control & 0x0080)
+		if (frame_ctl & 0x0080)
 			qos_len = 2;
-		if ((dot11_hdr->frame_control & 0x0300) == 0x0300)
+		if ((frame_ctl & 0x0300) == 0x0300)
 			dot11_hdr_len += 6;
 
 		memcpy(dst_mac_addr, dot11_hdr->addr1, sizeof(dst_mac_addr));
@@ -2611,7 +2603,7 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 
 		if (rtw_action_frame_parse(buf, len, &category, &action) == false) {
 			DBG_8192D(FUNC_NDEV_FMT" frame_control:0x%x\n", FUNC_NDEV_ARG(ndev),
-				le16_to_cpu(((struct rtw_ieee80211_hdr_3addr *)buf)->frame_ctl));
+				  ((struct rtw_ieee80211_hdr_3addr *)buf)->frame_ctl);
 			goto fail;
 		}
 
@@ -3486,10 +3478,7 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 			/* add PUSH_BUTTON config_method by driver self in wpsie of probe_resp at GO Mode */
 			if ((puconfig_method = (u16*)rtw_get_wps_attr_content(wps_ie, wps_ielen, WPS_ATTR_CONF_METHOD , NULL, &attr_contentlen)) != NULL)
 			{
-				uconfig_method = WPS_CM_PUSH_BUTTON;
-				uconfig_method = cpu_to_be16(uconfig_method);
-
-				*puconfig_method |= uconfig_method;
+				*puconfig_method |= WPS_CM_PUSH_BUTTON;
 			}
 
 			memcpy(pmlmepriv->wps_probe_resp_ie, wps_ie, wps_ielen);
@@ -3700,7 +3689,7 @@ static void rtw_cfg80211_init_ht_capab(struct ieee80211_sta_ht_cap *ht_cap, enum
 		ht_cap->mcs.rx_mask[1] = 0x00;
 		ht_cap->mcs.rx_mask[4] = 0x01;
 
-		ht_cap->mcs.rx_highest = MAX_BIT_RATE_40MHZ_MCS7;
+		ht_cap->mcs.rx_highest = cpu_to_le16(MAX_BIT_RATE_40MHZ_MCS7);
 	}
 	else if ((rf_type == RF_1T2R) || (rf_type==RF_2T2R))
 	{
@@ -3708,7 +3697,7 @@ static void rtw_cfg80211_init_ht_capab(struct ieee80211_sta_ht_cap *ht_cap, enum
 		ht_cap->mcs.rx_mask[1] = 0xFF;
 		ht_cap->mcs.rx_mask[4] = 0x01;
 
-		ht_cap->mcs.rx_highest = MAX_BIT_RATE_40MHZ_MCS15;
+		ht_cap->mcs.rx_highest = cpu_to_le16(MAX_BIT_RATE_40MHZ_MCS15);
 	}
 	else
 	{

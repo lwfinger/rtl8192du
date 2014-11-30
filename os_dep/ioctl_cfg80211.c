@@ -3550,8 +3550,18 @@ int rtw_cfg80211_set_mgnt_wpsp2pie(struct net_device *net, char *buf, int len,
 	return ret;
 }
 
+        int     (*mgmt_tx)(struct wiphy *wiphy, struct wireless_dev *wdev,
+                          struct ieee80211_channel *chan, bool offchan,
+                          unsigned int wait, const u8 *buf, size_t len,
+                          bool no_cck, bool dont_wait_for_ack, u64 *cookie);
 static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy, struct wireless_dev *wdev,
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 14, 0))
+				struct ieee80211_channel *chan, bool offchan,
+				unsigned int wait, const u8 *buf, size_t len,
+				bool no_cck, bool dont_wait_for_ack,
+#else
 				struct cfg80211_mgmt_tx_params *params,
+#endif
 				u64 *cookie)
 {
 	struct rtw_adapter *padapter =
@@ -3563,9 +3573,11 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy, struct wireless_dev *wdev,
 	bool ack = true;
 	u8 category, action;
 	unsigned long start = jiffies;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0))
 	size_t len = params->len;
 	struct ieee80211_channel *chan = params->chan;
 	const u8 *buf = params->buf;
+#endif
 	struct ieee80211_mgmt *hdr = (struct ieee80211_mgmt *)buf;
 	u8 tx_ch = (u8) ieee80211_frequency_to_channel(chan->center_freq);
 

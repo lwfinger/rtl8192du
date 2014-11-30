@@ -723,6 +723,30 @@ struct ADDBA_request {
 	__le16	BA_starting_seqctrl;
 }  __attribute__ ((packed));
 
+ /**
+ * struct cfg80211_mgmt_tx_params - mgmt tx parameters
+ *
+ * This structure provides information needed to transmit a mgmt frame
+ *
+ * @chan: channel to use
+ * @offchan: indicates wether off channel operation is required
+ * @wait: duration for ROC
+ * @buf: buffer to transmit
+ * @len: buffer length
+ * @no_cck: don't use cck rates for this frame
+ * @dont_wait_for_ack: tells the low level not to wait for an ack
+ */
+#ifndef cfg80211_mgmt_tx_params
+struct cfg80211_mgmt_tx_params {
+       struct ieee80211_channel *chan;
+       bool offchan;
+       unsigned int wait;
+       const u8 *buf;
+       size_t len;
+       bool no_cck;
+       bool dont_wait_for_ack;
+};
+#endif
 
 /* 802.11n HT capabilities masks */
 #define IEEE80211_HT_CAP_SUP_WIDTH		0x0002

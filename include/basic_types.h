@@ -170,4 +170,18 @@ value to host byte ordering.*/
 #define	N_BYTE_ALIGMENT(__value, __aligment) ((__aligment == 1) ? \
 	(__value) : (((__value + __aligment - 1) / __aligment) * __aligment))
 
+#ifndef ether_addr_copy
+#define ether_addr_copy(_dst, _src) memcpy(_dst, _src, ETH_ALEN)
+#endif
+
+#ifndef IEEE80211_WEP_IV_LEN
+#define IEEE80211_WEP_IV_LEN		4
+#define IEEE80211_WEP_ICV_LEN		4
+#define IEEE80211_CCMP_HDR_LEN		8
+#define IEEE80211_CCMP_MIC_LEN		8
+#define IEEE80211_TKIP_ICV_LEN		4
+#define IEEE80211_TKIP_IV_LEN		8
+#endif
+
+
 #endif /* __BASIC_TYPES_H__ */

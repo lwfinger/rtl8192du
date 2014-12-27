@@ -2400,9 +2400,7 @@ void rtw_cfg80211_indicate_sta_assoc(struct rtw_adapter *padapter, u8 *pmgmt_fra
 	struct wireless_dev *pwdev = padapter->rtw_wdev;
 	struct mlme_ext_priv *pmlmeext = &(padapter->mlmeextpriv);
 	struct net_device *ndev = padapter->pnetdev;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
 	u32 flags = 0;
-#endif
 
 	DBG_8192D("%s(padapter=%p,%s)\n", __func__, padapter, ndev->name);
 
@@ -2428,15 +2426,7 @@ void rtw_cfg80211_indicate_sta_assoc(struct rtw_adapter *padapter, u8 *pmgmt_fra
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 18, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags, GFP_ATOMIC);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
-#else
-	cfg80211_rx_mgmt(ndev, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
-#endif
+	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, flags);
 #endif /* defined(RTW_USE_CFG80211_STA_EVENT) */
 }
 
@@ -2452,9 +2442,7 @@ void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned c
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct net_device *ndev = padapter->pnetdev;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
 	u32 flags = 0;
-#endif
 
 	DBG_8192D("%s(padapter=%p,%s)\n", __func__, padapter, ndev->name);
 
@@ -2487,15 +2475,7 @@ void rtw_cfg80211_indicate_sta_disassoc(struct rtw_adapter *padapter, unsigned c
 //	reason = cpu_to_le16(reason);
 	pmgmt_frame = rtw_set_fixed_ie(pmgmt_frame, _RSON_CODE_ , (unsigned char *)&reason, &frame_len);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 18, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, mgmt_buf, frame_len, flags);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, mgmt_buf, frame_len, flags, GFP_ATOMIC);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, mgmt_buf, frame_len, GFP_ATOMIC);
-#else
-	cfg80211_rx_mgmt(ndev, freq, 0, mgmt_buf, frame_len, GFP_ATOMIC);
-#endif
+	rtw_cfg80211_rx_mgmt(padapter, freq, 0, mgmt_buf, frame_len, flags);
 #endif /* defined(RTW_USE_CFG80211_STA_EVENT) */
 }
 
@@ -3137,9 +3117,7 @@ void rtw_cfg80211_rx_action_p2p(struct rtw_adapter *padapter, u8 *pmgmt_frame, u
 	int channel;
 	struct mlme_ext_priv *pmlmeext = &(padapter->mlmeextpriv);
 	u8 category, action;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
 	u32 flags = 0;
-#endif
 
 	channel = rtw_get_oper_ch(padapter);
 
@@ -3153,15 +3131,7 @@ indicate:
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 18, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, flags, GFP_ATOMIC);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
-#else
-	cfg80211_rx_mgmt(padapter->pnetdev, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
-#endif
+	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, flags);
 }
 
 void rtw_cfg80211_rx_p2p_action_public(struct rtw_adapter *padapter, u8 *frame, uint frame_len)
@@ -3171,9 +3141,7 @@ void rtw_cfg80211_rx_p2p_action_public(struct rtw_adapter *padapter, u8 *frame, 
 	int channel;
 	struct mlme_ext_priv *pmlmeext = &(padapter->mlmeextpriv);
 	u8 category, action;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
 	u32 flags = 0;
-#endif
 
 	channel = rtw_get_oper_ch(padapter);
 
@@ -3187,15 +3155,7 @@ indicate:
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 18, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, frame, frame_len, flags);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, frame, frame_len, flags, GFP_ATOMIC);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0))
-	cfg80211_rx_mgmt(padapter->rtw_wdev, freq, 0, frame, frame_len, GFP_ATOMIC);
-#else
-	cfg80211_rx_mgmt(padapter->pnetdev, freq, 0, frame, frame_len, GFP_ATOMIC);
-#endif
+	rtw_cfg80211_rx_mgmt(padapter, freq, 0, frame, frame_len, flags);
 }
 
 void rtw_cfg80211_rx_action(struct rtw_adapter *adapter, u8 *frame, uint frame_len, const char*msg)
@@ -3205,9 +3165,7 @@ void rtw_cfg80211_rx_action(struct rtw_adapter *adapter, u8 *frame, uint frame_l
 	struct mlme_ext_priv *pmlmeext = &(adapter->mlmeextpriv);
 	struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(adapter->rtw_wdev);
 	u8 category, action;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
 	u32 flags = 0;
-#endif
 
 	channel = rtw_get_oper_ch(adapter);
 
@@ -3224,15 +3182,7 @@ void rtw_cfg80211_rx_action(struct rtw_adapter *adapter, u8 *frame, uint frame_l
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 18, 0))
-	cfg80211_rx_mgmt(adapter->rtw_wdev, freq, 0, frame, frame_len, flags);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
-	cfg80211_rx_mgmt(adapter->rtw_wdev, freq, 0, frame, frame_len, flags, GFP_ATOMIC);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0))
-	cfg80211_rx_mgmt(adapter->rtw_wdev, freq, 0, frame, frame_len, GFP_ATOMIC);
-#else
-	cfg80211_rx_mgmt(adapter->pnetdev, freq, 0, frame, frame_len, GFP_ATOMIC);
-#endif
+	rtw_cfg80211_rx_mgmt(adapter, freq, 0, frame, frame_len, flags);
 }
 
 static int _cfg80211_rtw_mgmt_tx(struct rtw_adapter *padapter, u8 tx_ch, const u8 *buf, size_t len)
@@ -3591,7 +3541,7 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy, struct wireless_dev *wdev,
 		  padapter->pnetdev->name, len, tx_ch);
 
 	/* indicate ack before issue frame to avoid racing with rsp frame */
-	cfg80211_mgmt_tx_status(padapter->rtw_wdev, *cookie, buf, len, ack,
+	rtw_cfg80211_mgmt_tx_status(padapter, *cookie, buf, len, ack,
 				GFP_KERNEL);
 
 //	DBG_8192D("RTW_Tx:tx_ch =%d, da =" MAC_FMT "\n", tx_ch,

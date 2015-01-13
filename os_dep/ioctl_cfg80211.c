@@ -2976,7 +2976,10 @@ static int cfg80211_rtw_add_station(struct wiphy *wiphy, struct net_device *ndev
 	return 0;
 }
 
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(3, 14, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 19, 0))
+static int cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev,
+				    struct station_del_parameters *params)
+#elif (LINUX_VERSION_CODE > KERNEL_VERSION(3, 14, 0))
 static int cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev,
 			       const u8 *mac)
 #else
@@ -2991,6 +2994,9 @@ static int cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(ndev);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,19,0))
+	const u8 *mac = params->mac;
+#endif
 
 	DBG_8192D("+"FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 

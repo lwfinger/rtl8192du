@@ -152,17 +152,17 @@ strip:
 	$(CROSS_COMPILE)strip $(MODULE_NAME).ko --strip-unneeded
 
 install:
-	install -d $(INSTALL_PREFIX)$(MODDESTDIR)
-	install -m644 $(MODULE_NAME).ko  $(INSTALL_PREFIX)$(MODDESTDIR)
-	install -d $(INSTALL_PREFIX)/lib/firmware/rtlwifi
-	install -m644 rtl8192dufw.bin $(INSTALL_PREFIX)/lib/firmware/rtlwifi
-	install -m644 rtl8192dufw_wol.bin $(INSTALL_PREFIX)/lib/firmware/rtlwifi
+	install -d $(DESTDIR)$(INSTALL_PREFIX)$(MODDESTDIR)
+	install -m644 $(MODULE_NAME).ko  $(DESTDIR)$(INSTALL_PREFIX)$(MODDESTDIR)
+	install -d $(DESTDIR)$(INSTALL_PREFIX)/lib/firmware/rtlwifi
+	install -m644 rtl8192dufw.bin $(DESTDIR)$(INSTALL_PREFIX)/lib/firmware/rtlwifi
+	install -m644 rtl8192dufw_wol.bin $(DESTDIR)$(INSTALL_PREFIX)/lib/firmware/rtlwifi
 	depmod -a
 
 uninstall:
-	rm -f $(INSTALL_PREFIX)$(MODDESTDIR)/$(MODULE_NAME).ko
-	rm -f $(INSTALL_PREFIX)/lib/firmware/rtlwifi/rtl8192dufw.bin
-	rm -f $(INSTALL_PREFIX)/lib/firmware/rtlwifi/rtl8192dufw_wol.bin
+	rm -f $(DESTDIR)$(INSTALL_PREFIX)$(MODDESTDIR)/$(MODULE_NAME).ko
+	rm -f $(DESTDIR)$(INSTALL_PREFIX)/lib/firmware/rtlwifi/rtl8192dufw.bin
+	rm -f $(DESTDIR)$(INSTALL_PREFIX)/lib/firmware/rtlwifi/rtl8192dufw_wol.bin
 	depmod -a
 
 config_r:

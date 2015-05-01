@@ -1276,16 +1276,23 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy,
 			goto exit;
 		}
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0))
 		sinfo->filled |= STATION_INFO_SIGNAL;
+		sinfo->filled |= STATION_INFO_TX_BITRATE;
+		sinfo->filled |= STATION_INFO_RX_PACKETS;
+		sinfo->filled |= STATION_INFO_TX_PACKETS;
+#else
+		sinfo->filled |= BIT(NL80211_STA_INFO_SIGNAL);
+		sinfo->filled |= BIT(NL80211_STA_INFO_TX_BITRATE);
+		sinfo->filled |= BIT(NL80211_STA_INFO_RX_PACKETS);
+		sinfo->filled |= BIT(NL80211_STA_INFO_TX_PACKETS);
+#endif
 		sinfo->signal = translate_percentage_to_dbm(padapter->recvpriv.signal_strength);
 
-		sinfo->filled |= STATION_INFO_TX_BITRATE;
 		sinfo->txrate.legacy = rtw_get_cur_max_rate(padapter);
 
-		sinfo->filled |= STATION_INFO_RX_PACKETS;
 		sinfo->rx_packets = sta_rx_data_pkts(psta);
 
-		sinfo->filled |= STATION_INFO_TX_PACKETS;
 		sinfo->tx_packets = psta->sta_stats.tx_pkts;
 
 	}
@@ -2756,6 +2763,9 @@ static int
 		const char *name,
 	#else
 		char *name,
+	#endif
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
+		unsigned char name_assign_type,
 	#endif
 		enum nl80211_iftype type, u32 *flags, struct vif_params *params)
 {

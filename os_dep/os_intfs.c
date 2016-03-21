@@ -1712,7 +1712,7 @@ netdev_if2_open_error:
 	return (-1);
 }
 
-static int netdev_if2_open(struct net_device *pnetdev)
+int netdev_if2_open(struct net_device *pnetdev)
 {
 	int ret;
 	struct rtw_adapter *padapter = (struct rtw_adapter *)rtw_netdev_priv(pnetdev);

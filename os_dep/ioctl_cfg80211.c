@@ -1553,7 +1553,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	int social_channel = 0, j = 0;
 	bool need_indicate_scan_done = false;
 #ifdef CONFIG_CONCURRENT_MODE
-	PADAPTER pbuddy_adapter = NULL;
+	struct rtw_adapter *pbuddy_adapter = NULL;
 	struct mlme_priv *pbuddy_mlmepriv = NULL;
 #endif /* CONFIG_CONCURRENT_MODE */
 
@@ -3243,7 +3243,7 @@ static int _cfg80211_rtw_mgmt_tx(struct rtw_adapter *padapter, u8 tx_ch, const u
 #ifdef CONFIG_CONCURRENT_MODE
 	if (check_buddy_fwstate(padapter, _FW_LINKED)) {
 		u8 co_channel=0xff;
-		PADAPTER pbuddy_adapter = padapter->pbuddy_adapter;
+		struct rtw_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
 		struct mlme_ext_priv *pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
 
 		co_channel = rtw_get_oper_ch(padapter);

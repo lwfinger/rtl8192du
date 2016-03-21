@@ -4653,6 +4653,9 @@ void site_survey(struct rtw_adapter *adapt)
 		/*      channel number is 0 or this channel is not valid. */
 
 #ifdef CONFIG_CONCURRENT_MODE
+		struct mlme_priv *pmlmepriv = &(adapt->mlmepriv);
+		struct rtw_adapter *pbuddy_adapter = adapt->pbuddy_adapter;
+		struct mlme_ext_priv *pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
 		u8 cur_channel;
 		u8 cur_bwmode;
 		u8 cur_ch_offset;

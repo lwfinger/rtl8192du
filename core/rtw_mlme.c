@@ -1798,9 +1798,9 @@ void rtw_stadel_event_callback(struct rtw_adapter *adapter, u8 *pbuf)
 			rtw_set_roaming(adapter,
 					adapter->registrypriv.
 					max_roaming_times);
-			if (*((unsigned short *)(pstadel->rsvd)) !=
-			    WLAN_REASON_EXPIRATION_CHK)
-				rtw_set_roaming(adapter, 0);	/* don't roam */
+		if (*((unsigned short *)(pstadel->rsvd)) !=
+		    WLAN_REASON_EXPIRATION_CHK)
+			rtw_set_roaming(adapter, 0);	/* don't roam */
 #endif
 
 		rtw_free_uc_swdec_pending_queue(adapter);

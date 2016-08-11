@@ -1415,33 +1415,27 @@ static void SwLedControlMode1(
 
 		case LED_CTL_TX:
 		case LED_CTL_RX:
-			if (pLed->bLedBlinkInProgress ==false)
-			{
-                            if (pLed->CurrLedState == LED_SCAN_BLINK || IS_LED_WPS_BLINKING(pLed))
-                            {
+			if (pLed->bLedBlinkInProgress ==false) {
+				if (pLed->CurrLedState == LED_SCAN_BLINK || IS_LED_WPS_BLINKING(pLed))
 					return;
-                            }
-                            if (pLed->bLedNoLinkBlinkInProgress == true)
-                            {
-                                _cancel_timer_ex(&(pLed->BlinkTimer));
-                                pLed->bLedNoLinkBlinkInProgress = false;
-                            }
-                            if (pLed->bLedLinkBlinkInProgress == true)
-                            {
-                                _cancel_timer_ex(&(pLed->BlinkTimer));
-                                pLed->bLedLinkBlinkInProgress = false;
-                            }
-                            pLed->bLedBlinkInProgress = true;
-                            pLed->CurrLedState = LED_TXRX_BLINK;
-                            pLed->BlinkTimes = 2;
-                            if (pLed->bLedOn)
-                                pLed->BlinkingLedState = RTW_LED_OFF;
-                            else
-                                pLed->BlinkingLedState = RTW_LED_ON;
+				if (pLed->bLedNoLinkBlinkInProgress == true) {
+					_cancel_timer_ex(&(pLed->BlinkTimer));
+					pLed->bLedNoLinkBlinkInProgress = false;
+				}
+				if (pLed->bLedLinkBlinkInProgress == true) {
+					_cancel_timer_ex(&(pLed->BlinkTimer));
+					pLed->bLedLinkBlinkInProgress = false;
+				}
+				pLed->bLedBlinkInProgress = true;
+				pLed->CurrLedState = LED_TXRX_BLINK;
+				pLed->BlinkTimes = 2;
+				if (pLed->bLedOn)
+					pLed->BlinkingLedState = RTW_LED_OFF;
+				else
+					pLed->BlinkingLedState = RTW_LED_ON;
 				_set_timer(&(pLed->BlinkTimer), LED_BLINK_FASTER_INTERVAL_ALPHA);
 			}
 			break;
-
 		case LED_CTL_START_WPS: /* wait until xinpin finish */
 		case LED_CTL_START_WPS_BOTTON:
 			 if (pLed->bLedWPSBlinkInProgress ==false)

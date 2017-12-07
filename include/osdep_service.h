@@ -163,12 +163,14 @@ static inline void _exit_critical_mutex(_mutex *pmutex)
 #endif
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 static inline void _init_timer(struct timer_list *timer, struct net_device * nic_hdl, void *pfunc, void *cntx)
 {
 	timer->function = pfunc;
 	timer->data = (unsigned long)cntx;
 	init_timer(timer);
 }
+#endif
 
 static inline void _set_timer(struct timer_list *timer,u32 delay_time)
 {

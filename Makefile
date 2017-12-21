@@ -29,7 +29,7 @@ ccflags-y += -D__CHECK_ENDIAN__
 
 RTL871X = rtl8192d
 
-MODULE_NAME = 8192du
+MODULE_NAME = rtl8192du
 
 CHIP_FILES := \
 	hal/$(RTL871X)_xmit.o
@@ -57,9 +57,9 @@ _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/$(RTL871X)_rxdesc.o \
 			hal/$(RTL871X)_cmd.o \
 			hal/$(HCI_NAME)_halinit.o \
-			hal/rtl$(MODULE_NAME)_led.o \
-			hal/rtl$(MODULE_NAME)_xmit.o \
-			hal/rtl$(MODULE_NAME)_recv.o \
+			hal/$(MODULE_NAME)_led.o \
+			hal/$(MODULE_NAME)_xmit.o \
+			hal/$(MODULE_NAME)_recv.o \
 			hal/hal8192duhwimg.o
 
 _HAL_INTFS_FILES += hal/$(HCI_NAME)_ops_linux.o

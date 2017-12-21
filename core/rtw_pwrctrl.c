@@ -200,7 +200,7 @@ static void pwr_state_check_handler(void *FunctionContext)
 		from_timer(padapter, t,
 			   pwrctrlpriv.pwr_state_check_timer);
 #else
-	struct rtw_adapter *padapter = (struct adapter *)FunctionContext;
+	struct rtw_adapter *padapter = (struct rtw_adapter *)FunctionContext;
 #endif
 
 	rtw_ps_cmd(padapter);

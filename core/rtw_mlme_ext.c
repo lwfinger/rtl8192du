@@ -23,6 +23,7 @@
 #include <wlan_bssdef.h>
 #include <mlme_osdep.h>
 #include <recv_osdep.h>
+#include <rtw_rf.h>
 
 static struct mlme_handler mlme_sta_tbl[] = {
 	{WIFI_ASSOCREQ, "OnAssocReq", &OnAssocReq},
@@ -7198,7 +7199,7 @@ void dc_SetBWMode(struct rtw_adapter *adapt, unsigned short bwmode,
 	_enter_critical_mutex(&
 			      (adapter_to_dvobj(ptarget_adapter)->setbw_mutex));
 
-	rtw_hal_set_bwmode(ptarget_adapter, (HT_CHANNEL_WIDTH) bwmode,
+	rtw_hal_set_bwmode(ptarget_adapter, (enum HT_CHANNEL_WIDTH) bwmode,
 			   channel_offset);
 
 	_exit_critical_mutex(&(adapter_to_dvobj(ptarget_adapter)->setbw_mutex));

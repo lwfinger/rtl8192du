@@ -945,9 +945,10 @@ struct net_device *rtw_init_netdev(struct rtw_adapter *old_padapter)
 	else
 		pnetdev = rtw_alloc_etherdev(sizeof(struct rtw_adapter));
 
-	if (!pnetdev)
+	if (!pnetdev) {
+		pr_err("Failed to allocate ether device\n");
 		return NULL;
-
+	}
 	pnetdev->dev.type = &wlan_type;
 	padapter = rtw_netdev_priv(pnetdev);
 	padapter->pnetdev = pnetdev;

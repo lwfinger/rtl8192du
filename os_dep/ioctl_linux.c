@@ -491,13 +491,16 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		if (param->u.crypt.set_tx) {
 			DBG_8192D("wep, set_tx = 1\n");
 
-			if (rtw_set_802_11_add_wep(padapter, pwep) == (u8)_FAIL)
+			if (rtw_set_802_11_add_wep(padapter, pwep) == (u8)_FAIL) {
+				pr_info("%s - rtw_set_802_11_add_wep() failed\n", __func__);
 				ret = -EOPNOTSUPP ;
+			}
 		} else {
 			DBG_8192D("wep, set_tx = 0\n");
 
 			if (wep_key_idx >= WEP_KEYS) {
 				ret = -EOPNOTSUPP ;
+				pr_info("%s - wep_key_idx %d too large\n", __func__, wep_key_idx);
 				goto exit;
 			}
 
@@ -1234,6 +1237,7 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 					ret = -1;
 			break;
 	default:
+		pr_info("%s - mlme->cmd %d\n", __func__, mlme->cmd);
 		return -EOPNOTSUPP;
 	}
 	return ret;
@@ -2031,8 +2035,10 @@ static int rtw_wx_set_enc(struct net_device *dev,
 	memcpy(wep.KeyMaterial, keybuf, wep.KeyLength);
 
 	if (rtw_set_802_11_add_wep(padapter, &wep) == false) {
-		if (rf_on == pwrpriv->rf_pwrstate)
+		if (rf_on == pwrpriv->rf_pwrstate) {
+			pr_info("%s - rtw_set_802_11_add_wep() failed with rf on\n", __func__);
 			ret = -EOPNOTSUPP;
+		}
 		goto exit;
 	}
 
@@ -2234,6 +2240,7 @@ static int rtw_wx_set_auth(struct net_device *dev,
 	case IW_AUTH_PRIVACY_INVOKED:
 		break;
 	default:
+		pr_info("%s - param->flags %d\n", __func__, param->flags);
 		return -EOPNOTSUPP;
 	}
 
@@ -3567,11 +3574,9 @@ static int wpa_set_param(struct net_device *dev, u8 name, u32 value)
 		break;
 
 	default:
-
+		pr_info("%s - name %d\n", __func__, name);
 		ret = -EOPNOTSUPP;
-
 		break;
-
 	}
 
 	return ret;
@@ -3599,6 +3604,7 @@ static int wpa_mlme(struct net_device *dev, u32 command, u32 reason)
 			break;
 
 		default:
+			pr_info("%s - command %d\n", __func__, command);
 			ret = -EOPNOTSUPP;
 			break;
 	}
@@ -3652,7 +3658,7 @@ static int wpa_supplicant_ioctl(struct net_device *dev, struct iw_point *p)
 		break;
 
 	default:
-		DBG_8192D("Unknown WPA supplicant request: %d\n", param->cmd);
+		pr_info("%s - Unknown WPA supplicant request: %d\n", __func__, param->cmd);
 		ret = -EOPNOTSUPP;
 		break;
 
@@ -4669,7 +4675,7 @@ static int rtw_hostapd_ioctl(struct net_device *dev, struct iw_point *p)
 		ret = rtw_ioctl_acl_remove_sta(dev, param, p->length);
 		break;
 	default:
-		DBG_8192D("Unknown hostapd request: %d\n", param->cmd);
+		pr_info("%s - Unknown hostapd request: %d\n", __func__, param->cmd);
 		ret = -EOPNOTSUPP;
 		break;
 	}
@@ -5449,6 +5455,7 @@ int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 		ret = rtw_android_priv_cmd(dev, rq, cmd);
 		break;
 	default:
+		pr_info("%s - Unknown value for cmd: %d\n", __func__, cmd);
 		ret = -EOPNOTSUPP;
 		break;
 	}

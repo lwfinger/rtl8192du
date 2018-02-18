@@ -1410,6 +1410,7 @@ static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
 		networkType = Ndis802_11APMode;
 		break;
 	default:
+		pr_info("%s - type %d not supported\n", __func__, type);
 		return -EOPNOTSUPP;
 	}
 
@@ -2228,9 +2229,10 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 
 		memcpy(pwep->KeyMaterial,  (void *)sme->key, pwep->KeyLength);
 
-		if (rtw_set_802_11_add_wep(padapter, pwep) == (u8)_FAIL)
+		if (rtw_set_802_11_add_wep(padapter, pwep) == (u8)_FAIL) {
+			pr_info("%s - rtw_set_802_11_add_wep() failed\n", __func__);
 			ret = -EOPNOTSUPP ;
-
+		}
 		if (pwep)
 			kfree(pwep);
 

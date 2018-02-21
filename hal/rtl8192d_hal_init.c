@@ -1251,7 +1251,7 @@ static void hal_EfuseUpdateNormalChipVersion_92D(struct rtw_adapter *adapter)
 		break;
 	default:
 		ChipVer = (enum VERSION_8192D)(ChipVer | D_CUT_VERSION);
-		pr_cont(", Unknown CUT chip\n");
+		pr_cont(", Unknown CUT chip, ChipValue 0x%x\n", ChipValue);
 		break;
 	}
 	pHalData->VersionID = ChipVer;

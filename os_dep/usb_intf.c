@@ -924,13 +924,15 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 
 	/* Initialize if1 */
 	if ((if1 = rtw_usb_if1_init(dvobj, pusb_intf, did)) == NULL) {
-		DBG_8192D("rtw_usb_if1_init Failed!\n");
+		pr_info("Creation of if1 failed\n");
 		goto free_dvobj;
 	}
 
 	/* Initialize if2 */
 #ifdef CONFIG_CONCURRENT_MODE
-	if ((if2 = rtw_drv_if2_init(if1, NULL, usb_set_intf_ops)) == NULL) {
+	if2 = rtw_drv_if2_init(if1, NULL, usb_set_intf_ops);
+	if (!if2) {
+		pr_info("Creation of if2 failed\n");
 		goto free_if1;
 	}
 #ifdef CONFIG_MULTI_VIR_IFACES

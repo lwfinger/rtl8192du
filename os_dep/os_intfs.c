@@ -1491,9 +1491,12 @@ _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,
 
 	/* step read_chip_version */
 	rtw_hal_read_chip_version(padapter);
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 
 	/* step usb endpoint mapping */
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 	rtw_hal_chip_configure(padapter);
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 
 	/* init drv data */
 	if (rtw_init_drv_sw(padapter)!= _SUCCESS)
@@ -1504,6 +1507,7 @@ _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,
 		name = padapter->registrypriv.if2name;
 
 	rtw_init_netdev_name(pnetdev, name);
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 	/* get mac address from primary_padapter */
 	memcpy(mac, primary_padapter->eeprompriv.mac_addr, ETH_ALEN);
 
@@ -1542,6 +1546,7 @@ _adapter *rtw_drv_add_vir_if (struct rtw_adapter *primary_padapter, char *name,
 
 	res = _SUCCESS;
 
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 	return padapter;
 
 error_rtw_drv_add_iface:
@@ -1834,9 +1839,11 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 
 	/* step read_chip_version */
 	rtw_hal_read_chip_version(padapter);
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 
 	/* step usb endpoint mapping */
 	rtw_hal_chip_configure(padapter);
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 
 	/* init drv data */
 	if (rtw_init_drv_sw(padapter)!= _SUCCESS)
@@ -1846,7 +1853,9 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 	if (name == NULL)
 		name = padapter->registrypriv.if2name;
 
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 	rtw_init_netdev_name(pnetdev, name);
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 
 	/* get mac address from primary_padapter */
 	memcpy(mac, primary_padapter->eeprompriv.mac_addr, ETH_ALEN);
@@ -1872,7 +1881,9 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 	}
 
 	memcpy(padapter->eeprompriv.mac_addr, mac, ETH_ALEN);
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 	rtw_init_wifidirect_addrs(padapter, padapter->eeprompriv.mac_addr, padapter->eeprompriv.mac_addr);
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 
 	memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
 
@@ -1888,6 +1899,7 @@ struct rtw_adapter *rtw_drv_if2_init(struct rtw_adapter *primary_padapter, char 
 		goto error_rtw_drv_if2_init;
 	}
 
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 	return padapter;
 
 error_rtw_drv_if2_init:

@@ -37,6 +37,7 @@ void rtw_hal_read_chip_version(struct rtw_adapter *padapter)
 {
 	if (padapter->HalFunc.read_chip_version)
 		padapter->HalFunc.read_chip_version(padapter);
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 }
 
 void rtw_hal_def_value_init(struct rtw_adapter *padapter)

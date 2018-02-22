@@ -17,7 +17,7 @@
 
 #include <rtw_debug.h>
 
-u32 GlobalDebugLevel = _drv_err_;
+u32 GlobalDebugLevel = _drv_debug_;
 
 u64 GlobalDebugComponents =
 	_module_rtl871x_xmit_c_ |

@@ -557,6 +557,7 @@ rtl8192d_ReadChipVersion(
 	struct hal_data_8192du *pHalData = GET_HAL_DATA(adapter);
 	enum VERSION_8192D	ChipVersion = VERSION_TEST_CHIP_88C;
 
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 	value32 = rtw_read32(adapter, REG_SYS_CFG);
 	DBG_8192D("ReadChipVersion8192D 0xF0 = 0x%x\n", value32);
 
@@ -576,6 +577,7 @@ rtl8192d_ReadChipVersion(
 	}
 
 	pHalData->VersionID = ChipVersion;
+	pr_info("**** In %s: line %d\n", __func__, __LINE__);
 }
 
 /*  */

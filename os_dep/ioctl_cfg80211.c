@@ -512,6 +512,7 @@ void rtw_cfg80211_indicate_disconnect(struct rtw_adapter *padapter)
 						WLAN_STATUS_UNSPECIFIED_FAILURE,
 						GFP_ATOMIC/*GFP_KERNEL*/);
 		} else {
+			pr_info("***** iftype %d\n", pwdev->iftype);
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 2, 0)
 			cfg80211_disconnected(padapter->pnetdev, 0,
 					      NULL, 0, true, GFP_ATOMIC);
@@ -2273,13 +2274,16 @@ static int cfg80211_rtw_disconnect(struct wiphy *wiphy, struct net_device *ndev,
 				   u16 reason_code)
 {
 	struct rtw_adapter *padapter = wiphy_to_adapter(wiphy);
+	struct wireless_dev *pwdev = padapter->rtw_wdev;
 
 	DBG_8192D(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 
+	/* Fix warning in __cfg80211_disconnected */
+	pwdev->iftype = NL80211_IFTYPE_STATION;
+
 	rtw_set_roaming(padapter, 0);
 
-	if (check_fwstate(&padapter->mlmepriv, _FW_LINKED))
-	{
+	if (check_fwstate(&padapter->mlmepriv, _FW_LINKED)) {
 		rtw_scan_abort(padapter);
 		LeaveAllPowerSaveMode(padapter);
 		rtw_disassoc_cmd(padapter, 500, false);
@@ -2765,7 +2769,7 @@ static int rtw_cfg80211_add_monitor_if (struct rtw_adapter *padapter, char *name
 	pnpi->sizeof_priv = sizeof(struct rtw_adapter);
 
 	/*  wdev */
-	mon_wdev = (struct wireless_dev *)kzalloc(sizeof(struct wireless_dev), GFP_KERNEL);
+	mon_wdev = kzalloc(sizeof(struct wireless_dev), GFP_KERNEL);
 	if (!mon_wdev) {
 		DBG_8192D(FUNC_ADPT_FMT" allocate mon_wdev fail\n", FUNC_ADPT_ARG(padapter));
 		ret = -ENOMEM;
@@ -2774,8 +2778,9 @@ static int rtw_cfg80211_add_monitor_if (struct rtw_adapter *padapter, char *name
 
 	mon_wdev->wiphy = padapter->rtw_wdev->wiphy;
 	mon_wdev->netdev = mon_ndev;
-	mon_wdev->iftype = NL80211_IFTYPE_MONITOR;
+//	mon_wdev->iftype = NL80211_IFTYPE_MONITOR;
 	mon_ndev->ieee80211_ptr = mon_wdev;
+	mon_wdev->iftype = NL80211_IFTYPE_STATION;
 
 	ret = register_netdevice(mon_ndev);
 	if (ret) {
@@ -3569,7 +3574,7 @@ int rtw_cfg80211_set_mgnt_wpsp2pie(struct net_device *net, char *buf, int len,
 	return ret;
 }
 
-        int     (*mgmt_tx)(struct wiphy *wiphy, struct wireless_dev *wdev,
+static int     (*mgmt_tx)(struct wiphy *wiphy, struct wireless_dev *wdev,
                           struct ieee80211_channel *chan, bool offchan,
                           unsigned int wait, const u8 *buf, size_t len,
                           bool no_cck, bool dont_wait_for_ack, u64 *cookie);
@@ -3844,7 +3849,7 @@ int rtw_wdev_alloc(struct rtw_adapter *padapter, struct device *dev)
 	}
 
 	/*  wdev */
-	wdev = (struct wireless_dev *)kzalloc(sizeof(struct wireless_dev), GFP_KERNEL);
+	wdev = kzalloc(sizeof(struct wireless_dev), GFP_KERNEL);
 	if (!wdev) {
 		DBG_8192D("Couldn't allocate wireless device\n");
 		ret = -ENOMEM;

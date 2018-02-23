@@ -1247,6 +1247,7 @@ static void hal_EfuseUpdateNormalChipVersion_92D(struct rtw_adapter *adapter)
 		ChipVer = (enum VERSION_8192D)(ChipVer | D_CUT_VERSION);
 		pr_cont(", D-CUT chip\n");
 		break;
+	case 0x33CC:
 	case 0xCC33:
 		ChipVer = (enum VERSION_8192D)(ChipVer | E_CUT_VERSION);
 		pr_cont(", E-CUT chip\n");

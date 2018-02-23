@@ -5950,20 +5950,14 @@ void PHY_ReadMacPhyMode92D(
 
 	MacPhyCrValue = rtw_read8(adapter, REG_MAC_PHY_CTRL_NORMAL);
 
-	DBG_8192D("PHY_ReadMacPhyMode92D():   MAC_PHY_CTRL Value %x\n",MacPhyCrValue);
+	pr_info("PHY_ReadMacPhyMode92D():   MAC_PHY_CTRL Value %x\n",MacPhyCrValue);
 
 	if ((MacPhyCrValue&0x03) == 0x03)
-	{
 		pHalData->MacPhyMode92D = DUALMAC_DUALPHY;
-	}
 	else if ((MacPhyCrValue&0x03) == 0x01)
-	{
 		pHalData->MacPhyMode92D = DUALMAC_SINGLEPHY;
-	}
 	else
-	{
 		pHalData->MacPhyMode92D = SINGLEMAC_SINGLEPHY;
-	}
 }
 
 /*  */

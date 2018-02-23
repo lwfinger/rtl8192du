@@ -2180,7 +2180,6 @@ static int netdev_close(struct net_device *pnetdev)
 
 	rtw_scan_abort(padapter);
 	wdev_to_priv(padapter->rtw_wdev)->bandroid_scan = false;
-	padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; /* set this at the end */
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-871x_drv - drv_close\n"));
 	DBG_8192D("-871x_drv - drv_close, bup =%d\n", padapter->bup);

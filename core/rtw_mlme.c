@@ -2973,7 +2973,7 @@ void _rtw_roaming(struct rtw_adapter *padapter,
 }
 #endif
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) | defined(CONFIG_DUALMAC_CONCURRENT)
 int rtw_buddy_adapter_up(struct rtw_adapter *padapter)
 {
 	int res = false;

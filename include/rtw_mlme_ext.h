@@ -619,7 +619,7 @@ extern void update_TSF(struct mlme_ext_priv *pmlmeext, u8 *pframe, uint len);
 extern void correct_TSF(struct rtw_adapter *padapter, struct mlme_ext_priv *pmlmeext);
 
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) | defined(CONFIG_DUALMAC_CONCURRENT)
 int check_buddy_mlmeinfo_state(struct rtw_adapter *padapter, u32 state);
 int concurrent_chk_start_clnt_join(struct rtw_adapter *padapter);
 void concurrent_chk_joinbss_done(struct rtw_adapter *padapter, int join_res);

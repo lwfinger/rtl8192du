@@ -541,7 +541,7 @@ __inline static void up_scanned_network(struct mlme_priv *pmlmepriv)
 	spin_unlock_bh(&pmlmepriv->lock);
 }
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) | defined(CONFIG_DUALMAC_CONCURRENT)
 int rtw_buddy_adapter_up(struct rtw_adapter *padapter);
 int check_buddy_fwstate(struct rtw_adapter *padapter, int state);
 #endif /* CONFIG_CONCURRENT_MODE */

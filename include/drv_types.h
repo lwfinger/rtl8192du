@@ -212,7 +212,7 @@ struct dvobj_priv {
 	unsigned char	oper_bwmode;
 	unsigned char	oper_ch_offset;/* PRIME_CHNL_OFFSET */
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) | defined(CONFIG_DUALMAC_CONCURRENT)
 	/* extend to support mulitu interface */
 	struct rtw_adapter *padapters[IFACE_ID_MAX];
 	u8 iface_nums; /*  total number of ifaces used runtime */

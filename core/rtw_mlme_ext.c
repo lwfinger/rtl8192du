@@ -7768,7 +7768,7 @@ u8 dc_check_xmit(struct rtw_adapter *adapt)
 }
 #endif
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) | defined(CONFIG_DUALMAC_CONCURRENT)
 int check_buddy_mlmeinfo_state(struct rtw_adapter *adapt, u32 state)
 {
 	struct rtw_adapter *pbuddy_adapter;

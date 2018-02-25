@@ -7784,7 +7784,11 @@ int check_buddy_mlmeinfo_state(struct rtw_adapter *adapt, u32 state)
 		return false;
 
 	pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
+	if (!pbuddy_mlmeext)
+		return false;
 	pbuddy_mlmeinfo = &(pbuddy_mlmeext->mlmext_info);
+	if (!pbuddy_mlmeinfo)
+		return false;
 
 	if ((pbuddy_mlmeinfo->state & 0x03) == state)
 		return true;

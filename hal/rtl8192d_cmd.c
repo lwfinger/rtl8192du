@@ -635,7 +635,7 @@ static void SetFwRsvdPagePkt(struct rtw_adapter * adapter, bool dl_finish)
 
 	DBG_8192D("%s\n", __func__);
 
-	reservedpagepacket = (u8*)kmalloc(1000, GFP_KERNEL);
+	reservedpagepacket = kzalloc(1000, GFP_KERNEL);
 	if (reservedpagepacket == NULL) {
 		DBG_8192D("%s(): alloc reservedpagepacket fail !!!\n", __func__);
 		return;

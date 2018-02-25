@@ -2243,14 +2243,13 @@ int rtw_set_auth(struct rtw_adapter *adapter,
 	struct cmd_priv *pcmdpriv = &(adapter->cmdpriv);
 	int res = _SUCCESS;
 
-	pcmd = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
+	pcmd = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
 		res = _FAIL;	/* try again */
 		goto exit;
 	}
 
-	psetauthparm =
-	    (struct setauth_parm *)kzalloc(sizeof(struct setauth_parm), GFP_KERNEL);
+	psetauthparm = kzalloc(sizeof(struct setauth_parm), GFP_KERNEL);
 	if (psetauthparm == NULL) {
 		kfree(pcmd);
 		res = _FAIL;
@@ -2289,13 +2288,12 @@ int rtw_set_key(struct rtw_adapter *adapter,
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 	int res = _SUCCESS;
 
-	pcmd = (struct cmd_obj *)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
+	pcmd = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
 		res = _FAIL;	/* try again */
 		goto exit;
 	}
-	psetkeyparm =
-	    (struct setkey_parm *)kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
+	psetkeyparm = kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
 	if (psetkeyparm == NULL) {
 		kfree(pcmd);
 		res = _FAIL;

@@ -76,11 +76,16 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	    (padapter->pwrctrlpriv.pnp_bstop_trx))
 		return _FAIL;
 
-	pcontext = (struct zero_bulkout_context *)kzalloc(sizeof(struct zero_bulkout_context), GFP_KERNEL);
+	pcontext = kzalloc(sizeof(struct zero_bulkout_context), GFP_KERNEL);
+	if (!pcontext)
+		return _FAIL;
 
-	pbuf = (unsigned char *)kzalloc(sizeof(int), GFP_KERNEL);
+	pbuf = kzalloc(sizeof(int), GFP_KERNEL);
+	if (!pbuf) {
+		kfree(pcontext);
+		return _FAIL;
+	}
 	purb = usb_alloc_urb(0, GFP_ATOMIC);
-
 	len = 0;
 	pcontext->pbuf = pbuf;
 	pcontext->purb = purb;

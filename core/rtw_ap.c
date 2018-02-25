@@ -120,7 +120,7 @@ static void update_BCNTIM(struct rtw_adapter *padapter)
 		}
 
 		if (remainder_ielen > 0) {
-			pbackup_remainder_ie = kmalloc(remainder_ielen, GFP_ATOMIC);
+			pbackup_remainder_ie = kzalloc(remainder_ielen, GFP_ATOMIC);
 			if (pbackup_remainder_ie && premainder_ie)
 				memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
 		}
@@ -205,7 +205,7 @@ void rtw_add_bcn_ie(struct rtw_adapter *padapter, struct wlan_bssid_ex *pnetwork
 	}
 
 	if (remainder_ielen > 0) {
-		pbackup_remainder_ie = kmalloc(remainder_ielen, GFP_KERNEL);
+		pbackup_remainder_ie = kzalloc(remainder_ielen, GFP_KERNEL);
 		if (pbackup_remainder_ie && premainder_ie)
 			memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
 	}
@@ -246,7 +246,7 @@ void rtw_remove_bcn_ie(struct rtw_adapter *padapter, struct wlan_bssid_ex *pnetw
 	}
 
 	if (remainder_ielen > 0) {
-		pbackup_remainder_ie = kmalloc(remainder_ielen, GFP_KERNEL);
+		pbackup_remainder_ie = kzalloc(remainder_ielen, GFP_KERNEL);
 		if (pbackup_remainder_ie && premainder_ie)
 			memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
 	}
@@ -1406,7 +1406,7 @@ static void update_bcn_wps_ie(struct rtw_adapter *padapter)
 	remainder_ielen = ielen - wps_offset - wps_ielen;
 
 	if (remainder_ielen > 0) {
-		pbackup_remainder_ie = kmalloc(remainder_ielen, GFP_KERNEL);
+		pbackup_remainder_ie = kzalloc(remainder_ielen, GFP_KERNEL);
 		if (pbackup_remainder_ie)
 			memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
 	}

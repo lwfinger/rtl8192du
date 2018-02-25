@@ -2310,7 +2310,7 @@ static void *aes_encrypt_init(u8 *key, size_t len)
 	u32 *rk;
 	if (len != 16)
 		return NULL;
-	rk = (u32 *)kmalloc(AES_PRIV_SIZE, GFP_KERNEL);
+	rk = kzalloc(AES_PRIV_SIZE, GFP_KERNEL);
 	if (rk == NULL)
 		return NULL;
 	rijndaelKeySetupEnc(rk, key);

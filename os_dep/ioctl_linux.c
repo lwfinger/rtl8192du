@@ -463,7 +463,7 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		if (wep_key_len > 0) {
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
 			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
-			pwep = (struct ndis_802_11_wep *) kmalloc(wep_total_len, GFP_KERNEL);
+			pwep = (struct ndis_802_11_wep *) kzalloc(wep_total_len, GFP_KERNEL);
 			if (pwep == NULL) {
 				RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_err_, (" wpa_set_encryption: pwep allocate fail !!!\n"));
 				goto exit;
@@ -2259,7 +2259,7 @@ static int rtw_wx_set_enc_ext(struct net_device *dev,
 	int ret = 0;
 
 	param_len = sizeof(struct ieee_param) + pext->key_len;
-	param = (struct ieee_param *)kmalloc(param_len, GFP_KERNEL);
+	param = kzalloc(param_len, GFP_KERNEL);
 	if (param == NULL)
 		return -1;
 
@@ -2355,7 +2355,7 @@ static int rtw_wx_read32(struct net_device *dev,
 	padapter = (struct rtw_adapter *)rtw_netdev_priv(dev);
 	p = &wrqu->data;
 	len = p->length;
-	ptmp = (u8 *)kmalloc(len, GFP_KERNEL);
+	ptmp = kzalloc(len, GFP_KERNEL);
 	if (NULL == ptmp)
 		return -ENOMEM;
 
@@ -2540,7 +2540,7 @@ static  int rtw_drvext_hdl(struct net_device *dev, struct iw_request_info *info,
 
 	bset = (u8)(p->flags&0xFFFF);
 	len = p->length;
-	pparmbuf = (u8 *)kmalloc(len, GFP_KERNEL);
+	pparmbuf = kzalloc(len, GFP_KERNEL);
 	if (pparmbuf == NULL) {
 		ret = -ENOMEM;
 		goto _rtw_drvext_hdl_exit;
@@ -2733,7 +2733,7 @@ static int rtw_mp_ioctl_hdl(struct net_device *dev, struct iw_request_info *info
 	pparmbuf = NULL;
 	bset = (u8)(p->flags & 0xFFFF);
 	len = p->length;
-	pparmbuf = (u8 *)kmalloc(len, GFP_KERNEL);
+	pparmbuf = kzalloc(len, GFP_KERNEL);
 	if (pparmbuf == NULL) {
 		ret = -ENOMEM;
 		goto _rtw_mp_ioctl_hdl_exit;
@@ -3624,7 +3624,7 @@ static int wpa_supplicant_ioctl(struct net_device *dev, struct iw_point *p)
 		goto out;
 	}
 
-	param = (struct ieee_param *)kmalloc(p->length, GFP_KERNEL);
+	param = kzalloc(p->length, GFP_KERNEL);
 	if (param == NULL)
 	{
 		ret = -ENOMEM;
@@ -3684,13 +3684,13 @@ static u8 set_pairwise_key(struct rtw_adapter *padapter, struct sta_info *psta)
 	struct cmd_priv				*pcmdpriv =&padapter->cmdpriv;
 	u8	res = _SUCCESS;
 
-	ph2c = (struct cmd_obj*)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
+	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (ph2c == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 
-	psetstakey_para = (struct set_stakey_parm*)kzalloc(sizeof(struct set_stakey_parm), GFP_KERNEL);
+	psetstakey_para = kzalloc(sizeof(struct set_stakey_parm), GFP_KERNEL);
 	if (psetstakey_para == NULL) {
 		kfree(ph2c);
 		res = _FAIL;
@@ -3722,12 +3722,12 @@ static int set_group_key(struct rtw_adapter *padapter, u8 *key, u8 alg, int keyi
 
 	DBG_8192D("%s\n", __func__);
 
-	pcmd = (struct cmd_obj*)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
+	pcmd = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
-	psetkeyparm = (struct setkey_parm*)kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
+	psetkeyparm = kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
 	if (psetkeyparm == NULL) {
 		kfree(pcmd);
 		res = _FAIL;
@@ -3867,7 +3867,7 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		{
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
 			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
-			pwep = (struct ndis_802_11_wep *)kmalloc(wep_total_len, GFP_KERNEL);
+			pwep = kzalloc(wep_total_len, GFP_KERNEL);
 			if (pwep == NULL) {
 				DBG_8192D(" r871x_set_encryption: pwep allocate fail !!!\n");
 				goto exit;
@@ -4425,10 +4425,10 @@ static int rtw_set_wps_beacon(struct net_device *dev, struct ieee_param *param, 
 	pmlmepriv->wps_beacon_ie = NULL;
 
 	if (ie_len > 0) {
-		pmlmepriv->wps_beacon_ie = kmalloc(ie_len, GFP_KERNEL);
+		pmlmepriv->wps_beacon_ie = kzalloc(ie_len, GFP_KERNEL);
 		pmlmepriv->wps_beacon_ie_len = ie_len;
 		if (pmlmepriv->wps_beacon_ie == NULL) {
-			DBG_8192D("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
+			DBG_8192D("%s()-%d: kzalloc() ERROR!\n", __func__, __LINE__);
 			return -EINVAL;
 		}
 		memcpy(pmlmepriv->wps_beacon_ie, param->u.bcn_ie.buf, ie_len);
@@ -4459,10 +4459,10 @@ static int rtw_set_wps_probe_resp(struct net_device *dev, struct ieee_param *par
 	pmlmepriv->wps_probe_resp_ie = NULL;
 
 	if (ie_len > 0) {
-		pmlmepriv->wps_probe_resp_ie = kmalloc(ie_len, GFP_KERNEL);
+		pmlmepriv->wps_probe_resp_ie = kzalloc(ie_len, GFP_KERNEL);
 		pmlmepriv->wps_probe_resp_ie_len = ie_len;
 		if (pmlmepriv->wps_probe_resp_ie == NULL) {
-			DBG_8192D("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
+			DBG_8192D("%s()-%d: kzalloc() ERROR!\n", __func__, __LINE__);
 			return -EINVAL;
 		}
 		memcpy(pmlmepriv->wps_probe_resp_ie, param->u.bcn_ie.buf, ie_len);
@@ -4488,10 +4488,10 @@ static int rtw_set_wps_assoc_resp(struct net_device *dev, struct ieee_param *par
 	pmlmepriv->wps_assoc_resp_ie = NULL;
 
 	if (ie_len > 0) {
-		pmlmepriv->wps_assoc_resp_ie = kmalloc(ie_len, GFP_KERNEL);
+		pmlmepriv->wps_assoc_resp_ie = kzalloc(ie_len, GFP_KERNEL);
 		pmlmepriv->wps_assoc_resp_ie_len = ie_len;
 		if (pmlmepriv->wps_assoc_resp_ie == NULL) {
-			DBG_8192D("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
+			DBG_8192D("%s()-%d: kzalloc() ERROR!\n", __func__, __LINE__);
 			return -EINVAL;
 		}
 
@@ -4620,7 +4620,7 @@ static int rtw_hostapd_ioctl(struct net_device *dev, struct iw_point *p)
 		goto out;
 	}
 
-	param = (struct ieee_param *)kmalloc(p->length, GFP_KERNEL);
+	param = kzalloc(p->length, GFP_KERNEL);
 	if (param == NULL) {
 		ret = -ENOMEM;
 		goto out;
@@ -4753,9 +4753,9 @@ static int rtw_wx_set_priv(struct net_device *dev,
 				pmlmepriv->wps_probe_req_ie = NULL;
 			}
 
-			pmlmepriv->wps_probe_req_ie = kmalloc(cp_sz, GFP_KERNEL);
+			pmlmepriv->wps_probe_req_ie = kzalloc(cp_sz, GFP_KERNEL);
 			if (pmlmepriv->wps_probe_req_ie == NULL) {
-				DBG_8192D("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192D("%s()-%d: kzalloc() ERROR!\n", __func__, __LINE__);
 				ret =  -EINVAL;
 				goto FREE_EXT;
 
@@ -5391,7 +5391,7 @@ static int rtw_wowlan_ctrl(struct net_device *dev,
 	pparmbuf = NULL;
 	bset = (u8)(p->flags & 0xFFFF);
 	len = p->length;
-	pparmbuf = (u8 *)kmalloc(len, GFP_KERNEL);
+	pparmbuf = kzalloc(len, GFP_KERNEL);
 	if (pparmbuf == NULL) {
 		ret = -ENOMEM;
 		goto _rtw_wowlan_ctrl_exit;

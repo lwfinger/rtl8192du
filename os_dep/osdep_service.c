@@ -745,7 +745,7 @@ void rtw_buf_update(u8 **buf, u32 *buf_len, u8 *src, u32 src_len)
 		goto keep_ori;
 
 	/* duplicate src */
-	dup = kmalloc(src_len, GFP_ATOMIC);
+	dup = kzalloc(src_len, GFP_ATOMIC);
 	if (dup) {
 		dup_len = src_len;
 		memcpy(dup, src, dup_len);
@@ -835,8 +835,7 @@ struct rtw_cbuf *rtw_cbuf_alloc(u32 size)
 {
 	struct rtw_cbuf *cbuf;
 
-	cbuf = (struct rtw_cbuf *)kmalloc(sizeof(*cbuf) + sizeof(void*) * size,
-					  GFP_KERNEL);
+	cbuf = kzalloc(sizeof(*cbuf) + sizeof(void*) * size, GFP_KERNEL);
 
 	if (cbuf) {
 		cbuf->write = cbuf->read = 0;

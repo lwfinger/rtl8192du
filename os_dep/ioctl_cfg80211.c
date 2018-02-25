@@ -187,7 +187,7 @@ static struct ieee80211_supported_band *rtw_spt_band_alloc(
 	len = sizeof(struct ieee80211_supported_band) +
 	      sizeof(struct ieee80211_channel) * n_channels +
 	      sizeof(struct ieee80211_rate) * n_bitrates;
-	spt_band = (struct ieee80211_supported_band *)kzalloc(len, GFP_KERNEL);
+	spt_band = kzalloc(len, GFP_KERNEL);
 	if (!spt_band)
 		goto exit;
 
@@ -537,7 +537,7 @@ static u8 set_pairwise_key(struct rtw_adapter *padapter, struct sta_info *psta)
 		goto exit;
 	}
 
-	psetstakey_para = (struct set_stakey_parm*)kzalloc(sizeof(struct set_stakey_parm), GFP_KERNEL);
+	psetstakey_para = kzalloc(sizeof(struct set_stakey_parm), GFP_KERNEL);
 	if (psetstakey_para==NULL) {
 		kfree(ph2c);
 		res=_FAIL;
@@ -569,12 +569,12 @@ static int set_group_key(struct rtw_adapter *padapter, u8 *key, u8 alg, int keyi
 
 	DBG_8192D("%s\n", __func__);
 
-	pcmd = (struct cmd_obj*)kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
+	pcmd = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 	if (pcmd==NULL) {
 		res= _FAIL;
 		goto exit;
 	}
-	psetkeyparm=(struct setkey_parm*)kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
+	psetkeyparm=kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
 	if (psetkeyparm==NULL) {
 		kfree(pcmd);
 		res= _FAIL;
@@ -1109,7 +1109,7 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, struct net_device *ndev,
 #endif	/*  (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) */
 
 	param_len = sizeof(struct ieee_param) + params->key_len;
-	param = (struct ieee_param *)kmalloc(param_len, GFP_KERNEL);
+	param = kzalloc(param_len, GFP_KERNEL);
 	if (param == NULL)
 		return -1;
 
@@ -1556,9 +1556,9 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(struct rtw_adapter *padapter, cha
 				pmlmepriv->wps_probe_req_ie = NULL;
 			}
 
-			pmlmepriv->wps_probe_req_ie = kmalloc(wps_ielen, GFP_KERNEL);
+			pmlmepriv->wps_probe_req_ie = kzalloc(wps_ielen, GFP_KERNEL);
 			if (pmlmepriv->wps_probe_req_ie == NULL) {
-				DBG_8192D("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192D("%s()-%d: kzalloc() ERROR!\n", __func__, __LINE__);
 				return -EINVAL;
 
 			}
@@ -2203,7 +2203,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		if (wep_key_len > 0) {
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
 			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
-			pwep =(struct ndis_802_11_wep *)kmalloc(wep_total_len, GFP_KERNEL);
+			pwep =kzalloc(wep_total_len, GFP_KERNEL);
 			if (pwep == NULL) {
 				DBG_8192D(" wpa_set_encryption: pwep allocate fail !!!\n");
 				ret = -ENOMEM;
@@ -3433,9 +3433,9 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 				pmlmepriv->wps_beacon_ie = NULL;
 			}
 
-			pmlmepriv->wps_beacon_ie = kmalloc(wps_ielen, GFP_KERNEL);
+			pmlmepriv->wps_beacon_ie = kzalloc(wps_ielen, GFP_KERNEL);
 			if (pmlmepriv->wps_beacon_ie == NULL) {
-				DBG_8192D("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192D("%s()-%d: kzalloc() ERROR!\n", __func__, __LINE__);
 				return -EINVAL;
 
 			}
@@ -3491,9 +3491,9 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 				pmlmepriv->wps_probe_resp_ie = NULL;
 			}
 
-			pmlmepriv->wps_probe_resp_ie = kmalloc(wps_ielen, GFP_KERNEL);
+			pmlmepriv->wps_probe_resp_ie = kzalloc(wps_ielen, GFP_KERNEL);
 			if (pmlmepriv->wps_probe_resp_ie == NULL) {
-				DBG_8192D("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
+				DBG_8192D("%s()-%d: kzalloc() ERROR!\n", __func__, __LINE__);
 				return -EINVAL;
 
 			}
@@ -3530,9 +3530,9 @@ static int rtw_cfg80211_set_assoc_resp_wpsp2pie(struct net_device *net, char *bu
 			pmlmepriv->wps_assoc_resp_ie = NULL;
 		}
 
-		pmlmepriv->wps_assoc_resp_ie = kmalloc(len, GFP_KERNEL);
+		pmlmepriv->wps_assoc_resp_ie = kzalloc(len, GFP_KERNEL);
 		if (pmlmepriv->wps_assoc_resp_ie == NULL) {
-			DBG_8192D("%s()-%d: kmalloc() ERROR!\n", __func__, __LINE__);
+			DBG_8192D("%s()-%d: kzalloc() ERROR!\n", __func__, __LINE__);
 			return -EINVAL;
 
 		}

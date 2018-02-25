@@ -298,7 +298,7 @@ static bool get_fw_from_file(struct rtw_adapter *adapter)
 		goto exit;
 	}
 
-	adapter->firmware = kmalloc(sizeof(struct rt_firmware_92d), GFP_KERNEL);
+	adapter->firmware = kzalloc(sizeof(struct rt_firmware_92d), GFP_KERNEL);
 	if (!adapter->firmware) {
 		goto exit;
 	}

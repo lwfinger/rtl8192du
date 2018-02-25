@@ -203,7 +203,7 @@ void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie)
 	if (authmode==_WPA_IE_ID_) {
 		RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("rtw_report_sec_ie, authmode=%d\n", authmode));
 
-		buff = kmalloc(IW_CUSTOM_MAX, GFP_ATOMIC);
+		buff = kzalloc(IW_CUSTOM_MAX, GFP_ATOMIC);
 
 		memset(buff,0,IW_CUSTOM_MAX);
 

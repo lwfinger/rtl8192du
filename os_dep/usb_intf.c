@@ -190,7 +190,7 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 	struct usb_host_endpoint		*phost_endp;
 	struct usb_endpoint_descriptor	*pendp_desc;
 
-	pdvobjpriv = (struct dvobj_priv*)kzalloc(sizeof(*pdvobjpriv), GFP_KERNEL);
+	pdvobjpriv = kzalloc(sizeof(*pdvobjpriv), GFP_KERNEL);
 	if (!pdvobjpriv)
 		goto exit;
 

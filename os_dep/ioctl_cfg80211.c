@@ -324,12 +324,11 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	u8 *notify_ie;
 	size_t notify_ielen;
 	s32 notify_signal;
-	u8 buf[MAX_BSSINFO_LEN], *pbuf;
+	u8 *buf, *pbuf;
 	size_t len,bssinf_len=0;
 	struct rtw_ieee80211_hdr *pwlanhdr;
 	__le16 *fctrl;
 	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-
 	struct wireless_dev *wdev = padapter->rtw_wdev;
 	struct wiphy *wiphy = wdev->wiphy;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
@@ -360,8 +359,10 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	} else {
 		notify_signal = 100*translate_percentage_to_dbm(pnetwork->network.PhyInfo.SignalStrength);/* dbm */
 	}
+	buf = kzalloc(MAX_BSSINFO_LEN, GFP_ATOMIC);
+	if (!buf)
+		goto exit;
 	pbuf = buf;
-
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pbuf;
 	fctrl = &(pwlanhdr->frame_ctl);
 	*(fctrl) = 0;
@@ -389,15 +390,14 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 		len, notify_signal, GFP_ATOMIC);
 	if (unlikely(!bss)) {
 		DBG_8192D("rtw_cfg80211_inform_bss error\n");
+		kfree(buf);
 		return -EINVAL;
 	}
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38))
 	/* patch for cfg80211, update beacon ies to information_elements */
 	if (pnetwork->network.Reserved[0] == 1) { /*  WIFI_BEACON */
-
-		 if (bss->len_information_elements != bss->len_beacon_ies)
-		 {
+		 if (bss->len_information_elements != bss->len_beacon_ies) {
 			bss->information_elements = bss->beacon_ies;
 			bss->len_information_elements =  bss->len_beacon_ies;
 		 }
@@ -409,6 +409,7 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 #else
 	cfg80211_put_bss(wiphy, bss);
 #endif
+	kfree(buf);
 
 exit:
 	return ret;

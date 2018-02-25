@@ -359,7 +359,7 @@ static int rtw_cfg80211_inform_bss(struct rtw_adapter *padapter, struct wlan_net
 	} else {
 		notify_signal = 100*translate_percentage_to_dbm(pnetwork->network.PhyInfo.SignalStrength);/* dbm */
 	}
-	buf = kzalloc(MAX_BSSINFO_LEN, GFP_ATOMIC);
+	buf = kzalloc(4 * MAX_BSSINFO_LEN, GFP_ATOMIC);
 	if (!buf)
 		goto exit;
 	pbuf = buf;

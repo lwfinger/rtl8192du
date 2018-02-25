@@ -4712,7 +4712,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
 	if (dwrq->length == 0)
 		return -EFAULT;
 	len = dwrq->length;
-	if (!(ext = vmalloc(len)))
+	if (!(ext = vzalloc(len)))
 		return -ENOMEM;
 
 	if (copy_from_user(ext, dwrq->pointer, len)) {
@@ -4721,7 +4721,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
 	}
 
 	#ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
-	if (!(ext_dbg = rtw_vmalloc(len))) {
+	if (!(ext_dbg = vzalloc(len))) {
 		vfree(ext);
 		return -ENOMEM;
 	}

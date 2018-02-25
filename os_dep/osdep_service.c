@@ -20,7 +20,6 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <recv_osdep.h>
-#include <linux/vmalloc.h>
 #include <rtw_ioctl_set.h>
 /*
 * Translate the OS dependent @param error_code to OS independent RTW_STATUS_CODE
@@ -55,14 +54,6 @@ u32 rtw_atoi(u8* s)
 	   num = num * -1;
 
 	 return(num);
-}
-
-inline u8* _rtw_vmalloc(u32 sz)
-{
-	u8	*pbuf;
-
-	pbuf = vmalloc(sz);
-	return pbuf;
 }
 
 int	_rtw_memcmp(void *dst, void *src, u32 sz)

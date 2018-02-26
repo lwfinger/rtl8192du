@@ -141,29 +141,28 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 	int i;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)purb->context;
 	struct rtw_adapter	*padapter = pxmitbuf->padapter;
-       struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
+	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 
-	switch (pxmitbuf->flags)
-	{
-		case VO_QUEUE_INX:
-			pxmitpriv->voq_cnt--;
-			break;
-		case VI_QUEUE_INX:
-			pxmitpriv->viq_cnt--;
-			break;
-		case BE_QUEUE_INX:
-			pxmitpriv->beq_cnt--;
-			break;
-		case BK_QUEUE_INX:
-			pxmitpriv->bkq_cnt--;
-			break;
-		case HIGH_QUEUE_INX:
+	switch (pxmitbuf->flags) {
+	case VO_QUEUE_INX:
+		pxmitpriv->voq_cnt--;
+		break;
+	case VI_QUEUE_INX:
+		pxmitpriv->viq_cnt--;
+		break;
+	case BE_QUEUE_INX:
+		pxmitpriv->beq_cnt--;
+		break;
+	case BK_QUEUE_INX:
+		pxmitpriv->bkq_cnt--;
+		break;
+	case HIGH_QUEUE_INX:
 #ifdef CONFIG_92D_AP_MODE
-			rtw_chk_hi_queue_cmd(padapter);
+		rtw_chk_hi_queue_cmd(padapter);
 #endif
-			break;
-		default:
-			break;
+		break;
+	default:
+		break;
 	}
 
 	if (padapter->bSurpriseRemoved || padapter->bDriverStopped ||padapter->bWritePortCancel)

@@ -359,7 +359,7 @@ static void rtw_dev_unload(struct rtw_adapter *padapter)
 
 		/* s4. */
 		if (!padapter->pwrctrlpriv.bInternalAutoSuspend)
-		rtw_stop_drv_threads(padapter);
+			rtw_stop_drv_threads(padapter);
 
 		/* s5. */
 		if (padapter->bSurpriseRemoved == false) {
@@ -510,7 +510,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	struct rtw_adapter *padapter = dvobj->if1;
 	struct net_device *pnetdev = padapter->pnetdev;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-	 int ret = 0;
+	int ret = 0;
 
 	if (pwrpriv->bInternalAutoSuspend) {
 		ret = rtw_resume_process(padapter);
@@ -690,7 +690,7 @@ static struct rtw_adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	struct net_device *pnetdev = NULL;
 	int status = _FAIL;
 
-	padapter = (struct rtw_adapter *)vzalloc(sizeof(*padapter));
+	padapter = kzalloc(sizeof(*padapter), GFP_KERNEL);
 	if (!padapter)
 		goto exit;
 	padapter->dvobj = dvobj;

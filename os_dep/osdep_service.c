@@ -40,20 +40,20 @@ u32 rtw_atoi(u8* s)
 
 	int num=0,flag=0;
 	int i;
-	for (i=0;i<=strlen(s);i++)
-	{
-	  if (s[i] >= '0' && s[i] <= '9')
-		 num = num * 10 + s[i] -'0';
-	  else if (s[0] == '-' && i==0)
-		 flag =1;
-	  else
-		  break;
+
+	for (i=0;i<=strlen(s);i++) {
+		if (s[i] >= '0' && s[i] <= '9')
+			num = num * 10 + s[i] -'0';
+		else if (s[0] == '-' && i==0)
+			flag =1;
+		else
+			break;
 	 }
 
 	if (flag == 1)
-	   num = num * -1;
+		num = num * -1;
 
-	 return(num);
+	return num;
 }
 
 int	_rtw_memcmp(void *dst, void *src, u32 sz)
@@ -626,7 +626,7 @@ void rtw_free_netdev(struct net_device * netdev)
 	if (!pnpi->priv)
 		goto RETURN;
 
-	vfree(pnpi->priv);
+	kfree(pnpi->priv);
 	free_netdev(netdev);
 
 RETURN:

@@ -590,20 +590,19 @@ static int set_group_key(struct rtw_adapter *padapter, u8 *key, u8 alg, int keyi
 
 	psetkeyparm->set_tx = 1;
 
-	switch (alg)
-	{
-		case _WEP40_:
-			keylen = 5;
-			break;
-		case _WEP104_:
-			keylen = 13;
-			break;
-		case _TKIP_:
-		case _TKIP_WTMIC_:
-		case _AES_:
-			keylen = 16;
-		default:
-			keylen = 16;
+	switch (alg) {
+	case _WEP40_:
+		keylen = 5;
+		break;
+	case _WEP104_:
+		keylen = 13;
+		break;
+	case _TKIP_:
+	case _TKIP_WTMIC_:
+	case _AES_:
+	default:
+		keylen = 16;
+		break;
 	}
 
 	memcpy(&(psetkeyparm->key[0]), key, keylen);
@@ -977,7 +976,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
 
-		psecuritypriv->ndisencryptstatus = NDIS802_11ENCRYPTION1ENABLED;
+			psecuritypriv->ndisencryptstatus = NDIS802_11ENCRYPTION1ENABLED;
 			psecuritypriv->dot11PrivacyAlgrthm = _WEP40_;
 			psecuritypriv->dot118021XGrpPrivacy = _WEP40_;
 
@@ -1601,8 +1600,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 #endif
 
 #ifdef CONFIG_CONCURRENT_MODE
-	if (rtw_buddy_adapter_up(padapter))
-	{
+	if (rtw_buddy_adapter_up(padapter)) {
 		pbuddy_adapter = padapter->pbuddy_adapter;
 		pbuddy_mlmepriv = &(pbuddy_adapter->mlmepriv);
 	}
@@ -1612,8 +1610,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	pwdev_priv->scan_request = request;
 	spin_unlock_bh(&pwdev_priv->scan_req_lock);
 
-	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
-	{
+	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 
 #ifdef CONFIG_DEBUG_CFG80211
 		DBG_8192D("%s under WIFI_AP_STATE\n", __func__);
@@ -1665,7 +1662,8 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 			pmlmepriv->scanning_via_buddy_intf = true;
 		}
 
-		DBG_8192D("buddy_intf's mlme state:0x%x\n", pbuddy_mlmepriv->fw_state);
+		if (pbuddy_mlmepriv)
+			DBG_8192D("buddy_intf's mlme state:0x%x\n", pbuddy_mlmepriv->fw_state);
 
 		need_indicate_scan_done = true;
 		goto check_need_indicate_scan_done;
@@ -1684,13 +1682,14 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 
 	/* parsing channels, n_channels */
 	memset(ch, 0, sizeof(struct rtw_ieee80211_channel)*RTW_CHANNEL_SCAN_AMOUNT);
-	if (request->n_channels == 1)
-	for (i=0;i<request->n_channels && i<RTW_CHANNEL_SCAN_AMOUNT;i++) {
-		#ifdef CONFIG_DEBUG_CFG80211
-		DBG_8192D(FUNC_ADPT_FMT CHAN_FMT"\n", FUNC_ADPT_ARG(padapter), CHAN_ARG(request->channels[i]));
-		#endif
-		ch[i].hw_value = request->channels[i]->hw_value;
-		ch[i].flags = request->channels[i]->flags;
+	if (request->n_channels == 1) {
+		for (i=0;i<request->n_channels && i<RTW_CHANNEL_SCAN_AMOUNT;i++) {
+			#ifdef CONFIG_DEBUG_CFG80211
+			DBG_8192D(FUNC_ADPT_FMT CHAN_FMT"\n", FUNC_ADPT_ARG(padapter), CHAN_ARG(request->channels[i]));
+			#endif
+			ch[i].hw_value = request->channels[i]->hw_value;
+			ch[i].flags = request->channels[i]->flags;
+		}
 	}
 
 	spin_lock_bh(&pmlmepriv->lock);
@@ -2094,6 +2093,8 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		}
 
 		pnetwork = container_of(pmlmepriv->pscanned, struct wlan_network, list);
+		if (!pnetwork)
+			break;
 		pmlmepriv->pscanned = pmlmepriv->pscanned->next;
 
 		dst_ssid = pnetwork->network.Ssid.Ssid;
@@ -2139,8 +2140,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 
 	}
 
-	if ((matched == false) || (pnetwork== NULL))
-	{
+	if (!matched || !pnetwork) {
 		ret = -ENOENT;
 		DBG_8192D("connect, matched == false, goto exit\n");
 		spin_unlock_bh(&queue->lock);
@@ -3802,10 +3802,8 @@ static void rtw_cfg80211_preinit_wiphy(struct rtw_adapter *padapter, struct wiph
 	wiphy->cipher_suites = rtw_cipher_suites;
 	wiphy->n_cipher_suites = ARRAY_SIZE(rtw_cipher_suites);
 
-	/* if (padapter->registrypriv.wireless_mode & WIRELESS_11G) */
-		wiphy->bands[IEEE80211_BAND_2GHZ] = rtw_spt_band_alloc(IEEE80211_BAND_2GHZ);
-	/* if (padapter->registrypriv.wireless_mode & WIRELESS_11A) */
-		wiphy->bands[IEEE80211_BAND_5GHZ] = rtw_spt_band_alloc(IEEE80211_BAND_5GHZ);
+	wiphy->bands[IEEE80211_BAND_2GHZ] = rtw_spt_band_alloc(IEEE80211_BAND_2GHZ);
+	wiphy->bands[IEEE80211_BAND_5GHZ] = rtw_spt_band_alloc(IEEE80211_BAND_5GHZ);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38) && LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0))
 	wiphy->flags |= WIPHY_FLAG_SUPPORTS_SEPARATE_DEFAULT_KEYS;
@@ -3888,7 +3886,6 @@ int rtw_wdev_alloc(struct rtw_adapter *padapter, struct device *dev)
 
 	return ret;
 
-	kfree(wdev);
 unregister_wiphy:
 	wiphy_unregister(wiphy);
  free_wiphy:

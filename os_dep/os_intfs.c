@@ -2075,7 +2075,7 @@ static int  ips_netdrv_open(struct rtw_adapter *padapter)
 	rtw_set_pwr_state_check_timer(&padapter->pwrctrlpriv);
 	_set_timer(&padapter->mlmepriv.dynamic_chk_timer, 5000);
 
-	 return _SUCCESS;
+	return _SUCCESS;
 
 netdev_open_error:
 	DBG_8192D("-ips_netdrv_open - drv_open failure, bup =%d\n", padapter->bup);

@@ -2009,9 +2009,6 @@ void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter)
 	struct rtw_adapter *pbuddy_adapter = adapter->pbuddy_adapter;
 #endif
 
-	if (!adapter)
-		return;
-
 	if (adapter->hw_init_completed == false)
 		return;
 
@@ -2105,7 +2102,7 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv,
 	}
 
 	/* check ssid, if needed */
-	if (pmlmepriv->assoc_ssid.Ssid && pmlmepriv->assoc_ssid.SsidLength) {
+	if (pmlmepriv->assoc_ssid.SsidLength) {
 		if (competitor->network.Ssid.SsidLength !=
 		    pmlmepriv->assoc_ssid.SsidLength ||
 		    _rtw_memcmp(competitor->network.Ssid.Ssid,

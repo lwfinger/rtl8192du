@@ -292,7 +292,7 @@ void Save_DM_Func_Flag(struct rtw_adapter *padapter)
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
 	if (pbuddy_adapter)
-	rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_OP, (u8 *)(&bSaveFlag));
+		rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_OP, (u8 *)(&bSaveFlag));
 #endif
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_DM_FUNC_OP, (u8 *)(&bSaveFlag));
@@ -304,7 +304,7 @@ void Restore_DM_Func_Flag(struct rtw_adapter *padapter)
 #ifdef CONFIG_CONCURRENT_MODE
 	struct rtw_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
 	if (pbuddy_adapter)
-	rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_OP, (u8 *)(&bSaveFlag));
+		rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_OP, (u8 *)(&bSaveFlag));
 #endif
 	rtw_hal_set_hwreg(padapter, HW_VAR_DM_FUNC_OP, (u8 *)(&bSaveFlag));
 }
@@ -318,13 +318,13 @@ void Switch_DM_Func(struct rtw_adapter *padapter, u8 mode, u8 enable)
 	if (enable == true) {
 #ifdef CONFIG_CONCURRENT_MODE
 		if (pbuddy_adapter)
-		rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_SET, (u8 *)(&mode));
+			rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_SET, (u8 *)(&mode));
 #endif
 		rtw_hal_set_hwreg(padapter, HW_VAR_DM_FUNC_SET, (u8 *)(&mode));
 	} else {
 #ifdef CONFIG_CONCURRENT_MODE
 		if (pbuddy_adapter)
-		rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_CLR, (u8 *)(&mode));
+			rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_CLR, (u8 *)(&mode));
 #endif
 		rtw_hal_set_hwreg(padapter, HW_VAR_DM_FUNC_CLR, (u8 *)(&mode));
 	}

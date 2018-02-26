@@ -276,7 +276,7 @@ u32 _rtw_write_port_and_wait(struct rtw_adapter *adapter, u32 addr, u32 cnt,
 	if (ret == _SUCCESS)
 		ret = rtw_sctx_wait(&sctx);
 
-	 return ret;
+	return ret;
 }
 
 void _rtw_write_port_cancel(struct rtw_adapter *adapter)

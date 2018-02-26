@@ -91,7 +91,7 @@ do{\
 }while (0)
 
 
-#define HWXMIT_ENTRY	4
+#define HWXMIT_ENTRY	5
 
 #define TXDESC_SIZE 32
 

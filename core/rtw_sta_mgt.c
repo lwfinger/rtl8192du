@@ -29,7 +29,7 @@ static void _rtw_init_stainfo(struct sta_info *psta)
 
 	memset((u8 *)psta, 0, sizeof(struct sta_info));
 
-	 _rtw_spinlock_init(&psta->lock);
+	_rtw_spinlock_init(&psta->lock);
 	INIT_LIST_HEAD(&psta->list);
 	INIT_LIST_HEAD(&psta->hash_list);
 
@@ -590,7 +590,7 @@ struct sta_info *rtw_get_bcmc_stainfo(struct rtw_adapter *padapter)
 	struct sta_priv		*pstapriv = &padapter->stapriv;
 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-	 psta = rtw_get_stainfo(pstapriv, bc_addr);
+	psta = rtw_get_stainfo(pstapriv, bc_addr);
 
 	return psta;
 }

@@ -7308,7 +7308,7 @@ void dc_handle_join_done(struct rtw_adapter *adapt, u8 join_res)
 			     pmlmeext->cur_channel, pmlmeext->cur_bwmode,
 			     pmlmeext->cur_ch_offset);
 
-			if (join_res >= 0) {
+			if (join_res > 0) {
 				u8 *p;
 				int ie_len;
 				struct HT_info_element *pht_info = NULL;

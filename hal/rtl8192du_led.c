@@ -428,7 +428,7 @@ static void SwLedBlink1(struct LED_871X *pLed)
 				}
 				else
 				{
-					 if (pLed->bLedOn)
+					if (pLed->bLedOn)
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -482,7 +482,7 @@ static void SwLedBlink1(struct LED_871X *pLed)
 				}
 				else
 				{
-					 if (pLed->bLedOn)
+					if (pLed->bLedOn)
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -595,7 +595,7 @@ static void SwLedBlink2(struct LED_871X *pLed)
 				}
 				else
 				{
-					 if (pLed->bLedOn)
+					if (pLed->bLedOn)
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -641,7 +641,7 @@ static void SwLedBlink2(struct LED_871X *pLed)
 				}
 				else
 				{
-					 if (pLed->bLedOn)
+					if (pLed->bLedOn)
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -901,7 +901,7 @@ static void SwLedBlink4(struct LED_871X *pLed)
 				}
 				else
 				{
-					 if (pLed->bLedOn)
+					if (pLed->bLedOn)
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -942,7 +942,7 @@ static void SwLedBlink4(struct LED_871X *pLed)
 				}
 				else
 				{
-					 if (pLed->bLedOn)
+					if (pLed->bLedOn)
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -1107,7 +1107,7 @@ static void SwLedBlink5(struct LED_871X *pLed)
 				}
 				else
 				{
-					 if (pLed->bLedOn)
+					if (pLed->bLedOn)
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -1136,16 +1136,14 @@ static void BlinkTimerCallback(unsigned long data)
 #endif
 {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
-	struct LED_871X *	 pLed = from_timer(pLed, t, BlinkTimer);
+	struct LED_871X *pLed = from_timer(pLed, t, BlinkTimer);
 #else
-	struct LED_871X *	 pLed = (struct LED_871X *)data;
+	struct LED_871X *pLed = (struct LED_871X *)data;
 #endif
-	struct rtw_adapter		*padapter = pLed->padapter;
+	struct rtw_adapter *padapter = pLed->padapter;
 
-	 if ((padapter->bSurpriseRemoved == true) || (padapter->bDriverStopped == true))
-       {
-             return;
-       }
+	if ((padapter->bSurpriseRemoved == true) || (padapter->bDriverStopped == true))
+		return;
 
 	_set_workitem(&(pLed->BlinkWorkItem));
 }
@@ -1157,44 +1155,41 @@ static void BlinkTimerCallback(unsigned long data)
 /*  */
 static void BlinkWorkItemCallback(struct work_struct *work)
 {
-	struct LED_871X *	 pLed = container_of(work, struct LED_871X, BlinkWorkItem);
+	struct LED_871X *pLed = container_of(work, struct LED_871X, BlinkWorkItem);
 	struct led_priv	*ledpriv = &(pLed->padapter->ledpriv);
 	struct rtw_adapter		*padapter = pLed->padapter;
 
-	 if ((padapter->bSurpriseRemoved == true) || (padapter->bDriverStopped == true))
-       {
-             return;
-       }
+	if ((padapter->bSurpriseRemoved == true) || (padapter->bDriverStopped == true))
+		return;
 
-	switch (ledpriv->LedStrategy)
-	{
-		case SW_LED_MODE0:
-			SwLedBlink(pLed);
-			break;
+	switch (ledpriv->LedStrategy) {
+	case SW_LED_MODE0:
+		SwLedBlink(pLed);
+		break;
 
-		case SW_LED_MODE1:
-			SwLedBlink1(pLed);
-			break;
+	case SW_LED_MODE1:
+		SwLedBlink1(pLed);
+		break;
 
-		case SW_LED_MODE2:
-			SwLedBlink2(pLed);
-			break;
+	case SW_LED_MODE2:
+		SwLedBlink2(pLed);
+		break;
 
-		case SW_LED_MODE3:
-			SwLedBlink3(pLed);
-			break;
+	case SW_LED_MODE3:
+		SwLedBlink3(pLed);
+		break;
 
-		case SW_LED_MODE4:
-			SwLedBlink4(pLed);
-			break;
+	case SW_LED_MODE4:
+		SwLedBlink4(pLed);
+		break;
 
-		case SW_LED_MODE5:
-			SwLedBlink5(pLed);
-			break;
+	case SW_LED_MODE5:
+		SwLedBlink5(pLed);
+		break;
 
-		default:
-			SwLedBlink(pLed);
-			break;
+	default:
+		SwLedBlink(pLed);
+		break;
 	}
 }
 
@@ -1393,9 +1388,9 @@ static void SwLedControlMode1(
 			break;
 
 		case LED_CTL_SITE_SURVEY:
-			 if ((pmlmepriv->LinkDetectInfo.bBusyTraffic) && (check_fwstate(pmlmepriv, _FW_LINKED)== true))
+			if ((pmlmepriv->LinkDetectInfo.bBusyTraffic) && (check_fwstate(pmlmepriv, _FW_LINKED)== true))
 				;
-			 else if (pLed->bLedScanBlinkInProgress ==false)
+			else if (pLed->bLedScanBlinkInProgress ==false)
 			 {
 				if (IS_LED_WPS_BLINKING(pLed))
 					return;
@@ -1408,7 +1403,7 @@ static void SwLedControlMode1(
 				if (pLed->bLedLinkBlinkInProgress == true)
 				{
 					_cancel_timer_ex(&(pLed->BlinkTimer));
-					 pLed->bLedLinkBlinkInProgress = false;
+					pLed->bLedLinkBlinkInProgress = false;
 				}
 				if (pLed->bLedBlinkInProgress ==true)
 				{
@@ -1451,8 +1446,7 @@ static void SwLedControlMode1(
 			break;
 		case LED_CTL_START_WPS: /* wait until xinpin finish */
 		case LED_CTL_START_WPS_BOTTON:
-			 if (pLed->bLedWPSBlinkInProgress ==false)
-			 {
+			if (pLed->bLedWPSBlinkInProgress ==false) {
 				if (pLed->bLedNoLinkBlinkInProgress == true)
 				{
 					_cancel_timer_ex(&(pLed->BlinkTimer));
@@ -1461,7 +1455,7 @@ static void SwLedControlMode1(
 				if (pLed->bLedLinkBlinkInProgress == true)
 				{
 					_cancel_timer_ex(&(pLed->BlinkTimer));
-					 pLed->bLedLinkBlinkInProgress = false;
+					pLed->bLedLinkBlinkInProgress = false;
 				}
 				if (pLed->bLedBlinkInProgress ==true)
 				{
@@ -1492,7 +1486,7 @@ static void SwLedControlMode1(
 			if (pLed->bLedLinkBlinkInProgress == true)
 			{
 				_cancel_timer_ex(&(pLed->BlinkTimer));
-				 pLed->bLedLinkBlinkInProgress = false;
+				pLed->bLedLinkBlinkInProgress = false;
 			}
 			if (pLed->bLedBlinkInProgress ==true)
 			{
@@ -1596,10 +1590,9 @@ static void SwLedControlMode2(
 	switch (LedAction)
 	{
 		case LED_CTL_SITE_SURVEY:
-			 if (pmlmepriv->LinkDetectInfo.bBusyTraffic)
+			if (pmlmepriv->LinkDetectInfo.bBusyTraffic)
 				;
-			 else if (pLed->bLedScanBlinkInProgress ==false)
-			 {
+			 else if (pLed->bLedScanBlinkInProgress ==false) {
 				if (IS_LED_WPS_BLINKING(pLed))
 					return;
 
@@ -2350,10 +2343,8 @@ static void LedControl871x(
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
 
-       if ((padapter->bSurpriseRemoved == true) || (padapter->bDriverStopped == true))
-       {
-             return;
-       }
+	if ((padapter->bSurpriseRemoved == true) || (padapter->bDriverStopped == true))
+		return;
 
 	if (ledpriv->bRegUseLed == false)
 		return;

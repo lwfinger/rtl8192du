@@ -310,20 +310,19 @@ static void getTxPowerWriteValByRegulatory(
 					((index<2)?powerBase0[rf]:powerBase1[rf]);
 				break;
 			case 1:	/*  Realtek regulatory */
-					/*  increase power diff defined by Realtek for regulatory */
-					if (pHalData->pwrGroupCnt == 1)
-						chnlGroup = 0;
-					if (pHalData->pwrGroupCnt >= MAX_PG_GROUP)
-					{
-						chnlGroup = getChnlGroupByPG(Channel-1);
+				/*  increase power diff defined by Realtek for regulatory */
+				if (pHalData->pwrGroupCnt == 1)
+					chnlGroup = 0;
+				if (pHalData->pwrGroupCnt >= MAX_PG_GROUP) {
+					chnlGroup = getChnlGroupByPG(Channel-1);
 
-						if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
-							chnlGroup++;
-						else	   /*  40M BW */
-							chnlGroup += 4;
-					}
-					writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] +
-							((index<2)?powerBase0[rf]:powerBase1[rf]);
+					if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
+						chnlGroup++;
+					else	   /*  40M BW */
+						chnlGroup += 4;
+				}
+				writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] +
+						((index<2)?powerBase0[rf]:powerBase1[rf]);
 
 				break;
 			case 2:	/*  Better regulatory */
@@ -535,7 +534,7 @@ rtl8192d_PHY_PowerDownAnotherPHY(
 			MaskforPhySet = MAC0_ACCESS_PHY1;
 		else
 			MaskforPhySet = MAC1_ACCESS_PHY0;
-		  rtw_write32(adapter, rFPGA0_XA_LSSIParameter|MaskforPhySet, 0x00000000);
+		rtw_write32(adapter, rFPGA0_XA_LSSIParameter|MaskforPhySet, 0x00000000);
 	}
 
 }

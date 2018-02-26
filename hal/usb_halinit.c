@@ -1943,7 +1943,7 @@ static u32 rtl8192du_hal_init(struct rtw_adapter *padapter)
 	rtw_write16(padapter, REG_BCN_CTRL, 0x1818);	/*  For 2 PORT TSF SYNC */
 
 	{
-	       u32					ulRegRead;
+		u32 ulRegRead;
 		/* 3  */
 		/* 3 Set Loopback mode or Normal mode */
 		/* 3 */
@@ -2173,7 +2173,7 @@ c.	APSD_CTRL 0x600[7:0] = 0x40
 d.	SYS_FUNC_EN 0x02[7:0] = 0x16		reset BB state machine
 e.	SYS_FUNC_EN 0x02[7:0] = 0x14		reset BB state machine
 ***************************************/
-       struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
+	struct hal_data_8192du	*pHalData = GET_HAL_DATA(adapter);
 	u8	eRFPath = 0, value8 = 0;
 
 	PHY_SetBBReg(adapter, rFPGA0_AnalogParameter4, 0x00f00000,  0xf);
@@ -3543,7 +3543,7 @@ static void hw_var_set_mlme_disconnect(struct rtw_adapter *adapter,
 #else   /*  CONFIG_BEACON_DISABLE_OFFLOAD */
 
 		/* disable update TSF1 */
-			rtw_write8(adapter, REG_BCN_CTRL_1, rtw_read8(adapter, REG_BCN_CTRL_1)|BIT(4));
+		rtw_write8(adapter, REG_BCN_CTRL_1, rtw_read8(adapter, REG_BCN_CTRL_1)|BIT(4));
 
 		/* reset TSF1 */
 		rtw_write8(adapter, REG_DUAL_TSF_RST, BIT(1));
@@ -3565,7 +3565,7 @@ static void hw_var_set_mlme_disconnect(struct rtw_adapter *adapter,
 	else	/*  (adapter->iface_type == IFACE_PORT1) */
 	{
 		/* disable update TSF */
-			rtw_write8(adapter, REG_BCN_CTRL, rtw_read8(adapter, REG_BCN_CTRL)|BIT(4));
+		rtw_write8(adapter, REG_BCN_CTRL, rtw_read8(adapter, REG_BCN_CTRL)|BIT(4));
 
 		/* reset TSF */
 		rtw_write8(adapter, REG_DUAL_TSF_RST, BIT(0));

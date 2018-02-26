@@ -351,6 +351,8 @@ int FirmwareDownload92D(struct rtw_adapter *adapter, bool bUsedWoWLANFw)
 			goto Exit;
 		}
 	}
+	if (!adapter->firmware)
+		goto Exit;
 	pFirmwareBuf = adapter->firmware->buffer;
 	FirmwareLen = adapter->firmware->length;
 
@@ -523,7 +525,7 @@ static u8 Hal_GetChnlGroupfromArray(u8 chnl)
 		group = 0;
 	else if (channel_info[chnl] <= 9)		/*  Channel 4-9 */
 		group = 1;
-	else	if (channel_info[chnl] <= 14)				/*  Channel 10-14 */
+	else if (channel_info[chnl] <= 14)		/*  Channel 10-14 */
 		group = 2;
 	/*  For TX_POWER_FOR_5G_BAND */
 	else if (channel_info[chnl] <= 44)
@@ -1088,7 +1090,7 @@ static void rtl8192d_EfusePowerSwitch(struct rtw_adapter *adapter, u8 bWrite,
 		tmpV16 = rtw_read16(adapter, REG_SYS_ISO_CTRL);
 		if (!(tmpV16 & PWC_EV12V)) {
 			tmpV16 |= PWC_EV12V;
-			 rtw_write16(adapter, REG_SYS_ISO_CTRL, tmpV16);
+			rtw_write16(adapter, REG_SYS_ISO_CTRL, tmpV16);
 		}
 		/*  Reset: 0x0000h[28], default valid */
 		tmpV16 = rtw_read16(adapter, REG_SYS_FUNC_EN);

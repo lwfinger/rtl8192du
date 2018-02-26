@@ -348,7 +348,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 #ifdef CONFIG_92D_AP_MODE
 		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 			ptxdesc->txdw5 |= cpu_to_le32(BIT(17));/* retry limit enable */
-				ptxdesc->txdw5 |= cpu_to_le32(0x00180000);/* retry limit = 6 */
+			ptxdesc->txdw5 |= cpu_to_le32(0x00180000);/* retry limit = 6 */
 		}
 #endif
 
@@ -436,7 +436,7 @@ s32 rtw_dump_xframe(struct rtw_adapter *padapter, struct xmit_frame *pxmitframe)
 
 	mem_addr = pxmitframe->buf_addr;
 
-       RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_dump_xframe()\n"));
+	RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_dump_xframe()\n"));
 
 	for (t = 0; t < pattrib->nr_frags; t++) {
 		if (inner_ret != _SUCCESS && ret == _SUCCESS)

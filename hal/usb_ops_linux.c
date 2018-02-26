@@ -322,7 +322,7 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 
 	wvalue = (u16)(addr&0x0000ffff);
 	len = length;
-	 memcpy(buf, pdata, len);
+	memcpy(buf, pdata, len);
 
 	ret = usb_write_reg(pintfhdl, wvalue, buf, len);
 

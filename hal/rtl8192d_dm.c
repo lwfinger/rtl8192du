@@ -186,9 +186,8 @@ odm_FalseAlarmCounterStatistics(
 	struct FALSE_ALARM_STATISTICS *falsealmcnt = &(pdmpriv->falsealmcnt);
 	u8	BBReset;
 #ifdef CONFIG_CONCURRENT_MODE
-	struct rtw_adapter * pbuddy_adapter = adapter->pbuddy_adapter;
-	struct hal_data_8192du *pbuddy_pHalData = GET_HAL_DATA(pbuddy_adapter);
-	struct mlme_priv *pbuddy_pmlmepriv = &(pbuddy_adapter->mlmepriv);
+	struct rtw_adapter *pbuddy_adapter = adapter->pbuddy_adapter;
+	struct mlme_priv *pbuddy_pmlmepriv;
 #endif /* CONFIG_CONCURRENT_MODE */
 	/* hold ofdm counter */
 	PHY_SetBBReg(adapter, rOFDM0_LSTF, BIT31, 1); /* hold page C counter */
@@ -209,8 +208,7 @@ odm_FalseAlarmCounterStatistics(
 								falsealmcnt->Cnt_Crc8_fail + falsealmcnt->Cnt_Mcs_fail +
 								falsealmcnt->Cnt_Fast_Fsync + falsealmcnt->Cnt_SB_Search_fail;
 
-	if (pHalData->CurrentBandType92D != BAND_ON_5G)
-	{
+	if (pHalData->CurrentBandType92D != BAND_ON_5G) {
 		/* hold cck counter */
 
 		ret_value = PHY_QueryBBReg(adapter, rCCK0_FACounterLower, bMaskByte0);
@@ -218,9 +216,7 @@ odm_FalseAlarmCounterStatistics(
 
 		ret_value = PHY_QueryBBReg(adapter, rCCK0_FACounterUpper, bMaskByte3);
 		falsealmcnt->Cnt_Cck_fail +=  (ret_value& 0xff)<<8;
-	}
-	else
-	{
+	} else {
 		falsealmcnt->Cnt_Cck_fail = 0;
 	}
 
@@ -233,8 +229,10 @@ odm_FalseAlarmCounterStatistics(
 						falsealmcnt->Cnt_Cck_fail);
 	adapter->recvpriv.falsealmcnt_all = falsealmcnt->Cnt_all;
 #ifdef CONFIG_CONCURRENT_MODE
-	if (pbuddy_adapter)
+	if (pbuddy_adapter) {
 		pbuddy_adapter->recvpriv.falsealmcnt_all = falsealmcnt->Cnt_all;
+		pbuddy_pmlmepriv = &(pbuddy_adapter->mlmepriv);
+	}
 #endif /* CONFIG_CONCURRENT_MODE */
 
 	/* reset false alarm counter registers */
@@ -434,20 +432,15 @@ DM_Write_DIG_DMSP(
 
 	Buddydmpriv = &GET_HAL_DATA(Buddyadapter)->dmpriv;
 
-	if (dm_digtable->preigvalue != dm_digtable->curigvalue)
-	{
+	if (dm_digtable->preigvalue != dm_digtable->curigvalue) {
 		/*  Set initial gain. */
 		/*  20100211 Joseph: Set only BIT0~BIT6 for DIG. BIT7 is the function switch of Antenna diversity. */
 		/*  Just not to modified it for SD3 testing. */
-		 if (pHalData->bSlaveOfDMSP)
-		 {
+		if (pHalData->bSlaveOfDMSP) {
 			Buddydmpriv->bWriteDigForAnotherMacOfDMSP = true;
 			Buddydmpriv->CurDigValueForAnotherMacOfDMSP =  dm_digtable->curigvalue;
-		 }
-		else
-		{
-			if (!bGetValueFromOtherMac)
-			{
+		} else {
+			if (!bGetValueFromOtherMac) {
 				PHY_SetBBReg(adapter, rOFDM0_XAAGCCore1, 0x7f, dm_digtable->curigvalue);
 				PHY_SetBBReg(adapter, rOFDM0_XBAGCCore1, 0x7f, dm_digtable->curigvalue);
 			}
@@ -981,36 +974,27 @@ static void dm_1R_CCA(struct rtw_adapter *adapter)
 	struct PS_T *dm_pstable = &pdmpriv->DM_PSTable;
 	struct registry_priv *pregistrypriv = &adapter->registrypriv;
 
-      if (pHalData->CurrentBandType92D == BAND_ON_5G)
-      {
-		if (pdmpriv->MinUndecoratedPWDBForDM != 0)
-		{
-			if (dm_pstable->preccastate == CCA_2R || dm_pstable->preccastate == CCA_MAX)
-			{
+	if (pHalData->CurrentBandType92D == BAND_ON_5G) {
+		if (pdmpriv->MinUndecoratedPWDBForDM != 0) {
+			if (dm_pstable->preccastate == CCA_2R || dm_pstable->preccastate == CCA_MAX) {
 				if (pdmpriv->MinUndecoratedPWDBForDM >= 35)
 					dm_pstable->curccastate = CCA_1R;
 				else
 					dm_pstable->curccastate = CCA_2R;
 
-			}
-			else {
+			} else {
 				if (pdmpriv->MinUndecoratedPWDBForDM <= 30)
 					dm_pstable->curccastate = CCA_2R;
 				else
 					dm_pstable->curccastate = CCA_1R;
 			}
-		}
-		else	/* disconnect */
-		{
+		} else {	/* disconnect */
 			dm_pstable->curccastate=CCA_MAX;
 		}
 
-		if (dm_pstable->preccastate != dm_pstable->curccastate)
-		{
-			if (dm_pstable->curccastate == CCA_1R)
-			{
-				if (pHalData->rf_type == RF_2T2R)
-				{
+		if (dm_pstable->preccastate != dm_pstable->curccastate) {
+			if (dm_pstable->curccastate == CCA_1R) {
+				if (pHalData->rf_type == RF_2T2R) {
 					if (pregistrypriv->special_rf_path == 1) /*  path A only */
 						PHY_SetBBReg(adapter, rOFDM0_TRxPathEnable  , bMaskByte0, 0x11);
 					else if (pregistrypriv->special_rf_path == 2) /* path B only */
@@ -1018,9 +1002,7 @@ static void dm_1R_CCA(struct rtw_adapter *adapter)
 					else
 						PHY_SetBBReg(adapter, rOFDM0_TRxPathEnable  , bMaskByte0, 0x13);
 					/* PHY_SetBBReg(adapter, 0xe70, bMaskByte3, 0x20); */
-				}
-				else
-				{
+				} else {
 					if (pregistrypriv->special_rf_path == 1) /*  path A only */
 						PHY_SetBBReg(adapter, rOFDM0_TRxPathEnable  , bMaskByte0, 0x11);
 					else if (pregistrypriv->special_rf_path == 2) /* path B only */
@@ -2076,36 +2058,33 @@ static void	dm_CheckPbcGPIO(struct rtw_adapter * padapter)
 	if (!padapter->registrypriv.hw_wps_pbc)
 		return;
 
-	do
-	{
+	do {
 		i++;
-	tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
-	tmp1byte |= (HAL_8192C_HW_GPIO_WPS_BIT);
-	rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	/* enable GPIO[2] as output mode */
+		tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
+		tmp1byte |= (HAL_8192C_HW_GPIO_WPS_BIT);
+		rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	/* enable GPIO[2] as output mode */
 
-	tmp1byte &= ~(HAL_8192C_HW_GPIO_WPS_BIT);
-	rtw_write8(padapter,  GPIO_IN, tmp1byte);		/* reset the floating voltage level */
+		tmp1byte &= ~(HAL_8192C_HW_GPIO_WPS_BIT);
+		rtw_write8(padapter,  GPIO_IN, tmp1byte);		/* reset the floating voltage level */
 
-	tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
-	tmp1byte &= ~(HAL_8192C_HW_GPIO_WPS_BIT);
-	rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	/* enable GPIO[2] as input mode */
+		tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
+		tmp1byte &= ~(HAL_8192C_HW_GPIO_WPS_BIT);
+		rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	/* enable GPIO[2] as input mode */
 
-	tmp1byte =rtw_read8(padapter, GPIO_IN);
+		tmp1byte =rtw_read8(padapter, GPIO_IN);
 
-	if (tmp1byte == 0xff)
-	{
-		bPbcPressed = false;
-		break ;
-	}
+		if (tmp1byte == 0xff) {
+			bPbcPressed = false;
+			break ;
+		}
 
-	if (tmp1byte&HAL_8192C_HW_GPIO_WPS_BIT)
-	{
-		bPbcPressed = true;
+		if (tmp1byte&HAL_8192C_HW_GPIO_WPS_BIT) {
+			bPbcPressed = true;
 
-		if (i<=3)
-			rtw_msleep_os(50);
-	}
-	}while (i<=3 && bPbcPressed == true);
+			if (i<=3)
+				rtw_msleep_os(50);
+		}
+	} while (i<=3 && bPbcPressed == true);
 
 	if (true == bPbcPressed)
 	{

@@ -193,7 +193,7 @@ rtl8192d_PHY_SetBBReg1Byte(
 	)
 {
 	u32			OriginalValue, BitShift,offset = 0;
-       u8			value=0;
+	u8			value=0;
 
 #if (DISABLE_BB_RF == 1)
 	return;
@@ -4356,8 +4356,8 @@ phy_IQCalibrate_5G(
 	REG0xe40 = PHY_QueryBBReg(adapter, rTx_IQK, bMaskDWord);
 	REG0xeac = PHY_QueryBBReg(adapter, rRx_Power_After_IQK_A_2, bMaskDWord);
 	REG0xeb4 = PHY_QueryBBReg(adapter, rTx_Power_Before_IQK_B, bMaskDWord);
-	if (((REG0xeac&BIT(31)) == 0) && ((REG0xeb4&0x3FF0000)!=0x142))
-	{
+	/* The next statement was testing against 0x142. This was always unequal. */
+	if (((REG0xeac&BIT(31)) == 0) && ((REG0xeb4&0x3FF0000)!=0x1420000)) {
 		TX_X1 = (PHY_QueryBBReg(adapter, rTx_Power_Before_IQK_B, bMaskDWord)&0x3FF0000)>>16;
 		TX_Y1 = (PHY_QueryBBReg(adapter, rTx_Power_After_IQK_B, bMaskDWord)&0x3FF0000)>>16;
 		RX1REG0xe40 = 0x80000000 | (REG0xe40 & 0xfc00fc00) | (TX_X1<<16) | TX_Y1;
@@ -4870,18 +4870,15 @@ phy_LCCalibrate92DSW(
 		}
 	}
 
-	for (index = 0; index <path; index ++)
-	{
+	for (index = 0; index <path; index ++) {
 		u4tmp = PHY_QueryRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G6, bRFRegOffsetMask);
 
-		while ((!(u4tmp & BIT11)) &&
-			timecount <= timeout)
-		{
-				#ifdef CONFIG_LONG_DELAY_ISSUE
-				rtw_msleep_os(50);
-				#else
-				rtw_mdelay_os(50);
-				#endif
+		while ((!(u4tmp & BIT11)) && timecount <= timeout) {
+			#ifdef CONFIG_LONG_DELAY_ISSUE
+			rtw_msleep_os(50);
+			#else
+			rtw_mdelay_os(50);
+			#endif
 			timecount += 50;
 			u4tmp = PHY_QueryRFReg(adapter, (enum RF_RADIO_PATH_E)index, RF_SYN_G6, bRFRegOffsetMask);
 		}

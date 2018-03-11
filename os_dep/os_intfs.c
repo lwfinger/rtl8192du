@@ -1381,7 +1381,9 @@ u8 rtw_free_drv_sw(struct rtw_adapter *padapter)
 	/*  clear pbuddy_adapter to avoid access wrong pointer. */
 	if (padapter->pbuddy_adapter != NULL)
 	{
-		padapter->pbuddy_adapter->pbuddy_adapter = NULL;
+//		original form was as below, but it crashes
+//		padapter->pbuddy_adapter->pbuddy_adapter = NULL;
+		padapter->pbuddy_adapter = NULL;
 	}
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-rtw_free_drv_sw\n"));

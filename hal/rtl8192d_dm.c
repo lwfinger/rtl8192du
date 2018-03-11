@@ -877,7 +877,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 		if (pdmpriv->bChangeCCKPDStateForAnotherMacOfDMSP)
 		{
 			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): mac 0 set for mac1\n");
-			if (pdmpriv->curcckpdstateForAnotherMacOfDMSP == CCK_PD_STAGE_LOWRSSI)
+			if (pdmpriv->CurCCKPDStateForAnotherMacOfDMSP == CCK_PD_STAGE_LOWRSSI)
 			{
 				PHY_SetBBReg(adapter, rCCK0_CCA, maskbyte2, 0x83);
 			}
@@ -920,7 +920,7 @@ static void dm_CCK_PacketDetectionThresh_DMSP(
 			Buddydmpriv = &GET_HAL_DATA(Buddyadapter)->dmpriv;
 			DBG_8192D("dm_CCK_PacketDetectionThresh_DMSP(): bslave case\n");
 			Buddydmpriv->bChangeCCKPDStateForAnotherMacOfDMSP = true;
-			Buddydmpriv->curcckpdstateForAnotherMacOfDMSP = dm_digtable->curcckpdstate;
+			Buddydmpriv->CurCCKPDStateForAnotherMacOfDMSP = dm_digtable->curcckpdstate;
 		}
 		else
 		{

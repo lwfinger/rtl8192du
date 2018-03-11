@@ -31,6 +31,9 @@
 	#include <linux/init.h>
 	#include <linux/slab.h>
 	#include <linux/module.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
+#include <linux/sched/signal.h>
+#endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,5))
 	#include <linux/kref.h>
 #endif

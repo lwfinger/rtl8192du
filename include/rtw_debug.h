@@ -150,26 +150,15 @@
 	#define	_MODULE_DEFINE_	_module_efuse_
 #endif
 
-#ifdef PLATFORM_OS_CE
-extern void rtl871x_cedbg(const char *fmt, ...);
-#endif
-
 #define RT_TRACE(_Comp, _Level, Fmt) do{}while(0)
 #define _func_enter_ do{}while(0)
 #define _func_exit_ do{}while(0)
 #define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen) do{}while(0)
 
-#ifdef PLATFORM_WINDOWS
-	#define DBG_871X do {} while(0)
-	#define MSG_8192C do {} while(0)
-	#define DBG_8192C do {} while(0)
-	#define DBG_871X_LEVEL do {} while(0)
-#else
 	#define DBG_871X(x, ...) do {} while(0)
 	#define MSG_8192C(x, ...) do {} while(0)
 	#define DBG_8192C(x,...) do {} while(0)
 	#define DBG_871X_LEVEL(x,...) do {} while(0)
-#endif
 
 #undef _dbgdump
 #undef _seqdump
@@ -179,21 +168,10 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 	extern u64 GlobalDebugComponents;
 #endif
 
-#if defined(PLATFORM_WINDOWS) && defined(PLATFORM_OS_XP)
-	#define _dbgdump DbgPrint
-	#define _seqdump(sel, fmt, arg...) _dbgdump(fmt, ##arg)
-#elif defined(PLATFORM_WINDOWS) && defined(PLATFORM_OS_CE)
-	#define _dbgdump rtl871x_cedbg
-	#define _seqdump(sel, fmt, arg...) _dbgdump(fmt, ##arg)
-#elif defined PLATFORM_LINUX
 	#define _dbgdump printk
 	#define _seqdump seq_printf
-#elif defined PLATFORM_FREEBSD
-	#define _dbgdump printf
-	#define _seqdump(sel, fmt, arg...) _dbgdump(fmt, ##arg)
-#endif
 
-#define DRIVER_PREFIX "RTL871X: "
+#define DRIVER_PREFIX "RTL8192DU: "
 
 #if defined(_dbgdump)
 
@@ -254,17 +232,20 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 #if	defined(_dbgdump)
 	#undef DBG_871X
 	#define DBG_871X(...)     do {\
-		_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
+		if (GlobalDebugLevel >= _drv_debug_)	\
+			 _dbgdump(DRIVER_PREFIX __VA_ARGS__);\
 	}while(0)
 
 	#undef MSG_8192C
 	#define MSG_8192C(...)     do {\
-		_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
+		if (GlobalDebugLevel >= _drv_debug_)	\
+			_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
 	}while(0)
 
 	#undef DBG_8192C
 	#define DBG_8192C(...)     do {\
-		_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
+		if (GlobalDebugLevel >= _drv_debug_)	\
+			_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
 	}while(0)
 #endif /* defined(_dbgdump) */
 #endif /* CONFIG_DEBUG */

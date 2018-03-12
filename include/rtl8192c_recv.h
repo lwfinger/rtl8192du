@@ -25,11 +25,6 @@
 #include <drv_types.h>
 
 
-#ifdef PLATFORM_OS_XP
-	#define NR_RECVBUFF (16)
-#elif defined(PLATFORM_OS_CE)
-	#define NR_RECVBUFF (4)
-#else
 #ifdef CONFIG_SINGLE_RECV_BUF
 	#define NR_RECVBUFF (1)
 #else
@@ -37,7 +32,6 @@
 #endif //CONFIG_SINGLE_RECV_BUF
 
 	#define NR_PREALLOC_RECV_SKB (8)
-#endif
 
 
 #define RECV_BLK_SZ 512
@@ -46,9 +40,6 @@
 
 #if defined(CONFIG_USB_HCI)
 
-#ifdef PLATFORM_OS_CE
-#define MAX_RECVBUF_SZ (8192+1024) // 8K+1k
-#else
 	#ifndef CONFIG_MINIMAL_MEMORY_USAGE
 		//#define MAX_RECVBUF_SZ (32768) // 32k
 		//#define MAX_RECVBUF_SZ (16384) //16K
@@ -62,7 +53,6 @@
 	#else
 		#define MAX_RECVBUF_SZ (4000) // about 4K
 	#endif
-#endif
 
 #elif defined(CONFIG_PCI_HCI)
 //#ifndef CONFIG_MINIMAL_MEMORY_USAGE

@@ -31,12 +31,6 @@
 #include <usb_ops.h>
 #endif
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
 #include <wifi.h>
 #include <circ_buf.h>
 
@@ -272,11 +266,6 @@ _func_enter_;
 		pfree_recv_queue = &precvpriv->free_recv_queue;
 		precvframe->u.hdr.adapter = padapter;
 	}
-#endif
-
-
-#ifdef PLATFORM_WINDOWS
-	rtw_os_read_port(padapter, precvframe->u.hdr.precvbuf);
 #endif
 
 #if defined(PLATFORM_LINUX)
@@ -2548,21 +2537,6 @@ _func_enter_;
 	}
 	else
 	{
-#ifdef PLATFORM_OS_XP
-		NDIS_PACKET_8021Q_INFO VlanPriInfo;
-		UINT32 UserPriority = precvframe->u.hdr.attrib.priority;
-		UINT32 VlanID = (pvlan!=NULL ? get_vlan_id(pvlan) : 0 );
-
-		VlanPriInfo.Value =          // Get current value.
-				NDIS_PER_PACKET_INFO_FROM_PACKET(precvframe->u.hdr.pkt, Ieee8021QInfo);
-
-		VlanPriInfo.TagHeader.UserPriority = UserPriority;
-		VlanPriInfo.TagHeader.VlanId =  VlanID ;
-
-		VlanPriInfo.TagHeader.CanonicalFormatId = 0; // Should be zero.
-		VlanPriInfo.TagHeader.Reserved = 0; // Should be zero.
-		NDIS_PER_PACKET_INFO_FROM_PACKET(precvframe->u.hdr.pkt, Ieee8021QInfo) = VlanPriInfo.Value;
-#endif
 	}
 
 	if(eth_type==0x8712)// append rx status for mp test packets
@@ -3055,9 +3029,6 @@ exit:
 
 	return ret;
 #else  // || defined (PLATFORM_LINUX)
-#ifdef PLATFORM_WINDOWS
-	_irqL irql;
-#endif //PLATFORM_WINDOWS
 	unsigned char *ptr, *pdata, *pbuf, *psnap_type;
 	union recv_frame *pnrframe, *pnrframe_new;
 	int a_len, mv_len, padding_len;
@@ -3068,9 +3039,6 @@ exit:
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 	_queue *pfree_recv_queue = &(precvpriv->free_recv_queue);
 	int ret = _SUCCESS;
-#ifdef PLATFORM_WINDOWS
-	struct recv_buf *precvbuf = prframe->u.hdr.precvbuf;
-#endif //PLATFORM_WINDOWS
 	a_len = prframe->u.hdr.len - prframe->u.hdr.attrib.hdrlen;
 
 	recvframe_pull(prframe, prframe->u.hdr.attrib.hdrlen);
@@ -3176,25 +3144,6 @@ exit:
 				RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("@@@===recv tcp len:%d @@@===\n", pnrframe->u.hdr.len));
 			}
 		}
-#ifdef PLATFORM_OS_XP
-		else
-		{
-			NDIS_PACKET_8021Q_INFO VlanPriInfo;
-			UINT32 UserPriority = pnrframe->u.hdr.attrib.priority;
-			UINT32 VlanID = (pvlan!=NULL ? get_vlan_id(pvlan) : 0 );
-
-			VlanPriInfo.Value =          // Get current value.
-					NDIS_PER_PACKET_INFO_FROM_PACKET(pnrframe->u.hdr.pkt, Ieee8021QInfo);
-
-			VlanPriInfo.TagHeader.UserPriority = UserPriority;
-			VlanPriInfo.TagHeader.VlanId =  VlanID;
-
-			VlanPriInfo.TagHeader.CanonicalFormatId = 0; // Should be zero.
-			VlanPriInfo.TagHeader.Reserved = 0; // Should be zero.
-			NDIS_PER_PACKET_INFO_FROM_PACKET(pnrframe->u.hdr.pkt, Ieee8021QInfo) = VlanPriInfo.Value;
-
-		}
-#endif //PLATFORM_OS_XP
 
 		pbuf = recvframe_pull(pnrframe, (mv_len-sizeof(struct ethhdr)));
 
@@ -3306,13 +3255,6 @@ exit:
 				pdata += (type_len + ETH_HLEN + padding_len);
 				pnrframe_new->u.hdr.rx_head = pnrframe_new->u.hdr.rx_data = pnrframe_new->u.hdr.rx_tail = pdata;
 				pnrframe_new->u.hdr.rx_end = pdata + a_len + padding_len;//
-
-#ifdef PLATFORM_WINDOWS
-				pnrframe_new->u.hdr.precvbuf=precvbuf;
-				_enter_critical_bh(&precvbuf->recvbuf_lock, &irql);
-				precvbuf->ref_cnt++;
-				_exit_critical_bh(&precvbuf->recvbuf_lock, &irql);
-#endif //PLATFORM_WINDOWS
 
 			}
 			else

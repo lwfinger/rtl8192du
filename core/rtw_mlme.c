@@ -295,17 +295,6 @@ _func_enter_;
 
 	if(!isfreeall)
 	{
-#ifdef PLATFORM_WINDOWS
-
-		delta_time = (curr_time -pnetwork->last_scanned)/10;
-
-		if(delta_time  < lifetime*1000000)// unit:usec
-		{
-			goto exit;
-		}
-
-#endif
-
 #ifdef PLATFORM_LINUX
 
 		delta_time = (curr_time -pnetwork->last_scanned)/HZ;
@@ -635,21 +624,6 @@ int is_same_network(WLAN_BSSID_EX *src, WLAN_BSSID_EX *dst, u8 feature)
 
 _func_enter_;
 
-#ifdef PLATFORM_OS_XP
-	 if ( ((uint)dst) <= 0x7fffffff ||
-		((uint)src) <= 0x7fffffff ||
-		((uint)&s_cap) <= 0x7fffffff ||
-		((uint)&d_cap) <= 0x7fffffff)
-	{
-		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("\n@@@@ error address of dst\n"));
-
-		KeBugCheckEx(0x87110000, (ULONG_PTR)dst, (ULONG_PTR)src,(ULONG_PTR)&s_cap, (ULONG_PTR)&d_cap);
-
-		return _FALSE;
-	}
-#endif
-
-
 	_rtw_memcpy((u8 *)&s_cap, rtw_get_capability_from_ie(src->IEs), 2);
 	_rtw_memcpy((u8 *)&d_cap, rtw_get_capability_from_ie(dst->IEs), 2);
 
@@ -869,13 +843,6 @@ static void update_current_network(_adapter *adapter, WLAN_BSSID_EX *pnetwork)
 
 _func_enter_;
 
-#ifdef PLATFORM_OS_XP
-	if ((unsigned long)(&(pmlmepriv->cur_network.network)) < 0x7ffffff)
-	{
-		KeBugCheckEx(0x87111c1c, (ULONG_PTR)(&(pmlmepriv->cur_network.network)), 0, 0,0);
-	}
-#endif
-
 	if ( (check_fwstate(pmlmepriv, _FW_LINKED)== _TRUE) && (is_same_network(&(pmlmepriv->cur_network.network), pnetwork, 0)))
 	{
 		//RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,"Same Network\n");
@@ -933,9 +900,6 @@ _func_enter_;
 
 		if ((unsigned long)(pnetwork) < 0x7ffffff)
 		{
-#ifdef PLATFORM_OS_XP
-			KeBugCheckEx(0x87111c1c, (ULONG_PTR)pnetwork, 0, 0,0);
-#endif
 		}
 
 

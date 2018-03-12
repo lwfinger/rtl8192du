@@ -266,8 +266,6 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 
 #ifdef PLATFORM_LINUX
 #define RTW_TIMER_HDL_ARGS void *FunctionContext
-#elif defined(PLATFORM_OS_CE) || defined(PLATFORM_WINDOWS)
-#define RTW_TIMER_HDL_ARGS IN PVOID SystemSpecific1, IN PVOID FunctionContext, IN PVOID SystemSpecific2, IN PVOID SystemSpecific3
 #endif
 
 #define RTW_TIMER_HDL_NAME(name) rtw_##name##_timer_hdl
@@ -578,13 +576,6 @@ __inline static unsigned char _cancel_timer_ex(_timer *ptimer)
 #ifdef PLATFORM_LINUX
 	return del_timer_sync(ptimer);
 #endif
-#ifdef PLATFORM_WINDOWS
-	u8 bcancelled;
-
-	_cancel_timer(ptimer, &bcancelled);
-
-	return bcancelled;
-#endif
 }
 
 static __inline void thread_enter(char *name)
@@ -614,16 +605,6 @@ __inline static _OS_STATUS res_to_status(sint res)
 #if defined (PLATFORM_LINUX) || defined (PLATFORM_MPIXEL)
 	return res;
 #endif
-
-#ifdef PLATFORM_WINDOWS
-
-	if (res == _SUCCESS)
-		return NDIS_STATUS_SUCCESS;
-	else
-		return NDIS_STATUS_FAILURE;
-
-#endif
-
 }
 
 __inline static void rtw_dump_stack(void)
@@ -725,8 +706,6 @@ __inline static u32 bitshift(u32 bitmask)
 // limitation of path length
 #ifdef PLATFORM_LINUX
 	#define PATH_LENGTH_MAX PATH_MAX
-#elif defined(PLATFORM_WINDOWS)
-	#define PATH_LENGTH_MAX MAX_PATH
 #endif
 
 
@@ -747,8 +726,6 @@ extern void rtw_lock_suspend_timeout(u32 timeout_ms);
 //Atomic integer operations
 #ifdef PLATFORM_LINUX
 	#define ATOMIC_T atomic_t
-#elif defined(PLATFORM_WINDOWS)
-	#define ATOMIC_T LONG
 #endif
 
 extern void ATOMIC_SET(ATOMIC_T *v, int i);

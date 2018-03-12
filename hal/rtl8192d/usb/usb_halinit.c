@@ -28,12 +28,6 @@
 #include <rtl8192d_hal.h>
 #include <rtl8192d_led.h>
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
 #ifndef CONFIG_USB_HCI
 
 #error "CONFIG_USB_HCI shall be on!\n"

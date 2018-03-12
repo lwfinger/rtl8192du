@@ -27,7 +27,11 @@
 #include <usb_osintf.h>
 #include <linux/vmalloc.h>
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS);
+#else
+void rtw_signal_stat_timer_hdl(struct timer_list *t);
+#endif
 
 void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
 {
@@ -95,8 +99,12 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv,
 	precvpriv->read_port_complete_EINPROGRESS_cnt = 0;
 	precvpriv->read_port_complete_other_urb_err_cnt = 0;
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	_init_timer(&precvpriv->signal_stat_timer, padapter->pnetdev,
 		    RTW_TIMER_HDL_NAME(signal_stat), padapter);
+#else
+	timer_setup(&precvpriv->signal_stat_timer, RTW_TIMER_HDL_NAME(signal_stat), 0);
+#endif
 
 	precvpriv->signal_stat_sampling_interval = 1000;	/* ms */
 
@@ -2887,9 +2895,17 @@ _recv_entry_drop:
 	return ret;
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS)
+#else
+void rtw_signal_stat_timer_hdl(struct timer_list *t)
+#endif
 {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	struct rtw_adapter *adapter = (struct rtw_adapter *)FunctionContext;
+#else
+	struct rtw_adapter *adapter = from_timer(adapter, t, recvpriv.signal_stat_timer);
+#endif
 	struct recv_priv *recvpriv = &adapter->recvpriv;
 
 	u32 tmp_s, tmp_q;

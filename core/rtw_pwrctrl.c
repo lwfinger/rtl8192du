@@ -280,9 +280,17 @@ exit:
 	return;
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 static void pwr_state_check_handler(void *FunctionContext)
+#else
+void pwr_state_check_handler(struct timer_list *t)
+#endif
 {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	struct rtw_adapter *padapter = (struct rtw_adapter *)FunctionContext;
+#else
+	struct rtw_adapter *padapter = from_timer(padapter, t, pwrctrlpriv.pwr_state_check_timer);
+#endif
 
 	rtw_ps_cmd(padapter);
 }
@@ -995,8 +1003,13 @@ void rtw_init_pwrctrl_priv(struct rtw_adapter *padapter)
 
 	pwrctrlpriv->tog = 0x80;
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	_init_timer(&(pwrctrlpriv->pwr_state_check_timer), padapter->pnetdev,
 		    pwr_state_check_handler, (u8 *)padapter);
+#else
+	timer_setup(&pwrctrlpriv->pwr_state_check_timer,
+		    pwr_state_check_handler, 0);
+#endif
 
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 	_init_workitem(&pwrctrlpriv->resume_work, resume_workitem_callback,

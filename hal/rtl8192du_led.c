@@ -43,7 +43,11 @@
 /*	Prototype of protected function. */
 /*  */
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 static void BlinkTimerCallback(unsigned long data);
+#else
+static void BlinkTimerCallback(struct timer_list *t);
+#endif
 
 static void
 BlinkWorkItemCallback(
@@ -90,8 +94,11 @@ static void InitLed871x(struct rtw_adapter *padapter,
 	pLed->BlinkTimes = 0;
 	pLed->BlinkingLedState = LED_UNKNOWN;
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	_init_timer(&(pLed->BlinkTimer), padapter->pnetdev, BlinkTimerCallback, pLed);
-
+#else
+	timer_setup(&pLed->BlinkTimer, BlinkTimerCallback, 0);
+#endif
 	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback, pLed);
 }
 
@@ -1121,12 +1128,17 @@ static void SwLedBlink5(struct LED_871X *pLed)
 /*		Callback function of LED BlinkTimer, */
 /*		it just schedules to corresponding BlinkWorkItem. */
 /*  */
-static void
-BlinkTimerCallback(
-	unsigned long data
-	)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+static void BlinkTimerCallback(unsigned long data)
+#else
+static void BlinkTimerCallback(struct timer_list *t)
+#endif
 {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	struct LED_871X *	 pLed = (struct LED_871X *)data;
+#else
+	struct LED_871X *pLed = from_timer(pLed, t, BlinkTimer);
+#endif
 	struct rtw_adapter		*padapter = pLed->padapter;
 
 	 if ((padapter->bSurpriseRemoved == true) || (padapter->bDriverStopped == true))
@@ -1415,19 +1427,14 @@ static void SwLedControlMode1(
 
 		case LED_CTL_TX:
 		case LED_CTL_RX:
-			if (pLed->bLedBlinkInProgress ==false)
-			{
+			if (pLed->bLedBlinkInProgress ==false) {
                             if (pLed->CurrLedState == LED_SCAN_BLINK || IS_LED_WPS_BLINKING(pLed))
-                            {
 					return;
-                            }
-                            if (pLed->bLedNoLinkBlinkInProgress == true)
-                            {
+                            if (pLed->bLedNoLinkBlinkInProgress == true) {
                                 _cancel_timer_ex(&(pLed->BlinkTimer));
                                 pLed->bLedNoLinkBlinkInProgress = false;
                             }
-                            if (pLed->bLedLinkBlinkInProgress == true)
-                            {
+                            if (pLed->bLedLinkBlinkInProgress == true) {
                                 _cancel_timer_ex(&(pLed->BlinkTimer));
                                 pLed->bLedLinkBlinkInProgress = false;
                             }

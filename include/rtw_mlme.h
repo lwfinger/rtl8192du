@@ -545,8 +545,8 @@ extern void rtw_atimdone_event_callback(struct rtw_adapter *adapter, u8 *pbuf);
 extern void rtw_cpwm_event_callback(struct rtw_adapter *adapter, u8 *pbuf);
 
 extern int event_thread(void *context);
-extern void rtw_join_timeout_handler(void* FunctionContext);
-extern void _rtw_scan_timeout_handler(void* FunctionContext);
+//extern void rtw_join_timeout_handler(void* FunctionContext);
+//extern void _rtw_scan_timeout_handler(void* FunctionContext);
 extern void rtw_free_network_queue(struct rtw_adapter *adapter,u8 isfreeall);
 extern int rtw_init_mlme_priv(struct rtw_adapter *adapter);/*  (struct mlme_priv *pmlmepriv); */
 extern void rtw_free_mlme_priv (struct mlme_priv *pmlmepriv);
@@ -656,8 +656,13 @@ extern void rtw_update_registrypriv_dev_network(struct rtw_adapter *adapter);
 
 extern void rtw_get_encrypt_decrypt_from_registrypriv(struct rtw_adapter *adapter);
 
-extern void _rtw_join_timeout_handler(struct rtw_adapter *adapter);
-extern void rtw_scan_timeout_handler(struct rtw_adapter *adapter);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+void _rtw_scan_timeout_handler (void *FunctionContext);
+#else
+void _rtw_scan_timeout_handler(struct timer_list *t);
+#endif
+void _rtw_join_timeout_handler(struct rtw_adapter *adapter);
+void rtw_scan_timeout_handler(struct rtw_adapter *adapter);
 
 extern void rtw_dynamic_check_timer_handlder(struct rtw_adapter *adapter);
 #ifdef CONFIG_SET_SCAN_DENY_TIMER

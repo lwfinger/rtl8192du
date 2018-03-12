@@ -100,7 +100,7 @@ typedef struct _ADAPTER _adapter, ADAPTER,*PADAPTER;
 #endif	// CONFIG_BR_EXT
 
 #ifdef CONFIG_IOCTL_CFG80211
-	#include "ioctl_cfg80211.h"	
+	#include "ioctl_cfg80211.h"
 #endif //CONFIG_IOCTL_CFG80211
 
 #define SPEC_DEV_ID_NONE BIT(0)
@@ -129,7 +129,7 @@ struct registry_priv
 	u8	network_mode;	//infra, ad-hoc, auto
 	u8	channel;//ad-hoc support requirement
 	u8	wireless_mode;//A, B, G, auto
-	u8 	scan_mode;//active, passive
+	u8	scan_mode;//active, passive
 	u8	radio_enable;
 	u8	preamble;//long, short, auto
 	u8	vrtl_carrier_sense;//Enable, Disable, Auto
@@ -165,7 +165,7 @@ struct registry_priv
 	u8	ht_enable;
 	u8	cbw40_enable;
 	u8	ampdu_enable;//for tx
-	u8 	rx_stbc;
+	u8	rx_stbc;
 	u8	ampdu_amsdu;//A-MPDU Supports A-MSDU is permitted
 #endif
 	u8	lowrate_two_xmit;
@@ -259,8 +259,8 @@ struct debug_priv {
 enum _IFACE_ID {
 	IFACE_ID0, //maping to PRIMARY_ADAPTER
 	IFACE_ID1, //maping to SECONDARY_ADAPTER
-	IFACE_ID2, 
-	IFACE_ID3, 
+	IFACE_ID2,
+	IFACE_ID3,
 	IFACE_ID_MAX,
 };
 
@@ -300,7 +300,7 @@ struct dvobj_priv
 
 	//extend to support mulitu interface
 	//padapters[IFACE_ID0] == if1
-	//padapters[IFACE_ID1] == if2	
+	//padapters[IFACE_ID1] == if2
 	_adapter *padapters[IFACE_ID_MAX];
 	u8 iface_nums; // total number of ifaces used runtime
 
@@ -403,10 +403,10 @@ struct dvobj_priv
 	u8	const_hwsw_rfoff_d3;
 	u8	const_support_pciaspm;
 	// pci-e bridge */
-	u8 	const_hostpci_aspm_setting;
+	u8	const_hostpci_aspm_setting;
 	// pci-e device */
-	u8 	const_devicepci_aspm_setting;
-	u8 	b_support_aspm; // If it supports ASPM, Offset[560h] = 0x40, otherwise Offset[560h] = 0x00.
+	u8	const_devicepci_aspm_setting;
+	u8	b_support_aspm; // If it supports ASPM, Offset[560h] = 0x40, otherwise Offset[560h] = 0x00.
 	u8	b_support_backdoor;
 	u8 bdma64;
 #endif//PLATFORM_LINUX
@@ -445,7 +445,7 @@ enum _IFACE_TYPE {
 enum _ADAPTER_TYPE {
 	PRIMARY_ADAPTER,
 	SECONDARY_ADAPTER,
-	MAX_ADAPTER = 0xFF,	
+	MAX_ADAPTER = 0xFF,
 };
 
 typedef enum _DRIVER_STATE{
@@ -454,7 +454,7 @@ typedef enum _DRIVER_STATE{
 	DRIVER_REPLACE_DONGLE = 2,
 }DRIVER_STATE;
 
-#ifdef CONFIG_INTEL_PROXIM	
+#ifdef CONFIG_INTEL_PROXIM
 struct proxim {
 	bool proxim_support;
 	bool proxim_on;
@@ -487,7 +487,7 @@ struct _ADAPTER{
 	int	DriverState;// for disable driver using module, use dongle to replace module.
 	int	pid[3];//process id from UI, 0:wps, 1:hostapd, 2:dhcpcd
 	int	bDongle;//build-in module or external dongle
-	u16 	chip_type;
+	u16	chip_type;
 	u16	HardwareType;
 	u16	interface_type;//USB,SDIO,PCI
 
@@ -497,15 +497,15 @@ struct _ADAPTER{
 	struct	cmd_priv	cmdpriv;
 	struct	evt_priv	evtpriv;
 	//struct	io_queue	*pio_queue;
-	struct 	io_priv	iopriv;
+	struct	io_priv	iopriv;
 	struct	xmit_priv	xmitpriv;
 	struct	recv_priv	recvpriv;
 	struct	sta_priv	stapriv;
 	struct	security_priv	securitypriv;
 	_lock   security_key_mutex; // add for CONFIG_IEEE80211W, none 11w also can use
-	struct	registry_priv	registrypriv;	
+	struct	registry_priv	registrypriv;
 	struct	pwrctrl_priv	pwrctrlpriv;
-	struct 	eeprom_priv eeprompriv;
+	struct	eeprom_priv eeprompriv;
 	struct	led_priv	ledpriv;
 
 #ifdef CONFIG_MP_INCLUDED
@@ -635,20 +635,20 @@ struct _ADAPTER{
 	//and their pbuddy_adapter is PRIMARY_ADAPTER.
 	//for PRIMARY_ADAPTER(IFACE_ID0) can directly refer to if1 in struct dvobj_priv
 	_adapter *pbuddy_adapter;
-	
+
 #if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 	u8 isprimary; //is primary adapter or not
-	//notes: 
+	//notes:
 	// if isprimary is true, the adapter_type value is 0, iface_id is IFACE_ID0 for PRIMARY_ADAPTER
 	// if isprimary is false, the adapter_type value is 1, iface_id is IFACE_ID1 for SECONDARY_ADAPTER
 	// refer to iface_id if iface_nums>2 and isprimary is false and the adapter_type value is 0xff.
-	u8 adapter_type;//used only in  two inteface case(PRIMARY_ADAPTER and SECONDARY_ADAPTER) . 
-	u8 iface_type; //interface port type, it depends on HW port 
+	u8 adapter_type;//used only in  two inteface case(PRIMARY_ADAPTER and SECONDARY_ADAPTER) .
+	u8 iface_type; //interface port type, it depends on HW port
 #endif
 
 	//extend to support multi interface
        //IFACE_ID0 is equals to PRIMARY_ADAPTER
-       //IFACE_ID1 is equals to SECONDARY_ADAPTER	
+       //IFACE_ID1 is equals to SECONDARY_ADAPTER
 	u8 iface_id;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
@@ -670,9 +670,9 @@ struct _ADAPTER{
 	struct br_ext_info		ethBrExtInfo;
 #endif	// CONFIG_BR_EXT
 
-#ifdef CONFIG_INTEL_PROXIM	
+#ifdef CONFIG_INTEL_PROXIM
 	/* intel Proximity, should be alloc mem
-	 * in intel Proximity module and can only 
+	 * in intel Proximity module and can only
 	 * be used in intel Proximity mode */
 	struct proxim proximity;
 #endif	//CONFIG_INTEL_PROXIM
@@ -697,4 +697,3 @@ __inline static u8 *myid(struct eeprom_priv *peepriv)
 
 
 #endif //__DRV_TYPES_H__
-

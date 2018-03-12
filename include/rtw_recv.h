@@ -66,25 +66,25 @@ struct recv_reorder_ctrl
 };
 
 struct	stainfo_rxcache	{
-	u16 	tid_rxseq[16];
-	u8 		iv[16][8];
+	u16	tid_rxseq[16];
+	u8		iv[16][8];
 /*
-	unsigned short 	tid0_rxseq;
-	unsigned short 	tid1_rxseq;
-	unsigned short 	tid2_rxseq;
-	unsigned short 	tid3_rxseq;
-	unsigned short 	tid4_rxseq;
-	unsigned short 	tid5_rxseq;
-	unsigned short 	tid6_rxseq;
-	unsigned short 	tid7_rxseq;
-	unsigned short 	tid8_rxseq;
-	unsigned short 	tid9_rxseq;
-	unsigned short 	tid10_rxseq;
-	unsigned short 	tid11_rxseq;
-	unsigned short 	tid12_rxseq;
-	unsigned short 	tid13_rxseq;
-	unsigned short 	tid14_rxseq;
-	unsigned short 	tid15_rxseq;
+	unsigned short	tid0_rxseq;
+	unsigned short	tid1_rxseq;
+	unsigned short	tid2_rxseq;
+	unsigned short	tid3_rxseq;
+	unsigned short	tid4_rxseq;
+	unsigned short	tid5_rxseq;
+	unsigned short	tid6_rxseq;
+	unsigned short	tid7_rxseq;
+	unsigned short	tid8_rxseq;
+	unsigned short	tid9_rxseq;
+	unsigned short	tid10_rxseq;
+	unsigned short	tid11_rxseq;
+	unsigned short	tid12_rxseq;
+	unsigned short	tid13_rxseq;
+	unsigned short	tid14_rxseq;
+	unsigned short	tid15_rxseq;
 */
 };
 
@@ -97,10 +97,10 @@ struct smooth_rssi_data {
 };
 
 struct signal_stat {
-	u8	update_req;		//used to indicate 
+	u8	update_req;		//used to indicate
 	u8	avg_val;		//avg of valid elements
 	u32	total_num;		//num of valid elements
-	u32	total_val;		//sum of valid elements	
+	u32	total_val;		//sum of valid elements
 };
 
 struct rx_pkt_attrib
@@ -110,8 +110,8 @@ struct rx_pkt_attrib
 	u8	drvinfo_sz;
 	u8	shift_sz;
 	u8	hdrlen; //the WLAN Header Len
-	u8 	to_fr_ds;
-	u8 	amsdu;
+	u8	to_fr_ds;
+	u8	amsdu;
 	u8	qos;
 	u8	priority;
 	u8	pw_save;
@@ -130,24 +130,24 @@ struct rx_pkt_attrib
 
 	u16 eth_type;
 
-	u8 	dst[ETH_ALEN];
-	u8 	src[ETH_ALEN];
-	u8 	ta[ETH_ALEN];
-	u8 	ra[ETH_ALEN];
-	u8 	bssid[ETH_ALEN];
-	
+	u8	dst[ETH_ALEN];
+	u8	src[ETH_ALEN];
+	u8	ta[ETH_ALEN];
+	u8	ra[ETH_ALEN];
+	u8	bssid[ETH_ALEN];
+
 	u8 ack_policy;
-	
+
 //#ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
 	u8	tcpchk_valid; // 0: invalid, 1: valid
 	u8	ip_chkrpt; //0: incorrect, 1: correct
 	u8	tcp_chkrpt; //0: incorrect, 1: correct
 //#endif
-	u8 	key_index;
+	u8	key_index;
 
 	u8	mcs_rate;
 	u8	rxht;
-	u8 	sgi;
+	u8	sgi;
 	u8	signal_qual;
 	s8	rx_mimo_signal_qual[2];
 	u8	signal_strength;
@@ -213,7 +213,7 @@ using enter_critical section to protect
 */
 struct recv_priv
 {
-  	  _lock	lock;
+	  _lock	lock;
 
 #ifdef CONFIG_RECV_THREAD_MODE
 	_sema	recv_sema;
@@ -241,7 +241,7 @@ struct recv_priv
 	PMDL	pbytecnt_mdl;
 #endif
 	uint	counter; //record the number that up-layer will return to drv; only when counter==0 can we  release recv_priv
-	NDIS_EVENT 	recv_resource_evt ;
+	NDIS_EVENT	recv_resource_evt ;
 #endif
 
 	u32	bIsAnyNonBEPkts;
@@ -294,7 +294,7 @@ struct recv_priv
 #ifdef CONFIG_PCI_HCI
 	// Rx
 	struct rtw_rx_ring	rx_ring[PCI_MAX_RX_QUEUE];
-	int 	rxringcount;
+	int	rxringcount;
 	u16	rxbuffersize;
 #endif
 
@@ -325,7 +325,7 @@ struct recv_priv
 	u32 recvbuf_null_cnt;
 	u32 read_port_complete_EINPROGRESS_cnt;
 	u32 read_port_complete_other_urb_err_cnt;
-	
+
 
 };
 
@@ -565,7 +565,7 @@ __inline static u8 *recvframe_put(union recv_frame *precvframe, sint sz)
 
 	//used for append sz bytes from ptr to rx_tail, update rx_tail and return the updated rx_tail to the caller
 	//after putting, rx_tail must be still larger than rx_end.
- 	unsigned char * prev_rx_tail;
+	unsigned char * prev_rx_tail;
 
 	if(precvframe==NULL)
 		return NULL;
@@ -661,7 +661,7 @@ __inline static u8 *pkt_to_recvmem(_pkt *pkt)
 
 	union recv_frame * precv_frame = pkt_to_recvframe(pkt);
 
-	return 	precv_frame->u.hdr.rx_head;
+	return	precv_frame->u.hdr.rx_head;
 
 }
 
@@ -671,7 +671,7 @@ __inline static u8 *pkt_to_recvdata(_pkt *pkt)
 
 	union recv_frame * precv_frame =pkt_to_recvframe(pkt);
 
-	return 	precv_frame->u.hdr.rx_data;
+	return	precv_frame->u.hdr.rx_data;
 
 }
 
@@ -716,4 +716,3 @@ extern void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv);
 extern void  mgt_dispatcher(_adapter *padapter, union recv_frame *precv_frame);
 
 #endif
-

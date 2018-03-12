@@ -17,7 +17,7 @@ enum country_code_type_t {
 
 	/*add new channel plan above this line */
 	COUNTRY_CODE_MAX
-}; 
+};
 
 int rtw_regd_init(_adapter *padapter,
 	int (*reg_notifier)(struct wiphy *wiphy,

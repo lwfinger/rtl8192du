@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2013 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -45,12 +45,12 @@
 
 //----------------------------------------------------------------------------
 //       CAM Config Setting (offset 0x680, 1 byte)
-//----------------------------------------------------------------------------   	       		
+//----------------------------------------------------------------------------
 #define CAM_VALID				BIT15
 #define CAM_NOTVALID			0x0000
 #define CAM_USEDK				BIT5
 
-#define CAM_CONTENT_COUNT 	8
+#define CAM_CONTENT_COUNT	8
 
 #define CAM_NONE				0x0
 #define CAM_WEP40				0x01
@@ -60,8 +60,8 @@
 #define CAM_SMS4				0x6
 
 #define TOTAL_CAM_ENTRY		32
-#define HALF_CAM_ENTRY			16	
-       		
+#define HALF_CAM_ENTRY			16
+
 #define CAM_CONFIG_USEDK		_TRUE
 #define CAM_CONFIG_NO_USEDK	_FALSE
 
@@ -82,4 +82,3 @@
 #define SCR_CHK_KEYID			BIT(8)
 
 #endif //__HAL_COMMON_H__
-

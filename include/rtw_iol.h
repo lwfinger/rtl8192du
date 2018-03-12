@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -34,7 +34,7 @@ typedef struct _io_offload_cmd {
 #define IOL_CMD_LLT			0x00
 //#define IOL_CMD_R_EFUSE	0x01
 #define IOL_CMD_WB_REG		0x02
-#define IOL_CMD_WW_REG 	0x03
+#define IOL_CMD_WW_REG	0x03
 #define IOL_CMD_WD_REG		0x04
 //#define IOL_CMD_W_RF		0x05
 #define IOL_CMD_DELAY_US	0x80

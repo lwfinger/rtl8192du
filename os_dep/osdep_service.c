@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -104,28 +104,28 @@ u32 rtw_atoi(u8* s)
 	{
 	  if(s[i] >= '0' && s[i] <= '9')
 		 num = num * 10 + s[i] -'0';
-	  else if(s[0] == '-' && i==0) 
+	  else if(s[0] == '-' && i==0)
 		 flag =1;
-	  else 
+	  else
 		  break;
 	 }
 
 	if(flag == 1)
 	   num = num * -1;
 
-	 return(num); 
+	 return(num);
 
 }
 
 inline u8* _rtw_vmalloc(u32 sz)
 {
-	u8 	*pbuf;
-#ifdef PLATFORM_LINUX	
+	u8	*pbuf;
+#ifdef PLATFORM_LINUX
 	pbuf = vmalloc(sz);
-#endif	
-	
+#endif
+
 #ifdef PLATFORM_WINDOWS
-	NdisAllocateMemoryWithTag(&pbuf,sz, RT_TAG);	
+	NdisAllocateMemoryWithTag(&pbuf,sz, RT_TAG);
 #endif
 
 #ifdef DBG_MEMORY_LEAK
@@ -137,31 +137,31 @@ inline u8* _rtw_vmalloc(u32 sz)
 #endif
 #endif /* DBG_MEMORY_LEAK */
 
-	return pbuf;	
+	return pbuf;
 }
 
 inline u8* _rtw_zvmalloc(u32 sz)
 {
-	u8 	*pbuf;
+	u8	*pbuf;
 #ifdef PLATFORM_LINUX
 	pbuf = _rtw_vmalloc(sz);
 	if (pbuf != NULL)
 		memset(pbuf, 0, sz);
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 	NdisAllocateMemoryWithTag(&pbuf,sz, RT_TAG);
 	if (pbuf != NULL)
 		NdisFillMemory(pbuf, sz, 0);
 #endif
 
-	return pbuf;	
+	return pbuf;
 }
 
 inline void _rtw_vmfree(u8 *pbuf, u32 sz)
 {
 #ifdef	PLATFORM_LINUX
 	vfree(pbuf);
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 	NdisFreeMemory(pbuf,sz, 0);
 #endif
@@ -177,17 +177,17 @@ inline void _rtw_vmfree(u8 *pbuf, u32 sz)
 u8* _rtw_malloc(u32 sz)
 {
 
-	u8 	*pbuf=NULL;
+	u8	*pbuf=NULL;
 
 #ifdef PLATFORM_LINUX
 #ifdef RTK_DMP_PLATFORM
 	if(sz > 0x4000)
 		pbuf = (u8 *)dvr_malloc(sz);
 	else
-#endif		
-		pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL); 		
+#endif
+		pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 
 	NdisAllocateMemoryWithTag(&pbuf,sz, RT_TAG);
@@ -203,28 +203,28 @@ u8* _rtw_malloc(u32 sz)
 #endif
 #endif /* DBG_MEMORY_LEAK */
 
-	return pbuf;	
-	
+	return pbuf;
+
 }
 
 
 u8* _rtw_zmalloc(u32 sz)
 {
-	u8 	*pbuf = _rtw_malloc(sz);
+	u8	*pbuf = _rtw_malloc(sz);
 
 	if (pbuf != NULL) {
 
 #ifdef PLATFORM_LINUX
 		memset(pbuf, 0, sz);
-#endif	
-	
+#endif
+
 #ifdef PLATFORM_WINDOWS
 		NdisFillMemory(pbuf, sz, 0);
 #endif
 
 	}
 
-	return pbuf;	
+	return pbuf;
 }
 
 void	_rtw_mfree(u8 *pbuf, u32 sz)
@@ -238,20 +238,20 @@ void	_rtw_mfree(u8 *pbuf, u32 sz)
 #endif
 		kfree(pbuf);
 
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 
 	NdisFreeMemory(pbuf,sz, 0);
 
 #endif
-	
+
 #ifdef DBG_MEMORY_LEAK
 #ifdef PLATFORM_LINUX
 	atomic_dec(&_malloc_cnt);
 	atomic_sub(sz, &_malloc_size);
 #endif
 #endif /* DBG_MEMORY_LEAK */
-	
+
 }
 
 
@@ -313,7 +313,7 @@ inline void _rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr
 {
 #ifdef PLATFORM_LINUX
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
-	usb_free_coherent(dev, size, addr, dma); 
+	usb_free_coherent(dev, size, addr, dma);
 #else
 	usb_buffer_free(dev, size, addr, dma);
 #endif
@@ -325,7 +325,7 @@ inline void _rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr
 
 struct rtw_mem_stat {
 	ATOMIC_T alloc; // the memory bytes we allocate currently
-	ATOMIC_T peak; // the peak memory bytes we allocate 
+	ATOMIC_T peak; // the peak memory bytes we allocate
 	ATOMIC_T alloc_cnt; // the alloc count for alloc currently
 	ATOMIC_T alloc_err_cnt; // the error times we fail to allocate memory
 };
@@ -360,7 +360,7 @@ void rtw_mstat_dump(void *sel)
 #ifdef RTW_MEM_FUNC_STAT
 	int value_f[4][mstat_ff_idx(MSTAT_FUNC_MAX)];
 #endif
-	
+
 	int vir_alloc, vir_peak, vir_alloc_err, phy_alloc, phy_peak, phy_alloc_err;
 	int tx_alloc, tx_peak, tx_alloc_err, rx_alloc, rx_peak, rx_alloc_err;
 
@@ -493,7 +493,7 @@ inline u8* dbg_rtw_vmalloc(u32 sz, const enum mstat_f flags, const char *func, c
 
 	if (match_mstat_sniff_rules(flags, sz))
 		DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
-	
+
 	p=_rtw_vmalloc((sz));
 
 	rtw_mstat_update(
@@ -501,7 +501,7 @@ inline u8* dbg_rtw_vmalloc(u32 sz, const enum mstat_f flags, const char *func, c
 		, p ? MSTAT_ALLOC_SUCCESS : MSTAT_ALLOC_FAIL
 		, sz
 	);
-	
+
 	return p;
 }
 
@@ -512,7 +512,7 @@ inline u8* dbg_rtw_zvmalloc(u32 sz, const enum mstat_f flags, const char *func, 
 	if (match_mstat_sniff_rules(flags, sz))
 		DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
 
-	p=_rtw_zvmalloc((sz)); 
+	p=_rtw_zvmalloc((sz));
 
 	rtw_mstat_update(
 		flags
@@ -529,7 +529,7 @@ inline void dbg_rtw_vmfree(u8 *pbuf, u32 sz, const enum mstat_f flags, const cha
 	if (match_mstat_sniff_rules(flags, sz))
 		DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
 
-	_rtw_vmfree((pbuf), (sz)); 
+	_rtw_vmfree((pbuf), (sz));
 
 	rtw_mstat_update(
 		flags
@@ -538,7 +538,7 @@ inline void dbg_rtw_vmfree(u8 *pbuf, u32 sz, const enum mstat_f flags, const cha
 	);
 }
 
-inline u8* dbg_rtw_malloc(u32 sz, const enum mstat_f flags, const char *func, const int line) 
+inline u8* dbg_rtw_malloc(u32 sz, const enum mstat_f flags, const char *func, const int line)
 {
 	u8 *p;
 
@@ -631,7 +631,7 @@ inline struct sk_buff *dbg_rtw_skb_copy(const struct sk_buff *skb, const enum ms
 	struct sk_buff *skb_cp;
 	unsigned int truesize = skb->truesize;
 	unsigned int cp_truesize = 0;
-	
+
 	skb_cp = _rtw_skb_copy(skb);
 	if(skb_cp)
 		cp_truesize = skb_cp->truesize;
@@ -679,7 +679,7 @@ inline int dbg_rtw_netif_rx(_nic_hdl ndev, struct sk_buff *skb, const enum mstat
 		DBG_871X("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __FUNCTION__, truesize);
 
 	ret = _rtw_netif_rx(ndev, skb);
-	
+
 	rtw_mstat_update(
 		flags
 		, MSTAT_FREE
@@ -706,7 +706,7 @@ inline void *dbg_rtw_usb_buffer_alloc(struct usb_device *dev, size_t size, dma_a
 		DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, size);
 
 	p = _rtw_usb_buffer_alloc(dev, size, dma);
-	
+
 	rtw_mstat_update(
 		flags
 		, p ? MSTAT_ALLOC_SUCCESS : MSTAT_ALLOC_FAIL
@@ -761,7 +761,7 @@ void _rtw_memcpy(void* dst, void* src, u32 sz)
 
 	memcpy(dst, src, sz);
 
-#endif	
+#endif
 
 #ifdef PLATFORM_WINDOWS
 
@@ -786,16 +786,16 @@ int	_rtw_memcmp(void *dst, void *src, u32 sz)
 
 #ifdef PLATFORM_WINDOWS
 //under Windows, the return value of NdisEqualMemory for two same mem. chunk is 1
-	
+
 	if (NdisEqualMemory (dst, src, sz))
 		return _TRUE;
 	else
 		return _FALSE;
 
-#endif	
-	
-	
-	
+#endif
+
+
+
 }
 
 void _rtw_memset(void *pbuf, int c, u32 sz)
@@ -837,7 +837,7 @@ void _rtw_init_listhead(_list *list)
 
 
 /*
-For the following list_xxx operations, 
+For the following list_xxx operations,
 caller must guarantee the atomic context.
 Otherwise, there will be racing condition.
 */
@@ -861,7 +861,7 @@ u32	rtw_is_list_empty(_list *phead)
 
 #endif
 
-	
+
 }
 
 void rtw_list_insert_head(_list *plist, _list *phead)
@@ -879,17 +879,17 @@ void rtw_list_insert_head(_list *plist, _list *phead)
 void rtw_list_insert_tail(_list *plist, _list *phead)
 {
 
-#ifdef PLATFORM_LINUX	
-	
+#ifdef PLATFORM_LINUX
+
 	list_add_tail(plist, phead);
-	
+
 #endif
 #ifdef PLATFORM_WINDOWS
 
   InsertTailList(phead, plist);
 
-#endif		
-	
+#endif
+
 }
 
 
@@ -913,7 +913,7 @@ void _rtw_init_sema(_sema	*sema, int init_val)
 	KeInitializeSemaphore(sema, init_val,  SEMA_UPBND); // count=0;
 
 #endif
-	
+
 #ifdef PLATFORM_OS_CE
 	if(*sema == NULL)
 		*sema = CreateSemaphore(NULL, init_val, SEMA_UPBND, NULL);
@@ -936,7 +936,7 @@ void _rtw_up_sema(_sema	*sema)
 
 	up(sema);
 
-#endif	
+#endif
 #ifdef PLATFORM_OS_XP
 
 	KeReleaseSemaphore(sema, IO_NETWORK_INCREMENT, 1,  FALSE );
@@ -952,13 +952,13 @@ u32 _rtw_down_sema(_sema *sema)
 {
 
 #ifdef PLATFORM_LINUX
-	
+
 	if (down_interruptible(sema))
 		return _FAIL;
 	else
 		return _SUCCESS;
 
-#endif    	
+#endif
 #ifdef PLATFORM_OS_XP
 
 	if(STATUS_SUCCESS == KeWaitForSingleObject(sema, Executive, KernelMode, TRUE, NULL))
@@ -969,7 +969,7 @@ u32 _rtw_down_sema(_sema *sema)
 
 #ifdef PLATFORM_OS_CE
 	if(WAIT_OBJECT_0 == WaitForSingleObject(*sema, INFINITE ))
-		return _SUCCESS; 
+		return _SUCCESS;
 	else
 		return _FAIL;
 #endif
@@ -1006,7 +1006,7 @@ void	_rtw_mutex_free(_mutex *pmutex)
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 	mutex_destroy(pmutex);
-#else	
+#else
 #endif
 
 #endif
@@ -1027,13 +1027,13 @@ void	_rtw_spinlock_init(_lock *plock)
 
 	spin_lock_init(plock);
 
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 
 	NdisAllocateSpinLock(plock);
 
 #endif
-	
+
 }
 
 void	_rtw_spinlock_free(_lock *plock)
@@ -1043,7 +1043,7 @@ void	_rtw_spinlock_free(_lock *plock)
 	NdisFreeSpinLock(plock);
 
 #endif
-	
+
 }
 
 void	_rtw_spinlock(_lock	*plock)
@@ -1059,7 +1059,7 @@ void	_rtw_spinlock(_lock	*plock)
 	NdisAcquireSpinLock(plock);
 
 #endif
-	
+
 }
 
 void	_rtw_spinunlock(_lock *plock)
@@ -1091,7 +1091,7 @@ void	_rtw_spinlock_ex(_lock	*plock)
 	NdisDprAcquireSpinLock(plock);
 
 #endif
-	
+
 }
 
 void	_rtw_spinunlock_ex(_lock *plock)
@@ -1137,14 +1137,14 @@ u32 rtw_end_of_queue_search(_list *head, _list *plist)
 
 u32	rtw_get_current_time(void)
 {
-	
+
 #ifdef PLATFORM_LINUX
 	return jiffies;
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 	LARGE_INTEGER	SystemTime;
 	NdisGetCurrentSystemTime(&SystemTime);
-	return (u32)(SystemTime.LowPart);// count of 100-nanosecond intervals 
+	return (u32)(SystemTime.LowPart);// count of 100-nanosecond intervals
 #endif
 }
 
@@ -1152,9 +1152,9 @@ inline u32 rtw_systime_to_ms(u32 systime)
 {
 #ifdef PLATFORM_LINUX
 	return systime * 1000 / HZ;
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
-	return systime / 10000 ; 
+	return systime / 10000 ;
 #endif
 }
 
@@ -1162,9 +1162,9 @@ inline u32 rtw_ms_to_systime(u32 ms)
 {
 #ifdef PLATFORM_LINUX
 	return ms * HZ / 1000;
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
-	return ms * 10000 ; 
+	return ms * 10000 ;
 #endif
 }
 
@@ -1190,15 +1190,15 @@ inline s32 rtw_get_time_interval_ms(u32 start, u32 end)
 	return rtw_systime_to_ms(end-start);
 #endif
 }
-	
 
-void rtw_sleep_schedulable(int ms)	
+
+void rtw_sleep_schedulable(int ms)
 {
 
 #ifdef PLATFORM_LINUX
 
     u32 delta;
-    
+
     delta = (ms * HZ)/1000;//(ms)
     if (delta == 0) {
         delta = 1;// 1 ms
@@ -1209,7 +1209,7 @@ void rtw_sleep_schedulable(int ms)
     }
     return;
 
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 
 	NdisMSleep(ms*1000); //(us)*1000=(ms)
@@ -1224,9 +1224,9 @@ void rtw_msleep_os(int ms)
 
 #ifdef PLATFORM_LINUX
 
-  	msleep((unsigned int)ms);
+	msleep((unsigned int)ms);
 
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 
 	NdisMSleep(ms*1000); //(us)*1000=(ms)
@@ -1239,14 +1239,14 @@ void rtw_usleep_os(int us)
 {
 
 #ifdef PLATFORM_LINUX
-  	
+
       // msleep((unsigned int)us);
       if ( 1 < (us/1000) )
                 msleep(1);
       else
 		msleep( (us/1000) + 1);
 
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 
 	NdisMSleep(us); //(us)
@@ -1272,7 +1272,7 @@ void _rtw_mdelay_os(int ms, const char *func, const int line)
 
 #if defined(PLATFORM_LINUX)
 
-   	mdelay((unsigned long)ms); 
+	mdelay((unsigned long)ms);
 
 #elif defined(PLATFORM_WINDOWS)
 
@@ -1291,15 +1291,15 @@ void _rtw_udelay_os(int us, const char *func, const int line)
 		rtw_usleep_os(us);
 		return;
 	}
-	#endif 
+	#endif
 
 
 	DBG_871X("%s:%d %s(%d)\n", func, line, __FUNCTION__, us);
-	
-	
+
+
 #if defined(PLATFORM_LINUX)
 
-      udelay((unsigned long)us); 
+      udelay((unsigned long)us);
 
 #elif defined(PLATFORM_WINDOWS)
 
@@ -1314,9 +1314,9 @@ void rtw_mdelay_os(int ms)
 
 #ifdef PLATFORM_LINUX
 
-   	mdelay((unsigned long)ms); 
+	mdelay((unsigned long)ms);
 
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 
 	NdisStallExecution(ms*1000); //(us)*1000=(ms)
@@ -1330,9 +1330,9 @@ void rtw_udelay_os(int us)
 
 #ifdef PLATFORM_LINUX
 
-      udelay((unsigned long)us); 
+      udelay((unsigned long)us);
 
-#endif	
+#endif
 #ifdef PLATFORM_WINDOWS
 
 	NdisStallExecution(us); //(us)
@@ -1508,19 +1508,19 @@ inline int ATOMIC_DEC_RETURN(ATOMIC_T *v)
 * @param mode please refer to linux document
 * @return Linux specific error code
 */
-static int openFile(struct file **fpp, char *path, int flag, int mode) 
-{ 
-	struct file *fp; 
- 
-	fp=filp_open(path, flag, mode); 
+static int openFile(struct file **fpp, char *path, int flag, int mode)
+{
+	struct file *fp;
+
+	fp=filp_open(path, flag, mode);
 	if(IS_ERR(fp)) {
 		*fpp=NULL;
 		return PTR_ERR(fp);
 	}
 	else {
-		*fpp=fp; 
+		*fpp=fp;
 		return 0;
-	}	
+	}
 }
 
 /*
@@ -1528,21 +1528,21 @@ static int openFile(struct file **fpp, char *path, int flag, int mode)
 * @param fp the pointer of struct file to close
 * @return always 0
 */
-static int closeFile(struct file *fp) 
-{ 
+static int closeFile(struct file *fp)
+{
 	filp_close(fp,NULL);
-	return 0; 
+	return 0;
 }
 
-static int readFile(struct file *fp,char *buf,int len) 
-{ 
+static int readFile(struct file *fp,char *buf,int len)
+{
 	int rlen=0, sum=0;
-	
+
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
 	if (!(fp->f_mode & FMODE_CAN_READ))
 #else
 	if (!fp->f_op || !fp->f_op->read)
-#endif 
+#endif
 		return -EPERM;
 
 	while(sum<len) {
@@ -1558,17 +1558,17 @@ static int readFile(struct file *fp,char *buf,int len)
 		else
 			break;
 	}
-	
+
 	return  sum;
 
 }
 
-static int writeFile(struct file *fp,char *buf,int len) 
-{ 
+static int writeFile(struct file *fp,char *buf,int len)
+{
 	int wlen=0, sum=0;
-	
-	if (!fp->f_op || !fp->f_op->write) 
-		return -EPERM; 
+
+	if (!fp->f_op || !fp->f_op->write)
+		return -EPERM;
 
 	while(sum<len) {
 		wlen=fp->f_op->write(fp,buf+sum,len-sum, &fp->f_pos);
@@ -1590,25 +1590,25 @@ static int writeFile(struct file *fp,char *buf,int len)
 * @return Linux specific error code
 */
 static int isFileReadable(char *path)
-{ 
+{
 	struct file *fp;
 	int ret = 0;
 	mm_segment_t oldfs;
 	char buf;
- 
-	fp=filp_open(path, O_RDONLY, 0); 
+
+	fp=filp_open(path, O_RDONLY, 0);
 	if(IS_ERR(fp)) {
 		ret = PTR_ERR(fp);
 	}
 	else {
 		oldfs = get_fs(); set_fs(get_ds());
-		
+
 		if(1!=readFile(fp, &buf, 1))
 			ret = PTR_ERR(fp);
-		
+
 		set_fs(oldfs);
 		filp_close(fp,NULL);
-	}	
+	}
 	return ret;
 }
 
@@ -1633,9 +1633,9 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 			ret=readFile(fp, buf, sz);
 			set_fs(oldfs);
 			closeFile(fp);
-			
+
 			DBG_871X("%s readFile, ret:%d\n",__FUNCTION__, ret);
-			
+
 		} else {
 			DBG_871X("%s openFile path:%s Fail, ret:%d\n",__FUNCTION__, path, ret);
 		}
@@ -1658,7 +1658,7 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 	int ret =0;
 	mm_segment_t oldfs;
 	struct file *fp;
-	
+
 	if(path && buf) {
 		if( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
 			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
@@ -1669,10 +1669,10 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 			closeFile(fp);
 
 			DBG_871X("%s writeFile, ret:%d\n",__FUNCTION__, ret);
-			
+
 		} else {
 			DBG_871X("%s openFile path:%s Fail, ret:%d\n",__FUNCTION__, path, ret);
-		}	
+		}
 	} else {
 		DBG_871X("%s NULL pointer\n",__FUNCTION__);
 		ret =  -EINVAL;
@@ -1749,7 +1749,7 @@ struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_p
 #endif
 	if (!pnetdev)
 		goto RETURN;
-	
+
 	pnpi = netdev_priv(pnetdev);
 	pnpi->priv=old_priv;
 	pnpi->sizeof_priv=sizeof_priv;
@@ -1770,16 +1770,16 @@ struct net_device *rtw_alloc_etherdev(int sizeof_priv)
 #endif
 	if (!pnetdev)
 		goto RETURN;
-	
+
 	pnpi = netdev_priv(pnetdev);
-	
+
 	pnpi->priv = rtw_zvmalloc(sizeof_priv);
 	if (!pnpi->priv) {
 		free_netdev(pnetdev);
 		pnetdev = NULL;
 		goto RETURN;
 	}
-	
+
 	pnpi->sizeof_priv=sizeof_priv;
 RETURN:
 	return pnetdev;
@@ -1788,10 +1788,10 @@ RETURN:
 void rtw_free_netdev(struct net_device * netdev)
 {
 	struct rtw_netdev_priv_indicator *pnpi;
-	
+
 	if(!netdev)
 		goto RETURN;
-	
+
 	pnpi = netdev_priv(netdev);
 
 	if(!pnpi->priv)
@@ -1805,7 +1805,7 @@ RETURN:
 }
 
 /*
-* Jeff: this function should be called under ioctl (rtnl_lock is accquired) while 
+* Jeff: this function should be called under ioctl (rtnl_lock is accquired) while
 * LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26)
 */
 int rtw_change_ifname(_adapter *padapter, const char *ifname)
@@ -1819,7 +1819,7 @@ int rtw_change_ifname(_adapter *padapter, const char *ifname)
 		goto error;
 
 	rereg_priv = &padapter->rereg_nd_name_priv;
-	
+
 	//free the old_pnetdev
 	if(rereg_priv->old_pnetdev) {
 		free_netdev(rereg_priv->old_pnetdev);
@@ -1862,9 +1862,9 @@ int rtw_change_ifname(_adapter *padapter, const char *ifname)
 	return 0;
 
 error:
-	
+
 	return -1;
-	
+
 }
 #endif
 #endif //MEM_ALLOC_REFINE_ADAPTOR
@@ -2031,4 +2031,3 @@ void rtw_cbuf_free(struct rtw_cbuf *cbuf)
 {
 	rtw_mfree((u8*)cbuf, sizeof(*cbuf) + sizeof(void*)*cbuf->size);
 }
-

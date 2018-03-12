@@ -260,7 +260,7 @@ struct rtw_usb_drv rtl8192c_usb_drv = {
 	.usbdrv.suspend =  rtw_suspend,
 	.usbdrv.resume = rtw_resume,
 	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
-  	.usbdrv.reset_resume   = rtw_resume,
+	.usbdrv.reset_resume   = rtw_resume,
 	#endif
 	#ifdef CONFIG_AUTOSUSPEND
 	.usbdrv.supports_autosuspend = 1,
@@ -290,7 +290,7 @@ struct rtw_usb_drv rtl8192d_usb_drv = {
 	.usbdrv.suspend =  rtw_suspend,
 	.usbdrv.resume = rtw_resume,
 	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
-  	.usbdrv.reset_resume   = rtw_resume,
+	.usbdrv.reset_resume   = rtw_resume,
 	#endif
 	#ifdef CONFIG_AUTOSUSPEND
 	.usbdrv.supports_autosuspend = 1,
@@ -322,7 +322,7 @@ static inline int RT_usb_endpoint_xfer_int(const struct usb_endpoint_descriptor 
 
 static inline int RT_usb_endpoint_xfer_bulk(const struct usb_endpoint_descriptor *epd)
 {
- 	return ((epd->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) == USB_ENDPOINT_XFER_BULK);
+	return ((epd->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) == USB_ENDPOINT_XFER_BULK);
 }
 
 static inline int RT_usb_endpoint_is_bulk_in(const struct usb_endpoint_descriptor *epd)
@@ -393,7 +393,7 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 	int	status = _FAIL;
 	struct dvobj_priv *pdvobjpriv = NULL;
 	struct usb_device				*pusbd;
-	struct usb_device_descriptor 	*pdev_desc;
+	struct usb_device_descriptor	*pdev_desc;
 	struct usb_host_config			*phost_conf;
 	struct usb_config_descriptor		*pconf_desc;
 	struct usb_host_interface		*phost_iface;
@@ -822,7 +822,7 @@ int rtw_hw_resume(_adapter *padapter)
 		netif_carrier_on(pnetdev);
 
 		if(!rtw_netif_queue_stopped(pnetdev))
-      			rtw_netif_start_queue(pnetdev);
+			rtw_netif_start_queue(pnetdev);
 		else
 			rtw_netif_wake_queue(pnetdev);
 
@@ -978,7 +978,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	 int ret = 0;
 
 	if(pwrpriv->bInternalAutoSuspend ){
- 		ret = rtw_resume_process(padapter);
+		ret = rtw_resume_process(padapter);
 	} else {
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 		rtw_resume_in_workqueue(pwrpriv);
@@ -1284,7 +1284,7 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 #ifdef CONFIG_AUTOSUSPEND
 	if( padapter->registrypriv.power_mgnt != PS_MODE_ACTIVE )
 	{
-		if(padapter->registrypriv.usbss_enable ){ 	/* autosuspend (2s delay) */
+		if(padapter->registrypriv.usbss_enable ){	/* autosuspend (2s delay) */
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,38))
 			dvobj->pusbdev->dev.power.autosuspend_delay = 0 * HZ;//15 * HZ; idle-delay time
 			#else
@@ -1649,4 +1649,3 @@ _adapter  *rtw_usb_get_sw_pointer(void)
 }
 EXPORT_SYMBOL(rtw_usb_get_sw_pointer);
 #endif	//CONFIG_INTEL_PROXIM
-

@@ -46,7 +46,7 @@ void dump_txrpt_ccx_8192d(void *buf)
 
 void handle_txrpt_ccx_8192d(_adapter *adapter, void *buf)
 {
-	struct txrpt_ccx_8192d *txrpt_ccx = buf; 
+	struct txrpt_ccx_8192d *txrpt_ccx = buf;
 
 	#ifdef DBG_CCX
 	dump_txrpt_ccx_8192d(buf);
@@ -60,4 +60,3 @@ void handle_txrpt_ccx_8192d(_adapter *adapter, void *buf)
 	//}
 }
 #endif //CONFIG_XMIT_ACK
-

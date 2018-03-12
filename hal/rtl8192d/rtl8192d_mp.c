@@ -27,7 +27,7 @@
 #include <rtl8192d_hal.h>
 #endif
 
-#define IQK_DELAY_TIME		1 	//ms
+#define IQK_DELAY_TIME		1	//ms
 
 #define PHY_IQCalibrate(a)	rtl8192d_PHY_IQCalibrate(a, _FALSE)
 #define PHY_LCCalibrate(a)	rtl8192d_PHY_LCCalibrate(a, _TRUE)
@@ -37,7 +37,7 @@
 VOID Hal_MptSet8256CCKTxPower( PADAPTER pAdapter,u8 *pTxPower)
 {
 	u8				TxAGC[2]={0, 0};
-	u32 			 tmpval=0;
+	u32			 tmpval=0;
 	u8				rf;
 	for(rf=0; rf<2; rf++)
 		TxAGC[rf] = pTxPower[rf];
@@ -59,7 +59,7 @@ VOID Hal_MptSet8256CCKTxPower( PADAPTER pAdapter,u8 *pTxPower)
 
 VOID Hal_MptSet8256OFDMTxPower(PADAPTER pAdapter,u8 *pTxPower)
 {
-	u32 			 TxAGC=0;
+	u32			 TxAGC=0;
 	u8 tmpval=0;
 	u8 rf;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -114,7 +114,7 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 	switch (pAdapter->mppriv.antenna_tx)
 	{
 		case ANTENNA_A:
-			p_ofdm_tx->r_tx_antenna 	= 0x1;
+			p_ofdm_tx->r_tx_antenna		= 0x1;
 			r_ofdm_tx_en_val		= 0x1;
 			p_ofdm_tx->r_ant_l		= 0x1;
 			p_ofdm_tx->r_ant_ht_s1		= 0x1;
@@ -145,7 +145,7 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 			break;
 
 		case ANTENNA_B:
-			p_ofdm_tx->r_tx_antenna 	= 0x2;
+			p_ofdm_tx->r_tx_antenna		= 0x2;
 			r_ofdm_tx_en_val		= 0x2;
 			p_ofdm_tx->r_ant_l		= 0x2;
 			p_ofdm_tx->r_ant_ht_s1		= 0x2;
@@ -178,7 +178,7 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 		break;
 
 		case ANTENNA_AB:	// For 8192S
-			p_ofdm_tx->r_tx_antenna 	= 0x3;
+			p_ofdm_tx->r_tx_antenna		= 0x3;
 			r_ofdm_tx_en_val		= 0x3;
 			p_ofdm_tx->r_ant_l		= 0x3;
 			p_ofdm_tx->r_ant_ht_s1		= 0x3;
@@ -380,7 +380,7 @@ void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart )
     }
     if(bStart)
     {   // Start Single Tone.
-    	RT_TRACE(_module_mp_,_drv_alert_, ("SetSingleToneTx: test start\n"));
+	RT_TRACE(_module_mp_,_drv_alert_, ("SetSingleToneTx: test start\n"));
 		write_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn, 0x0);
 		write_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn, 0x0);
 	//Rlk Helen 20121220 add for Reg_88c: set bit20-23=0xf,disable 3write------
@@ -389,7 +389,7 @@ void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart )
 
 
 		if(is92C)
-       	{
+	{
 			_write_rfreg(pAdapter, RF_PATH_A, 0x21, BIT19, 0x01);
 			rtw_usleep_os(100);
 			if (rfPath == RF_PATH_A)
@@ -398,7 +398,7 @@ void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart )
 				write_rfreg(pAdapter, RF_PATH_A, 0x00, 0x10000); // PAD all on.
 			write_rfreg(pAdapter, rfPath, 0x00, 0x2001f); // PAD all on.
 			rtw_usleep_os(100);
-		} 
+		}
 		else
 		{
 			if( pHalData->CurrentBandType92D == BAND_ON_2_4G)
@@ -419,12 +419,12 @@ void Hal_SetSingleToneTx ( PADAPTER pAdapter , u8 bStart )
     }
     else
     {   // Stop Single Tone.
-    	RT_TRACE(_module_mp_,_drv_alert_, ("SetSingleToneTx: test stop\n"));
+	RT_TRACE(_module_mp_,_drv_alert_, ("SetSingleToneTx: test stop\n"));
 		write_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn, 0x1);
 		write_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
 	//Rlk Helen 20121220 add for Reg_88c: set bit20-23=0x0,enable 3write------
 	write_bbreg(pAdapter, rFPGA0_AnalogParameter4, 0xf00000, 0x0);//Reg_88c: set bit20-23=0x0,enable 3write
-	//       	//Rlk Helen 20121220 END--------------------	
+	//		//Rlk Helen 20121220 END--------------------
 		if(is92C)
 		{
 			_write_rfreg(pAdapter, RF_PATH_A, 0x21, BIT19, 0x00);
@@ -491,7 +491,7 @@ VOID Hal_TriggerRFThermalMeter( PADAPTER pAdapter )
 u8 Hal_ReadRFThermalMeter(PADAPTER pAdapter)
 {
 	u32 ThermalValue = 0;
-	
+
 	ThermalValue = _read_rfreg(pAdapter, RF_PATH_A, RF_T_METER, 0xf800);	//0x42: RF Reg[15:11]
 //	RT_TRACE(_module_mp_, _drv_alert_, ("ThermalValue = 0x%x\n", ThermalValue));
 	return (u8)ThermalValue;
@@ -519,7 +519,7 @@ void Hal_SetTxPower (PADAPTER pAdapter)
 	//u1Byte				CurrChannel;
 	u8                  TxPowerLevel_CCK[2], TxPowerLevel_HTOFDM[2];
     PMPT_CONTEXT        pMptCtx = &(pAdapter->mppriv.MptCtx);
-	u8  				rf;
+	u8				rf;
 
 	printk("%s",__func__);
 
@@ -797,7 +797,7 @@ void Hal_SetContinuousTx (PADAPTER pAdapter, u8 bStart)
 u4Byte RT8192DU_Reg_Offset_Conver(PADAPTER Adapter, u4Byte offset)
 {
 	//if (Adapter->interfaceIndex!=0)
-	//{ 
+	//{
 		if(offset < 0x1000)
 			offset|=0x4000;
 		else if( (offset&MAC1_ACCESS_PHY0) && !(offset&0x8000))// MAC1 need to access PHY0
@@ -807,7 +807,7 @@ u4Byte RT8192DU_Reg_Offset_Conver(PADAPTER Adapter, u4Byte offset)
 	return (offset);
 }
 
-void 
+void
 HalWritePCIDwordDBI8192C(
 	IN	PADAPTER			Adapter,
 	IN	u16	 Offset,
@@ -819,13 +819,13 @@ HalWritePCIDwordDBI8192C(
 	rtw_write32(Adapter, REG_DBI_WDATA, Value);
 	rtw_write8(Adapter, REG_DBI_FLAG, BIT0|Direct);
 
-	//RT_TRACE(COMP_INIT, DBG_TRACE, ("HalWritePCIDwordDBI8192C offset 0x%x direct 0x%x value 0x%x\n", Offset, Direct, Value));	
+	//RT_TRACE(COMP_INIT, DBG_TRACE, ("HalWritePCIDwordDBI8192C offset 0x%x direct 0x%x value 0x%x\n", Offset, Direct, Value));
 	return ;
 }
 /**********************************************************************************
 Author:  sherry
 
-Input:	  u2Byte reg ----PCI Configuration Space offset 
+Input:	  u2Byte reg ----PCI Configuration Space offset
 		Direct: Read  from	PCI config space, or MAC reg(MAC0 or MAC1 for 92DE)
 		reg 0x352 bit 3 ,dbi_acc_ext(1 表示訪問 register，0表示pcie config)
 			0x352 bit 2，dbi_access_macsel
@@ -834,10 +834,10 @@ Output:  u4Byte -------the value of offset
 
 Date:	2009.11.26
 
-Function: Read PCI Configuration Space after page 1 for Windows XP 
+Function: Read PCI Configuration Space after page 1 for Windows XP
 
 ***********************************************************************************/
-u4Byte 
+u4Byte
 HalReadPCIDwordDBI8192C(
 	IN	PADAPTER			Adapter,
 	IN	u16	 Offset,
@@ -845,32 +845,32 @@ HalReadPCIDwordDBI8192C(
 )
 {
 	u4Byte value;
-	
+
 	_rtw_write16(Adapter,REG_DBI_CTRL, (Offset & 0xFFC));
 	_rtw_write8(Adapter, REG_DBI_FLAG, BIT1|Direct);
 	rtw_msleep_os(10);
 	value = _rtw_read32(Adapter, REG_DBI_RDATA);
 
 	//RT_TRACE(COMP_IO, DBG_TRACE, ("HalReadPCIDwordDBI8192C offset 0x%x direct 0x%x value 0x%x\n", Offset, Direct, value));
-	
+
 	return value ;
 }
 
 
 VOID
 PHY_PowerDownAnotherPHY(
-	IN	PADAPTER		Adapter,	
-	IN	BOOLEAN 		bMac0
+	IN	PADAPTER		Adapter,
+	IN	BOOLEAN			bMac0
 	)
 {
 //	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u1Byte					u1bTmp;
-#if defined(CONFIG_PCI_HCI) 	
+#if defined(CONFIG_PCI_HCI)
 	u1Byte			Direct = (bMac0==_TRUE)? BIT3|BIT2:BIT3;
-#endif	
+#endif
 	u1Byte			MAC_REG = (bMac0==_TRUE)? REG_MAC1:REG_MAC0;
 	u1Byte			MAC_ON_BIT = (bMac0==_TRUE)? MAC1_ON:MAC0_ON;
-#if defined(CONFIG_USB_HCI) 
+#if defined(CONFIG_USB_HCI)
 	u4Byte			MaskforPhySet = 0;
 #endif
 
@@ -880,13 +880,13 @@ PHY_PowerDownAnotherPHY(
 	u1bTmp = _rtw_read8(Adapter, MAC_REG);
 
 	if (!(u1bTmp&MAC_ON_BIT))
-	{	
+	{
 		//RT_TRACE(COMP_INIT, DBG_LOUD, ("PHY_PowerDownAnotherPHY power down\n"));
 
 		// power down RF radio A according to YuNan's advice.
-#if defined(CONFIG_PCI_HCI) 			
-			  HalWritePCIDwordDBI8192C(Adapter, 
-						rFPGA0_XA_LSSIParameter, 
+#if defined(CONFIG_PCI_HCI)
+			  HalWritePCIDwordDBI8192C(Adapter,
+						rFPGA0_XA_LSSIParameter,
 						0x00000000,
 						Direct);
 #elif defined(CONFIG_USB_HCI)
@@ -894,12 +894,12 @@ PHY_PowerDownAnotherPHY(
 				MaskforPhySet = MAC0_ACCESS_PHY1;
 			else
 				MaskforPhySet = MAC1_ACCESS_PHY0;
-			  _rtw_write32(Adapter, rFPGA0_XA_LSSIParameter|MaskforPhySet, 0x00000000); 
-		
+			  _rtw_write32(Adapter, rFPGA0_XA_LSSIParameter|MaskforPhySet, 0x00000000);
+
 #endif
 	}
 
-	 // RT_TRACE(COMP_RF, DBG_LOUD, ("<====PHY_PowerDownAnotherPHY\n"));	
+	 // RT_TRACE(COMP_RF, DBG_LOUD, ("<====PHY_PowerDownAnotherPHY\n"));
 }
 
 /*------------------------Define function prototype--------------------------*/
@@ -908,17 +908,17 @@ PHY_PowerDownAnotherPHY(
 //
 BOOLEAN
 PHY_EnableAnotherPHY(
-	IN	PADAPTER		Adapter,	
-	IN	BOOLEAN 		bMac0
+	IN	PADAPTER		Adapter,
+	IN	BOOLEAN			bMac0
 	)
 {
 	u1Byte					u1bTmp;
 #ifdef CONFIG_PCI_HCI
 	u1Byte			Direct = (bMac0==_TRUE)? BIT3|BIT2:BIT3;
-#endif	
+#endif
 	u1Byte			MAC_REG = (bMac0==_TRUE)?REG_MAC1:REG_MAC0;
 	u1Byte			MAC_ON_BIT = bMac0==_TRUE?MAC1_ON:MAC0_ON;
-	BOOLEAN 		bResult = _TRUE; //true: need to enable BB/RF power
+	BOOLEAN			bResult = _TRUE; //true: need to enable BB/RF power
 #ifdef CONFIG_USB_HCI
 	u4Byte			MaskForPHYSet = 0;
 #endif
@@ -932,24 +932,24 @@ PHY_EnableAnotherPHY(
 	{
 
 	//   RT_TRACE(COMP_INIT, DBG_LOUD, ("PHY_EnableAnotherPHY enable BB & RF\n"));
-	
+
 	   // Enable BB and RF power
-#if defined(CONFIG_PCI_HCI) 
-		HalWritePCIDwordDBI8192C(Adapter, 
-			REG_SYS_ISO_CTRL, 
+#if defined(CONFIG_PCI_HCI)
+		HalWritePCIDwordDBI8192C(Adapter,
+			REG_SYS_ISO_CTRL,
 			HalReadPCIDwordDBI8192C(Adapter, REG_SYS_ISO_CTRL, Direct)|BIT29|BIT16|BIT17,
 			Direct);
-#elif defined(CONFIG_USB_HCI) 
+#elif defined(CONFIG_USB_HCI)
 		if(bMac0)
 			MaskForPHYSet = MAC0_ACCESS_PHY1;
 		else
 			MaskForPHYSet = MAC1_ACCESS_PHY0;
-		_rtw_write16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet, _rtw_read16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet)&0xFFFC); 
-		_rtw_write16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet, _rtw_read16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet)|BIT13|BIT0|BIT1); 
+		_rtw_write16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet, _rtw_read16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet)&0xFFFC);
+		_rtw_write16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet, _rtw_read16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet)|BIT13|BIT0|BIT1);
 #endif
 	}
 	else
-	{			
+	{
 		// We think if MAC1 is ON,then radio_a.txt and radio_b.txt has been load.
 		bResult = _FALSE;
 	}
@@ -963,10 +963,10 @@ PHY_EnableAnotherPHY(
 
 VOID
 phy_RestoreRFENV(
-	IN	PADAPTER		Adapter,	
+	IN	PADAPTER		Adapter,
 	IN	u8			eRFPath,
 	IN  u32			MaskforPhySet,
-	IN	u32* 		pu4RegValue
+	IN	u32*		pu4RegValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -986,16 +986,16 @@ phy_RestoreRFENV(
 			PHY_SetBBReg(Adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV<<16, *pu4RegValue);
 			break;
 	}
-	//RT_TRACE(COMP_RF, DBG_LOUD, ("<=====phy_RestoreRFENV\n"));	
+	//RT_TRACE(COMP_RF, DBG_LOUD, ("<=====phy_RestoreRFENV\n"));
 
 }
 
 VOID
 phy_EnableRFENV(
-	IN	PADAPTER		Adapter,	
+	IN	PADAPTER		Adapter,
 	IN	u1Byte			eRFPath ,
 	IN	  u4Byte			MaskforPhySet,
-	OUT  u32* 		pu4RegValue
+	OUT  u32*		pu4RegValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1003,7 +1003,7 @@ phy_EnableRFENV(
 
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("====>phy_EnableRFENV\n"));
 
-	/*----Store original RFENV control type----*/		
+	/*----Store original RFENV control type----*/
 	switch(eRFPath)
 	{
 		case RF_PATH_A:
@@ -1014,24 +1014,24 @@ phy_EnableRFENV(
 		case RF_PATH_D:
 			*pu4RegValue = PHY_QueryBBReg(Adapter, pPhyReg->rfintfs|MaskforPhySet, bRFSI_RFENV<<16);
 			break;
-	}	
+	}
 
-	/*----Set RF_ENV enable----*/		
+	/*----Set RF_ENV enable----*/
 	PHY_SetBBReg(Adapter, pPhyReg->rfintfe|MaskforPhySet, bRFSI_RFENV<<16, 0x1);
 	rtw_msleep_os(1);
-	
+
 	/*----Set RF_ENV output high----*/
 	PHY_SetBBReg(Adapter, pPhyReg->rfintfo|MaskforPhySet, bRFSI_RFENV, 0x1);
 	rtw_msleep_os(1);
-	
+
 	/* Set bit number of Address and Data for RF register */
 	PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2|MaskforPhySet, b3WireAddressLength, 0x0);	// Set 1 to 4 bits for 8255
 	rtw_msleep_os(1);
-	
+
 	PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2|MaskforPhySet, b3WireDataLength, 0x0); // Set 0 to 12	bits for 8255
 	rtw_msleep_os(1);
 
-	//RT_TRACE(COMP_RF, DBG_LOUD, ("<====phy_EnableRFENV\n"));	
+	//RT_TRACE(COMP_RF, DBG_LOUD, ("<====phy_EnableRFENV\n"));
 
 }
 
@@ -1048,12 +1048,12 @@ phy_EnableRFENV(
  * Return:		NONE
  *
  * Revised History:
- * When 		Who 	Remark
- * 01/08/2009	MHC 	Suggestion from SD3 Willis for 92S series.
- * 01/09/2009	MHC 	Add CCK modification for 40MHZ. Suggestion from SD3.
+ * When			Who	Remark
+ * 01/08/2009	MHC	Suggestion from SD3 Willis for 92S series.
+ * 01/09/2009	MHC	Add CCK modification for 40MHZ. Suggestion from SD3.
  *
  *---------------------------------------------------------------------------*/
- 
+
 /*----------------------------Function Body----------------------------------*/
 
 static u8 GetRightChnlPlace(u8 chnl)
@@ -1077,28 +1077,28 @@ static u8 GetRightChnlPlace(u8 chnl)
 }
 
 
-VOID	
+VOID
  phy_SwitchRfSetting8192D(
 	PADAPTER				Adapter,
-	u8					channel 	
+	u8					channel
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	u8		path = pHalData->CurrentBandType92D == BAND_ON_5G?RF_PATH_A:RF_PATH_B;
 	u8		index = 0,	i = 0, eRFPath = RF_PATH_A;
-	BOOLEAN 	bNeedPowerDownRadio = _FALSE, bInteralPA = _FALSE;
+	BOOLEAN		bNeedPowerDownRadio = _FALSE, bInteralPA = _FALSE;
 	u32		u4RegValue = 0, mask = 0x1C000, value = 0, u4tmp, u4tmp2,MaskforPhySet=0;
 	//Query regB30 bit27
 	u32		Regb30 = PHY_QueryBBReg(Adapter, 0xb30, BIT27);
-			
+
 #ifdef CONFIG_PCI_HCI
 	if(IS_81xxC_VENDOR_UMC_B_CUT(pHalData->VersionID))
 	{
-		if(channel == 6 && pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)				
+		if(channel == 6 && pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
 			PHY_SetRFReg(Adapter, RF_PATH_A, RF_RX_G1, bRFRegOffsetMask, 0x00255);
 		else
 			PHY_SetRFReg(Adapter, RF_PATH_A, RF_RX_G1, bRFRegOffsetMask, pHalData->backupRF0x1A);
-	}	
+	}
 #endif
 	//only for 92D SMSP >= C-cut
 	if(!IS_HARDWARE_TYPE_8192D(Adapter))
@@ -1116,10 +1116,10 @@ VOID
 	if(pHalData->CurrentBandType92D == BAND_ON_5G)
 	{
 		//RT_TRACE(COMP_CMD, DBG_LOUD, ("====>phy_SwitchRfSetting8192D interface %d 5G\n", Adapter->interfaceIndex));
-		
+
 		u4tmp = CurveIndex[GetRightChnlPlace(channel)-1];
 		//RT_DISP(FINIT, INIT_IQK, ("ver 1 set RF-A, 5G, 0x28 = 0x%x !!\n", u4tmp));
-	
+
 		for(i = 0; i < RF_CHNL_NUM_5G; i++)
 		{
 			if(channel == RF_CHNL_5G[i] && channel <= 140)
@@ -1147,7 +1147,7 @@ VOID
 			if(bNeedPowerDownRadio)
 				phy_EnableRFENV(Adapter, path, MaskforPhySet, &u4RegValue);
 		}
-		
+
 		//DMDP, if band = 5G,Mac0 need to set PHY1 when regB30[27]=1
 		if(Regb30 && pHalData->interfaceIndex == 0)
 		{
@@ -1159,7 +1159,7 @@ VOID
 			if(bNeedPowerDownRadio)
 				phy_EnableRFENV(Adapter, path, MaskforPhySet, &u4RegValue);
 		}
-		
+
 		for(i = 0; i < RF_REG_NUM_for_C_CUT_5G; i++)
 		{
 #if 1
@@ -1169,9 +1169,9 @@ VOID
 			}
 			else if (RF_REG_for_C_CUT_5G[i] == RF_SYN_G4)
 			{
-#if SWLCK == 1			
+#if SWLCK == 1
 				u4tmp2= (RF_REG_Param_for_C_CUT_5G[index][i]&0x7FF)|(u4tmp << 11);
-			
+
 				if(channel == 36)
 					u4tmp2 &= ~(BIT7|BIT6);
 
@@ -1179,7 +1179,7 @@ VOID
 #else
 				u4tmp2= RF_REG_Param_for_C_CUT_5G[index][i];
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, 0xFF8FF, u4tmp2);
-#endif			
+#endif
 			}
 			else
 			{
@@ -1190,18 +1190,18 @@ VOID
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i], RF_REG_MASK_for_C_CUT_5G[i], 0xE439D);
 			else
 				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_5G[i], RF_REG_MASK_for_C_CUT_5G[i], RF_REG_Param_for_C_CUT_5G[index][i]);
-#endif			
-			//RT_TRACE(COMP_RF, DBG_TRACE, ("phy_SwitchRfSetting8192D offset 0x%x value 0x%x path %d index %d readback 0x%x\n", 
+#endif
+			//RT_TRACE(COMP_RF, DBG_TRACE, ("phy_SwitchRfSetting8192D offset 0x%x value 0x%x path %d index %d readback 0x%x\n",
 			//	RF_REG_for_C_CUT_5G[i], RF_REG_Param_for_C_CUT_5G[index][i], path,	index,
 			//	PHY_QueryRFReg(Adapter,  path, RF_REG_for_C_CUT_5G[i]|MaskforPhySet, bRFRegOffsetMask)));
-			
+
 		}
-		
+
 		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 1)
 		{
 			if(bNeedPowerDownRadio)
 			{
-				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue); 
+				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
 			PHY_PowerDownAnotherPHY(Adapter, _FALSE);
 		}
@@ -1210,11 +1210,11 @@ VOID
 		{
 			if(bNeedPowerDownRadio)
 			{
-				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue); 
+				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
 			PHY_PowerDownAnotherPHY(Adapter, _TRUE);
 		}
-		
+
 		if(channel < 149)
 			value = 0x07;
 		else if(channel >= 149)
@@ -1224,7 +1224,7 @@ VOID
 			index = 0;
 		else if(channel >=100 && channel <= 140)
 			index = 1;
-		else	
+		else
 			index = 2;
 
 		for(eRFPath = RF_PATH_A; eRFPath < pHalData->NumTotalRFPath; eRFPath++)
@@ -1234,32 +1234,32 @@ VOID
 				bInteralPA = pHalData->InternalPA5G[1];
 			else
 				bInteralPA = pHalData->InternalPA5G[eRFPath];
-			
+
 			if(bInteralPA)
-			{				
+			{
 				for(i = 0; i < RF_REG_NUM_for_C_CUT_5G_internalPA; i++)
 				{
 					if(RF_REG_for_C_CUT_5G_internalPA[i] == 0x03 &&
 						channel >=36 && channel <=64)
-						PHY_SetRFReg(Adapter, eRFPath, RF_REG_for_C_CUT_5G_internalPA[i], bRFRegOffsetMask, 0x7bdef);									
+						PHY_SetRFReg(Adapter, eRFPath, RF_REG_for_C_CUT_5G_internalPA[i], bRFRegOffsetMask, 0x7bdef);
 					else
-						PHY_SetRFReg(Adapter, eRFPath, RF_REG_for_C_CUT_5G_internalPA[i], bRFRegOffsetMask, RF_REG_Param_for_C_CUT_5G_internalPA[index][i]);			
-					//RT_TRACE(COMP_RF, DBG_LOUD, ("phy_SwitchRfSetting8192D offset 0x%x value 0x%x path %d index %d \n", 
-					//	RF_REG_for_C_CUT_5G_internalPA[i], RF_REG_Param_for_C_CUT_5G_internalPA[index][i], eRFPath, index));					
+						PHY_SetRFReg(Adapter, eRFPath, RF_REG_for_C_CUT_5G_internalPA[i], bRFRegOffsetMask, RF_REG_Param_for_C_CUT_5G_internalPA[index][i]);
+					//RT_TRACE(COMP_RF, DBG_LOUD, ("phy_SwitchRfSetting8192D offset 0x%x value 0x%x path %d index %d \n",
+					//	RF_REG_for_C_CUT_5G_internalPA[i], RF_REG_Param_for_C_CUT_5G_internalPA[index][i], eRFPath, index));
 				}
-			}		
+			}
 			else
 			PHY_SetRFReg(Adapter, eRFPath, RF_TXPA_AG, mask, value);
 		}
-		
+
 	}
 	else if(pHalData->CurrentBandType92D==BAND_ON_2_4G)
 	{
 		//RT_TRACE(COMP_CMD, DBG_LOUD, ("====>phy_SwitchRfSetting8192D interface %d 2.4G\n", Adapter->interfaceIndex));
 		//u4tmp = CurveIndex[channel-1];
 		//RT_DISP(FINIT, INIT_IQK, ("ver 3 set RF-B, 2G, 0x28 = 0x%x !!\n", u4tmp));
-	
-		if(channel == 1 || channel == 2 || channel ==4 || channel == 9 || channel == 10 || 
+
+		if(channel == 1 || channel == 2 || channel ==4 || channel == 9 || channel == 10 ||
 			channel == 11 || channel ==12)
 			index = 0;
 		else if(channel ==3 || channel == 13 || channel == 14)
@@ -1269,7 +1269,7 @@ VOID
 
 		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY)
 		{
-			path = RF_PATH_A;		
+			path = RF_PATH_A;
 			if(pHalData->interfaceIndex == 0)
 			{
 				bNeedPowerDownRadio = PHY_EnableAnotherPHY(Adapter, _TRUE);
@@ -1290,30 +1290,30 @@ VOID
 					phy_EnableRFENV(Adapter, path,MaskforPhySet,&u4RegValue);
 			}
 		}
-		
+
 
 		for(i = 0; i < RF_REG_NUM_for_C_CUT_2G; i++)
 		{
-#if 1		
+#if 1
 #if SWLCK == 1
-			if (RF_REG_for_C_CUT_2G[i] == RF_SYN_G7)																						
-				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_2G[i]|MaskforPhySet, bRFRegOffsetMask, (RF_REG_Param_for_C_CUT_2G[index][i] | BIT17)); 						
+			if (RF_REG_for_C_CUT_2G[i] == RF_SYN_G7)
+				PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_2G[i]|MaskforPhySet, bRFRegOffsetMask, (RF_REG_Param_for_C_CUT_2G[index][i] | BIT17));
 			else
-#endif				
+#endif
 			PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_2G[i]|MaskforPhySet, bRFRegOffsetMask, RF_REG_Param_for_C_CUT_2G[index][i]);
 #else
 			PHY_SetRFReg(Adapter, path, RF_REG_for_C_CUT_2G[i], RF_REG_MASK_for_C_CUT_2G[i], RF_REG_Param_for_C_CUT_2G[index][i]);
 #endif
-			//RT_TRACE(COMP_RF, DBG_TRACE, ("phy_SwitchRfSetting8192D offset 0x%x value 0x%x mak 0x%x path %d index %d readback 0x%x\n", 
-			//	RF_REG_for_C_CUT_2G[i], RF_REG_Param_for_C_CUT_2G[index][i], RF_REG_MASK_for_C_CUT_2G[i], path,  index, 
+			//RT_TRACE(COMP_RF, DBG_TRACE, ("phy_SwitchRfSetting8192D offset 0x%x value 0x%x mak 0x%x path %d index %d readback 0x%x\n",
+			//	RF_REG_for_C_CUT_2G[i], RF_REG_Param_for_C_CUT_2G[index][i], RF_REG_MASK_for_C_CUT_2G[i], path,  index,
 			//	PHY_QueryRFReg(Adapter,  path, RF_REG_for_C_CUT_2G[i]|MaskforPhySet, bRFRegOffsetMask)));
 		}
-		
+
 #if SWLCK == 1
 		//for SWLCK
 		//RT_DISP(FINIT, INIT_IQK, ("ver 3 set RF-B, 2G, 0x28 = 0x%x !!\n", RF_REG_SYN_G4_for_C_CUT_2G | (u4tmp << 11)));
-		
-		PHY_SetRFReg(Adapter, path, RF_SYN_G4|MaskforPhySet, bRFRegOffsetMask, RF_REG_SYN_G4_for_C_CUT_2G | (u4tmp << 11)); 				
+
+		PHY_SetRFReg(Adapter, path, RF_SYN_G4|MaskforPhySet, bRFRegOffsetMask, RF_REG_SYN_G4_for_C_CUT_2G | (u4tmp << 11));
 #endif
 
 		if(pHalData->MacPhyMode92D == DUALMAC_DUALPHY && pHalData->interfaceIndex == 0)
@@ -1328,7 +1328,7 @@ VOID
 		{
 			if(bNeedPowerDownRadio)
 			{
-				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue); 
+				phy_RestoreRFENV(Adapter, path,MaskforPhySet, &u4RegValue);
 			}
 			PHY_PowerDownAnotherPHY(Adapter, _FALSE);
 		}
@@ -1336,11 +1336,11 @@ VOID
 
 	//RT_TRACE(COMP_CMD, DBG_LOUD, ("<====phy_SwitchRfSetting8192D interface %u\n", Adapter->interfaceIndex));
 
-}	
+}
 
 void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
 {
-	
+
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(pAdapter);
 	struct mp_priv *pmp = &pAdapter->mppriv;
 	u8 ChannelToSw = pmp->channel, eRFPath = RF_PATH_A;
@@ -1349,9 +1349,9 @@ void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
 	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
     BOOLEAN             bInteralPA = _FALSE;
     u32				value = 0;
-    
+
    // phy_SwitchRfSetting8192D(pAdapter,ChannelToSw);
-#if 0    
+#if 0
 	if (((ulRateIdx == MPT_RATE_1M || ulRateIdx == MPT_RATE_6M || ulRateIdx == MPT_RATE_MCS0 ||
         ulRateIdx == MPT_RATE_MCS8) && ulbandwidth == HT_CHANNEL_WIDTH_20 &&
         (ChannelToSw == 1 || ChannelToSw == 11)) ||
@@ -1377,9 +1377,9 @@ void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
             bInteralPA = pHalData->InternalPA5G[eRFPath];
 
         if(!bInteralPA ||  pHalData->CurrentBandType92D==BAND_ON_2_4G)
-        	_write_rfreg(pAdapter, (RF_RADIO_PATH_E)eRFPath, 0x03, bRFRegOffsetMask, value);
+		_write_rfreg(pAdapter, (RF_RADIO_PATH_E)eRFPath, 0x03, bRFRegOffsetMask, value);
     }
- #endif    
+ #endif
 }
 
 void Hal_SetBandwidth(PADAPTER pAdapter)
@@ -1391,28 +1391,28 @@ void Hal_SetBandwidth(PADAPTER pAdapter)
 	{
 		/* 20 MHZ sub-carrier mode --> dont care. */
 		pmp->bCurBW40MHz = _FALSE;
-		SetBWMode(pAdapter,HT_CHANNEL_WIDTH_20,pmp->prime_channel_offset);		
+		SetBWMode(pAdapter,HT_CHANNEL_WIDTH_20,pmp->prime_channel_offset);
 	}
 	/* Sub-Carrier mode is defined in MAC data sheet chapter 12.3. */
 	else
 	{
 		/* 40 MHZ sub-carrier mode --> dont care. */
-		pmp->bCurBW40MHz = _TRUE;					
+		pmp->bCurBW40MHz = _TRUE;
 		SetBWMode(pAdapter,HT_CHANNEL_WIDTH_40,pmp->prime_channel_offset);
 		//SetBWMode(pAdapter,HT_CHANNEL_WIDTH_40,HAL_PRIME_CHNL_OFFSET_UPPER);
 	}
-	
+
 	SelectChannel(pAdapter, pmp->channel);
 	//phy_SwitchRfSetting(pAdapter,pmp->channel);
 }
 
 void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
 {
-	s32 	TempCCk;
+	s32	TempCCk;
 	u8		CCK_index, CCK_index_old=0;
 	u8		Action = 0; //0: no action, 1: even->odd, 2:odd->even
 	u8		TimeOut = 100;
-	s32 	i = 0;
+	s32	i = 0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
 
@@ -1510,18 +1510,18 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
 
 void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
 {
-	u32 	TempVal = 0, TempVal2 = 0, TempVal3 = 0;
-	u32 	CurrCCKSwingVal = 0, CCKSwingIndex = 12;
+	u32	TempVal = 0, TempVal2 = 0, TempVal3 = 0;
+	u32	CurrCCKSwingVal = 0, CCKSwingIndex = 12;
 	u8		i;
 	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(Adapter);
 
 
 	// get current cck swing value and check 0xa22 & 0xa23 later to match the table.
 	CurrCCKSwingVal = read_bbreg(Adapter, rCCK0_TxFilter1, bMaskHWord);
-	
+
 	if(!bInCH14)
 	{
-		// Readback the current bb cck swing value and compare with the table to 
+		// Readback the current bb cck swing value and compare with the table to
 		// get the current swing index
 		for(i=0 ; i<CCK_TABLE_SIZE ; i++)
 		{
@@ -1534,19 +1534,19 @@ void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
 				break;
 			}
 		}
-		
+
 		//Write 0xa22 0xa23
 		TempVal =	CCKSwingTable_Ch1_Ch13[CCKSwingIndex][0] +
 					(CCKSwingTable_Ch1_Ch13[CCKSwingIndex][1]<<8) ;
-	
-		
+
+
 		//Write 0xa24 ~ 0xa27
 		TempVal2 = 0;
 		TempVal2 =	CCKSwingTable_Ch1_Ch13[CCKSwingIndex][2] +
 					(CCKSwingTable_Ch1_Ch13[CCKSwingIndex][3]<<8) +
 					(CCKSwingTable_Ch1_Ch13[CCKSwingIndex][4]<<16 )+
 					(CCKSwingTable_Ch1_Ch13[CCKSwingIndex][5]<<24);
-		
+
 		//Write 0xa28  0xa29
 		TempVal3 = 0;
 		TempVal3 =	CCKSwingTable_Ch1_Ch13[CCKSwingIndex][6] +
@@ -1565,18 +1565,18 @@ void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
 				break;
 			}
 		}
-		
+
 		//Write 0xa22 0xa23
 		TempVal =	CCKSwingTable_Ch14[CCKSwingIndex][0] +
 					(CCKSwingTable_Ch14[CCKSwingIndex][1]<<8) ;
-		
+
 		//Write 0xa24 ~ 0xa27
 		TempVal2= 0;
 		TempVal2 =	CCKSwingTable_Ch14[CCKSwingIndex][2] +
 					(CCKSwingTable_Ch14[CCKSwingIndex][3]<<8) +
 					(CCKSwingTable_Ch14[CCKSwingIndex][4]<<16 )+
 					(CCKSwingTable_Ch14[CCKSwingIndex][5]<<24);
-		
+
 		//Write 0xa28  0xa29
 		TempVal3 = 0;
 		TempVal3 =	CCKSwingTable_Ch14[CCKSwingIndex][6] +
@@ -1861,4 +1861,3 @@ void Hal_ProSetCrystalCap (PADAPTER pAdapter , u32 CrystalCapVal)
 
 
 #endif // CONFIG_MP_INCLUDED
-

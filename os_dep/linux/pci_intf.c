@@ -1962,7 +1962,7 @@ static int __init rtw_drv_entry(void)
 	DBG_871X_LEVEL(_drv_always_, "module init start\n");
 	dump_drv_version(RTW_DBGDUMP);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24)) 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24))
 		//console_suspend_enabled=0;
 #endif
 
@@ -2005,4 +2005,3 @@ static void __exit rtw_drv_halt(void)
 
 module_init(rtw_drv_entry);
 module_exit(rtw_drv_halt);
-

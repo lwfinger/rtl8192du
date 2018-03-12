@@ -169,7 +169,7 @@ do{\
 #define BMC		BIT(24)
 #define LSG		BIT(26)
 #define FSG		BIT(27)
-#define OWN 		BIT(31)
+#define OWN		BIT(31)
 
 //OFFSET 4
 #define PKT_OFFSET_SZ	0
@@ -289,10 +289,10 @@ struct pkt_attrib
 	int	mac_id;
 	int	vcs_mode;	//virtual carrier sense method
 
-	u8 	dst[ETH_ALEN];
+	u8	dst[ETH_ALEN];
 	u8	src[ETH_ALEN];
 	u8	ta[ETH_ALEN];
-	u8 	ra[ETH_ALEN];
+	u8	ra[ETH_ALEN];
 
 	u8	key_idx;
 
@@ -341,10 +341,10 @@ struct pkt_attrib
 	u8	ack_policy;
 	u8	mac_id;
 	u8	vcs_mode;	//virtual carrier sense method
-	u8 	dst[ETH_ALEN];
+	u8	dst[ETH_ALEN];
 	u8	src[ETH_ALEN];
 	u8	ta[ETH_ALEN];
-	u8 	ra[ETH_ALEN];
+	u8	ra[ETH_ALEN];
 	u8	key_idx;
 	u8	qos_en;
 	u8	ht_en;
@@ -360,7 +360,7 @@ struct pkt_attrib
 	u8	eosp;
 	u8	rate;
 	u8	intel_proxim;
-	u8 	retry_ctrl;
+	u8	retry_ctrl;
 	struct sta_info * psta;
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
 	u8	hw_tcp_csum;
@@ -384,7 +384,7 @@ struct pkt_attrib
 
 #define MP_FRAMETAG		0x07
 
-#define TXAGG_FRAMETAG 	0x08
+#define TXAGG_FRAMETAG	0x08
 
 struct  submit_ctx{
 	u32 submit_time; /* */
@@ -541,7 +541,7 @@ struct sta_xmit_priv
 	struct tx_servq	bk_q;			//priority == 1,2
 	struct tx_servq	vi_q;			//priority == 4,5
 	struct tx_servq	vo_q;			//priority == 6,7
-	_list 	legacy_dz;
+	_list	legacy_dz;
 	_list  apsd;
 
 	u16 txseq_tid[16];
@@ -556,7 +556,7 @@ struct sta_xmit_priv
 struct	hw_txqueue	{
 	volatile sint	head;
 	volatile sint	tail;
-	volatile sint 	free_sz;	//in units of 64 bytes
+	volatile sint	free_sz;	//in units of 64 bytes
 	volatile sint      free_cmdsz;
 	volatile sint	 txsz[8];
 	uint	ff_hwaddr;
@@ -737,4 +737,3 @@ void rtw_ack_tx_done(struct xmit_priv *pxmitpriv, int status);
 #include <xmit_osdep.h>
 
 #endif	//_RTL871X_XMIT_H_
-

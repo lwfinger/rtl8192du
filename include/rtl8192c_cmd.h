@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -22,7 +22,7 @@
 
 
 enum cmd_msg_element_id
-{	
+{
 	NONE_CMDMSG_EID,
 	AP_OFFLOAD_EID=0,
 	SET_PWRMODE_EID=1,
@@ -59,16 +59,16 @@ struct cmd_msg_parm {
 };
 
 typedef struct _SETPWRMODE_PARM{
-	u8 	Mode;
-	u8 	SmartPS;
+	u8	Mode;
+	u8	SmartPS;
 	u8	BcnPassTime;	// unit: 100ms
 }SETPWRMODE_PARM, *PSETPWRMODE_PARM;
 
 #ifdef CONFIG_WOWLAN
 typedef struct _SETWOWLAN_PARM{
-	u8 	mode;
-	u8 	gpio_index;
-	u8	gpio_duration;	
+	u8	mode;
+	u8	gpio_index;
+	u8	gpio_duration;
 	u8  second_mode;
 	u8  reserve;
 }SETWOWLAN_PARM, *PSETWOWLAN_PARM;
@@ -87,7 +87,7 @@ typedef struct _SETWOWLAN_PARM{
 #endif // CONFIG_WOWLAN
 
 struct H2C_SS_RFOFF_PARAM{
-	u8 	ROFOn; // 1: on, 0:off
+	u8	ROFOn; // 1: on, 0:off
 	u16	gpio_period; // unit: 1024 us
 }__attribute__ ((packed));
 
@@ -97,8 +97,8 @@ typedef struct JOINBSSRPT_PARM{
 }JOINBSSRPT_PARM, *PJOINBSSRPT_PARM;
 
 typedef struct _RSVDPAGE_LOC{
-	u8 	LocProbeRsp;
-	u8 	LocPsPoll;
+	u8	LocProbeRsp;
+	u8	LocPsPoll;
 	u8	LocNullData;
 }RSVDPAGE_LOC, *PRSVDPAGE_LOC;
 
@@ -130,7 +130,7 @@ void	rtl8192c_set_p2p_ps_offload_cmd(_adapter* padapter, u8 p2p_ps_state);
 
 #ifdef CONFIG_IOL
 typedef struct _IO_OFFLOAD_LOC{
-	u8 	LocCmd;
+	u8	LocCmd;
 }IO_OFFLOAD_LOC, *PIO_OFFLOAD_LOC;
 int rtl8192c_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms);
 #endif //CONFIG_IOL
@@ -146,8 +146,7 @@ int reset_tsf(PADAPTER Adapter, u8 reset_port );
 
 #ifdef CONFIG_WOWLAN
 void rtl8192c_set_wowlan_cmd(_adapter* padapter);
-void SetFwRelatedForWoWLAN8192CU(_adapter* 	padapter,u8 bHostIsGoingtoSleep);
+void SetFwRelatedForWoWLAN8192CU(_adapter*	padapter,u8 bHostIsGoingtoSleep);
 #endif // CONFIG_WOWLAN
 
 #endif	// __RTL8192C_CMD_H_
-

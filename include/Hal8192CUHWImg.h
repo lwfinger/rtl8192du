@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -44,7 +44,7 @@ extern u8 Rtl8192CUFwUMCACutImgArray[UMCACutImgArrayLength];
 extern u8 Rtl8192CUFwUMCBCutImgArray[UMCBCutImgArrayLength];
 
 //8188C_Formal_All_PHYforMP_111117	2011-11-23
-//8192C_Formal_92CU_PHYforMP_110817 	2011-11-23
+//8192C_Formal_92CU_PHYforMP_110817	2011-11-23
 #define PHY_REG_2TArrayLength 374
 extern u32  Rtl8192CUPHY_REG_2TArray[PHY_REG_2TArrayLength];
 #define PHY_REG_1TArrayLength 374

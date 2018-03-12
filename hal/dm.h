@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2013 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -92,4 +92,3 @@ void odm_AdaptivityInit(PDM_ODM_T pDM_Odm);
 void odm_Adaptivity(PDM_ODM_T pDM_Odm);
 
 #endif /* __DM_H__ */
-

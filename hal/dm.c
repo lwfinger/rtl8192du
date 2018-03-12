@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2013 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -31,28 +31,28 @@
 #endif
 
 #define u1Byte		u8
-#define pu1Byte 	u8* 
+#define pu1Byte		u8*
 
 #define u2Byte		u16
-#define pu2Byte 	u16*		
+#define pu2Byte		u16*
 
 #define u4Byte		u32
-#define pu4Byte 	u32*	
+#define pu4Byte		u32*
 
 #define u8Byte		u64
-#define pu8Byte 	u64*
+#define pu8Byte		u64*
 
 #define s1Byte		s8
-#define ps1Byte 	s8* 
+#define ps1Byte		s8*
 
 #define s2Byte		s16
-#define ps2Byte 	s16*	
+#define ps2Byte		s16*
 
 #define s4Byte		s32
-#define ps4Byte 	s32*	
+#define ps4Byte		s32*
 
 #define s8Byte		s64
-#define ps8Byte 	s64*
+#define ps8Byte		s64*
 
 typedef enum _ODM_RF_RADIO_PATH {
     ODM_RF_PATH_A = 0,   //Radio Path A
@@ -72,34 +72,34 @@ typedef enum _ODM_RF_RADIO_PATH {
   //  ODM_RF_PATH_MAX,    //Max RF number 90 support
 } ODM_RF_RADIO_PATH_E, *PODM_RF_RADIO_PATH_E;
 
-#define	ODM_AP		 	0x01	//BIT0 
-#define	ODM_ADSL	 	0x02	//BIT1
-#define	ODM_CE		 	0x04	//BIT2
-#define	ODM_WIN		 	0x08	//BIT3
+#define	ODM_AP			0x01	//BIT0
+#define	ODM_ADSL		0x02	//BIT1
+#define	ODM_CE			0x04	//BIT2
+#define	ODM_WIN			0x08	//BIT3
 
 #define	DM_ODM_SUPPORT_TYPE			ODM_CE
 
 typedef enum tag_ODM_Support_Interface_Definition
 {
-	ODM_ITRF_PCIE 	=	0x1,
-	ODM_ITRF_USB 	=	0x2,
-	ODM_ITRF_SDIO 	=	0x4,
-	ODM_ITRF_ALL 	=	0x7,
+	ODM_ITRF_PCIE	=	0x1,
+	ODM_ITRF_USB	=	0x2,
+	ODM_ITRF_SDIO	=	0x4,
+	ODM_ITRF_ALL	=	0x7,
 }ODM_INTERFACE_E;
 
 typedef enum tag_ODM_Support_IC_Type_Definition
 {
-	ODM_RTL8192S 	=	BIT0,
-	ODM_RTL8192C 	=	BIT1,
-	ODM_RTL8192D 	=	BIT2,
-	ODM_RTL8723A 	=	BIT3,
-	ODM_RTL8188E 	=	BIT4,
-	ODM_RTL8812 	=	BIT5,
-	ODM_RTL8821 	=	BIT6,
-	ODM_RTL8192E 	=	BIT7,	
+	ODM_RTL8192S	=	BIT0,
+	ODM_RTL8192C	=	BIT1,
+	ODM_RTL8192D	=	BIT2,
+	ODM_RTL8723A	=	BIT3,
+	ODM_RTL8188E	=	BIT4,
+	ODM_RTL8812	=	BIT5,
+	ODM_RTL8821	=	BIT6,
+	ODM_RTL8192E	=	BIT7,
 	ODM_RTL8723B	=	BIT8,
-	ODM_RTL8813A	=	BIT9,	
-	ODM_RTL8881A 	=	BIT10
+	ODM_RTL8813A	=	BIT9,
+	ODM_RTL8881A	=	BIT10
 }ODM_IC_TYPE_E;
 
 #define ODM_IC_11N_SERIES		(ODM_RTL8192S|ODM_RTL8192C|ODM_RTL8192D|ODM_RTL8723A|ODM_RTL8188E|ODM_RTL8192E|ODM_RTL8723B)
@@ -107,7 +107,7 @@ typedef enum tag_ODM_Support_IC_Type_Definition
 
 u1Byte
 ODM_Read1Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
+	IN	PDM_ODM_T		pDM_Odm,
 	IN	u4Byte			RegAddr
 	)
 {
@@ -120,14 +120,14 @@ ODM_Read1Byte(
 #elif(DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	return	PlatformEFIORead1Byte(Adapter, RegAddr);
-#endif	
+#endif
 
 }
 
 
 u2Byte
 ODM_Read2Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
+	IN	PDM_ODM_T		pDM_Odm,
 	IN	u4Byte			RegAddr
 	)
 {
@@ -140,14 +140,14 @@ ODM_Read2Byte(
 #elif(DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	return	PlatformEFIORead2Byte(Adapter, RegAddr);
-#endif	
+#endif
 
 }
 
 
 u4Byte
 ODM_Read4Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
+	IN	PDM_ODM_T		pDM_Odm,
 	IN	u4Byte			RegAddr
 	)
 {
@@ -160,14 +160,14 @@ ODM_Read4Byte(
 #elif(DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	return	PlatformEFIORead4Byte(Adapter, RegAddr);
-#endif	
+#endif
 
 }
 
 
 VOID
 ODM_Write1Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
+	IN	PDM_ODM_T		pDM_Odm,
 	IN	u4Byte			RegAddr,
 	IN	u1Byte			Data
 	)
@@ -182,13 +182,13 @@ ODM_Write1Byte(
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	PlatformEFIOWrite1Byte(Adapter, RegAddr, Data);
 #endif
-	
+
 }
 
 
 VOID
 ODM_Write2Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
+	IN	PDM_ODM_T		pDM_Odm,
 	IN	u4Byte			RegAddr,
 	IN	u2Byte			Data
 	)
@@ -202,14 +202,14 @@ ODM_Write2Byte(
 #elif(DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	PlatformEFIOWrite2Byte(Adapter, RegAddr, Data);
-#endif	
+#endif
 
 }
 
 
 VOID
 ODM_Write4Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
+	IN	PDM_ODM_T		pDM_Odm,
 	IN	u4Byte			RegAddr,
 	IN	u4Byte			Data
 	)
@@ -223,14 +223,14 @@ ODM_Write4Byte(
 #elif(DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	PlatformEFIOWrite4Byte(Adapter, RegAddr, Data);
-#endif	
+#endif
 
 }
 
 
 VOID
-ODM_SetMACReg(	
-	IN 	PDM_ODM_T	pDM_Odm,
+ODM_SetMACReg(
+	IN	PDM_ODM_T	pDM_Odm,
 	IN	u4Byte		RegAddr,
 	IN	u4Byte		BitMask,
 	IN	u4Byte		Data
@@ -241,13 +241,13 @@ ODM_SetMACReg(
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_WIN))
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
-#endif	
+#endif
 }
 
 
-u4Byte 
-ODM_GetMACReg(	
-	IN 	PDM_ODM_T	pDM_Odm,
+u4Byte
+ODM_GetMACReg(
+	IN	PDM_ODM_T	pDM_Odm,
 	IN	u4Byte		RegAddr,
 	IN	u4Byte		BitMask
 	)
@@ -259,13 +259,13 @@ ODM_GetMACReg(
 	return PHY_QueryMacReg(Adapter, RegAddr, BitMask);
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE))
 	return PHY_QueryBBReg(pDM_Odm->Adapter, RegAddr, BitMask);
-#endif	
+#endif
 }
 
 
 VOID
-ODM_SetBBReg(	
-	IN 	PDM_ODM_T	pDM_Odm,
+ODM_SetBBReg(
+	IN	PDM_ODM_T	pDM_Odm,
 	IN	u4Byte		RegAddr,
 	IN	u4Byte		BitMask,
 	IN	u4Byte		Data
@@ -276,13 +276,13 @@ ODM_SetBBReg(
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_WIN))
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
-#endif	
+#endif
 }
 
 
-u4Byte 
-ODM_GetBBReg(	
-	IN 	PDM_ODM_T	pDM_Odm,
+u4Byte
+ODM_GetBBReg(
+	IN	PDM_ODM_T	pDM_Odm,
 	IN	u4Byte		RegAddr,
 	IN	u4Byte		BitMask
 	)
@@ -292,13 +292,13 @@ ODM_GetBBReg(
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_WIN))
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	return PHY_QueryBBReg(Adapter, RegAddr, BitMask);
-#endif	
+#endif
 }
 
 
 VOID
-ODM_SetRFReg(	
-	IN 	PDM_ODM_T			pDM_Odm,
+ODM_SetRFReg(
+	IN	PDM_ODM_T			pDM_Odm,
 	IN	ODM_RF_RADIO_PATH_E	eRFPath,
 	IN	u4Byte				RegAddr,
 	IN	u4Byte				BitMask,
@@ -310,13 +310,13 @@ ODM_SetRFReg(
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_WIN))
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	PHY_SetRFReg(Adapter, eRFPath, RegAddr, BitMask, Data);
-#endif	
+#endif
 }
 
 
-u4Byte 
-ODM_GetRFReg(	
-	IN 	PDM_ODM_T			pDM_Odm,
+u4Byte
+ODM_GetRFReg(
+	IN	PDM_ODM_T			pDM_Odm,
 	IN	ODM_RF_RADIO_PATH_E	eRFPath,
 	IN	u4Byte				RegAddr,
 	IN	u4Byte				BitMask
@@ -327,7 +327,7 @@ ODM_GetRFReg(
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_WIN))
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	return PHY_QueryRFReg(Adapter, eRFPath, RegAddr, BitMask);
-#endif	
+#endif
 }
 
 
@@ -335,14 +335,14 @@ ODM_GetRFReg(
 #include "OUTSRC/odm_RegDefine11AC.h"
 #include "OUTSRC/odm_debug.h"
 
-VOID 
+VOID
 ODM_InitDebugSetting(
 	IN		PDM_ODM_T		pDM_Odm
 	)
 {
-pDM_Odm->DebugLevel				= 	ODM_DBG_LOUD;
+pDM_Odm->DebugLevel				=	ODM_DBG_LOUD;
 
-pDM_Odm->DebugComponents			= 
+pDM_Odm->DebugComponents			=
 \
 #if ODM_DBG
 //BB Functions
@@ -359,7 +359,7 @@ pDM_Odm->DebugComponents			=
 //									ODM_COMP_PATH_DIV				|
 //									ODM_COMP_DYNAMIC_PRICCA		|
 //									ODM_COMP_RXHP					|
-//									ODM_COMP_MP 					|
+//									ODM_COMP_MP					|
 //									ODM_COMP_DYNAMIC_ATC		|
 
 //MAC Functions
@@ -524,7 +524,7 @@ bool rtw_adapter_linked(_adapter *adapter)
 
 	if(	(check_fwstate(mlmepriv, WIFI_AP_STATE) == _TRUE) ||
 		(check_fwstate(mlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == _TRUE))
-	{				
+	{
 		if(adapter->stapriv.asoc_sta_count > 2)
 			linked = _TRUE;
 	}
@@ -651,9 +651,9 @@ Phydm_SearchPwdBLowerBound(
 	u1Byte			cnt, IGI = 0x50;		/*IGI = 0x50 for cal EDCCA lower bound*/
 	u1Byte			txEdcca1 = 0, txEdcca0 = 0;
 	BOOLEAN			bAdjust = _TRUE;
-	s1Byte 			TH_L2H_dmc, TH_H2L_dmc, IGI_target = 0x32;
-	s1Byte 			Diff;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pDM_Odm->Adapter);	
+	s1Byte			TH_L2H_dmc, TH_H2L_dmc, IGI_target = 0x32;
+	s1Byte			Diff;
+	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pDM_Odm->Adapter);
 
 	ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_RPT_FORMAT_11N, BIT3 | BIT2 | BIT1, 0x1);			/*set TXmod to standby mode to remove outside noise affect*/
 	ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_RPT_FORMAT_11N, BIT22 | BIT21 | BIT20, 0x1);		/*set RXmod to standby mode to remove outside noise affect*/
@@ -662,7 +662,7 @@ Phydm_SearchPwdBLowerBound(
 			ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_RPT_FORMAT_11N_B, BIT22 | BIT21 | BIT20, 0x1);	/*set RXmod to standby mode to remove outside noise affect*/
 	}
 	ODM_Write_DIG(pDM_Odm, 0x7e);
-	
+
 	Diff = IGI_target - (s1Byte)IGI;
 	TH_L2H_dmc = pDM_Odm->TH_L2H_ini + Diff;
 	if (TH_L2H_dmc > 10)
@@ -723,7 +723,7 @@ Phydm_SearchPwdBLowerBound(
 			ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_RPT_FORMAT_11N_B, BIT22 | BIT21 | BIT20, 0x3);	/*set RXmod to standby mode to remove outside noise affect*/
 	}
 	ODM_Write_DIG(pDM_Odm, 0x20);
-	
+
 	ODM_SetBBReg(pDM_Odm,rOFDM0_ECCAThreshold, bMaskByte0, (u1Byte)0x7f);
 	ODM_SetBBReg(pDM_Odm,rOFDM0_ECCAThreshold, bMaskByte2, (u1Byte)0x7f);
 }
@@ -737,7 +737,7 @@ IN PDM_ODM_T pDM_Odm
 #ifdef CONFIG_ODM_ADAPTIVITY
 
 	pDM_Odm->TH_L2H_ini = 0xef; // -17
-	
+
 	pDM_Odm->TH_EDCCA_HL_diff = 7;
 	pDM_Odm->IGI_Base = 0x32;
 	pDM_Odm->IGI_target = 0x1c;
@@ -788,12 +788,12 @@ odm_Adaptivity(
 	if (!(dmpriv->DMFlag & DYNAMIC_FUNC_ADAPTIVITY))
 	{
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("Go to odm_DynamicEDCCA() \n"));
-		// Add by Neil Chen to enable edcca to MP Platform 
+		// Add by Neil Chen to enable edcca to MP Platform
 		return;
 	}
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("odm_Adaptivity() =====> \n"));
 
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("ForceEDCCA=%d, IGI_Base=0x%x, TH_L2H_ini = %d, TH_EDCCA_HL_diff = %d, AdapEn_RSSI = %d\n", 
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("ForceEDCCA=%d, IGI_Base=0x%x, TH_L2H_ini = %d, TH_EDCCA_HL_diff = %d, AdapEn_RSSI = %d\n",
 		pDM_Odm->ForceEDCCA, pDM_Odm->IGI_Base, pDM_Odm->TH_L2H_ini, pDM_Odm->TH_EDCCA_HL_diff, pDM_Odm->AdapEn_RSSI));
 
 	IGI_target = pDM_Odm->IGI_Base;
@@ -807,17 +807,17 @@ odm_Adaptivity(
 	{
 		Diff = IGI_target -(s1Byte)IGI;
 		TH_L2H_dmc = pDM_Odm->TH_L2H_ini + Diff;
-		if(TH_L2H_dmc > 10) 	TH_L2H_dmc = 10;
+		if(TH_L2H_dmc > 10)	TH_L2H_dmc = 10;
 		TH_H2L_dmc = TH_L2H_dmc - pDM_Odm->TH_EDCCA_HL_diff;
 
 		//replace lower bound to prevent EDCCA always equal 1
-			if(TH_H2L_dmc < pDM_Odm->H2L_lb)				
+			if(TH_H2L_dmc < pDM_Odm->H2L_lb)
 				TH_H2L_dmc = pDM_Odm->H2L_lb;
 			if(TH_L2H_dmc < pDM_Odm->L2H_lb)
 				TH_L2H_dmc = pDM_Odm->L2H_lb;
 	}
-	
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("IGI=0x%x, TH_L2H_dmc = %d, TH_H2L_dmc = %d\n", 
+
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("IGI=0x%x, TH_L2H_dmc = %d, TH_H2L_dmc = %d\n",
 		IGI, TH_L2H_dmc, TH_H2L_dmc));
 
 		ODM_SetBBReg(pDM_Odm,rOFDM0_ECCAThreshold, bMaskByte0, (u1Byte)TH_L2H_dmc);
@@ -839,7 +839,7 @@ void rtw_odm_init(_adapter *adapter)
 		odm->SupportICType = ODM_RTL8192C;
 		break;
 	case RTL8192D:
- 		odm->SupportICType = ODM_RTL8192D;
+		odm->SupportICType = ODM_RTL8192D;
 		break;
 	default:
 		odm->SupportICType = 0;
@@ -860,4 +860,3 @@ void rtw_odm_init(_adapter *adapter)
 
 	ODM_InitDebugSetting(odm);
 }
-

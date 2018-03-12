@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
+ *                                        
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -10,6 +10,10 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
  *
  *
  ******************************************************************************/
@@ -20,15 +24,17 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
-void rtw_init_mlme_timer(struct rtw_adapter *padapter);
-void rtw_os_indicate_disconnect(struct rtw_adapter *adapter);
-void rtw_os_indicate_connect(struct rtw_adapter *adapter);
-void rtw_os_indicate_scan_done(struct rtw_adapter *padapter, bool aborted);
-void rtw_report_sec_ie(struct rtw_adapter *adapter,u8 authmode,u8 *sec_ie);
+#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MPIXEL)
+extern int time_after(u32 now, u32 old);
+#endif
 
-void rtw_reset_securitypriv(struct rtw_adapter *adapter);
-void indicate_wx_scan_complete_event(struct rtw_adapter *padapter);
-u8 rtw_do_join(struct rtw_adapter *padapter);
+extern void rtw_init_mlme_timer(_adapter *padapter);
+extern void rtw_os_indicate_disconnect( _adapter *adapter, u16 reason, u8 locally_generated);
+extern void rtw_os_indicate_connect( _adapter *adapter );
+void rtw_os_indicate_scan_done( _adapter *padapter, bool aborted);
+extern void rtw_report_sec_ie(_adapter *adapter,u8 authmode,u8 *sec_ie);
 
+void rtw_reset_securitypriv( _adapter *adapter );
 
-#endif	/* _MLME_OSDEP_H_ */
+#endif	//_MLME_OSDEP_H_
+

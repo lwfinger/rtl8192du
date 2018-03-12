@@ -270,14 +270,9 @@ struct recv_priv
 #endif
 
 #endif
-#if defined(PLATFORM_LINUX) || defined(PLATFORM_FREEBSD)
-#ifdef PLATFORM_FREEBSD
-	struct task irq_prepare_beacon_tasklet;
-	struct task recv_tasklet;
-#else //PLATFORM_FREEBSD
+#if defined(PLATFORM_LINUX)
 	struct tasklet_struct irq_prepare_beacon_tasklet;
 	struct tasklet_struct recv_tasklet;
-#endif //PLATFORM_FREEBSD
 	struct sk_buff_head free_recv_skb_queue;
 	struct sk_buff_head rx_skb_queue;
 #ifdef CONFIG_RX_INDICATE_QUEUE
@@ -285,7 +280,7 @@ struct recv_priv
 	struct ifqueue rx_indicate_queue;
 #endif	// CONFIG_RX_INDICATE_QUEUE
 
-#endif //defined(PLATFORM_LINUX) || defined(PLATFORM_FREEBSD)
+#endif //defined(PLATFORM_LINUX)
 
 	u8 *pallocated_recv_buf;
 	u8 *precv_buf;    // 4 alignment
@@ -376,7 +371,7 @@ struct recv_buf
 
 #ifdef CONFIG_USB_HCI
 
-	#if defined(PLATFORM_OS_XP)||defined(PLATFORM_LINUX)||defined(PLATFORM_FREEBSD)
+	#if defined(PLATFORM_OS_XP)||defined(PLATFORM_LINUX)
 	PURB	purb;
 	dma_addr_t dma_transfer_addr;	/* (in) dma addr for transfer_buffer */
 	u32 alloc_sz;
@@ -399,12 +394,7 @@ struct recv_buf
 	_pkt *pskb;
 	u8	reuse;
 #endif
-#ifdef PLATFORM_FREEBSD //skb solution
-	struct sk_buff *pskb;
-	u8	reuse;
-#endif //PLATFORM_FREEBSD //skb solution
 };
-
 
 /*
 	head  ----->

@@ -78,13 +78,6 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 	_rtw_init_queue(&precvpriv->recv_buf_pending_queue);
 #endif	// PLATFORM_LINUX
 
-#ifdef PLATFORM_FREEBSD
-	TASK_INIT(&precvpriv->recv_tasklet, 0, rtl8192du_recv_tasklet, padapter);
-#ifdef CONFIG_RX_INDICATE_QUEUE
-	TASK_INIT(&precvpriv->rx_indicate_tasklet, 0, rtw_rx_indicate_tasklet, padapter);
-#endif	// CONFIG_RX_INDICATE_QUEUE
-#endif	// PLATFORM_FREEBSD
-
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
 
 #ifdef PLATFORM_LINUX
@@ -137,7 +130,7 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 
 	precvpriv->free_recv_buf_queue_cnt = NR_RECVBUFF;
 
-#if defined(PLATFORM_LINUX) || defined(PLATFORM_FREEBSD)
+#if defined(PLATFORM_LINUX)
 
 	skb_queue_head_init(&precvpriv->rx_skb_queue);
 
@@ -159,13 +152,8 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 		{
 			pskb = rtw_skb_alloc(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 
-			if(pskb)
-			{
-				#ifdef PLATFORM_FREEBSD
-				pskb->dev = padapter->pifp;
-				#else
+			if(pskb) {
 				pskb->dev = padapter->pnetdev;
-				#endif //PLATFORM_FREEBSD
 
 				tmpaddr = (SIZE_PTR)pskb->data;
 				alignment = tmpaddr & (RECVBUFF_ALIGN_SZ-1);
@@ -235,38 +223,4 @@ void rtl8192du_free_recv_priv (_adapter *padapter)
 #endif
 
 #endif // PLATFORM_LINUX
-
-#ifdef PLATFORM_FREEBSD
-	struct sk_buff  *pskb;
-	while (NULL != (pskb = skb_dequeue(&precvpriv->rx_skb_queue)))
-	{
-		rtw_skb_free(pskb);
-				
-	}
-
-#ifdef CONFIG_PREALLOC_RECV_SKB
-	while (NULL != (pskb = skb_dequeue(&precvpriv->free_recv_skb_queue)))
-	{
-		rtw_skb_free(pskb);
-				
-	}
-#endif	
-
-#ifdef CONFIG_RX_INDICATE_QUEUE
-	struct mbuf *m;
-	for (;;) {
-		IF_DEQUEUE(&precvpriv->rx_indicate_queue, m);
-		if (m == NULL)
-			break;
-		m_freem(m);
-	}
-	mtx_destroy(&precvpriv->rx_indicate_queue.ifq_mtx);
-#endif	// CONFIG_RX_INDICATE_QUEUE
-
-#endif // PLATFORM_FREEBSD
-
-
-
 }
-
-

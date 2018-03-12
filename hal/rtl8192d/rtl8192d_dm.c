@@ -2500,7 +2500,6 @@ rtl8192d_dm_CheckTXPowerTracking(
  *	01/10/2008	MHC		Create Version 0.  
  *
  *---------------------------------------------------------------------------*/
-#ifndef PLATFORM_FREEBSD
 static VOID
 dm_CheckRfCtrlGPIO(
 	IN	PADAPTER	Adapter
@@ -2508,7 +2507,6 @@ dm_CheckRfCtrlGPIO(
 {
 
 }	/* dm_CheckRfCtrlGPIO */
-#endif //PLATFORM_FREEBSD
 
 /*-----------------------------------------------------------------------------
  * Function:	dm_CheckPbcGPIO()
@@ -2806,7 +2804,6 @@ dm_RefreshRateAdaptiveMask(	IN	PADAPTER	pAdapter)
 	}
 #endif	
 }
-#ifndef PLATFORM_FREEBSD
 static VOID
 dm_CheckProtection(
 	IN	PADAPTER	Adapter
@@ -2833,7 +2830,6 @@ dm_CheckProtection(
 	}
 #endif
 }
-#endif //PLATFORM_FREEBSD
 
 static VOID
 dm_CheckStatistics(

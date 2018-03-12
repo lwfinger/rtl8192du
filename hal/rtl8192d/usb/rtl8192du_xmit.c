@@ -42,9 +42,6 @@ s32	rtl8192du_init_xmit_priv(_adapter *padapter)
 	     (void(*)(unsigned long))rtl8192du_xmit_tasklet,
 	     (unsigned long)padapter);
 #endif
-#ifdef PLATFORM_FREEBSD
-		TASK_INIT(&pxmitpriv->xmit_tasklet, 1, (task_fn_t *)rtl8192du_xmit_tasklet, (void *)padapter);
-#endif
 
 	return _SUCCESS;
 }
@@ -1006,11 +1003,6 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 	
 	_enter_critical_bh(&pxmitpriv->lock, &irqL);
 	
-#ifdef PLATFORM_FREEBSD
-	//force tx to enqueue, and schedule tx task later.
-	goto enqueue;
-#endif	// PLATFORM_FREEBSD
-
 	if (rtw_txframes_sta_ac_pending(padapter, pattrib) > 0
 #ifdef CONFIG_DUALMAC_CONCURRENT
 		|| (dc_check_xmit(padapter)== _FALSE)
@@ -1058,10 +1050,6 @@ enqueue:
 		pxmitpriv->tx_drop++;
 		return _TRUE;
 	}
-
-#ifdef PLATFORM_FREEBSD
-	rtw_os_xmit_schedule(padapter);
-#endif	// PLATFORM_FREEBSD
 
 	return _FALSE;
 }
@@ -1153,11 +1141,7 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 		goto _exit;
 
 	pxmitbuf = pxmit_skb->data;
-#ifdef PLATFORM_FREEBSD
-	urb = rtw_usb_alloc_urb(0, GFP_ATOMIC);
-#else //PLATFORM_FREEBSD
 	urb = usb_alloc_urb(0, GFP_ATOMIC);
-#endif //PLATFORM_FREEBSD
 	if (!urb) {
 		goto _exit;
 	}
@@ -1215,31 +1199,17 @@ s32 rtl8192du_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 	//translate DMA FIFO addr to pipehandle
 	//pipe = ffaddr2pipehdl(pdvobj, MGT_QUEUE_INX);
 	pipe = usb_sndbulkpipe(pdvobj->pusbdev, pHalData->Queue2EPNum[(u8)MGT_QUEUE_INX]&0x0f);
-#ifdef PLATFORM_FREEBSD
-	rtw_usb_fill_bulk_urb(urb, pdvobj->pusbdev, pipe,
-		pxmit_skb->data, pxmit_skb->len, rtl8192cu_hostap_mgnt_xmit_cb, pxmit_skb);
-#else //PLATFORM_FREEBSD
 	usb_fill_bulk_urb(urb, pdvobj->pusbdev, pipe,
 		pxmit_skb->data, pxmit_skb->len, rtl8192cu_hostap_mgnt_xmit_cb, pxmit_skb);
-#endif //PLATFORM_FREEBSD
 	
 	urb->transfer_flags |= URB_ZERO_PACKET;
 	usb_anchor_urb(urb, &phostapdpriv->anchored);
-#ifdef PLATFORM_FREEBSD
-	rc = rtw_usb_submit_urb(urb, GFP_ATOMIC);
-#else //PLATFORM_FREEBSD
 	rc = usb_submit_urb(urb, GFP_ATOMIC);
-#endif //PLATFORM_FREEBSD
 	if (rc < 0) {
 		usb_unanchor_urb(urb);
 		kfree_skb(skb);
 	}
-#ifdef PLATFORM_FREEBSD
-	rtw_usb_free_urb(urb);
-#else //PLATFORM_FREEBSD
 	usb_free_urb(urb);
-#endif //PLATFORM_FREEBSD
-
 	
 _exit:	
 	

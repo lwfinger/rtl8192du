@@ -1040,13 +1040,11 @@ static void next_key(u8 *key, sint round);
 static void byte_sub(u8 *in, u8 *out);
 static void shift_row(u8 *in, u8 *out);
 static void mix_column(u8 *in, u8 *out);
-#ifndef PLATFORM_FREEBSD 
 static void add_round_key( u8 *shiftrow_in,
                     u8 *mcol_in,
                     u8 *block_in,
                     sint round,
                     u8 *out);
-#endif //PLATFORM_FREEBSD
 static void aes128k128d(u8 *key, u8 *data, u8 *ciphertext);
 
 
@@ -1578,16 +1576,17 @@ _func_enter_;
 
     }
 
-    for (j = 0 ; j < 8; j++) mic[j] = aes_out[j];
+    for (j = 0 ; j < 8; j++)
+	mic[j] = aes_out[j];
 
     /* Insert MIC into payload */
     for (j = 0; j < 8; j++)
     	pframe[payload_index+j] = mic[j];	//message[payload_index+j] = mic[j];
 
-	payload_index = hdrlen + 8;
-	for (i=0; i< num_blocks; i++)
+    payload_index = hdrlen + 8;
+    for (i=0; i< num_blocks; i++)
     {
-        construct_ctr_preload(
+	        construct_ctr_preload(
                                 ctr_preload,
                                 a4_exists,
                                 qc_exists,
@@ -1595,9 +1594,10 @@ _func_enter_;
                                 pn_vector,
                                 i+1,
                                 frtype); // add for CONFIG_IEEE80211W, none 11w also can use
-        aes128k128d(key, ctr_preload, aes_out);
-        bitwise_xor(aes_out, &pframe[payload_index], chain_buffer);//bitwise_xor(aes_out, &message[payload_index], chain_buffer);
-        for (j=0; j<16;j++) pframe[payload_index++] = chain_buffer[j];//for (j=0; j<16;j++) message[payload_index++] = chain_buffer[j];
+	        aes128k128d(key, ctr_preload, aes_out);
+        	bitwise_xor(aes_out, &pframe[payload_index], chain_buffer);//bitwise_xor(aes_out, &message[payload_index], chain_buffer);
+	        for (j=0; j<16;j++)
+			 pframe[payload_index++] = chain_buffer[j];//for (j=0; j<16;j++) message[payload_index++] = chain_buffer[j];
     }
 
     if (payload_remainder > 0)          /* If there is a short final block, then pad it,*/
@@ -1958,9 +1958,8 @@ _func_enter_;
     for (j = 0; j < 8; j++)
     	message[payload_index+j] = mic[j];
 
-	payload_index = hdrlen + 8;
-	for (i=0; i< num_blocks; i++)
-    {
+    payload_index = hdrlen + 8;
+    for (i=0; i< num_blocks; i++) {
         construct_ctr_preload(
                                 ctr_preload,
                                 a4_exists,
@@ -2263,7 +2262,6 @@ BIP_exit:
 }
 #endif //CONFIG_IEEE80211W
 
-#ifndef PLATFORM_FREEBSD
 /* compress 512-bits */
 static int sha256_compress(struct sha256_state *md, unsigned char *buf)
 {
@@ -2529,7 +2527,7 @@ static void hmac_sha256_vector(u8 *key, size_t key_len, size_t num_elem,
 	_len[1] = 32;
 	sha256_vector(2, _addr, _len, mac);
 }
-#endif //PLATFORM_FREEBSD
+
 /**
  * sha256_prf - SHA256-based Pseudo-Random Function (IEEE 802.11r, 8.5.1.5.2)
  * @key: Key for PRF
@@ -2543,7 +2541,6 @@ static void hmac_sha256_vector(u8 *key, size_t key_len, size_t num_elem,
  * This function is used to derive new, cryptographically separate keys from a
  * given key.
  */
-#ifndef PLATFORM_FREEBSD //Baron
 static void sha256_prf(u8 *key, size_t key_len, char *label,
 		u8 *data, size_t data_len, u8 *buf, size_t buf_len)
 {
@@ -2580,7 +2577,6 @@ static void sha256_prf(u8 *key, size_t key_len, char *label,
 		counter++;
 	}
 }
-#endif //PLATFORM_FREEBSD Baron
 
 /* AES tables*/
 const u32 Te0[256] = {
@@ -2759,7 +2755,6 @@ const u8 rcons[] = {
  *
  * @return	the number of rounds for the given cipher key size.
  */
-#ifndef PLATFORM_FREEBSD //Baron
 static void rijndaelKeySetupEnc(u32 rk[/*44*/], const u8 cipherKey[])
 {
 	int i;
@@ -2975,7 +2970,6 @@ int omac1_aes_128(u8 *key, u8 *data, size_t data_len, u8 *mac)
 {
 	return omac1_aes_128_vector(key, 1, &data, &data_len, mac);
 }
-#endif //PLATFORM_FREEBSD Baron
 
 #ifdef CONFIG_TDLS
 void wpa_tdls_generate_tpk(_adapter *padapter, struct sta_info *psta)
@@ -3156,9 +3150,6 @@ void rtw_use_tkipkey_handler (
 	)
 #endif
 #ifdef PLATFORM_LINUX
-void rtw_use_tkipkey_handler(void *FunctionContext)
-#endif
-#ifdef PLATFORM_FREEBSD
 void rtw_use_tkipkey_handler(void *FunctionContext)
 #endif
 {

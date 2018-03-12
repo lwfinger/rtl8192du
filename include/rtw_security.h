@@ -465,10 +465,6 @@ void rtw_use_tkipkey_handler (
 void rtw_use_tkipkey_handler(void* FunctionContext);
 #endif
 
-#ifdef PLATFORM_FREEBSD
-void rtw_use_tkipkey_handler(void* FunctionContext);
-#endif //PLATFORM_FREEBSD
-
 void rtw_sec_restore_wep_key(_adapter *adapter);
 u8 rtw_handle_tkip_countermeasure(_adapter* adapter, const char *caller);
 

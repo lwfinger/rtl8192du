@@ -314,18 +314,6 @@ _func_enter_;
 		{		
 			goto exit;
 		}
-
-#endif
-
-#ifdef PLATFORM_FREEBSD
-        //i think needs to check again
-		delta_time = (curr_time -pnetwork->last_scanned)/hz;	
-
-		if(delta_time < lifetime)// unit:sec
-		{		
-			goto exit;
-		}
-
 #endif
 	}
 
@@ -552,7 +540,6 @@ _func_exit_;
 }
 
 
-#ifndef PLATFORM_FREEBSD //Baron
 static struct	wlan_network *rtw_dequeue_network(_queue *queue)
 {
 	struct wlan_network *pnetwork;
@@ -561,7 +548,6 @@ _func_enter_;
 _func_exit_;		
 	return pnetwork;
 }
-#endif //PLATFORM_FREEBSD
 
 struct	wlan_network *rtw_alloc_network(struct	mlme_priv *pmlmepriv );
 struct	wlan_network *rtw_alloc_network(struct	mlme_priv *pmlmepriv )//(_queue	*free_queue)
@@ -2504,25 +2490,6 @@ void _rtw_join_timeout_handler (_adapter *adapter)
 #endif	
 
 _func_enter_;		
-#ifdef PLATFORM_FREEBSD
-		rtw_mtx_lock(NULL);
-		 if (callout_pending(&adapter->mlmepriv.assoc_timer.callout)) {
-			 /* callout was reset */
-			 //mtx_unlock(&sc->sc_mtx);
-			 rtw_mtx_unlock(NULL);
-			 return;
-		 }
-		 if (!callout_active(&adapter->mlmepriv.assoc_timer.callout)) {
-			 /* callout was stopped */
-			 //mtx_unlock(&sc->sc_mtx);
-			 rtw_mtx_unlock(NULL);
-			 return;
-		 }
-		 callout_deactivate(&adapter->mlmepriv.assoc_timer.callout);
-	
-	
-#endif
-
 	DBG_871X("%s, fw_state=%x\n", __FUNCTION__, get_fwstate(pmlmepriv));
 	
 	if(adapter->bDriverStopped ||adapter->bSurpriseRemoved)
@@ -2577,9 +2544,6 @@ _func_enter_;
 #ifdef CONFIG_DRVEXT_MODULE_WSC	
 	drvext_assoc_fail_indicate(&adapter->drvextpriv);	
 #endif	
-#ifdef PLATFORM_FREEBSD
-		rtw_mtx_unlock(NULL);
-#endif
 	
 _func_exit_;
 

@@ -378,7 +378,6 @@ rtl8192d_PHY_SetBBReg(
  *	01/21/2008	MHC		Create Version 0.  
  *
  *---------------------------------------------------------------------------*/
-#ifndef PLATFORM_FREEBSD   //amy, temp remove
 static	u32
 phy_FwRFSerialRead(
 	IN	PADAPTER			Adapter,
@@ -417,7 +416,6 @@ phy_FwRFSerialWrite(
 {
 	//RT_ASSERT(FALSE,("deprecate!\n"));
 }
-#endif //PLATFORM_FREEBSD amy, temp remove
 
 /**
 * Function:	phy_RFSerialRead
@@ -3821,7 +3819,6 @@ PHY_SwChnl8192D(	// Call after initialization
 	}
 }
 
-#ifndef PLATFORM_FREEBSD //amy, temp remove
 static	BOOLEAN
 phy_SwChnlStepByStep(
 	IN	PADAPTER	Adapter,
@@ -3831,154 +3828,6 @@ phy_SwChnlStepByStep(
 	OUT u32		*delay
 	)
 {
-#if 0
-	HAL_DATA_TYPE			*pHalData = GET_HAL_DATA(Adapter);
-	PCHANNEL_ACCESS_SETTING	pChnlAccessSetting;
-	SwChnlCmd				PreCommonCmd[MAX_PRECMD_CNT];
-	u4Byte					PreCommonCmdCnt;
-	SwChnlCmd				PostCommonCmd[MAX_POSTCMD_CNT];
-	u4Byte					PostCommonCmdCnt;
-	SwChnlCmd				RfDependCmd[MAX_RFDEPENDCMD_CNT];
-	u4Byte					RfDependCmdCnt;
-	SwChnlCmd				*CurrentCmd;	
-	u1Byte					eRFPath;	
-	u4Byte					RfTXPowerCtrl;
-	BOOLEAN					bAdjRfTXPowerCtrl = _FALSE;
-	
-	
-	RT_ASSERT((Adapter != NULL), ("Adapter should not be NULL\n"));
-#if(MP_DRIVER != 1)
-	RT_ASSERT(IsLegalChannel(Adapter, channel), ("illegal channel: %d\n", channel));
-#endif
-	RT_ASSERT((pHalData != NULL), ("pHalData should not be NULL\n"));
-	
-	pChnlAccessSetting = &Adapter->MgntInfo.Info8185.ChannelAccessSetting;
-	RT_ASSERT((pChnlAccessSetting != NULL), ("pChnlAccessSetting should not be NULL\n"));
-	
-	//for(eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
-	//for(eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
-	//{
-		// <1> Fill up pre common command.
-	PreCommonCmdCnt = 0;
-	phy_SetSwChnlCmdArray(PreCommonCmd, PreCommonCmdCnt++, MAX_PRECMD_CNT, 
-				CmdID_SetTxPowerLevel, 0, 0, 0);
-	phy_SetSwChnlCmdArray(PreCommonCmd, PreCommonCmdCnt++, MAX_PRECMD_CNT, 
-				CmdID_End, 0, 0, 0);
-	
-		// <2> Fill up post common command.
-	PostCommonCmdCnt = 0;
-
-	phy_SetSwChnlCmdArray(PostCommonCmd, PostCommonCmdCnt++, MAX_POSTCMD_CNT, 
-				CmdID_End, 0, 0, 0);
-	
-		// <3> Fill up RF dependent command.
-	RfDependCmdCnt = 0;
-	switch( pHalData->RFChipID )
-	{
-		case RF_8225:		
-		RT_ASSERT((channel >= 1 && channel <= 14), ("illegal channel for Zebra: %d\n", channel));
-		// 2008/09/04 MH Change channel. 
-		if(channel==14) channel++;
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT, 
-			CmdID_RF_WriteReg, rZebra1_Channel, (0x10+channel-1), 10);
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT, 
-		CmdID_End, 0, 0, 0);
-		break;	
-		
-	case RF_8256:
-		// TEST!! This is not the table for 8256!!
-		RT_ASSERT((channel >= 1 && channel <= 14), ("illegal channel for Zebra: %d\n", channel));
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT, 
-			CmdID_RF_WriteReg, rRfChannel, channel, 10);
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT, 
-		CmdID_End, 0, 0, 0);
-		break;
-		
-	case RF_6052:
-		RT_ASSERT((channel >= 1 && channel <= 14), ("illegal channel for Zebra: %d\n", channel));
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT, 
-			CmdID_RF_WriteReg, RF_CHNLBW, channel, 10);		
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT, 
-		CmdID_End, 0, 0, 0);		
-		
-		break;
-
-	case RF_8258:
-		break;
-
-	// For FPGA two MAC verification
-	case RF_PSEUDO_11N:
-		return TRUE;
-	default:
-		RT_ASSERT(FALSE, ("Unknown RFChipID: %d\n", pHalData->RFChipID));
-		return FALSE;
-		break;
-	}
-
-	
-	do{
-		switch(*stage)
-		{
-		case 0:
-			CurrentCmd=&PreCommonCmd[*step];
-			break;
-		case 1:
-			CurrentCmd=&RfDependCmd[*step];
-			break;
-		case 2:
-			CurrentCmd=&PostCommonCmd[*step];
-			break;
-		}
-		
-		if(CurrentCmd->CmdID==CmdID_End)
-		{
-			if((*stage)==2)
-			{
-				return TRUE;
-			}
-			else
-			{
-				(*stage)++;
-				(*step)=0;
-				continue;
-			}
-		}
-		
-		switch(CurrentCmd->CmdID)
-		{
-		case CmdID_SetTxPowerLevel:
-			PHY_SetTxPowerLevel8192C(Adapter,channel);
-			break;
-		case CmdID_WritePortUlong:
-			PlatformEFIOWrite4Byte(Adapter, CurrentCmd->Para1, CurrentCmd->Para2);
-			break;
-		case CmdID_WritePortUshort:
-			PlatformEFIOWrite2Byte(Adapter, CurrentCmd->Para1, (u2Byte)CurrentCmd->Para2);
-			break;
-		case CmdID_WritePortUchar:
-			PlatformEFIOWrite1Byte(Adapter, CurrentCmd->Para1, (u1Byte)CurrentCmd->Para2);
-			break;
-		case CmdID_RF_WriteReg:	// Only modify channel for the register now !!!!!
-			for(eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
-			{
-#if 1
-				pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffffc00) | CurrentCmd->Para2);
-				PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, CurrentCmd->Para1, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
-#else
-				PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, CurrentCmd->Para1, bRFRegOffsetMask, (CurrentCmd->Para2));
-#endif
-			}
-			break;
-		}
-		
-		break;
-	}while(TRUE);
-	//cosa }/*for(Number of RF paths)*/
-
-	(*delay)=CurrentCmd->msDelay;
-	(*step)++;
-	return FALSE;
-#endif	
 	return _TRUE;
 }
 
@@ -4017,7 +3866,6 @@ phy_SetSwChnlCmdArray(
 
 	return _TRUE;
 }
-#endif  //amy, temp remove
 
 static	void
 phy_FinishSwChnlNow(	// We should not call this function directly
@@ -4025,16 +3873,6 @@ phy_FinishSwChnlNow(	// We should not call this function directly
 		IN	u8		channel
 		)
 {
-#if 0
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u32			delay;
-  
-	while(!phy_SwChnlStepByStep(Adapter,channel,&pHalData->SwChnlStage,&pHalData->SwChnlStep,&delay))
-	{
-		if(delay>0)
-			rtw_mdelay_os(delay);
-	}
-#endif	
 }
 
 

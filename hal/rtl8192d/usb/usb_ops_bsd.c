@@ -28,12 +28,6 @@
 #include <recv_osdep.h>
 #include <rtl8192d_hal.h>
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_FREEBSD)
-
-#error "Shall be Linux or FreeBSD, but not both!\n"
-
-#endif
-
 struct zero_bulkout_context{
 	void *pbuf;
 	void *purb;
@@ -59,11 +53,7 @@ struct zero_bulkout_context{
 #ifdef CONFIG_USB_VENDOR_REQ_PREALLOC
 static int usbctrl_vendorreq(struct dvobj_priv  *pdvobjpriv, u8 request, u16 value, u16 index, void *pdata, u16 len, u8 requesttype)
 {
-#ifdef PLATFORM_FREEBSD
-	struct usb_host_endpoint *pipe;
-#else /* PLATFORM_FREEBSD */
 	unsigned int pipe;
-#endif /* PLATFORM_FREEBSD */
 	int status = 0;
 	u32 tmp_buflen=0;
 	u8 reqtype;
@@ -172,11 +162,7 @@ static int usbctrl_vendorreq(struct dvobj_priv  *pdvobjpriv, u8 request, u16 val
 #else
 static int usbctrl_vendorreq(struct dvobj_priv  *pdvobjpriv, u8 request, u16 value, u16 index, void *pdata, u16 len, u8 requesttype)
 {
-#ifdef PLATFORM_FREEBSD
-	struct usb_host_endpoint *pipe;
-#else /* PLATFORM_FREEBSD */
 	unsigned int	pipe;
-#endif /* PLATFORM_FREEBSD */
 	int	status;
 	u8	reqtype;
 	u32	tmp_buflen=0;
@@ -552,7 +538,6 @@ void usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata)
 }
 
 #ifdef CONFIG_USB_SUPPORT_ASYNC_VDN_REQ
-#ifndef PLATFORM_FREEBSD
 static void _usbctrl_vendorreq_async_callback(struct urb *urb, struct pt_regs *regs)
 {
 	if(urb){
@@ -616,11 +601,9 @@ static int _usbctrl_vendorreq_async_write(struct usb_device *udev, u8 request, u
 	}
 	return rc;
 }
-#endif /* PLATFORM_FREEBSD */
 
 static void usb_write_async(struct usb_device *udev, u32 addr, u32 val, u16 len)
 {
-#ifndef PLATFORM_FREEBSD
 	u8 request;
 	u8 requesttype;
 	u16 wvalue;
@@ -636,9 +619,6 @@ static void usb_write_async(struct usb_device *udev, u32 addr, u32 val, u16 len)
 	data = cpu_to_le32(data);
 	
 	_usbctrl_vendorreq_async_write(udev, request, wvalue, index, &data, len, requesttype);
-#else /* PLATFORM_FREEBSD */
-	DBG_8192C("*** %s() is not implemented! ***\n", __FUNCTION__);
-#endif /* PLATFORM_FREEBSD */
 }
 static void usb_async_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val)
 {	
@@ -711,7 +691,6 @@ static struct usb_host_endpoint * ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 
 	return pipe;
 
 }
-#ifndef PLATFORM_FREEBSD
 static void usb_bulkout_zero_complete(struct urb *purb, struct pt_regs *regs)
 {	
 	struct zero_bulkout_context *pcontext = (struct zero_bulkout_context *)purb->context;
@@ -794,7 +773,6 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	return _SUCCESS;
 
 }
-#endif /* PLATFORM_FREEBSD */
 
 static void usb_read_mem(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 {
@@ -1329,16 +1307,10 @@ int recvbuf2recvframe(_adapter *padapter, struct sk_buff  *pskb)
 		}
 		else
 		{	
-#ifdef PLATFORM_FREEBSD
-			printf("%s(),LINE %d: allocate failure 881\n",__FUNCTION__,__LINE__);
-			rtw_free_recvframe(precvframe, pfree_recv_queue);
-			goto _exit_recvbuf2recvframe;
-#else // PLATFORM_FREEBSD
 			//DBG_8192C("recvbuf2recvframe:can not allocate memory for skb copy\n");				
 			precvframe->u.hdr.pkt = rtw_skb_clone(pskb);
 			precvframe->u.hdr.rx_head = precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pbuf;
 			precvframe->u.hdr.rx_end = pbuf + alloc_sz;
-#endif // PLATFORM_FREEBSD
 		}
 
 #else // CONFIG_BSD_RX_USE_MBUF

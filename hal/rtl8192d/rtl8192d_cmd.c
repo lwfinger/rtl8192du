@@ -31,7 +31,6 @@
 
 #include <rtl8192d_hal.h>
 
-#ifndef PLATFORM_FREEBSD
 static BOOLEAN
 CheckWriteH2C(
 	IN	PADAPTER		Adapter,
@@ -51,7 +50,6 @@ CheckWriteH2C(
 	return Result;
 
 }
-#endif //PLATFORM_FREEBSD
 
 static BOOLEAN
 CheckFwReadLastH2C(

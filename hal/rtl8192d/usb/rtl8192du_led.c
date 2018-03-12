@@ -47,7 +47,6 @@
 //	Prototype of protected function.
 //================================================================================
 
-#ifndef PLATFORM_FREEBSD //amy temp remove
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 static void BlinkTimerCallback(unsigned long data);
 #else
@@ -58,7 +57,6 @@ static void
 BlinkWorkItemCallback(
 	struct work_struct *work
 	);
-#endif //PLATFORM_FREEBSD,amy temp remove
 
 static void
 ResetLedStatus(PLED_871x	pLed) {
@@ -107,7 +105,6 @@ InitLed871x(
 	pLed->bLedBlinkInProgress = _FALSE;
 	pLed->BlinkTimes = 0;
 	pLed->BlinkingLedState = LED_UNKNOWN;
-#ifndef PLATFORM_FREEBSD   //amy, temp remove
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	_init_timer(&(pLed->BlinkTimer), padapter->pnetdev, BlinkTimerCallback, pLed);
@@ -116,7 +113,6 @@ InitLed871x(
 #endif
 
 	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback, pLed);
-#endif //PLATFORM_FREEBSD    //amy, temp remove
 }
 
 
@@ -1293,7 +1289,6 @@ SwLedBlink5(
 
 }
 
-#ifndef PLATFORM_FREEBSD //amy temp remove
 //
 //	Description:
 //		Callback function of LED BlinkTimer, 
@@ -1368,7 +1363,6 @@ void BlinkWorkItemCallback(struct work_struct *work)
 			break;
 	}
 }
-#endif //PLATFORM_FREEBSD,amy temp remove
 
 
 //================================================================================
@@ -1639,7 +1633,7 @@ SwLedControlMode1(
                                 pLed->BlinkingLedState = RTW_LED_OFF; 
                             else
                                 pLed->BlinkingLedState = RTW_LED_ON;
-				_set_timer(&(pLed->BlinkTimer), LED_BLINK_FASTER_INTERVAL_ALPHA);
+			    _set_timer(&(pLed->BlinkTimer), LED_BLINK_FASTER_INTERVAL_ALPHA);
 			}
 			break;
 

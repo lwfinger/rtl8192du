@@ -637,13 +637,11 @@ extern void rtw_stadel_event_callback(_adapter *adapter, u8 *pbuf);
 extern void rtw_atimdone_event_callback(_adapter *adapter, u8 *pbuf);
 extern void rtw_cpwm_event_callback(_adapter *adapter, u8 *pbuf);
 
-#if defined (PLATFORM_LINUX)
 extern int event_thread(void *context);
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 void _rtw_scan_timeout_handler (void *FunctionContext);
 #else
 void _rtw_scan_timeout_handler(struct timer_list *t);
-#endif
 #endif
 
 extern void rtw_free_network_queue(_adapter *adapter,u8 isfreeall);

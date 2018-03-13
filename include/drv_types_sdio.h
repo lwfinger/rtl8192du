@@ -24,9 +24,7 @@
 #include <basic_types.h>
 
 // SDIO Header Files
-#ifdef PLATFORM_LINUX
 #include <linux/mmc/sdio_func.h>
-#endif
 
 typedef struct sdio_data
 {
@@ -36,9 +34,7 @@ typedef struct sdio_data
 	u8  rx_block_mode;
 	u32 block_transfer_len;
 
-#ifdef PLATFORM_LINUX
 	struct sdio_func	 *func;
-#endif
 
 } SDIO_DATA, *PSDIO_DATA;
 

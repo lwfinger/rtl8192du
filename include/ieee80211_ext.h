@@ -39,16 +39,12 @@
 #define WPA_KEY_MGMT_IEEE8021X_NO_WPA BIT(3)
 #define WPA_KEY_MGMT_WPA_NONE BIT(4)
 
-
 #define WPA_CAPABILITY_PREAUTH BIT(0)
 #define WPA_CAPABILITY_MGMT_FRAME_PROTECTION BIT(6)
 #define WPA_CAPABILITY_PEERKEY_ENABLED BIT(9)
 
-
 #define PMKID_LEN 16
 
-
-#ifdef PLATFORM_LINUX
 struct wpa_ie_hdr {
 	u8 elem_id;
 	u8 len;
@@ -102,8 +98,6 @@ struct wme_parameter_element {
 	struct wme_ac_parameter ac[4];
 
 } __attribute__ ((packed));
-
-#endif
 
 #define WPA_PUT_LE16(a, val)			\
 	do {					\
@@ -179,8 +173,6 @@ enum ieee80211_back_parties {
 	WLAN_BACK_TIMER = 2,
 };
 
-#ifdef PLATFORM_LINUX
-
 struct ieee80211_mgmt {
 	u16 frame_control;
 	u16 duration;
@@ -251,21 +243,6 @@ struct ieee80211_mgmt {
 					u8 status_code;
 					u8 variable[0];
 				}  __attribute__ ((packed)) wme_action;
-#if 0
-				struct{
-					u8 action_code;
-					u8 element_id;
-					u8 length;
-					struct ieee80211_channel_sw_ie sw_elem;
-				}  __attribute__ ((packed)) chan_switch;
-				struct{
-					u8 action_code;
-					u8 dialog_token;
-					u8 element_id;
-					u8 length;
-					struct ieee80211_msrment_ie msr_elem;
-				}  __attribute__ ((packed)) measurement;
-#endif
 				struct{
 					u8 action_code;
 					u8 dialog_token;
@@ -306,9 +283,6 @@ struct ieee80211_mgmt {
 		}  __attribute__ ((packed)) action;
 	} __attribute__ ((packed)) u;
 }__attribute__ ((packed));
-
-#endif
-
 
 /* mgmt header + 1 byte category code */
 #define IEEE80211_MIN_ACTION_SIZE FIELD_OFFSET(struct ieee80211_mgmt, u.action.u)

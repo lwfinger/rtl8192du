@@ -358,7 +358,7 @@ rtl8192d_FirmwareSelfReset(
 {
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	u1bTmp;
-	u8	Delay = 100;
+	int	Delay = 300;
 
 	//if((pHalData->FirmwareVersion > 0x21) ||
 	//	(pHalData->FirmwareVersion == 0x21 &&
@@ -387,7 +387,7 @@ rtl8192d_FirmwareSelfReset(
 
 		if((u1bTmp&BIT2) && (Delay == 0))
 		{
-			//DbgPrint("FirmwareDownload92C(): Fail!!!!!! 0x03 = %x\n", u1bTmp);
+			pr_info("FirmwareDownload92C(): Fail!!!!!! 0x03 = %x\n", u1bTmp);
 			rtw_write8(Adapter, REG_FWIMR, 0x00);
 			//debug reset fail
 			printk("FirmwareDownload92C(): Fail!!!!!! 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x  \n", rtw_read32(Adapter, 0x1c)

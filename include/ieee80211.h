@@ -34,12 +34,15 @@
 	#include <list.h>
 
 #endif
+#include <ieee80211.h>
 
 #define MGMT_QUEUE_NUM 5
 
 #define ETH_ALEN	6
 #define ETH_TYPE_LEN		2
 #define PAYLOAD_TYPE_LEN	1
+#define CONFIG_WIRELESS_EXT	1
+#define WIRELESS_EXT		22
 
 #ifdef CONFIG_AP_MODE
 

@@ -41,13 +41,15 @@ atomic_t _malloc_size = ATOMIC_INIT(0);
 #endif /* DBG_MEMORY_LEAK */
 
 
-static ssize_t new_sync_read(struct file *filp, void __user *buf, size_t len, loff_t *ppos)
+static ssize_t new_sync_read(struct file *filp, void __user *buf, __kernel_size_t len, loff_t *ppos)
 {
-        struct iovec iov = { .iov_base = buf, .iov_len = len };
+        struct iovec iov;
         struct kiocb kiocb;
         struct iov_iter iter;
         ssize_t ret;
 
+	iov.iov_base = buf;
+	iov.iov_len = len;
         init_sync_kiocb(&kiocb, filp);
         kiocb.ki_pos = *ppos;
         iov_iter_init(&iter, READ, &iov, 1, len);
@@ -64,7 +66,7 @@ static ssize_t __vfs_read_alt(struct file *file, char __user *buf, size_t count,
         if (file->f_op->read)
                 return file->f_op->read(file, buf, count, pos);
         else if (file->f_op->read_iter)
-                return new_sync_read(file, (void *)buf, count, pos);
+                return new_sync_read(file, (void *)buf, (__kernel_size_t)count, pos);
         else
                 return -EINVAL;
 }

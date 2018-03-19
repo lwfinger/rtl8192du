@@ -1779,7 +1779,9 @@ static int rtw_wx_get_range(struct net_device *dev,
 
 	range->pm_capa = 0;
 
+#ifndef CONFIG_IOCTL_CFG80211
 	range->we_version_compiled = WIRELESS_EXT;
+#endif
 	range->we_version_source = 16;
 
 //	range->retry_capa;	/* What retry options are supported */
@@ -1824,6 +1826,7 @@ static int rtw_wx_get_range(struct net_device *dev,
 #define IW_SCAN_CAPA_TIME		0x40
 */
 
+#ifndef CONFIG_IOCTL_CFG80211
 #if WIRELESS_EXT > 17
 	range->enc_capa = IW_ENC_CAPA_WPA|IW_ENC_CAPA_WPA2|
 			  IW_ENC_CAPA_CIPHER_TKIP|IW_ENC_CAPA_CIPHER_CCMP;
@@ -1832,6 +1835,7 @@ static int rtw_wx_get_range(struct net_device *dev,
 #ifdef IW_SCAN_CAPA_ESSID //WIRELESS_EXT > 21
 	range->scan_capa = IW_SCAN_CAPA_ESSID | IW_SCAN_CAPA_TYPE |IW_SCAN_CAPA_BSSID|
 					IW_SCAN_CAPA_CHANNEL|IW_SCAN_CAPA_MODE|IW_SCAN_CAPA_RATE;
+#endif
 #endif
 
 
@@ -2167,6 +2171,7 @@ _func_enter_;
 
 	_rtw_memset(ssid, 0, sizeof(NDIS_802_11_SSID)*RTW_SSID_SCAN_AMOUNT);
 
+#ifndef CONFIG_IOCTL_CFG80211
 #if WIRELESS_EXT >= 17
 	if (wrqu->data.length == sizeof(struct iw_scan_req))
 	{
@@ -2195,6 +2200,7 @@ _func_enter_;
 
 	}
 	else
+#endif
 #endif
 
 	if(	wrqu->data.length >= WEXT_CSCAN_HEADER_SIZE
@@ -2512,6 +2518,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 		goto exit;
 	}
 
+#ifndef CONFIG_IOCTL_CFG80211
 #if WIRELESS_EXT <= 20
 	if ((wrqu->essid.length-1) > IW_ESSID_MAX_SIZE){
 #else
@@ -2520,6 +2527,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 		ret= -E2BIG;
 		goto exit;
 	}
+#endif
 
 	if(check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 		ret = -1;
@@ -2538,10 +2546,12 @@ static int rtw_wx_set_essid(struct net_device *dev,
 		//		wrq.u.essid.length--;
 		//	=========================================
 		//	That means, if the WIRELESS_EXT less than or equal to 20, the correct ssid len should subtract 1.
+#ifndef CONFIG_IOCTL_CFG80211
 #if WIRELESS_EXT <= 20
 		len = ((wrqu->essid.length-1) < IW_ESSID_MAX_SIZE) ? (wrqu->essid.length-1) : IW_ESSID_MAX_SIZE;
 #else
 		len = (wrqu->essid.length < IW_ESSID_MAX_SIZE) ? wrqu->essid.length : IW_ESSID_MAX_SIZE;
+#endif
 #endif
 
 		if( wrqu->essid.length != 33 )
@@ -12592,6 +12602,7 @@ static iw_handler rtw_private_handler[] =
 
 #endif // #if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_MP_IWPRIV_SUPPORT)
 
+#ifndef CONFIG_IOCTL_CFG80211
 #if WIRELESS_EXT >= 17
 static struct iw_statistics *rtw_get_wireless_stats(struct net_device *dev)
 {
@@ -12642,7 +12653,9 @@ static struct iw_statistics *rtw_get_wireless_stats(struct net_device *dev)
 	return &padapter->iwstats;
 }
 #endif
+#endif
 
+#ifndef CONFIG_IOCTL_CFG80211
 #ifdef CONFIG_WIRELESS_EXT
 struct iw_handler_def rtw_handlers_def =
 {
@@ -12658,6 +12671,7 @@ struct iw_handler_def rtw_handlers_def =
 	.get_wireless_stats = rtw_get_wireless_stats,
 #endif
 };
+#endif
 #endif
 
 // copy from net/wireless/wext.c start

@@ -28,7 +28,7 @@
 	#include <drv_types.h>
 	#include "wifi.h"
 
-	#include <linux/wireless.h>
+	#include <uapi/linux/wireless.h>
 #else
 
 	#include <list.h>

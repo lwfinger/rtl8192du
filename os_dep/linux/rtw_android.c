@@ -103,11 +103,11 @@ typedef struct cmd_tlv {
 
 typedef struct android_wifi_priv_cmd {
 
-#ifdef CONFIG_COMPAT
-	compat_uptr_t buf;
-#else
+//#ifdef CONFIG_COMPAT
+//	compat_uptr_t buf;
+//#else
 	char *buf;
-#endif
+//#endif
 
 	int used_len;
 	int total_len;
@@ -389,7 +389,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		ret = -EFAULT;
 		goto exit;
 	 }
-	if (copy_from_user(command, (void *)priv_cmd.buf, priv_cmd.total_len)) {
+	if (copy_from_user(command, (char *)priv_cmd.buf, priv_cmd.total_len)) {
 		ret = -EFAULT;
 		goto exit;
 	}

@@ -41,10 +41,8 @@
 #define ETH_ALEN	6
 #define ETH_TYPE_LEN		2
 #define PAYLOAD_TYPE_LEN	1
-#ifndef CONFIG_IOCTL_CFG80211
 #define CONFIG_WIRELESS_EXT	1
 #define WIRELESS_EXT		22
-#endif
 
 #ifdef CONFIG_AP_MODE
 
@@ -281,7 +279,6 @@ struct sta_data{
 #endif
 
 
-#ifndef CONFIG_IOCTL_CFG80211
 #if WIRELESS_EXT < 17
 #define IW_QUAL_QUAL_INVALID   0x10
 #define IW_QUAL_LEVEL_INVALID  0x20
@@ -289,7 +286,6 @@ struct sta_data{
 #define IW_QUAL_QUAL_UPDATED   0x1
 #define IW_QUAL_LEVEL_UPDATED  0x2
 #define IW_QUAL_NOISE_UPDATED  0x4
-#endif
 #endif
 
 #define IEEE80211_DATA_LEN		2304

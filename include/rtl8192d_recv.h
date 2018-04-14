@@ -106,7 +106,7 @@ typedef struct _Phy_OFDM_Rx_Status_Report_8192cd
 	unsigned char	sigevm;
 	unsigned char	max_ex_pwr;
 //#ifdef RTL8192SE
-#ifdef CONFIG_LITTLE_ENDIAN
+#ifdef __LITTLE_ENDIAN
 	unsigned char ex_intf_flg:1;
 	unsigned char sgi_en:1;
 	unsigned char rxsc:2;

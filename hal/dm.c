@@ -331,9 +331,9 @@ ODM_GetRFReg(
 }
 
 
-#include "OUTSRC/odm_RegDefine11N.h"
-#include "OUTSRC/odm_RegDefine11AC.h"
-#include "OUTSRC/odm_debug.h"
+#include "odm_RegDefine11N.h"
+#include "odm_RegDefine11AC.h"
+#include "odm_debug.h"
 
 VOID
 ODM_InitDebugSetting(

@@ -36,7 +36,7 @@
 #include <hal_intf.h>
 
 #include <rtl8192d_hal.h>
-#include "../dm.h"
+#include "dm.h"
 //avoid to warn in FreeBSD
 u32 EDCAParam[maxAP][3] =
 {          // UL			DL

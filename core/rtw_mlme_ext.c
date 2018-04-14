@@ -2255,7 +2255,7 @@ unsigned int OnAssocReq(_adapter *padapter, union recv_frame *precv_frame)
 		DBG_871X("indicate_sta_join_event to upper layer - hostapd\n");
 
 #ifdef CONFIG_IOCTL_CFG80211
-		#ifdef COMPAT_KERNEL_RELEASE
+		#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 10, 0)
 		rtw_cfg80211_indicate_sta_assoc(padapter, pframe, pkt_len);
 		#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
 		rtw_cfg80211_indicate_sta_assoc(padapter, pframe, pkt_len);

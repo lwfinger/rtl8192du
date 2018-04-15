@@ -721,6 +721,5 @@ clean:
 	cd core ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd hal ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd os_dep ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-	cd platform ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 endif
 

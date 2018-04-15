@@ -149,6 +149,7 @@ _OS_INTFS_FILES :=	os_dep/osdep_service.o \
 			os_dep/ioctl_cfg80211.o \
 			os_dep/wifi_regd.o \
 			os_dep/rtw_android.o \
+			os_dep/platform_ops.o \
 			os_dep/rtw_proc.o
 
 
@@ -172,9 +173,6 @@ _HAL_INTFS_FILES += hal/$(RTL871X)_mp.o
 endif
 
 _HAL_INTFS_FILES += $(CHIP_FILES)
-
-EXTRA_CFLAGS += -I$(src)/platform
-_PLATFORM_FILES := platform/platform_ops.o
 
 ifeq ($(CONFIG_AUTOCFG_CP), y)
 $(shell cp $(TopDIR)/autoconf_$(RTL871X)_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)

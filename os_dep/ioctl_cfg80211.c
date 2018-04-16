@@ -1527,6 +1527,7 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, struct net_device *ndev,
 		break;
 #endif //CONFIG_IEEE80211W
 	default:
+		pr_info("%s: line %d, Unsupported cipher %d\n", __func__, __LINE__, params->cipher);
 		return -ENOTSUPP;
 	}
 
@@ -2558,7 +2559,7 @@ static int rtw_cfg80211_set_cipher(struct security_priv *psecuritypriv, u32 ciph
 		ndisencryptstatus = Ndis802_11Encryption3Enabled;
 		break;
 	default:
-		DBG_8192C("Unsupported cipher: 0x%x\n", cipher);
+		pr_info("%s: line %d, Unsupported cipher %d\n", __func__, __LINE__, cipher);
 		return -ENOTSUPP;
 	}
 
@@ -3693,6 +3694,7 @@ static int
 	case NL80211_IFTYPE_AP_VLAN:
 	case NL80211_IFTYPE_WDS:
 	case NL80211_IFTYPE_MESH_POINT:
+		pr_info("%s: line %d, type %d not handled\n", __func__, __LINE__, type);
 		ret = -ENODEV;
 		break;
 	case NL80211_IFTYPE_MONITOR:
@@ -3703,6 +3705,7 @@ static int
 	case NL80211_IFTYPE_P2P_CLIENT:
 #endif
 	case NL80211_IFTYPE_STATION:
+		pr_info("%s: line %d, type %d not handled\n", __func__, __LINE__, type);
 		ret = -ENODEV;
 		break;
 
@@ -3710,9 +3713,11 @@ static int
 	case NL80211_IFTYPE_P2P_GO:
 #endif
 	case NL80211_IFTYPE_AP:
+		pr_info("%s: line %d, type %d not handled\n", __func__, __LINE__, type);
 		ret = -ENODEV;
 		break;
 	default:
+		pr_info("%s: line %d, type %d not handled\n", __func__, __LINE__, type);
 		ret = -ENODEV;
 		DBG_8192C("Unsupported interface type\n");
 		break;

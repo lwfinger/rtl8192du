@@ -1811,19 +1811,20 @@ static int rtw_drv_init(struct pci_dev *pdev, const struct pci_device_id *did)
 
 	/* Initialize dvobj_priv */
 	if ((dvobj = pci_dvobj_init(pdev)) == NULL) {
-		RT_TRACE(_module_hci_intfs_c_, _drv_err_, ("initialize device object priv Failed!\n"));
+		pr_info("%s: line %d, initialize device object priv Failed\n", __func__, __LINE__;
 		goto exit;
 	}
 
 	/* Initialize if1 */
 	if ((if1 = rtw_pci_if1_init(dvobj, pdev, did)) == NULL) {
-		DBG_871X("rtw_pci_if1_init Failed!\n");
+		pr_info("%s: line %d, rtw_pci_if1_init Failed\n", __func__, __LINE__;
 		goto free_dvobj;
 	}
 
 	/* Initialize if2 */
 #ifdef CONFIG_CONCURRENT_MODE
 	if((if2 = rtw_drv_if2_init(if1, pci_set_intf_ops)) == NULL) {
+		pr_info("%s: line %d, rtw_pci_if2_init Failed\n", __func__, __LINE__;
 		goto free_if1;
 	}
 #endif
@@ -1837,6 +1838,7 @@ static int rtw_drv_init(struct pci_dev *pdev, const struct pci_device_id *did)
 
 	//dev_alloc_name && register_netdev
 	if((status = rtw_drv_register_netdev(if1)) != _SUCCESS) {
+		pr_info("%s: line %d, rtw_drv_register_netdev Failed\n", __func__, __LINE__;
 		goto free_if1;
 	}
 
@@ -1850,8 +1852,10 @@ static int rtw_drv_init(struct pci_dev *pdev, const struct pci_device_id *did)
 #endif
 
 	/* alloc irq */
-	if (pci_alloc_irq(dvobj) != _SUCCESS)
+	if (pci_alloc_irq(dvobj) != _SUCCESS) {
+		pr_info("%s: line %d, pci_alloc_irq Failed\n", __func__, __LINE__;
 		goto free_if2;
+	}
 
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-871x_drv - drv_init, success!\n"));
 	//DBG_871X("-871x_drv - drv_init, success!\n");

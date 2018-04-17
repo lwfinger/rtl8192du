@@ -2250,6 +2250,9 @@ int pm_netdev_open(struct net_device *pnetdev,u8 bnormal)
 static int netdev_close(struct net_device *pnetdev)
 {
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
+#ifdef CONFIG_IOCTL_CFG80211
+	struct wireless_dev *wdev = padapter->rtw_wdev;
+#endif
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+871x_drv - drv_close\n"));
 
@@ -2308,6 +2311,8 @@ static int netdev_close(struct net_device *pnetdev)
 #endif //CONFIG_P2P
 
 #ifdef CONFIG_IOCTL_CFG80211
+	wdev->iftype = NL80211_IFTYPE_MONITOR;
+	wdev->current_bss = NULL;
 	rtw_scan_abort(padapter);
 	adapter_wdev_data(padapter)->bandroid_scan = _FALSE;
 	padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; //set this at the end

@@ -713,6 +713,10 @@ void rtw_unregister_netdevs(struct dvobj_priv *dvobj)
 		pnetdev = padapter->pnetdev;
 
 		if((padapter->DriverState != DRIVER_DISAPPEAR) && pnetdev) {
+#ifdef CONFIG_IOCTL_CFG80211
+			struct wireless_dev *wdev = padapter->rtw_wdev;
+			wdev->current_bss = NULL;
+#endif
 			unregister_netdev(pnetdev); //will call netdev_close()
 		}
 
@@ -2311,11 +2315,11 @@ static int netdev_close(struct net_device *pnetdev)
 #endif //CONFIG_P2P
 
 #ifdef CONFIG_IOCTL_CFG80211
-	wdev->iftype = NL80211_IFTYPE_MONITOR;
+	wdev->iftype = NL80211_IFTYPE_STATION;
 	wdev->current_bss = NULL;
 	rtw_scan_abort(padapter);
 	adapter_wdev_data(padapter)->bandroid_scan = _FALSE;
-	padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; //set this at the end
+	padapter->rtw_wdev->iftype = NL80211_IFTYPE_STATION; //set this at the end
 #endif //CONFIG_IOCTL_CFG80211
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("-871x_drv - drv_close\n"));

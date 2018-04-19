@@ -722,7 +722,7 @@ __inline static void up_scanned_network(struct mlme_priv *pmlmepriv)
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);
 }
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 sint rtw_buddy_adapter_up(_adapter *padapter);
 sint check_buddy_fwstate(_adapter *padapter, sint state);
 #endif //CONFIG_CONCURRENT_MODE

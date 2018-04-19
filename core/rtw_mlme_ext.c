@@ -9054,7 +9054,7 @@ void site_survey(_adapter *padapter)
 
 #ifdef CONFIG_P2P
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 
 #ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
 	u8 stay_buddy_ch = 0;
@@ -9220,7 +9220,7 @@ void site_survey(_adapter *padapter)
 
 		//	channel number is 0 or this channel is not valid.
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 		u8 cur_channel;
 		u8 cur_bwmode;
 		u8 cur_ch_offset;
@@ -9408,7 +9408,7 @@ void site_survey(_adapter *padapter)
 
 		}
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 		if(check_buddy_mlmeinfo_state(padapter, WIFI_FW_AP_STATE) &&
 			check_buddy_fwstate(padapter, _FW_LINKED))
 		{
@@ -12890,7 +12890,7 @@ u8	dc_check_xmit(_adapter *padapter)
 }
 #endif
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 sint check_buddy_mlmeinfo_state(_adapter *padapter, u32 state)
 {
 	PADAPTER pbuddy_adapter;

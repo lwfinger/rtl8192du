@@ -985,7 +985,7 @@ PHY_RF6052_Config8192D(
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	if(pHalData->bSlaveOfDMSP)
 	{
-		DBG_871X(("PHY_RF6052_Config() skip configuration RF \n"));
+//		DBG_871X(("PHY_RF6052_Config() skip configuration RF \n"));
 		return rtStatus;
 	}
 #endif

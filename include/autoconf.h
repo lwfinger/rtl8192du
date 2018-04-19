@@ -124,8 +124,6 @@
 //	#define CONFIG_TDLS_AUTOCHECKALIVE		1
 #endif
 
-//#define CONFIG_DUALMAC_CONCURRENT	1 //for 92D dual mac concurrent ,DMSP DMDP SMSP switch
-
 #define CONFIG_SKB_COPY	1//for amsdu
 
 #define CONFIG_DFS	1
@@ -159,6 +157,8 @@
 		#define CONFIG_CHECK_AC_LIFETIME	1	// Check packet lifetime of 4 ACs.
 	#endif
 #endif
+
+//#define CONFIG_DUALMAC_CONCURRENT	1 //for 92D dual mac concurrent ,DMSP DMDP SMSP switch
 
 #define CONFIG_CONCURRENT_MODE 1
 #ifdef CONFIG_CONCURRENT_MODE

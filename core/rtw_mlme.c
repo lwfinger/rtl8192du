@@ -2602,7 +2602,7 @@ static void rtw_auto_scan_handler(_adapter *padapter)
 			}
 		}
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 		if (rtw_buddy_adapter_up(padapter))
 		{
 			if ((check_buddy_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == _TRUE) ||
@@ -4000,7 +4000,7 @@ void _rtw_roaming(_adapter *padapter, struct wlan_network *tgt_network)
 }
 #endif /* CONFIG_LAYER2_ROAMING */
 
-#ifdef CONFIG_CONCURRENT_MODE
+#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
 sint rtw_buddy_adapter_up(_adapter *padapter)
 {
 	sint res = _FALSE;

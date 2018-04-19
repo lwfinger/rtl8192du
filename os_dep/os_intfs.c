@@ -1978,11 +1978,13 @@ static int _rtw_drv_register_netdev(_adapter *padapter, char *name)
 {
 	int ret = _SUCCESS;
 	struct net_device *pnetdev = padapter->pnetdev;
+	struct wiphy *wiphy = padapter->rtw_wdev->wiphy;
 
 	/* alloc netdev name */
 	rtw_init_netdev_name(pnetdev, name);
 
 	_rtw_memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
+	memcpy(wiphy->perm_addr, pnetdev->dev_addr, ETH_ALEN);
 
 	/* Tell the network stack we exist */
 	if (register_netdev(pnetdev) != 0) {

@@ -553,7 +553,6 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(_adapter *padapter, struct wlan_net
 #endif
 
 	if (unlikely(!bss)) {
-		DBG_8192C(FUNC_ADPT_FMT" bss NULL\n", FUNC_ADPT_ARG(padapter));
 		goto exit;
 	}
 
@@ -635,7 +634,6 @@ int rtw_cfg80211_check_bss(_adapter *padapter)
 #else
 	cfg80211_put_bss(bss);
 #endif
-
 	return	(bss!=NULL);
 }
 
@@ -5741,6 +5739,7 @@ int rtw_wdev_alloc(_adapter *padapter, struct device *dev)
 	struct wireless_dev *wdev;
 	struct rtw_wdev_priv *pwdev_priv;
 	struct net_device *pnetdev = padapter->pnetdev;
+	const char addr_mask[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 	DBG_8192C("%s(padapter=%p)\n", __func__, padapter);
 
@@ -5755,6 +5754,8 @@ int rtw_wdev_alloc(_adapter *padapter, struct device *dev)
 	*((_adapter**)wiphy_priv(wiphy)) = padapter;
 	rtw_cfg80211_preinit_wiphy(padapter, wiphy);
 
+	memcpy(wiphy->perm_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
+	memcpy(wiphy->addr_mask, addr_mask, ETH_ALEN);
 	ret = wiphy_register(wiphy);
 	if (ret < 0) {
 		DBG_8192C("Couldn't register wiphy device\n");

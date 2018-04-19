@@ -716,6 +716,7 @@ void rtw_unregister_netdevs(struct dvobj_priv *dvobj)
 #ifdef CONFIG_IOCTL_CFG80211
 			struct wireless_dev *wdev = padapter->rtw_wdev;
 			wdev->current_bss = NULL;
+			pnetdev->reg_state = NETREG_REGISTERED;
 #endif
 			unregister_netdev(pnetdev); //will call netdev_close()
 		}

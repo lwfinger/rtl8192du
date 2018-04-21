@@ -702,6 +702,9 @@ void rtw_unregister_netdevs(struct dvobj_priv *dvobj)
 	int i;
 	_adapter *padapter = NULL;
 
+	if (!dvobj)
+		return;
+
 	for (i=0;i<dvobj->iface_nums;i++) {
 		struct net_device *pnetdev = NULL;
 
@@ -712,7 +715,11 @@ void rtw_unregister_netdevs(struct dvobj_priv *dvobj)
 
 		pnetdev = padapter->pnetdev;
 
-		if((padapter->DriverState != DRIVER_DISAPPEAR) && pnetdev) {
+		if (!pnetdev)
+			continue;
+		pr_info("In %s, pnetdev = %p\n", __func__, pnetdev);
+
+		if (padapter->DriverState != DRIVER_DISAPPEAR) {
 #ifdef CONFIG_IOCTL_CFG80211
 			struct wireless_dev *wdev = padapter->rtw_wdev;
 			wdev->current_bss = NULL;
@@ -722,10 +729,10 @@ void rtw_unregister_netdevs(struct dvobj_priv *dvobj)
 		}
 
 		#ifdef CONFIG_IOCTL_CFG80211
-		rtw_wdev_unregister(padapter->rtw_wdev);
+		if (padapter->rtw_wdev)
+			rtw_wdev_unregister(padapter->rtw_wdev);
 		#endif
 	}
-
 }
 
 u32 rtw_start_drv_threads(_adapter *padapter)

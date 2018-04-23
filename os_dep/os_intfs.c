@@ -701,23 +701,19 @@ void rtw_unregister_netdevs(struct dvobj_priv *dvobj)
 {
 	int i;
 	_adapter *padapter = NULL;
+	struct net_device *pnetdev = NULL;
 
-	if (!dvobj)
+	if (!dvobj || dvobj->iface_nums == 0)
 		return;
 
-	for (i=0;i<dvobj->iface_nums;i++) {
-		struct net_device *pnetdev = NULL;
-
+	for (i = 0; i < dvobj->iface_nums; i++) {
 		padapter = dvobj->padapters[i];
-
 		if (padapter == NULL)
 			continue;
 
 		pnetdev = padapter->pnetdev;
-
 		if (!pnetdev)
 			continue;
-		pr_info("In %s, pnetdev = %p\n", __func__, pnetdev);
 
 		if (padapter->DriverState != DRIVER_DISAPPEAR) {
 #ifdef CONFIG_IOCTL_CFG80211

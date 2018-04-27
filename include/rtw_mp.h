@@ -195,7 +195,7 @@ struct mp_tx
 #define s1Byte s8
 #define u4Byte u32
 #define s4Byte s32
-typedef VOID (*MPT_WORK_ITEM_HANDLER)(IN PVOID Adapter);
+typedef VOID (*MPT_WORK_ITEM_HANDLER)(PVOID Adapter);
 typedef struct _MPT_CONTEXT
 {
 	// Indicate if we have started Mass Production Test.

@@ -9028,8 +9028,8 @@ Following are some utitity fuctions for WiFi MLME
 *****************************************************************************/
 
 BOOLEAN IsLegal5GChannel(
-	IN PADAPTER			Adapter,
-	IN u8			channel)
+	PADAPTER			Adapter,
+	u8			channel)
 {
 
 	int i=0;

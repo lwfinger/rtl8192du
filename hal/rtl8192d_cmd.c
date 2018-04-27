@@ -33,8 +33,8 @@
 
 static BOOLEAN
 CheckWriteH2C(
-	IN	PADAPTER		Adapter,
-	IN	u8		BoxNum
+	PADAPTER		Adapter,
+	u8		BoxNum
 )
 {
 	u8	valHMETFR;
@@ -53,8 +53,8 @@ CheckWriteH2C(
 
 static BOOLEAN
 CheckFwReadLastH2C(
-	IN	PADAPTER		Adapter,
-	IN	u8		BoxNum
+	PADAPTER		Adapter,
+	u8		BoxNum
 )
 {
 	u8	valHMETFR;
@@ -273,10 +273,10 @@ _func_exit_;
 
 VOID
 FillH2CCmd92D(
-	IN	PADAPTER	Adapter,
-	IN	u8	ElementID,
-	IN	u32	CmdLen,
-	IN	u8*	pCmdBuffer
+	PADAPTER	Adapter,
+	u8	ElementID,
+	u32	CmdLen,
+	u8*	pCmdBuffer
 )
 {
 	u32	tmpCmdBuf[2];
@@ -626,10 +626,10 @@ void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr
 //
 static VOID
 FillFakeTxDescriptor92D(
-	IN PADAPTER		Adapter,
-	IN u8*			pDesc,
-	IN u32			BufferLen,
-	IN BOOLEAN		IsPsPoll
+	PADAPTER		Adapter,
+	u8*			pDesc,
+	u32			BufferLen,
+	BOOLEAN		IsPsPoll
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

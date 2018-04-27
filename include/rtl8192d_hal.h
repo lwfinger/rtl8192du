@@ -1086,12 +1086,12 @@ typedef struct hal_data_8192du HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define GET_HAL_DATA(__pAdapter)	((HAL_DATA_TYPE *)((__pAdapter)->HalData))
 #define GET_RF_TYPE(priv)	(GET_HAL_DATA(priv)->rf_type)
 
-int FirmwareDownload92D(IN	PADAPTER Adapter,IN	BOOLEAN  bUsedWoWLANFw);
-VOID rtl8192d_FirmwareSelfReset(IN PADAPTER Adapter);
-void rtl8192d_ReadChipVersion(IN PADAPTER Adapter);
+int FirmwareDownload92D(PADAPTER Adapter, BOOLEAN  bUsedWoWLANFw);
+VOID rtl8192d_FirmwareSelfReset(PADAPTER Adapter);
+void rtl8192d_ReadChipVersion(PADAPTER Adapter);
 VOID rtl8192d_EfuseParseChnlPlan(PADAPTER Adapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
 VOID rtl8192d_ReadTxPowerInfo(PADAPTER Adapter, u8* PROMContent, BOOLEAN AutoLoadFail);
-VOID rtl8192d_ResetDualMacSwitchVariables(IN PADAPTER Adapter);
+VOID rtl8192d_ResetDualMacSwitchVariables(PADAPTER Adapter);
 u8 GetEEPROMSize8192D(PADAPTER Adapter);
 BOOLEAN PHY_CheckPowerOffFor8192D(PADAPTER Adapter);
 VOID PHY_SetPowerOnFor8192D(PADAPTER Adapter);

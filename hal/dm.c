@@ -107,8 +107,8 @@ typedef enum tag_ODM_Support_IC_Type_Definition
 
 u1Byte
 ODM_Read1Byte(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr
+	PDM_ODM_T		pDM_Odm,
+	u4Byte			RegAddr
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -127,8 +127,8 @@ ODM_Read1Byte(
 
 u2Byte
 ODM_Read2Byte(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr
+	PDM_ODM_T		pDM_Odm,
+	u4Byte			RegAddr
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -147,8 +147,8 @@ ODM_Read2Byte(
 
 u4Byte
 ODM_Read4Byte(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr
+	PDM_ODM_T		pDM_Odm,
+	u4Byte			RegAddr
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -167,9 +167,9 @@ ODM_Read4Byte(
 
 VOID
 ODM_Write1Byte(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr,
-	IN	u1Byte			Data
+	PDM_ODM_T		pDM_Odm,
+	u4Byte			RegAddr,
+	u1Byte			Data
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -188,9 +188,9 @@ ODM_Write1Byte(
 
 VOID
 ODM_Write2Byte(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr,
-	IN	u2Byte			Data
+	PDM_ODM_T		pDM_Odm,
+	u4Byte			RegAddr,
+	u2Byte			Data
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -209,9 +209,9 @@ ODM_Write2Byte(
 
 VOID
 ODM_Write4Byte(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr,
-	IN	u4Byte			Data
+	PDM_ODM_T		pDM_Odm,
+	u4Byte			RegAddr,
+	u4Byte			Data
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -230,10 +230,10 @@ ODM_Write4Byte(
 
 VOID
 ODM_SetMACReg(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u4Byte		RegAddr,
-	IN	u4Byte		BitMask,
-	IN	u4Byte		Data
+	PDM_ODM_T	pDM_Odm,
+	u4Byte		RegAddr,
+	u4Byte		BitMask,
+	u4Byte		Data
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -247,9 +247,9 @@ ODM_SetMACReg(
 
 u4Byte
 ODM_GetMACReg(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u4Byte		RegAddr,
-	IN	u4Byte		BitMask
+	PDM_ODM_T	pDM_Odm,
+	u4Byte		RegAddr,
+	u4Byte		BitMask
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -265,10 +265,10 @@ ODM_GetMACReg(
 
 VOID
 ODM_SetBBReg(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u4Byte		RegAddr,
-	IN	u4Byte		BitMask,
-	IN	u4Byte		Data
+	PDM_ODM_T	pDM_Odm,
+	u4Byte		RegAddr,
+	u4Byte		BitMask,
+	u4Byte		Data
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -282,9 +282,9 @@ ODM_SetBBReg(
 
 u4Byte
 ODM_GetBBReg(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u4Byte		RegAddr,
-	IN	u4Byte		BitMask
+	PDM_ODM_T	pDM_Odm,
+	u4Byte		RegAddr,
+	u4Byte		BitMask
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -298,11 +298,11 @@ ODM_GetBBReg(
 
 VOID
 ODM_SetRFReg(
-	IN	PDM_ODM_T			pDM_Odm,
-	IN	ODM_RF_RADIO_PATH_E	eRFPath,
-	IN	u4Byte				RegAddr,
-	IN	u4Byte				BitMask,
-	IN	u4Byte				Data
+	PDM_ODM_T			pDM_Odm,
+	ODM_RF_RADIO_PATH_E	eRFPath,
+	u4Byte				RegAddr,
+	u4Byte				BitMask,
+	u4Byte				Data
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -316,10 +316,10 @@ ODM_SetRFReg(
 
 u4Byte
 ODM_GetRFReg(
-	IN	PDM_ODM_T			pDM_Odm,
-	IN	ODM_RF_RADIO_PATH_E	eRFPath,
-	IN	u4Byte				RegAddr,
-	IN	u4Byte				BitMask
+	PDM_ODM_T			pDM_Odm,
+	ODM_RF_RADIO_PATH_E	eRFPath,
+	u4Byte				RegAddr,
+	u4Byte				BitMask
 	)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -337,7 +337,7 @@ ODM_GetRFReg(
 
 VOID
 ODM_InitDebugSetting(
-	IN		PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 	)
 {
 pDM_Odm->DebugLevel				=	ODM_DBG_LOUD;
@@ -624,8 +624,8 @@ void rtw_odm_adaptivity_parm_set(_adapter *pAdapter, s8 TH_L2H_ini, s8 TH_EDCCA_
 
 VOID
 ODM_Write_DIG(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u1Byte			CurrentIGI
+	PDM_ODM_T		pDM_Odm,
+	u1Byte			CurrentIGI
 	)
 {
 	_adapter *adapter = pDM_Odm->Adapter;
@@ -643,7 +643,7 @@ ODM_Write_DIG(
 
 VOID
 Phydm_SearchPwdBLowerBound(
-	IN		PVOID		pDM_VOID
+	PVOID		pDM_VOID
 )
 {
 	PDM_ODM_T		pDM_Odm = (PDM_ODM_T)pDM_VOID;
@@ -731,7 +731,7 @@ Phydm_SearchPwdBLowerBound(
 
 VOID
 odm_AdaptivityInit(
-IN PDM_ODM_T pDM_Odm
+PDM_ODM_T pDM_Odm
 )
 {
 #ifdef CONFIG_ODM_ADAPTIVITY
@@ -768,7 +768,7 @@ IN PDM_ODM_T pDM_Odm
 
 VOID
 odm_Adaptivity(
-	IN		PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 )
 {
 #ifdef CONFIG_ODM_ADAPTIVITY

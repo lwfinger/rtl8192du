@@ -1431,19 +1431,7 @@ _adapter *rtw_drv_add_vir_if(_adapter *primary_padapter, void (*set_intf_ops)(st
 	padapter->HardwareType = primary_padapter->HardwareType;
 
 	//set hal data & hal ops
-#if defined(CONFIG_RTL8192C)
-	#if defined(CONFIG_PCI_HCI)
-		rtl8192ce_set_hal_ops(padapter);
-	#elif defined(CONFIG_USB_HCI)
-		rtl8192cu_set_hal_ops(padapter);
-	#endif
-#elif defined(CONFIG_RTL8192D)
-	#if defined(CONFIG_PCI_HCI)
-		rtl8192de_set_hal_ops(padapter);
-	#elif defined(CONFIG_USB_HCI)
-		rtl8192du_set_hal_ops(padapter);
-	#endif
-#endif
+	rtl8192du_set_hal_ops(padapter);
 
 	padapter->HalFunc.inirp_init = NULL;
 	padapter->HalFunc.inirp_deinit = NULL;
@@ -1800,19 +1788,7 @@ _adapter *rtw_drv_if2_init(_adapter *primary_padapter, void (*set_intf_ops)(stru
 	padapter->HardwareType = primary_padapter->HardwareType;
 
 	//set hal data & hal ops
-#if defined(CONFIG_RTL8192C)
-	#if defined(CONFIG_PCI_HCI)
-		rtl8192ce_set_hal_ops(padapter);
-	#elif defined(CONFIG_USB_HCI)
-		rtl8192cu_set_hal_ops(padapter);
-	#endif
-#elif defined(CONFIG_RTL8192D)
-	#if defined(CONFIG_PCI_HCI)
-		rtl8192de_set_hal_ops(padapter);
-	#elif defined(CONFIG_USB_HCI)
-		rtl8192du_set_hal_ops(padapter);
-	#endif
-#endif
+	rtl8192du_set_hal_ops(padapter);
 
 	padapter->HalFunc.inirp_init = NULL;
 	padapter->HalFunc.inirp_deinit = NULL;

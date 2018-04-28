@@ -734,13 +734,7 @@ void CAM_empty_entry(
 	rtw_hal_set_hwreg(Adapter, HW_VAR_CAM_EMPTY_ENTRY, (u8 *)(&ucIndex));
 }
 
-#ifdef CONFIG_RTL8192C
-#include <rtl8192c_hal.h>
-#endif
-
-#ifdef CONFIG_RTL8192D
 #include <rtl8192d_hal.h>
-#endif
 
 void invalidate_cam_all(_adapter *padapter)
 {

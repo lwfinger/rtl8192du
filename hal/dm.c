@@ -22,13 +22,7 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
-#ifdef CONFIG_RTL8192C
-#include <rtl8192c_hal.h>
-#endif
-
-#ifdef CONFIG_RTL8192D
 #include <rtl8192d_hal.h>
-#endif
 
 #define u1Byte		u8
 #define pu1Byte		u8*

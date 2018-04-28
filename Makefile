@@ -23,9 +23,7 @@ EXTRA_LDFLAGS += --strip-debug
 
 CONFIG_AUTOCFG_CP = n
 
-CONFIG_RTL8192C = n
 CONFIG_RTL8192D = y
-CONFIG_RTL8723A = n
 
 CONFIG_USB_HCI = y
 CONFIG_PCI_HCI = n
@@ -37,7 +35,6 @@ CONFIG_USB_AUTOSUSPEND = n
 CONFIG_HW_PWRP_DETECTION = n
 CONFIG_WIFI_TEST = n
 CONFIG_BT_COEXISTENCE = n
-CONFIG_RTL8192CU_REDEFINE_1X1 = n
 CONFIG_INTEL_WIDI = n
 CONFIG_WAKE_ON_WLAN = n
 CONFIG_ODM_ADAPTIVITY = n
@@ -83,24 +80,6 @@ CONFIG_DRVEXT_MODULE = n
 export TopDIR ?= $(shell pwd)
 
 
-ifeq ($(CONFIG_RTL8192C), y)
-
-RTL871X = rtl8192c
-
-ifeq ($(CONFIG_USB_HCI), y)
-MODULE_NAME = 8192cu
-FW_FILES := hal/Hal8192CUHWImg.o
-ifneq ($(CONFIG_WAKE_ON_WLAN), n)
-FW_FILES += hal/Hal8192CUHWImg_wowlan.o
-endif
-endif
-
-CHIP_FILES := \
-	hal/$(RTL871X)_sreset.o \
-	hal/$(RTL871X)_xmit.o
-CHIP_FILES += $(FW_FILES)
-endif
-
 ifeq ($(CONFIG_RTL8192D), y)
 
 RTL871X = rtl8192d
@@ -116,22 +95,6 @@ endif
 CHIP_FILES := \
 	hal/$(RTL871X)_xmit.o
 CHIP_FILES += $(FW_FILES)
-endif
-
-ifeq ($(CONFIG_RTL8723A), y)
-
-RTL871X = rtl8723a
-
-ifeq ($(CONFIG_USB_HCI), y)
-MODULE_NAME = 8723au
-FW_FILES := hal/Hal8723UHWImg.o
-endif
-
-PWRSEQ_FILES := hal/HalPwrSeqCmd.o \
-				hal/$(RTL871X)/Hal8723PwrSeq.o
-
-CHIP_FILES += $(FW_FILES) $(PWRSEQ_FILES)
-
 endif
 
 ifeq ($(CONFIG_USB_HCI), y)
@@ -199,10 +162,6 @@ endif
 
 ifeq ($(CONFIG_BT_COEXISTENCE), y)
 EXTRA_CFLAGS += -DCONFIG_BT_COEXISTENCE
-endif
-
-ifeq ($(CONFIG_RTL8192CU_REDEFINE_1X1), y)
-EXTRA_CFLAGS += -DRTL8192C_RECONFIG_TO_1T1R
 endif
 
 ifeq ($(CONFIG_WAKE_ON_WLAN), y)

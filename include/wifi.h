@@ -666,7 +666,6 @@ __inline static int IsFrameTypeCtrl(unsigned char *pframe)
  * This structure refers to "HT BlockAckReq" as
  * described in 802.11n draft section 7.2.1.7.1
  */
- #if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8712FW)
 struct rtw_ieee80211_bar {
 	unsigned short frame_control;
 	unsigned short duration;
@@ -675,18 +674,12 @@ struct rtw_ieee80211_bar {
 	unsigned short control;
 	unsigned short start_seq_num;
 } __attribute__((packed));
- #endif
 
 /* 802.11 BAR control masks */
 #define IEEE80211_BAR_CTRL_ACK_POLICY_NORMAL     0x0000
 #define IEEE80211_BAR_CTRL_CBMTID_COMPRESSED_BA  0x0004
 
-
- #if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8712FW)
-
-
-
- /**
+/**
  * struct rtw_ieee80211_ht_cap - HT capabilities
  *
  * This structure refers to "HT capabilities element" as
@@ -762,10 +755,6 @@ struct ADDBA_request
 	unsigned short	BA_timeout_value;
 	unsigned short	BA_starting_seqctrl;
 }  __attribute__ ((packed));
-
-
-
-#endif
 
 /* 802.11n HT capabilities masks */
 #define IEEE80211_HT_CAP_SUP_WIDTH		0x0002

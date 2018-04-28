@@ -43,12 +43,7 @@
 #ifdef CONFIG_MP_INCLUDED
 #include <rtw_mp.h>
 #endif
-#ifdef CONFIG_RTL8192C
-#include <rtl8192c_hal.h>
-#endif
-#ifdef CONFIG_RTL8192D
 #include <rtl8192d_hal.h>
-#endif
 
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27))
@@ -8969,15 +8964,8 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 			}
 		}
 //		DBG_871X("}\n");
-	}
-	else if (strcmp(tmp[0], "mac") == 0)
-	{
-		#ifdef CONFIG_RTL8192C
-		addr = 0x16; // EEPROM_MAC_ADDR
-		#endif
-		#ifdef CONFIG_RTL8192D
+	} else if (strcmp(tmp[0], "mac") == 0) {
 		addr = 0x19;
-		#endif
 		cnts = 6;
 
 		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
@@ -9007,15 +8995,8 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		}
 		}
 //		DBG_871X("}\n");
-	}
-	else if (strcmp(tmp[0], "vidpid") == 0)
-	{
-		#ifdef CONFIG_RTL8192C
-		addr = 0x0a; // EEPROM_VID
-		#endif
-		#ifdef CONFIG_RTL8192D
+	} else if (strcmp(tmp[0], "vidpid") == 0) {
 		addr = 0x0c;
-		#endif
 
 		cnts = 4;
 
@@ -9433,13 +9414,8 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 			goto exit;
 		}
 
-			//mac,00e04c871200
-			#ifdef CONFIG_RTL8192C
-				addr = 0x16;
-			#endif
-			#ifdef CONFIG_RTL8192D
-				addr = 0x19;
-			#endif
+		//mac,00e04c871200
+		addr = 0x19;
 
 		cnts = strlen(tmp[1]);
 		if (cnts%2)
@@ -9496,13 +9472,8 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 			goto exit;
 		}
 
-				// pidvid,da0b7881
-				#ifdef CONFIG_RTL8192C
-					   addr=0x0a;
-				#endif
-				#ifdef CONFIG_RTL8192D
-					addr = 0x0c;
-				#endif
+		// pidvid,da0b7881
+		addr = 0x0c;
 
 		cnts = strlen(tmp[1]);
 		if (cnts%2)
@@ -10347,7 +10318,6 @@ static int rtw_mp_ctx(struct net_device *dev,
 		pmp_priv->mode = MP_CARRIER_SUPPRISSION_TX;
 	if (scTx == 0)
 		pmp_priv->mode = MP_SINGLE_CARRIER_TX;
-#ifdef CONFIG_RTL8192D
 	if(pHalData->CurrentBandType92D==BAND_ON_2_4G)
 	{
 		rtw_write32(padapter, 0x860,0x66F60610);
@@ -10358,82 +10328,77 @@ static int rtw_mp_ctx(struct net_device *dev,
 		rtw_write32(padapter, 0x860, 0x66F60250);
 		rtw_write32(padapter, 0x864, 0x061F0150);
 	}
-#endif
-	switch (pmp_priv->mode)
-	{
-		case MP_PACKET_TX:
+	switch (pmp_priv->mode) {
+	case MP_PACKET_TX:
 
-			//DBG_871X("%s:pkTx %d\n", __func__,bStartTest);
-			if (bStartTest == 0)
-			{
-				pmp_priv->tx.stop = 1;
-				pmp_priv->mode = MP_ON;
-				sprintf( extra, "Stop continuous Tx");
-			}
-			else if (pmp_priv->tx.stop == 1)
-			{
-				sprintf( extra, "Start continuous DA=ffffffffffff len=1500 count=%u,\n",count);
-				//DBG_871X("%s:countPkTx %d\n", __func__,count);
-				pmp_priv->tx.stop = 0;
-				pmp_priv->tx.count = count;
-				pmp_priv->tx.payload = 2;
-				pattrib = &pmp_priv->tx.attrib;
-				pattrib->pktlen = 1460;
-				_rtw_memset(pattrib->dst, 0xFF, ETH_ALEN);
-				#ifdef CONFIG_RTL8192D
-					if(pHalData->CurrentBandType92D != BAND_ON_2_4G)
-						PHY_SetBBReg(padapter, 0x864, bMaskDWord, 0x061f0151);
-						//PHY_SetBBReg(padapter, 0x864, bMaskDWord, 0x061f0510);
-				#endif
-				SetPacketTx(padapter);
-			}
-			else {
-				//DBG_871X("%s: pkTx not stop\n", __func__);
-				return -EFAULT;
-			}
-				wrqu->length = strlen(extra);
-				return 0;
-
-		case MP_SINGLE_TONE_TX:
-			//DBG_871X("%s: sgleTx %d \n", __func__, bStartTest);
-			if (bStartTest != 0){
-				sprintf( extra, "Start continuous DA=ffffffffffff len=1500 \n infinite=yes.");
-			 }
-			Hal_SetSingleToneTx(padapter, (u8)bStartTest);
-			break;
-
-		case MP_CONTINUOUS_TX:
-			//DBG_871X("%s: cotuTx %d\n", __func__, bStartTest);
-			if (bStartTest != 0){
-				sprintf( extra, "Start continuous DA=ffffffffffff len=1500 \n infinite=yes.");
-			 }
-			 Hal_SetContinuousTx(padapter, (u8)bStartTest);
-			break;
-
-		case MP_CARRIER_SUPPRISSION_TX:
-			//DBG_871X("%s: CarrSprTx %d\n", __func__, bStartTest);
-			if (bStartTest != 0){
-				if( pmp_priv->rateidx <= MPT_RATE_11M )
-				{
-					sprintf( extra, "Start continuous DA=ffffffffffff len=1500 \n infinite=yes.");
-					Hal_SetCarrierSuppressionTx(padapter, (u8)bStartTest);
-				}else
-					sprintf( extra, "Specify carrier suppression but not CCK rate");
-			}
-			break;
-
-		case MP_SINGLE_CARRIER_TX:
-			//DBG_871X("%s: scTx %d\n", __func__, bStartTest);
-			if (bStartTest != 0){
-				sprintf( extra, "Start continuous DA=ffffffffffff len=1500 \n infinite=yes.");
-			}
-			Hal_SetSingleCarrierTx(padapter, (u8)bStartTest);
-			break;
-
-		default:
-			//DBG_871X("%s:No Match MP_MODE\n", __func__);
-			sprintf( extra, "Error! Continuous-Tx is not on-going.");
+		//DBG_871X("%s:pkTx %d\n", __func__,bStartTest);
+		if (bStartTest == 0)
+		{
+			pmp_priv->tx.stop = 1;
+			pmp_priv->mode = MP_ON;
+			sprintf( extra, "Stop continuous Tx");
+		}
+		else if (pmp_priv->tx.stop == 1)
+		{
+			sprintf( extra, "Start continuous DA=ffffffffffff len=1500 count=%u,\n",count);
+			//DBG_871X("%s:countPkTx %d\n", __func__,count);
+			pmp_priv->tx.stop = 0;
+			pmp_priv->tx.count = count;
+			pmp_priv->tx.payload = 2;
+			pattrib = &pmp_priv->tx.attrib;
+			pattrib->pktlen = 1460;
+			_rtw_memset(pattrib->dst, 0xFF, ETH_ALEN);
+			if(pHalData->CurrentBandType92D != BAND_ON_2_4G)
+				PHY_SetBBReg(padapter, 0x864, bMaskDWord, 0x061f0151);
+			SetPacketTx(padapter);
+		}
+		else {
+			//DBG_871X("%s: pkTx not stop\n", __func__);
 			return -EFAULT;
+		}
+			wrqu->length = strlen(extra);
+			return 0;
+
+	case MP_SINGLE_TONE_TX:
+		//DBG_871X("%s: sgleTx %d \n", __func__, bStartTest);
+		if (bStartTest != 0){
+			sprintf( extra, "Start continuous DA=ffffffffffff len=1500 \n infinite=yes.");
+		 }
+		Hal_SetSingleToneTx(padapter, (u8)bStartTest);
+		break;
+
+	case MP_CONTINUOUS_TX:
+		//DBG_871X("%s: cotuTx %d\n", __func__, bStartTest);
+		if (bStartTest != 0){
+			sprintf( extra, "Start continuous DA=ffffffffffff len=1500 \n infinite=yes.");
+		 }
+		 Hal_SetContinuousTx(padapter, (u8)bStartTest);
+		break;
+
+	case MP_CARRIER_SUPPRISSION_TX:
+		//DBG_871X("%s: CarrSprTx %d\n", __func__, bStartTest);
+		if (bStartTest != 0){
+			if( pmp_priv->rateidx <= MPT_RATE_11M )
+			{
+				sprintf( extra, "Start continuous DA=ffffffffffff len=1500 \n infinite=yes.");
+				Hal_SetCarrierSuppressionTx(padapter, (u8)bStartTest);
+			}else
+				sprintf( extra, "Specify carrier suppression but not CCK rate");
+		}
+		break;
+
+	case MP_SINGLE_CARRIER_TX:
+		//DBG_871X("%s: scTx %d\n", __func__, bStartTest);
+		if (bStartTest != 0){
+			sprintf( extra, "Start continuous DA=ffffffffffff len=1500 \n infinite=yes.");
+		}
+		Hal_SetSingleCarrierTx(padapter, (u8)bStartTest);
+		break;
+
+	default:
+		//DBG_871X("%s:No Match MP_MODE\n", __func__);
+		sprintf( extra, "Error! Continuous-Tx is not on-going.");
+		return -EFAULT;
 	}
 
 	if ( bStartTest==1 && pmp_priv->mode != MP_ON) {
@@ -10606,12 +10571,7 @@ static int rtw_mp_thermal(struct net_device *dev,
 {
 	u8 val;
 	u16 bwrite=1;
-	#ifdef CONFIG_RTL8192C
-		u16 addr=0x78;
-	#endif
-	#ifdef CONFIG_RTL8192D
-		u16 addr=0xc3;
-	#endif
+	u16 addr=0xc3;
 	u16 cnt=1;
 	u16 max_available_size=0;
 	PADAPTER padapter = rtw_netdev_priv(dev);
@@ -10718,14 +10678,8 @@ static int rtw_mp_dump(struct net_device *dev,
 			else
 				path_nums = 2;
 
-			for(path=0;path<path_nums;path++)
-			{
-#ifdef CONFIG_RTL8192D
-			  for (i = 0; i < 0x50; i++)
-#else
-			 for (i = 0; i < 0x34; i++)
-#endif
-				{
+			for(path=0;path<path_nums;path++) {
+				for (i = 0; i < 0x34; i++) {
 					//value = PHY_QueryRFReg(padapter, (RF90_RADIO_PATH_E)path,i, bMaskDWord);
 					value =rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
 					if(j%4==1)	DBG_871X("0x%02x ",i);
@@ -10755,9 +10709,7 @@ static int rtw_mp_phypara(struct net_device *dev,
 
 	if (!IS_HARDWARE_TYPE_8192D(padapter))
 			return 0;
-#ifdef CONFIG_RTL8192D
 	Hal_ProSetCrystalCap( padapter , valxcap );
-#endif
 
 	sprintf( extra, "Set xcap=%d",valxcap );
 	wrqu->length = strlen(extra) + 1;

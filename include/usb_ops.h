@@ -55,23 +55,12 @@ enum{
 #include <usb_ops_linux.h>
 #endif //PLATFORM_LINUX
 
-#ifdef CONFIG_RTL8192C
-void rtl8192cu_set_intf_ops(struct _io_ops *pops);
-#define usb_set_intf_ops	rtl8192cu_set_intf_ops
-
-void rtl8192cu_recv_tasklet(void *priv);
-
-void rtl8192cu_xmit_tasklet(void *priv);
-#endif
-
-#ifdef CONFIG_RTL8192D
 void rtl8192du_set_intf_ops(struct _io_ops *pops);
 #define usb_set_intf_ops	rtl8192du_set_intf_ops
 
 void rtl8192du_recv_tasklet(void *priv);
 
 void rtl8192du_xmit_tasklet(void *priv);
-#endif
 
 /*
 * Increase and check if the continual_urb_error of this @param dvobjprive is larger than MAX_CONTINUAL_URB_ERR

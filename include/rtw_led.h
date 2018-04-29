@@ -42,8 +42,6 @@ typedef enum _LED_CTL_MODE{
 	 LED_CTL_STOP_WPS_FAIL_OVERLAP = 13, //added for BELKIN
 }LED_CTL_MODE;
 
-
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI)
 //================================================================================
 // LED object.
 //================================================================================
@@ -117,79 +115,6 @@ typedef	enum _LED_STRATEGY_871x{
 	SW_LED_MODE6, //for 88CU minicard, porting from ce SW_LED_MODE7
 	HW_LED, // HW control 2 LEDs, LED0 and LED1 (there are 4 different control modes, see MAC.CONFIG1 for details.)
 }LED_STRATEGY_871x, *PLED_STRATEGY_871x;
-#endif //CONFIG_USB_HCI
-
-#ifdef CONFIG_PCI_HCI
-//================================================================================
-// LED object.
-//================================================================================
-
-typedef	enum _LED_STATE_871x{
-	LED_UNKNOWN = 0,
-	RTW_LED_ON = 1,
-	RTW_LED_OFF = 2,
-	LED_BLINK_NORMAL = 3,
-	LED_BLINK_SLOWLY = 4,
-	LED_POWER_ON_BLINK = 5,
-	LED_SCAN_BLINK = 6, // LED is blinking during scanning period, the # of times to blink is depend on time for scanning.
-	LED_NO_LINK_BLINK = 7, // LED is blinking during no link state.
-	LED_BLINK_StartToBlink = 8,
-	LED_BLINK_TXRX = 9,
-	LED_BLINK_RUNTOP = 10, // Customized for RunTop
-	LED_BLINK_CAMEO = 11,
-}LED_STATE_871x;
-
-typedef enum _LED_PIN_871x{
-	LED_PIN_GPIO0,
-	LED_PIN_LED0,
-	LED_PIN_LED1,
-	LED_PIN_LED2
-}LED_PIN_871x;
-
-typedef struct _LED_871x{
-	_adapter				*padapter;
-
-	LED_PIN_871x		LedPin;	// Identify how to implement this SW led.
-
-	LED_STATE_871x		CurrLedState; // Current LED state.
-	u8					bLedOn; // TRUE if LED is ON, FALSE if LED is OFF.
-
-	u8					bLedBlinkInProgress; // TRUE if it is blinking, FALSE o.w..
-	u8					bLedWPSBlinkInProgress; // TRUE if it is blinking, FALSE o.w..
-
-	u8					bLedSlowBlinkInProgress;//added by vivi, for led new mode
-	u32					BlinkTimes; // Number of times to toggle led state for blinking.
-	LED_STATE_871x		BlinkingLedState; // Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are.
-
-	_timer				BlinkTimer; // Timer object for led blinking.
-
-	u8					bLedLinkBlinkInProgress;
-	u8					bLedNoLinkBlinkInProgress;
-	u8					bLedScanBlinkInProgress;
-} LED_871x, *PLED_871x;
-
-
-//================================================================================
-// LED customization.
-//================================================================================
-
-typedef	enum _LED_STRATEGY_871x{
-	SW_LED_MODE0, // SW control 1 LED via GPIO0. It is default option.
-	SW_LED_MODE1, // SW control for PCI Express
-	SW_LED_MODE2, // SW control for Cameo.
-	SW_LED_MODE3, // SW contorl for RunTop.
-	SW_LED_MODE4, // SW control for Netcore
-	SW_LED_MODE5, //added by vivi, for led new mode, DLINK
-	SW_LED_MODE6, //added by vivi, for led new mode, PRONET
-	SW_LED_MODE7, //added by chiyokolin, for Lenovo, PCI Express Minicard Spec Rev.1.2 spec
-	SW_LED_MODE8, //added by chiyokolin, for QMI
-	SW_LED_MODE9, //added by chiyokolin, for BITLAND, PCI Express Minicard Spec Rev.1.1
-	SW_LED_MODE10, //added by chiyokolin, for Edimax-ASUS
-	HW_LED, // HW control 2 LEDs, LED0 and LED1 (there are 4 different control modes)
-}LED_STRATEGY_871x, *PLED_STRATEGY_871x;
-
-#define LED_CM8_BLINK_INTERVAL		500	//for QMI
-#endif //CONFIG_PCI_HCI
 
 struct led_priv{
 	/* add for led controll */

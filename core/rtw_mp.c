@@ -579,7 +579,6 @@ end_of_mp_stop_test:
 }
 /*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
 #if 0
-//#ifdef CONFIG_USB_HCI
 static VOID mpt_AdjustRFRegByRateByChan92CU(PADAPTER pAdapter, u8 RateIdx, u8 Channel, u8 BandWidthID)
 {
 	u8		eRFPath;

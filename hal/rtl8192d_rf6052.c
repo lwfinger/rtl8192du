@@ -660,15 +660,10 @@ rtl8192d_PHY_EnableAnotherPHY(
 	)
 {
 	u8			u1bTmp;
-#ifdef CONFIG_PCI_HCI
-	u8			Direct = bMac0==_TRUE?BIT3|BIT2:BIT3;
-#endif //CONFIG_PCI_HCI
 	u8			MAC_REG = bMac0==_TRUE?REG_MAC1:REG_MAC0;
 	u8			MAC_ON_BIT = bMac0==_TRUE?MAC1_ON:MAC0_ON;
 	BOOLEAN		bResult = _TRUE;	//true: need to enable BB/RF power
-#ifdef CONFIG_USB_HCI
 	u32			MaskForPHYSet = 0;
-#endif
 
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("===>PHY_EnableAnotherPHY\n"));
 
@@ -680,19 +675,12 @@ rtl8192d_PHY_EnableAnotherPHY(
 		//RT_TRACE(COMP_INIT, DBG_LOUD, ("PHY_EnableAnotherPHY enable BB & RF\n"));
 
 		// Enable BB and RF power
-#ifdef CONFIG_PCI_HCI
-		MpWritePCIDwordDBI8192D(Adapter,
-			REG_SYS_ISO_CTRL,
-			MpReadPCIDwordDBI8192D(Adapter, REG_SYS_ISO_CTRL, Direct)|BIT29|BIT16|BIT17,
-			Direct);
-#elif defined(CONFIG_USB_HCI)
 		if(bMac0)
 			MaskForPHYSet = MAC0_ACCESS_PHY1;
 		else
 			MaskForPHYSet = MAC1_ACCESS_PHY0;
 		rtw_write16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet, rtw_read16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet)&0xFFFC);
 		rtw_write16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet, rtw_read16(Adapter, REG_SYS_FUNC_EN|MaskForPHYSet)|BIT13|BIT0|BIT1);
-#endif
 	}
 	else
 	{
@@ -714,14 +702,9 @@ rtl8192d_PHY_PowerDownAnotherPHY(
 	)
 {
 	u8	u1bTmp;
-#ifdef CONFIG_PCI_HCI
-	u8	Direct = bMac0==_TRUE?BIT3|BIT2:BIT3;
-#endif //CONFIG_PCI_HCI
 	u8	MAC_REG = bMac0==_TRUE?REG_MAC1:REG_MAC0;
 	u8	MAC_ON_BIT = bMac0==_TRUE?MAC1_ON:MAC0_ON;
-#ifdef CONFIG_USB_HCI
 	u32	MaskforPhySet = 0;
-#endif
 
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("====>PHY_PowerDownAnotherPHY\n"));
 
@@ -733,18 +716,11 @@ rtl8192d_PHY_PowerDownAnotherPHY(
 		//RT_TRACE(COMP_INIT, DBG_LOUD, ("PHY_PowerDownAnotherPHY power down\n"));
 
 		// power down RF radio A according to YuNan's advice.
-#ifdef CONFIG_PCI_HCI
-		MpWritePCIDwordDBI8192D(Adapter,
-					rFPGA0_XA_LSSIParameter,
-					0x00000000,
-					Direct);
-#elif defined(CONFIG_USB_HCI)
 		if(bMac0)
 			MaskforPhySet = MAC0_ACCESS_PHY1;
 		else
 			MaskforPhySet = MAC1_ACCESS_PHY0;
 		  rtw_write32(Adapter, rFPGA0_XA_LSSIParameter|MaskforPhySet, 0x00000000);
-#endif
 	}
 
 	//RT_TRACE(COMP_RF, DBG_LOUD, ("<====PHY_PowerDownAnotherPHY\n"));

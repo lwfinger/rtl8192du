@@ -577,19 +577,14 @@ int proc_get_trx_info(struct seq_file *m, void *v)
 	DBG_871X_SEL_NL(m, "read_port_complete_EINPROGRESS_cnt=%d\n", precvpriv->read_port_complete_EINPROGRESS_cnt);
 	DBG_871X_SEL_NL(m, "read_port_complete_other_urb_err_cnt=%d\n", precvpriv->read_port_complete_other_urb_err_cnt);
 	DBG_871X_SEL_NL(m, "hw_init_completed=%d\n", padapter->hw_init_completed);
-#ifdef CONFIG_USB_HCI
 	DBG_871X_SEL_NL(m, "continual_urb_error=%d\n", atomic_read(&pdvobj->continual_urb_error));
-#endif
 
 	for(i = 0; i < 4; i++)
 	{
 		phwxmit = pxmitpriv->hwxmits + i;
 		DBG_871X_SEL_NL(m, "%d, hwq.accnt=%d\n", i, phwxmit->accnt);
 	}
-
-#ifdef CONFIG_USB_HCI
 	DBG_871X_SEL_NL(m, "rx_urb_pending_cnt=%d\n", precvpriv->rx_pending_cnt);
-#endif
 
 	return 0;
 }

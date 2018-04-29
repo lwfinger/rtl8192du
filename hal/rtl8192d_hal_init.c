@@ -24,13 +24,8 @@
 #include <drv_types.h>
 #include <rtw_byteorder.h>
 #include <rtw_efuse.h>
-
 #include <hal_intf.h>
-
-#ifdef CONFIG_USB_HCI
 #include <usb_hal.h>
-#endif
-
 #include <rtl8192d_hal.h>
 
 atomic_t GlobalMutexForGlobalAdapterList = ATOMIC_INIT(0);
@@ -96,7 +91,6 @@ static VOID _FWDownloadEnable(PADAPTER Adapter, BOOLEAN enable)
 #endif
 }
 
-#ifdef CONFIG_USB_HCI
 static int _BlockWrite_92d(PADAPTER Adapter, PVOID buffer, u32 size)
 {
 	int ret = _SUCCESS;
@@ -161,73 +155,8 @@ static int _BlockWrite_92d(PADAPTER Adapter, PVOID buffer, u32 size)
 exit:
 	return ret;
 }
-#endif
-#ifndef CONFIG_USB_HCI
-static int
-_BlockWrite(
-	PADAPTER		Adapter,
-	PVOID			buffer,
-	u32			size
-	)
-{
-	int ret = _SUCCESS;
 
-	u32			blockSize	= sizeof(u32);	// Use 4-byte write to download FW
-	u8*			bufferPtr	= (u8*)buffer;
-	u32*			pu4BytePtr	= (u32*)buffer;
-	u32			i, offset, blockCount, remainSize;
-#ifdef CONFIG_PCI_HCI
-	u8			remainFW[4] = {0, 0, 0, 0};
-	u8			*p = NULL;
-#endif
-	blockCount = size / blockSize;
-	remainSize = size % blockSize;
-
-	for(i = 0 ; i < blockCount ; i++){
-		offset = i * blockSize;
-		ret = rtw_write32(Adapter, (FW_8192D_START_ADDRESS + offset), cpu_to_le32(*(pu4BytePtr + i)));
-
-		if(ret == _FAIL)
-			goto exit;
-	}
-#ifdef CONFIG_PCI_HCI
-	p = (u8*)((u32*)(bufferPtr + blockCount * blockSize));
-	if (remainSize) {
-		switch (remainSize) {
-		case 0:
-			break;
-		case 3:
-			remainFW[2]=*(p+2);
-		case 2:
-			remainFW[1]=*(p+1);
-		case 1:
-			remainFW[0]=*(p);
-			ret = rtw_write32(Adapter, (FW_8192D_START_ADDRESS + blockCount * blockSize),
-				 le32_to_cpu(*(u32*)remainFW));
-		}
-		return ret;
-	}
-#endif
-	if(remainSize){
-		offset = blockCount * blockSize;
-		bufferPtr += offset;
-
-		for(i = 0 ; i < remainSize ; i++){
-			ret = rtw_write8(Adapter, (FW_8192D_START_ADDRESS + offset + i), *(bufferPtr + i));
-
-			if(ret == _FAIL)
-				goto exit;
-		}
-	}
-
-exit:
-	return ret;
-
-}
-#endif //CONFIG_USB_HCI
-static int
-_PageWrite(
-	PADAPTER		Adapter,
+static int _PageWrite(PADAPTER		Adapter,
 	u32			page,
 	PVOID			buffer,
 	u32			size
@@ -238,36 +167,10 @@ _PageWrite(
 
 	value8 = (rtw_read8(Adapter, REG_MCUFWDL+2)& 0xF8 ) | u8Page ;
 	rtw_write8(Adapter, REG_MCUFWDL+2,value8);
-#ifdef CONFIG_USB_HCI
 	return _BlockWrite_92d(Adapter,buffer,size);
-#else
-	return _BlockWrite(Adapter,buffer,size);
-#endif
 }
-#ifdef CONFIG_PCI_HCI
-static VOID
-_FillDummy(
-	u8*		pFwBuf,
-	u32*	pFwLen
-	)
-{
-	u32	FwLen = *pFwLen;
-	u8	remain = (u8)(FwLen%4);
-	remain = (remain==0)?0:(4-remain);
 
-	while(remain>0)
-	{
-		pFwBuf[FwLen] = 0;
-		FwLen++;
-		remain--;
-	}
-
-	*pFwLen = FwLen;
-}
-#endif //CONFIG_PCI_HCI
-static int
-_WriteFW(
-	PADAPTER		Adapter,
+static int _WriteFW(PADAPTER		Adapter,
 	PVOID			buffer,
 	u32			size
 	)
@@ -278,12 +181,6 @@ _WriteFW(
 	u32	pageNums,remainSize ;
 	u32	page,offset;
 	u8*	bufferPtr = (u8*)buffer;
-
-#ifdef CONFIG_PCI_HCI
-	// 20100120 Joseph: Add for 88CE normal chip.
-	// Fill in zero to make firmware image to dword alignment.
-//	_FillDummy(bufferPtr, &size);
-#endif
 
 	pageNums = size / MAX_PAGE_SIZE ;
 	//RT_ASSERT((pageNums <= 4), ("Page numbers should not greater then 4 \n"));

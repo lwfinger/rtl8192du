@@ -54,89 +54,22 @@ static s32 signal_scale_mapping(_adapter *padapter, s32 cur_sig )
 {
 	s32 ret_sig;
 
-#ifdef CONFIG_USB_HCI
 	if(cur_sig >= 51 && cur_sig <= 100)
-	{
 		ret_sig = 100;
-	}
 	else if(cur_sig >= 41 && cur_sig <= 50)
-	{
 		ret_sig = 80 + ((cur_sig - 40)*2);
-	}
 	else if(cur_sig >= 31 && cur_sig <= 40)
-	{
 		ret_sig = 66 + (cur_sig - 30);
-	}
 	else if(cur_sig >= 21 && cur_sig <= 30)
-	{
 		ret_sig = 54 + (cur_sig - 20);
-	}
 	else if(cur_sig >= 10 && cur_sig <= 20)
-	{
 		ret_sig = 42 + (((cur_sig - 10) * 2) / 3);
-	}
 	else if(cur_sig >= 5 && cur_sig <= 9)
-	{
 		ret_sig = 22 + (((cur_sig - 5) * 3) / 2);
-	}
 	else if(cur_sig >= 1 && cur_sig <= 4)
-	{
 		ret_sig = 6 + (((cur_sig - 1) * 3) / 2);
-	}
 	else
-	{
 		ret_sig = cur_sig;
-	}
-#else
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-
-	if(pHalData->CustomerID == RT_CID_819x_Lenovo)
-	{
-		return cur_sig;
-	}
-
-	// Step 1. Scale mapping.
-	if(cur_sig >= 61 && cur_sig <= 100)
-	{
-		ret_sig = 90 + ((cur_sig - 60) / 4);
-	}
-	else if(cur_sig >= 41 && cur_sig <= 60)
-	{
-		ret_sig = 78 + ((cur_sig - 40) / 2);
-	}
-	else if(cur_sig >= 31 && cur_sig <= 40)
-	{
-		ret_sig = 66 + (cur_sig - 30);
-	}
-	else if(cur_sig >= 21 && cur_sig <= 30)
-	{
-		ret_sig = 54 + (cur_sig - 20);
-	}
-	else if(cur_sig >= 5 && cur_sig <= 20)
-	{
-		ret_sig = 42 + (((cur_sig - 5) * 2) / 3);
-	}
-	else if(cur_sig == 4)
-	{
-		ret_sig = 36;
-	}
-	else if(cur_sig == 3)
-	{
-		ret_sig = 27;
-	}
-	else if(cur_sig == 2)
-	{
-		ret_sig = 18;
-	}
-	else if(cur_sig == 1)
-	{
-		ret_sig = 9;
-	}
-	else
-	{
-		ret_sig = cur_sig;
-	}
-#endif
 
 	return ret_sig;
 }

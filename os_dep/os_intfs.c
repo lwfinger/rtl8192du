@@ -29,13 +29,7 @@
 #include <rtw_ioctl.h>
 #include <rtw_version.h>
 
-#ifdef CONFIG_USB_HCI
 #include <usb_osintf.h>
-#endif
-
-#ifdef CONFIG_PCI_HCI
-#include <pci_osintf.h>
-#endif
 
 #ifdef CONFIG_BR_EXT
 #include <rtw_br_ext.h>
@@ -149,11 +143,7 @@ int rtw_hwpwrp_detect = 1;
 int rtw_hwpwrp_detect = 0; //HW power  ping detect 0:disable , 1:enable
 #endif
 
-#ifdef CONFIG_USB_HCI
 int rtw_hw_wps_pbc = 1;
-#else
-int rtw_hw_wps_pbc = 0;
-#endif
 
 #ifdef CONFIG_TX_MCAST2UNI
 int rtw_mc2u_disable = 0;
@@ -1236,9 +1226,7 @@ u8 rtw_free_drv_sw(_adapter *padapter)
 
 #ifdef CONFIG_CONCURRENT_MODE
 
-#ifdef CONFIG_USB_HCI
-	#include <usb_hal.h>
-#endif
+#include <usb_hal.h>
 
 #ifdef CONFIG_MULTI_VIR_IFACES
 int _netdev_vir_if_open(struct net_device *pnetdev)

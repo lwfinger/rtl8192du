@@ -28,9 +28,7 @@
 #include <circ_buf.h>
 #include <ip.h>
 
-#ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
-#endif
 
 
 static u8 P802_1H_OUI[P80211_OUI_LEN] = { 0x00, 0x00, 0xf8 };
@@ -191,13 +189,6 @@ _func_enter_;
 			goto exit;
 		}
 
-#ifdef CONFIG_SDIO_HCI
-		pxmitbuf->phead = pxmitbuf->pbuf;
-		pxmitbuf->pend = pxmitbuf->pbuf + MAX_XMITBUF_SZ;
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-
 		pxmitbuf->flags = XMIT_VO_QUEUE;
 
 		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmitbuf_queue.queue));
@@ -282,14 +273,6 @@ _func_enter_;
 			res= _FAIL;
 			goto exit;
 		}
-
-#ifdef CONFIG_SDIO_HCI
-		pxmitbuf->phead = pxmitbuf->pbuf;
-		pxmitbuf->pend = pxmitbuf->pbuf + MAX_XMIT_EXTBUF_SZ;
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-
 		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmit_extbuf_queue.queue));
 		#ifdef DBG_XMIT_BUF
 		pxmitbuf->no=i;
@@ -303,7 +286,6 @@ _func_enter_;
 	rtw_alloc_hwxmits(padapter);
 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
 
-#ifdef CONFIG_USB_HCI
 	pxmitpriv->txirp_cnt=1;
 
 	_rtw_init_sema(&(pxmitpriv->tx_retevt), 0);
@@ -313,7 +295,6 @@ _func_enter_;
 	pxmitpriv->bkq_cnt = 0;
 	pxmitpriv->viq_cnt = 0;
 	pxmitpriv->voq_cnt = 0;
-#endif
 
 
 #ifdef CONFIG_XMIT_ACK
@@ -2260,14 +2241,6 @@ _func_enter_;
 
 		pxmitbuf->priv_data = NULL;
 
-#ifdef CONFIG_SDIO_HCI
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-#ifdef CONFIG_PCI_HCI
-		pxmitbuf->len = 0;
-#endif
-
 		if (pxmitbuf->sctx) {
 			DBG_871X("%s pxmitbuf->sctx is not NULL\n", __func__);
 			rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_ALLOC);
@@ -2347,14 +2320,6 @@ _func_enter_;
 
 		pxmitbuf->priv_data = NULL;
 
-#ifdef CONFIG_SDIO_HCI
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-#ifdef CONFIG_PCI_HCI
-		pxmitbuf->len = 0;
-#endif
-
 		if (pxmitbuf->sctx) {
 			DBG_871X("%s pxmitbuf->sctx is not NULL\n", __func__);
 			rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_ALLOC);
@@ -2430,7 +2395,6 @@ void rtw_init_xmitframe(struct xmit_frame *pxframe)
 
 		pxframe->frame_tag = DATA_FRAMETAG;
 
-#ifdef CONFIG_USB_HCI
 		pxframe->pkt = NULL;
 #ifdef USB_PACKET_OFFSET_SZ
 		pxframe->pkt_offset = 0;
@@ -2439,13 +2403,6 @@ void rtw_init_xmitframe(struct xmit_frame *pxframe)
 #endif
 
 #ifdef CONFIG_USB_TX_AGGREGATION
-		pxframe->agg_num = 1;
-#endif
-
-#endif //#ifdef CONFIG_USB_HCI
-
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-		pxframe->pg_num = 1;
 		pxframe->agg_num = 1;
 #endif
 
@@ -2733,9 +2690,6 @@ struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
 	_adapter *padapter = pxmitpriv->adapter;
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	int i, inx[4];
-#ifdef CONFIG_USB_HCI
-//	int j, tmp, acirp_cnt[4];
-#endif
 
 _func_enter_;
 
@@ -2753,7 +2707,6 @@ _func_enter_;
 		}
 #endif
 
-#ifdef CONFIG_USB_HCI
 		//entry indx: 0->vo, 1->vi, 2->be, 3->bk.
 		acirp_cnt[0] = pxmitpriv->voq_cnt;
 		acirp_cnt[1] = pxmitpriv->viq_cnt;
@@ -2776,7 +2729,6 @@ _func_enter_;
 				}
 			}
 		}
-#endif
 	}
 
 	_enter_critical_bh(&pxmitpriv->lock, &irqL0);

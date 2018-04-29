@@ -24,12 +24,6 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
-#ifdef CONFIG_SDIO_HCI
-//#define MAX_XMITBUF_SZ (30720)//	(2048)
-#define MAX_XMITBUF_SZ (12288)
-#define NR_XMITBUFF	(16)
-
-#elif defined (CONFIG_USB_HCI)
 #ifdef CONFIG_USB_TX_AGGREGATION
 	#if defined(CONFIG_PLATFORM_ARM_SUNxI) || defined(CONFIG_PLATFORM_ARM_SUN6I)
 		#define MAX_XMITBUF_SZ (12288)  //12k 1536*8
@@ -47,19 +41,10 @@
 #define NR_XMITBUFF	(4)
 #endif //CONFIG_SINGLE_XMIT_BUF
 
-#elif defined (CONFIG_PCI_HCI)
-#define MAX_XMITBUF_SZ	(1664)
-#define NR_XMITBUFF	(128)
-#endif
-
-#ifdef CONFIG_PCI_HCI
-#define XMITBUF_ALIGN_SZ 4
-#else
 #ifdef USB_XMITBUF_ALIGN_SZ
 #define XMITBUF_ALIGN_SZ (USB_XMITBUF_ALIGN_SZ)
 #else
 #define XMITBUF_ALIGN_SZ 512
-#endif
 #endif
 
 // xmit extension buff defination
@@ -87,12 +72,6 @@
 #define TXCMD_QUEUE_INX	7
 
 #define HW_QUEUE_ENTRY	8
-
-#ifdef CONFIG_PCI_HCI
-//#define TXDESC_NUM						64
-#define TXDESC_NUM						128
-#define TXDESC_NUM_BE_QUEUE			128
-#endif
 
 #define WEP_IV(pattrib_iv, dot11txpn, keyidx)\
 do{\
@@ -135,23 +114,12 @@ do{\
 
 #define TXDESC_SIZE 32
 
-#ifdef CONFIG_SDIO_HCI
-#define TXDESC_OFFSET TXDESC_SIZE
-#endif
-
-#ifdef CONFIG_USB_HCI
 #ifdef USB_PACKET_OFFSET_SZ
 #define PACKET_OFFSET_SZ (USB_PACKET_OFFSET_SZ)
 #else
 #define PACKET_OFFSET_SZ (8)
 #endif
 #define TXDESC_OFFSET (TXDESC_SIZE + PACKET_OFFSET_SZ)
-#endif
-
-#ifdef CONFIG_PCI_HCI
-#define TXDESC_OFFSET 0
-#define TX_DESC_NEXT_DESC_OFFSET	40
-#endif
 
 //
 //defined for TX DESC Operation
@@ -211,27 +179,6 @@ struct tx_desc{
 	unsigned int txdw6;
 
 	unsigned int txdw7;
-#ifdef CONFIG_PCI_HCI
-	unsigned int txdw8;
-
-	unsigned int txdw9;
-
-	unsigned int txdw10;
-
-	unsigned int txdw11;
-
-	// 2008/05/15 MH Because PCIE HW memory R/W 4K limit. And now,  our descriptor
-	// size is 40 bytes. If you use more than 102 descriptor( 103*40>4096), HW will execute
-	// memoryR/W CRC error. And then all DMA fetch will fail. We must decrease descriptor
-	// number or enlarge descriptor size as 64 bytes.
-	unsigned int txdw12;
-
-	unsigned int txdw13;
-
-	unsigned int txdw14;
-
-	unsigned int txdw15;
-#endif
 };
 
 
@@ -239,19 +186,6 @@ union txdesc {
 	struct tx_desc txdesc;
 	unsigned int value[TXDESC_SIZE>>2];
 };
-
-#ifdef CONFIG_PCI_HCI
-#define PCI_MAX_TX_QUEUE_COUNT	8
-
-struct rtw_tx_ring {
-	struct tx_desc	*desc;
-	dma_addr_t		dma;
-	unsigned int		idx;
-	unsigned int		entries;
-	_queue			queue;
-	u32				qlen;
-};
-#endif
 
 struct	hw_xmit	{
 	//_lock xmit_lock;
@@ -430,8 +364,6 @@ struct xmit_buf
 
 	struct submit_ctx *sctx;
 
-#ifdef CONFIG_USB_HCI
-
 	u32 sz[8];
 
 #if defined(PLATFORM_LINUX)
@@ -442,21 +374,6 @@ struct xmit_buf
 	u8 bpending[8];
 
 	sint last[8];
-
-#endif
-
-#ifdef CONFIG_SDIO_HCI
-	u32  len;
-	u8 *phead;
-	u8 *pdata;
-	u8 *ptail;
-	u8 *pend;
-	u32 ff_hwaddr;
-#endif
-
-#ifdef CONFIG_PCI_HCI
-	u32  len;
-#endif
 
 #ifdef DBG_XMIT_BUF
 	u8 no;
@@ -480,19 +397,12 @@ struct xmit_frame
 
 	struct xmit_buf *pxmitbuf;
 
-#ifdef CONFIG_SDIO_HCI
-	u8	pg_num;
-	u8	agg_num;
-#endif
-
-#ifdef CONFIG_USB_HCI
 #ifdef CONFIG_USB_TX_AGGREGATION
 	u8	agg_num;
 #endif
 	u8	pkt_offset;
 	u8	EMPktNum;
 	u16	EMPktLen[5];//The max value by HW
-#endif
 #ifdef CONFIG_XMIT_ACK
 	u8 ack_report;
 #endif
@@ -600,7 +510,6 @@ struct	xmit_priv	{
 	struct hw_xmit *hwxmits;
 	u8	hwxmit_entry;
 
-#ifdef CONFIG_USB_HCI
 	_sema	tx_retevt;//all tx return event;
 	u8		txirp_cnt;//
 
@@ -613,16 +522,6 @@ struct	xmit_priv	{
 	int viq_cnt;
 	int voq_cnt;
 
-#endif
-
-#ifdef CONFIG_PCI_HCI
-	// Tx
-	struct rtw_tx_ring	tx_ring[PCI_MAX_TX_QUEUE_COUNT];
-	int	txringcount[PCI_MAX_TX_QUEUE_COUNT];
-#ifdef PLATFORM_LINUX
-	struct tasklet_struct xmit_tasklet;
-#endif
-#endif
 
 	_queue free_xmitbuf_queue;
 	_queue pending_xmitbuf_queue;

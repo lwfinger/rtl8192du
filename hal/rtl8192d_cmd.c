@@ -665,11 +665,9 @@ FillFakeTxDescriptor92D(
 	if(pHalData->CurrentBandType92D == BAND_ON_5G)
 		ptxdesc->txdw5 |= cpu_to_le32(BIT(2));// use OFDM 6Mbps
 
-#ifdef CONFIG_USB_HCI
 	// USB interface drop packet if the checksum of descriptor isn't correct.
 	// Using this checksum can let hardware recovery from packet bulk out error (e.g. Cancel URC, Bulk out error.).
 	rtl8192du_cal_txdesc_chksum(ptxdesc);
-#endif
 
 	RT_PRINT_DATA(_module_rtl8712_cmd_c_, _drv_info_, "FillFakeTxDescriptor92D(): H2C Tx Desc Content ----->\n", pDesc, TXDESC_SIZE);
 }
@@ -714,13 +712,8 @@ void SetFwRsvdPagePkt(PADAPTER Adapter, BOOLEAN bDLFinished)
 
 	TxDescLen = 32;//TX_DESC_SIZE;
 
-#ifdef CONFIG_USB_HCI
 	BufIndex = TXDESC_OFFSET;
 	TxDescOffset = TxDescLen + PACKET_OFFSET_SZ;;
-#else
-	BufIndex = 0;
-	TxDescOffset = 0;
-#endif
 
 	//(1) beacon
 	ConstructBeacon(Adapter,&ReservedPagePacket[BufIndex],&BeaconLength);

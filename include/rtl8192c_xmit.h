@@ -77,8 +77,6 @@ void handle_txrpt_ccx_8192c(_adapter *adapter, void *buf);
 #define handle_txrpt_ccx_8192c(adapter, buf) do {} while(0)
 #endif
 
-#ifdef CONFIG_USB_HCI
-
 #ifdef CONFIG_USB_TX_AGGREGATION
 #define MAX_TX_AGG_PACKET_NUMBER 0xFF
 #endif
@@ -99,30 +97,6 @@ s32	 rtl8192cu_hal_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmi
 
 #ifdef CONFIG_HOSTAPD_MLME
 s32 rtl8192cu_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt);
-#endif
-
-#endif
-
-#ifdef CONFIG_PCI_HCI
-s32	rtl8192ce_init_xmit_priv(_adapter * padapter);
-void	rtl8192ce_free_xmit_priv(_adapter * padapter);
-
-s32	rtl8192ce_enqueue_xmitbuf(struct rtw_tx_ring *ring, struct xmit_buf *pxmitbuf);
-struct xmit_buf *rtl8192ce_dequeue_xmitbuf(struct rtw_tx_ring *ring);
-
-void	rtl8192ce_xmitframe_resume(_adapter *padapter);
-
-s32	rtl8192ce_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe);
-
-s32	rtl8192ce_hal_xmit(_adapter *padapter, struct xmit_frame *pxmitframe);
-
-s32	 rtl8192ce_hal_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe);
-
-
-#ifdef CONFIG_HOSTAPD_MLME
-s32	rtl8192ce_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt);
-#endif
-
 #endif
 
 #endif

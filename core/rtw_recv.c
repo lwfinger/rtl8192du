@@ -26,11 +26,7 @@
 #include <ip.h>
 #include <if_ether.h>
 #include <ethernet.h>
-
-#ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
-#endif
-
 #include <wifi.h>
 #include <circ_buf.h>
 
@@ -115,13 +111,9 @@ _func_enter_;
 
 	}
 
-#ifdef CONFIG_USB_HCI
-
 	precvpriv->rx_pending_cnt=1;
 
 	_rtw_init_sema(&precvpriv->allrxreturnevt, 0);
-
-#endif
 
 	res = rtw_hal_init_recv_priv(padapter);
 
@@ -2562,64 +2554,7 @@ _func_exit_;
 }
 #endif
 
-
-#ifdef CONFIG_SDIO_HCI
-#ifdef PLATFORM_LINUX
-static void recvframe_expand_pkt(
-	PADAPTER padapter,
-	union recv_frame *prframe)
-{
-	struct recv_frame_hdr *pfhdr;
-	_pkt *ppkt;
-	u8 shift_sz;
-	u32 alloc_sz;
-
-
-	pfhdr = &prframe->u.hdr;
-
-	//	6 is for IP header 8 bytes alignment in QoS packet case.
-	if (pfhdr->attrib.qos)
-		shift_sz = 6;
-	else
-		shift_sz = 0;
-
-	// for first fragment packet, need to allocate
-	// (1536 + RXDESC_SIZE + drvinfo_sz) to reassemble packet
-	//	8 is for skb->data 8 bytes alignment.
-//	alloc_sz = _RND(1536 + RXDESC_SIZE + pfhdr->attrib.drvinfosize + shift_sz + 8, 128);
-	alloc_sz = 1664; // round (1536 + 24 + 32 + shift_sz + 8) to 128 bytes alignment
-
-	//3 1. alloc new skb
-	// prepare extra space for 4 bytes alignment
-	ppkt = rtw_skb_alloc(alloc_sz);
-
-	if (!ppkt) return; // no way to expand
-
-	//3 2. Prepare new skb to replace & release old skb
-	// force ppkt->data at 8-byte alignment address
-	skb_reserve(ppkt, 8 - ((SIZE_PTR)ppkt->data & 7));
-	// force ip_hdr at 8-byte alignment address according to shift_sz
-	skb_reserve(ppkt, shift_sz);
-
-	// copy data to new pkt
-	_rtw_memcpy(skb_put(ppkt, pfhdr->len), pfhdr->rx_data, pfhdr->len);
-
-	rtw_skb_free(pfhdr->pkt);
-
-	// attach new pkt to recvframe
-	pfhdr->pkt = ppkt;
-	pfhdr->rx_head = ppkt->head;
-	pfhdr->rx_data = ppkt->data;
-	pfhdr->rx_tail = skb_tail_pointer(ppkt);
-	pfhdr->rx_end = skb_end_pointer(ppkt);
-}
-#else
-#warning "recvframe_expand_pkt not implement, defrag may crash system"
-#endif
-#endif
-
 //perform defrag
-union recv_frame * recvframe_defrag(_adapter *adapter,_queue *defrag_q);
 union recv_frame * recvframe_defrag(_adapter *adapter,_queue *defrag_q)
 {
 	_list	 *plist, *phead;
@@ -2649,11 +2584,6 @@ _func_enter_;
 
 		return NULL;
 	}
-
-#ifdef CONFIG_SDIO_HCI
-	recvframe_expand_pkt(adapter, prframe);
-#endif
-
 	curfragnum++;
 
 	plist= get_list_head(defrag_q);

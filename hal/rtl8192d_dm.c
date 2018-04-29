@@ -1248,10 +1248,7 @@ static void dm_1R_CCA(
 	pPS_T pDM_PSTable = &pdmpriv->DM_PSTable;
 	struct registry_priv *pregistrypriv = &pAdapter->registrypriv;
 
-#ifdef CONFIG_USB_HCI // Add by Gary for 92DU 1RCCA 5G->Enable, 2G->Disable 20110624
-      if(pHalData->CurrentBandType92D == BAND_ON_5G)
-      {
-#endif
+      if(pHalData->CurrentBandType92D == BAND_ON_5G) {
               //RT_TRACE(COMP_BB_POWERSAVING,DBG_LOUD,("=Gary=: 92D 5G 1RCCA on\n"));
 		if(pdmpriv->MinUndecoratedPWDBForDM != 0)
 		{
@@ -1313,11 +1310,9 @@ static void dm_1R_CCA(
 			pDM_PSTable->PreCCAState = pDM_PSTable->CurCCAState;
 		}
 		//RT_TRACE(	COMP_BB_POWERSAVING|COMP_INIT, DBG_LOUD, ("CCAStage = %d\n",pDM_PSTable->CurCCAState));
-#ifdef CONFIG_USB_HCI
 	}
 	//else  // pHalData->CurrentBandType92D == BAND_ON_2_4G  92DU 2.4G 1RCCA Disable
 	//	RT_TRACE(COMP_BB_POWERSAVING,DBG_LOUD,("=Gary=: 92D 2G 1RCCA off\n"));
-#endif
 }
 
 static void dm_InitDynamicTxPower(PADAPTER	Adapter)
@@ -2536,7 +2531,6 @@ static void	dm_CheckPbcGPIO(PADAPTER padapter)
 	do
 	{
 		i++;
-#ifdef CONFIG_USB_HCI
 	tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
 	tmp1byte |= (HAL_8192C_HW_GPIO_WPS_BIT);
 	rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	//enable GPIO[2] as output mode
@@ -2563,24 +2557,6 @@ static void	dm_CheckPbcGPIO(PADAPTER padapter)
 		if(i<=3)
 			rtw_msleep_os(50);
 	}
-#else
-	tmp1byte = rtw_read8(padapter, GPIO_IN);
-	//RT_TRACE(COMP_IO, DBG_TRACE, ("dm_CheckPbcGPIO - %x\n", tmp1byte));
-
-	if (tmp1byte == 0xff || padapter->init_adpt_in_progress)
-	{
-		bPbcPressed = _FALSE;
-		break ;
-	}
-
-	if((tmp1byte&HAL_8192C_HW_GPIO_WPS_BIT)==0)
-	{
-		bPbcPressed = _TRUE;
-
-		if(i<=3)
-			rtw_msleep_os(50);
-	}
-#endif
 	}while(i<=3 && bPbcPressed == _TRUE);
 
 	if( _TRUE == bPbcPressed)
@@ -3102,11 +3078,7 @@ rtl8192d_HalDmWatchDog(
 		// Dynamic Initial Gain mechanism.
 		//
 //sherry delete flag 20110517
-#ifdef CONFIG_PCI_HCI
-//		ACQUIRE_GLOBAL_SPINLOCK(&GlobalSpinlockForGlobalAdapterList);
-#else
 		ACQUIRE_GLOBAL_MUTEX(GlobalMutexForGlobalAdapterList);
-#endif
 		if(pHalData->bSlaveOfDMSP)
 		{
 			odm_FalseAlarmCounterStatistics_ForSlaveOfDMSP(Adapter);
@@ -3115,11 +3087,7 @@ rtl8192d_HalDmWatchDog(
 		{
 			odm_FalseAlarmCounterStatistics(Adapter);
 		}
-#ifdef CONFIG_PCI_HCI
-//		RELEASE_GLOBAL_SPINLOCK(&GlobalSpinlockForGlobalAdapterList);
-#else
 		RELEASE_GLOBAL_MUTEX(GlobalMutexForGlobalAdapterList);
-#endif
 		//odm_RSSIMonitorCheck(Adapter);
 #ifndef CONFIG_CONCURRENT_MODE
 		odm_FindMinimumRSSI_92D(Adapter);
@@ -3140,10 +3108,6 @@ rtl8192d_HalDmWatchDog(
 				dm_CCK_PacketDetectionThresh(Adapter);
 		}
 
-//#ifdef CONFIG_PCI_HCI
-//		odm_DynamicEarlyMode(Adapter);
-//#endif
-
 		//
 		// Dynamic Tx Power mechanism.
 		//
@@ -3162,17 +3126,6 @@ rtl8192d_HalDmWatchDog(
 		// Rate Adaptive by Rx Signal Strength mechanism.
 		//
 		dm_RefreshRateAdaptiveMask(Adapter);
-
-//#ifdef CONFIG_PCI_HCI
-		//BT-Coexist
-//		dm_BTCoexist(Adapter);
-//#endif
-
-#ifdef CONFIG_PCI_HCI
-		// Tx Migration settings.
-		//migration, 92d just for normal chip, vivi, 20100708
-		//dm_InterruptMigration(Adapter);
-#endif
 
 		// EDCA turbo
 		//update the EDCA paramter according to the Tx/RX mode

@@ -25,10 +25,6 @@ CONFIG_AUTOCFG_CP = n
 
 CONFIG_RTL8192D = y
 
-CONFIG_USB_HCI = y
-CONFIG_PCI_HCI = n
-CONFIG_SDIO_HCI = n
-
 CONFIG_MP_INCLUDED = n
 CONFIG_POWER_SAVING = y
 CONFIG_USB_AUTOSUSPEND = n
@@ -84,12 +80,10 @@ ifeq ($(CONFIG_RTL8192D), y)
 
 RTL871X = rtl8192d
 
-ifeq ($(CONFIG_USB_HCI), y)
 MODULE_NAME = 8192du
 FW_FILES := hal/Hal8192DUHWImg.o
 ifneq ($(CONFIG_WAKE_ON_WLAN), n)
 FW_FILES += hal/Hal8192DUHWImg_wowlan.o
-endif
 endif
 
 CHIP_FILES := \
@@ -97,9 +91,7 @@ CHIP_FILES := \
 CHIP_FILES += $(FW_FILES)
 endif
 
-ifeq ($(CONFIG_USB_HCI), y)
 HCI_NAME = usb
-endif
 
 _OS_INTFS_FILES :=	os_dep/osdep_service.o \
 			os_dep/os_intfs.o \
@@ -142,10 +134,8 @@ $(shell cp $(TopDIR)/autoconf_$(RTL871X)_$(HCI_NAME)_linux.h $(TopDIR)/include/a
 endif
 
 
-ifeq ($(CONFIG_USB_HCI), y)
 ifeq ($(CONFIG_USB_AUTOSUSPEND), y)
 EXTRA_CFLAGS += -DCONFIG_USB_AUTOSUSPEND
-endif
 endif
 
 ifeq ($(CONFIG_POWER_SAVING), y)
@@ -328,9 +318,7 @@ endif
 
 ifeq ($(CONFIG_PLATFORM_RTK_DMP), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DRTK_DMP_PLATFORM
-ifeq ($(CONFIG_USB_HCI), y)
 _PLATFORM_FILES += platform/platform_RTK_DMP_usb.o
-endif
 ARCH:=mips
 CROSS_COMPILE:=mipsel-linux-
 KVER:=
@@ -475,14 +463,7 @@ EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
 EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 EXTRA_CFLAGS += -DDCONFIG_P2P_IPS
 
-ifeq ($(CONFIG_USB_HCI), y)
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-endif
-#ifeq ($(CONFIG_SDIO_HCI), y)
-# default setting for A10-EVB mmc0
-#EXTRA_CFLAGS += -DCONFIG_WITS_EVB_V13
-#endif
-
 ARCH := arm
 #CROSS_COMPILE := arm-none-linux-gnueabi-
 CROSS_COMPILE=/home/android_sdk/Allwinner/a10/android-jb42/lichee-jb42/buildroot/output/external-toolchain/bin/arm-none-linux-gnueabi-
@@ -500,21 +481,12 @@ EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
 EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 EXTRA_CFLAGS += -DCONFIG_P2P_IPS -DCONFIG_QOS_OPTIMIZATION
 
-ifeq ($(CONFIG_USB_HCI), y)
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-endif
-#ifeq ($(CONFIG_SDIO_HCI), y)
-# default setting for A31-EVB mmc0
-#EXTRA_CFLAGS += -DCONFIG_A31_EVB
-#endif
-
 ARCH := arm
 #Android-JB42
 #CROSS_COMPILE := /home/android_sdk/Allwinner/a31/android-jb42/lichee/buildroot/output/external-toolchain/bin/arm-linux-gnueabi-
 #KSRC :=/home/android_sdk/Allwinner/a31/android-jb42/lichee/linux-3.3
-#ifeq ($(CONFIG_USB_HCI), y)
 #MODULE_NAME := 8188eu_sw
-#endif
 # ==== Cross compile setting for kitkat-a3x_v4.5 =====
 CROSS_COMPILE := /home/android_sdk/Allwinner/a31/kitkat-a3x_v4.5/lichee/buildroot/output/external-toolchain/bin/arm-linux-gnueabi-
 KSRC :=/home/android_sdk/Allwinner/a31/kitkat-a3x_v4.5/lichee/linux-3.3
@@ -529,9 +501,7 @@ EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
 EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 EXTRA_CFLAGS += -DCONFIG_P2P_IPS -DCONFIG_QOS_OPTIMIZATION
 
-ifeq ($(CONFIG_USB_HCI), y)
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-endif
 
 ARCH := arm
 # ===Cross compile setting for Android 4.2 SDK ===
@@ -554,9 +524,7 @@ EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
 EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 EXTRA_CFLAGS += -DCONFIG_P2P_IPS
 
-ifeq ($(CONFIG_USB_HCI), y)
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-endif
 
 ARCH := arm
 # ===Cross compile setting for Android 4.2 SDK ===

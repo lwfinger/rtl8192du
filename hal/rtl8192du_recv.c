@@ -27,9 +27,7 @@
 #include <if_ether.h>
 #include <ethernet.h>
 
-#ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
-#endif
 
 #include <wifi.h>
 #include <circ_buf.h>

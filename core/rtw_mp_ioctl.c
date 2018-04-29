@@ -1632,11 +1632,6 @@ NDIS_STATUS oid_rt_set_power_down_hdl(struct oid_par_priv *poid_par_priv)
 {
 	u8		bpwrup;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-#ifdef PLATFORM_LINUX
-#ifdef CONFIG_SDIO_HCI
-	PADAPTER	padapter = (PADAPTER)(poid_par_priv->adapter_context);
-#endif
-#endif
 
 _func_enter_;
 
@@ -1652,11 +1647,6 @@ _func_enter_;
 
 	bpwrup = *(u8 *)poid_par_priv->information_buf;
 	//CALL  the power_down function
-#ifdef PLATFORM_LINUX
-#ifdef CONFIG_SDIO_HCI
-	dev_power_down(padapter,bpwrup);
-#endif
-#endif
 	_irqlevel_changed_(&oldirql, RAISE);
 
 	//DEBUG_ERR(("\n <=== Query OID_RT_PRO_READ_REGISTER.

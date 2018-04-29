@@ -36,35 +36,21 @@
 #define RECV_BLK_CNT 16
 #define RECV_BLK_TH RECV_BLK_CNT
 
-#if defined(CONFIG_USB_HCI)
-
-	#ifndef CONFIG_MINIMAL_MEMORY_USAGE
-		//#define MAX_RECVBUF_SZ (32768) // 32k
-		//#define MAX_RECVBUF_SZ (16384) //16K
-		//#define MAX_RECVBUF_SZ (10240) //10K
-		#ifdef CONFIG_PLATFORM_MSTAR
-			#define MAX_RECVBUF_SZ (8192) // 8K
-		#else
-			#ifndef CONFIG_USB_RX_AGGREGATION
-			#define MAX_RECVBUF_SZ (4000) // about 4K
-			#else
-			#define MAX_RECVBUF_SZ (15360) // 15k < 16k
-			#endif //CONFIG_USB_RX_AGGREGATION
-		#endif
+#ifndef CONFIG_MINIMAL_MEMORY_USAGE
+	//#define MAX_RECVBUF_SZ (32768) // 32k
+	//#define MAX_RECVBUF_SZ (16384) //16K
+	//#define MAX_RECVBUF_SZ (10240) //10K
+	#ifdef CONFIG_PLATFORM_MSTAR
+		#define MAX_RECVBUF_SZ (8192) // 8K
 	#else
+		#ifndef CONFIG_USB_RX_AGGREGATION
 		#define MAX_RECVBUF_SZ (4000) // about 4K
+		#else
+		#define MAX_RECVBUF_SZ (15360) // 15k < 16k
+		#endif //CONFIG_USB_RX_AGGREGATION
 	#endif
-
-#elif defined(CONFIG_PCI_HCI)
-//#ifndef CONFIG_MINIMAL_MEMORY_USAGE
-//	#define MAX_RECVBUF_SZ (9100)
-//#else
+#else
 	#define MAX_RECVBUF_SZ (4000) // about 4K
-//#endif
-
-#define RX_MPDU_QUEUE				0
-#define RX_CMD_QUEUE				1
-#define RX_MAX_QUEUE				2
 #endif
 
 #define RECV_BULK_IN_ADDR		0x80
@@ -143,7 +129,6 @@ typedef struct _Phy_CCK_Rx_Status_Report_8192cd
 // Rx smooth factor
 #define	Rx_Smooth_Factor (20)
 
-#ifdef CONFIG_USB_HCI
 typedef struct _INTERRUPT_MSG_FORMAT_EX{
 	unsigned int C2H_MSG0;
 	unsigned int C2H_MSG1;
@@ -157,12 +142,6 @@ typedef struct _INTERRUPT_MSG_FORMAT_EX{
 void rtl8192du_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf);
 int	rtl8192du_init_recv_priv(_adapter * padapter);
 void	rtl8192du_free_recv_priv(_adapter * padapter);
-#endif
-
-#ifdef CONFIG_PCI_HCI
-int	rtl8192de_init_recv_priv(_adapter * padapter);
-void rtl8192de_free_recv_priv(_adapter * padapter);
-#endif
 
 void rtl8192d_translate_rx_signal_stuff(union recv_frame *precvframe, struct phy_stat *pphy_info);
 void rtl8192d_query_rx_desc_status(union recv_frame *precvframe, struct recv_stat *pdesc);

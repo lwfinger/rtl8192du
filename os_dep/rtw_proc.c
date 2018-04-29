@@ -220,18 +220,6 @@ void rtw_drv_proc_deinit(void)
 	rtw_proc = NULL;
 }
 
-#ifdef CONFIG_SDIO_HCI
-static int proc_get_sd_f0_reg_dump(struct seq_file *m, void *v)
-{
-	struct net_device *dev = m->private;
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-
-	sd_f0_reg_dump(m, adapter);
-
-	return 0;
-}
-#endif /* CONFIG_SDIO_HCI */
-
 static int proc_get_mac_reg_dump(struct seq_file *m, void *v)
 {
 	struct net_device *dev = m->private;

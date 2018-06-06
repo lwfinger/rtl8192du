@@ -40,36 +40,6 @@ atomic_t _malloc_cnt = ATOMIC_INIT(0);
 atomic_t _malloc_size = ATOMIC_INIT(0);
 #endif /* DBG_MEMORY_LEAK */
 
-
-static ssize_t new_sync_read(struct file *filp, void __user *buf, __kernel_size_t len, loff_t *ppos)
-{
-        struct iovec iov;
-        struct kiocb kiocb;
-        struct iov_iter iter;
-        ssize_t ret;
-
-	iov.iov_base = buf;
-	iov.iov_len = len;
-        init_sync_kiocb(&kiocb, filp);
-        kiocb.ki_pos = *ppos;
-        iov_iter_init(&iter, READ, &iov, 1, len);
-
-        ret = call_read_iter(filp, &kiocb, &iter);
-        BUG_ON(ret == -EIOCBQUEUED);
-        *ppos = kiocb.ki_pos;
-        return ret;
-}
-
-static ssize_t __vfs_read_alt(struct file *file, char __user *buf, size_t count,
-                   loff_t *pos)
-{
-        if (file->f_op->read)
-                return file->f_op->read(file, buf, count, pos);
-        else if (file->f_op->read_iter)
-                return new_sync_read(file, (void *)buf, (__kernel_size_t)count, pos);
-        else
-                return -EINVAL;
-}
 /*
 * Translate the OS dependent @param error_code to OS independent RTW_STATUS_CODE
 * @return: one of RTW_STATUS_CODE
@@ -1086,7 +1056,7 @@ static int readFile(struct file *fp,char *buf,int len)
 
 	while(sum<len) {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
-		rlen = __vfs_read_alt(fp, buf+sum, len-sum, &fp->f_pos);
+		rlen = __vfs_read(fp, buf+sum, len-sum, &fp->f_pos);
 #else
 		rlen = fp->f_op->read(fp, buf+sum, len-sum, &fp->f_pos);
 #endif

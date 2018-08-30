@@ -5421,8 +5421,7 @@ phy_IQCalibrate_5G(
 	REG0xe40 = PHY_QueryBBReg(pAdapter, rTx_IQK, bMaskDWord);
 	REG0xeac = PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord);
 	REG0xeb4 = PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_B, bMaskDWord);
-	if(((REG0xeac&BIT(31)) == 0) && ((REG0xeb4&0x3FF0000)!=0x142))
-	{
+	if(((REG0xeac&BIT(31)) == 0) && ((REG0xeb4&0x3FF0000) >> 16 != 0x142)) {
 		TX_X1 = (PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_B, bMaskDWord)&0x3FF0000)>>16;
 		TX_Y1 = (PHY_QueryBBReg(pAdapter, rTx_Power_After_IQK_B, bMaskDWord)&0x3FF0000)>>16;
 		RX1REG0xe40 = 0x80000000 | (REG0xe40 & 0xfc00fc00) | (TX_X1<<16) | TX_Y1;

@@ -754,7 +754,7 @@ PDM_ODM_T pDM_Odm
 	if (pDM_Odm->SupportICType & ODM_IC_11N_SERIES)
 		ODM_SetBBReg(pDM_Odm, ODM_REG_DBG_RPT_11N, bMaskDWord, 0x208);
 
-		Phydm_SearchPwdBLowerBound(pDM_Odm);
+	Phydm_SearchPwdBLowerBound(pDM_Odm);
 
 
 #endif /* CONFIG_ODM_ADAPTIVITY */

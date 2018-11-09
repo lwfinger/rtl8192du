@@ -353,24 +353,27 @@ VOID rtl8192d_FirmwareSelfReset(PADAPTER Adapter)
 		rtw_write8(Adapter, REG_HMETFR+3, 0x20);
 
 		u1bTmp = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-		while(u1bTmp&BIT2)
-		{
+		while(u1bTmp&BIT2) {
 			Delay--;
-			//RT_TRACE(COMP_INIT, DBG_LOUD, ("PowerOffAdapter8192CE(): polling 0x03[2] Delay = %d \n", Delay));
-			if(Delay == 0)
+			if (Delay == 0)
 				break;
-			rtw_udelay_os(50);
+			mdelay(1);
 			u1bTmp = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
 		}
 
-		if((u1bTmp&BIT2) && (Delay == 0))
-		{
+		if((u1bTmp&BIT2) && (Delay == 0)) {
 			pr_info("FirmwareDownload92C(): Fail!!!!!! 0x03 = %x\n", u1bTmp);
 			rtw_write8(Adapter, REG_FWIMR, 0x00);
 			//debug reset fail
-			printk("FirmwareDownload92C(): Fail!!!!!! 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x  \n", rtw_read32(Adapter, 0x1c)
-			, rtw_read32(Adapter, 0x130), rtw_read32(Adapter, 0x134), rtw_read32(Adapter, 0x138), rtw_read32(Adapter, 0x1c4),
-			rtw_read32(Adapter, 0x1cc), rtw_read32(Adapter, 0x80), rtw_read32(Adapter, 0x1c0));
+			printk("FirmwareDownload Fail: 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x  \n",
+			       rtw_read32(Adapter, 0x1c),
+			       rtw_read32(Adapter, 0x130),
+			       rtw_read32(Adapter, 0x134),
+			       rtw_read32(Adapter, 0x138),
+			       rtw_read32(Adapter, 0x1c4),
+			       rtw_read32(Adapter, 0x1cc),
+			       rtw_read32(Adapter, 0x80),
+			       rtw_read32(Adapter, 0x1c0));
 		}
 	}
 }

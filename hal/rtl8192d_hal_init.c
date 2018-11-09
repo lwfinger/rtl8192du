@@ -265,28 +265,20 @@ _FillDummy(
 	*pFwLen = FwLen;
 }
 #endif //CONFIG_PCI_HCI
-static int
-_WriteFW(
+static int _WriteFW(
 	PADAPTER		Adapter,
 	PVOID			buffer,
 	u32			size
 	)
 {
 	int ret = _SUCCESS;
-	// Since we need dynamic decide method of dwonload fw, so we call this function to get chip version.
+	// Since we need dynamic decide method of download fw, so we call this function to get chip version.
 	// We can remove _ReadChipVersion from ReadAdapterInfo8192C later.
 	u32	pageNums,remainSize ;
 	u32	page,offset;
 	u8*	bufferPtr = (u8*)buffer;
 
-#ifdef CONFIG_PCI_HCI
-	// 20100120 Joseph: Add for 88CE normal chip.
-	// Fill in zero to make firmware image to dword alignment.
-//	_FillDummy(bufferPtr, &size);
-#endif
-
 	pageNums = size / MAX_PAGE_SIZE ;
-	//RT_ASSERT((pageNums <= 4), ("Page numbers should not greater then 4 \n"));
 	remainSize = size % MAX_PAGE_SIZE;
 
 	for(page = 0; page < pageNums;  page++){
@@ -329,52 +321,45 @@ int _FWFreeToGo_92D(PADAPTER Adapter)
 	value32 |= MCUFWDL_RDY;
 	rtw_write32(Adapter, REG_MCUFWDL, value32);
 	return _SUCCESS;
-
 }
 
 VOID rtl8192d_FirmwareSelfReset(PADAPTER Adapter)
 {
-	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	u1bTmp;
 	int	Delay = 300;
 
-	//if((pHalData->FirmwareVersion > 0x21) ||
-	//	(pHalData->FirmwareVersion == 0x21 &&
-	//	pHalData->FirmwareSubVersion >= 0x01))
-	{
-		rtw_write8(Adapter, REG_FSIMR, 0x00);
-		// 2010/08/25 MH Accordign to RD alfred's suggestion, we need to disable other
-		// HRCV INT to influence 8051 reset.
-		rtw_write8(Adapter, REG_FWIMR, 0x20);
-		// 2011/02/15 MH According to Alex's suggestion, close mask to prevent incorrect FW write operation.
-		rtw_write8(Adapter, REG_FTIMR, 0x00);
+	rtw_write8(Adapter, REG_FSIMR, 0x00);
+	// 2010/08/25 MH Accordign to RD alfred's suggestion, we need to disable other
+	// HRCV INT to influence 8051 reset.
+	rtw_write8(Adapter, REG_FWIMR, 0x20);
+	// 2011/02/15 MH According to Alex's suggestion, close mask to prevent incorrect FW write operation.
+	rtw_write8(Adapter, REG_FTIMR, 0x00);
 
-		//0x1cf=0x20. Inform 8051 to reset. 2009.12.25. tynli_test
-		rtw_write8(Adapter, REG_HMETFR+3, 0x20);
+	//0x1cf=0x20. Inform 8051 to reset. 2009.12.25. tynli_test
+	rtw_write8(Adapter, REG_HMETFR+3, 0x20);
 
+	u1bTmp = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
+	while(u1bTmp&BIT2) {
+		Delay--;
+		if (Delay == 0)
+			break;
+		mdelay(1);
 		u1bTmp = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-		while(u1bTmp&BIT2) {
-			Delay--;
-			if (Delay == 0)
-				break;
-			mdelay(1);
-			u1bTmp = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-		}
+	}
 
-		if((u1bTmp&BIT2) && (Delay == 0)) {
-			pr_info("FirmwareDownload92C(): Fail!!!!!! 0x03 = %x\n", u1bTmp);
-			rtw_write8(Adapter, REG_FWIMR, 0x00);
-			//debug reset fail
-			printk("FirmwareDownload Fail: 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x  \n",
-			       rtw_read32(Adapter, 0x1c),
-			       rtw_read32(Adapter, 0x130),
-			       rtw_read32(Adapter, 0x134),
-			       rtw_read32(Adapter, 0x138),
-			       rtw_read32(Adapter, 0x1c4),
-			       rtw_read32(Adapter, 0x1cc),
-			       rtw_read32(Adapter, 0x80),
-			       rtw_read32(Adapter, 0x1c0));
-		}
+	if((u1bTmp&BIT2) && (Delay == 0)) {
+//		pr_info("FirmwareDownload92C(): Fail!!!!!! 0x03 = %x\n", u1bTmp);
+		rtw_write8(Adapter, REG_FWIMR, 0x00);
+		//debug reset fail
+/*		printk("FirmwareDownload Fail: 0x1c = %x, 0x130=>%08x, 0x134=>%08x, 0x138=>%08x, 0x1c4=>%08x\n, 0x1cc=>%08x, , 0x80=>%08x , 0x1c0=>%08x  \n",
+		       rtw_read32(Adapter, 0x1c),
+		       rtw_read32(Adapter, 0x130),
+		       rtw_read32(Adapter, 0x134),
+		       rtw_read32(Adapter, 0x138),
+		       rtw_read32(Adapter, 0x1c4),
+		       rtw_read32(Adapter, 0x1cc),
+		       rtw_read32(Adapter, 0x80),
+		       rtw_read32(Adapter, 0x1c0)); */
 	}
 }
 
@@ -637,9 +622,9 @@ int FirmwareDownload92D(PADAPTER Adapter, BOOLEAN bUsedWoWLANFw)
 
 		rtStatus = _WriteFW(Adapter, pFirmwareBuf, FirmwareLen);
 
-		if(rtStatus == _SUCCESS || Adapter->bDriverStopped || Adapter->bSurpriseRemoved
-			||(writeFW_retry++ >= 3 && rtw_get_passing_time_ms(fwdl_start_time) > 500)
-		)
+		if (rtStatus == _SUCCESS || Adapter->bDriverStopped ||
+		    Adapter->bSurpriseRemoved || (writeFW_retry++ >= 3 &&
+		    rtw_get_passing_time_ms(fwdl_start_time) > 500))
 			break;
 	}
 	_FWDownloadEnable(Adapter, _FALSE);
@@ -650,7 +635,7 @@ int FirmwareDownload92D(PADAPTER Adapter, BOOLEAN bUsedWoWLANFw)
 	);
 
 	if(_SUCCESS != rtStatus){
-		DBG_871X("DL Firmware failed!\n");
+		pr_info("DL Firmware failed!\n");
 		goto Exit;
 	}
 

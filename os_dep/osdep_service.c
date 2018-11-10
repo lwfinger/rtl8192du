@@ -42,13 +42,6 @@ static inline ssize_t call_read_iter(struct file *file, struct kiocb *kio,
 }
 #endif
 
-#ifdef DBG_MEMORY_LEAK
-#include <asm/atomic.h>
-atomic_t _malloc_cnt = ATOMIC_INIT(0);
-atomic_t _malloc_size = ATOMIC_INIT(0);
-#endif /* DBG_MEMORY_LEAK */
-
-
 static ssize_t new_sync_read(struct file *filp, void __user *buf, __kernel_size_t len, loff_t *ppos)
 {
         struct iovec iov;
@@ -119,15 +112,8 @@ u32 rtw_atoi(u8* s)
 inline u8* _rtw_vmalloc(u32 sz)
 {
 	u8	*pbuf;
+
 	pbuf = vmalloc(sz);
-
-#ifdef DBG_MEMORY_LEAK
-	if ( pbuf != NULL) {
-		atomic_inc(&_malloc_cnt);
-		atomic_add(sz, &_malloc_size);
-	}
-#endif /* DBG_MEMORY_LEAK */
-
 	return pbuf;
 }
 
@@ -143,10 +129,6 @@ inline u8* _rtw_zvmalloc(u32 sz)
 inline void _rtw_vmfree(u8 *pbuf, u32 sz)
 {
 	vfree(pbuf);
-#ifdef DBG_MEMORY_LEAK
-	atomic_dec(&_malloc_cnt);
-	atomic_sub(sz, &_malloc_size);
-#endif /* DBG_MEMORY_LEAK */
 }
 
 u8* _rtw_malloc(u32 sz)
@@ -160,18 +142,8 @@ u8* _rtw_malloc(u32 sz)
 	else
 #endif
 		pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
-
-#ifdef DBG_MEMORY_LEAK
-	if ( pbuf != NULL) {
-		atomic_inc(&_malloc_cnt);
-		atomic_add(sz, &_malloc_size);
-	}
-#endif /* DBG_MEMORY_LEAK */
-
 	return pbuf;
-
 }
-
 
 u8* _rtw_zmalloc(u32 sz)
 {
@@ -194,12 +166,6 @@ void	_rtw_mfree(u8 *pbuf, u32 sz)
 	else
 #endif
 		kfree(pbuf);
-
-#ifdef DBG_MEMORY_LEAK
-	atomic_dec(&_malloc_cnt);
-	atomic_sub(sz, &_malloc_size);
-#endif /* DBG_MEMORY_LEAK */
-
 }
 
 

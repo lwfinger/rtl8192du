@@ -442,10 +442,6 @@ const struct rtw_proc_hdl adapter_proc_hdls [] = {
 	{"all_sta_info", proc_get_all_sta_info, NULL},
 #endif
 
-#ifdef DBG_MEMORY_LEAK
-	{"_malloc_cnt", proc_get_malloc_cnt, NULL},
-#endif
-
 #ifdef CONFIG_FIND_BEST_CHANNEL
 
 	{"best_channel", proc_get_best_channel, proc_set_best_channel},

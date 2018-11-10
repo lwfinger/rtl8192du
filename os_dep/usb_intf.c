@@ -66,99 +66,6 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf);
 #define USB_VENDER_ID_REALTEK		0x0BDA
 
 /* DID_USB_v915_20121224 */
-#define RTL8192C_USB_IDS \
-	/*=== Realtek demoboard ===*/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8191)},/* Default ID */ \
-	/****** 8188CUS ********/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8176)},/* 8188cu 1*1 dongole */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8170)},/* 8188CE-VAU USB minCard */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817E)},/* 8188CE-VAU USB minCard */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817A)},/* 8188cu Slim Solo */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817B)},/* 8188cu Slim Combo */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817D)},/* 8188RU High-power USB Dongle */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8754)},/* 8188 Combo for BC4 */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817F)},/* 8188RU */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x818A)},/* RTL8188CUS-VL */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x018A)},/* RTL8188CTV */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x17C0)}, /* RTK demoboard - USB-N10E */ \
-	/****** 8192CUS ********/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8177)},/* 8191cu 1*2 */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8178)},/* 8192cu 2*2 */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817C)},/* 8192CE-VAU USB minCard */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8191)},/* 8192CU 2*2 */ \
-	{USB_DEVICE(0x1058, 0x0631)},/* Alpha, 8192CU */ \
-	/*=== Customer ID ===*/	 \
-	/****** 8188CUS Dongle ********/ \
-	{USB_DEVICE(0x2019, 0xED17)},/* PCI - Edimax */ \
-	{USB_DEVICE(0x0DF6, 0x0052)},/* Sitecom - Edimax */ \
-	{USB_DEVICE(0x7392, 0x7811)},/* Edimax - Edimax */ \
-	{USB_DEVICE(0x07B8, 0x8189)},/* Abocom - Abocom */ \
-	{USB_DEVICE(0x0EB0, 0x9071)},/* NO Brand - Etop */ \
-	{USB_DEVICE(0x06F8, 0xE033)},/* Hercules - Edimax */ \
-	{USB_DEVICE(0x103C, 0x1629)},/* HP - Lite-On ,8188CUS Slim Combo */ \
-	{USB_DEVICE(0x2001, 0x3308)},/* D-Link - Alpha */ \
-	{USB_DEVICE(0x050D, 0x1102)},/* Belkin - Edimax */ \
-	{USB_DEVICE(0x2019, 0xAB2A)},/* Planex - Abocom */ \
-	{USB_DEVICE(0x20F4, 0x648B)},/* TRENDnet - Cameo */ \
-	{USB_DEVICE(0x4855, 0x0090)},/*  - Feixun */ \
-	{USB_DEVICE(0x13D3, 0x3357)},/*  - AzureWave */ \
-	{USB_DEVICE(0x0DF6, 0x005C)},/* Sitecom - Edimax */ \
-	{USB_DEVICE(0x0BDA, 0x5088)},/* Thinkware - CC&C */ \
-	{USB_DEVICE(0x4856, 0x0091)},/* NetweeN - Feixun */ \
-	{USB_DEVICE(0x0846, 0x9041)}, /* Netgear - Cameo */ \
-	{USB_DEVICE(0x2019, 0x4902)},/* Planex - Etop */ \
-	{USB_DEVICE(0x2019, 0xAB2E)},/* SW-WF02-AD15 -Abocom */ \
-	{USB_DEVICE(0x2001, 0x330B)}, /* D-LINK - T&W */ \
-	{USB_DEVICE(0xCDAB, 0x8010)}, /* - - compare */ \
-	{USB_DEVICE(0x0B05, 0x17BA)}, /* ASUS - Edimax */ \
-	{USB_DEVICE(0x0BDA, 0x1E1E)}, /* Intel - - */ \
-	{USB_DEVICE(0x04BB, 0x094c)}, /* I-O DATA - Edimax */ \
-	/****** 8188CTV ********/ \
-	{USB_DEVICE(0xCDAB, 0x8011)}, /* - - compare */ \
-	{USB_DEVICE(0x0BDA, 0x0A8A)}, /* Sony - Foxconn */ \
-	/****** 8188 RU ********/ \
-	{USB_DEVICE(0x0BDA, 0x317F)},/* Netcore,Netcore */ \
-	/****** 8188CE-VAU ********/ \
-	{USB_DEVICE(0x13D3, 0x3359)},/*  - Azwave */ \
-	{USB_DEVICE(0x13D3, 0x3358)},/*  - Azwave */ \
-	/****** 8188CUS Slim Solo********/ \
-	{USB_DEVICE(0x04F2, 0xAFF7)},/* XAVI - XAVI */ \
-	{USB_DEVICE(0x04F2, 0xAFF9)},/* XAVI - XAVI */ \
-	{USB_DEVICE(0x04F2, 0xAFFA)},/* XAVI - XAVI */ \
-	/****** 8188CUS Slim Combo ********/ \
-	{USB_DEVICE(0x04F2, 0xAFF8)},/* XAVI - XAVI */ \
-	{USB_DEVICE(0x04F2, 0xAFFB)},/* XAVI - XAVI */ \
-	{USB_DEVICE(0x04F2, 0xAFFC)},/* XAVI - XAVI */ \
-	{USB_DEVICE(0x2019, 0x1201)},/* Planex - Vencer */ \
-	/****** 8192CUS Dongle ********/ \
-	{USB_DEVICE(0x2001, 0x3307)},/* D-Link - Cameo */ \
-	{USB_DEVICE(0x2001, 0x330A)},/* D-Link - Alpha */ \
-	{USB_DEVICE(0x2001, 0x3309)},/* D-Link - Alpha */ \
-	{USB_DEVICE(0x0586, 0x341F)},/* Zyxel - Abocom */ \
-	{USB_DEVICE(0x7392, 0x7822)},/* Edimax - Edimax */ \
-	{USB_DEVICE(0x2019, 0xAB2B)},/* Planex - Abocom */ \
-	{USB_DEVICE(0x07B8, 0x8178)},/* Abocom - Abocom */ \
-	{USB_DEVICE(0x07AA, 0x0056)},/* ATKK - Gemtek */ \
-	{USB_DEVICE(0x4855, 0x0091)},/*  - Feixun */ \
-	{USB_DEVICE(0x050D, 0x2102)},/* Belkin - Sercomm */ \
-	{USB_DEVICE(0x050D, 0x2103)},/* Belkin - Edimax */ \
-	{USB_DEVICE(0x20F4, 0x624D)},/* TRENDnet */ \
-	{USB_DEVICE(0x0DF6, 0x0061)},/* Sitecom - Edimax */ \
-	{USB_DEVICE(0x0B05, 0x17AB)},/* ASUS - Edimax */ \
-	{USB_DEVICE(0x0846, 0x9021)},/* Netgear - Sercomm */ \
-	{USB_DEVICE(0x0846, 0xF001)}, /* Netgear - Sercomm */ \
-	{USB_DEVICE(0x0E66, 0x0019)},/* Hawking,Edimax */ \
-	{USB_DEVICE(0x0E66, 0x0020)}, /* Hawking  - Edimax */ \
-	{USB_DEVICE(0x050D, 0x1004)}, /* Belkin - Edimax */ \
-	{USB_DEVICE(0x0BDA, 0x2E2E)}, /* Intel - - */ \
-	{USB_DEVICE(0x2357, 0x0100)}, /* TP-Link - TP-Link */ \
-	{USB_DEVICE(0x06F8, 0xE035)}, /* Hercules - Edimax */ \
-	{USB_DEVICE(0x04BB, 0x0950)}, /* IO-DATA - Edimax */ \
-	{USB_DEVICE(0x0DF6, 0x0070)}, /* Sitecom - Edimax */ \
-	{USB_DEVICE(0x0789, 0x016D)}, /* LOGITEC - Edimax */ \
-	/****** 8192CE-VAU  ********/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8186)},/* Intel-Xavi( Azwave) */
-
 #define RTL8192D_USB_IDS \
 	/*=== Realtek demoboard ===*/ \
 	/****** 8192DU ********/ \
@@ -186,18 +93,7 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf);
 	/****** 8192DU-WiFi Display Dongle ********/ \
 	{USB_DEVICE(0x2019, 0xAB2D)},/* Planex - Abocom ,5G dongle for WiFi Display */
 
-#ifndef CONFIG_RTL8192C
-	#undef RTL8192C_USB_IDS
-	#define RTL8192C_USB_IDS
-#endif
-#ifndef CONFIG_RTL8192D
-	#undef RTL8192D_USB_IDS
-	#define RTL8192D_USB_IDS
-#endif
-
-
 static struct usb_device_id rtw_usb_id_tbl[] ={
-	RTL8192C_USB_IDS
 	RTL8192D_USB_IDS
 	{}	/* Terminating entry */
 };
@@ -240,37 +136,6 @@ static void rtw_dev_shutdown(struct device *dev)
 	ATOMIC_SET(&dvobj->continual_urb_error, MAX_CONTINUAL_URB_ERR+1);
 }
 
-#ifdef CONFIG_RTL8192C
-static struct usb_device_id rtl8192c_usb_id_tbl[] ={
-	RTL8192C_USB_IDS
-	{}	/* Terminating entry */
-};
-
-struct rtw_usb_drv rtl8192c_usb_drv = {
-	.usbdrv.name = (char*)"rtl8192cu",
-	.usbdrv.probe = rtw_drv_init,
-	.usbdrv.disconnect = rtw_dev_remove,
-	.usbdrv.id_table = rtl8192c_usb_id_tbl,
-	.usbdrv.suspend =  rtw_suspend,
-	.usbdrv.resume = rtw_resume,
-	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
-	.usbdrv.reset_resume   = rtw_resume,
-	#endif
-	#ifdef CONFIG_AUTOSUSPEND
-	.usbdrv.supports_autosuspend = 1,
-	#endif
-
-	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 19))
-	.usbdrv.drvwrap.driver.shutdown = rtw_dev_shutdown,
-	#else
-	.usbdrv.driver.shutdown = rtw_dev_shutdown,
-	#endif
-};
-
-static struct rtw_usb_drv *usb_drv = &rtl8192c_usb_drv;
-#endif /* CONFIG_RTL8192C */
-
-#ifdef CONFIG_RTL8192D
 static struct usb_device_id rtl8192d_usb_id_tbl[] ={
 	RTL8192D_USB_IDS
 	{}	/* Terminating entry */
@@ -296,8 +161,8 @@ struct rtw_usb_drv rtl8192d_usb_drv = {
 	.usbdrv.driver.shutdown = rtw_dev_shutdown,
 	#endif
 };
+
 static struct rtw_usb_drv *usb_drv = &rtl8192d_usb_drv;
-#endif /* CONFIG_RTL8192D */
 
 static inline int RT_usb_endpoint_dir_in(const struct usb_endpoint_descriptor *epd)
 {
@@ -410,93 +275,35 @@ _func_enter_;
 
 
 	pdev_desc = &pusbd->descriptor;
-#if 0
-	DBG_871X("\n8712_usb_device_descriptor:\n");
-	DBG_871X("bLength=%x\n", pdev_desc->bLength);
-	DBG_871X("bDescriptorType=%x\n", pdev_desc->bDescriptorType);
-	DBG_871X("bcdUSB=%x\n", pdev_desc->bcdUSB);
-	DBG_871X("bDeviceClass=%x\n", pdev_desc->bDeviceClass);
-	DBG_871X("bDeviceSubClass=%x\n", pdev_desc->bDeviceSubClass);
-	DBG_871X("bDeviceProtocol=%x\n", pdev_desc->bDeviceProtocol);
-	DBG_871X("bMaxPacketSize0=%x\n", pdev_desc->bMaxPacketSize0);
-	DBG_871X("idVendor=%x\n", pdev_desc->idVendor);
-	DBG_871X("idProduct=%x\n", pdev_desc->idProduct);
-	DBG_871X("bcdDevice=%x\n", pdev_desc->bcdDevice);
-	DBG_871X("iManufacturer=%x\n", pdev_desc->iManufacturer);
-	DBG_871X("iProduct=%x\n", pdev_desc->iProduct);
-	DBG_871X("iSerialNumber=%x\n", pdev_desc->iSerialNumber);
-	DBG_871X("bNumConfigurations=%x\n", pdev_desc->bNumConfigurations);
-#endif
-
 	phost_conf = pusbd->actconfig;
 	pconf_desc = &phost_conf->desc;
 
-#if 0
-	DBG_871X("\n8712_usb_configuration_descriptor:\n");
-	DBG_871X("bLength=%x\n", pconf_desc->bLength);
-	DBG_871X("bDescriptorType=%x\n", pconf_desc->bDescriptorType);
-	DBG_871X("wTotalLength=%x\n", pconf_desc->wTotalLength);
-	DBG_871X("bNumInterfaces=%x\n", pconf_desc->bNumInterfaces);
-	DBG_871X("bConfigurationValue=%x\n", pconf_desc->bConfigurationValue);
-	DBG_871X("iConfiguration=%x\n", pconf_desc->iConfiguration);
-	DBG_871X("bmAttributes=%x\n", pconf_desc->bmAttributes);
-	DBG_871X("bMaxPower=%x\n", pconf_desc->bMaxPower);
-#endif
-
-	//DBG_871X("\n/****** num of altsetting = (%d) ******/\n", usb_intf->num_altsetting);
-
 	phost_iface = &usb_intf->altsetting[0];
 	piface_desc = &phost_iface->desc;
-
-#if 0
-	DBG_871X("\n8712_usb_interface_descriptor:\n");
-	DBG_871X("bLength=%x\n", piface_desc->bLength);
-	DBG_871X("bDescriptorType=%x\n", piface_desc->bDescriptorType);
-	DBG_871X("bInterfaceNumber=%x\n", piface_desc->bInterfaceNumber);
-	DBG_871X("bAlternateSetting=%x\n", piface_desc->bAlternateSetting);
-	DBG_871X("bNumEndpoints=%x\n", piface_desc->bNumEndpoints);
-	DBG_871X("bInterfaceClass=%x\n", piface_desc->bInterfaceClass);
-	DBG_871X("bInterfaceSubClass=%x\n", piface_desc->bInterfaceSubClass);
-	DBG_871X("bInterfaceProtocol=%x\n", piface_desc->bInterfaceProtocol);
-	DBG_871X("iInterface=%x\n", piface_desc->iInterface);
-#endif
 
 	pdvobjpriv->NumInterfaces = pconf_desc->bNumInterfaces;
 	pdvobjpriv->InterfaceNumber = piface_desc->bInterfaceNumber;
 	pdvobjpriv->nr_endpoint = piface_desc->bNumEndpoints;
 
-	//DBG_871X("\ndump usb_endpoint_descriptor:\n");
-
-	for (i = 0; i < pdvobjpriv->nr_endpoint; i++)
-	{
+	for (i = 0; i < pdvobjpriv->nr_endpoint; i++) {
 		phost_endp = phost_iface->endpoint + i;
-		if (phost_endp)
-		{
+		if (phost_endp) {
 			pendp_desc = &phost_endp->desc;
 
 			DBG_871X("\nusb_endpoint_descriptor(%d):\n", i);
 			DBG_871X("bLength=%x\n",pendp_desc->bLength);
 			DBG_871X("bDescriptorType=%x\n",pendp_desc->bDescriptorType);
 			DBG_871X("bEndpointAddress=%x\n",pendp_desc->bEndpointAddress);
-			//DBG_871X("bmAttributes=%x\n",pendp_desc->bmAttributes);
-			//DBG_871X("wMaxPacketSize=%x\n",pendp_desc->wMaxPacketSize);
 			DBG_871X("wMaxPacketSize=%x\n",le16_to_cpu(pendp_desc->wMaxPacketSize));
 			DBG_871X("bInterval=%x\n",pendp_desc->bInterval);
-			//DBG_871X("bRefresh=%x\n",pendp_desc->bRefresh);
-			//DBG_871X("bSynchAddress=%x\n",pendp_desc->bSynchAddress);
 
-			if (RT_usb_endpoint_is_bulk_in(pendp_desc))
-			{
+			if (RT_usb_endpoint_is_bulk_in(pendp_desc)) {
 				DBG_871X("RT_usb_endpoint_is_bulk_in = %x\n", RT_usb_endpoint_num(pendp_desc));
 				pdvobjpriv->RtNumInPipes++;
-			}
-			else if (RT_usb_endpoint_is_int_in(pendp_desc))
-			{
+			} else if (RT_usb_endpoint_is_int_in(pendp_desc)) {
 				DBG_871X("RT_usb_endpoint_is_int_in = %x, Interval = %x\n", RT_usb_endpoint_num(pendp_desc),pendp_desc->bInterval);
 				pdvobjpriv->RtNumInPipes++;
-			}
-			else if (RT_usb_endpoint_is_bulk_out(pendp_desc))
-			{
+			} else if (RT_usb_endpoint_is_bulk_out(pendp_desc)) {
 				DBG_871X("RT_usb_endpoint_is_bulk_out = %x\n", RT_usb_endpoint_num(pendp_desc));
 				pdvobjpriv->RtNumOutPipes++;
 			}
@@ -1264,8 +1071,7 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 
 #ifdef CONFIG_PM
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,18))
-	if(padapter->pwrctrlpriv.bSupportRemoteWakeup)
-	{
+	if(padapter->pwrctrlpriv.bSupportRemoteWakeup) {
 		dvobj->pusbdev->do_remote_wakeup=1;
 		pusb_intf->needs_remote_wakeup = 1;
 		device_init_wakeup(&pusb_intf->dev, 1);
@@ -1276,8 +1082,7 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 #endif
 
 #ifdef CONFIG_AUTOSUSPEND
-	if( padapter->registrypriv.power_mgnt != PS_MODE_ACTIVE )
-	{
+	if( padapter->registrypriv.power_mgnt != PS_MODE_ACTIVE ) {
 		if(padapter->registrypriv.usbss_enable ){	/* autosuspend (2s delay) */
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,38))
 			dvobj->pusbdev->dev.power.autosuspend_delay = 0 * HZ;//15 * HZ; idle-delay time
@@ -1425,10 +1230,8 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 		goto free_if1;
 	}
 #ifdef CONFIG_MULTI_VIR_IFACES
-	for(i=0; i<if1->registrypriv.ext_iface_num;i++)
-	{
-		if(rtw_drv_add_vir_if(if1, usb_set_intf_ops) == NULL)
-		{
+	for(i=0; i<if1->registrypriv.ext_iface_num;i++) {
+		if(rtw_drv_add_vir_if(if1, usb_set_intf_ops) == NULL) {
 			DBG_871X("rtw_drv_add_iface failed! (%d)\n", i);
 			goto free_if1;
 		}

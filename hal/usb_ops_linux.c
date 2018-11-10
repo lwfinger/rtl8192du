@@ -81,7 +81,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	pIo_buf = pdvobjpriv->usb_vendor_req_buf;
 #else
 	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
-	tmp_buf = rtw_malloc( (u32) len + ALIGNMENT_UNIT);
+	tmp_buf = kzalloc((u32)len + ALIGNMENT_UNIT, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	tmp_buflen =  (u32)len + ALIGNMENT_UNIT;
 	#else // use stack memory
 	tmp_buflen = MAX_USB_IO_CTL_SIZE;
@@ -112,7 +112,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 		{
 			pipe = usb_sndctrlpipe(udev, 0);//write_out
 			reqtype =  REALTEK_USB_VENQT_WRITE;
-			_rtw_memcpy( pIo_buf, pdata, len);
+			memcpy( pIo_buf, pdata, len);
 		}
 
 		#if 0
@@ -129,7 +129,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 			rtw_reset_continual_urb_error(pdvobjpriv);
 			if ( requesttype == 0x01 )
 			{   // For Control read transfer, we have to copy the read data from pIo_buf to pdata.
-				_rtw_memcpy( pdata, pIo_buf,  len );
+				memcpy( pdata, pIo_buf,  len );
 			}
 		}
 		else { // error cases
@@ -154,7 +154,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 				if(status > 0) {
 					if ( requesttype == 0x01 )
 					{   // For Control read transfer, we have to copy the read data from pIo_buf to pdata.
-						_rtw_memcpy( pdata, pIo_buf,  len );
+						memcpy( pdata, pIo_buf,  len );
 					}
 				}
 			}
@@ -403,7 +403,7 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 
 	wvalue = (u16)(addr&0x0000ffff);
 	len = length;
-	 _rtw_memcpy(buf, pdata, len );
+	 memcpy(buf, pdata, len );
 
 	ret = usb_write_reg(pintfhdl, wvalue, buf, len);
 
@@ -620,7 +620,7 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 				precvframe_if2->u.hdr.precvbuf = NULL;	//can't access the precvbuf for new arch.
 				precvframe_if2->u.hdr.len=0;
 
-				_rtw_memcpy(&precvframe_if2->u.hdr.attrib, &precvframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib));
+				memcpy(&precvframe_if2->u.hdr.attrib, &precvframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib));
 
 				pattrib = &precvframe_if2->u.hdr.attrib;
 
@@ -663,7 +663,7 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 					precvframe_if2->u.hdr.rx_end = pkt_copy->data + alloc_sz;
 					skb_reserve( pkt_copy, 8 - ((SIZE_PTR)( pkt_copy->data ) & 7 ));//force pkt_copy->data at 8-byte alignment address
 					skb_reserve( pkt_copy, shift_sz );//force ip_hdr at 8-byte alignment address according to shift_sz.
-					_rtw_memcpy(pkt_copy->data, pbuf, skb_len);
+					memcpy(pkt_copy->data, pbuf, skb_len);
 					precvframe_if2->u.hdr.rx_data = precvframe_if2->u.hdr.rx_tail = pkt_copy->data;
 				}
 
@@ -796,7 +796,7 @@ static int recvbuf2recvframe(_adapter *padapter, struct recv_buf *precvbuf)
 			precvframe->u.hdr.rx_end = pkt_copy->data + alloc_sz;
 			skb_reserve( pkt_copy, 8 - ((SIZE_PTR)( pkt_copy->data ) & 7 ));//force pkt_copy->data at 8-byte alignment address
 			skb_reserve( pkt_copy, shift_sz );//force ip_hdr at 8-byte alignment address according to shift_sz.
-			_rtw_memcpy(pkt_copy->data, (pbuf + pattrib->shift_sz + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
+			memcpy(pkt_copy->data, (pbuf + pattrib->shift_sz + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
 			precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pkt_copy->data;
 		}
 		else
@@ -1137,7 +1137,7 @@ static int recvbuf2recvframe(_adapter *padapter, _pkt *pskb)
 			precvframe->u.hdr.rx_end = pkt_copy->data + alloc_sz;
 			skb_reserve( pkt_copy, 8 - ((SIZE_PTR)( pkt_copy->data ) & 7 ));//force pkt_copy->data at 8-byte alignment address
 			skb_reserve( pkt_copy, shift_sz );//force ip_hdr at 8-byte alignment address according to shift_sz.
-			_rtw_memcpy(pkt_copy->data, (pbuf + pattrib->shift_sz + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
+			memcpy(pkt_copy->data, (pbuf + pattrib->shift_sz + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
 			precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pkt_copy->data;
 		}
 		else

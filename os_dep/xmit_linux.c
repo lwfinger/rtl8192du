@@ -139,11 +139,9 @@ int rtw_os_xmit_resource_alloc(_adapter *padapter, struct xmit_buf *pxmitbuf,u32
 		return _FAIL;
 #else // CONFIG_USE_USB_BUFFER_ALLOC_TX
 
-	pxmitbuf->pallocated_buf = rtw_zmalloc(alloc_sz);
+	pxmitbuf->pallocated_buf = kzalloc(alloc_sz, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	if (pxmitbuf->pallocated_buf == NULL)
-	{
 		return _FAIL;
-	}
 
 	pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitbuf->pallocated_buf), XMITBUF_ALIGN_SZ);
 	pxmitbuf->dma_transfer_addr = 0;
@@ -162,7 +160,7 @@ int rtw_os_xmit_resource_alloc(_adapter *padapter, struct xmit_buf *pxmitbuf,u32
 	}
 #endif
 #if defined(CONFIG_PCI_HCI) || defined(CONFIG_SDIO_HCI)
-	pxmitbuf->pallocated_buf = rtw_zmalloc(alloc_sz);
+	pxmitbuf->pallocated_buf = kzalloc(alloc_sz, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	if (pxmitbuf->pallocated_buf == NULL)
 	{
 		return _FAIL;
@@ -398,7 +396,7 @@ int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 		newskb = rtw_skb_copy(skb);
 
 		if (newskb) {
-			_rtw_memcpy(newskb->data, psta->hwaddr, 6);
+			memcpy(newskb->data, psta->hwaddr, 6);
 			res = rtw_xmit(padapter, &newskb);
 			if (res < 0) {
 				DBG_871X("%s()-%d: rtw_xmit() return error!\n", __FUNCTION__, __LINE__);

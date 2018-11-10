@@ -56,7 +56,7 @@ static int _usbctrl_vendorreq_async_write(struct usb_device *udev, u8 request,
 		reqtype =  REALTEK_USB_VENQT_WRITE;
 	}
 
-	buf = (struct rtl819x_async_write_data *)rtw_zmalloc(sizeof(*buf));
+	buf = kzalloc(sizeof(*buf), in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	if (!buf) {
 		rc = -ENOMEM;
 		goto exit;
@@ -77,7 +77,7 @@ static int _usbctrl_vendorreq_async_write(struct usb_device *udev, u8 request,
 	dr->wIndex = cpu_to_le16(index);
 	dr->wLength = cpu_to_le16(len);
 
-	_rtw_memcpy(buf, pdata, len);
+	memcpy(buf, pdata, len);
 
 	usb_fill_control_urb(urb, udev, pipe, (unsigned char *)dr, buf, len,
 		_usbctrl_vendorreq_async_callback, buf);
@@ -232,9 +232,9 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	}
 
 
-	pcontext = (struct zero_bulkout_context *)rtw_zmalloc(sizeof(struct zero_bulkout_context));
+	pcontext = kzalloc(sizeof(struct zero_bulkout_context), in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 
-	pbuf = (unsigned char *)rtw_zmalloc(sizeof(int));
+	pbuf = kzalloc(sizeof(int), in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	purb = usb_alloc_urb(0, GFP_ATOMIC);
 
 	len = 0;

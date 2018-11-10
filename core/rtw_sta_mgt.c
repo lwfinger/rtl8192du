@@ -351,7 +351,7 @@ _func_enter_;
 
 		_rtw_init_stainfo(psta);
 
-		_rtw_memcpy(psta->hwaddr, hwaddr, ETH_ALEN);
+		memcpy(psta->hwaddr, hwaddr, ETH_ALEN);
 
 		index = wifi_mac_hash(hwaddr);
 
@@ -379,7 +379,7 @@ _func_enter_;
 
 		for( i = 0; i < 16; i++ )
 		{
-                     _rtw_memcpy( &psta->sta_recvpriv.rxcache.tid_rxseq[ i ], &wRxSeqInitialValue, 2 );
+                     memcpy( &psta->sta_recvpriv.rxcache.tid_rxseq[ i ], &wRxSeqInitialValue, 2 );
 			_rtw_memset(&psta->sta_recvpriv.rxcache.iv[i], 0, sizeof(psta->sta_recvpriv.rxcache.iv[i]));
 		}
 

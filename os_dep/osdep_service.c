@@ -131,32 +131,6 @@ inline void _rtw_vmfree(u8 *pbuf, u32 sz)
 	vfree(pbuf);
 }
 
-u8* _rtw_malloc(u32 sz)
-{
-
-	u8	*pbuf=NULL;
-
-#ifdef RTK_DMP_PLATFORM
-	if(sz > 0x4000)
-		pbuf = (u8 *)dvr_malloc(sz);
-	else
-#endif
-		pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
-	return pbuf;
-}
-
-u8* _rtw_zmalloc(u32 sz)
-{
-	u8	*pbuf = _rtw_malloc(sz);
-
-	if (pbuf != NULL) {
-
-		memset(pbuf, 0, sz);
-	}
-
-	return pbuf;
-}
-
 void	_rtw_mfree(u8 *pbuf, u32 sz)
 {
 
@@ -440,42 +414,6 @@ inline void dbg_rtw_vmfree(u8 *pbuf, u32 sz, const enum mstat_f flags, const cha
 	);
 }
 
-inline u8* dbg_rtw_malloc(u32 sz, const enum mstat_f flags, const char *func, const int line)
-{
-	u8 *p;
-
-	if (match_mstat_sniff_rules(flags, sz))
-		DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
-
-	p=_rtw_malloc((sz));
-
-	rtw_mstat_update(
-		flags
-		, p ? MSTAT_ALLOC_SUCCESS : MSTAT_ALLOC_FAIL
-		, sz
-	);
-
-	return p;
-}
-
-inline u8* dbg_rtw_zmalloc(u32 sz, const enum mstat_f flags, const char *func, const int line)
-{
-	u8 *p;
-
-	if (match_mstat_sniff_rules(flags, sz))
-		DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
-
-	p = _rtw_zmalloc((sz));
-
-	rtw_mstat_update(
-		flags
-		, p ? MSTAT_ALLOC_SUCCESS : MSTAT_ALLOC_FAIL
-		, sz
-	);
-
-	return p;
-}
-
 inline void dbg_rtw_mfree(u8 *pbuf, u32 sz, const enum mstat_f flags, const char *func, const int line)
 {
 	if (match_mstat_sniff_rules(flags, sz))
@@ -633,33 +571,6 @@ inline void dbg_rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *a
 }
 #endif /* CONFIG_USB_HCI */
 #endif /* DBG_MEM_ALLOC */
-
-void* rtw_malloc2d(int h, int w, int size)
-{
-	int j;
-
-	void **a = (void **) rtw_zmalloc( h*sizeof(void *) + h*w*size );
-	if(a == NULL)
-	{
-		DBG_871X("%s: alloc memory fail!\n", __FUNCTION__);
-		return NULL;
-	}
-
-	for( j=0; j<h; j++ )
-		a[j] = ((char *)(a+h)) + j*w*size;
-
-	return a;
-}
-
-void rtw_mfree2d(void *pbuf, int h, int w, int size)
-{
-	rtw_mfree((u8 *)pbuf, h*sizeof(void*) + w*h*size);
-}
-
-void _rtw_memcpy(void* dst, void* src, u32 sz)
-{
-	memcpy(dst, src, sz);
-}
 
 int	_rtw_memcmp(void *dst, void *src, u32 sz)
 {
@@ -1341,7 +1252,7 @@ int rtw_change_ifname(_adapter *padapter, const char *ifname)
 
 	rtw_init_netdev_name(pnetdev, ifname);
 
-	_rtw_memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
+	memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
 	if(!rtnl_is_locked())
@@ -1405,10 +1316,10 @@ void rtw_buf_update(u8 **buf, u32 *buf_len, u8 *src, u32 src_len)
 		goto keep_ori;
 
 	/* duplicate src */
-	dup = rtw_malloc(src_len);
+	dup = kzalloc(src_len, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	if (dup) {
 		dup_len = src_len;
-		_rtw_memcpy(dup, src, dup_len);
+		memcpy(dup, src, dup_len);
 	}
 
 keep_ori:
@@ -1500,7 +1411,7 @@ struct rtw_cbuf *rtw_cbuf_alloc(u32 size)
 {
 	struct rtw_cbuf *cbuf;
 
-	cbuf = (struct rtw_cbuf *)rtw_malloc(sizeof(*cbuf) + sizeof(void*)*size);
+	cbuf = kzalloc(sizeof(*cbuf) + sizeof(void*)*size, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 
 	if (cbuf) {
 		cbuf->write = cbuf->read = 0;

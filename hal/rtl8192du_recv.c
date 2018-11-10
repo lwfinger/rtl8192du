@@ -80,7 +80,7 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 		DBG_8192C("alloc_urb for interrupt in endpoint fail !!!!\n");
 	}
 #endif //PLATFORM_LINUX
-	precvpriv->int_in_buf = rtw_malloc(sizeof(INTERRUPT_MSG_FORMAT_EX));
+	precvpriv->int_in_buf = kzalloc(sizeof(INTERRUPT_MSG_FORMAT_EX), in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	if(precvpriv->int_in_buf == NULL){
 		DBG_8192C("alloc_mem for interrupt in endpoint fail !!!!\n");
 	}
@@ -89,7 +89,7 @@ int	rtl8192du_init_recv_priv(_adapter *padapter)
 	//init recv_buf
 	_rtw_init_queue(&precvpriv->free_recv_buf_queue);
 
-	precvpriv->pallocated_recv_buf = rtw_zmalloc(NR_RECVBUFF *sizeof(struct recv_buf) + 4);
+	precvpriv->pallocated_recv_buf = kzalloc(NR_RECVBUFF *sizeof(struct recv_buf) + 4, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	if(precvpriv->pallocated_recv_buf==NULL){
 		res= _FAIL;
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("alloc recv_buf fail!\n"));

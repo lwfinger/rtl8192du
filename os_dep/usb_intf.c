@@ -214,7 +214,7 @@ static u8 rtw_init_intf_priv(struct dvobj_priv *dvobj)
 
 
 	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
-	dvobj->usb_alloc_vendor_req_buf = rtw_zmalloc(MAX_USB_IO_CTL_SIZE);
+	dvobj->usb_alloc_vendor_req_buf = kzalloc(MAX_USB_IO_CTL_SIZE, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	if (dvobj->usb_alloc_vendor_req_buf == NULL) {
 		DBG_871X("alloc usb_vendor_req_buf failed... /n");
 		rst = _FAIL;

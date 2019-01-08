@@ -192,9 +192,7 @@ void rtw_5g_rates_init(struct ieee80211_rate *rates)
 	);
 }
 
-struct ieee80211_supported_band *rtw_spt_band_alloc(
-	enum ieee80211_band band
-	)
+struct ieee80211_supported_band *rtw_spt_band_alloc(enum ieee80211_band band)
 {
 	struct ieee80211_supported_band *spt_band = NULL;
 	int n_channels, n_bitrates;
@@ -572,10 +570,8 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
 		return;
 
 #ifdef CONFIG_P2P
-	if(pwdinfo->driver_interface == DRIVER_CFG80211 )
-	{
-		if(!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-		{
+	if(pwdinfo->driver_interface == DRIVER_CFG80211 ) {
+		if(!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)) {
 			rtw_p2p_set_pre_state(pwdinfo, rtw_p2p_state(pwdinfo));
 			rtw_p2p_set_role(pwdinfo, P2P_ROLE_CLIENT);
 			rtw_p2p_set_state(pwdinfo, P2P_STATE_GONEGO_OK);
@@ -588,8 +584,6 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
 		WLAN_BSSID_EX  *pnetwork = &(padapter->mlmeextpriv.mlmext_info.network);
 		struct wlan_network *scanned = pmlmepriv->cur_network_scanned;
 
-		//DBG_8192C(FUNC_ADPT_FMT" BSS not found\n", FUNC_ADPT_ARG(padapter));
-
 		if(scanned == NULL) {
 			rtw_warn_on(1);
 			goto check_bss;
@@ -600,8 +594,6 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
 		) {
 			if (!rtw_cfg80211_inform_bss(padapter,scanned)) {
 				DBG_8192C(FUNC_ADPT_FMT" inform fail !!\n", FUNC_ADPT_ARG(padapter));
-			} else {
-				//DBG_8192C(FUNC_ADPT_FMT" inform success !!\n", FUNC_ADPT_ARG(padapter));
 			}
 		} else {
 			DBG_8192C("scanned: %s("MAC_FMT"), cur: %s("MAC_FMT")\n",

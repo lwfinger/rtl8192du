@@ -21,7 +21,7 @@
 #define __IOCTL_CFG80211_H__
 
 #if defined(CONFIG_IOCTL_CFG80211) && !defined(CONFIG_CFG80211) && !defined(CONFIG_CFG80211_MODULE)
-	#error "Can't define CONFIG_IOCTL_CFG80211 because neither CONFIG_CFG80211 nor CONFIG_CFG80211_MODULE is defined in kernel"
+//	#error "Can't define CONFIG_IOCTL_CFG80211 because neither CONFIG_CFG80211 nor CONFIG_CFG80211_MODULE is defined in kernel"
 #endif
 #if defined(CONFIG_IOCTL_CFG80211) && LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35)
 	#error "We haven't verify our cfg80211 solution below kernel version 2.6.35"

@@ -522,8 +522,8 @@ static void __nat25_db_network_insert(_adapter *priv,
 		db = db->next_hash;
 	}
 
-	db = (struct nat25_network_db_entry *) rtw_malloc(sizeof(*db));
-	if(db == NULL) {
+	db = kzalloc(sizeof(*db), in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
+	if (!db) {
 		_exit_critical_bh(&priv->br_ext_lock, &irqL);
 		return;
 	}

@@ -130,10 +130,10 @@ static void _init_mp_priv_(struct mp_priv *pmp_priv)
 	pmp_priv->network_macaddr[5] = 0x55;
 
 	pnetwork = &pmp_priv->mp_network.network;
-	_rtw_memcpy(pnetwork->MacAddress, pmp_priv->network_macaddr, ETH_ALEN);
+	memcpy(pnetwork->MacAddress, pmp_priv->network_macaddr, ETH_ALEN);
 
 	pnetwork->Ssid.SsidLength = 8;
-	_rtw_memcpy(pnetwork->Ssid.Ssid, "mp_871x", pnetwork->Ssid.SsidLength);
+	memcpy(pnetwork->Ssid.Ssid, "mp_871x", pnetwork->Ssid.SsidLength);
 }
 
 #ifdef PLATFORM_LINUX
@@ -147,7 +147,7 @@ static int init_mp_priv_by_os(struct mp_priv *pmp_priv)
 	_rtw_init_queue(&pmp_priv->free_mp_xmitqueue);
 
 	pmp_priv->pallocated_mp_xmitframe_buf = NULL;
-	pmp_priv->pallocated_mp_xmitframe_buf = rtw_zmalloc(NR_MP_XMITFRAME * sizeof(struct mp_xmit_frame) + 4);
+	pmp_priv->pallocated_mp_xmitframe_buf = kzalloc(NR_MP_XMITFRAME * sizeof(struct mp_xmit_frame) + 4, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	if (pmp_priv->pallocated_mp_xmitframe_buf == NULL) {
 		res = _FAIL;
 		goto _exit_init_mp_priv;
@@ -191,8 +191,8 @@ static void mp_init_xmit_attrib(struct mp_tx *pmptx, PADAPTER padapter)
 	_rtw_memset(desc, 0, TXDESC_SIZE);
 
 	pattrib->ether_type = 0x8712;
-	//_rtw_memcpy(pattrib->src, padapter->eeprompriv.mac_addr, ETH_ALEN);
-//	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	//memcpy(pattrib->src, padapter->eeprompriv.mac_addr, ETH_ALEN);
+//	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 	_rtw_memset(pattrib->dst, 0xFF, ETH_ALEN);
 //	pattrib->pctrl = 0;
 //	pattrib->dhcp_pkt = 0;
@@ -471,9 +471,9 @@ s32 mp_start_test(PADAPTER padapter)
 
 	//3 1. initialize a new WLAN_BSSID_EX
 //	_rtw_memset(&bssid, 0, sizeof(WLAN_BSSID_EX));
-	_rtw_memcpy(bssid.MacAddress, pmppriv->network_macaddr, ETH_ALEN);
+	memcpy(bssid.MacAddress, pmppriv->network_macaddr, ETH_ALEN);
 	bssid.Ssid.SsidLength = strlen("mp_pseudo_adhoc");
-	_rtw_memcpy(bssid.Ssid.Ssid, (u8*)"mp_pseudo_adhoc", bssid.Ssid.SsidLength);
+	memcpy(bssid.Ssid.Ssid, (u8*)"mp_pseudo_adhoc", bssid.Ssid.SsidLength);
 	bssid.InfrastructureMode = Ndis802_11IBSS;
 	bssid.NetworkTypeInUse = Ndis802_11DS;
 	bssid.IELength = 0;
@@ -523,7 +523,7 @@ s32 mp_start_test(PADAPTER padapter)
 	//3 3. join psudo AdHoc
 	tgt_network->join_res = 1;
 	tgt_network->aid = psta->aid = 1;
-	_rtw_memcpy(&tgt_network->network, &bssid, length);
+	memcpy(&tgt_network->network, &bssid, length);
 
 	rtw_indicate_connect(padapter);
 	_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
@@ -839,8 +839,8 @@ static thread_return mp_xmit_packet_thread(thread_context context)
 			}
 		}
 
-		_rtw_memcpy((u8 *)(pxmitframe->buf_addr+TXDESC_OFFSET), pmptx->buf, pmptx->write_size);
-		_rtw_memcpy(&(pxmitframe->attrib), &(pmptx->attrib), sizeof(struct pkt_attrib));
+		memcpy((u8 *)(pxmitframe->buf_addr+TXDESC_OFFSET), pmptx->buf, pmptx->write_size);
+		memcpy(&(pxmitframe->attrib), &(pmptx->attrib), sizeof(struct pkt_attrib));
 
 		dump_mpframe(padapter, pxmitframe);
 
@@ -870,7 +870,7 @@ exit:
 void fill_txdesc_for_mp(PADAPTER padapter, struct tx_desc *ptxdesc)
 {
 	struct mp_priv *pmp_priv = &padapter->mppriv;
-	_rtw_memcpy(ptxdesc, &(pmp_priv->tx.desc), TXDESC_SIZE);
+	memcpy(ptxdesc, &(pmp_priv->tx.desc), TXDESC_SIZE);
 }
 
 void SetPacketTx(PADAPTER padapter)
@@ -893,9 +893,9 @@ void SetPacketTx(PADAPTER padapter)
 
 	//3 1. update_attrib()
 	pattrib = &pmp_priv->tx.attrib;
-	_rtw_memcpy(pattrib->src, padapter->eeprompriv.mac_addr, ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
-	_rtw_memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
+	memcpy(pattrib->src, padapter->eeprompriv.mac_addr, ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
 	bmcast = IS_MCAST(pattrib->ra);
 	if (bmcast) {
 		pattrib->mac_id = 1;
@@ -914,7 +914,7 @@ void SetPacketTx(PADAPTER padapter)
 		rtw_mfree(pmp_priv->tx.pallocated_buf, pmp_priv->tx.buf_size);
 	pmp_priv->tx.write_size = pkt_size;
 	pmp_priv->tx.buf_size = pkt_size + XMITBUF_ALIGN_SZ;
-	pmp_priv->tx.pallocated_buf = rtw_zmalloc(pmp_priv->tx.buf_size);
+	pmp_priv->tx.pallocated_buf = kzalloc(pmp_priv->tx.buf_size, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	if (pmp_priv->tx.pallocated_buf == NULL) {
 		DBG_871X("%s: malloc(%d) fail!!\n", __func__, pmp_priv->tx.buf_size);
 		return;
@@ -969,9 +969,9 @@ void SetPacketTx(PADAPTER padapter)
 	//3 4. make wlan header, make_wlanhdr()
 	hdr = (struct rtw_ieee80211_hdr *)pkt_start;
 	SetFrameSubType(&hdr->frame_ctl, pattrib->subtype);
-	_rtw_memcpy(hdr->addr1, pattrib->dst, ETH_ALEN); // DA
-	_rtw_memcpy(hdr->addr2, pattrib->src, ETH_ALEN); // SA
-	_rtw_memcpy(hdr->addr3, get_bssid(&padapter->mlmepriv), ETH_ALEN); // RA, BSSID
+	memcpy(hdr->addr1, pattrib->dst, ETH_ALEN); // DA
+	memcpy(hdr->addr2, pattrib->src, ETH_ALEN); // SA
+	memcpy(hdr->addr3, get_bssid(&padapter->mlmepriv), ETH_ALEN); // RA, BSSID
 
 	//3 5. make payload
 	ptr = pkt_start + pattrib->hdrlen;

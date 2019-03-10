@@ -749,7 +749,7 @@ _func_enter_;
 
 			//get ether_type
 			ptr=ptr+pfhdr->attrib.hdrlen+pfhdr->attrib.iv_len+LLC_HEADER_SIZE;
-			_rtw_memcpy(&ether_type,ptr, 2);
+			memcpy(&ether_type,ptr, 2);
 			ether_type= ntohs((unsigned short )ether_type);
 
 		        if (ether_type == eapol_type) {
@@ -848,25 +848,25 @@ sint recv_ucast_pn_decache(union recv_frame *precv_frame, struct stainfo_rxcache
 		return _FAIL;
 
 	if (pattrib->encrypt == _AES_) {
-		_rtw_memcpy(&tmp_iv_hdr, (pdata + pattrib->hdrlen), 8);
+		memcpy(&tmp_iv_hdr, (pdata + pattrib->hdrlen), 8);
 		tmp_iv_hdr = le64_to_cpu(tmp_iv_hdr);
 		pkt_pn = (tmp_iv_hdr & 0x000000000000ffff)		|
 			((tmp_iv_hdr & 0xffffffff00000000) >> 16);
 
-		_rtw_memcpy(&tmp_iv_hdr, prxcache->iv[tid], 8);
+		memcpy(&tmp_iv_hdr, prxcache->iv[tid], 8);
 		tmp_iv_hdr = le64_to_cpu(tmp_iv_hdr);
 		curr_pn = (tmp_iv_hdr & 0x000000000000ffff)		|
 			((tmp_iv_hdr & 0xffffffff00000000) >> 16);
 
 		if (curr_pn == 0) {
-			_rtw_memcpy(prxcache->iv[tid], (pdata + pattrib->hdrlen), sizeof(prxcache->iv[tid]));
+			memcpy(prxcache->iv[tid], (pdata + pattrib->hdrlen), sizeof(prxcache->iv[tid]));
 			goto exit;
 		}
 
 		if (PN_LESS_CHK(pkt_pn, curr_pn) || PN_EQUAL_CHK(pkt_pn, curr_pn)) {
 			/* return _FAIL; */
 		} else
-			_rtw_memcpy(prxcache->iv[tid], (pdata + pattrib->hdrlen), sizeof(prxcache->iv[tid]));
+			memcpy(prxcache->iv[tid], (pdata + pattrib->hdrlen), sizeof(prxcache->iv[tid]));
 	}
 
 exit:
@@ -888,7 +888,7 @@ sint recv_bcast_pn_decache(union recv_frame *precv_frame)
 
 	if ((pattrib->encrypt == _AES_) &&
 		(check_fwstate(pmlmepriv, WIFI_STATION_STATE) == _TRUE)) {
-		_rtw_memcpy(&tmp_iv_hdr, (pdata + pattrib->hdrlen), 8);
+		memcpy(&tmp_iv_hdr, (pdata + pattrib->hdrlen), 8);
 		tmp_iv_hdr = le64_to_cpu(tmp_iv_hdr);
 		key_id = ((tmp_iv_hdr & 0x00000000c0000000) >> 30);
 		pkt_pn = (tmp_iv_hdr & 0x000000000000ffff)		|
@@ -897,12 +897,12 @@ sint recv_bcast_pn_decache(union recv_frame *precv_frame)
 		if (key_id >= 4 )
 			return _FAIL;
 
-		_rtw_memcpy(&tmp_iv_hdr,  psecuritypriv->iv_seq[key_id], 8);
+		memcpy(&tmp_iv_hdr,  psecuritypriv->iv_seq[key_id], 8);
 		tmp_iv_hdr = le64_to_cpu(tmp_iv_hdr);
 		curr_pn = (tmp_iv_hdr & 0x0000ffffffffffff);
 
 		if ((curr_pn == 0) && (pkt_pn >= 0)) {
-			_rtw_memcpy(psecuritypriv->iv_seq[key_id], &pkt_pn, 8);
+			memcpy(psecuritypriv->iv_seq[key_id], &pkt_pn, 8);
 			goto exit;
 		}
 
@@ -910,7 +910,7 @@ sint recv_bcast_pn_decache(union recv_frame *precv_frame)
 			return _FAIL;
 		} else{
 			pkt_pn = cpu_to_le64(pkt_pn);
-			_rtw_memcpy(psecuritypriv->iv_seq[key_id], &pkt_pn, 8);
+			memcpy(psecuritypriv->iv_seq[key_id], &pkt_pn, 8);
 		}
 	}
 
@@ -1342,11 +1342,11 @@ _func_enter_;
 	}
 	else if(check_fwstate(pmlmepriv, WIFI_MP_STATE) == _TRUE)
 	{
-		_rtw_memcpy(pattrib->dst, GetAddr1Ptr(ptr), ETH_ALEN);
-		_rtw_memcpy(pattrib->src, GetAddr2Ptr(ptr), ETH_ALEN);
-		_rtw_memcpy(pattrib->bssid, GetAddr3Ptr(ptr), ETH_ALEN);
-		_rtw_memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
-		_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+		memcpy(pattrib->dst, GetAddr1Ptr(ptr), ETH_ALEN);
+		memcpy(pattrib->src, GetAddr2Ptr(ptr), ETH_ALEN);
+		memcpy(pattrib->bssid, GetAddr3Ptr(ptr), ETH_ALEN);
+		memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
+		memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 		sta_addr = mybssid;
 	}
@@ -1489,14 +1489,14 @@ _func_enter_;
 	else if ((check_fwstate(pmlmepriv, WIFI_MP_STATE) == _TRUE) &&
 		     (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) )
 	{
-		_rtw_memcpy(pattrib->dst, GetAddr1Ptr(ptr), ETH_ALEN);
-		_rtw_memcpy(pattrib->src, GetAddr2Ptr(ptr), ETH_ALEN);
-		_rtw_memcpy(pattrib->bssid, GetAddr3Ptr(ptr), ETH_ALEN);
-		_rtw_memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
-		_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+		memcpy(pattrib->dst, GetAddr1Ptr(ptr), ETH_ALEN);
+		memcpy(pattrib->src, GetAddr2Ptr(ptr), ETH_ALEN);
+		memcpy(pattrib->bssid, GetAddr3Ptr(ptr), ETH_ALEN);
+		memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
+		memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
 
 		//
-		_rtw_memcpy(pattrib->bssid,  mybssid, ETH_ALEN);
+		memcpy(pattrib->bssid,  mybssid, ETH_ALEN);
 
 
 		*psta = rtw_get_stainfo(pstapriv, pattrib->bssid); // get sta_info
@@ -1846,31 +1846,31 @@ sint validate_recv_mgnt_frame(PADAPTER padapter, union recv_frame *precv_frame)
 		pbssid = get_hdr_bssid(ptr);
 
 
-		_rtw_memcpy(pattrib->dst, pda, ETH_ALEN);
-		_rtw_memcpy(pattrib->src, psa, ETH_ALEN);
+		memcpy(pattrib->dst, pda, ETH_ALEN);
+		memcpy(pattrib->src, psa, ETH_ALEN);
 
-		_rtw_memcpy(pattrib->bssid, pbssid, ETH_ALEN);
+		memcpy(pattrib->bssid, pbssid, ETH_ALEN);
 
 	switch(pattrib->to_fr_ds)
 	{
 		case 0:
-			_rtw_memcpy(pattrib->ra, pda, ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, psa, ETH_ALEN);
+			memcpy(pattrib->ra, pda, ETH_ALEN);
+			memcpy(pattrib->ta, psa, ETH_ALEN);
 			break;
 
 		case 1:
-			_rtw_memcpy(pattrib->ra, pda, ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, pbssid, ETH_ALEN);
+			memcpy(pattrib->ra, pda, ETH_ALEN);
+			memcpy(pattrib->ta, pbssid, ETH_ALEN);
 			break;
 
 		case 2:
-			_rtw_memcpy(pattrib->ra, pbssid, ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, psa, ETH_ALEN);
+			memcpy(pattrib->ra, pbssid, ETH_ALEN);
+			memcpy(pattrib->ta, psa, ETH_ALEN);
 			break;
 
 		case 3:
-			_rtw_memcpy(pattrib->ra, GetAddr1Ptr(ptr), ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, GetAddr2Ptr(ptr), ETH_ALEN);
+			memcpy(pattrib->ra, GetAddr1Ptr(ptr), ETH_ALEN);
+			memcpy(pattrib->ta, GetAddr2Ptr(ptr), ETH_ALEN);
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" case 3\n"));
 			break;
 
@@ -1916,34 +1916,34 @@ _func_enter_;
 		goto exit;
 	}
 
-	_rtw_memcpy(pattrib->dst, pda, ETH_ALEN);
-	_rtw_memcpy(pattrib->src, psa, ETH_ALEN);
+	memcpy(pattrib->dst, pda, ETH_ALEN);
+	memcpy(pattrib->src, psa, ETH_ALEN);
 
-	_rtw_memcpy(pattrib->bssid, pbssid, ETH_ALEN);
+	memcpy(pattrib->bssid, pbssid, ETH_ALEN);
 
 	switch(pattrib->to_fr_ds)
 	{
 		case 0:
-			_rtw_memcpy(pattrib->ra, pda, ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, psa, ETH_ALEN);
+			memcpy(pattrib->ra, pda, ETH_ALEN);
+			memcpy(pattrib->ta, psa, ETH_ALEN);
 			ret = sta2sta_data_frame(adapter, precv_frame, &psta);
 			break;
 
 		case 1:
-			_rtw_memcpy(pattrib->ra, pda, ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, pbssid, ETH_ALEN);
+			memcpy(pattrib->ra, pda, ETH_ALEN);
+			memcpy(pattrib->ta, pbssid, ETH_ALEN);
 			ret = ap2sta_data_frame(adapter, precv_frame, &psta);
 			break;
 
 		case 2:
-			_rtw_memcpy(pattrib->ra, pbssid, ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, psa, ETH_ALEN);
+			memcpy(pattrib->ra, pbssid, ETH_ALEN);
+			memcpy(pattrib->ta, psa, ETH_ALEN);
 			ret = sta2ap_data_frame(adapter, precv_frame, &psta);
 			break;
 
 		case 3:
-			_rtw_memcpy(pattrib->ra, GetAddr1Ptr(ptr), ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, GetAddr2Ptr(ptr), ETH_ALEN);
+			memcpy(pattrib->ra, GetAddr1Ptr(ptr), ETH_ALEN);
+			memcpy(pattrib->ta, GetAddr2Ptr(ptr), ETH_ALEN);
 			ret =_FAIL;
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" case 3\n"));
 			break;
@@ -2099,11 +2099,11 @@ static sint validate_80211w_mgmt(_adapter *adapter, union recv_frame *precv_fram
 			pattrib->hdrlen = sizeof(struct rtw_ieee80211_hdr_3addr);
 			//set iv and icv length
 			SET_ICE_IV_LEN(pattrib->iv_len, pattrib->icv_len, pattrib->encrypt);
-			_rtw_memcpy(pattrib->ra, GetAddr1Ptr(ptr), ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, GetAddr2Ptr(ptr), ETH_ALEN);
+			memcpy(pattrib->ra, GetAddr1Ptr(ptr), ETH_ALEN);
+			memcpy(pattrib->ta, GetAddr2Ptr(ptr), ETH_ALEN);
 			//actual management data frame body
 			data_len = pattrib->pkt_len - pattrib->hdrlen - pattrib->iv_len - pattrib->icv_len;
-			mgmt_DATA = rtw_zmalloc(data_len);
+			mgmt_DATA = kzalloc(data_len, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 			if(mgmt_DATA == NULL)
 			{
 				DBG_871X("%s mgmt allocate fail  !!!!!!!!!\n", __FUNCTION__);
@@ -2120,9 +2120,9 @@ static sint validate_80211w_mgmt(_adapter *adapter, union recv_frame *precv_fram
 
 			precv_frame = decryptor(adapter, precv_frame);
 			//save actual management data frame body
-			_rtw_memcpy(mgmt_DATA, ptr+pattrib->hdrlen+pattrib->iv_len, data_len);
+			memcpy(mgmt_DATA, ptr+pattrib->hdrlen+pattrib->iv_len, data_len);
 			//overwrite the iv field
-			_rtw_memcpy(ptr+pattrib->hdrlen, mgmt_DATA, data_len);
+			memcpy(ptr+pattrib->hdrlen, mgmt_DATA, data_len);
 			//remove the iv and icv length
 			pattrib->pkt_len = pattrib->pkt_len - pattrib->iv_len - pattrib->icv_len;
 			rtw_mfree(mgmt_DATA, data_len);
@@ -2404,7 +2404,7 @@ _func_enter_;
 
 	RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("\n===pattrib->hdrlen: %x,  pattrib->iv_len:%x ===\n\n", pattrib->hdrlen,  pattrib->iv_len));
 
-	_rtw_memcpy(&eth_type, ptr+rmv_len, 2);
+	memcpy(&eth_type, ptr+rmv_len, 2);
 	eth_type= ntohs((unsigned short )eth_type); //pattrib->ether_type
 	pattrib->eth_type = eth_type;
 
@@ -2417,19 +2417,19 @@ _func_enter_;
 		eth_type = 0x8712;
 		// append rx status for mp test packets
 		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr)+2)-24);
-		_rtw_memcpy(ptr, get_rxmem(precvframe), 24);
+		memcpy(ptr, get_rxmem(precvframe), 24);
 		ptr+=24;
 	}
 	else {
 		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr)+ (bsnaphdr?2:0)));
 	}
 
-	_rtw_memcpy(ptr, pattrib->dst, ETH_ALEN);
-	_rtw_memcpy(ptr+ETH_ALEN, pattrib->src, ETH_ALEN);
+	memcpy(ptr, pattrib->dst, ETH_ALEN);
+	memcpy(ptr+ETH_ALEN, pattrib->src, ETH_ALEN);
 
 	if(!bsnaphdr) {
 		len = htons(len);
-		_rtw_memcpy(ptr+12, &len, 2);
+		memcpy(ptr+12, &len, 2);
 	}
 
 _func_exit_;
@@ -2492,7 +2492,7 @@ _func_enter_;
 
 	ptr += rmv_len ;
 
-	_rtw_memcpy(&eth_type, ptr, 2);
+	memcpy(&eth_type, ptr, 2);
 	eth_type= ntohs((unsigned short )eth_type); //pattrib->ether_type
 	ptr +=2;
 
@@ -2525,7 +2525,7 @@ _func_enter_;
 	else if(eth_type==0x8712)// append rx status for mp test packets
 	{
 		//ptr -= 16;
-		//_rtw_memcpy(ptr, get_rxmem(precvframe), 16);
+		//memcpy(ptr, get_rxmem(precvframe), 16);
 	}
 	else
 	{
@@ -2534,17 +2534,17 @@ _func_enter_;
 	if(eth_type==0x8712)// append rx status for mp test packets
 	{
 		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr)+2)-24);
-		_rtw_memcpy(ptr, get_rxmem(precvframe), 24);
+		memcpy(ptr, get_rxmem(precvframe), 24);
 		ptr+=24;
 	}
 	else
 		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr)+2));
 
-	_rtw_memcpy(ptr, pattrib->dst, ETH_ALEN);
-	_rtw_memcpy(ptr+ETH_ALEN, pattrib->src, ETH_ALEN);
+	memcpy(ptr, pattrib->dst, ETH_ALEN);
+	memcpy(ptr+ETH_ALEN, pattrib->src, ETH_ALEN);
 
 	eth_type = htons((unsigned short)eth_type) ;
-	_rtw_memcpy(ptr+12, &eth_type, 2);
+	memcpy(ptr+12, &eth_type, 2);
 
 exit:
 
@@ -2622,7 +2622,7 @@ _func_enter_;
 		recvframe_pull_tail(prframe, pfhdr->attrib.icv_len);
 
 		//memcpy
-		_rtw_memcpy(pfhdr->rx_tail, pnfhdr->rx_data, pnfhdr->len);
+		memcpy(pfhdr->rx_tail, pnfhdr->rx_data, pnfhdr->len);
 
 		recvframe_put(prframe, pnfhdr->len);
 
@@ -2829,7 +2829,7 @@ int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 		{
 			skb_reserve(sub_skb, 12);
 			data_ptr = (u8 *)skb_put(sub_skb, nSubframe_Length);
-			_rtw_memcpy(data_ptr, pdata, nSubframe_Length);
+			memcpy(data_ptr, pdata, nSubframe_Length);
 		}
 		else
 #endif // CONFIG_SKB_COPY
@@ -2888,15 +2888,15 @@ int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 			 _rtw_memcmp(sub_skb->data, rtw_bridge_tunnel_header, SNAP_SIZE) )) {
 			/* remove RFC1042 or Bridge-Tunnel encapsulation and replace EtherType */
 			skb_pull(sub_skb, SNAP_SIZE);
-			_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src, ETH_ALEN);
-			_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->dst, ETH_ALEN);
+			memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src, ETH_ALEN);
+			memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->dst, ETH_ALEN);
 		} else {
 			u16 len;
 			/* Leave Ethernet header part of hdr and full payload */
 			len = htons(sub_skb->len);
-			_rtw_memcpy(skb_push(sub_skb, 2), &len, 2);
-			_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src, ETH_ALEN);
-			_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->dst, ETH_ALEN);
+			memcpy(skb_push(sub_skb, 2), &len, 2);
+			memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src, ETH_ALEN);
+			memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->dst, ETH_ALEN);
 		}
 
 		/* Indicat the packets to upper layer */
@@ -2992,12 +2992,12 @@ exit:
 		ptr = pdata;
 
 
-		_rtw_memcpy(pnrframe->u.hdr.attrib.dst, ptr, ETH_ALEN);
+		memcpy(pnrframe->u.hdr.attrib.dst, ptr, ETH_ALEN);
 		ptr+=ETH_ALEN;
-		_rtw_memcpy(pnrframe->u.hdr.attrib.src, ptr, ETH_ALEN);
+		memcpy(pnrframe->u.hdr.attrib.src, ptr, ETH_ALEN);
 		ptr+=ETH_ALEN;
 
-		_rtw_memcpy(&type_len, ptr, 2);
+		memcpy(&type_len, ptr, 2);
 		type_len= ntohs((unsigned short )type_len);
 		ptr +=2;
 		mv_len += ETH_HLEN;
@@ -3050,7 +3050,7 @@ exit:
 		}
 
 		ptr += (bsnaphdr?SNAP_SIZE:0);
-		_rtw_memcpy(&eth_type, ptr, 2);
+		memcpy(&eth_type, ptr, 2);
 		eth_type= ntohs((unsigned short )eth_type); //pattrib->ether_type
 
 		mv_len+= 2+(bsnaphdr?SNAP_SIZE:0);
@@ -3077,11 +3077,11 @@ exit:
 
 		pbuf = recvframe_pull(pnrframe, (mv_len-sizeof(struct ethhdr)));
 
-		_rtw_memcpy(pbuf, pnrframe->u.hdr.attrib.dst, ETH_ALEN);
-		_rtw_memcpy(pbuf+ETH_ALEN, pnrframe->u.hdr.attrib.src, ETH_ALEN);
+		memcpy(pbuf, pnrframe->u.hdr.attrib.dst, ETH_ALEN);
+		memcpy(pbuf+ETH_ALEN, pnrframe->u.hdr.attrib.src, ETH_ALEN);
 
 		eth_type = htons((unsigned short)eth_type) ;
-		_rtw_memcpy(pbuf+12, &eth_type, 2);
+		memcpy(pbuf+12, &eth_type, 2);
 
 		padding_len = (4) - ((type_len + ETH_HLEN)&(4-1));
 
@@ -3109,7 +3109,7 @@ exit:
 
 			pnrframe_new->u.hdr.pkt = pskb_copy;
 
-			_rtw_memcpy(pskb_copy->data, pnrframe->u.hdr.rx_data, copy_len);
+			memcpy(pskb_copy->data, pnrframe->u.hdr.rx_data, copy_len);
 
 			pnrframe_new->u.hdr.rx_data = pnrframe->u.hdr.rx_data;
 			pnrframe_new->u.hdr.rx_tail = pnrframe->u.hdr.rx_data + copy_len;

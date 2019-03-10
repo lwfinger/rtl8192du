@@ -296,7 +296,7 @@ int rtw_android_get_p2p_dev_addr(struct net_device *net, char *command, int tota
 	int bytes_written = 0;
 
 	//We use the same address as our HW MAC address
-	_rtw_memcpy(command, net->dev_addr, ETH_ALEN);
+	memcpy(command, net->dev_addr, ETH_ALEN);
 
 	bytes_written = ETH_ALEN;
 	return bytes_written;
@@ -376,15 +376,18 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		goto exit;
 	}
 
-	command = rtw_zmalloc(priv_cmd.total_len);
-	if (!command)
-	{
+	command = kzalloc(priv_cmd.total_len, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
+	if (!command) {
 		DBG_871X("%s: failed to allocate memory\n", __FUNCTION__);
 		ret = -ENOMEM;
 		goto exit;
 	}
 
-	if (!access_ok(VERIFY_READ, priv_cmd.buf, priv_cmd.total_len)){
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 0, 0))
+	if (!access_ok(priv_cmd.buf, priv_cmd.total_len)) {
+#else
+	if (!access_ok(VERIFY_READ, priv_cmd.buf, priv_cmd.total_len)) {
+#endif
 		DBG_871X("%s: failed to access memory\n", __FUNCTION__);
 		ret = -EFAULT;
 		goto exit;

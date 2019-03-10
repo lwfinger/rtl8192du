@@ -1538,7 +1538,7 @@ unsigned int mp_ioctl_xmit_packet_hdl(struct oid_par_priv *poid_par_priv)
 			pmp_priv->tx.payload = pparm->payload_type;
 			pattrib = &pmp_priv->tx.attrib;
 			pattrib->pktlen = pparm->length;
-			_rtw_memcpy(pattrib->dst, pparm->da, ETH_ALEN);
+			memcpy(pattrib->dst, pparm->da, ETH_ALEN);
 			SetPacketTx(padapter);
 		} else
 			return NDIS_STATUS_FAILURE;
@@ -1606,10 +1606,10 @@ unsigned int mp_ioctl_xmit_packet_hdl(struct oid_par_priv *poid_par_priv)
 	*(fctrl) = 0;
 	SetFrameSubType(pframe, WIFI_DATA);
 
-	_rtw_memcpy(pwlanhdr->addr1, pethhdr->h_dest, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, pethhdr->h_source, ETH_ALEN);
+	memcpy(pwlanhdr->addr1, pethhdr->h_dest, ETH_ALEN);
+	memcpy(pwlanhdr->addr2, pethhdr->h_source, ETH_ALEN);
 
-	_rtw_memcpy(pwlanhdr->addr3, addr3, ETH_ALEN);
+	memcpy(pwlanhdr->addr3, addr3, ETH_ALEN);
 
 	pwlanhdr->seq_ctl = 0;
 	pframe += pattrib->hdrlen;
@@ -1617,7 +1617,7 @@ unsigned int mp_ioctl_xmit_packet_hdl(struct oid_par_priv *poid_par_priv)
 	llc_sz= rtw_put_snap(pframe, pattrib->ether_type);
 	pframe += llc_sz;
 
-	_rtw_memcpy(pframe, (void*)(pmp_pkt+14),  payload_len);
+	memcpy(pframe, (void*)(pmp_pkt+14),  payload_len);
 
 	pattrib->last_txcmdsz = pattrib->hdrlen + llc_sz + payload_len;
 

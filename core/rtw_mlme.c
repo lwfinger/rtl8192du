@@ -53,9 +53,6 @@ sint	_rtw_init_mlme_priv (_adapter* padapter)
 
 _func_enter_;
 
-	// We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc().
-	//_rtw_memset((u8 *)pmlmepriv, 0, sizeof(struct mlme_priv));
-
 	pmlmepriv->nic_hdl = (u8 *)padapter;
 
 	pmlmepriv->pscanned = NULL;
@@ -289,21 +286,15 @@ _func_enter_;
 
 	curr_time = rtw_get_current_time();
 
-	if ( (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)==_TRUE ) ||
-		(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)==_TRUE ) )
+	if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)==_TRUE ) ||
+	    (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)==_TRUE))
 		lifetime = 1;
 
-	if(!isfreeall)
-	{
-#ifdef PLATFORM_LINUX
-
+	if (!isfreeall) {
 		delta_time = (curr_time -pnetwork->last_scanned)/HZ;
 
 		if(delta_time < lifetime)// unit:sec
-		{
 			goto exit;
-		}
-#endif
 	}
 
 	_enter_critical_bh(&free_queue->lock, &irqL);
@@ -314,15 +305,11 @@ _func_enter_;
 
 	pmlmepriv->num_of_scanned --;
 
-
-	//DBG_871X("_rtw_free_network:SSID=%s\n", pnetwork->network.Ssid.Ssid);
-
 	_exit_critical_bh(&free_queue->lock, &irqL);
 
 exit:
 
 _func_exit_;
-
 }
 
 void _rtw_free_network_nolock(struct	mlme_priv *pmlmepriv, struct wlan_network *pnetwork)
@@ -891,17 +878,11 @@ _func_enter_;
 		feature = 1; // p2p enable
 #endif
 
-	while(1)
-	{
+	while(1) {
 		if (rtw_end_of_queue_search(phead,plist)== _TRUE)
 			break;
 
 		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
-
-		if ((unsigned long)(pnetwork) < 0x7ffffff)
-		{
-		}
-
 
 		if (is_same_network(&(pnetwork->network), target, feature)) {
 			target_find = 1;
@@ -924,7 +905,6 @@ _func_enter_;
 	 * with this beacon's information */
 	//if (rtw_end_of_queue_search(phead,plist)== _TRUE) {
 	if (!target_find) {
-
 		if (_rtw_queue_empty(&(pmlmepriv->free_bss_pool)) == _TRUE) {
 			/* If there are no more slots, expire the oldest */
 			//list_del_init(&oldest->list);
@@ -1153,12 +1133,9 @@ _func_enter_;
 	}
 
 	// lock pmlmepriv->lock when you accessing network_q
-	if ((check_fwstate(pmlmepriv, _FW_UNDER_LINKING)) == _FALSE)
-	{
+	if ((check_fwstate(pmlmepriv, _FW_UNDER_LINKING)) == _FALSE) {
 	        if( pnetwork->Ssid.Ssid[0] == 0 )
-		{
 			pnetwork->Ssid.SsidLength = 0;
-		}
 		rtw_add_network(adapter, pnetwork);
 	}
 

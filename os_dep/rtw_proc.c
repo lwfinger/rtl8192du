@@ -63,12 +63,19 @@ inline struct proc_dir_entry *rtw_proc_create_dir(const char *name, struct proc_
 	return entry;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+inline struct proc_dir_entry *rtw_proc_create_entry(const char *name, struct proc_dir_entry *parent,
+	const struct proc_ops *pops, void * data)
+#else
 inline struct proc_dir_entry *rtw_proc_create_entry(const char *name, struct proc_dir_entry *parent,
 	const struct file_operations *fops, void * data)
+#endif
 {
 	struct proc_dir_entry *entry;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+	entry = proc_create_data(name,  S_IFREG|S_IRUGO, parent, pops, data);
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
 	entry = proc_create_data(name,  S_IFREG|S_IRUGO, parent, fops, data);
 #else
 	entry = create_proc_entry(name, S_IFREG|S_IRUGO, parent);
@@ -165,6 +172,15 @@ static ssize_t rtw_drv_proc_write(struct file *file, const char __user *buffer, 
 	return -EROFS;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+static const struct proc_ops rtw_drv_proc_ops = {
+	.proc_open = rtw_drv_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_drv_proc_write,
+};
+#else
 static const struct file_operations rtw_drv_proc_fops = {
 	.owner = THIS_MODULE,
 	.open = rtw_drv_proc_open,
@@ -173,6 +189,7 @@ static const struct file_operations rtw_drv_proc_fops = {
 	.release = single_release,
 	.write = rtw_drv_proc_write,
 };
+#endif
 
 int rtw_drv_proc_init(void)
 {
@@ -193,7 +210,11 @@ int rtw_drv_proc_init(void)
 	}
 
 	for (i=0;i<drv_proc_hdls_num;i++) {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+		entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_ops, (void *)i);
+#else
 		entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_fops, (void *)i);
+#endif
 		if (!entry) {
 			rtw_warn_on(1);
 			goto exit;
@@ -475,6 +496,15 @@ static ssize_t rtw_adapter_proc_write(struct file *file, const char __user *buff
 	return -EROFS;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+static const struct proc_ops rtw_adapter_proc_ops = {
+	.proc_open = rtw_adapter_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_adapter_proc_write,
+};
+#else
 static const struct file_operations rtw_adapter_proc_fops = {
 	.owner = THIS_MODULE,
 	.open = rtw_adapter_proc_open,
@@ -483,6 +513,7 @@ static const struct file_operations rtw_adapter_proc_fops = {
 	.release = single_release,
 	.write = rtw_adapter_proc_write,
 };
+#endif
 
 int proc_get_dm_ability(struct seq_file *m, void *v)
 {
@@ -662,6 +693,15 @@ static ssize_t rtw_dm_proc_write(struct file *file, const char __user *buffer, s
 	return -EROFS;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+static const struct proc_ops rtw_dm_proc_ops = {
+	.proc_open = rtw_dm_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_dm_proc_write,
+};
+#else
 static const struct file_operations rtw_dm_proc_fops = {
 	.owner = THIS_MODULE,
 	.open = rtw_dm_proc_open,
@@ -670,6 +710,7 @@ static const struct file_operations rtw_dm_proc_fops = {
 	.release = single_release,
 	.write = rtw_dm_proc_write,
 };
+#endif
 
 struct proc_dir_entry *rtw_dm_proc_init(struct net_device *dev)
 {
@@ -697,7 +738,11 @@ struct proc_dir_entry *rtw_dm_proc_init(struct net_device *dev)
 	adapter->dir_dm = dir_dm;
 
 	for (i=0;i<dm_proc_hdls_num;i++) {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+		entry = rtw_proc_create_entry(dm_proc_hdls[i].name, dir_dm, &rtw_dm_proc_ops, (void *)i);
+#else
 		entry = rtw_proc_create_entry(dm_proc_hdls[i].name, dir_dm, &rtw_dm_proc_fops, (void *)i);
+#endif
 		if (!entry) {
 			rtw_warn_on(1);
 			goto exit;
@@ -756,7 +801,11 @@ struct proc_dir_entry *rtw_adapter_proc_init(struct net_device *dev)
 	adapter->dir_dev = dir_dev;
 
 	for (i=0;i<adapter_proc_hdls_num;i++) {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+		entry = rtw_proc_create_entry(adapter_proc_hdls[i].name, dir_dev, &rtw_adapter_proc_ops, (void *)i);
+#else
 		entry = rtw_proc_create_entry(adapter_proc_hdls[i].name, dir_dev, &rtw_adapter_proc_fops, (void *)i);
+#endif
 		if (!entry) {
 			rtw_warn_on(1);
 			goto exit;

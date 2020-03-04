@@ -1338,6 +1338,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 			case -ESHUTDOWN:
 				//padapter->bSurpriseRemoved=_TRUE;
 				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bSurpriseRemoved=TRUE\n"));
+				__attribute__((__fallthrough__));
 			case -ENOENT:
 				padapter->bDriverStopped=_TRUE;
 				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped=TRUE\n"));

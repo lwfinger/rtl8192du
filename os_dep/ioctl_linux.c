@@ -7473,20 +7473,19 @@ static int set_group_key(_adapter *padapter, u8 *key, u8 alg, int keyid)
 
 	psetkeyparm->set_tx = 1;
 
-	switch(alg)
-	{
-		case _WEP40_:
-			keylen = 5;
-			break;
-		case _WEP104_:
-			keylen = 13;
-			break;
-		case _TKIP_:
-		case _TKIP_WTMIC_:
-		case _AES_:
-			keylen = 16;
-		default:
-			keylen = 16;
+	switch(alg) {
+	case _WEP40_:
+		keylen = 5;
+		break;
+	case _WEP104_:
+		keylen = 13;
+		break;
+	case _TKIP_:
+	case _TKIP_WTMIC_:
+	case _AES_:
+	default:
+		keylen = 16;
+		break;
 	}
 
 	memcpy(&(psetkeyparm->key[0]), key, keylen);

@@ -268,7 +268,9 @@ _func_enter_;
 
 	skb->len = precv_frame->u.hdr.len;
 
-	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("\n skb->head=%p skb->data=%p skb->tail=%p skb->end=%p skb->len=%d\n", skb->head, skb->data, skb->tail, skb->end, skb->len));
+	RT_TRACE(_module_recv_osdep_c_,_drv_info_,
+		 ("\n skb->head=%p skb->data=%p skb->tail=0x%x skb->end=0x%x skb->len=%d\n",
+		  skb->head, skb->data, skb->tail, skb->end, skb->len));
 
 	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
 	{

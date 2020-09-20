@@ -11,5 +11,5 @@ Install Instructions:
     cd rtl8192du
     make
     sudo make install
-    sudo modprobe rtl8192du
+    sudo modprobe 8192du
     

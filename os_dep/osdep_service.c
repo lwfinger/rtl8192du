@@ -1023,6 +1023,7 @@ static int isFileReadable(char *path)
 		ret = PTR_ERR(fp);
 	}
 	else {
+
 #if defined(get_fs)
 		oldfs = get_fs(); set_fs(KERNEL_DS);
 #endif

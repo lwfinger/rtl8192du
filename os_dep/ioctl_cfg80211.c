@@ -1658,7 +1658,7 @@ exit:
 
 extern int netdev_open(struct net_device *pnetdev);
 #ifdef CONFIG_CONCURRENT_MODE
-extern int netdev_if2_open(struct net_device *pnetdev);
+extern int _netdev_if2_open(struct net_device *pnetdev);
 #endif
 
 /*
@@ -1710,7 +1710,7 @@ static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
 	if(padapter->adapter_type == SECONDARY_ADAPTER)
 	{
 		DBG_8192C(FUNC_NDEV_FMT" call netdev_if2_open\n", FUNC_NDEV_ARG(ndev));
-		if(netdev_if2_open(ndev) != 0) {
+		if(_netdev_if2_open(ndev) != 0) {
 			ret= -EPERM;
 			goto exit;
 		}

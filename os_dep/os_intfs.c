@@ -1663,17 +1663,6 @@ netdev_if2_open_error:
 
 }
 
-int netdev_if2_open(struct net_device *pnetdev)
-{
-	int ret;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
-
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
-	ret = _netdev_if2_open(pnetdev);
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
-	return ret;
-}
-
 static int netdev_if2_close(struct net_device *pnetdev)
 {
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
@@ -1702,7 +1691,7 @@ static int netdev_if2_close(struct net_device *pnetdev)
 static const struct net_device_ops rtw_netdev_if2_ops = {
 	.ndo_init = rtw_ndev_init,
 	.ndo_uninit = rtw_ndev_uninit,
-	.ndo_open = netdev_if2_open,
+	.ndo_open = _netdev_if2_open,
 	.ndo_stop = netdev_if2_close,
 	.ndo_start_xmit = rtw_xmit_entry,
 	.ndo_set_mac_address = rtw_net_set_mac_address,
@@ -1733,7 +1722,7 @@ _adapter *rtw_drv_if2_init(_adapter *primary_padapter, void (*set_intf_ops)(stru
 #else
 	pnetdev->init = rtw_ndev_init;
 	pnetdev->uninit = rtw_ndev_uninit;
-	pnetdev->open = netdev_if2_open;
+	pnetdev->open = _netdev_if2_open;
 	pnetdev->stop = netdev_if2_close;
 #endif
 
@@ -2125,9 +2114,7 @@ int netdev_open(struct net_device *pnetdev)
 	int ret;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
 
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
 	ret = _netdev_open(pnetdev);
-	_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
 
 	return ret;
 }

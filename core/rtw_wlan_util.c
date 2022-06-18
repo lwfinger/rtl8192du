@@ -607,7 +607,7 @@ void set_channel_bwmode(_adapter *padapter, unsigned char channel, unsigned char
 	dc_SelectChannel(padapter, center_ch);// set center channel
 #else //CONFIG_DUALMAC_CONCURRENT
 
-	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->setch_mutex), NULL);
+//	_enter_critical_mutex(&(adapter_to_dvobj(padapter)->setch_mutex), NULL);
 
 	//saved channel/bw info
 	rtw_set_oper_ch(padapter, channel);
@@ -616,7 +616,7 @@ void set_channel_bwmode(_adapter *padapter, unsigned char channel, unsigned char
 
 	rtw_hal_set_chan(padapter, center_ch);
 
-        _exit_critical_mutex(&(adapter_to_dvobj(padapter)->setch_mutex), NULL);
+//        _exit_critical_mutex(&(adapter_to_dvobj(padapter)->setch_mutex), NULL);
 
 #endif // CONFIG_DUALMAC_CONCURRENT
 

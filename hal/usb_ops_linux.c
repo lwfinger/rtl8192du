@@ -71,11 +71,6 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 		goto exit;
 	}
 
-	#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
-	_enter_critical_mutex(&pdvobjpriv->usb_vendor_req_mutex, NULL);
-	#endif
-
-
 	// Acquire IO memory for vendorreq
 #ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
 	pIo_buf = pdvobjpriv->usb_vendor_req_buf;
@@ -178,9 +173,6 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	#endif
 
 release_mutex:
-	#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
-	_exit_critical_mutex(&pdvobjpriv->usb_vendor_req_mutex, NULL);
-	#endif
 exit:
 	return status;
 

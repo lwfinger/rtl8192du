@@ -2830,7 +2830,7 @@ static int rtw_check_join_candidate(struct mlme_priv *mlme
 	}
 
 	//check ssid, if needed
-	if(mlme->assoc_ssid.Ssid && mlme->assoc_ssid.SsidLength) {
+	if (mlme->assoc_ssid.SsidLength) {
 		if( competitor->network.Ssid.SsidLength != mlme->assoc_ssid.SsidLength
 			|| _rtw_memcmp(competitor->network.Ssid.Ssid, mlme->assoc_ssid.Ssid, mlme->assoc_ssid.SsidLength) == _FALSE
 		)

@@ -5448,7 +5448,8 @@ void rtw_cfg80211_init_wiphy(_adapter *padapter)
 	}
 
 	/* init regulary domain */
-	rtw_regd_init(padapter, rtw_reg_notifier);
+	queue_work(padapter->regd_wq, padapter->regd_work);
+//	rtw_regd_init(padapter, rtw_reg_notifier);
 }
 
 /*

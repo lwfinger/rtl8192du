@@ -32,6 +32,7 @@
 #include <wlan_bssdef.h>
 
 #include <drv_types_linux.h>
+#include <linux/workqueue.h>
 
 enum _NIC_VERSION {
 
@@ -388,6 +389,8 @@ typedef struct loopbackdata
 #endif
 
 struct _ADAPTER{
+	struct workqueue_struct *regd_wq;
+	struct work_struct *regd_work;
 	int	DriverState;// for disable driver using module, use dongle to replace module.
 	int	pid[3];//process id from UI, 0:wps, 1:hostapd, 2:dhcpcd
 	int	bDongle;//build-in module or external dongle

@@ -28,6 +28,7 @@
 #include <hal_intf.h>
 #include <rtw_ioctl.h>
 #include <rtw_version.h>
+#include <rtw_wifi_regd.h>
 
 #include <usb_osintf.h>
 
@@ -963,7 +964,14 @@ u8 rtw_reset_drv_sw(_adapter *padapter)
 }
 
 
-u8 rtw_init_drv_sw(_adapter *padapter)
+static void regd_init_work(struct work_struct *w)
+{
+        struct _ADAPTER *padapter = container_of((void *)w, struct _ADAPTER, regd_work);
+
+	rtw_regd_init(padapter, rtw_reg_notifier);
+}
+
+u8 rtw_init_drv_sw(struct _ADAPTER *padapter)
 {
 
 	u8	ret8=_SUCCESS;
@@ -1057,6 +1065,8 @@ _func_enter_;
 	padapter->setband = GHZ24_50;
 	padapter->fix_rate = 0xFF;
 	rtw_init_bcmc_stainfo(padapter);
+	INIT_WORK(padapter->regd_work, regd_init_work);;
+	padapter->regd_wq = alloc_workqueue("8192du-regd", WQ_UNBOUND | WQ_HIGHPRI, 0);
 
 	rtw_init_pwrctrl_priv(padapter);
 
@@ -1228,6 +1238,7 @@ u8 rtw_free_drv_sw(_adapter *padapter)
 	}
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("-rtw_free_drv_sw\n"));
+	destroy_workqueue(padapter->regd_wq);
 
 	return _SUCCESS;
 

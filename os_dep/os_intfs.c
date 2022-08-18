@@ -711,7 +711,9 @@ void rtw_unregister_netdevs(struct dvobj_priv *dvobj)
 		if (padapter->DriverState != DRIVER_DISAPPEAR) {
 #ifdef CONFIG_IOCTL_CFG80211
 			struct wireless_dev *wdev = padapter->rtw_wdev;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,19, 2))
+			wdev->connected = NULL;
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))
 			wdev->links[0].client.current_bss = NULL;
 #else
 			wdev->current_bss = NULL;
@@ -2288,7 +2290,9 @@ static int netdev_close(struct net_device *pnetdev)
 
 #ifdef CONFIG_IOCTL_CFG80211
 	wdev->iftype = NL80211_IFTYPE_STATION;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,19, 2))
+	wdev->connected = NULL;
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))
 	wdev->links[0].client.current_bss = NULL;
 #else
 	wdev->current_bss = NULL;

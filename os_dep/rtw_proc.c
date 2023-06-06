@@ -63,21 +63,27 @@ inline struct proc_dir_entry *rtw_proc_create_dir(const char *name, struct proc_
 	return entry;
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
+inline struct proc_dir_entry *rtw_proc_create_entry(const char *name, struct proc_dir_entry *parent,
+	const struct proc_ops *props, void * data)
+#else
 inline struct proc_dir_entry *rtw_proc_create_entry(const char *name, struct proc_dir_entry *parent,
 	const struct file_operations *fops, void * data)
+#endif
 {
 	struct proc_dir_entry *entry;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
-	entry = proc_create_data(name,  S_IFREG|S_IRUGO, parent, fops, data);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
+	entry = proc_create_data(name,  S_IFREG | S_IRUGO | S_IWUGO, parent, props, data);
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 26))
+	entry = proc_create_data(name,  S_IFREG | S_IRUGO | S_IWUGO, parent, fops, data);
 #else
-	entry = create_proc_entry(name, S_IFREG|S_IRUGO, parent);
+	entry = create_proc_entry(name, S_IFREG | S_IRUGO | S_IWUGO, parent);
 	if (entry) {
 		entry->data = data;
 		entry->proc_fops = fops;
 	}
 #endif
-
 	return entry;
 }
 
@@ -136,11 +142,15 @@ static int proc_get_mstat(struct seq_file *m, void *v)
 * init/deinit when register/unregister driver
 */
 const struct rtw_proc_hdl drv_proc_hdls [] = {
-	{"ver_info", proc_get_drv_version, NULL},
-	{"log_level", proc_get_log_level, proc_set_log_level},
+	RTW_PROC_HDL_SSEQ("ver_info", proc_get_drv_version, NULL),
+	RTW_PROC_HDL_SSEQ("log_level", proc_get_log_level, proc_set_log_level),
+	RTW_PROC_HDL_SSEQ("drv_cfg", proc_get_drv_cfg, NULL),
 #ifdef DBG_MEM_ALLOC
-	{"mstat", proc_get_mstat, NULL},
+	RTW_PROC_HDL_SSEQ("mstat", proc_get_mstat, NULL),
 #endif /* DBG_MEM_ALLOC */
+	RTW_PROC_HDL_SSEQ("country_chplan_map", proc_get_country_chplan_map, NULL),
+	RTW_PROC_HDL_SSEQ("chplan_id_list", proc_get_chplan_id_list, NULL),
+	RTW_PROC_HDL_SSEQ("chplan_test", proc_get_chplan_test, NULL),
 };
 
 const int drv_proc_hdls_num = sizeof(drv_proc_hdls) / sizeof(struct rtw_proc_hdl);
@@ -165,7 +175,35 @@ static ssize_t rtw_drv_proc_write(struct file *file, const char __user *buffer, 
 	return -EROFS;
 }
 
-static const struct file_operations rtw_drv_proc_fops = {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+static const struct proc_ops rtw_drv_proc_ops = {
+	.proc_open = rtw_drv_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_drv_proc_write,
+};
+#else
+static const struct file_operations rtw_drv_proc_seq_fops = {
+	.owner = THIS_MODULE,
+	.open = rtw_drv_proc_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = seq_release,
+	.write = rtw_drv_proc_write,
+};
+#endif
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+static const struct proc_ops rtw_drv_proc_sseq_proc_ops = {
+	.proc_open = rtw_drv_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_drv_proc_write,
+};
+#else
+static const struct file_operations rtw_drv_proc_sseq_fops = {
 	.owner = THIS_MODULE,
 	.open = rtw_drv_proc_open,
 	.read = seq_read,
@@ -173,6 +211,7 @@ static const struct file_operations rtw_drv_proc_fops = {
 	.release = single_release,
 	.write = rtw_drv_proc_write,
 };
+#endif
 
 int rtw_drv_proc_init(void)
 {
@@ -193,7 +232,21 @@ int rtw_drv_proc_init(void)
 	}
 
 	for (i=0;i<drv_proc_hdls_num;i++) {
-		entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_fops, (void *)i);
+		if (drv_proc_hdls[i].type == RTW_PROC_HDL_TYPE_SEQ)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+			entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_ops, (void *)i);
+#else
+			entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_seq_fops, (void *)i);
+#endif
+		else if (drv_proc_hdls[i].type == RTW_PROC_HDL_TYPE_SSEQ)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+			entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_sseq_proc_ops, (void *)i);
+#else
+			entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_sseq_fops, (void *)i);
+#endif
+		else
+			entry = NULL;
+
 		if (!entry) {
 			rtw_warn_on(1);
 			goto exit;

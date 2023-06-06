@@ -95,6 +95,7 @@ struct rtw_wdev_priv
 	struct net_device *pmon_ndev;//for monitor interface
 	char ifname_mon[IFNAMSIZ + 1]; //interface name for monitor interface
 
+	u32 mgmt_regs;
 	u8 p2p_enabled;
 
 	u8 provdisc_req_issued;

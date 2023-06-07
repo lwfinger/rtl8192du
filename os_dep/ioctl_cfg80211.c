@@ -5459,9 +5459,6 @@ void rtw_cfg80211_init_wiphy(_adapter *padapter)
 		if(bands)
 			rtw_cfg80211_init_ht_capab(&bands->ht_cap, IEEE80211_BAND_5GHZ, rf_type);
 	}
-
-	/* init regulary domain */
-	rtw_regd_init(padapter, rtw_reg_notifier);
 }
 
 /*
@@ -5648,9 +5645,12 @@ int rtw_wdev_alloc(_adapter *padapter, struct device *dev)
 	ATOMIC_SET(&pwdev_priv->ro_ch_to, 1);
 #endif
 
+	/* init regulary domain */
+	rtw_regd_init(padapter, rtw_reg_notifier);
+
+//	rtw_mfree((u8*)wdev, sizeof(struct wireless_dev));
 	return ret;
 
-	rtw_mfree((u8*)wdev, sizeof(struct wireless_dev));
 unregister_wiphy:
 	wiphy_unregister(wiphy);
  free_wiphy:

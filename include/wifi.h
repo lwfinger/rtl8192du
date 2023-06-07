@@ -1175,5 +1175,14 @@ struct rtw_regulatory {
 	struct regd_pair_mapping *regpair;
 };
 #endif
+#if defined(CONFIG_SUSE_VERSION)
+#if CONFIG_SUSE_PATCHLEVEL && CONFIG_SUSE_VERSION == 15 && CONFIG_SUSE_PATCHLEVEL == 3
+#define SUSE 1
+#else
+#define SUSE 0
+#endif
+#else
+#define SUSE 0
+#endif
 
 #endif // _WIFI_H_

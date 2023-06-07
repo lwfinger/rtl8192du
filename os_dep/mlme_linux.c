@@ -617,11 +617,11 @@ int hostapd_mode_init(_adapter *padapter)
 	mac[4]=0x11;
 	mac[5]=0x12;
 
-	if (is_zero_ether_addr(mac)) {
-		pr_info("Ethernet address is zero in %s\n", __func__);
-		return -EINVAL;
-	}
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0)) || (SUSE == 1)
+	dev_addr_set(pnetdev, mac);
+#else
 	memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
+#endif
 
 
 	netif_carrier_off(pnetdev);

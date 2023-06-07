@@ -104,6 +104,12 @@ static int proc_get_log_level(struct seq_file *m, void *v)
 	return 0;
 }
 
+static int proc_get_drv_cfg(struct seq_file *m, void *v)
+{
+	dump_drv_cfg(m);
+	return 0;
+}
+
 static ssize_t proc_set_log_level(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
 	char tmp[32];
@@ -136,6 +142,23 @@ static int proc_get_mstat(struct seq_file *m, void *v)
 }
 #endif /* DBG_MEM_ALLOC */
 
+static int proc_get_country_chplan_map(struct seq_file *m, void *v)
+{
+	dump_country_chplan_map(m);
+	return 0;
+}
+
+static int proc_get_chplan_id_list(struct seq_file *m, void *v)
+{
+	dump_chplan_id_list(m);
+	return 0;
+}
+
+static int proc_get_chplan_test(struct seq_file *m, void *v)
+{
+	dump_chplan_test(m);
+	return 0;
+}
 
 /*
 * rtw_drv_proc:

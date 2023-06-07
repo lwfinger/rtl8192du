@@ -23,6 +23,9 @@
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
 
+#define RTW_PROC_HDL_TYPE_SEQ	0
+#define RTW_PROC_HDL_TYPE_SSEQ	1
+
 struct rtw_proc_hdl {
 	char *name;
 	u8 type;

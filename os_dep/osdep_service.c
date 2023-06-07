@@ -1267,6 +1267,10 @@ int rtw_change_ifname(_adapter *padapter, const char *ifname)
 
 	rtw_init_netdev_name(pnetdev, ifname);
 
+	if (is_zero_ether_addr(padapter->eeprompriv.mac_addr)) {
+		pr_info("Ethernet address is zero in %s\n", __func__);
+		return -EINVAL;
+	}
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5, 17, 0)
 	memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 #else

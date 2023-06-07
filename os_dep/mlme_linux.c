@@ -617,6 +617,10 @@ int hostapd_mode_init(_adapter *padapter)
 	mac[4]=0x11;
 	mac[5]=0x12;
 
+	if (is_zero_ether_addr(mac)) {
+		pr_info("Ethernet address is zero in %s\n", __func__);
+		return -EINVAL;
+	}
 	memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
 
 

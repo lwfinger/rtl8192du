@@ -2438,6 +2438,10 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 
 				rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_DEVICE_INFO , pattr_content, (uint*)&attr_contentlen);
 
+				if (is_zero_ether_addr(pattr_content)) {
+					pr_info("Ethernet address is zero in %s\n", __func__);
+					return -EINVAL;
+				}
 				memcpy(psta->dev_addr,	pattr_content, ETH_ALEN);//P2P Device Address
 
 				pattr_content += ETH_ALEN;

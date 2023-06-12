@@ -617,7 +617,7 @@ int hostapd_mode_init(_adapter *padapter)
 	mac[4]=0x11;
 	mac[5]=0x12;
 
-	memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
+	dev_addr_set(pnetdev, mac);
 
 
 	netif_carrier_off(pnetdev);

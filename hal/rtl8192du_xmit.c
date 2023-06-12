@@ -32,11 +32,9 @@ s32	rtl8192du_init_xmit_priv(_adapter *padapter)
 {
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 
-#ifdef PLATFORM_LINUX
 	tasklet_init(&pxmitpriv->xmit_tasklet,
-	     (void(*)(unsigned long))rtl8192du_xmit_tasklet,
+	     (void(*))rtl8192du_xmit_tasklet,
 	     (unsigned long)padapter);
-#endif
 
 	return _SUCCESS;
 }
@@ -45,7 +43,6 @@ void	rtl8192du_free_xmit_priv(_adapter *padapter)
 {
 }
 
-u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe);
 u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe)
 {
 	u32 addr;
@@ -88,7 +85,6 @@ u32 rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe)
 
 }
 
-int urb_zero_packet_chk(_adapter *padapter, int sz);
 int urb_zero_packet_chk(_adapter *padapter, int sz)
 {
 	int blnSetTxDescOffset;
@@ -133,7 +129,6 @@ void rtl8192du_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 
 }
 
-void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc);
 void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
 {
 	if ((pattrib->encrypt > 0) && !pattrib->bswenc)

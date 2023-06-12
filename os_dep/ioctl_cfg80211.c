@@ -826,7 +826,6 @@ static int set_group_key(_adapter *padapter, u8 *key, u8 alg, int keyid)
 		case _TKIP_:
 		case _TKIP_WTMIC_:
 		case _AES_:
-			keylen = 16;
 		default:
 			keylen = 16;
 	}
@@ -2120,21 +2119,15 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	#ifdef CONFIG_P2P
 	if( pwdinfo->driver_interface == DRIVER_CFG80211 )
 	{
-		if(ssids->ssid != NULL
-			&& _rtw_memcmp(ssids->ssid, "DIRECT-", 7)
-			&& rtw_get_p2p_ie((u8 *)request->ie, request->ie_len, NULL, NULL)
-		)
-		{
-			if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-			{
+		if(_rtw_memcmp(ssids->ssid, "DIRECT-", 7) &&
+		   rtw_get_p2p_ie((u8 *)request->ie, request->ie_len, NULL, NULL)) {
+			if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)) {
 				u32 initialgain = 0x30;
 				rtw_p2p_enable(padapter, P2P_ROLE_DEVICE);
 				adapter_wdev_data(padapter)->p2p_enabled = _TRUE;
 				padapter->HalFunc.SetHwRegHandler(padapter, HW_VAR_INITIAL_GAIN, (u8 *)&(initialgain));
 				padapter->HalFunc.SetHwRegHandler(padapter, HW_VAR_INITIAL_GAIN, (u8 *)&(initialgain));
-			}
-			else
-			{
+			} else {
 				rtw_p2p_set_pre_state(pwdinfo, rtw_p2p_state(pwdinfo));
 				#ifdef CONFIG_DEBUG_CFG80211
 				DBG_8192C("%s, role=%d, p2p_state=%d\n", __func__, rtw_p2p_role(pwdinfo), rtw_p2p_state(pwdinfo));
@@ -2143,11 +2136,9 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 			rtw_p2p_set_state(pwdinfo, P2P_STATE_LISTEN);
 
 			if(request->n_channels == 3 &&
-				request->channels[0]->hw_value == 1 &&
-				request->channels[1]->hw_value == 6 &&
-				request->channels[2]->hw_value == 11
-			)
-			{
+			   request->channels[0]->hw_value == 1 &&
+			   request->channels[1]->hw_value == 6 &&
+			   request->channels[2]->hw_value == 11) {
 				social_channel = 1;
 			}
 		}

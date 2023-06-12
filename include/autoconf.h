@@ -263,9 +263,9 @@
 
 #define DBG 0
 
-#define CONFIG_DEBUG
+//#define CONFIG_DEBUG
 
-#define CONFIG_PROC_DEBUG 1
+//#define CONFIG_PROC_DEBUG 1
 
 //#define DBG_HAL_INIT_PROFILING
 

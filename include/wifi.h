@@ -21,6 +21,8 @@
 #define _WIFI_H_
 
 #include <rtw_byteorder.h>
+#include <linux/netdevice.h>
+#include <linux/netdevice.h>
 
 #ifdef BIT
 //#error	"BIT define occurred earlier elsewhere!\n"
@@ -1185,6 +1187,17 @@ struct rtw_regulatory {
 	int16_t power_limit;
 	struct regd_pair_mapping *regpair;
 };
+#endif
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
+static inline void dev_addr_set(struct net_device *dev, const u8 *addr)
+{
+	memcpy(dev->dev_addr, addr, ETH_ALEN);
+}
+#endif
+
+#if !defined(fallthrough)
+#define fallthroufg do {} while(0)
 #endif
 
 #endif // _WIFI_H_

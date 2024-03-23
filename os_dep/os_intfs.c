@@ -35,6 +35,10 @@
 #include <rtw_br_ext.h>
 #endif //CONFIG_BR_EXT
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 8, 0))
+#define strlcpy strscpy
+#endif
+
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
 MODULE_AUTHOR("Realtek Semiconductor Corp.");

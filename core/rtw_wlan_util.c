@@ -918,7 +918,7 @@ exit:
 	return (s16)camid;
 }
 
-bool _rtw_camid_is_gk(_adapter *adapter, u8 cam_id)
+static bool _rtw_camid_is_gk(_adapter *adapter, u8 cam_id)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
@@ -936,7 +936,7 @@ exit:
 	return ret;
 }
 
-bool rtw_camid_is_gk(_adapter *adapter, u8 cam_id)
+static bool rtw_camid_is_gk(_adapter *adapter, u8 cam_id)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
@@ -950,7 +950,7 @@ bool rtw_camid_is_gk(_adapter *adapter, u8 cam_id)
 	return ret;
 }
 
-s16 _rtw_camid_search(_adapter *adapter, u8 *addr, s16 kid)
+static s16 _rtw_camid_search(_adapter *adapter, u8 *addr, s16 kid)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
@@ -2289,7 +2289,7 @@ void update_wireless_mode(_adapter *padapter)
 	}
 }
 
-void fire_write_MAC_cmd(_adapter *padapter, unsigned int addr, unsigned int value)
+static void fire_write_MAC_cmd(_adapter *padapter, unsigned int addr, unsigned int value)
 {
 }
 

@@ -107,7 +107,7 @@ int rtw_hw_suspend(_adapter *padapter );
 int rtw_hw_resume(_adapter *padapter);
 #endif
 
-bool rtw_pwr_unassociated_idle(_adapter *adapter)
+static bool rtw_pwr_unassociated_idle(_adapter *adapter)
 {
 	_adapter *buddy = adapter->pbuddy_adapter;
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
@@ -291,9 +291,9 @@ exit:
 }
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
-void pwr_state_check_handler(void *FunctionContext)
+static void pwr_state_check_handler(void *FunctionContext)
 #else
-void pwr_state_check_handler(struct timer_list *t)
+static void pwr_state_check_handler(struct timer_list *t)
 #endif
 {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)

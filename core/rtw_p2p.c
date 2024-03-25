@@ -25,7 +25,7 @@
 
 #ifdef CONFIG_P2P
 
-int rtw_p2p_is_channel_list_ok( u8 desired_ch, u8* ch_list, u8 ch_cnt )
+static int rtw_p2p_is_channel_list_ok( u8 desired_ch, u8* ch_list, u8 ch_cnt )
 {
 	int found = 0, i = 0;
 
@@ -40,7 +40,7 @@ int rtw_p2p_is_channel_list_ok( u8 desired_ch, u8* ch_list, u8 ch_cnt )
 	return( found );
 }
 
-int is_any_client_associated(_adapter *padapter)
+static int is_any_client_associated(_adapter *padapter)
 {
 	return padapter->stapriv.asoc_list_cnt ? _TRUE : _FALSE;
 }
@@ -2643,7 +2643,7 @@ u8 process_p2p_provdisc_resp(struct wifidirect_info *pwdinfo,  u8 *pframe)
 	return _TRUE;
 }
 
-u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_content, u8 ch_cnt, u8 *peer_ch_list)
+static u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_content, u8 ch_cnt, u8 *peer_ch_list)
 {
 	u8 i = 0, j = 0;
 	u8 temp = 0;
@@ -2668,7 +2668,7 @@ u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_content, u8 
 	return ch_no;
 }
 
-u8 rtw_p2p_check_peer_oper_ch(struct mlme_ext_priv *pmlmeext, u8 ch)
+static u8 rtw_p2p_check_peer_oper_ch(struct mlme_ext_priv *pmlmeext, u8 ch)
 {
 	u8 i = 0;
 
@@ -2683,7 +2683,7 @@ u8 rtw_p2p_check_peer_oper_ch(struct mlme_ext_priv *pmlmeext, u8 ch)
 	return _FAIL;
 }
 
-u8 rtw_p2p_ch_inclusion(struct mlme_ext_priv *pmlmeext, u8 *peer_ch_list, u8 peer_ch_num, u8 *ch_list_inclusioned)
+static u8 rtw_p2p_ch_inclusion(struct mlme_ext_priv *pmlmeext, u8 *peer_ch_list, u8 peer_ch_num, u8 *ch_list_inclusioned)
 {
 	int	i = 0, j = 0, temp = 0;
 	u8 ch_no = 0;
@@ -3316,7 +3316,7 @@ u8 process_p2p_presence_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 	return _TRUE;
 }
 
-void find_phase_handler( _adapter*	padapter )
+static void find_phase_handler( _adapter*	padapter )
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -3342,7 +3342,7 @@ _func_exit_;
 
 void p2p_concurrent_handler(  _adapter* padapter );
 
-void restore_p2p_state_handler( _adapter*	padapter )
+static void restore_p2p_state_handler( _adapter*	padapter )
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -3385,7 +3385,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void pre_tx_invitereq_handler( _adapter*	padapter )
+static void pre_tx_invitereq_handler( _adapter*	padapter )
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	u8	val8 = 1;
@@ -3399,7 +3399,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void pre_tx_provdisc_handler( _adapter*	padapter )
+static void pre_tx_provdisc_handler( _adapter*	padapter )
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	u8	val8 = 1;
@@ -3413,7 +3413,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void pre_tx_negoreq_handler( _adapter*	padapter )
+static void pre_tx_negoreq_handler( _adapter*	padapter )
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	u8	val8 = 1;
@@ -3960,7 +3960,7 @@ void rtw_append_wfd_ie(_adapter *padapter, u8 *buf, u32* len)
 }
 #endif
 
-u8 *dump_p2p_attr_ch_list(u8 *p2p_ie, uint p2p_ielen, u8 *buf, u32 buf_len)
+static u8 *dump_p2p_attr_ch_list(u8 *p2p_ie, uint p2p_ielen, u8 *buf, u32 buf_len)
 {
 	uint attr_contentlen = 0;
 	u8 *pattr = NULL;
@@ -4013,7 +4013,7 @@ u8 *dump_p2p_attr_ch_list(u8 *p2p_ie, uint p2p_ielen, u8 *buf, u32 buf_len)
 /*
  * return _TRUE if requester is GO, _FALSE if responder is GO
  */
-bool rtw_p2p_nego_intent_compare(u8 req, u8 resp)
+static bool rtw_p2p_nego_intent_compare(u8 req, u8 resp)
 {
 	if (req>>1 == resp >>1)
 		return  req&0x01 ? _TRUE : _FALSE;

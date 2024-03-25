@@ -1405,7 +1405,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void rtw_reset_rx_info(struct debug_priv *pdbgpriv){
+static void rtw_reset_rx_info(struct debug_priv *pdbgpriv){
 	pdbgpriv->dbg_rx_ampdu_drop_count = 0;
 	pdbgpriv->dbg_rx_ampdu_forced_indicate_count = 0;
 	pdbgpriv->dbg_rx_ampdu_loss_count = 0;

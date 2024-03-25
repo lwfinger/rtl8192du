@@ -2414,12 +2414,12 @@ void power_saving_wk_hdl(_adapter *padapter, u8 *pbuf, int sz)
 }
 
 //add for CONFIG_IEEE80211W, none 11w can use it
-void reset_securitypriv_hdl(_adapter *padapter)
+static void reset_securitypriv_hdl(_adapter *padapter)
 {
 	 rtw_reset_securitypriv(padapter);
 }
 
-void free_assoc_resources_hdl(_adapter *padapter)
+static void free_assoc_resources_hdl(_adapter *padapter)
 {
 	 rtw_free_assoc_resources(padapter, 1);
 }
@@ -2622,6 +2622,7 @@ exit:
 	return res;
 }
 
+s32 c2h_evt_hdl(_adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter);
 s32 c2h_evt_hdl(_adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter)
 {
 	s32 ret = _FAIL;

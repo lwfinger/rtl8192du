@@ -2966,7 +2966,7 @@ static int omac1_aes_128_vector(u8 *key, size_t num_elem,
  * OMAC1 was standardized with the name CMAC by NIST in a Special Publication
  * (SP) 800-38B.
  */ //modify for CONFIG_IEEE80211W
-int omac1_aes_128(u8 *key, u8 *data, size_t data_len, u8 *mac)
+static int omac1_aes_128(u8 *key, u8 *data, size_t data_len, u8 *mac)
 {
 	return omac1_aes_128_vector(key, 1, &data, &data_len, mac);
 }

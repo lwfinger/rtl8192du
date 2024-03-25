@@ -2360,7 +2360,7 @@ _func_exit_;
 	return _SUCCESS;
 }
 
-void rtw_init_xmitframe(struct xmit_frame *pxframe)
+static void rtw_init_xmitframe(struct xmit_frame *pxframe)
 {
 	if (pxframe !=  NULL)//default value setting
 	{
@@ -3006,7 +3006,7 @@ _func_exit_;
 }
 
 #ifdef CONFIG_BR_EXT
-int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
+static int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 {
 	struct sk_buff *skb = *pskb;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
@@ -4021,7 +4021,7 @@ int rtw_sctx_wait(struct submit_ctx *sctx)
 	return ret;
 }
 
-bool rtw_sctx_chk_waring_status(int status)
+static bool rtw_sctx_chk_waring_status(int status)
 {
 	switch(status) {
 	case RTW_SCTX_DONE_UNKNOWN:
@@ -4068,7 +4068,7 @@ s32 c2h_evt_hdl(_adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter fi
  * till tx report or timeout
  * Returns: _SUCCESS if TX report ok, _FAIL for others
  */
-int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
+static int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 {
 	int ret = _FAIL;
 	struct submit_ctx *pack_tx_ops = &pxmitpriv->ack_tx_ops;

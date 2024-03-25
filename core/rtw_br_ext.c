@@ -80,6 +80,12 @@
   PPPoE |type|   SID   |           AC MAC            |
 -----------------------------------------------------------------*/
 
+void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb);
+int nat25_handle_frame(_adapter *priv, struct sk_buff *skb);
+void *scdb_findEntry(_adapter *priv, unsigned char *macAddr,
+				unsigned char *ipAddr);
+void nat25_db_expire(_adapter *priv);
+int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method);
 
 //Find a tag in pppoe frame and return the pointer
 static __inline__ unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned short type)

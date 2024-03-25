@@ -1231,7 +1231,7 @@ u8 key_2char2num(u8 hch, u8 lch)
     return ((key_char2num(hch) << 4) | key_char2num(lch));
 }
 
-u8 convert_ip_addr(u8 hch, u8 mch, u8 lch)
+static u8 convert_ip_addr(u8 hch, u8 mch, u8 lch)
 {
     return ((key_char2num(hch) * 100) + (key_char2num(mch) * 10 ) + key_char2num(lch));
 }

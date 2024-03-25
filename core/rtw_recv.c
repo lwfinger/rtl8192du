@@ -2555,7 +2555,7 @@ _func_exit_;
 #endif
 
 //perform defrag
-union recv_frame * recvframe_defrag(_adapter *adapter,_queue *defrag_q)
+static union recv_frame * recvframe_defrag(_adapter *adapter,_queue *defrag_q)
 {
 	_list	 *plist, *phead;
 	u8	*data,wlanhdr_offset;
@@ -3821,7 +3821,7 @@ int process_recv_indicatepkts(_adapter *padapter, union recv_frame *prframe)
 
 }
 
-int recv_func_prehandle(_adapter *padapter, union recv_frame *rframe)
+static int recv_func_prehandle(_adapter *padapter, union recv_frame *rframe)
 {
 	int ret = _SUCCESS;
 	struct rx_pkt_attrib *pattrib = &rframe->u.hdr.attrib;
@@ -3862,7 +3862,7 @@ exit:
 	return ret;
 }
 
-int recv_func_posthandle(_adapter *padapter, union recv_frame *prframe)
+static int recv_func_posthandle(_adapter *padapter, union recv_frame *prframe)
 {
 	int ret = _SUCCESS;
 	union recv_frame *orig_prframe = prframe;

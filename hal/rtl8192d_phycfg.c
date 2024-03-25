@@ -2696,7 +2696,7 @@ PHY_StopTRXBeforeChangeBand8192D(
 /*
 
 */
-void
+static void
 PHY_SwitchWirelessBand(
 	PADAPTER		 Adapter,
 	u8		Band)
@@ -5410,7 +5410,7 @@ Exit_IQK:
 
 }
 
-void phy_IQCalibrate_Setting(
+static void phy_IQCalibrate_Setting(
 	PADAPTER	pAdapter,
 	BOOLEAN		is2T,
 	BOOLEAN		isON

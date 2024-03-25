@@ -199,7 +199,7 @@ rtl8192d_PHY_RF6052SetBandwidth(
 }
 
 #define MGN_2M 0x04
-s8 tx_power_extra_bias(
+static s8 tx_power_extra_bias(
 	u8				RFPath,
 	u8				Rate,
 	HT_CHANNEL_WIDTH	BandWidth,
@@ -1005,7 +1005,7 @@ PHY_RF6052_Config8192D(
  *
  *---------------------------------------------------------------------------*/
 
-u32
+static u32
 PHY_RFShadowRead(
 	PADAPTER			Adapter,
 	RF_RADIO_PATH_E	eRFPath,
@@ -1016,7 +1016,7 @@ PHY_RFShadowRead(
 }	/* PHY_RFShadowRead */
 
 
-VOID
+static VOID
 PHY_RFShadowWrite(
 	PADAPTER			Adapter,
 	RF_RADIO_PATH_E	eRFPath,
@@ -1028,7 +1028,7 @@ PHY_RFShadowWrite(
 
 }	/* PHY_RFShadowWrite */
 
-BOOLEAN
+static BOOLEAN
 PHY_RFShadowCompare(
 	PADAPTER			Adapter,
 	RF_RADIO_PATH_E	eRFPath,
@@ -1052,7 +1052,7 @@ PHY_RFShadowCompare(
 	}
 	return _FALSE;
 }	/* PHY_RFShadowCompare */
-VOID
+static VOID
 PHY_RFShadowRecorver(
 	PADAPTER			Adapter,
 	RF_RADIO_PATH_E	eRFPath,
@@ -1073,7 +1073,7 @@ PHY_RFShadowRecorver(
 	}
 
 }	/* PHY_RFShadowRecorver */
-VOID
+static VOID
 PHY_RFShadowCompareAll(
 	PADAPTER			Adapter)
 {
@@ -1089,7 +1089,7 @@ PHY_RFShadowCompareAll(
 	}
 
 }	/* PHY_RFShadowCompareAll */
-VOID
+static VOID
 PHY_RFShadowRecorverAll(
 	PADAPTER			Adapter)
 {
@@ -1105,7 +1105,7 @@ PHY_RFShadowRecorverAll(
 	}
 
 }	/* PHY_RFShadowRecorverAll */
-VOID
+static VOID
 PHY_RFShadowCompareFlagSet(
 	PADAPTER			Adapter,
 	RF_RADIO_PATH_E	eRFPath,
@@ -1116,7 +1116,7 @@ PHY_RFShadowCompareFlagSet(
 	RF_Shadow[eRFPath][Offset].Compare = Type;
 
 }	/* PHY_RFShadowCompareFlagSet */
-VOID
+static VOID
 PHY_RFShadowRecorverFlagSet(
 	PADAPTER			Adapter,
 	RF_RADIO_PATH_E	eRFPath,
@@ -1127,7 +1127,7 @@ PHY_RFShadowRecorverFlagSet(
 	RF_Shadow[eRFPath][Offset].Recorver= Type;
 
 }	/* PHY_RFShadowRecorverFlagSet */
-VOID
+static VOID
 PHY_RFShadowCompareFlagSetAll(
 	PADAPTER			Adapter)
 {
@@ -1147,7 +1147,7 @@ PHY_RFShadowCompareFlagSetAll(
 	}
 
 }	/* PHY_RFShadowCompareFlagSetAll */
-VOID
+static VOID
 PHY_RFShadowRecorverFlagSetAll(
 	PADAPTER			Adapter)
 {
@@ -1167,7 +1167,7 @@ PHY_RFShadowRecorverFlagSetAll(
 	}
 
 }	/* PHY_RFShadowCompareFlagSetAll */
-VOID
+static VOID
 PHY_RFShadowRefresh(
 	PADAPTER			Adapter)
 {

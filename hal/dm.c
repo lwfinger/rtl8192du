@@ -99,7 +99,7 @@ typedef enum tag_ODM_Support_IC_Type_Definition
 #define ODM_IC_11N_SERIES		(ODM_RTL8192S|ODM_RTL8192C|ODM_RTL8192D|ODM_RTL8723A|ODM_RTL8188E|ODM_RTL8192E|ODM_RTL8723B)
 #define ODM_IC_11AC_SERIES		(ODM_RTL8812|ODM_RTL8821|ODM_RTL8813A|ODM_RTL8881A)
 
-u1Byte
+static u1Byte
 ODM_Read1Byte(
 	PDM_ODM_T		pDM_Odm,
 	u4Byte			RegAddr
@@ -119,7 +119,7 @@ ODM_Read1Byte(
 }
 
 
-u2Byte
+static u2Byte
 ODM_Read2Byte(
 	PDM_ODM_T		pDM_Odm,
 	u4Byte			RegAddr
@@ -139,7 +139,7 @@ ODM_Read2Byte(
 }
 
 
-u4Byte
+static u4Byte
 ODM_Read4Byte(
 	PDM_ODM_T		pDM_Odm,
 	u4Byte			RegAddr
@@ -159,7 +159,7 @@ ODM_Read4Byte(
 }
 
 
-VOID
+static VOID
 ODM_Write1Byte(
 	PDM_ODM_T		pDM_Odm,
 	u4Byte			RegAddr,
@@ -180,7 +180,7 @@ ODM_Write1Byte(
 }
 
 
-VOID
+static VOID
 ODM_Write2Byte(
 	PDM_ODM_T		pDM_Odm,
 	u4Byte			RegAddr,
@@ -201,7 +201,7 @@ ODM_Write2Byte(
 }
 
 
-VOID
+static VOID
 ODM_Write4Byte(
 	PDM_ODM_T		pDM_Odm,
 	u4Byte			RegAddr,
@@ -222,7 +222,7 @@ ODM_Write4Byte(
 }
 
 
-VOID
+static VOID
 ODM_SetMACReg(
 	PDM_ODM_T	pDM_Odm,
 	u4Byte		RegAddr,
@@ -239,7 +239,7 @@ ODM_SetMACReg(
 }
 
 
-u4Byte
+static u4Byte
 ODM_GetMACReg(
 	PDM_ODM_T	pDM_Odm,
 	u4Byte		RegAddr,
@@ -257,7 +257,7 @@ ODM_GetMACReg(
 }
 
 
-VOID
+static VOID
 ODM_SetBBReg(
 	PDM_ODM_T	pDM_Odm,
 	u4Byte		RegAddr,
@@ -274,7 +274,7 @@ ODM_SetBBReg(
 }
 
 
-u4Byte
+static u4Byte
 ODM_GetBBReg(
 	PDM_ODM_T	pDM_Odm,
 	u4Byte		RegAddr,
@@ -290,7 +290,7 @@ ODM_GetBBReg(
 }
 
 
-VOID
+static VOID
 ODM_SetRFReg(
 	PDM_ODM_T			pDM_Odm,
 	ODM_RF_RADIO_PATH_E	eRFPath,
@@ -303,12 +303,12 @@ ODM_SetRFReg(
 	PHY_SetRFReg(pDM_Odm->priv, eRFPath, RegAddr, BitMask, Data);
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_WIN))
 	PADAPTER		Adapter = pDM_Odm->Adapter;
-	PHY_SetRFReg(Adapter, eRFPath, RegAddr, BitMask, Data);
+	PHY_SetRFReg(Adapter, (enum _RF_RADIO_PATH)eRFPath, RegAddr, BitMask, Data);
 #endif
 }
 
 
-u4Byte
+static u4Byte
 ODM_GetRFReg(
 	PDM_ODM_T			pDM_Odm,
 	ODM_RF_RADIO_PATH_E	eRFPath,
@@ -320,7 +320,7 @@ ODM_GetRFReg(
 	return PHY_QueryRFReg(pDM_Odm->priv, eRFPath, RegAddr, BitMask, 1);
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_WIN))
 	PADAPTER		Adapter = pDM_Odm->Adapter;
-	return PHY_QueryRFReg(Adapter, eRFPath, RegAddr, BitMask);
+	return PHY_QueryRFReg(Adapter, (enum _RF_RADIO_PATH)eRFPath, RegAddr, BitMask);
 #endif
 }
 
@@ -511,7 +511,7 @@ inline void rtw_dm_ability_set(_adapter *adapter, u8 ability)
 	rtw_hal_set_hwreg(adapter, HW_VAR_DM_FLAG, (u8*)&ability);
 }
 
-bool rtw_adapter_linked(_adapter *adapter)
+static bool rtw_adapter_linked(_adapter *adapter)
 {
 	bool linked = _FALSE;
 	struct mlme_priv	*mlmepriv = &adapter->mlmepriv;
@@ -530,7 +530,7 @@ bool rtw_adapter_linked(_adapter *adapter)
 	return linked;
 }
 
-bool dm_linked(_adapter *adapter)
+static bool dm_linked(_adapter *adapter)
 {
 	bool linked;
 
@@ -548,7 +548,7 @@ exit:
 }
 
 /* v4 branch doesn't have common traffic_stat in dvobj */
-u64 dev_tx_uncast_bytes(_adapter *adapter)
+static u64 dev_tx_uncast_bytes(_adapter *adapter)
 {
 	u64	tx_bytes = 0;
 
@@ -564,7 +564,7 @@ exit:
 	return tx_bytes;
 }
 
-u64 dev_rx_uncast_bytes(_adapter *adapter)
+static u64 dev_rx_uncast_bytes(_adapter *adapter)
 {
 	u64	rx_bytes = 0;
 

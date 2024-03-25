@@ -225,7 +225,7 @@ Len1	Len0	Pkt_num
 Len4	Len3	Len2
 
 */
-VOID
+static VOID
 InsertEMContent(struct xmit_frame *pxmitframe, u8 *VirtualAddress)
 {
 	_rtw_memset(VirtualAddress, 0, 8);
@@ -513,7 +513,7 @@ if (padapter->registrypriv.mp_mode == 0)
 
 }
 
-s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
+static s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 ret = _SUCCESS;
 	s32 inner_ret = _SUCCESS;

@@ -206,7 +206,7 @@ exit:
 	return ret;
 }
 
-int _FWFreeToGo_92D(PADAPTER Adapter)
+static int _FWFreeToGo_92D(PADAPTER Adapter)
 {
 	u32			counter = 0;
 	u32			value32;
@@ -270,7 +270,7 @@ VOID rtl8192d_FirmwareSelfReset(PADAPTER Adapter)
 //
 // description :polling fw ready
 //
-int _FWInit(PADAPTER Adapter)
+static int _FWInit(PADAPTER Adapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u32			counter = 0;
@@ -2273,7 +2273,7 @@ rtl8192d_Efuse_WordEnableDataWrite(PADAPTER	pAdapter,
 	}
 	return badworden;
 }
-void hal_notch_filter_8192d(_adapter *adapter, bool enable)
+static void hal_notch_filter_8192d(_adapter *adapter, bool enable)
 {
 	if (enable) {
 		DBG_871X("Enable notch filter\n");
@@ -2392,7 +2392,7 @@ struct bcn_qinfo_92d {
 	u8 tail;
 };
 
-void dump_qinfo_92d(void *sel, struct qinfo_92d *info, const char *tag)
+static void dump_qinfo_92d(void *sel, struct qinfo_92d *info, const char *tag)
 {
 	//if (info->pkt_num)
 	DBG_871X_SEL_NL(sel, "%shead:0x%02x, fw_num:%u, pkt_num:%u, cpu_head:0x%02x\n"
@@ -2400,7 +2400,7 @@ void dump_qinfo_92d(void *sel, struct qinfo_92d *info, const char *tag)
 	);
 }
 
-void dump_bcn_qinfo_92d(void *sel, struct bcn_qinfo_92d *info, const char *tag)
+static void dump_bcn_qinfo_92d(void *sel, struct bcn_qinfo_92d *info, const char *tag)
 {
 	//if (info->pkt_num)
 	DBG_871X_SEL_NL(sel, "%shead:0x%02x, tail:0x%02x, fw_num:%u\n"
@@ -2408,7 +2408,7 @@ void dump_bcn_qinfo_92d(void *sel, struct bcn_qinfo_92d *info, const char *tag)
 	);
 }
 
-void dump_mac_qinfo_92d(void *sel, _adapter *adapter)
+static void dump_mac_qinfo_92d(void *sel, _adapter *adapter)
 {
 	u32 vo_q_info;
 	u32 vi_q_info;

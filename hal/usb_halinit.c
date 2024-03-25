@@ -412,7 +412,7 @@ static u8 _InitPowerOn(_adapter *padapter)
 
 }
 
-u16 CRC16(u8 data,u16 CRC)
+static u16 CRC16(u8 data,u16 CRC)
 {
 	unsigned char shift_in,CRC_BIT15,DataBit,CRC_BIT11,CRC_BIT4 ;
 	int index;
@@ -475,7 +475,7 @@ u16 CRC16(u8 data,u16 CRC)
 //input         : char* pattern , pattern size
 //
 //////////////////////////////////////////////////
-u16 calc_crc(u8 * pdata,int length)
+static u16 calc_crc(u8 * pdata,int length)
 {
 //    unsigned char data[2]={0xC6,0xAA};
 	u16 CRC=0xffff;
@@ -3153,7 +3153,7 @@ _ReadPROMVersion(
 	}
 }
 
-u32
+static u32
 _GetChannelGroup(
 	u32	channel
 	)
@@ -3658,7 +3658,7 @@ ResumeTxBeacon(
 //
 // 2010.11.17. Added by tynli.
 //
-u8
+static u8
 SelectRTSInitialRate(
 	PADAPTER	Adapter
 )
@@ -4493,7 +4493,7 @@ static void dc_hw_var_mlme_join(PADAPTER Adapter, u8 join_state)
 }
 #endif
 
-void SetHwReg8192DU(PADAPTER Adapter, u8 variable, u8* val)
+static void SetHwReg8192DU(PADAPTER Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -5324,7 +5324,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void GetHwReg8192DU(PADAPTER Adapter, u8 variable, u8* val)
+static void GetHwReg8192DU(PADAPTER Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
@@ -5388,7 +5388,7 @@ _func_exit_;
 //	Description:
 //		Query setting of specified variable.
 //
-u8
+static u8
 GetHalDefVar8192DUsb(
 	PADAPTER				Adapter,
 	HAL_DEF_VARIABLE		eVariable,
@@ -5452,7 +5452,7 @@ GetHalDefVar8192DUsb(
 //	Description:
 //		Change default setting of specified variable.
 //
-u8
+static u8
 SetHalDefVar8192DUsb(
 	PADAPTER				Adapter,
 	HAL_DEF_VARIABLE		eVariable,
